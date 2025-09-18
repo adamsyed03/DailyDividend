@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dividend - Finance News WhatsApp Bot</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-dd">DD</div>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Markets Within 
+                    <span class="gradient-text">Minutes</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Get personalized finance news, market insights, and educational content delivered directly to your WhatsApp. 
+                    Stay informed, stay ahead.
+                </p>
+                <div class="hero-cta">
+                    <div class="signup-form">
+                        <div class="input-group">
+                            <div class="country-code">
+                                <span>+1</span>
+                            </div>
+                            <input type="tel" id="phoneInput" placeholder="Enter your phone number" maxlength="10">
+                        </div>
+                        <button class="cta-button" onclick="startWhatsAppSignup()">
+                            <i class="fab fa-whatsapp"></i>
+                            Get Started Free
+                        </button>
+                    </div>
+                    <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="whatsapp-chat">
+                            <div class="chat-header">
+                                <div class="chat-avatar">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="chat-info">
+                                    <h4>DD Assistant</h4>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="chat-messages">
+                                <div class="message bot-message">
+                                    <p>📈 Market Update: S&P 500 up 0.8% today</p>
+                                    <span class="time">2:30 PM</span>
+                                </div>
+                                <div class="message user-message">
+                                    <p>Tell me about dividend stocks</p>
+                                    <span class="time">2:31 PM</span>
+                                </div>
+                                <div class="message bot-message">
+                                    <p>💡 Here are today's top dividend picks...</p>
+                                    <span class="time">2:31 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Daily Dividend?</h2>
+                <p>Everything you need to stay on top of your financial game</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>Daily Newsletters</h3>
+                    <p>Get curated finance news delivered to your WhatsApp every morning. No more information overload.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Interactive Bot</h3>
+                    <p>Ask questions, get instant answers about stocks, markets, and personal finance. Available 24/7.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Educational Content</h3>
+                    <p>Learn finance concepts through bite-sized lessons and real-world examples. Perfect for beginners.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Market Insights</h3>
+                    <p>Get expert analysis, market trends, and investment opportunities tailored to your interests.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Smart Alerts</h3>
+                    <p>Never miss important market movements or breaking news that could affect your investments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>Your data is secure. We never share your information and you can unsubscribe anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Get started in less than 30 seconds</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Sign Up</h3>
+                        <p>Enter your phone number and we'll send you a WhatsApp message to confirm.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Customize</h3>
+                        <p>Tell us your interests and we'll personalize your daily content and alerts.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Start Learning</h3>
+                        <p>Receive daily newsletters and interact with our AI bot to learn and stay informed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple, Transparent Pricing</h2>
+                <p>Start free, upgrade when you're ready</p>
+            </div>
+            <div class="pricing-cards">
+                <div class="pricing-card free">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <div class="price">
+                            <span class="currency">£</span>
+                            <span class="amount">0</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Newsletter access</li>
+                    </ul>
+                    <button class="pricing-button" onclick="startWhatsAppSignup()">Get Started</button>
+                </div>
+                <div class="pricing-card pro">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3>Basic</h3>
+                        <div class="price">
+                            <span class="currency">£</span>
+                            <span class="amount">2.99</span>
+                            <span class="period">/month + VAT</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Newsletter access</li>
+                        <li><i class="fas fa-check"></i> Limited token usage</li>
+                    </ul>
+                    <button class="pricing-button pro-button" onclick="startWhatsAppSignup()">Upgrade to Basic</button>
+                </div>
+                <div class="pricing-card premium">
+                    <div class="pricing-header">
+                        <h3>Premium</h3>
+                        <div class="price">
+                            <span class="currency">£</span>
+                            <span class="amount">14.99</span>
+                            <span class="period">/month + VAT</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Newsletter access</li>
+                        <li><i class="fas fa-check"></i> Unlimited token usage</li>
+                        <li><i class="fas fa-check"></i> Community access</li>
+                    </ul>
+                    <button class="pricing-button premium-button" onclick="startWhatsAppSignup()">Upgrade to Premium</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="social-proof">
+        <div class="container">
+            <div class="section-header">
+                <h2>Trusted by Thousands</h2>
+                <p>Join our growing community of finance enthusiasts</p>
+            </div>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"Daily Dividend has completely changed how I stay informed about the markets. The WhatsApp format is so convenient!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson</h4>
+                            <span>Investment Analyst</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"The educational content is fantastic. I've learned so much about personal finance in just a few weeks."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <h4>Mike Chen</h4>
+                            <span>Software Engineer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"The bot is incredibly helpful. I can ask any finance question and get instant, accurate answers."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <h4>Alex Rodriguez</h4>
+                            <span>Small Business Owner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Financial Knowledge?</h2>
+                <p>Join thousands of users who are already staying ahead with Daily Dividend</p>
+                <div class="cta-form">
+                    <div class="input-group">
+                        <div class="country-code">
+                            <span>+1</span>
+                        </div>
+                        <input type="tel" id="phoneInputBottom" placeholder="Enter your phone number" maxlength="10">
+                    </div>
+                    <button class="cta-button" onclick="startWhatsAppSignup()">
+                        <i class="fab fa-whatsapp"></i>
+                        Start Your Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-dd">DD</div>
+                    </div>
+                    <p>Your trusted source for finance news and education via WhatsApp.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/dailydividend_news/" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/dailydividend/about/" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#pricing">Pricing</a></li>
+                            <li><a href="#how-it-works">How it Works</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#contact">Contact</a></li>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Daily Dividend. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js?v=2"></script>
+</body>
+</html>
