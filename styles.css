@@ -51,6 +51,14 @@ body {
     color: #2563eb;
 }
 
+.logo-dd-image {
+    height: 2.5rem;
+    width: auto;
+    max-width: 5rem;
+    object-fit: contain;
+    display: block;
+}
+
 .logo-dd {
     font-size: 2.5rem;
     font-weight: 900;
@@ -131,10 +139,11 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     color: #6b7280;
     margin-bottom: 40px;
     line-height: 1.6;
+    font-style: italic;
 }
 
 .hero-cta {
@@ -155,25 +164,28 @@ body {
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     flex: 1;
-}
-
-.country-code {
-    background: #f8fafc;
-    padding: 15px 20px;
-    border-right: 1px solid #e2e8f0;
-    color: #64748b;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
+    gap: 0;
 }
 
 .input-group input {
     border: none;
     padding: 15px 20px;
     font-size: 1rem;
-    flex: 1;
     outline: none;
     color: #1e293b;
+}
+
+.input-group input:first-child {
+    width: 100px;
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    color: #64748b;
+    font-weight: 600;
+    text-align: center;
+}
+
+.input-group input:last-child {
+    flex: 1;
 }
 
 .input-group input::placeholder {
@@ -433,6 +445,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     justify-content: center;
+    align-items: stretch;
 }
 
 .pricing-card {
@@ -446,6 +459,8 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border: 2px solid #e5e7eb;
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .pricing-card:hover {
@@ -507,14 +522,23 @@ body {
 .pricing-features {
     list-style: none;
     margin-bottom: 30px;
+    text-align: left;
+    flex-grow: 1;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .pricing-features li {
     padding: 10px 0;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 10px;
     color: #6b7280;
+    text-align: left;
+    margin: 0;
+    padding-left: 0;
 }
 
 .pricing-features i {
@@ -533,6 +557,8 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    margin-top: auto;
 }
 
 .pricing-button:hover {
@@ -630,6 +656,39 @@ body {
     text-align: center;
 }
 
+/* Terms Section */
+.terms-section {
+    padding: 100px 0;
+    background: white;
+}
+
+.terms-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.terms-text {
+    text-align: left;
+    line-height: 1.8;
+}
+
+.terms-text h3 {
+    color: #1f2937;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 30px 0 15px 0;
+}
+
+.terms-text h3:first-child {
+    margin-top: 0;
+}
+
+.terms-text p {
+    color: #6b7280;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
 .cta-content h2 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -687,6 +746,7 @@ body {
 .footer-logo .logo-dd::before {
     color: #9ca3af;
 }
+
 
 .social-links {
     display: flex;
@@ -748,8 +808,118 @@ body {
     color: #94a3b8;
 }
 
+/* Contact Section Styles */
+.contact-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.contact-info h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.1rem;
+}
+
+.contact-item i {
+    font-size: 1.5rem;
+    width: 30px;
+    text-align: center;
+}
+
+.social-links h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.social-icon:hover {
+    transform: translateY(-5px);
+    border-color: white;
+}
+
+.social-icon.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-icon.twitter {
+    background: #1da1f2;
+}
+
+.social-icon.linkedin {
+    background: #0077b5;
+}
+
+.social-icon.whatsapp {
+    background: #25d366;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .contact-info h3 {
+        font-size: 2rem;
+    }
+    
+    .social-icons {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .social-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
     .nav-links {
         display: none;
     }

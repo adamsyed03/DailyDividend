@@ -18,29 +18,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Phone number formatting
-    const phoneInputs = document.querySelectorAll('input[type="tel"]');
+    // Phone number formatting - simplified approach
+    const phoneInputs = document.querySelectorAll('#phoneInput, #phoneInputBottom');
+    const countryCodeInputs = document.querySelectorAll('#countryCode, #countryCodeBottom');
+    
+    // Handle country code inputs
+    countryCodeInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            let value = e.target.value;
+            // Ensure it starts with +
+            if (!value.startsWith('+')) {
+                value = '+' + value.replace(/[^0-9]/g, '');
+            } else {
+                value = '+' + value.replace(/[^0-9]/g, '');
+            }
+            e.target.value = value;
+        });
+    });
+    
+    // Handle phone number inputs - simple numeric only
     phoneInputs.forEach(input => {
         input.addEventListener('input', function(e) {
             // Remove all non-numeric characters
             let value = e.target.value.replace(/\D/g, '');
             
-            // Limit to 10 digits
-            if (value.length > 10) {
-                value = value.substring(0, 10);
+            // Limit to 15 digits (international standard)
+            if (value.length > 15) {
+                value = value.substring(0, 15);
             }
             
-            e.target.value = value;
-        });
-
-        // Format as user types (optional: add dashes or parentheses)
-        input.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 6) {
-                value = value.substring(0, 3) + '-' + value.substring(3, 6) + '-' + value.substring(6, 10);
-            } else if (value.length >= 3) {
-                value = value.substring(0, 3) + '-' + value.substring(3);
-            }
             e.target.value = value;
         });
     });
@@ -90,19 +96,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // WhatsApp signup function
 function startWhatsAppSignup() {
-    const phoneInputs = document.querySelectorAll('input[type="tel"]');
-    let phoneNumber = '';
+    // Get country code and phone number
+    const countryCodeInput = document.querySelector('#countryCode') || document.querySelector('#countryCodeBottom');
+    const phoneInput = document.querySelector('#phoneInput') || document.querySelector('#phoneInputBottom');
     
-    // Get phone number from any of the inputs
-    phoneInputs.forEach(input => {
-        if (input.value.trim()) {
-            phoneNumber = input.value.replace(/\D/g, ''); // Remove all non-numeric characters
-        }
-    });
+    const countryCode = countryCodeInput ? countryCodeInput.value.trim() : '+44';
+    const phoneNumber = phoneInput ? phoneInput.value.replace(/\D/g, '') : '';
 
-    // Validate phone number
-    if (!phoneNumber || phoneNumber.length !== 10) {
-        showNotification('Please enter a valid 10-digit phone number', 'error');
+    // Validate inputs
+    if (!countryCode || !countryCode.startsWith('+')) {
+        showNotification('Please enter a valid country code (e.g., +44)', 'error');
+        return;
+    }
+
+    if (!phoneNumber || phoneNumber.length < 7) {
+        showNotification('Please enter a valid phone number', 'error');
         return;
     }
 
@@ -117,11 +125,12 @@ function startWhatsAppSignup() {
     // Simulate API call delay
     setTimeout(() => {
         // Format phone number for WhatsApp
-        const formattedNumber = `+1${phoneNumber}`;
+        const formattedNumber = `${countryCode}${phoneNumber}`;
+        const cleanCountryCode = countryCode.replace('+', '');
         
         // Create WhatsApp URL
         const message = `Hi! I'd like to sign up for Daily Dividend finance news and education. My phone number is ${formattedNumber}.`;
-        const whatsappUrl = `https://wa.me/1${phoneNumber}?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/${cleanCountryCode}${phoneNumber}?text=${encodeURIComponent(message)}`;
         
         // Open WhatsApp
         window.open(whatsappUrl, '_blank');

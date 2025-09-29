@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Dividend - Finance News WhatsApp Bot</title>
-    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="styles.css?v=14">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
@@ -14,14 +14,15 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <div class="logo-dd">DD</div>
+                <img src="DDlogo.jpeg?v=2" alt="Daily Dividend Logo" class="logo-dd-image">
             </div>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#how-it-works">How it Works</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#contact">Contact</a>
-            </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How it Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#contact">Contact</a>
+                    <a href="#terms">Terms</a>
+                </div>
         </div>
     </nav>
 
@@ -30,20 +31,16 @@
         <div class="hero-container">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Markets Within 
-                    <span class="gradient-text">Minutes</span>
+                    <span class="gradient-text">Daily Dividend</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Get personalized finance news, market insights, and educational content delivered directly to your WhatsApp. 
-                    Stay informed, stay ahead.
+                    Markets within minutes
                 </p>
                 <div class="hero-cta">
                     <div class="signup-form">
                         <div class="input-group">
-                            <div class="country-code">
-                                <span>+1</span>
-                            </div>
-                            <input type="tel" id="phoneInput" placeholder="Enter your phone number" maxlength="10">
+                            <input type="tel" id="countryCode" placeholder="+44" maxlength="4" value="+44">
+                            <input type="tel" id="phoneInput" placeholder="Phone number" maxlength="15">
                         </div>
                         <button class="cta-button" onclick="startWhatsAppSignup()">
                             <i class="fab fa-whatsapp"></i>
@@ -104,10 +101,10 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-robot"></i>
+                        <i class="fas fa-users"></i>
                     </div>
-                    <h3>Interactive Bot</h3>
-                    <p>Ask questions, get instant answers about stocks, markets, and personal finance. Available 24/7.</p>
+                    <h3>Community Access</h3>
+                    <p>Connect with like-minded investors, share insights, and learn from experienced traders in our exclusive community.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -159,15 +156,15 @@
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3>Customize</h3>
-                        <p>Tell us your interests and we'll personalize your daily content and alerts.</p>
+                        <h3>Start Learning</h3>
+                        <p>Receive daily newsletters and interact with our AI bot to learn and stay informed.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>Start Learning</h3>
-                        <p>Receive daily newsletters and interact with our AI bot to learn and stay informed.</p>
+                        <h3>Customize Gradually</h3>
+                        <p>Our algorithm perfectly aligns the content you're interested in, learning from your interactions to deliver increasingly personalized finance insights.</p>
                     </div>
                 </div>
             </div>
@@ -178,7 +175,7 @@
     <section id="pricing" class="pricing">
         <div class="container">
             <div class="section-header">
-                <h2>Simple, Transparent Pricing</h2>
+                <h2>Pricing</h2>
                 <p>Start free, upgrade when you're ready</p>
             </div>
             <div class="pricing-cards">
@@ -208,11 +205,13 @@
                     </div>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i> Newsletter access</li>
-                        <li><i class="fas fa-check"></i> Limited token usage</li>
+                        <li><i class="fas fa-check"></i> Tier 2 content (industry analysis reports, stock pitches, etc.)</li>
+                        <li><i class="fas fa-check"></i> Free access to new features</li>
                     </ul>
                     <button class="pricing-button pro-button" onclick="startWhatsAppSignup()">Upgrade to Basic</button>
                 </div>
                 <div class="pricing-card premium">
+                    <div class="pricing-badge">Limited Access</div>
                     <div class="pricing-header">
                         <h3>Premium</h3>
                         <div class="price">
@@ -223,8 +222,8 @@
                     </div>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i> Newsletter access</li>
-                        <li><i class="fas fa-check"></i> Unlimited token usage</li>
-                        <li><i class="fas fa-check"></i> Community access</li>
+                        <li><i class="fas fa-check"></i> Tier 2 content access</li>
+                        <li><i class="fas fa-check"></i> Community access, events, and catered job preparation tools</li>
                     </ul>
                     <button class="pricing-button premium-button" onclick="startWhatsAppSignup()">Upgrade to Premium</button>
                 </div>
@@ -288,10 +287,8 @@
                 <p>Join thousands of users who are already staying ahead with Daily Dividend</p>
                 <div class="cta-form">
                     <div class="input-group">
-                        <div class="country-code">
-                            <span>+1</span>
-                        </div>
-                        <input type="tel" id="phoneInputBottom" placeholder="Enter your phone number" maxlength="10">
+                        <input type="tel" id="countryCodeBottom" placeholder="+44" maxlength="4" value="+44">
+                        <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
                     </div>
                     <button class="cta-button" onclick="startWhatsAppSignup()">
                         <i class="fab fa-whatsapp"></i>
@@ -302,53 +299,90 @@
         </div>
     </section>
 
+    <!-- Terms and Conditions Section -->
+    <section id="terms" class="terms-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Terms and Conditions</h2>
+                <p>Please read these terms carefully before using our service</p>
+            </div>
+            <div class="terms-content">
+                <div class="terms-text">
+                    <h3>1. Service Description</h3>
+                    <p>Daily Dividend provides financial news, market insights, and educational content via WhatsApp. Our service is designed to help users stay informed about financial markets and personal finance topics.</p>
+                    
+                    <h3>2. User Responsibilities</h3>
+                    <p>Users are responsible for providing accurate contact information and understanding that financial information provided is for educational purposes only and should not be considered as financial advice.</p>
+                    
+                    <h3>3. Privacy and Data Protection</h3>
+                    <p>We respect your privacy and are committed to protecting your personal information. Your phone number and preferences are used solely to deliver our service and will not be shared with third parties without your consent.</p>
+                    
+                    <h3>4. Service Availability</h3>
+                    <p>While we strive to provide continuous service, we cannot guarantee uninterrupted access. Service may be temporarily unavailable due to maintenance, technical issues, or circumstances beyond our control.</p>
+                    
+                    <h3>5. Limitation of Liability</h3>
+                    <p>Daily Dividend shall not be liable for any financial losses or decisions made based on the information provided through our service. All financial decisions are the sole responsibility of the user.</p>
+                    
+                    <h3>6. Changes to Terms</h3>
+                    <p>We reserve the right to modify these terms at any time. Users will be notified of significant changes via WhatsApp or email.</p>
+                    
+                    <h3>7. Contact Information</h3>
+                    <p>For questions about these terms, please contact us through our WhatsApp service or email us at support@dailydividend.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>dailydividendwork@gmail.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp: +44 123 456 7890</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="https://instagram.com/dailydividend" target="_blank" class="social-icon instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://twitter.com/dailydividend" target="_blank" class="social-icon twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/dailydividend" target="_blank" class="social-icon linkedin">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://wa.me/441234567890" target="_blank" class="social-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <div class="logo-dd">DD</div>
-                    </div>
-                    <p>Your trusted source for finance news and education via WhatsApp.</p>
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/dailydividend_news/" target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/company/dailydividend/about/" target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </div>
+                <div class="footer-logo">
+                    <img src="DDlogo.jpeg?v=2" alt="Daily Dividend Logo" class="logo-dd-image">
                 </div>
                 <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Product</h4>
-                        <ul>
-                            <li><a href="#features">Features</a></li>
-                            <li><a href="#pricing">Pricing</a></li>
-                            <li><a href="#how-it-works">How it Works</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Support</h4>
-                        <ul>
-                            <li><a href="#contact">Contact</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms of Service</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Careers</a></li>
-                        </ul>
-                    </div>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How it Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#contact">Contact</a>
                 </div>
             </div>
             <div class="footer-bottom">
