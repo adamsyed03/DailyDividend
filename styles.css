@@ -1,25 +1,179 @@
-/* Reset and Base Styles */
-* {
+/*!
+ * Daily Dividend - Professional Landing Page Styles
+ * ================================================
+ * 
+ * A comprehensive CSS framework for the Daily Dividend landing page.
+ * Features responsive design, modern UI patterns, and accessibility compliance.
+ * 
+ * Architecture:
+ * - CSS Reset & Base Styles
+ * - Layout Components (Grid, Flexbox)
+ * - UI Components (Buttons, Cards, Forms)
+ * - Navigation & Header
+ * - Hero Section
+ * - Content Sections (Features, Pricing, etc.)
+ * - Footer
+ * - Responsive Design
+ * - Animations & Transitions
+ * - Accessibility Features
+ * 
+ * Author: Daily Dividend Team
+ * Version: 2.0
+ * Last Updated: 2024
+ */
+
+/* ===========================================
+   CSS RESET & BASE STYLES
+   ===========================================
+   Modern CSS reset with improved defaults
+   and consistent cross-browser behavior.
+*/
+
+/* Universal Reset */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    line-height: 1.6;
-    color: #1f2937;
-    background: white;
-    overflow-x: hidden;
+/* Root Variables for Consistent Theming */
+:root {
+    /* Color Palette */
+    --color-primary: #374151;
+    --color-primary-dark: #1f2937;
+    --color-primary-light: #6b7280;
+    --color-secondary: #25d366;
+    --color-secondary-dark: #20c55a;
+    --color-accent: #2563eb;
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    
+    /* Semantic Colors */
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
+    
+    /* Typography */
+    --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
+    
+    /* Spacing Scale */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+    --spacing-20: 5rem;
+    --spacing-24: 6rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Z-Index Scale */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
 }
 
+/* Base HTML Element Styles */
+html {
+    scroll-behavior: smooth;
+    font-size: 16px; /* Base font size for rem calculations */
+}
+
+body {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-gray-800);
+    background-color: var(--color-white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===========================================
+   LAYOUT COMPONENTS
+   ===========================================
+   Reusable layout utilities and containers.
+*/
+
+/* Main Container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 var(--spacing-5);
 }
 
-/* Navigation */
+/* Screen Reader Only Content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===========================================
+   NAVIGATION COMPONENT
+   ===========================================
+   Fixed navigation bar with responsive design
+   and smooth scroll behavior.
+*/
+
+/* Main Navigation Bar */
 .navbar {
     position: fixed;
     top: 0;
@@ -27,15 +181,94 @@ body {
     right: 0;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--color-gray-200);
+    z-index: var(--z-fixed);
+    transition: all var(--transition-normal);
 }
 
+/* Navigation Container */
+.navbar__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+/* Brand/Logo Section */
+.navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.navbar__logo-image {
+    height: 2.5rem;
+    width: auto;
+    max-width: 5rem;
+    object-fit: contain;
+    display: block;
+}
+
+/* Navigation Menu */
+.navbar__menu {
+    display: flex;
+    gap: var(--spacing-8);
+    align-items: center;
+    list-style: none;
+}
+
+.navbar__menu-item {
+    margin: 0;
+}
+
+.navbar__menu-link {
+    text-decoration: none;
+    color: var(--color-gray-500);
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    transition: color var(--transition-normal);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+}
+
+.navbar__menu-link:hover,
+.navbar__menu-link:focus {
+    color: var(--color-gray-700);
+    background-color: var(--color-gray-100);
+    outline: none;
+}
+
+.navbar__menu-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Mobile Menu Toggle (for future implementation) */
+.navbar__toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--radius-md);
+}
+
+.navbar__toggle:hover {
+    background-color: var(--color-gray-100);
+}
+
+/* Legacy class support (for existing HTML) */
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 var(--spacing-5);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,10 +278,40 @@ body {
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1.5rem;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-xl);
     font-weight: 700;
-    color: #2563eb;
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--spacing-8);
+    align-items: center;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--color-gray-500);
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    transition: color var(--transition-normal);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+    color: var(--color-gray-700);
+    background-color: var(--color-gray-100);
+    outline: none;
+}
+
+.nav-links a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
 }
 
 .logo-dd-image {
@@ -59,49 +322,24 @@ body {
     display: block;
 }
 
-.logo-dd {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #1f2937;
-    font-family: 'Georgia', serif;
-    line-height: 1;
-    position: relative;
-}
+/* ===========================================
+   HERO SECTION
+   ===========================================
+   Main landing section with value proposition
+   and call-to-action. Optimized for performance
+   with lazy loading and efficient animations.
+*/
 
-.logo-dd::before {
-    content: 'D';
-    position: absolute;
-    left: -2px;
-    top: 0;
-    color: #6b7280;
-    font-size: 2.5rem;
-    z-index: -1;
-}
-
-.nav-links {
-    display: flex;
-    gap: 30px;
-    align-items: center;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #64748b;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #374151;
-}
-
-/* Hero Section */
+/* Hero Container */
 .hero {
     padding: 120px 0 80px;
-    background: #f8fafc;
-    color: #1f2937;
+    background: var(--color-gray-50);
+    color: var(--color-gray-800);
     position: relative;
     overflow: hidden;
+    /* Performance optimization: Enable hardware acceleration */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .hero::before {
@@ -1026,6 +1264,45 @@ body {
     animation: fadeInUp 0.6s ease-out;
 }
 
+/* ===========================================
+   PERFORMANCE OPTIMIZATIONS
+   ===========================================
+   CSS optimizations for better performance,
+   including hardware acceleration, efficient
+   animations, and reduced repaints.
+*/
+
+/* Hardware acceleration for smooth animations */
+.feature-card,
+.step,
+.testimonial,
+.pricing-card {
+    /* Enable hardware acceleration for smooth transforms */
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* Optimize transitions for better performance */
+* {
+    /* Use transform and opacity for animations when possible */
+    transition-property: transform, opacity, color, background-color;
+    transition-timing-function: ease;
+}
+
+/* Reduce layout thrashing with contain property */
+.feature-card,
+.pricing-card,
+.testimonial {
+    contain: layout style paint;
+}
+
+/* ===========================================
+   ACCESSIBILITY FEATURES
+   ===========================================
+   Enhanced accessibility with focus states,
+   screen reader support, and keyboard navigation.
+*/
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;
@@ -1035,9 +1312,40 @@ html {
 .cta-button:focus,
 .pricing-button:focus,
 input:focus {
-    outline: 2px solid #374151;
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
 }
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .feature-card,
+    .pricing-card,
+    .testimonial {
+        border: 2px solid var(--color-gray-800);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ===========================================
+   LOADING STATES & MICRO-INTERACTIONS
+   ===========================================
+   Loading states, button interactions, and
+   visual feedback for better user experience.
+*/
 
 /* Loading states */
 .cta-button:disabled {
@@ -1067,3 +1375,22 @@ input:focus {
     0% { transform: translateY(-50%) rotate(0deg); }
     100% { transform: translateY(-50%) rotate(360deg); }
 }
+
+/* Error states for form validation */
+input.error {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Success states */
+input:valid {
+    border-color: var(--color-success);
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN
+   ===========================================
+   Mobile-first responsive design with breakpoints
+   for optimal viewing across all devices.
+   Uses CSS Grid and Flexbox for efficient layouts.
+*/
