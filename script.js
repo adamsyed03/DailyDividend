@@ -319,9 +319,10 @@ function startWhatsAppSignup() {
         .then(() => {
             // After successful submission, open WhatsApp
             try {
-                // Create WhatsApp URL with pre-filled message
+                // Create WhatsApp URL with pre-filled message to YOUR business number
+                const businessNumber = '447449222602'; // Your business WhatsApp number
                 const message = `Hi! I'd like to sign up for Daily Dividend finance news and education. My phone number is ${formattedNumber}.`;
-                const whatsappUrl = `https://wa.me/${cleanCountryCode}${phoneNumber}?text=${encodeURIComponent(message)}`;
+                const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
                 
                 // Open WhatsApp in new tab
                 window.open(whatsappUrl, '_blank');
