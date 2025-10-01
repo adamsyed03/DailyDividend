@@ -706,14 +706,73 @@ body {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
-.pricing-card.pro {
-    border-color: #374151;
+/* Free tier - highlighted with black outline */
+.pricing-card.free {
+    border-color: #1f2937;
+    border-width: 3px;
     transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(31, 41, 55, 0.2);
 }
 
-.pricing-card.premium {
-    border-color: #1f2937;
-    transform: scale(1.02);
+.pricing-card.free:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 15px 50px rgba(31, 41, 55, 0.3);
+}
+
+/* Coming soon cards - grayed out */
+.pricing-card.coming-soon-card {
+    opacity: 0.6;
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: none;
+    position: relative;
+}
+
+.pricing-card.coming-soon-card:hover {
+    transform: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Lock overlay for coming soon cards */
+.lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(249, 250, 251, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    border-radius: 20px;
+    backdrop-filter: blur(2px);
+}
+
+.lock-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    animation: lockPulse 2s ease-in-out infinite;
+}
+
+.lock-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+@keyframes lockPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
 }
 
 .pricing-badge {
@@ -727,6 +786,53 @@ body {
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 600;
+}
+
+/* Coming Soon Sticker */
+.coming-soon-sticker {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #6b7280;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    animation: pulse-glow 2s ease-in-out infinite;
+    z-index: 10;
+}
+
+.coming-soon-sticker i {
+    font-size: 0.9rem;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-3px);
+    }
+    60% {
+        transform: translateY(-2px);
+    }
 }
 
 .pricing-header h3 {
@@ -826,6 +932,53 @@ body {
     background: #111827;
     border-color: #111827;
     color: white;
+}
+
+/* Coming Soon Button Styles */
+.coming-soon-button {
+    background: #374151 !important;
+    color: white !important;
+    border: 2px solid #374151 !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.coming-soon-button:hover {
+    background: #1f2937 !important;
+    border-color: #1f2937 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(55, 65, 81, 0.4);
+}
+
+.coming-soon-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.coming-soon-button:hover::before {
+    left: 100%;
+}
+
+/* Disabled state for coming soon cards */
+.pricing-card.pro .pricing-features li,
+.pricing-card.premium .pricing-features li {
+    opacity: 0.7;
+    position: relative;
+}
+
+.pricing-card.pro .pricing-features li::after,
+.pricing-card.premium .pricing-features li::after {
+    content: '🔒';
+    position: absolute;
+    right: 0;
+    font-size: 0.8rem;
+    opacity: 0.5;
 }
 
 /* Social Proof Section */
@@ -1385,6 +1538,144 @@ input.error {
 /* Success states */
 input:valid {
     border-color: var(--color-success);
+}
+
+/* ===========================================
+   WAITLIST MODAL
+   ===========================================
+   Professional waitlist form for premium features.
+*/
+
+.waitlist-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.waitlist-modal__content {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    animation: slideUp 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.waitlist-modal__header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.waitlist-modal__icon {
+    width: 80px;
+    height: 80px;
+    background: #374151;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.waitlist-modal__header h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.waitlist-modal__header p {
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+.waitlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #374151;
+    box-shadow: 0 0 0 3px rgba(55, 65, 81, 0.1);
+}
+
+.waitlist-submit-btn {
+    background: #374151;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.waitlist-submit-btn:hover {
+    background: #1f2937;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(55, 65, 81, 0.4);
+}
+
+.waitlist-modal__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.waitlist-modal__close:hover {
+    background: #f3f4f6;
+    color: #374151;
 }
 
 /* ===========================================

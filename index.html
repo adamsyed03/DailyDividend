@@ -345,8 +345,15 @@
                     </ul>
                     <button class="pricing-button" onclick="startWhatsAppSignup()">Get Started</button>
                 </div>
-                <div class="pricing-card pro">
-                    <div class="pricing-badge">Most Popular</div>
+                <div class="pricing-card pro coming-soon-card">
+                    <div class="coming-soon-sticker">
+                        <i class="fas fa-rocket"></i>
+                        <span>Coming Soon</span>
+                    </div>
+                    <div class="lock-overlay">
+                        <div class="lock-icon">🔒</div>
+                        <div class="lock-text">Not Available Yet</div>
+                    </div>
                     <div class="pricing-header">
                         <h3>Basic</h3>
                         <div class="price">
@@ -360,10 +367,20 @@
                         <li><i class="fas fa-check"></i> Tier 2 content (industry analysis reports, stock pitches, etc.)</li>
                         <li><i class="fas fa-check"></i> Free access to new features</li>
                     </ul>
-                    <button class="pricing-button pro-button" onclick="startWhatsAppSignup()">Upgrade to Basic</button>
+                    <button class="pricing-button coming-soon-button" onclick="showWaitlistForm()">
+                        <i class="fas fa-bell"></i>
+                        Join Waitlist
+                    </button>
                 </div>
-                <div class="pricing-card premium">
-                    <div class="pricing-badge">Limited Access</div>
+                <div class="pricing-card premium coming-soon-card">
+                    <div class="coming-soon-sticker">
+                        <i class="fas fa-gem"></i>
+                        <span>Coming Soon</span>
+                    </div>
+                    <div class="lock-overlay">
+                        <div class="lock-icon">🔒</div>
+                        <div class="lock-text">Not Available Yet</div>
+                    </div>
                     <div class="pricing-header">
                         <h3>Premium</h3>
                         <div class="price">
@@ -377,7 +394,10 @@
                         <li><i class="fas fa-check"></i> Tier 2 content access</li>
                         <li><i class="fas fa-check"></i> Community access, events, and catered job preparation tools</li>
                     </ul>
-                    <button class="pricing-button premium-button" onclick="startWhatsAppSignup()">Upgrade to Premium</button>
+                    <button class="pricing-button coming-soon-button" onclick="showWaitlistForm()">
+                        <i class="fas fa-bell"></i>
+                        Join Waitlist
+                    </button>
                 </div>
             </div>
         </div>
@@ -542,6 +562,44 @@
             </div>
         </div>
     </footer>
+
+    <!-- Waitlist Form Modal -->
+    <div id="waitlistModal" class="waitlist-modal" style="display: none;">
+        <div class="waitlist-modal__content">
+            <div class="waitlist-modal__header">
+                <div class="waitlist-modal__icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3>Join the Waitlist</h3>
+                <p>Be the first to know when premium features launch!</p>
+            </div>
+            <form class="waitlist-form" id="waitlistForm">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <button type="submit" class="waitlist-submit-btn">
+                    <i class="fas fa-bell"></i>
+                    Join Waitlist
+                </button>
+            </form>
+            <button class="waitlist-modal__close" onclick="closeWaitlistModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <script src="script.js?v=2"></script>
 </body>
