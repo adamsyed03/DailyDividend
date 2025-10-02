@@ -322,10 +322,27 @@ function startWhatsAppSignup() {
                 // Create WhatsApp URL with pre-filled message to YOUR business number
                 const businessNumber = '447449222602'; // Your business WhatsApp number
                 const message = `Hi! I'd like to sign up for Daily Dividend finance news and education. My phone number is ${formattedNumber}.`;
-                const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
                 
-                // Open WhatsApp in new tab
-                window.open(whatsappUrl, '_blank');
+                // Detect device and browser for better WhatsApp handling
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroid = /Android/.test(navigator.userAgent);
+                const isMobile = isIOS || isAndroid;
+                
+                let whatsappUrl;
+                
+                if (isIOS) {
+                    // iOS: Try app first, then web
+                    whatsappUrl = `whatsapp://send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+                } else if (isAndroid) {
+                    // Android: Use wa.me (most reliable)
+                    whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
+                } else {
+                    // Desktop: Use web version
+                    whatsappUrl = `https://web.whatsapp.com/send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+                }
+                
+                // Try to open WhatsApp
+                openWhatsApp(whatsappUrl, message, businessNumber);
                 
                 // Show success message
                 showNotification('Data saved! WhatsApp opened. Please send the message to complete your signup.', 'success');
@@ -350,6 +367,44 @@ function startWhatsAppSignup() {
             // Reset button states
             setButtonLoadingState(false);
         });
+}
+
+/**
+ * Open WhatsApp with proper device detection and fallbacks
+ * @param {string} whatsappUrl - The WhatsApp URL to try
+ * @param {string} message - The message to send
+ * @param {string} businessNumber - The business phone number
+ * @returns {void}
+ */
+function openWhatsApp(whatsappUrl, message, businessNumber) {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if (isIOS) {
+        // iOS: Try app first, then fallback to web
+        const appUrl = `whatsapp://send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+        const webUrl = `https://web.whatsapp.com/send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+        
+        // Try to open the app
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = appUrl;
+        document.body.appendChild(iframe);
+        
+        // Fallback to web after a short delay
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+            window.open(webUrl, '_blank');
+        }, 2000);
+        
+    } else if (isAndroid) {
+        // Android: Use wa.me (most reliable)
+        window.open(whatsappUrl, '_blank');
+        
+    } else {
+        // Desktop: Use web version
+        window.open(whatsappUrl, '_blank');
+    }
 }
 
 /**
