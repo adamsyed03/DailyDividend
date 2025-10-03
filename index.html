@@ -161,9 +161,9 @@
                         <!-- Signup Button -->
                         <button type="button" 
                                 class="cta-button" 
-                                onclick="startWhatsAppSignup()"
-                                aria-label="Get started with Daily Dividend via WhatsApp">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                                onclick="startSignup()"
+                                aria-label="Get started with Daily Dividend">
+                            <i class="fas fa-rocket" aria-hidden="true"></i>
                             Get Started Free
                         </button>
                     </form>
@@ -343,7 +343,7 @@
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i> Newsletter access</li>
                     </ul>
-                    <button class="pricing-button" onclick="startWhatsAppSignup()">Get Started</button>
+                    <button class="pricing-button" onclick="startSignup()">Get Started</button>
                 </div>
                 <div class="pricing-card pro coming-soon-card">
                     <div class="coming-soon-sticker">
@@ -462,8 +462,8 @@
                         <input type="tel" id="countryCodeBottom" placeholder="+44" maxlength="4" value="+44">
                         <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
                     </div>
-                    <button class="cta-button" onclick="startWhatsAppSignup()">
-                        <i class="fab fa-whatsapp"></i>
+                    <button class="cta-button" onclick="startSignup()">
+                        <i class="fas fa-rocket"></i>
                         Start Your Journey
                     </button>
                 </div>
@@ -563,6 +563,9 @@
         </div>
     </footer>
 
+    <!-- Hidden iframe for form submissions -->
+    <iframe name="hidden_iframe" style="display:none"></iframe>
+
         <!-- Phone Signup Modal -->
         <div id="phoneSignupModal" class="phone-signup-modal" style="display: none;">
             <div class="phone-signup-modal__content">
@@ -573,14 +576,14 @@
                     <h3>Complete Your Signup</h3>
                     <p>Just a few more details to get you started!</p>
                 </div>
-                <form class="phone-signup-form" id="phoneSignupForm">
+                <form class="phone-signup-form" id="phoneSignupForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe">
                     <div class="form-group">
                         <label for="signupFirstName">First Name</label>
-                        <input type="text" id="signupFirstName" name="firstName" required>
+                        <input type="text" id="signupFirstName" name="first_name" required>
                     </div>
                     <div class="form-group">
                         <label for="signupLastName">Last Name</label>
-                        <input type="text" id="signupLastName" name="lastName" required>
+                        <input type="text" id="signupLastName" name="last_name" required>
                     </div>
                     <div class="form-group">
                         <label for="signupEmail">Email Address</label>
@@ -588,8 +591,9 @@
                     </div>
                     <div class="form-group">
                         <label for="signupPhoneDisplay">Phone Number</label>
-                        <input type="text" id="signupPhoneDisplay" readonly class="readonly-field">
+                        <input type="text" id="signupPhoneDisplay" name="phone" readonly class="readonly-field">
                     </div>
+                    <input type="hidden" name="page" value="landing_page_signup">
                     <button type="submit" class="phone-signup-submit-btn">
                         <i class="fas fa-check"></i>
                         Complete Signup
@@ -611,14 +615,14 @@
                     <h3>Join the Waitlist</h3>
                     <p>Be the first to know when premium features launch!</p>
                 </div>
-                <form class="waitlist-form" id="waitlistForm">
+                <form class="waitlist-form" id="waitlistForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe">
                     <div class="form-group">
                         <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" name="firstName" required>
+                        <input type="text" id="firstName" name="first_name" required>
                     </div>
                     <div class="form-group">
                         <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" required>
+                        <input type="text" id="lastName" name="last_name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -628,6 +632,7 @@
                         <label for="phone">Phone Number</label>
                         <input type="tel" id="phone" name="phone" required>
                     </div>
+                    <input type="hidden" name="page" value="waitlist">
                     <button type="submit" class="waitlist-submit-btn">
                         <i class="fas fa-bell"></i>
                         Join Waitlist
@@ -640,5 +645,137 @@
         </div>
 
     <script src="script.js?v=2"></script>
+    
+    <!-- Simple form handling script -->
+    <script>
+        // Handle "Get Started" button click
+        function startSignup() {
+            try {
+                const countryCode = document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '+44';
+                const phoneInput = document.getElementById('phoneInput')?.value || document.getElementById('phoneInputBottom')?.value || '';
+                
+                // Concatenate and trim the phone number
+                const fullPhone = (countryCode + phoneInput).trim();
+                
+                if (!fullPhone || fullPhone === '+44') {
+                    alert('Please enter a valid phone number');
+                    return;
+                }
+                
+                // Populate the phone field in the modal
+                const phoneDisplay = document.getElementById('signupPhoneDisplay');
+                if (phoneDisplay) {
+                    phoneDisplay.value = fullPhone;
+                }
+                
+                // Show the modal
+                const modal = document.getElementById('phoneSignupModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                } else {
+                    console.error('Phone signup modal not found');
+                }
+            } catch (error) {
+                console.error('Error in startSignup:', error);
+                alert('There was an error opening the signup form. Please try again.');
+            }
+        }
+        
+        // Close phone signup modal
+        function closePhoneSignupModal() {
+            try {
+                const modal = document.getElementById('phoneSignupModal');
+                const form = document.getElementById('phoneSignupForm');
+                if (modal) modal.style.display = 'none';
+                if (form) form.reset();
+            } catch (error) {
+                console.error('Error closing phone signup modal:', error);
+            }
+        }
+        
+        // Close waitlist modal
+        function closeWaitlistModal() {
+            try {
+                const modal = document.getElementById('waitlistModal');
+                const form = document.getElementById('waitlistForm');
+                if (modal) modal.style.display = 'none';
+                if (form) form.reset();
+            } catch (error) {
+                console.error('Error closing waitlist modal:', error);
+            }
+        }
+        
+        // Show waitlist modal
+        function showWaitlistForm() {
+            try {
+                const modal = document.getElementById('waitlistModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                } else {
+                    console.error('Waitlist modal not found');
+                }
+            } catch (error) {
+                console.error('Error showing waitlist form:', error);
+            }
+        }
+        
+        // Test function to verify everything is working
+        function testSignup() {
+            console.log('Testing signup function...');
+            console.log('Country code element:', document.getElementById('countryCode'));
+            console.log('Phone input element:', document.getElementById('phoneInput'));
+            console.log('Phone display element:', document.getElementById('signupPhoneDisplay'));
+            console.log('Modal element:', document.getElementById('phoneSignupModal'));
+            
+            // Test with sample data
+            const testPhone = '+447123456789';
+            const phoneDisplay = document.getElementById('signupPhoneDisplay');
+            if (phoneDisplay) {
+                phoneDisplay.value = testPhone;
+                console.log('Set test phone number:', testPhone);
+            }
+            
+            const modal = document.getElementById('phoneSignupModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                console.log('Modal should now be visible');
+            }
+        }
+        
+        // Wait for DOM to be ready before adding event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Handle form submissions with success messages
+                const phoneForm = document.getElementById('phoneSignupForm');
+                const waitlistForm = document.getElementById('waitlistForm');
+                
+                if (phoneForm) {
+                    phoneForm.addEventListener('submit', function(e) {
+                        // Let the form submit naturally to Google Apps Script
+                        setTimeout(() => {
+                            alert('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!');
+                            closePhoneSignupModal();
+                        }, 1000); // Give time for the form to submit
+                    });
+                } else {
+                    console.error('Phone signup form not found');
+                }
+                
+                if (waitlistForm) {
+                    waitlistForm.addEventListener('submit', function(e) {
+                        // Let the form submit naturally to Google Apps Script
+                        setTimeout(() => {
+                            alert('Thanks! You\'ve been added to our waitlist. We\'ll notify you when premium features launch!');
+                            closeWaitlistModal();
+                        }, 1000); // Give time for the form to submit
+                    });
+                } else {
+                    console.error('Waitlist form not found');
+                }
+            } catch (error) {
+                console.error('Error setting up form event listeners:', error);
+            }
+        });
+    </script>
 </body>
 </html>

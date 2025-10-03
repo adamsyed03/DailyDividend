@@ -233,8 +233,8 @@ function initializeInteractiveEffects() {
         
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0) scale(1)';
-        });
     });
+});
 
     // Add click effects to buttons
     const buttons = document.querySelectorAll('.cta-button, .pricing-button');
@@ -372,100 +372,68 @@ function closePhoneSignupModal() {
  * @returns {void}
  */
 function handlePhoneSignupSubmit(event) {
-    console.log('Phone signup form submitted!');
     event.preventDefault();
     
+    console.log('Phone signup form submitted!');
+    
+    const form = event.target;
     const modal = document.getElementById('phoneSignupModal');
-    const formData = new FormData(event.target);
     
     // Get phone data from modal dataset
     const formattedNumber = modal.dataset.formattedNumber;
-    const countryCode = modal.dataset.countryCode;
-    const phoneNumber = modal.dataset.phoneNumber;
     
-    console.log('Modal data:', {
-        formattedNumber,
-        countryCode,
-        phoneNumber
-    });
+    // Update the phone field with the formatted number
+    const phoneInput = form.querySelector('input[name="phone"]');
+    phoneInput.value = formattedNumber;
     
-    // Get form data
-    const signupData = {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        email: formData.get('email'),
-        phoneNumber: formattedNumber,
-        countryCode: countryCode,
-        rawPhone: phoneNumber,
-        source: 'phone_signup_modal',
-        timestamp: new Date().toISOString()
+    // Prepare form data exactly like your example
+    let formData = {
+        first_name: form.first_name.value,
+        last_name: form.last_name.value,
+        email: form.email.value,
+        phone: formattedNumber,
+        page: form.page.value
     };
     
-    console.log('Signup data prepared:', signupData);
+    console.log('Form data being sent:', formData);
     
     // Show loading state
-    const submitBtn = event.target.querySelector('.phone-signup-submit-btn');
+    const submitBtn = form.querySelector('.phone-signup-submit-btn');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
     submitBtn.disabled = true;
     
-    // For now, let's just show success and skip the Google Apps Script call
-    // This will help us test if the form submission is working
-    console.log('Form submitted successfully, showing success message');
+    // Submit to Google Apps Script using your exact approach
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
     
-    // Show success message
-    showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
-    
-    // Close modal
-    closePhoneSignupModal();
-    
-    // Track successful signup
-    trackEvent('phone_signup_completed', {
-        phone_number: formattedNumber,
-        email: signupData.email,
-        source: 'modal',
-        timestamp: new Date().toISOString()
+    fetch(googleScriptUrl, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {"Content-Type": "application/json"}
+    })
+    .then(res => res.text())
+    .then(data => {
+        console.log('Response from Google Apps Script:', data);
+        showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
+        closePhoneSignupModal();
+        
+        // Track successful signup
+        trackEvent('phone_signup_completed', {
+            phone_number: formattedNumber,
+            email: formData.email,
+            source: 'modal',
+            timestamp: new Date().toISOString()
+        });
+    })
+    .catch(err => {
+        console.error('Error submitting form:', err);
+        showNotification('Unable to complete signup. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
     });
-    
-    // TODO: Re-enable Google Apps Script submission once we confirm form works
-    /*
-    // Submit to Google Apps Script
-    submitCompleteSignupToGoogleAppsScript(signupData)
-        .then(() => {
-            // Show success message
-            showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
-            
-            // Close modal
-            closePhoneSignupModal();
-            
-            // Track successful signup
-            trackEvent('phone_signup_completed', {
-                phone_number: formattedNumber,
-                email: signupData.email,
-                source: 'modal',
-                timestamp: new Date().toISOString()
-            });
-        })
-        .catch((error) => {
-            console.error('Error submitting signup:', error);
-            
-            // Try alternative submission method
-            console.log('Trying alternative submission method...');
-            submitWithAlternativeMethod(signupData)
-                .then(() => {
-                    showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
-                    closePhoneSignupModal();
-                })
-                .catch((altError) => {
-                    console.error('Alternative method also failed:', altError);
-                    showNotification('Unable to complete signup. Please try again.', 'error');
-                });
-        })
-    */
-    
-    // Reset button state
-    submitBtn.innerHTML = originalText;
-    submitBtn.disabled = false;
 }
 
 /**
@@ -552,33 +520,99 @@ function submitCompleteSignupToGoogleAppsScript(signupData) {
 }
 
 /**
- * Alternative submission method using form data
+ * Simple form submission method (no CORS issues)
  * @param {Object} signupData - The signup data object
- * @returns {Promise} - Promise that resolves when data is submitted
+ * @returns {void}
  */
-function submitWithAlternativeMethod(signupData) {
+function submitWithFormMethod(signupData) {
     const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
     
-    // Create form data instead of JSON
-    const formData = new FormData();
-    formData.append('first_name', signupData.firstName);
-    formData.append('last_name', signupData.lastName);
-    formData.append('email', signupData.email);
-    formData.append('phone_number', signupData.phoneNumber);
-    formData.append('page', 'landing_page_signup');
-    formData.append('source', signupData.source);
-    formData.append('timestamp', signupData.timestamp);
+    console.log('=== FORM SUBMISSION DEBUG ===');
+    console.log('Google Script URL:', googleScriptUrl);
+    console.log('Signup Data:', signupData);
+    
+    // Create a hidden form and submit it
+    const form = document.createElement('form');
+    form.action = googleScriptUrl;
+    form.method = 'POST';
+    form.target = 'hidden_iframe';
+    form.style.display = 'none';
+    
+    // Add form fields
+    const fields = {
+        'first_name': signupData.firstName,
+        'last_name': signupData.lastName,
+        'email': signupData.email,
+        'phone': signupData.phoneNumber,
+        'page': 'landing_page_signup'
+    };
+    
+    console.log('Form fields being sent:', fields);
+    
+    Object.keys(fields).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+        console.log(`Added field: ${key} = ${fields[key]}`);
+    });
+    
+    // Create hidden iframe if it doesn't exist
+    let iframe = document.getElementById('hidden_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'hidden_iframe';
+        iframe.name = 'hidden_iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        console.log('Created hidden iframe');
+    } else {
+        console.log('Using existing hidden iframe');
+    }
+    
+    // Submit the form
+    document.body.appendChild(form);
+    console.log('Form added to DOM, submitting...');
+    form.submit();
+    document.body.removeChild(form);
+    
+    console.log('Form submitted to Google Apps Script');
+    console.log('=== END FORM SUBMISSION DEBUG ===');
+}
 
-    console.log('Trying alternative method with FormData');
-
-    return fetch(googleScriptUrl, {
+/**
+ * Test function - run this in browser console to test Google Apps Script directly
+ * Usage: testGoogleAppsScript()
+ */
+function testGoogleAppsScript() {
+    console.log('=== TESTING GOOGLE APPS SCRIPT DIRECTLY ===');
+    
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
+    
+    fetch(googleScriptUrl, {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: new URLSearchParams({
+            first_name: 'Test',
+            last_name: 'User',
+            email: 'test@example.com',
+            phone: '+447000000000',
+            page: '/console'
+        })
     })
     .then(response => {
-        console.log('Alternative method response status:', response.status);
-        console.log('Alternative method successful');
-        return Promise.resolve();
+        console.log('Test response status:', response.status);
+        return response.text();
+    })
+    .then(text => {
+        console.log('Test response text:', text);
+        console.log('=== TEST COMPLETE ===');
+    })
+    .catch(error => {
+        console.error('Test failed:', error);
     });
 }
 
@@ -630,7 +664,7 @@ function openWhatsAppWithMessage(businessNumber, message) {
  */
 function setButtonLoadingState(isLoading) {
     const buttons = document.querySelectorAll('.cta-button, .pricing-button');
-    buttons.forEach(button => {
+        buttons.forEach(button => {
         if (isLoading) {
             button.disabled = true;
             button.classList.add('loading');
@@ -1051,39 +1085,39 @@ function showNotification(message, type = 'info') {
 
     // Add notification styles if not already present
     if (!document.querySelector('#notification-styles')) {
-        const style = document.createElement('style');
+    const style = document.createElement('style');
         style.id = 'notification-styles';
-        style.textContent = `
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
             }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
             .notification__content {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                flex: 1;
-            }
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
             .notification__close {
-                background: none;
-                border: none;
-                color: white;
-                cursor: pointer;
-                padding: 5px;
-                border-radius: 5px;
-                transition: background 0.2s ease;
-            }
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
             .notification__close:hover {
-                background: rgba(255, 255, 255, 0.2);
-            }
-        `;
-        document.head.appendChild(style);
+            background: rgba(255, 255, 255, 0.2);
+        }
+    `;
+    document.head.appendChild(style);
     }
 
     // Add to page
@@ -1146,12 +1180,12 @@ function trackEvent(eventName, properties = {}) {
  * @returns {void}
  */
 function initializeKeyboardNavigation() {
-    document.addEventListener('keydown', function(e) {
-        // Enter key on phone input should trigger signup
-        if (e.key === 'Enter' && e.target.type === 'tel') {
+document.addEventListener('keydown', function(e) {
+    // Enter key on phone input should trigger signup
+    if (e.key === 'Enter' && e.target.type === 'tel') {
             e.preventDefault();
-            startWhatsAppSignup();
-        }
+        startWhatsAppSignup();
+    }
         
         // Escape key to close notifications
         if (e.key === 'Escape') {
