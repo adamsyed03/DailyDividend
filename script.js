@@ -307,65 +307,132 @@ function startWhatsAppSignup() {
         return;
     }
 
-    // Show loading state
-    setButtonLoadingState(true);
-
-    // Format phone number for WhatsApp
+    // Format phone number for display
     const formattedNumber = `${countryCode}${phoneNumber}`;
-    const cleanCountryCode = countryCode.replace('+', '');
+    
+    // Show the phone signup modal with the phone number pre-filled
+    showPhoneSignupModal(formattedNumber, countryCode, phoneNumber);
+}
 
-    // Submit data to Google Apps Script first
-    submitToGoogleAppsScript(formattedNumber, countryCode, phoneNumber)
+/**
+ * Show phone signup modal with pre-filled phone number
+ * @param {string} formattedNumber - The complete formatted phone number
+ * @param {string} countryCode - The country code
+ * @param {string} phoneNumber - The phone number without country code
+ * @returns {void}
+ */
+function showPhoneSignupModal(formattedNumber, countryCode, phoneNumber) {
+    const modal = document.getElementById('phoneSignupModal');
+    const phoneDisplay = document.getElementById('signupPhoneDisplay');
+    
+    // Pre-fill the phone number display
+    phoneDisplay.value = formattedNumber;
+    
+    // Store the phone data for later use
+    modal.dataset.formattedNumber = formattedNumber;
+    modal.dataset.countryCode = countryCode;
+    modal.dataset.phoneNumber = phoneNumber;
+    
+    // Show the modal
+    modal.style.display = 'flex';
+    
+    // Focus on first name input
+    setTimeout(() => {
+        document.getElementById('signupFirstName').focus();
+    }, 300);
+    
+    // Track modal opened
+    trackEvent('phone_signup_modal_opened', {
+        phone_number: formattedNumber,
+        source: 'landing_page',
+        timestamp: new Date().toISOString()
+    });
+}
+
+/**
+ * Close phone signup modal
+ * @returns {void}
+ */
+function closePhoneSignupModal() {
+    const modal = document.getElementById('phoneSignupModal');
+    modal.style.display = 'none';
+    
+    // Reset form
+    document.getElementById('phoneSignupForm').reset();
+    
+    // Clear stored data
+    delete modal.dataset.formattedNumber;
+    delete modal.dataset.countryCode;
+    delete modal.dataset.phoneNumber;
+}
+
+/**
+ * Handle phone signup form submission
+ * @param {Event} event - The form submission event
+ * @returns {void}
+ */
+function handlePhoneSignupSubmit(event) {
+    event.preventDefault();
+    
+    const modal = document.getElementById('phoneSignupModal');
+    const formData = new FormData(event.target);
+    
+    // Get phone data from modal dataset
+    const formattedNumber = modal.dataset.formattedNumber;
+    const countryCode = modal.dataset.countryCode;
+    const phoneNumber = modal.dataset.phoneNumber;
+    
+    // Get form data
+    const signupData = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        phoneNumber: formattedNumber,
+        countryCode: countryCode,
+        rawPhone: phoneNumber,
+        source: 'phone_signup_modal',
+        timestamp: new Date().toISOString()
+    };
+    
+    // Show loading state
+    const submitBtn = event.target.querySelector('.phone-signup-submit-btn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+    submitBtn.disabled = true;
+    
+    // Submit to Google Apps Script
+    submitCompleteSignupToGoogleAppsScript(signupData)
         .then(() => {
             // After successful submission, open WhatsApp
-            try {
-                // Create WhatsApp URL with pre-filled message to YOUR business number
-                const businessNumber = '447449222602'; // Your business WhatsApp number
-                const message = `Hi! I'd like to sign up for Daily Dividend finance news and education. My phone number is ${formattedNumber}.`;
-                
-                // Detect device and browser for better WhatsApp handling
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                const isAndroid = /Android/.test(navigator.userAgent);
-                const isMobile = isIOS || isAndroid;
-                
-                let whatsappUrl;
-                
-                if (isIOS) {
-                    // iOS: Try app first, then web
-                    whatsappUrl = `whatsapp://send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
-                } else if (isAndroid) {
-                    // Android: Use wa.me (most reliable)
-                    whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
-                } else {
-                    // Desktop: Use web version
-                    whatsappUrl = `https://web.whatsapp.com/send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
-                }
-                
-                // Try to open WhatsApp
-                openWhatsApp(whatsappUrl, message, businessNumber);
-                
-                // Show success message
-                showNotification('Data saved! WhatsApp opened. Please send the message to complete your signup.', 'success');
-                
-                // Track signup attempt for analytics
-                trackEvent('signup_attempt', {
-                    phone_number: formattedNumber,
-                    source: 'landing_page',
-                    timestamp: new Date().toISOString()
-                });
-                
-            } catch (error) {
-                console.error('Error opening WhatsApp:', error);
-                showNotification('Data saved! Unable to open WhatsApp. Please try again.', 'warning');
-            }
+            const businessNumber = '447449222602';
+            const fullName = `${signupData.firstName} ${signupData.lastName}`;
+            const message = `Hi! I'd like to sign up for Daily Dividend finance news and education. My name is ${fullName}, email is ${signupData.email}, and phone number is ${formattedNumber}.`;
+            
+            // Open WhatsApp
+            openWhatsAppWithMessage(businessNumber, message);
+            
+            // Show success message
+            showNotification('Signup complete! WhatsApp opened. Please send the message to complete your registration.', 'success');
+            
+            // Close modal
+            closePhoneSignupModal();
+            
+            // Track successful signup
+            trackEvent('phone_signup_completed', {
+                phone_number: formattedNumber,
+                email: signupData.email,
+                source: 'modal',
+                timestamp: new Date().toISOString()
+            });
         })
         .catch((error) => {
-            console.error('Error submitting to Google Apps Script:', error);
-            showNotification('Unable to save data. Please try again.', 'error');
+            console.error('Error submitting signup:', error);
+            showNotification('Unable to complete signup. Please try again.', 'error');
         })
         .finally(() => {
-            // Reset button states
-            setButtonLoadingState(false);
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
         });
 }
 
@@ -408,26 +475,26 @@ function openWhatsApp(whatsappUrl, message, businessNumber) {
 }
 
 /**
- * Submit phone number data to Google Apps Script
- * @param {string} formattedNumber - The complete formatted phone number
- * @param {string} countryCode - The country code
- * @param {string} phoneNumber - The phone number without country code
+ * Submit complete signup data to Google Apps Script
+ * @param {Object} signupData - The complete signup data object
  * @returns {Promise} - Promise that resolves when data is submitted
  */
-function submitToGoogleAppsScript(formattedNumber, countryCode, phoneNumber) {
+function submitCompleteSignupToGoogleAppsScript(signupData) {
     const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
     
     const formData = {
-        name: 'Daily Dividend Signup',
-        email: 'signup@dailydividend.com',
+        name: `${signupData.firstName} ${signupData.lastName}`,
+        email: signupData.email,
         product: 'Daily Dividend WhatsApp Service',
         quantity: 1,
-        comments: `Phone: ${formattedNumber}, Country Code: ${countryCode}, Raw Phone: ${phoneNumber}, Source: Landing Page, Timestamp: ${new Date().toISOString()}`,
-        phone_number: formattedNumber,
-        country_code: countryCode,
-        raw_phone: phoneNumber,
-        source: 'landing_page',
-        timestamp: new Date().toISOString(),
+        comments: `Complete Signup - Phone: ${signupData.phoneNumber}, Country Code: ${signupData.countryCode}, Raw Phone: ${signupData.rawPhone}, Source: ${signupData.source}, Timestamp: ${signupData.timestamp}`,
+        phone_number: signupData.phoneNumber,
+        country_code: signupData.countryCode,
+        raw_phone: signupData.rawPhone,
+        first_name: signupData.firstName,
+        last_name: signupData.lastName,
+        source: signupData.source,
+        timestamp: signupData.timestamp,
         user_agent: navigator.userAgent,
         referrer: document.referrer || 'direct'
     };
@@ -443,13 +510,54 @@ function submitToGoogleAppsScript(formattedNumber, countryCode, phoneNumber) {
     .then(response => {
         // Note: With no-cors mode, we can't read the response
         // But the data should still be submitted to Google Apps Script
-        console.log('Data submitted to Google Apps Script successfully');
+        console.log('Complete signup data submitted to Google Apps Script successfully');
         return Promise.resolve();
     })
     .catch(error => {
-        console.error('Error submitting to Google Apps Script:', error);
+        console.error('Error submitting complete signup to Google Apps Script:', error);
         throw error;
     });
+}
+
+/**
+ * Open WhatsApp with message using proper device detection
+ * @param {string} businessNumber - The business phone number
+ * @param {string} message - The message to send
+ * @returns {void}
+ */
+function openWhatsAppWithMessage(businessNumber, message) {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    let whatsappUrl;
+    
+    if (isIOS) {
+        // iOS: Try app first, then fallback to web
+        const appUrl = `whatsapp://send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+        const webUrl = `https://web.whatsapp.com/send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+        
+        // Try to open the app
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = appUrl;
+        document.body.appendChild(iframe);
+        
+        // Fallback to web after a short delay
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+            window.open(webUrl, '_blank');
+        }, 2000);
+        
+    } else if (isAndroid) {
+        // Android: Use wa.me (most reliable)
+        whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+        
+    } else {
+        // Desktop: Use web version
+        whatsappUrl = `https://web.whatsapp.com/send?phone=${businessNumber}&text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    }
 }
 
 /**
@@ -1068,6 +1176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeKeyboardNavigation();
     initializeLazyLoading();
     initializeWaitlistForm();
+    initializePhoneSignupForm();
     
     // Add ripple animation styles
     const style = document.createElement('style');
@@ -1098,6 +1207,17 @@ function initializeWaitlistForm() {
     const waitlistForm = document.getElementById('waitlistForm');
     if (waitlistForm) {
         waitlistForm.addEventListener('submit', handleWaitlistSubmit);
+    }
+}
+
+/**
+ * Initialize phone signup form functionality
+ * @returns {void}
+ */
+function initializePhoneSignupForm() {
+    const phoneSignupForm = document.getElementById('phoneSignupForm');
+    if (phoneSignupForm) {
+        phoneSignupForm.addEventListener('submit', handlePhoneSignupSubmit);
     }
 }
 
