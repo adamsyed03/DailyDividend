@@ -483,35 +483,36 @@ function submitCompleteSignupToGoogleAppsScript(signupData) {
     const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
     
     const formData = {
-        name: `${signupData.firstName} ${signupData.lastName}`,
-        email: signupData.email,
-        product: 'Daily Dividend WhatsApp Service',
-        quantity: 1,
-        comments: `Complete Signup - Phone: ${signupData.phoneNumber}, Country Code: ${signupData.countryCode}, Raw Phone: ${signupData.rawPhone}, Source: ${signupData.source}, Timestamp: ${signupData.timestamp}`,
-        phone_number: signupData.phoneNumber,
-        country_code: signupData.countryCode,
-        raw_phone: signupData.rawPhone,
         first_name: signupData.firstName,
         last_name: signupData.lastName,
+        email: signupData.email,
+        phone_number: signupData.phoneNumber,
         source: signupData.source,
-        timestamp: signupData.timestamp,
-        user_agent: navigator.userAgent,
-        referrer: document.referrer || 'direct'
+        timestamp: signupData.timestamp
     };
+
+    // Log what we're sending
+    console.log('Sending data to Google Apps Script:', formData);
+    console.log('URL:', googleScriptUrl);
 
     return fetch(googleScriptUrl, {
         method: 'POST',
-        mode: 'no-cors', // Required for Google Apps Script
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
     })
     .then(response => {
-        // Note: With no-cors mode, we can't read the response
-        // But the data should still be submitted to Google Apps Script
-        console.log('Complete signup data submitted to Google Apps Script successfully');
-        return Promise.resolve();
+        console.log('Response status:', response.status);
+        if (response.ok) {
+            console.log('Complete signup data submitted to Google Apps Script successfully');
+            return response.text().then(text => {
+                console.log('Response:', text);
+                return Promise.resolve();
+            });
+        } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
     })
     .catch(error => {
         console.error('Error submitting complete signup to Google Apps Script:', error);
