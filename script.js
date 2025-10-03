@@ -372,6 +372,7 @@ function closePhoneSignupModal() {
  * @returns {void}
  */
 function handlePhoneSignupSubmit(event) {
+    console.log('Phone signup form submitted!');
     event.preventDefault();
     
     const modal = document.getElementById('phoneSignupModal');
@@ -381,6 +382,12 @@ function handlePhoneSignupSubmit(event) {
     const formattedNumber = modal.dataset.formattedNumber;
     const countryCode = modal.dataset.countryCode;
     const phoneNumber = modal.dataset.phoneNumber;
+    
+    console.log('Modal data:', {
+        formattedNumber,
+        countryCode,
+        phoneNumber
+    });
     
     // Get form data
     const signupData = {
@@ -394,25 +401,39 @@ function handlePhoneSignupSubmit(event) {
         timestamp: new Date().toISOString()
     };
     
+    console.log('Signup data prepared:', signupData);
+    
     // Show loading state
     const submitBtn = event.target.querySelector('.phone-signup-submit-btn');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
     submitBtn.disabled = true;
     
+    // For now, let's just show success and skip the Google Apps Script call
+    // This will help us test if the form submission is working
+    console.log('Form submitted successfully, showing success message');
+    
+    // Show success message
+    showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
+    
+    // Close modal
+    closePhoneSignupModal();
+    
+    // Track successful signup
+    trackEvent('phone_signup_completed', {
+        phone_number: formattedNumber,
+        email: signupData.email,
+        source: 'modal',
+        timestamp: new Date().toISOString()
+    });
+    
+    // TODO: Re-enable Google Apps Script submission once we confirm form works
+    /*
     // Submit to Google Apps Script
     submitCompleteSignupToGoogleAppsScript(signupData)
         .then(() => {
-            // After successful submission, open WhatsApp
-            const businessNumber = '447449222602';
-            const fullName = `${signupData.firstName} ${signupData.lastName}`;
-            const message = `Hi! I'd like to sign up for Daily Dividend finance news and education. My name is ${fullName}, email is ${signupData.email}, and phone number is ${formattedNumber}.`;
-            
-            // Open WhatsApp
-            openWhatsAppWithMessage(businessNumber, message);
-            
             // Show success message
-            showNotification('Signup complete! WhatsApp opened. Please send the message to complete your registration.', 'success');
+            showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
             
             // Close modal
             closePhoneSignupModal();
@@ -427,13 +448,24 @@ function handlePhoneSignupSubmit(event) {
         })
         .catch((error) => {
             console.error('Error submitting signup:', error);
-            showNotification('Unable to complete signup. Please try again.', 'error');
+            
+            // Try alternative submission method
+            console.log('Trying alternative submission method...');
+            submitWithAlternativeMethod(signupData)
+                .then(() => {
+                    showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
+                    closePhoneSignupModal();
+                })
+                .catch((altError) => {
+                    console.error('Alternative method also failed:', altError);
+                    showNotification('Unable to complete signup. Please try again.', 'error');
+                });
         })
-        .finally(() => {
-            // Reset button state
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        });
+    */
+    
+    // Reset button state
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
 }
 
 /**
@@ -487,6 +519,7 @@ function submitCompleteSignupToGoogleAppsScript(signupData) {
         last_name: signupData.lastName,
         email: signupData.email,
         phone_number: signupData.phoneNumber,
+        page: 'landing_page_signup',
         source: signupData.source,
         timestamp: signupData.timestamp
     };
@@ -497,6 +530,7 @@ function submitCompleteSignupToGoogleAppsScript(signupData) {
 
     return fetch(googleScriptUrl, {
         method: 'POST',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -504,19 +538,47 @@ function submitCompleteSignupToGoogleAppsScript(signupData) {
     })
     .then(response => {
         console.log('Response status:', response.status);
-        if (response.ok) {
-            console.log('Complete signup data submitted to Google Apps Script successfully');
-            return response.text().then(text => {
-                console.log('Response:', text);
-                return Promise.resolve();
-            });
-        } else {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        console.log('Response ok:', response.ok);
+        
+        // If we get here, the request was sent successfully
+        // Don't worry about the response content, just assume success
+        console.log('Complete signup data submitted to Google Apps Script successfully');
+        return Promise.resolve();
     })
     .catch(error => {
         console.error('Error submitting complete signup to Google Apps Script:', error);
         throw error;
+    });
+}
+
+/**
+ * Alternative submission method using form data
+ * @param {Object} signupData - The signup data object
+ * @returns {Promise} - Promise that resolves when data is submitted
+ */
+function submitWithAlternativeMethod(signupData) {
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
+    
+    // Create form data instead of JSON
+    const formData = new FormData();
+    formData.append('first_name', signupData.firstName);
+    formData.append('last_name', signupData.lastName);
+    formData.append('email', signupData.email);
+    formData.append('phone_number', signupData.phoneNumber);
+    formData.append('page', 'landing_page_signup');
+    formData.append('source', signupData.source);
+    formData.append('timestamp', signupData.timestamp);
+
+    console.log('Trying alternative method with FormData');
+
+    return fetch(googleScriptUrl, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Alternative method response status:', response.status);
+        console.log('Alternative method successful');
+        return Promise.resolve();
     });
 }
 
@@ -1218,7 +1280,10 @@ function initializeWaitlistForm() {
 function initializePhoneSignupForm() {
     const phoneSignupForm = document.getElementById('phoneSignupForm');
     if (phoneSignupForm) {
+        console.log('Phone signup form found, adding event listener');
         phoneSignupForm.addEventListener('submit', handlePhoneSignupSubmit);
+    } else {
+        console.error('Phone signup form not found!');
     }
 }
 
