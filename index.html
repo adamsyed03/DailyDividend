@@ -563,43 +563,81 @@
         </div>
     </footer>
 
-    <!-- Waitlist Form Modal -->
-    <div id="waitlistModal" class="waitlist-modal" style="display: none;">
-        <div class="waitlist-modal__content">
-            <div class="waitlist-modal__header">
-                <div class="waitlist-modal__icon">
-                    <i class="fas fa-rocket"></i>
+        <!-- Phone Signup Modal -->
+        <div id="phoneSignupModal" class="phone-signup-modal" style="display: none;">
+            <div class="phone-signup-modal__content">
+                <div class="phone-signup-modal__header">
+                    <div class="phone-signup-modal__icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>Complete Your Signup</h3>
+                    <p>Just a few more details to get you started!</p>
                 </div>
-                <h3>Join the Waitlist</h3>
-                <p>Be the first to know when premium features launch!</p>
-            </div>
-            <form class="waitlist-form" id="waitlistForm">
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <button type="submit" class="waitlist-submit-btn">
-                    <i class="fas fa-bell"></i>
-                    Join Waitlist
+                <form class="phone-signup-form" id="phoneSignupForm">
+                    <div class="form-group">
+                        <label for="signupFirstName">First Name</label>
+                        <input type="text" id="signupFirstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupLastName">Last Name</label>
+                        <input type="text" id="signupLastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhoneDisplay">Phone Number</label>
+                        <input type="text" id="signupPhoneDisplay" readonly class="readonly-field">
+                    </div>
+                    <button type="submit" class="phone-signup-submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Complete Signup & Open WhatsApp
+                    </button>
+                </form>
+                <button class="phone-signup-modal__close" onclick="closePhoneSignupModal()">
+                    <i class="fas fa-times"></i>
                 </button>
-            </form>
-            <button class="waitlist-modal__close" onclick="closeWaitlistModal()">
-                <i class="fas fa-times"></i>
-            </button>
+            </div>
         </div>
-    </div>
+
+        <!-- Waitlist Form Modal -->
+        <div id="waitlistModal" class="waitlist-modal" style="display: none;">
+            <div class="waitlist-modal__content">
+                <div class="waitlist-modal__header">
+                    <div class="waitlist-modal__icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Join the Waitlist</h3>
+                    <p>Be the first to know when premium features launch!</p>
+                </div>
+                <form class="waitlist-form" id="waitlistForm">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <button type="submit" class="waitlist-submit-btn">
+                        <i class="fas fa-bell"></i>
+                        Join Waitlist
+                    </button>
+                </form>
+                <button class="waitlist-modal__close" onclick="closeWaitlistModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
 
     <script src="script.js?v=2"></script>
 </body>
