@@ -1,737 +1,303 @@
 <!DOCTYPE html>
-<!--
-    Daily Dividend - Finance News WhatsApp Bot Landing Page
-    =====================================================
-    
-    A professional landing page for Daily Dividend, a financial education
-    and news service delivered via WhatsApp. This page showcases features,
-    pricing, and provides user signup functionality.
-    
-    Features:
-    - Responsive design with mobile-first approach
-    - WhatsApp integration for user signup
-    - Professional UI/UX with modern design patterns
-    - Accessibility compliant (WCAG 2.1 AA)
-    - SEO optimized with structured data
-    - Performance optimized with lazy loading
-    
-    Author: Daily Dividend Team
-    Version: 2.0
-    Last Updated: 2024
--->
 <html lang="en">
 <head>
-    <!-- Basic Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Meta Tags -->
-    <title>Daily Dividend - Finance News WhatsApp Bot | Stay Informed, Stay Ahead</title>
-    <meta name="description" content="Get daily financial news, market insights, and educational content delivered directly to your WhatsApp. Join thousands of investors staying informed with Daily Dividend's AI-powered finance assistant.">
-    <meta name="keywords" content="finance news, WhatsApp bot, market insights, financial education, investment news, stock market, daily dividend, financial assistant">
-    <meta name="author" content="Daily Dividend">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:title" content="Daily Dividend - Finance News WhatsApp Bot">
-    <meta property="og:description" content="Get daily financial news and market insights delivered to your WhatsApp. Join our community of informed investors.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dailydividend.com">
-    <meta property="og:image" content="https://dailydividend.com/og-image.jpg">
-    <meta property="og:site_name" content="Daily Dividend">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Daily Dividend - Finance News WhatsApp Bot">
-    <meta name="twitter:description" content="Get daily financial news and market insights delivered to your WhatsApp.">
-    <meta name="twitter:image" content="https://dailydividend.com/twitter-card.jpg">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://dailydividend.com">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css?v=14">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    
-    <!-- Preconnect to external domains for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Daily Dividend",
-        "description": "Finance news and education service delivered via WhatsApp",
-        "url": "https://dailydividend.com",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "WhatsApp",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "GBP",
-            "description": "Free tier with premium options"
-        }
-    }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Dividend - Finance News WhatsApp Bot | Stay Informed, Stay Ahead</title>
+  <meta name="description" content="Get daily financial news, market insights, and educational content delivered directly to your WhatsApp. Join thousands of investors staying informed with Daily Dividend's AI-powered finance assistant.">
+  <link rel="stylesheet" href="styles.css?v=14">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 </head>
 <body>
-    <!-- 
-        ===========================================
-        MAIN NAVIGATION
-        ===========================================
-        Fixed navigation bar with logo and main menu items.
-        Includes smooth scrolling navigation and responsive design.
-    -->
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
-            <!-- Brand Logo Section -->
-            <div class="nav-logo">
-                <img src="DDlogo.jpeg?v=2" 
-                     alt="Daily Dividend Logo - Finance News WhatsApp Bot" 
-                     class="logo-dd-image"
-                     width="120" 
-                     height="40">
+
+  <!-- NAV -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <img src="DDlogo.jpeg?v=2" alt="Daily Dividend Logo" class="logo-dd-image" width="120" height="40">
+      </div>
+      <div class="nav-links" role="menubar">
+        <a href="#features" role="menuitem">Features</a>
+        <a href="#how-it-works" role="menuitem">How it Works</a>
+        <a href="#pricing" role="menuitem">Pricing</a>
+        <a href="#contact" role="menuitem">Contact</a>
+        <a href="#terms" role="menuitem">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" role="banner">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title"><span class="gradient-text">Daily Dividend</span></h1>
+        <p class="hero-subtitle">Markets within minutes</p>
+
+        <div class="hero-cta">
+          <!-- Top phone capture (opens modal, does not submit) -->
+          <form class="signup-form" role="form" aria-label="Sign up for Daily Dividend">
+            <div class="input-group">
+              <input type="tel" id="countryCode" name="countryCode" placeholder="+44" maxlength="4" value="+44" aria-label="Country code" required>
+              <input type="tel" id="phoneInput" name="phoneNumber" placeholder="Phone number" maxlength="15" aria-label="Phone number" required>
             </div>
-            
-            <!-- Main Navigation Menu -->
-            <div class="nav-links" role="menubar">
-                <a href="#features" role="menuitem" aria-label="View our features">Features</a>
-                <a href="#how-it-works" role="menuitem" aria-label="Learn how it works">How it Works</a>
-                <a href="#pricing" role="menuitem" aria-label="View pricing plans">Pricing</a>
-                <a href="#contact" role="menuitem" aria-label="Contact us">Contact</a>
-                <a href="#terms" role="menuitem" aria-label="Read terms and conditions">Terms</a>
-            </div>
+            <button type="button" class="cta-button" onclick="startSignup()" aria-label="Get started with Daily Dividend">
+              <i class="fas fa-rocket" aria-hidden="true"></i> Get Started Free
+            </button>
+          </form>
+          <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
         </div>
-    </nav>
+      </div>
 
-    <!-- 
-        ===========================================
-        HERO SECTION
-        ===========================================
-        Main landing section with value proposition, 
-        signup form, and visual demonstration.
-        Includes WhatsApp integration for user onboarding.
-    -->
-    <section class="hero" role="banner">
-        <div class="hero-container">
-            <!-- Main Content Area -->
-            <div class="hero-content">
-                <!-- Primary Headline -->
-                <h1 class="hero-title">
-                    <span class="gradient-text">Daily Dividend</span>
-                </h1>
-                
-                <!-- Value Proposition -->
-                <p class="hero-subtitle">
-                    Markets within minutes
-                </p>
-                
-                <!-- Call-to-Action Section -->
-                <div class="hero-cta">
-                    <!-- Phone Number Signup Form -->
-                    <form class="signup-form" role="form" aria-label="Sign up for Daily Dividend">
-                        <div class="input-group">
-                            <!-- Country Code Input -->
-                            <input type="tel" 
-                                   id="countryCode" 
-                                   name="countryCode"
-                                   placeholder="+44" 
-                                   maxlength="4" 
-                                   value="+44"
-                                   aria-label="Country code"
-                                   required>
-                            
-                            <!-- Phone Number Input -->
-                            <input type="tel" 
-                                   id="phoneInput" 
-                                   name="phoneNumber"
-                                   placeholder="Phone number" 
-                                   maxlength="15"
-                                   aria-label="Phone number"
-                                   required>
-                        </div>
-                        
-                        <!-- Signup Button -->
-                        <button type="button" 
-                                class="cta-button" 
-                                onclick="startSignup()"
-                                aria-label="Get started with Daily Dividend">
-                            <i class="fas fa-rocket" aria-hidden="true"></i>
-                            Get Started Free
-                        </button>
-                    </form>
-                    
-                    <!-- Trust Signal -->
-                    <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
-                </div>
+      <!-- Visual -->
+      <div class="hero-visual">
+        <div class="phone-mockup" role="img" aria-label="WhatsApp chat demonstration">
+          <div class="phone-screen">
+            <div class="whatsapp-chat">
+              <div class="chat-header">
+                <div class="chat-avatar" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
+                <div class="chat-info"><h4>DD Assistant</h4><span>Online</span></div>
+              </div>
+              <div class="chat-messages">
+                <div class="message bot-message"><p>📈 Market Update: S&P 500 up 0.8% today</p><span class="time">2:30 PM</span></div>
+                <div class="message user-message"><p>Tell me about dividend stocks</p><span class="time">2:31 PM</span></div>
+                <div class="message bot-message"><p>💡 Here are today's top dividend picks...</p><span class="time">2:31 PM</span></div>
+              </div>
             </div>
-            <!-- Visual Demonstration Area -->
-            <div class="hero-visual">
-                <!-- WhatsApp Chat Mockup -->
-                <div class="phone-mockup" role="img" aria-label="WhatsApp chat demonstration">
-                    <div class="phone-screen">
-                        <div class="whatsapp-chat">
-                            <!-- Chat Header -->
-                            <div class="chat-header">
-                                <div class="chat-avatar" aria-hidden="true">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <div class="chat-info">
-                                    <h4>DD Assistant</h4>
-                                    <span>Online</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Sample Chat Messages -->
-                            <div class="chat-messages">
-                                <!-- Bot Message Example -->
-                                <div class="message bot-message">
-                                    <p>📈 Market Update: S&P 500 up 0.8% today</p>
-                                    <span class="time" aria-label="Message time">2:30 PM</span>
-                                </div>
-                                
-                                <!-- User Message Example -->
-                                <div class="message user-message">
-                                    <p>Tell me about dividend stocks</p>
-                                    <span class="time" aria-label="Message time">2:31 PM</span>
-                                </div>
-                                
-                                <!-- Bot Response Example -->
-                                <div class="message bot-message">
-                                    <p>💡 Here are today's top dividend picks...</p>
-                                    <span class="time" aria-label="Message time">2:31 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- 
-        ===========================================
-        FEATURES SECTION
-        ===========================================
-        Showcases key features and benefits of the service.
-        Uses grid layout for responsive feature cards.
-    -->
-    <section id="features" class="features" role="region" aria-labelledby="features-heading">
-        <div class="container">
-            <!-- Section Header -->
-            <div class="section-header">
-                <h2 id="features-heading">Why Choose Daily Dividend?</h2>
-                <p>Everything you need to stay on top of your financial game</p>
-            </div>
-            
-            <!-- Features Grid -->
-            <div class="features-grid" role="list">
-                <!-- Feature Card: Daily Newsletters -->
-                <div class="feature-card" role="listitem">
-                    <div class="feature-icon" aria-hidden="true">
-                        <i class="fas fa-newspaper"></i>
-                    </div>
-                    <h3>Daily Newsletters</h3>
-                    <p>Get curated finance news delivered to your WhatsApp every morning. No more information overload.</p>
-                </div>
-                
-                <!-- Feature Card: Community Access -->
-                <div class="feature-card" role="listitem">
-                    <div class="feature-icon" aria-hidden="true">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Community Access</h3>
-                    <p>Connect with like-minded investors, share insights, and learn from experienced traders in our exclusive community.</p>
-                </div>
-                
-                <!-- Feature Card: Educational Content -->
-                <div class="feature-card" role="listitem">
-                    <div class="feature-icon" aria-hidden="true">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3>Educational Content</h3>
-                    <p>Learn finance concepts through bite-sized lessons and real-world examples. Perfect for beginners.</p>
-                </div>
-                
-                <!-- Feature Card: Market Insights -->
-                <div class="feature-card" role="listitem">
-                    <div class="feature-icon" aria-hidden="true">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <h3>Market Insights</h3>
-                    <p>Get expert analysis, market trends, and investment opportunities tailored to your interests.</p>
-                </div>
-                
-                <!-- Feature Card: Smart Alerts -->
-                <div class="feature-card" role="listitem">
-                    <div class="feature-icon" aria-hidden="true">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h3>Smart Alerts</h3>
-                    <p>Never miss important market movements or breaking news that could affect your investments.</p>
-                </div>
-                
-                <!-- Feature Card: Privacy First -->
-                <div class="feature-card" role="listitem">
-                    <div class="feature-icon" aria-hidden="true">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Privacy First</h3>
-                    <p>Your data is secure. We never share your information and you can unsubscribe anytime.</p>
-                </div>
-            </div>
+  <!-- FEATURES -->
+  <section id="features" class="features" role="region" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="features-heading">Why Choose Daily Dividend?</h2>
+        <p>Everything you need to stay on top of your financial game</p>
+      </div>
+      <div class="features-grid" role="list">
+        <div class="feature-card" role="listitem"><div class="feature-icon"><i class="fas fa-newspaper"></i></div><h3>Daily Newsletters</h3><p>Curated finance news on WhatsApp every morning.</p></div>
+        <div class="feature-card" role="listitem"><div class="feature-icon"><i class="fas fa-users"></i></div><h3>Community Access</h3><p>Connect and learn with like-minded investors.</p></div>
+        <div class="feature-card" role="listitem"><div class="feature-icon"><i class="fas fa-graduation-cap"></i></div><h3>Educational Content</h3><p>Bite-sized lessons with real examples.</p></div>
+        <div class="feature-card" role="listitem"><div class="feature-icon"><i class="fas fa-chart-pie"></i></div><h3>Market Insights</h3><p>Trends and ideas tailored to your interests.</p></div>
+        <div class="feature-card" role="listitem"><div class="feature-icon"><i class="fas fa-bell"></i></div><h3>Smart Alerts</h3><p>Never miss key market moves.</p></div>
+        <div class="feature-card" role="listitem"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><h3>Privacy First</h3><p>Your data stays with us.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Democratizing high finance for everyone, one newsletter at a time</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-number">1</div><div class="step-content"><h3>Join the Movement</h3><p>Sign up in seconds.</p></div></div>
+        <div class="step"><div class="step-number">2</div><div class="step-content"><h3>Receive Premium Content</h3><p>Daily newsletters and insights.</p></div></div>
+        <div class="step"><div class="step-number">3</div><div class="step-content"><h3>Level Up</h3><p>Become a confident investor.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing">
+    <div class="container">
+      <div class="section-header"><h2>Pricing</h2><p>Start free, upgrade when you're ready</p></div>
+      <div class="pricing-cards">
+        <div class="pricing-card free">
+          <div class="pricing-header"><h3>Free</h3><div class="price"><span class="currency">£</span><span class="amount">0</span><span class="period">/month</span></div></div>
+          <ul class="pricing-features"><li><i class="fas fa-check"></i> Newsletter access</li></ul>
+          <button class="pricing-button" onclick="startSignup()">Get Started</button>
         </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <h2>How It Works</h2>
-                <p>Democratizing high finance for everyone, one newsletter at a time</p>
-            </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Join the Movement</h3>
-                        <p>Sign up in seconds and become part of a community that believes finance knowledge should be accessible to everyone, not just Wall Street insiders.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Receive Premium Content</h3>
-                        <p>Get daily newsletters packed with institutional-grade analysis, market insights, and educational content that breaks down complex financial concepts into digestible, actionable information.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Level Up Your Finance Game</h3>
-                        <p>Transform from a finance novice to a confident investor with our curated content that makes high-level financial strategies accessible and understandable for everyday people.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="pricing-card pro coming-soon-card">
+          <div class="coming-soon-sticker"><i class="fas fa-rocket"></i><span>Coming Soon</span></div>
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-text">Not Available Yet</div></div>
+          <div class="pricing-header"><h3>Basic</h3><div class="price"><span class="currency">£</span><span class="amount">2.99</span><span class="period">/month + VAT</span></div></div>
+          <ul class="pricing-features"><li><i class="fas fa-check"></i> Newsletter access</li><li><i class="fas fa-check"></i> Tier 2 content</li><li><i class="fas fa-check"></i> New features</li></ul>
+          <button class="pricing-button coming-soon-button" onclick="showWaitlistForm()"><i class="fas fa-bell"></i> Join Waitlist</button>
         </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>Pricing</h2>
-                <p>Start free, upgrade when you're ready</p>
-            </div>
-            <div class="pricing-cards">
-                <div class="pricing-card free">
-                    <div class="pricing-header">
-                        <h3>Free</h3>
-                        <div class="price">
-                            <span class="currency">£</span>
-                            <span class="amount">0</span>
-                            <span class="period">/month</span>
-                        </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Newsletter access</li>
-                    </ul>
-                    <button class="pricing-button" onclick="startSignup()">Get Started</button>
-                </div>
-                <div class="pricing-card pro coming-soon-card">
-                    <div class="coming-soon-sticker">
-                        <i class="fas fa-rocket"></i>
-                        <span>Coming Soon</span>
-                    </div>
-                    <div class="lock-overlay">
-                        <div class="lock-icon">🔒</div>
-                        <div class="lock-text">Not Available Yet</div>
-                    </div>
-                    <div class="pricing-header">
-                        <h3>Basic</h3>
-                        <div class="price">
-                            <span class="currency">£</span>
-                            <span class="amount">2.99</span>
-                            <span class="period">/month + VAT</span>
-                        </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Newsletter access</li>
-                        <li><i class="fas fa-check"></i> Tier 2 content (industry analysis reports, stock pitches, etc.)</li>
-                        <li><i class="fas fa-check"></i> Free access to new features</li>
-                    </ul>
-                    <button class="pricing-button coming-soon-button" onclick="showWaitlistForm()">
-                        <i class="fas fa-bell"></i>
-                        Join Waitlist
-                    </button>
-                </div>
-                <div class="pricing-card premium coming-soon-card">
-                    <div class="coming-soon-sticker">
-                        <i class="fas fa-gem"></i>
-                        <span>Coming Soon</span>
-                    </div>
-                    <div class="lock-overlay">
-                        <div class="lock-icon">🔒</div>
-                        <div class="lock-text">Not Available Yet</div>
-                    </div>
-                    <div class="pricing-header">
-                        <h3>Premium</h3>
-                        <div class="price">
-                            <span class="currency">£</span>
-                            <span class="amount">14.99</span>
-                            <span class="period">/month + VAT</span>
-                        </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Newsletter access</li>
-                        <li><i class="fas fa-check"></i> Tier 2 content access</li>
-                        <li><i class="fas fa-check"></i> Community access, events, and catered job preparation tools</li>
-                    </ul>
-                    <button class="pricing-button coming-soon-button" onclick="showWaitlistForm()">
-                        <i class="fas fa-bell"></i>
-                        Join Waitlist
-                    </button>
-                </div>
-            </div>
+        <div class="pricing-card premium coming-soon-card">
+          <div class="coming-soon-sticker"><i class="fas fa-gem"></i><span>Coming Soon</span></div>
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-text">Not Available Yet</div></div>
+          <div class="pricing-header"><h3>Premium</h3><div class="price"><span class="currency">£</span><span class="amount">14.99</span><span class="period">/month + VAT</span></div></div>
+          <ul class="pricing-features"><li><i class="fas fa-check"></i> Newsletter access</li><li><i class="fas fa-check"></i> Tier 2 content</li><li><i class="fas fa-check"></i> Community & events</li></ul>
+          <button class="pricing-button coming-soon-button" onclick="showWaitlistForm()"><i class="fas fa-bell"></i> Join Waitlist</button>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Social Proof Section -->
-    <section class="social-proof">
-        <div class="container">
-            <div class="section-header">
-                <h2>Trusted by Thousands</h2>
-                <p>Join our growing community of finance enthusiasts</p>
-            </div>
-            <div class="testimonials">
-                <div class="testimonial">
-                    <div class="testimonial-content">
-                        <p>"Daily Dividend has completely changed how I stay informed about the markets. The WhatsApp format is so convenient!"</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">S</div>
-                        <div class="author-info">
-                            <h4>Sarah Johnson</h4>
-                            <span>Investment Analyst</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-content">
-                        <p>"The educational content is fantastic. I've learned so much about personal finance in just a few weeks."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">M</div>
-                        <div class="author-info">
-                            <h4>Mike Chen</h4>
-                            <span>Software Engineer</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-content">
-                        <p>"The bot is incredibly helpful. I can ask any finance question and get instant, accurate answers."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">A</div>
-                        <div class="author-info">
-                            <h4>Alex Rodriguez</h4>
-                            <span>Small Business Owner</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Transform Your Financial Knowledge?</h2>
+        <p>Join thousands of users already staying ahead</p>
+        <div class="cta-form">
+          <div class="input-group">
+            <input type="tel" id="countryCodeBottom" placeholder="+44" maxlength="4" value="+44">
+            <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
+          </div>
+          <button class="cta-button" onclick="startSignup()"><i class="fas fa-rocket"></i> Start Your Journey</button>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Financial Knowledge?</h2>
-                <p>Join thousands of users who are already staying ahead with Daily Dividend</p>
-                <div class="cta-form">
-                    <div class="input-group">
-                        <input type="tel" id="countryCodeBottom" placeholder="+44" maxlength="4" value="+44">
-                        <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
-                    </div>
-                    <button class="cta-button" onclick="startSignup()">
-                        <i class="fas fa-rocket"></i>
-                        Start Your Journey
-                    </button>
-                </div>
-            </div>
+  <!-- TERMS -->
+  <section id="terms" class="terms-section">
+    <div class="container">
+      <div class="section-header"><h2>Terms and Conditions</h2><p>Please read these terms carefully before using our service</p></div>
+      <div class="terms-content"><div class="terms-text">
+        <h3>1. Service Description</h3><p>Daily Dividend provides finance news via WhatsApp.</p>
+        <h3>2. User Responsibilities</h3><p>Provide accurate information; content is educational, not advice.</p>
+        <h3>3. Privacy</h3><p>Your data is used to deliver the service and not shared without consent.</p>
+        <h3>4. Availability</h3><p>We cannot guarantee uninterrupted access.</p>
+        <h3>5. Liability</h3><p>We are not liable for financial decisions based on our content.</p>
+        <h3>6. Changes</h3><p>Terms may change; we’ll notify you of significant updates.</p>
+        <h3>7. Contact</h3><p>Email: support@dailydividend.com</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="contact-content">
+        <div class="contact-info">
+          <h3>Get in Touch</h3>
+          <div class="contact-details">
+            <div class="contact-item"><i class="fas fa-envelope"></i><span>dailydividendwork@gmail.com</span></div>
+            <div class="contact-item"><i class="fab fa-whatsapp"></i><span>WhatsApp: +44 123 456 7890</span></div>
+          </div>
         </div>
-    </section>
-
-    <!-- Terms and Conditions Section -->
-    <section id="terms" class="terms-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Terms and Conditions</h2>
-                <p>Please read these terms carefully before using our service</p>
-            </div>
-            <div class="terms-content">
-                <div class="terms-text">
-                    <h3>1. Service Description</h3>
-                    <p>Daily Dividend provides financial news, market insights, and educational content via WhatsApp. Our service is designed to help users stay informed about financial markets and personal finance topics.</p>
-                    
-                    <h3>2. User Responsibilities</h3>
-                    <p>Users are responsible for providing accurate contact information and understanding that financial information provided is for educational purposes only and should not be considered as financial advice.</p>
-                    
-                    <h3>3. Privacy and Data Protection</h3>
-                    <p>We respect your privacy and are committed to protecting your personal information. Your phone number and preferences are used solely to deliver our service and will not be shared with third parties without your consent.</p>
-                    
-                    <h3>4. Service Availability</h3>
-                    <p>While we strive to provide continuous service, we cannot guarantee uninterrupted access. Service may be temporarily unavailable due to maintenance, technical issues, or circumstances beyond our control.</p>
-                    
-                    <h3>5. Limitation of Liability</h3>
-                    <p>Daily Dividend shall not be liable for any financial losses or decisions made based on the information provided through our service. All financial decisions are the sole responsibility of the user.</p>
-                    
-                    <h3>6. Changes to Terms</h3>
-                    <p>We reserve the right to modify these terms at any time. Users will be notified of significant changes via WhatsApp or email.</p>
-                    
-                    <h3>7. Contact Information</h3>
-                    <p>For questions about these terms, please contact us through our WhatsApp service or email us at support@dailydividend.com</p>
-                </div>
-            </div>
+        <div class="social-links">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a href="https://instagram.com/dailydividend_news" target="_blank" class="social-icon instagram" rel="noopener"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/dailydividend" target="_blank" class="social-icon twitter" rel="noopener"><i class="fab fa-twitter"></i></a>
+            <a href="https://linkedin.com/company/dailydividend" target="_blank" class="social-icon linkedin" rel="noopener"><i class="fab fa-linkedin"></i></a>
+            <a href="https://wa.me/441234567890" target="_blank" class="social-icon whatsapp" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Get in Touch</h3>
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>dailydividendwork@gmail.com</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>WhatsApp: +44 123 456 7890</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="social-links">
-                    <h4>Follow Us</h4>
-                    <div class="social-icons">
-                        <a href="https://instagram.com/dailydividend_news" target="_blank" class="social-icon instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://twitter.com/dailydividend" target="_blank" class="social-icon twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="https://linkedin.com/company/dailydividend" target="_blank" class="social-icon linkedin">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://wa.me/441234567890" target="_blank" class="social-icon whatsapp">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo"><img src="DDlogo.jpeg?v=2" alt="Daily Dividend Logo" class="logo-dd-image"></div>
+        <div class="footer-links">
+          <a href="#features">Features</a><a href="#how-it-works">How it Works</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a>
         </div>
-    </section>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 Daily Dividend. All rights reserved.</p></div>
+    </div>
+  </footer>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="DDlogo.jpeg?v=2" alt="Daily Dividend Logo" class="logo-dd-image">
-                </div>
-                <div class="footer-links">
-                    <a href="#features">Features</a>
-                    <a href="#how-it-works">How it Works</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#contact">Contact</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Daily Dividend. All rights reserved.</p>
-            </div>
+  <!-- Hidden iframe to keep user on page while posting -->
+  <iframe name="hidden_iframe" style="display:none"></iframe>
+
+  <!-- Phone Signup Modal -->
+  <div id="phoneSignupModal" class="phone-signup-modal" style="display:none;">
+    <div class="phone-signup-modal__content">
+      <div class="phone-signup-modal__header">
+        <div class="phone-signup-modal__icon"><i class="fas fa-user-plus"></i></div>
+        <h3>Complete Your Signup</h3>
+        <p>Just a few more details to get you started!</p>
+      </div>
+      <!-- NATIVE SUBMIT to Apps Script -->
+      <form id="phoneSignupForm"
+            action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec"
+            method="POST" target="hidden_iframe" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+          <label for="signupFirstName">First Name</label>
+          <input type="text" id="signupFirstName" name="first_name" required>
         </div>
-    </footer>
-
-    <!-- Hidden iframe for form submissions -->
-    <iframe name="hidden_iframe" style="display:none"></iframe>
-
-        <!-- Phone Signup Modal -->
-        <div id="phoneSignupModal" class="phone-signup-modal" style="display: none;">
-            <div class="phone-signup-modal__content">
-                <div class="phone-signup-modal__header">
-                    <div class="phone-signup-modal__icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <h3>Complete Your Signup</h3>
-                    <p>Just a few more details to get you started!</p>
-                </div>
-                <form id="phoneSignupForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe" novalidate>
-                    <div class="form-group">
-                        <label for="signupFirstName">First Name</label>
-                        <input type="text" id="signupFirstName" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupLastName">Last Name</label>
-                        <input type="text" id="signupLastName" name="last_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupEmail">Email Address</label>
-                        <input type="email" id="signupEmail" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPhoneDisplay">Phone Number</label>
-                        <input type="text" id="signupPhoneDisplay" name="phone" readonly class="readonly-field">
-                    </div>
-                    <input type="hidden" name="page" value="landing_page_signup">
-                    <button type="submit" class="phone-signup-submit-btn">
-                        <i class="fas fa-check"></i>
-                        Complete Signup
-                    </button>
-                </form>
-                <button class="phone-signup-modal__close" onclick="closePhoneSignupModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <div class="form-group">
+          <label for="signupLastName">Last Name</label>
+          <input type="text" id="signupLastName" name="last_name" required>
         </div>
-
-        <!-- Waitlist Form Modal -->
-        <div id="waitlistModal" class="waitlist-modal" style="display: none;">
-            <div class="waitlist-modal__content">
-                <div class="waitlist-modal__header">
-                    <div class="waitlist-modal__icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3>Join the Waitlist</h3>
-                    <p>Be the first to know when premium features launch!</p>
-                </div>
-                <form id="waitlistForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe" novalidate>
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" name="last_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <input type="hidden" name="page" value="waitlist">
-                    <button type="submit" class="waitlist-submit-btn">
-                        <i class="fas fa-bell"></i>
-                        Join Waitlist
-                    </button>
-                </form>
-                <button class="waitlist-modal__close" onclick="closeWaitlistModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <div class="form-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" name="email" required>
         </div>
+        <div class="form-group">
+          <label for="signupPhoneDisplay">Phone Number</label>
+          <input type="text" id="signupPhoneDisplay" name="phone" class="readonly-field" readonly>
+        </div>
+        <input type="hidden" name="page" value="landing_page_signup">
+        <button type="submit" class="phone-signup-submit-btn"><i class="fas fa-check"></i> Complete Signup</button>
+      </form>
+      <button class="phone-signup-modal__close" onclick="closePhoneSignupModal()"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
 
-    <!-- Temporarily disabled to prevent form submission interception -->
-    <!-- <script src="script.js?v=2"></script> -->
-    
-    <!-- Simple form handling script -->
-    <script>
-        // Handle "Get Started" button click
-        function startSignup() {
-            try {
-                const countryCode = document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '+44';
-                const phoneInput = document.getElementById('phoneInput')?.value || document.getElementById('phoneInputBottom')?.value || '';
-                
-                // Concatenate and trim the phone number
-                const fullPhone = (countryCode + phoneInput).trim();
-                
-                if (!fullPhone || fullPhone === '+44') {
-                    alert('Please enter a valid phone number');
-                    return;
-                }
-                
-                // Populate the phone field in the modal
-                const phoneDisplay = document.getElementById('signupPhoneDisplay');
-                if (phoneDisplay) {
-                    phoneDisplay.value = fullPhone;
-                }
-                
-                // Show the modal
-                const modal = document.getElementById('phoneSignupModal');
-                if (modal) {
-                    modal.style.display = 'flex';
-                } else {
-                    console.error('Phone signup modal not found');
-                }
-            } catch (error) {
-                console.error('Error in startSignup:', error);
-                alert('There was an error opening the signup form. Please try again.');
-            }
-        }
-        
-        // Close phone signup modal
-        function closePhoneSignupModal() {
-            try {
-                const modal = document.getElementById('phoneSignupModal');
-                const form = document.getElementById('phoneSignupForm');
-                if (modal) modal.style.display = 'none';
-                if (form) form.reset();
-            } catch (error) {
-                console.error('Error closing phone signup modal:', error);
-            }
-        }
-        
-        // Close waitlist modal
-        function closeWaitlistModal() {
-            try {
-                const modal = document.getElementById('waitlistModal');
-                const form = document.getElementById('waitlistForm');
-                if (modal) modal.style.display = 'none';
-                if (form) form.reset();
-            } catch (error) {
-                console.error('Error closing waitlist modal:', error);
-            }
-        }
-        
-        // Show waitlist modal
-        function showWaitlistForm() {
-            try {
-                const modal = document.getElementById('waitlistModal');
-                if (modal) {
-                    modal.style.display = 'flex';
-                } else {
-                    console.error('Waitlist modal not found');
-                }
-            } catch (error) {
-                console.error('Error showing waitlist form:', error);
-            }
-        }
-        
-        // Clean native form submission - no JavaScript interference
-        
-        // Wait for DOM to be ready before adding event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                // Forms now submit natively to Google Apps Script without JavaScript interception
-                // This eliminates CORS issues and ensures reliable data submission
-                console.log('Forms configured for native submission to Google Apps Script');
-            } catch (error) {
-                console.error('Error setting up form event listeners:', error);
-            }
-        });
-    </script>
+  <!-- Waitlist Modal -->
+  <div id="waitlistModal" class="waitlist-modal" style="display:none;">
+    <div class="waitlist-modal__content">
+      <div class="waitlist-modal__header">
+        <div class="waitlist-modal__icon"><i class="fas fa-rocket"></i></div>
+        <h3>Join the Waitlist</h3>
+        <p>Be the first to know when premium features launch!</p>
+      </div>
+      <!-- NATIVE SUBMIT to Apps Script -->
+      <form id="waitlistForm"
+            action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec"
+            method="POST" target="hidden_iframe" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="first_name" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="last_name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        <input type="hidden" name="page" value="waitlist">
+        <button type="submit" class="waitlist-submit-btn"><i class="fas fa-bell"></i> Join Waitlist</button>
+      </form>
+      <button class="waitlist-modal__close" onclick="closeWaitlistModal()"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <!-- Keep external JS disabled to avoid intercepting submit -->
+  <!-- script.js removed to prevent form submission interference -->
+
+  <!-- Minimal inline JS: open/close modals and fill phone field ONLY -->
+  <script>
+    function startSignup() {
+      const cc = (document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '+44').trim();
+      const pn = (document.getElementById('phoneInput')?.value || document.getElementById('phoneInputBottom')?.value || '').trim();
+      const phone = (cc + pn).replace(/\s+/g,'');
+      if (!pn) { alert('Please enter a valid phone number'); return; }
+      const out = document.getElementById('signupPhoneDisplay');
+      if (out) out.value = phone;
+      const modal = document.getElementById('phoneSignupModal');
+      if (modal) modal.style.display = 'flex';
+    }
+    function closePhoneSignupModal(){ const m=document.getElementById('phoneSignupModal'); const f=document.getElementById('phoneSignupForm'); if(m) m.style.display='none'; if(f) f.reset(); }
+    function showWaitlistForm(){ const m=document.getElementById('waitlistModal'); if(m) m.style.display='flex'; }
+    function closeWaitlistModal(){ const m=document.getElementById('waitlistModal'); const f=document.getElementById('waitlistForm'); if(m) m.style.display='none'; if(f) f.reset(); }
+    // Log that native submission is in use
+    document.addEventListener('DOMContentLoaded', () => console.log('Native form submission enabled (no fetch)'));
+  </script>
+
+  <!-- FontAwesome (icons) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Form Test</title>
+</head>
+<body>
+    <h1>Simple Google Apps Script Form Test</h1>
+    
+    <!-- Simple test form -->
+    <form action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe" enctype="application/x-www-form-urlencoded">
+        <p>
+            <label>First Name:</label><br>
+            <input type="text" name="first_name" value="Test" required>
+        </p>
+        <p>
+            <label>Last Name:</label><br>
+            <input type="text" name="last_name" value="User" required>
+        </p>
+        <p>
+            <label>Email:</label><br>
+            <input type="email" name="email" value="test@example.com" required>
+        </p>
+        <p>
+            <label>Phone:</label><br>
+            <input type="text" name="phone" value="+447123456789" required>
+        </p>
+        <p>
+            <label>Page:</label><br>
+            <input type="text" name="page" value="test_page">
+        </p>
+        <p>
+            <button type="submit" onclick="console.log('Button clicked!'); alert('Button clicked!');">SUBMIT TO GOOGLE SHEETS</button>
+        </p>
+        <p>
+            <button type="button" onclick="alert('Test button works!');">TEST BUTTON</button>
+        </p>
+    </form>
+    
+    <!-- Hidden iframe for form submission -->
+    <iframe name="hidden_iframe" style="display:none"></iframe>
+    
+    <script>
+        // Simple success message
+        document.querySelector('form').addEventListener('submit', function() {
+            setTimeout(() => {
+                alert('Form submitted! Check your Google Sheet and Apps Script executions.');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
