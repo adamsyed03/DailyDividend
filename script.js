@@ -367,74 +367,15 @@ function closePhoneSignupModal() {
 }
 
 /**
- * Handle phone signup form submission
- * @param {Event} event - The form submission event
- * @returns {void}
+ * Handle phone signup form submission - DISABLED FOR NATIVE FORM SUBMISSION
+ * Forms now submit directly to Google Apps Script without JavaScript interception
  */
+/*
 function handlePhoneSignupSubmit(event) {
-    event.preventDefault();
-    
-    console.log('Phone signup form submitted!');
-    
-    const form = event.target;
-    const modal = document.getElementById('phoneSignupModal');
-    
-    // Get phone data from modal dataset
-    const formattedNumber = modal.dataset.formattedNumber;
-    
-    // Update the phone field with the formatted number
-    const phoneInput = form.querySelector('input[name="phone"]');
-    phoneInput.value = formattedNumber;
-    
-    // Prepare form data exactly like your example
-    let formData = {
-        first_name: form.first_name.value,
-        last_name: form.last_name.value,
-        email: form.email.value,
-        phone: formattedNumber,
-        page: form.page.value
-    };
-    
-    console.log('Form data being sent:', formData);
-    
-    // Show loading state
-    const submitBtn = form.querySelector('.phone-signup-submit-btn');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-    submitBtn.disabled = true;
-    
-    // Submit to Google Apps Script using your exact approach
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
-    
-    fetch(googleScriptUrl, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: {"Content-Type": "application/json"}
-    })
-    .then(res => res.text())
-    .then(data => {
-        console.log('Response from Google Apps Script:', data);
-        showNotification('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!', 'success');
-        closePhoneSignupModal();
-        
-        // Track successful signup
-        trackEvent('phone_signup_completed', {
-            phone_number: formattedNumber,
-            email: formData.email,
-            source: 'modal',
-            timestamp: new Date().toISOString()
-        });
-    })
-    .catch(err => {
-        console.error('Error submitting form:', err);
-        showNotification('Unable to complete signup. Please try again.', 'error');
-    })
-    .finally(() => {
-        // Reset button state
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    });
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 /**
  * Open WhatsApp with proper device detection and fallbacks
@@ -479,107 +420,26 @@ function openWhatsApp(whatsappUrl, message, businessNumber) {
  * @param {Object} signupData - The complete signup data object
  * @returns {Promise} - Promise that resolves when data is submitted
  */
+// DISABLED FOR NATIVE FORM SUBMISSION - Forms now submit directly to Google Apps Script
+/*
 function submitCompleteSignupToGoogleAppsScript(signupData) {
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
-    
-    const formData = {
-        first_name: signupData.firstName,
-        last_name: signupData.lastName,
-        email: signupData.email,
-        phone_number: signupData.phoneNumber,
-        page: 'landing_page_signup',
-        source: signupData.source,
-        timestamp: signupData.timestamp
-    };
-
-    // Log what we're sending
-    console.log('Sending data to Google Apps Script:', formData);
-    console.log('URL:', googleScriptUrl);
-
-    return fetch(googleScriptUrl, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-        
-        // If we get here, the request was sent successfully
-        // Don't worry about the response content, just assume success
-        console.log('Complete signup data submitted to Google Apps Script successfully');
-        return Promise.resolve();
-    })
-    .catch(error => {
-        console.error('Error submitting complete signup to Google Apps Script:', error);
-        throw error;
-    });
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 /**
  * Simple form submission method (no CORS issues)
  * @param {Object} signupData - The signup data object
  * @returns {void}
  */
+// DISABLED FOR NATIVE FORM SUBMISSION - Forms now submit directly to Google Apps Script
+/*
 function submitWithFormMethod(signupData) {
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
-    
-    console.log('=== FORM SUBMISSION DEBUG ===');
-    console.log('Google Script URL:', googleScriptUrl);
-    console.log('Signup Data:', signupData);
-    
-    // Create a hidden form and submit it
-    const form = document.createElement('form');
-    form.action = googleScriptUrl;
-    form.method = 'POST';
-    form.target = 'hidden_iframe';
-    form.style.display = 'none';
-    
-    // Add form fields
-    const fields = {
-        'first_name': signupData.firstName,
-        'last_name': signupData.lastName,
-        'email': signupData.email,
-        'phone': signupData.phoneNumber,
-        'page': 'landing_page_signup'
-    };
-    
-    console.log('Form fields being sent:', fields);
-    
-    Object.keys(fields).forEach(key => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = fields[key];
-        form.appendChild(input);
-        console.log(`Added field: ${key} = ${fields[key]}`);
-    });
-    
-    // Create hidden iframe if it doesn't exist
-    let iframe = document.getElementById('hidden_iframe');
-    if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.id = 'hidden_iframe';
-        iframe.name = 'hidden_iframe';
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-        console.log('Created hidden iframe');
-    } else {
-        console.log('Using existing hidden iframe');
-    }
-    
-    // Submit the form
-    document.body.appendChild(form);
-    console.log('Form added to DOM, submitting...');
-    form.submit();
-    document.body.removeChild(form);
-    
-    console.log('Form submitted to Google Apps Script');
-    console.log('=== END FORM SUBMISSION DEBUG ===');
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 /**
  * Test function - run this in browser console to test Google Apps Script directly
@@ -705,83 +565,28 @@ function closeWaitlistModal() {
 }
 
 /**
- * Handle waitlist form submission
- * @function handleWaitlistSubmit
- * @param {Event} event - The form submit event
- * @returns {void}
+ * Handle waitlist form submission - DISABLED FOR NATIVE FORM SUBMISSION
+ * Forms now submit directly to Google Apps Script without JavaScript interception
  */
+/*
 function handleWaitlistSubmit(event) {
-    event.preventDefault();
-    
-    const formData = new FormData(event.target);
-    const waitlistData = {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        source: 'waitlist_modal',
-        timestamp: new Date().toISOString()
-    };
-    
-    // Submit to Google Apps Script
-    submitWaitlistToGoogleAppsScript(waitlistData)
-        .then(() => {
-            showNotification('Thanks! You\'ve been added to our waitlist. We\'ll notify you when premium features launch!', 'success');
-            closeWaitlistModal();
-            event.target.reset();
-            
-            // Track waitlist signup
-            trackEvent('waitlist_signup', {
-                source: 'modal',
-                timestamp: new Date().toISOString()
-            });
-        })
-        .catch((error) => {
-            console.error('Error submitting waitlist:', error);
-            showNotification('Unable to join waitlist. Please try again.', 'error');
-        });
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 /**
  * Submit waitlist data to Google Apps Script
  * @param {Object} waitlistData - The waitlist form data
  * @returns {Promise} - Promise that resolves when data is submitted
  */
+// DISABLED FOR NATIVE FORM SUBMISSION - Forms now submit directly to Google Apps Script
+/*
 function submitWaitlistToGoogleAppsScript(waitlistData) {
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec';
-    
-    const formData = {
-        name: `${waitlistData.firstName} ${waitlistData.lastName}`,
-        email: waitlistData.email,
-        product: 'Daily Dividend Waitlist',
-        quantity: 1,
-        comments: `Waitlist signup - Phone: ${waitlistData.phone}, Source: ${waitlistData.source}`,
-        phone_number: waitlistData.phone,
-        first_name: waitlistData.firstName,
-        last_name: waitlistData.lastName,
-        source: waitlistData.source,
-        timestamp: waitlistData.timestamp,
-        user_agent: navigator.userAgent,
-        referrer: document.referrer || 'direct'
-    };
-
-    return fetch(googleScriptUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => {
-        console.log('Waitlist data submitted to Google Apps Script successfully');
-        return Promise.resolve();
-    })
-    .catch(error => {
-        console.error('Error submitting waitlist to Google Apps Script:', error);
-        throw error;
-    });
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 /**
  * Show coming soon notification for premium tiers
@@ -1272,8 +1077,9 @@ function throttle(func, limit) {
 document.addEventListener('DOMContentLoaded', function() {
     initializeKeyboardNavigation();
     initializeLazyLoading();
-    initializeWaitlistForm();
-    initializePhoneSignupForm();
+    // Form initialization disabled - forms now submit natively to Google Apps Script
+    // initializeWaitlistForm();
+    // initializePhoneSignupForm();
     
     // Add ripple animation styles
     const style = document.createElement('style');
@@ -1300,26 +1106,25 @@ document.addEventListener('DOMContentLoaded', function() {
  * @function initializeWaitlistForm
  * @returns {void}
  */
+// DISABLED FOR NATIVE FORM SUBMISSION - Forms now submit directly to Google Apps Script
+/*
 function initializeWaitlistForm() {
-    const waitlistForm = document.getElementById('waitlistForm');
-    if (waitlistForm) {
-        waitlistForm.addEventListener('submit', handleWaitlistSubmit);
-    }
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 /**
  * Initialize phone signup form functionality
  * @returns {void}
  */
+// DISABLED FOR NATIVE FORM SUBMISSION - Forms now submit directly to Google Apps Script
+/*
 function initializePhoneSignupForm() {
-    const phoneSignupForm = document.getElementById('phoneSignupForm');
-    if (phoneSignupForm) {
-        console.log('Phone signup form found, adding event listener');
-        phoneSignupForm.addEventListener('submit', handlePhoneSignupSubmit);
-    } else {
-        console.error('Phone signup form not found!');
-    }
+    // This function is disabled - forms submit natively to Google Apps Script
+    // to avoid CORS issues
 }
+*/
 
 // Apply performance optimizations
 const debouncedScrollHandler = debounce(function() {

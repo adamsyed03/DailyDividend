@@ -576,7 +576,7 @@
                     <h3>Complete Your Signup</h3>
                     <p>Just a few more details to get you started!</p>
                 </div>
-                <form class="phone-signup-form" id="phoneSignupForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe">
+                <form id="phoneSignupForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe" novalidate>
                     <div class="form-group">
                         <label for="signupFirstName">First Name</label>
                         <input type="text" id="signupFirstName" name="first_name" required>
@@ -615,7 +615,7 @@
                     <h3>Join the Waitlist</h3>
                     <p>Be the first to know when premium features launch!</p>
                 </div>
-                <form class="waitlist-form" id="waitlistForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe">
+                <form id="waitlistForm" action="https://script.google.com/macros/s/AKfycbzDeCNco-q8b8xOktCi9bTih50B5_DMqZb_DK3Br98mQJLAQq281Pm7K3SaZCINktA6/exec" method="POST" target="hidden_iframe" novalidate>
                     <div class="form-group">
                         <label for="firstName">First Name</label>
                         <input type="text" id="firstName" name="first_name" required>
@@ -644,7 +644,8 @@
             </div>
         </div>
 
-    <script src="script.js?v=2"></script>
+    <!-- Temporarily disabled to prevent form submission interception -->
+    <!-- <script src="script.js?v=2"></script> -->
     
     <!-- Simple form handling script -->
     <script>
@@ -719,59 +720,14 @@
             }
         }
         
-        // Test function to verify everything is working
-        function testSignup() {
-            console.log('Testing signup function...');
-            console.log('Country code element:', document.getElementById('countryCode'));
-            console.log('Phone input element:', document.getElementById('phoneInput'));
-            console.log('Phone display element:', document.getElementById('signupPhoneDisplay'));
-            console.log('Modal element:', document.getElementById('phoneSignupModal'));
-            
-            // Test with sample data
-            const testPhone = '+447123456789';
-            const phoneDisplay = document.getElementById('signupPhoneDisplay');
-            if (phoneDisplay) {
-                phoneDisplay.value = testPhone;
-                console.log('Set test phone number:', testPhone);
-            }
-            
-            const modal = document.getElementById('phoneSignupModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                console.log('Modal should now be visible');
-            }
-        }
+        // Clean native form submission - no JavaScript interference
         
         // Wait for DOM to be ready before adding event listeners
         document.addEventListener('DOMContentLoaded', function() {
             try {
-                // Handle form submissions with success messages
-                const phoneForm = document.getElementById('phoneSignupForm');
-                const waitlistForm = document.getElementById('waitlistForm');
-                
-                if (phoneForm) {
-                    phoneForm.addEventListener('submit', function(e) {
-                        // Let the form submit naturally to Google Apps Script
-                        setTimeout(() => {
-                            alert('Signup complete! Thank you for joining Daily Dividend. We\'ll be in touch soon!');
-                            closePhoneSignupModal();
-                        }, 1000); // Give time for the form to submit
-                    });
-                } else {
-                    console.error('Phone signup form not found');
-                }
-                
-                if (waitlistForm) {
-                    waitlistForm.addEventListener('submit', function(e) {
-                        // Let the form submit naturally to Google Apps Script
-                        setTimeout(() => {
-                            alert('Thanks! You\'ve been added to our waitlist. We\'ll notify you when premium features launch!');
-                            closeWaitlistModal();
-                        }, 1000); // Give time for the form to submit
-                    });
-                } else {
-                    console.error('Waitlist form not found');
-                }
+                // Forms now submit natively to Google Apps Script without JavaScript interception
+                // This eliminates CORS issues and ensures reliable data submission
+                console.log('Forms configured for native submission to Google Apps Script');
             } catch (error) {
                 console.error('Error setting up form event listeners:', error);
             }
