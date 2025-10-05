@@ -86,6 +86,27 @@
       
       /* Additional spacing for hero content */
       .hero-content { margin-top: 20px; }
+      
+      /* Mobile How it Works layout */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+      }
+      .step-number {
+        margin-bottom: 10px;
+      }
+      .step-content {
+        text-align: center;
+      }
     }
     
     /* Override any purple backgrounds */
@@ -183,31 +204,9 @@
                 </div>
             </div>
 
-      <!-- RIGHT VISUAL (your WhatsApp mockup preserved) -->
+      <!-- RIGHT VISUAL (WhatsApp mockup image) -->
             <div class="hero-visual">
-        <div class="phone-mockup" role="img" aria-label="WhatsApp chat demonstration">
-                    <div class="phone-screen">
-                        <div class="whatsapp-chat">
-                            <div class="chat-header">
-                <div class="chat-avatar" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
-                                <div class="chat-info">
-                  <h4>DD Assistant</h4><span>Online</span>
-                                </div>
-                            </div>
-                            <div class="chat-messages">
-                                <div class="message bot-message">
-                  <p>📈 Market Update: S&P 500 up 0.8% today</p><span class="time">2:30 PM</span>
-                                </div>
-                                <div class="message user-message">
-                  <p>Tell me about dividend stocks</p><span class="time">2:31 PM</span>
-                                </div>
-                                <div class="message bot-message">
-                  <p>💡 Here are today's top dividend picks...</p><span class="time">2:31 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        </div><!-- /phone-mockup -->
+                <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
             </div>
         </div>
     </section>
@@ -410,24 +409,24 @@
      <section id="contact" class="contact-section" style="background-color: white !important; background: white !important;">
          <div class="container" style="background-color: white !important; background: white !important;">
              <div class="contact-content" style="background-color: white !important; background: white !important;">
-                 <div class="contact-info">
+                <div class="contact-info">
                      <h3 style="color: black;">Get in Touch</h3>
-                     <div class="contact-details">
+                    <div class="contact-details">
              <div class="contact-item" style="color: black;"><i class="fas fa-envelope" style="color: black;"></i><span style="color: black;">dailydividendwork@gmail.com</span></div>
              <div class="contact-item" style="color: black;"><i class="fab fa-whatsapp" style="color: black;"></i><span style="color: black;">WhatsApp: +44 123 456 7890</span></div>
-                     </div>
-                 </div>
-                 <div class="social-links">
+                    </div>
+                </div>
+                <div class="social-links">
                      <h4 style="color: black;">Follow Us</h4>
-                     <div class="social-icons">
+                    <div class="social-icons">
              <a href="https://instagram.com/dailydividend_news" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
              <a href="https://linkedin.com/company/dailydividend" target="_blank" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
              <a href="https://wa.me/441234567890" target="_blank" class="social-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
   <!-- =========================
        FOOTER
@@ -436,9 +435,9 @@
          <div class="container" style="text-align: center;">
              <div style="text-align: center;">
                  <p style="color: black; margin: 0;">&copy; 2025 Daily Dividend. All rights reserved.</p>
-             </div>
-         </div>
-     </footer>
+            </div>
+        </div>
+    </footer>
 
   <!-- Hidden target iframe -->
   <iframe name="gas_iframe" id="gas_iframe" style="display:none"></iframe>
