@@ -456,7 +456,7 @@
       <form id="phoneSignupForm" method="GET" target="gas_iframe" action="https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec" novalidate>
         <div class="form-group"><label for="signupFirstName">First Name</label><input type="text" id="signupFirstName" name="first_name" required></div>
         <div class="form-group"><label for="signupLastName">Last Name</label><input type="text" id="signupLastName" name="last_name" required></div>
-        <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" required></div>
+        <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
         <div class="form-group"><label for="signupPhoneDisplay">Phone Number</label><input type="text" id="signupPhoneDisplay" name="phone" readonly class="readonly-field"></div>
         <input type="hidden" name="page" value="landing_page_signup">
         <input type="hidden" name="ts" id="ts_signup" value="">
@@ -481,7 +481,7 @@
       <form id="waitlistForm" method="GET" target="gas_iframe" action="https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec" novalidate>
         <div class="form-group"><label for="firstName">First Name</label><input type="text" id="firstName" name="first_name" required></div>
         <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" name="last_name" required></div>
-        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
         <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required></div>
         <input type="hidden" name="page" value="waitlist">
         <input type="hidden" name="ts" id="ts_waitlist" value="">
