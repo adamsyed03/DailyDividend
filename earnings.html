@@ -560,6 +560,74 @@
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                 </div>
+                
+                <!-- Notable Earnings Next Week - Bottom Section -->
+                <div class="notable-earnings-bottom">
+                    <h3 class="notable-title">
+                        <i class="fas fa-star"></i> Notable Earnings Next Week
+                    </h3>
+                    <div class="notable-grid">
+                        <div class="notable-day-group">
+                            <div class="notable-day-label">Monday, Nov 11</div>
+                            <div class="notable-companies-row">
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">SONY</span>
+                                    <span class="notable-name">Sony Group</span>
+                                </div>
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">VOD</span>
+                                    <span class="notable-name">Vodafone</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="notable-day-group">
+                            <div class="notable-day-label">Tuesday, Nov 12</div>
+                            <div class="notable-companies-row">
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">CSCO</span>
+                                    <span class="notable-name">Cisco</span>
+                                </div>
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">TCEHY</span>
+                                    <span class="notable-name">Tencent</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="notable-day-group">
+                            <div class="notable-day-label">Wednesday, Nov 13</div>
+                            <div class="notable-companies-row">
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">DIS</span>
+                                    <span class="notable-name">Disney</span>
+                                </div>
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">JD</span>
+                                    <span class="notable-name">JD.com</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="notable-day-group">
+                            <div class="notable-day-label">Thursday, Nov 14</div>
+                            <div class="notable-companies-row">
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">BABA</span>
+                                    <span class="notable-name">Alibaba</span>
+                                </div>
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">MUFG</span>
+                                    <span class="notable-name">Mitsubishi</span>
+                                </div>
+                                <div class="notable-company-card">
+                                    <span class="notable-symbol">MFG</span>
+                                    <span class="notable-name">Mizuho</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -711,6 +779,116 @@
     .earnings-table thead th:nth-child(4),
     .earnings-table tbody td:nth-child(4) {
       display: none;
+    }
+    
+    /* Notable Earnings Bottom Section */
+    .notable-earnings-bottom {
+      margin-top: 60px;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+    
+    .notable-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .notable-title i {
+      color: #f59e0b;
+      font-size: 1.3rem;
+    }
+    
+    .notable-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    
+    .notable-day-group {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 20px;
+    }
+    
+    .notable-day-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    
+    .notable-companies-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .notable-company-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: white;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .notable-company-card:hover {
+      background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(55, 65, 81, 0.2);
+    }
+    
+    .notable-symbol {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #2563eb;
+      min-width: 60px;
+      transition: color 0.3s ease;
+    }
+    
+    .notable-company-card:hover .notable-symbol {
+      color: white;
+    }
+    
+    .notable-name {
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .notable-company-card:hover .notable-name {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    @media (max-width: 768px) {
+      .notable-earnings-bottom {
+        margin-top: 40px;
+        padding: 25px 15px;
+      }
+      
+      .notable-title {
+        font-size: 1.2rem;
+      }
+      
+      .notable-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
     }
   </style>
 </body>
