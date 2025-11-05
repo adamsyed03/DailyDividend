@@ -240,10 +240,6 @@
             <div class="earnings-layout" style="display: block; max-width: 1200px; margin: 0 auto;">
                 <!-- Main Macro Events This Week -->
                 <div class="earnings-main" style="width: 100%;">
-                    <h3 class="earnings-week-title">
-                        <i class="fas fa-chart-line"></i> Macro Events This Week
-                    </h3>
-                    
                     <!-- Week Navigation -->
                     <div class="week-calendar">
                         <button class="week-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
@@ -275,25 +271,21 @@
                     
                     <!-- Macro Events for Sunday -->
                     <div class="earnings-day-content" id="sunday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Sun, Nov 2</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Macro Events for Monday -->
                     <div class="earnings-day-content" id="monday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Mon, Nov 3</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Macro Events for Tuesday -->
                     <div class="earnings-day-content" id="tuesday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Tue, Nov 4</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Macro Events for Wednesday -->
                     <div class="earnings-day-content" id="wednesday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Wed, Nov 5</h4>
                         <div class="earnings-table-wrapper">
                             <table class="earnings-table">
                                 <thead>
@@ -482,7 +474,6 @@
                     
                     <!-- Macro Events for Thursday -->
                     <div class="earnings-day-content" id="thursday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Thu, Nov 6</h4>
                         <div class="earnings-table-wrapper">
                             <table class="earnings-table">
                                 <thead>
@@ -527,13 +518,11 @@
                     
                     <!-- Macro Events for Friday -->
                     <div class="earnings-day-content" id="friday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Fri, Nov 7</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Macro Events for Saturday -->
                     <div class="earnings-day-content" id="saturday-macro">
-                        <h4 class="earnings-day-title">Macro Events on Sat, Nov 8</h4>
                         <div class="earnings-table-wrapper">
                             <table class="earnings-table">
                                 <thead>
@@ -664,6 +653,7 @@
     // Macro Calendar Interactive Navigation
     function initMacroCalendar() {
       const weekDays = document.querySelectorAll('.week-day[data-day]');
+      const weekDaysContainer = document.querySelector('.week-days');
       
       // Auto-select today's date
       const today = new Date();
@@ -671,7 +661,7 @@
       const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
       const todayName = dayNames[dayOfWeek];
       
-      // Set today as active
+      // Set today as active and scroll to it
       weekDays.forEach(day => {
         const dayAttr = day.getAttribute('data-day');
         if (dayAttr === todayName) {
@@ -680,6 +670,10 @@
           if (targetContent) {
             targetContent.classList.add('active');
           }
+          // Scroll today's date to the leftmost position
+          setTimeout(() => {
+            day.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+          }, 100);
         }
       });
       

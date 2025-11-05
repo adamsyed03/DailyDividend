@@ -224,7 +224,7 @@
             </a>
                              <a href="macro-calendar.html" onclick="closeMobileMenu()">
                                  <i class="fas fa-chart-line"></i> Macro Calendar
-                             </a>
+            </a>
           </div>
         </details>
       </div>
@@ -240,13 +240,9 @@
                 <h1 style="font-size: 2.5rem;">Earnings Calendar</h1>
             </div>
             
-            <div class="earnings-layout">
+            <div class="earnings-layout" style="display: block; max-width: 1200px; margin: 0 auto;">
                 <!-- Main Earnings This Week -->
-                <div class="earnings-main">
-                    <h3 class="earnings-week-title">
-                        <i class="fas fa-calendar-week"></i> Earnings This Week
-                    </h3>
-                    
+                <div class="earnings-main" style="width: 100%;">
                     <!-- Week Navigation -->
                     <div class="week-calendar">
                         <button class="week-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
@@ -278,25 +274,21 @@
 
                     <!-- Earnings Table for Sunday -->
                     <div class="earnings-day-content" id="sunday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Sun, Nov 2</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Earnings Table for Monday -->
                     <div class="earnings-day-content" id="monday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Mon, Nov 3</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Earnings Table for Tuesday -->
                     <div class="earnings-day-content" id="tuesday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Tue, Nov 4</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
                     </div>
                     
                     <!-- Earnings Table for Wednesday -->
                     <div class="earnings-day-content" id="wednesday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Wed, Nov 5</h4>
                         <div class="earnings-table-wrapper">
                             <table class="earnings-table">
                                 <thead>
@@ -377,11 +369,10 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    
+    </div>
+
                     <!-- Earnings Table for Thursday -->
                     <div class="earnings-day-content" id="thursday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Thu, Nov 6</h4>
                         <div class="earnings-table-wrapper">
                             <table class="earnings-table">
                                 <thead>
@@ -474,7 +465,6 @@
 
                     <!-- Earnings Table for Friday -->
                     <div class="earnings-day-content" id="friday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Fri, Nov 7</h4>
                         <div class="earnings-table-wrapper">
                             <table class="earnings-table">
       <thead>
@@ -567,78 +557,8 @@
                     
                     <!-- Earnings Table for Saturday -->
                     <div class="earnings-day-content" id="saturday-earnings">
-                        <h4 class="earnings-day-title">Earnings on Sat, Nov 8</h4>
+                        <h4 class="earnings-day-title">Earnings</h4>
                         <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
-                    </div>
-                </div>
-                
-                <!-- Sidebar: Notable Earnings Next Week -->
-                <div class="earnings-sidebar">
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-title">
-                            <i class="fas fa-star"></i> Notable Earnings Next Week
-                        </h3>
-                        <div class="notable-earnings-list">
-                            <div class="notable-earnings-day">
-                                <div class="notable-date">Monday, Nov 11</div>
-                                <div class="notable-companies">
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">SONY</span>
-                                        <span class="notable-name">Sony Group</span>
-                                    </div>
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">VOD</span>
-                                        <span class="notable-name">Vodafone</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="notable-earnings-day">
-                                <div class="notable-date">Tuesday, Nov 12</div>
-                                <div class="notable-companies">
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">CSCO</span>
-                                        <span class="notable-name">Cisco</span>
-                                    </div>
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">TCEHY</span>
-                                        <span class="notable-name">Tencent</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="notable-earnings-day">
-                                <div class="notable-date">Wednesday, Nov 13</div>
-                                <div class="notable-companies">
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">DIS</span>
-                                        <span class="notable-name">Disney</span>
-                                    </div>
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">JD</span>
-                                        <span class="notable-name">JD.com</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="notable-earnings-day">
-                                <div class="notable-date">Thursday, Nov 14</div>
-                                <div class="notable-companies">
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">BABA</span>
-                                        <span class="notable-name">Alibaba</span>
-                                    </div>
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">MUFG</span>
-                                        <span class="notable-name">Mitsubishi</span>
-                                    </div>
-                                    <div class="notable-company">
-                                        <span class="notable-symbol">MFG</span>
-                                        <span class="notable-name">Mizuho</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -729,6 +649,7 @@
     // Earnings Calendar Interactive Navigation
     function initEarningsCalendar() {
       const weekDays = document.querySelectorAll('.week-day[data-day]');
+      const weekDaysContainer = document.querySelector('.week-days');
       
       // Auto-select today's date
       const today = new Date();
@@ -736,7 +657,7 @@
       const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
       const todayName = dayNames[dayOfWeek];
       
-      // Set today as active
+      // Set today as active and scroll to it
       weekDays.forEach(day => {
         const dayAttr = day.getAttribute('data-day');
         if (dayAttr === todayName) {
@@ -745,6 +666,10 @@
           if (targetContent) {
             targetContent.classList.add('active');
           }
+          // Scroll today's date to the leftmost position
+          setTimeout(() => {
+            day.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+          }, 100);
         }
       });
       
@@ -776,7 +701,7 @@
       initEarningsCalendar();
     });
   </script>
-  
+
   <style>
     /* Hide Event and Time columns on all devices */
     .earnings-table thead th:nth-child(3),
