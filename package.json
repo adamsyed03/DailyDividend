@@ -1,0 +1,13 @@
+{
+  "name": "dailydividend",
+  "version": "1.0.0",
+  "description": "Daily Dividend - Markets within minutes",
+  "scripts": {
+    "dev": "npx live-server --port=8000 --open=/index.html",
+    "start": "npx live-server --port=8000"
+  },
+  "keywords": [],
+  "author": "Daily Dividend",
+  "license": "ISC"
+}
+

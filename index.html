@@ -168,6 +168,25 @@
                     <a href="#test">Test</a>
                     <a href="#terms">Terms</a>
                     <a href="#contact">Contact</a>
+                    
+                    <!-- Tools Dropdown -->
+                    <div class="nav-dropdown" id="toolsDropdown">
+                        <button class="nav-dropdown-btn" 
+                                aria-haspopup="true" 
+                                aria-expanded="false" 
+                                id="toolsDropdownBtn">
+                            Tools
+                        </button>
+                        <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+                            <a href="earnings.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-calendar-alt"></i> Earnings Calendar
+                            </a>
+                            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-chart-line"></i> Macro Calendar
+                            </a>
+                            <!-- Add more tools here in the future -->
+                        </div>
+                    </div>
                 </div>
                  <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                      <i class="fas fa-bars"></i>
@@ -179,6 +198,17 @@
                      <a href="#test" onclick="closeMobileMenu()">Test</a>
                      <a href="#terms" onclick="closeMobileMenu()">Terms</a>
                      <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+                     <details class="mobile-menu-dropdown">
+                         <summary>Tools</summary>
+                         <div class="mobile-menu-dropdown-content">
+                             <a href="earnings.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-calendar-alt"></i> Earnings Calendar
+                             </a>
+                             <a href="macro-calendar.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-chart-line"></i> Macro Calendar
+                             </a>
+                         </div>
+                     </details>
                 </div>
         </div>
     </nav>
@@ -619,6 +649,50 @@
         closeMobileMenu();
       }
     });
+
+    // Tools dropdown functionality
+    const toolsDropdown = document.getElementById('toolsDropdown');
+    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+      // Hover functionality
+      toolsDropdown.addEventListener('mouseenter', () => {
+        toolsDropdownMenu.classList.add('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+      });
+
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsDropdownMenu.classList.remove('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      // Click/touch functionality
+      toolsDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = toolsDropdownMenu.classList.contains('active');
+        toolsDropdownMenu.classList.toggle('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!toolsDropdown.contains(e.target)) {
+          toolsDropdownMenu.classList.remove('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Keyboard navigation
+      toolsDropdownBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          toolsDropdownMenu.classList.toggle('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+        }
+      });
+    }
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {

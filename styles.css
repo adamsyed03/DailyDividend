@@ -292,6 +292,155 @@ body {
     list-style: none;
 }
 
+/* ===========================================
+   PREMIUM DROPDOWN MENU
+   ===========================================
+   Accessible dropdown menu with hover and
+   keyboard navigation support.
+*/
+
+/* Dropdown Container */
+.nav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Button */
+.nav-dropdown-btn {
+    text-decoration: none;
+    color: var(--color-gray-500);
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    transition: color var(--transition-normal);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-dropdown-btn:hover,
+.nav-dropdown-btn:focus {
+    color: var(--color-gray-700);
+    background-color: var(--color-gray-100);
+    outline: none;
+}
+
+.nav-dropdown-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Dropdown Menu */
+.nav-dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 220px;
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-2) 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-normal);
+    z-index: var(--z-dropdown);
+}
+
+.nav-dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Dropdown Items */
+.nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-4);
+    color: var(--color-gray-800);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: background-color var(--transition-fast);
+}
+
+.nav-dropdown-item:hover {
+    background-color: var(--color-gray-50);
+}
+
+.nav-dropdown-item:focus {
+    background-color: var(--color-gray-50);
+    outline: none;
+}
+
+.nav-dropdown-item i {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-500);
+}
+
+/* Mobile Menu Dropdown (using details/summary) */
+.mobile-menu-dropdown {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-menu-dropdown summary {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 10px 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.mobile-menu-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.mobile-menu-dropdown summary::after {
+    content: '▾';
+    margin-left: 8px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.mobile-menu-dropdown[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.mobile-menu-dropdown-content {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.mobile-menu-dropdown-content a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 0.9rem;
+    border-bottom: none !important;
+}
+
+.mobile-menu-dropdown-content a:hover {
+    color: #374151;
+}
+
+.mobile-menu-dropdown-content a i {
+    font-size: 0.85rem;
+}
+
 .nav-links a {
     text-decoration: none;
     color: var(--color-gray-500);
@@ -1315,6 +1464,11 @@ body {
         display: none;
     }
     
+    /* Hide desktop dropdown on mobile */
+    .nav-dropdown {
+        display: none;
+    }
+    
     .hero-container {
         grid-template-columns: 1fr;
         text-align: center;
@@ -1994,6 +2148,494 @@ input:valid {
 .waitlist-modal__close:hover {
     background: #f3f4f6;
     color: #374151;
+}
+
+/* ===========================================
+   EARNINGS CALENDAR SECTION
+   ===========================================
+   Beautiful earnings calendar with weekly view
+   and notable earnings sidebar.
+*/
+
+.earnings-section {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.earnings-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+/* Main Earnings Area */
+.earnings-main {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.earnings-week-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.earnings-week-title i {
+    color: #374151;
+    font-size: 1.6rem;
+}
+
+/* Week Calendar Navigation */
+.week-calendar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f0f3f7 100%);
+    border-radius: 15px;
+}
+
+.week-nav-btn {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+.week-nav-btn:hover {
+    background: #374151;
+    border-color: #374151;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(55, 65, 81, 0.2);
+}
+
+.week-days {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.week-day {
+    text-align: center;
+    padding: 15px 10px;
+    background: white;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.week-day:hover {
+    border-color: #374151;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(55, 65, 81, 0.15);
+}
+
+.week-day.active {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    border-color: #374151;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(55, 65, 81, 0.3);
+}
+
+.day-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.week-day.active .day-label {
+    color: white;
+}
+
+.day-count {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.week-day.active .day-count {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Earnings Day Content */
+.earnings-day-content {
+    display: none;
+}
+
+.earnings-day-content.active {
+    display: block;
+    animation: fadeInTable 0.5s ease;
+}
+
+@keyframes fadeInTable {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.earnings-day-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.earnings-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.earnings-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.earnings-table thead {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+}
+
+.earnings-table thead th {
+    padding: 16px 12px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.earnings-table tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: all 0.3s ease;
+}
+
+.earnings-table tbody tr:hover {
+    background: #f8fafc;
+    transform: scale(1.01);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.earnings-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.earnings-table tbody td {
+    padding: 16px 12px;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.earnings-table .symbol {
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 1rem;
+}
+
+.earnings-table .company {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* Time Badges */
+.time-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.time-badge.bmo {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.time-badge.amc {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.time-badge.tns {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+/* Sidebar: Notable Earnings */
+.earnings-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 2px solid #e5e7eb;
+    position: sticky;
+    top: 100px;
+}
+
+.sidebar-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.sidebar-title i {
+    color: #f59e0b;
+    font-size: 1.2rem;
+}
+
+.notable-earnings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.notable-earnings-day {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.notable-earnings-day:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.notable-date {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.notable-companies {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notable-company {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.notable-company:hover {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(55, 65, 81, 0.2);
+}
+
+.notable-symbol {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #2563eb;
+    min-width: 60px;
+    transition: color 0.3s ease;
+}
+
+.notable-company:hover .notable-symbol {
+    color: white;
+}
+
+.notable-name {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.notable-company:hover .notable-name {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .earnings-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar-card {
+        position: static;
+    }
+    
+    .week-days {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+    }
+    
+    .week-day {
+        padding: 10px 5px;
+    }
+    
+    .day-label {
+        font-size: 0.7rem;
+    }
+    
+    .day-count {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .earnings-section {
+        padding: 60px 0;
+    }
+    
+    .earnings-main {
+        padding: 20px;
+    }
+    
+    .earnings-week-title {
+        font-size: 1.4rem;
+    }
+    
+    .week-calendar {
+        flex-direction: column;
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .week-days {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        width: 100%;
+    }
+    
+    .week-day {
+        padding: 8px 3px;
+    }
+    
+    .day-label {
+        font-size: 0.6rem;
+        margin-bottom: 5px;
+    }
+    
+    .day-count {
+        font-size: 0.55rem;
+    }
+    
+    .week-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .earnings-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .earnings-table {
+        font-size: 0.85rem;
+    }
+    
+    .earnings-table thead th {
+        padding: 12px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .earnings-table tbody td {
+        padding: 12px 8px;
+        font-size: 0.85rem;
+    }
+    
+    .earnings-day-title {
+        font-size: 1.2rem;
+    }
+    
+    .sidebar-card {
+        padding: 20px;
+    }
+    
+    .sidebar-title {
+        font-size: 1.1rem;
+    }
+    
+    .notable-company {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .week-days {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 3px;
+    }
+    
+    .week-day {
+        padding: 6px 2px;
+    }
+    
+    .day-label {
+        font-size: 0.5rem;
+    }
+    
+    .day-count {
+        font-size: 0.5rem;
+    }
+    
+    .earnings-table thead th {
+        font-size: 0.65rem;
+        padding: 10px 5px;
+    }
+    
+    .earnings-table tbody td {
+        font-size: 0.75rem;
+        padding: 10px 5px;
+    }
+    
+    .time-badge {
+        padding: 4px 8px;
+        font-size: 0.65rem;
+    }
 }
 
 /* ===========================================
