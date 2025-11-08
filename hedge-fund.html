@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hedge Fund Positioning - Daily Dividend</title>
+  <meta name="description" content="Interactive hedge fund positioning dashboard powered by Daily Dividend.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="styles.css?v=17">
+  <style>
+    body { margin: 0; font-family: Inter, sans-serif; background: #f3f4f6; color: #111827; }
+    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+
+    .hf-hero {
+      padding: 160px 20px 60px;
+      background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%);
+      color: #f9fafb;
+      text-align: center;
+    }
+    .hf-hero h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 12px; }
+    .hf-hero p { font-size: 1.05rem; max-width: 760px; margin: 0 auto 30px; color: rgba(249,249,249,0.7); }
+
+    .hf-search {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hf-search input {
+      width: min(420px, 90vw);
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: #f9fafb;
+      font-size: 1rem;
+      backdrop-filter: blur(6px);
+    }
+    .hf-search input::placeholder { color: rgba(249,250,251,0.5); }
+
+    .hf-wrapper {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 30px;
+      max-width: 1200px;
+      margin: -60px auto 80px;
+      padding: 0 20px;
+    }
+
+    .hf-panel {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+      padding: 26px;
+    }
+
+    .fund-list { display: flex; flex-direction: column; gap: 16px; }
+    .fund-card {
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+    .fund-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1); }
+    .fund-card.active { border-color: #2563eb; box-shadow: 0 14px 32px rgba(37, 99, 235, 0.18); }
+    .fund-card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .fund-meta { font-size: 0.85rem; color: #6b7280; display: flex; flex-direction: column; gap: 3px; }
+    .fund-tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .fund-tag { font-size: 0.72rem; padding: 4px 10px; border-radius: 999px; background: #eef2ff; color: #4338ca; }
+
+    .fund-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+    .fund-header .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: #e0f2fe; color: #075985; font-size: 0.8rem; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .metric-card {
+      border-radius: 16px;
+      padding: 18px;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      color: #312e81;
+    }
+    .metric-card span { font-size: 0.78rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.04em; }
+    .metric-card strong { display: block; font-size: 1.35rem; margin-top: 6px; }
+
+    .holdings-section { display: flex; flex-direction: column; gap: 20px; }
+    .holdings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .holding-card {
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 18px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .holding-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    .holding-rank { font-size: 0.8rem; color: #9ca3af; }
+    .holding-ticker { font-size: 1.3rem; font-weight: 600; color: #111827; }
+    .holding-company { font-size: 0.92rem; color: #4b5563; }
+    .weight-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+    .weight-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      border-radius: 999px;
+    }
+    .holding-stats { display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.78rem; color: #1f2937; }
+    .holding-stats span { background: #f3f4f6; padding: 6px 10px; border-radius: 10px; }
+    .holding-thesis { font-size: 0.85rem; line-height: 1.45; color: #374151; }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 26px;
+    }
+    .insight-card { padding: 20px; border-radius: 18px; background: #fff; border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 10px 28px rgba(15,23,42,0.06); }
+    .insight-card h4 { margin: 0 0 12px; font-size: 1rem; }
+    .insight-card ul { margin: 0; padding-left: 18px; color: #4b5563; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px; }
+
+    .activity-section { margin-top: 36px; }
+    .activity-list { display: grid; gap: 12px; }
+    .activity-item { border-radius: 14px; border: 1px solid rgba(37, 99, 235, 0.18); background: #f8fafc; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+    .activity-item span { font-size: 0.85rem; color: #1f2937; }
+
+    .cta-bar {
+      margin-top: 40px;
+      padding: 18px 22px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #2563eb 0%, #312e81 100%);
+      color: #f9fafb;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cta-bar a {
+      background: rgba(255, 255, 255, 0.18);
+      color: #f9fafb;
+      padding: 10px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+    }
+    .cta-bar a:hover { background: rgba(255,255,255,0.28); }
+
+    @media (max-width: 1024px) {
+      .hf-wrapper { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .hf-hero { padding-top: 140px; }
+      .hf-wrapper { margin-top: -40px; }
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">
+          <img src="DDlogo.jpeg?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
+        </a>
+      </div>
+      <div class="nav-links" role="menubar">
+        <a href="index.html#features">Why Us</a>
+        <a href="index.html#how-it-works">How it Works</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#test">Test</a>
+        <a href="index.html#terms">Terms</a>
+        <a href="index.html#contact">Contact</a>
+        <div class="nav-dropdown" id="toolsDropdown">
+          <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" id="toolsDropdownBtn">Tools</button>
+          <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+            <a href="earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
+            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
+            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+          </div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html#features" onclick="closeMobileMenu()">Why Us</a>
+        <a href="index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+        <a href="index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="index.html#test" onclick="closeMobileMenu()">Test</a>
+        <a href="index.html#terms" onclick="closeMobileMenu()">Terms</a>
+        <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <details class="mobile-menu-dropdown">
+          <summary>Tools</summary>
+          <div class="mobile-menu-dropdown-content">
+            <a href="earnings.html" onclick="closeMobileMenu()"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
+            <a href="macro-calendar.html" onclick="closeMobileMenu()"><i class="fas fa-chart-line"></i> Macro Calendar</a>
+            <a href="hedge-fund.html" onclick="closeMobileMenu()"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hf-hero">
+    <h1>Hedge Fund Positioning</h1>
+    <p>Explore institutional portfolios through an investor-first lens. Start with Berkshire Hathaway and drill into conviction holdings, conviction sizing, and positioning dynamics.</p>
+    <div class="hf-search">
+      <input type="search" id="fundSearch" placeholder="Search for a hedge fund (e.g. Tiger Global, Pershing Square)..." aria-label="Search hedge funds">
+    </div>
+  </header>
+
+  <main class="hf-wrapper">
+    <aside class="hf-panel" aria-label="Fund list">
+      <h2 style="margin:0 0 18px;font-size:1.05rem;">Funds</h2>
+      <div class="fund-list" id="fundList"></div>
+    </aside>
+
+    <section class="hf-panel" id="fundDetail" aria-live="polite">
+      <!-- Populated by script -->
+    </section>
+  </main>
+
+  <footer class="footer" style="background-color:white !important; text-align:center;">
+    <div class="container" style="text-align:center;">
+      <div style="text-align:center;">
+        <p style="color:black; margin:0;">&copy; 2025 Daily Dividend. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) mobileMenu.classList.toggle('active');
+    }
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) mobileMenu.classList.remove('active');
+    }
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (mobileMenu && mobileMenu.classList.contains('active') && !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    const funds = [
+      {
+        id: 'brk',
+        name: 'Berkshire Hathaway Inc. (BRK.A / BRK.B)',
+        location: 'Omaha, Nebraska',
+        style: ['Value', 'Quality', 'Ultra Concentrated'],
+        aum: '$257.5B',
+        top10Concentration: '87.29%',
+        turnover: '16.7%',
+        turnoverAlt: '1.94%',
+        avgHoldingPeriod: '7.4 years',
+        lastFiling: 'Q2 2025',
+        url: 'https://whalewisdom.com/filer/berkshire-hathaway-inc',
+        commentary: 'Warren Buffett and Todd Combs continue to lean on cash-flow heavy, wide-moat franchises with durable pricing power.',
+        exposure: [
+          { label: 'Financials 46%', tone: 'primary' },
+          { label: 'Consumer Staples 16%', tone: 'neutral' },
+          { label: 'Energy 12%', tone: 'accent' },
+          { label: 'Tech & Digital 22%', tone: 'bright' }
+        ],
+        topBuys: [
+          'Incremental adds to UnitedHealth, Nucor, Lennar, Pool, D.R. Horton (all sub 1% sizing) show a tilt toward healthcare resilience and US housing demand.',
+          'No blockbuster new positions – cash pile remains north of $180B, highlighting patience at current equity valuations.'
+        ],
+        topSells: [
+          'Trimmed Apple for liquidity while preserving a 22% anchor weight.',
+          'Light reductions in T-Mobile, DaVita, Charter Communications; portfolio turnover continues to sit in the teens.'
+        ],
+        holdings: [
+          { rank: 1, ticker: 'AAPL', company: 'Apple Inc.', weight: 22.31, sector: 'Technology', theme: 'Systems lock-in & services flywheel', thesis: 'Buffett continues to call Apple a “consumer products company” with unmatched ecosystem stickiness. Free cash flow backs relentless buybacks.' },
+          { rank: 2, ticker: 'AXP', company: 'American Express Co.', weight: 18.78, sector: 'Financials', theme: 'Affluent payments network', thesis: 'Closed-loop payments model delivers superior spend visibility and pricing power across premium consumers and SMEs.' },
+          { rank: 3, ticker: 'BAC', company: 'Bank of America Corp.', weight: 11.12, sector: 'Financials', theme: 'Deposit fortress bank', thesis: 'Scale retail deposit base lowers funding costs while digital investments expand operating leverage in core lending.' },
+          { rank: 4, ticker: 'KO', company: 'Coca-Cola Co.', weight: 10.99, sector: 'Consumer Staples', theme: 'Global beverage royalty', thesis: 'Capital-light franchise model and brand equity translate into resilient pricing power through cycles.' },
+          { rank: 5, ticker: 'CVX', company: 'Chevron Corp.', weight: 6.79, sector: 'Energy', theme: 'Integrated energy cash engine', thesis: 'Disciplined capex and advantaged upstream portfolio support double-digit shareholder returns at mid-cycle oil.' },
+          { rank: 6, ticker: 'OXY', company: 'Occidental Petroleum Corp.', weight: 4.59, sector: 'Energy', theme: 'Carbon-efficient shale', thesis: 'Equity + warrants structure gives Berkshire asymmetric upside on disciplined Permian production and carbon capture optionality.' },
+          { rank: 7, ticker: 'KHC', company: 'Kraft Heinz Co.', weight: 3.06, sector: 'Consumer Staples', theme: 'Packaged food turnaround', thesis: 'Portfolio rationalisation and margin rebuild continue; dividend stream remains appealing despite muted growth.' },
+          { rank: 8, ticker: 'MCO', company: "Moody's Corp.", weight: 2.96, sector: 'Financials', theme: 'Oligopoly analytics', thesis: 'Rating agency duopoly complemented by fast-growing data & risk analytics segment.' },
+          { rank: 9, ticker: 'HPQ', company: 'HP Inc.', weight: 1.48, sector: 'Technology', theme: 'Capital returns play', thesis: 'PC + printing cash generation underpins aggressive buyback program; viewed as capital allocation trade.' },
+          { rank:10, ticker: 'C', company: 'Citigroup Inc.', weight: 1.09, sector: 'Financials', theme: 'Restructuring optionality', thesis: 'Position sized as optionality on simplification effort and return to double-digit ROTCE.' }
+        ]
+      }
+    ];
+
+    const fundListEl = document.getElementById('fundList');
+    const fundDetailEl = document.getElementById('fundDetail');
+    const searchInput = document.getElementById('fundSearch');
+    let activeFundId = funds[0]?.id;
+
+    function renderFundList(filterText = '') {
+      if (!fundListEl) return;
+      fundListEl.innerHTML = '';
+      const normalized = filterText.trim().toLowerCase();
+      const visibleFunds = funds.filter(fund => fund.name.toLowerCase().includes(normalized) || fund.style.some(tag => tag.toLowerCase().includes(normalized)));
+
+      if (!visibleFunds.length) {
+        const empty = document.createElement('div');
+        empty.textContent = 'No funds match your search yet. Suggest a manager via support@dailydividend.info';
+        empty.style.fontSize = '0.85rem';
+        empty.style.color = '#6b7280';
+        fundListEl.appendChild(empty);
+        return;
+      }
+
+      visibleFunds.forEach(fund => {
+        const card = document.createElement('article');
+        card.className = `fund-card${fund.id === activeFundId ? ' active' : ''}`;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.innerHTML = `
+          <h3>${fund.name}</h3>
+          <div class="fund-meta">
+            <span><i class="fas fa-location-dot"></i> ${fund.location}</span>
+            <span><i class="fas fa-calendar"></i> Latest filing ${fund.lastFiling}</span>
+          </div>
+          <div class="fund-tags">
+            ${fund.style.map(tag => `<span class="fund-tag">${tag}</span>`).join('')}
+          </div>
+        `;
+        card.addEventListener('click', () => selectFund(fund.id));
+        card.addEventListener('keypress', (e) => { if (e.key === 'Enter') selectFund(fund.id); });
+        fundListEl.appendChild(card);
+      });
+    }
+
+    function renderFundDetail(fund) {
+      if (!fundDetailEl || !fund) return;
+      fundDetailEl.innerHTML = `
+        <div class="fund-header">
+          <span class="pill"><i class="fas fa-chart-pie"></i> ${fund.commentary}</span>
+          <h2 style="margin:0;font-size:1.6rem;">${fund.name}</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;color:#6b7280;font-size:0.85rem;">
+            <span><i class="fas fa-location-dot"></i> ${fund.location}</span>
+            <span><i class="fas fa-calendar-alt"></i> Form 13F – ${fund.lastFiling}</span>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card"><span>13F Assets</span><strong>${fund.aum}</strong><small style="display:block;margin-top:6px;">Reported to SEC</small></div>
+          <div class="metric-card"><span>Top 10 Concentration</span><strong>${fund.top10Concentration}</strong><small style="display:block;margin-top:6px;">Portfolio focus</small></div>
+          <div class="metric-card"><span>Reported Turnover</span><strong>${fund.turnover}</strong><small style="display:block;margin-top:6px;">Quarterly activity</small></div>
+          <div class="metric-card"><span>Alternate Turnover</span><strong>${fund.turnoverAlt}</strong><small style="display:block;margin-top:6px;">Value-adjusted</small></div>
+          <div class="metric-card"><span>Avg Holding Period</span><strong>${fund.avgHoldingPeriod}</strong><small style="display:block;margin-top:6px;">Top positions</small></div>
+        </div>
+
+        <section class="holdings-section">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+            <h3 style="margin:0;font-size:1.2rem;">Top 10 Holdings</h3>
+            <div class="fund-tags">
+              ${fund.exposure.map(ex => `<span class="fund-tag">${ex.label}</span>`).join('')}
+            </div>
+          </div>
+          <p style="margin:8px 0 16px;font-size:0.92rem;color:#4b5563;">Weights derived from WhaleWisdom Q2 2025 filings. Bars scale by reported portfolio weight.</p>
+          <div class="holdings-grid">
+            ${fund.holdings.map(holding => `
+              <article class="holding-card">
+                <div class="holding-header">
+                  <div>
+                    <div class="holding-rank">#${holding.rank}</div>
+                    <div class="holding-ticker">${holding.ticker}</div>
+                    <div class="holding-company">${holding.company}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:0.82rem;color:#1f2937;">${holding.weight.toFixed(2)}%</div>
+                    <div style="font-size:0.72rem;color:#6b7280;">of 13F</div>
+                  </div>
+                </div>
+                <div class="weight-bar"><div class="weight-fill" style="width:${Math.min(holding.weight, 40)}%;"></div></div>
+                <div class="holding-stats">
+                  <span><i class="fas fa-industry"></i> ${holding.sector}</span>
+                  <span><i class="fas fa-layer-group"></i> ${holding.theme}</span>
+                </div>
+                <p class="holding-thesis">${holding.thesis}</p>
+              </article>
+            `).join('')}
+          </div>
+        </section>
+
+        <section class="insights-grid" aria-label="Additional insights">
+          <article class="insight-card">
+            <h4><i class="fas fa-lightbulb"></i> Portfolio Posture</h4>
+            <ul>
+              <li>Equity book remains anchored by consumer and payments franchises with consistent cash return profiles.</li>
+              <li>Energy exposure (Chevron + Occidental) reflects Buffett’s preference for shareholder-friendly producers with optionality on higher oil.</li>
+              <li>Top 10 concentration above 85% underscores the bar to enter the portfolio.</li>
+            </ul>
+          </article>
+          <article class="insight-card">
+            <h4><i class="fas fa-arrows-rotate"></i> Activity Signals</h4>
+            <ul>
+              ${fund.topBuys.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </article>
+          <article class="insight-card">
+            <h4><i class="fas fa-scissors"></i> Trims & Reductions</h4>
+            <ul>
+              ${fund.topSells.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </article>
+        </section>
+
+      `;
+    }
+
+    function selectFund(id) {
+      activeFundId = id;
+      renderFundList(searchInput?.value || '');
+      const fund = funds.find(item => item.id === id);
+      renderFundDetail(fund);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFundList();
+      selectFund(activeFundId);
+      searchInput?.addEventListener('input', (event) => {
+        renderFundList(event.target.value);
+      });
+    });
+  </script>
+</body>
+</html>
