@@ -22,6 +22,71 @@
   <style>
     body { margin: 0; font-family: Inter, sans-serif; }
     .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+
+    .week-calendar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .week-days {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      max-width: clamp(420px, 80vw, 860px);
+      padding: 10px 6px;
+    }
+
+    .week-days::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .week-days::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 999px;
+    }
+
+    .week-day {
+      flex: 0 0 168px;
+      min-width: 168px;
+      padding: 22px 18px;
+      scroll-snap-align: start;
+    }
+
+    .day-label {
+      font-size: 1rem;
+    }
+
+    .week-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #ffffff;
+      color: #1f2937;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .week-nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .week-nav-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+    }
     
     /* Mobile menu styles */
     .mobile-menu-btn { display: none; }
@@ -71,38 +136,19 @@
       .mobile-menu a:last-child { border-bottom: none; }
       
       /* Mobile Calendar Optimizations */
-      .week-nav-btn { display: none !important; }
-      
-      .week-calendar {
-        padding: 15px 10px !important;
-        overflow: hidden;
-      }
-      
+      .week-nav-btn { display: none; }
+      .week-calendar { padding: 18px 12px; }
       .week-days {
-        display: flex !important;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 8px !important;
-        padding: 5px 0;
+        max-width: 100%;
+        gap: 12px;
+        padding: 6px 4px;
       }
-      
-      .week-days::-webkit-scrollbar {
-        display: none;
-      }
-      
+      .week-days::-webkit-scrollbar { display: none; }
       .week-day {
-        flex: 0 0 auto;
-        min-width: 100px !important;
-        padding: 18px 12px !important;
-        scroll-snap-align: start;
-        font-size: 1rem !important;
+        min-width: 135px;
+        padding: 18px 14px;
       }
-      
-      .day-label {
-        font-size: 0.95rem !important;
-      }
+      .day-label { font-size: 0.98rem; }
       
       .earnings-table-wrapper {
         overflow-x: auto;
@@ -268,296 +314,108 @@
                             <div class="week-day" data-day="saturday">
                                 <div class="day-label">Sat, Nov 8</div>
                             </div>
+                            <!-- Additional Dates -->
+                            <div class="week-day" data-day="nov9" data-date="2025-11-09">
+                                <div class="day-label">Sun, Nov 9</div>
+                            </div>
+                            <div class="week-day" data-day="nov10" data-date="2025-11-10">
+                                <div class="day-label">Mon, Nov 10</div>
+                            </div>
+                            <div class="week-day" data-day="nov11" data-date="2025-11-11">
+                                <div class="day-label">Tue, Nov 11</div>
+                            </div>
+                            <div class="week-day" data-day="nov12" data-date="2025-11-12">
+                                <div class="day-label">Wed, Nov 12</div>
+                            </div>
+                            <div class="week-day" data-day="nov13" data-date="2025-11-13">
+                                <div class="day-label">Thu, Nov 13</div>
+                            </div>
+                            <div class="week-day" data-day="nov14" data-date="2025-11-14">
+                                <div class="day-label">Fri, Nov 14</div>
+                            </div>
+                            <div class="week-day" data-day="nov15" data-date="2025-11-15">
+                                <div class="day-label">Sat, Nov 15</div>
+                            </div>
+                            <div class="week-day" data-day="nov16" data-date="2025-11-16">
+                                <div class="day-label">Sun, Nov 16</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
 
                     <!-- Earnings Table for Sunday -->
                     <div class="earnings-day-content" id="sunday-earnings">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-02"></div>
                     </div>
                     
                     <!-- Earnings Table for Monday -->
                     <div class="earnings-day-content" id="monday-earnings">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-03"></div>
                     </div>
                     
                     <!-- Earnings Table for Tuesday -->
                     <div class="earnings-day-content" id="tuesday-earnings">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-04"></div>
                     </div>
                     
                     <!-- Earnings Table for Wednesday -->
                     <div class="earnings-day-content" id="wednesday-earnings">
-                        <div class="earnings-table-wrapper">
-                            <table class="earnings-table">
-                                <thead>
-                                    <tr>
-                                        <th>Symbol</th>
-                                        <th>Company</th>
-                                        <th>Event</th>
-                                        <th>Time</th>
-                                        <th>EPS Est.</th>
-                                        <th>Market Cap</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="symbol">TM</td>
-                                        <td class="company">Toyota Motor Corporation</td>
-                                        <td>-</td>
-                                        <td><span class="time-badge tns">TAS</span></td>
-                                        <td>$5.36</td>
-                                        <td>$259.66B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">NVO</td>
-                                        <td class="company">Novo Nordisk A/S</td>
-                                        <td>-</td>
-                                        <td><span class="time-badge tns">TAS</span></td>
-                                        <td>$4.24</td>
-                                        <td>$214.63B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">APP</td>
-                                        <td class="company">AppLovin Corporation</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$2.39</td>
-                                        <td>$208.72B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">QCOM</td>
-                                        <td class="company">QUALCOMM Incorporated</td>
-                                        <td>Q4 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$2.87</td>
-                                        <td>$193.56B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">ARM</td>
-                                        <td class="company">Arm Holdings plc</td>
-                                        <td>Q2 2026</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$0.33</td>
-                                        <td>$169.64B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">HOOD</td>
-                                        <td class="company">Robinhood Markets, Inc.</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$0.61</td>
-                                        <td>$126.95B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">MCK</td>
-                                        <td class="company">McKesson Corporation</td>
-                                        <td>Q2 2026</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$9.05</td>
-                                        <td>$105.01B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">DASH</td>
-                                        <td class="company">DoorDash, Inc.</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$1.25</td>
-                                        <td>$101.63B</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-    </div>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-05"></div>
+                    </div>
 
                     <!-- Earnings Table for Thursday -->
                     <div class="earnings-day-content" id="thursday-earnings">
-                        <div class="earnings-table-wrapper">
-                            <table class="earnings-table">
-                                <thead>
-                                    <tr>
-                                        <th>Symbol</th>
-                                        <th>Company</th>
-                                        <th>Event</th>
-                                        <th>Time</th>
-                                        <th>EPS Est.</th>
-                                        <th>Market Cap</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="symbol">AZN</td>
-                                        <td class="company">AstraZeneca PLC</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$1.13</td>
-                                        <td>$253.56B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">COP</td>
-                                        <td class="company">ConocoPhillips</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$1.41</td>
-                                        <td>$110.12B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">PH</td>
-                                        <td class="company">Parker-Hannifin Corporation</td>
-                                        <td>Q1 2026</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$6.62</td>
-                                        <td>$98.35B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">PBR</td>
-                                        <td class="company">Petróleo Brasileiro - Petrobras</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$0.66</td>
-                                        <td>$75.85B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">ABNB</td>
-                                        <td class="company">Airbnb, Inc.</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$2.31</td>
-                                        <td>$75.49B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">NGG</td>
-                                        <td class="company">National Grid plc</td>
-                                        <td>H1 2026</td>
-                                        <td><span class="time-badge tns">TNS</span></td>
-                                        <td>-</td>
-                                        <td>$75.10B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">CNQ</td>
-                                        <td class="company">Canadian Natural Resources</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$0.81</td>
-                                        <td>$66.64B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">MNST</td>
-                                        <td class="company">Monster Beverage Corporation</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge amc">AMC</span></td>
-                                        <td>$0.48</td>
-                                        <td>$66.13B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">VST</td>
-                                        <td class="company">Vistra Corp.</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$1.96</td>
-                                        <td>$64.69B</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-    </div>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-06"></div>
+                    </div>
 
                     <!-- Earnings Table for Friday -->
                     <div class="earnings-day-content" id="friday-earnings">
-                        <div class="earnings-table-wrapper">
-                            <table class="earnings-table">
-      <thead>
-        <tr>
-                                        <th>Symbol</th>
-          <th>Company</th>
-                                        <th>Event</th>
-          <th>Time</th>
-                                        <th>EPS Est.</th>
-                                        <th>Market Cap</th>
-        </tr>
-      </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="symbol">CEG</td>
-                                        <td class="company">Constellation Energy Corporation</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$3.13</td>
-                                        <td>$114.45B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">KKR</td>
-                                        <td class="company">KKR & Co. Inc.</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$1.30</td>
-                                        <td>$110.55B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">ENB</td>
-                                        <td class="company">Enbridge Inc.</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$0.51</td>
-                                        <td>$101.72B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">DUK</td>
-                                        <td class="company">Duke Energy Corporation</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$1.75</td>
-                                        <td>$96.15B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">BAM</td>
-                                        <td class="company">Brookfield Asset Management</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$0.40</td>
-                                        <td>$87.57B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">UI</td>
-                                        <td class="company">Ubiquiti Inc.</td>
-                                        <td>Q1 2026</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$2.93</td>
-                                        <td>$47.31B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">HMC</td>
-                                        <td class="company">Honda Motor Co., Ltd.</td>
-                                        <td>Q2 2026</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>-</td>
-                                        <td>$40.13B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">TU</td>
-                                        <td class="company">TELUS Corporation</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$0.27</td>
-                                        <td>$22.47B</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="symbol">BIP</td>
-                                        <td class="company">Brookfield Infrastructure Partners</td>
-                                        <td>Q3 2025</td>
-                                        <td><span class="time-badge bmo">BMO</span></td>
-                                        <td>$0.31</td>
-                                        <td>$16.05B</td>
-                                    </tr>
-                                </tbody>
-    </table>
-                        </div>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-07"></div>
                     </div>
                     
                     <!-- Earnings Table for Saturday -->
                     <div class="earnings-day-content" id="saturday-earnings">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-08"></div>
+                    </div>
+
+                    <!-- Earnings Table for Sunday Nov 9 -->
+                    <div class="earnings-day-content" id="nov9-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-09"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Nov 10 -->
+                    <div class="earnings-day-content" id="nov10-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-10"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Nov 11 -->
+                    <div class="earnings-day-content" id="nov11-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-11"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Nov 12 -->
+                    <div class="earnings-day-content" id="nov12-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-12"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Nov 13 -->
+                    <div class="earnings-day-content" id="nov13-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-13"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Nov 14 -->
+                    <div class="earnings-day-content" id="nov14-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-14"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Nov 15 -->
+                    <div class="earnings-day-content" id="nov15-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-15"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Nov 16 -->
+                    <div class="earnings-day-content" id="nov16-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-16"></div>
                     </div>
                 </div>
                 
@@ -566,66 +424,8 @@
                     <h3 class="notable-title">
                         <i class="fas fa-star"></i> Notable Earnings Next Week
                     </h3>
-                    <div class="notable-grid">
-                        <div class="notable-day-group">
-                            <div class="notable-day-label">Monday, Nov 11</div>
-                            <div class="notable-companies-row">
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">SONY</span>
-                                    <span class="notable-name">Sony Group</span>
-                                </div>
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">VOD</span>
-                                    <span class="notable-name">Vodafone</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="notable-day-group">
-                            <div class="notable-day-label">Tuesday, Nov 12</div>
-                            <div class="notable-companies-row">
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">CSCO</span>
-                                    <span class="notable-name">Cisco</span>
-                                </div>
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">TCEHY</span>
-                                    <span class="notable-name">Tencent</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="notable-day-group">
-                            <div class="notable-day-label">Wednesday, Nov 13</div>
-                            <div class="notable-companies-row">
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">DIS</span>
-                                    <span class="notable-name">Disney</span>
-                                </div>
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">JD</span>
-                                    <span class="notable-name">JD.com</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="notable-day-group">
-                            <div class="notable-day-label">Thursday, Nov 14</div>
-                            <div class="notable-companies-row">
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">BABA</span>
-                                    <span class="notable-name">Alibaba</span>
-                                </div>
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">MUFG</span>
-                                    <span class="notable-name">Mitsubishi</span>
-                                </div>
-                                <div class="notable-company-card">
-                                    <span class="notable-symbol">MFG</span>
-                                    <span class="notable-name">Mizuho</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="notable-grid" id="notableEarningsGrid">
+                        <!-- Populated via renderNotableEarnings() -->
                     </div>
                 </div>
             </div>
@@ -644,6 +444,190 @@
   </footer>
 
   <script>
+    const EARNINGS_DATA = {
+      '2025-11-02': { message: 'No significant events to report.' },
+      '2025-11-03': { message: 'No significant events to report.' },
+      '2025-11-04': { message: 'No significant events to report.' },
+      '2025-11-05': {
+        rows: [
+          ['TM', 'Toyota Motor Corporation', '-', 'TAS', '$5.36', '$259.66B'],
+          ['NVO', 'Novo Nordisk A/S', '-', 'TAS', '$4.24', '$214.63B'],
+          ['APP', 'AppLovin Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$2.39', '$208.72B'],
+          ['QCOM', 'QUALCOMM Incorporated', 'Q4 2025 Earnings Announcement', 'AMC', '$2.87', '$193.56B'],
+          ['ARM', 'Arm Holdings plc', 'Q2 2026 Earnings Announcement', 'AMC', '$0.33', '$169.64B'],
+          ['HOOD', 'Robinhood Markets, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$0.61', '$126.95B'],
+          ['MCK', 'McKesson Corporation', 'Q2 2026 Earnings Announcement', 'AMC', '$9.05', '$105.01B'],
+          ['DASH', 'DoorDash, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$1.25', '$101.63B']
+        ]
+      },
+      '2025-11-06': {
+        rows: [
+          ['AZN', 'AstraZeneca PLC', 'Q3 2025 Earnings Announcement', 'BMO', '$1.13', '$253.56B'],
+          ['COP', 'ConocoPhillips', 'Q3 2025 Earnings Announcement', 'BMO', '$1.41', '$110.12B'],
+          ['PH', 'Parker-Hannifin Corporation', 'Q1 2026 Earnings Announcement', 'BMO', '$6.62', '$98.35B'],
+          ['PBR', 'Petróleo Brasileiro - Petrobras', 'Q3 2025 Earnings Announcement', 'AMC', '$0.66', '$75.85B'],
+          ['ABNB', 'Airbnb, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$2.31', '$75.49B'],
+          ['NGG', 'National Grid plc', 'H1 2026 Earnings Announcement', 'TNS', '-', '$75.10B'],
+          ['CNQ', 'Canadian Natural Resources', 'Q3 2025 Earnings Announcement', 'BMO', '$0.81', '$66.64B'],
+          ['MNST', 'Monster Beverage Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$0.48', '$66.13B'],
+          ['VST', 'Vistra Corp.', 'Q3 2025 Earnings Announcement', 'BMO', '$1.96', '$64.69B']
+        ]
+      },
+      '2025-11-07': {
+        rows: [
+          ['CEG', 'Constellation Energy Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$3.13', '$114.45B'],
+          ['KKR', 'KKR & Co. Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$1.30', '$110.55B'],
+          ['ENB', 'Enbridge Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.51', '$101.72B'],
+          ['DUK', 'Duke Energy Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$1.75', '$96.15B'],
+          ['BAM', 'Brookfield Asset Management', 'Q3 2025 Earnings Announcement', 'BMO', '$0.40', '$87.57B'],
+          ['UI', 'Ubiquiti Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$2.93', '$47.31B'],
+          ['HMC', 'Honda Motor Co., Ltd.', 'Q2 2026 Earnings Announcement', 'BMO', '-', '$40.13B'],
+          ['TU', 'TELUS Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$0.27', '$22.47B'],
+          ['BIP', 'Brookfield Infrastructure Partners', 'Q3 2025 Earnings Announcement', 'BMO', '$0.31', '$16.05B']
+        ]
+      },
+      '2025-11-08': { message: 'No significant events to report.' },
+      '2025-11-09': { message: 'No significant events scheduled.' },
+      '2025-11-10': {
+        rows: [
+          ['B', 'Barrick Mining Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$0.61', '$56.48B'],
+          ['CRWV', 'CoreWeave, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.51', '$51.50B'],
+          ['OXY', 'Occidental Petroleum Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$0.49', '$40.67B'],
+          ['ASTS', 'AST SpaceMobile, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.39', '$25.37B'],
+          ['RKLB', 'Rocket Lab Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.06', '$24.99B'],
+          ['LI', 'Li Auto Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.56', '$20.38B']
+        ]
+      },
+      '2025-11-11': {
+        rows: [
+          ['SONY', 'Sony Group Corporation', 'Q2 2025 Earnings Announcement', 'BMO', '$0.27', '$165.29B'],
+          ['SE', 'Sea Limited', 'Q3 2025 Earnings Announcement', 'BMO', '$0.95', '$88.77B'],
+          ['ALC', 'Alcon Inc.', 'Q3 2025 Earnings Announcement', 'TNS', '$0.77', '$36.57B'],
+          ['AU', 'AngloGold Ashanti plc', 'Q3 2025 Earnings Announcement', 'BMO', '$1.32', '$35.03B'],
+          ['NBIS', 'Nebius Group N.V.', 'Q3 2025 Earnings Announcement', 'BMO', '-$0.39', '$27.95B'],
+          ['VOD', 'Vodafone Group Public Limited Company', 'H1 2026 Earnings Announcement', 'BMO', '-', '$27.93B'],
+          ['OKLO', 'Oklo Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.12', '$7.42B']
+        ]
+      },
+      '2025-11-12': {
+        rows: [
+          ['CSCO', 'Cisco Systems, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$0.98', '$280.07B'],
+          ['TDG', 'TransDigm Group Incorporated', 'Q4 2025 Earnings Announcement', 'BMO', '$10.06', '$72.40B'],
+          ['MFC', 'Manulife Financial Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$1.04', '$56.32B'],
+          ['FLUT', 'Flutter Entertainment plc', 'Q3 2025 Earnings Announcement', 'AMC', '$0.62', '$39.02B'],
+          ['TME', 'Tencent Music Entertainment Group', 'Q3 2025 Earnings Announcement', 'BMO', '$1.52', '$33.57B'],
+          ['IX', 'ORIX Corporation', 'Q2 2026 Earnings Announcement', 'TNS', '$0.57', '$26.75B'],
+          ['CRCL', 'Circle Internet Group', 'Q3 2025 Earnings Announcement', 'BMO', '$0.17', '$25.83B'],
+          ['GFS', 'GlobalFoundries Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.38', '$18.91B']
+        ]
+      },
+      '2025-11-13': {
+        rows: [
+          ['DIS', 'The Walt Disney Company', 'Q4 2025 Earnings Announcement', 'BMO', '$1.02', '$199.10B'],
+          ['AMAT', 'Applied Materials, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$2.10', '$183.28B'],
+          ['BN', 'Brookfield Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$0.26', '$102.89B'],
+          ['NU', 'Nu Holdings Ltd.', 'Q3 2025 Earnings Announcement', 'AMC', '$0.17', '$76.69B'],
+          ['JD', 'JD.com, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$2.89', '$45.45B'],
+          ['BAP', 'Credicorp Ltd.', 'Q3 2025 Earnings Announcement', 'AMC', '$6.31', '$20.60B'],
+          ['EC', 'Ecopetrol S.A.', 'Q3 2025 Earnings Announcement', 'AMC', '$0.36', '$20.39B']
+        ]
+      },
+      '2025-11-14': {
+        rows: [
+          ['BABA', 'Alibaba Group Holding Limited', 'Q2 2026 Earnings Announcement', 'BMO', '$5.78', '$402.02B'],
+          ['MUFG', 'Mitsubishi UFJ Financial Group, Inc.', 'Q2 2025 Earnings Announcement', 'TNS', '$0.26', '$171.98B'],
+          ['SMFG', 'Sumitomo Mitsui Financial Group, Inc.', 'Q2 2025 Earnings Announcement', 'TNS', '$0.10', '$104.56B'],
+          ['MFG', 'Mizuho Financial Group, Inc.', 'Q2 2025 Earnings Announcement', 'TNS', '$0.11', '$82.41B'],
+          ['LTM', 'LATAM Airlines Group S.A.', 'Q3 2025 Earnings Announcement', 'AMC', '$1.29', '$13.40B'],
+          ['SR', 'Spire Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '-$0.38', '$5.29B'],
+          ['CSAN', 'Cosan S.A.', 'Q3 2025 Earnings Announcement', 'TNS', '$0.21', '$4.36B'],
+          ['ABTC', 'American Bitcoin Corp', 'Q3 2025 Earnings Announcement', 'BMO', '-', '$4.29B']
+        ]
+      },
+      '2025-11-15': { message: 'No significant events scheduled.' },
+      '2025-11-16': { message: 'No significant events scheduled.' }
+    };
+
+    const NOTABLE_BLOCKS = [
+      {
+        start: '2025-11-03',
+        end: '2025-11-09',
+        days: [
+          { label: 'Monday, Nov 10', message: 'No significant earnings.' },
+          { label: 'Tuesday, Nov 11', companies: [{ symbol: 'SONY', name: 'Sony Group' }, { symbol: 'VOD', name: 'Vodafone' }] },
+          { label: 'Wednesday, Nov 12', companies: [{ symbol: 'CSCO', name: 'Cisco' }, { symbol: 'TCEHY', name: 'Tencent' }] },
+          { label: 'Thursday, Nov 13', companies: [{ symbol: 'DIS', name: 'Disney' }, { symbol: 'JD', name: 'JD.com' }] },
+          { label: 'Friday, Nov 14', companies: [{ symbol: 'BABA', name: 'Alibaba' }, { symbol: 'MUFG', name: 'Mitsubishi' }, { symbol: 'MFG', name: 'Mizuho' }] }
+        ]
+      },
+      {
+        start: '2025-11-10',
+        end: '2025-11-16',
+        days: [
+          { label: 'Monday, Nov 17', companies: [{ symbol: 'TCOM', name: 'Trip.com' }] },
+          { label: 'Tuesday, Nov 18', companies: [{ symbol: 'HD', name: 'Home Depot' }, { symbol: 'BIDU', name: 'Baidu' }] },
+          { label: 'Wednesday, Nov 19', companies: [{ symbol: 'NVDA', name: 'Nvidia' }, { symbol: 'TGT', name: 'Target' }] },
+          { label: 'Thursday, Nov 20', companies: [{ symbol: 'WMT', name: 'Walmart' }] },
+          { label: 'Friday, Nov 21', message: 'No significant earnings.' }
+        ]
+      }
+    ];
+
+    const TABLE_HEADERS = ['Symbol', 'Company', 'Event', 'Time', 'EPS Est.', 'Market Cap'];
+
+    function buildTimeBadge(time) {
+      if (!time || time === '-') return '-';
+      const key = time.toLowerCase();
+      const timeClass = key === 'bmo'
+        ? 'bmo'
+        : key === 'amc'
+          ? 'amc'
+          : (key === 'tns' || key === 'tas' ? 'tns' : 'tns');
+      return `<span class="time-badge ${timeClass}">${time}</span>`;
+    }
+
+    function renderEarningsTables() {
+      const wrappers = document.querySelectorAll('.earnings-table-wrapper[data-day-table]');
+      wrappers.forEach(wrapper => {
+        const dateKey = wrapper.dataset.dayTable;
+        const data = EARNINGS_DATA[dateKey];
+
+        if (!data) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">No data available.</p>`;
+          return;
+        }
+
+        if (data.message) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">${data.message}</p>`;
+          return;
+        }
+
+        const rows = (data.rows || []).map(([symbol, company, event, time, eps, cap]) => `
+          <tr>
+            <td class="symbol">${symbol}</td>
+            <td class="company">${company}</td>
+            <td>${event}</td>
+            <td>${buildTimeBadge(time)}</td>
+            <td>${eps}</td>
+            <td>${cap}</td>
+          </tr>
+        `).join('');
+
+        wrapper.innerHTML = `
+          <table class="earnings-table">
+            <thead>
+              <tr>
+                ${TABLE_HEADERS.map(label => `<th>${label}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        `;
+      });
+    }
+
     // Mobile menu functions
     function toggleMobileMenu() {
       const mobileMenu = document.getElementById('mobileMenu');
@@ -715,58 +699,146 @@
 
     // Earnings Calendar Interactive Navigation
     function initEarningsCalendar() {
-      const weekDays = document.querySelectorAll('.week-day[data-day]');
+      const weekDays = Array.from(document.querySelectorAll('.week-day'));
       const weekDaysContainer = document.querySelector('.week-days');
-      
-      // Auto-select today's date
-      const today = new Date();
-      const dayOfWeek = today.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
+      const prevBtn = document.querySelector('.week-nav-btn.prev');
+      const nextBtn = document.querySelector('.week-nav-btn.next');
+      const allContents = Array.from(document.querySelectorAll('.earnings-day-content'));
       const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-      const todayName = dayNames[dayOfWeek];
-      
-      // Set today as active and scroll to it
-      weekDays.forEach(day => {
-        const dayAttr = day.getAttribute('data-day');
-        if (dayAttr === todayName) {
-          day.classList.add('active');
-          const targetContent = document.getElementById(`${todayName}-earnings`);
-          if (targetContent) {
-            targetContent.classList.add('active');
-          }
-          // Scroll today's date to the leftmost position
+
+      const assignDateIfMissing = (day) => {
+        if (day.dataset.date) return day.dataset.date;
+        const label = day.querySelector('.day-label')?.textContent || '';
+        const normalized = label.replace(',', '').trim();
+        if (!normalized) return null;
+        const parsed = new Date(`${normalized} 2025`);
+        if (!isNaN(parsed)) {
+          day.dataset.date = parsed.toISOString().split('T')[0];
+          return day.dataset.date;
+        }
+        return null;
+      };
+
+      const updateNavState = () => {
+        if (!prevBtn || !nextBtn) return;
+        const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+        prevBtn.disabled = activeIndex <= 0;
+        nextBtn.disabled = activeIndex >= weekDays.length - 1;
+      };
+
+      const showDay = (day, shouldScroll = true) => {
+        if (!day) return;
+        const activeDate = assignDateIfMissing(day);
+        weekDays.forEach(d => d.classList.remove('active'));
+        day.classList.add('active');
+
+        allContents.forEach(content => content.classList.remove('active'));
+        const targetId = `${day.getAttribute('data-day')}-earnings`;
+        const targetContent = document.getElementById(targetId);
+        if (targetContent) {
+          targetContent.classList.add('active');
+        }
+
+        if (shouldScroll) {
+          const behavior = weekDaysContainer?.dataset.instant === 'true' ? 'auto' : 'smooth';
           setTimeout(() => {
-            day.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-          }, 100);
+            day.scrollIntoView({ behavior, inline: 'start', block: 'nearest' });
+          }, 50);
+        }
+
+        renderNotableEarnings(activeDate);
+        updateNavState();
+      };
+
+      const todayIso = new Date().toISOString().split('T')[0];
+      let activated = false;
+
+      weekDays.forEach(day => {
+        const dateAttr = assignDateIfMissing(day);
+        if (!activated && dateAttr === todayIso) {
+          showDay(day);
+          activated = true;
         }
       });
-      
+
+      if (!activated) {
+        const today = new Date();
+        const fallbackName = dayNames[today.getDay()];
+        const fallback = weekDays.find(day => day.getAttribute('data-day') === fallbackName);
+        if (fallback) {
+          showDay(fallback);
+          activated = true;
+        } else if (weekDays.length) {
+          showDay(weekDays[0]);
+        }
+      }
+
       weekDays.forEach(day => {
-        day.addEventListener('click', () => {
-          // Remove active class from all days
-          weekDays.forEach(d => d.classList.remove('active'));
-          
-          // Add active class to clicked day
-          day.classList.add('active');
-          
-          // Hide all earnings content
-          document.querySelectorAll('.earnings-day-content').forEach(content => {
-            content.classList.remove('active');
-          });
-          
-          // Show corresponding earnings content
-          const dayName = day.getAttribute('data-day');
-          const targetContent = document.getElementById(`${dayName}-earnings`);
-          if (targetContent) {
-            targetContent.classList.add('active');
+        day.addEventListener('click', () => showDay(day, true));
+      });
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          const currentIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (currentIndex > 0) {
+            showDay(weekDays[currentIndex - 1]);
           }
         });
-      });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const currentIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (currentIndex < weekDays.length - 1) {
+            showDay(weekDays[currentIndex + 1]);
+          }
+        });
+      }
+
+      updateNavState();
     }
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
+      renderEarningsTables();
       initEarningsCalendar();
+      renderNotableEarnings(new Date().toISOString().split('T')[0]);
     });
+
+    function renderNotableEarnings(activeDateIso) {
+      const grid = document.getElementById('notableEarningsGrid');
+      if (!grid) return;
+
+      const targetIso = activeDateIso || new Date().toISOString().split('T')[0];
+      const block = NOTABLE_BLOCKS.find(({ start, end }) => targetIso >= start && targetIso <= end)
+        || NOTABLE_BLOCKS[0];
+
+      grid.innerHTML = block.days.map(day => {
+        if (day.companies && day.companies.length) {
+          return `
+            <div class="notable-day-group">
+              <div class="notable-day-label">${day.label}</div>
+              <div class="notable-companies-row">
+                ${day.companies.map(company => `
+                  <div class="notable-company-card">
+                    <span class="notable-symbol">${company.symbol}</span>
+                    <span class="notable-name">${company.name}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        const message = day.message || 'No notable earnings yet.';
+        return `
+          <div class="notable-day-group">
+            <div class="notable-day-label">${day.label}</div>
+            <p style="text-align:center; color:#6b7280; margin:0;">${message}</p>
+          </div>
+        `;
+      }).join('');
+    }
   </script>
 
   <style>

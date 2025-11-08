@@ -23,6 +23,90 @@
     body { margin: 0; font-family: Inter, sans-serif; }
     .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
     
+    .week-calendar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .week-days {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      max-width: clamp(420px, 80vw, 860px);
+      padding: 10px 6px;
+    }
+
+    .week-days::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .week-days::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 999px;
+    }
+
+    .week-day {
+      flex: 0 0 168px;
+      min-width: 168px;
+      padding: 22px 18px;
+      scroll-snap-align: start;
+    }
+
+    .day-label {
+      font-size: 1rem;
+    }
+    
+    .earnings-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    
+    .earnings-table thead th {
+      font-size: 0.78rem;
+    }
+    
+    .earnings-table tbody td {
+      font-size: 0.95rem;
+    }
+    
+    .earnings-table tbody td:nth-child(1) {
+      font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+      text-align: center;
+    }
+
+    .week-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #ffffff;
+      color: #1f2937;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .week-nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .week-nav-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+    }
+    
     /* Mobile menu styles */
     .mobile-menu-btn { display: none; }
     .mobile-menu { display: none; }
@@ -71,37 +155,20 @@
       .mobile-menu a:last-child { border-bottom: none; }
       
       /* Mobile Calendar Optimizations */
-      .week-nav-btn { display: none !important; }
-      
-      .week-calendar {
-        padding: 15px 10px !important;
-        overflow: hidden;
-      }
-      
+      .week-nav-btn { display: none; }
+      .week-calendar { padding: 18px 12px; }
       .week-days {
-        display: flex !important;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 8px !important;
-        padding: 5px 0;
+        max-width: 100%;
+        gap: 12px;
+        padding: 6px 4px;
       }
-      
-      .week-days::-webkit-scrollbar {
-        display: none;
-      }
-      
+      .week-days::-webkit-scrollbar { display: none; }
       .week-day {
-        flex: 0 0 auto;
-        min-width: 100px !important;
-        padding: 18px 12px !important;
-        scroll-snap-align: start;
-        font-size: 1rem !important;
+        min-width: 135px;
+        padding: 18px 14px;
       }
-      
       .day-label {
-        font-size: 0.95rem !important;
+        font-size: 0.98rem !important;
       }
       
       .earnings-table-wrapper {
@@ -109,29 +176,24 @@
         -webkit-overflow-scrolling: touch;
       }
       
-      .earnings-table {
+    .earnings-table {
         min-width: 100%;
-        font-size: 0.75rem !important;
+        font-size: 0.85rem !important;
       }
       
-      .earnings-table thead th {
+    .earnings-table thead th {
         padding: 10px 6px !important;
-        font-size: 0.7rem !important;
+        font-size: 0.72rem !important;
       }
       
       .earnings-table tbody td {
         padding: 10px 6px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.85rem !important;
       }
       
       /* Hide Time and Currency columns on mobile */
       .earnings-table thead th:nth-child(1),
       .earnings-table tbody td:nth-child(1) {
-        display: none;
-      }
-      
-      .earnings-table thead th:nth-child(2),
-      .earnings-table tbody td:nth-child(2) {
         display: none;
       }
       
@@ -244,324 +306,100 @@
                     <div class="week-calendar">
                         <button class="week-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
                         <div class="week-days">
-                            <div class="week-day" data-day="sunday">
+                            <div class="week-day" data-date="2025-11-02">
                                 <div class="day-label">Sun, Nov 2</div>
                             </div>
-                            <div class="week-day" data-day="monday">
+                            <div class="week-day" data-date="2025-11-03">
                                 <div class="day-label">Mon, Nov 3</div>
                             </div>
-                            <div class="week-day" data-day="tuesday">
+                            <div class="week-day" data-date="2025-11-04">
                                 <div class="day-label">Tue, Nov 4</div>
                             </div>
-                            <div class="week-day" data-day="wednesday">
+                            <div class="week-day" data-date="2025-11-05">
                                 <div class="day-label">Wed, Nov 5</div>
                             </div>
-                            <div class="week-day" data-day="thursday">
+                            <div class="week-day" data-date="2025-11-06">
                                 <div class="day-label">Thu, Nov 6</div>
                             </div>
-                            <div class="week-day" data-day="friday">
+                            <div class="week-day" data-date="2025-11-07">
                                 <div class="day-label">Fri, Nov 7</div>
                             </div>
-                            <div class="week-day" data-day="saturday">
+                            <div class="week-day" data-date="2025-11-08">
                                 <div class="day-label">Sat, Nov 8</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-09">
+                                <div class="day-label">Sun, Nov 9</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-10">
+                                <div class="day-label">Mon, Nov 10</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-11">
+                                <div class="day-label">Tue, Nov 11</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-12">
+                                <div class="day-label">Wed, Nov 12</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-13">
+                                <div class="day-label">Thu, Nov 13</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-14">
+                                <div class="day-label">Fri, Nov 14</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-15">
+                                <div class="day-label">Sat, Nov 15</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-16">
+                                <div class="day-label">Sun, Nov 16</div>
                             </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     
-                    <!-- Macro Events for Sunday -->
-                    <div class="earnings-day-content" id="sunday-macro">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
-                    </div>
-                    
-                    <!-- Macro Events for Monday -->
-                    <div class="earnings-day-content" id="monday-macro">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
-                    </div>
-                    
-                    <!-- Macro Events for Tuesday -->
-                    <div class="earnings-day-content" id="tuesday-macro">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
-                    </div>
-                    
-                    <!-- Macro Events for Wednesday -->
-                    <div class="earnings-day-content" id="wednesday-macro">
-                        <div class="earnings-table-wrapper">
-                            <table class="earnings-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time (Local)</th>
-                                        <th>Country</th>
-                                        <th>Event</th>
-                                        <th>Actual</th>
-                                        <th>Forecast</th>
-                                        <th>Previous</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>02:00</td>
-                                        <td style="font-size: 1.5rem;">🇩🇪</td>
-                                        <td>German Factory Orders (MoM) (Sep)</td>
-                                        <td class="positive">1.1%</td>
-                                        <td>0.9%</td>
-                                        <td class="negative">-0.4%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:15</td>
-                                        <td style="font-size: 1.5rem;">🇪🇸</td>
-                                        <td>Spanish Services PMI (Oct)</td>
-                                        <td class="positive">56.6</td>
-                                        <td>54.8</td>
-                                        <td>54.3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:45</td>
-                                        <td style="font-size: 1.5rem;">🇮🇹</td>
-                                        <td>Italian Composite PMI (Oct)</td>
-                                        <td class="positive">53.1</td>
-                                        <td>51.7</td>
-                                        <td>51.7</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:45</td>
-                                        <td style="font-size: 1.5rem;">🇮🇹</td>
-                                        <td>Italian Services PMI (Oct)</td>
-                                        <td class="positive">54.0</td>
-                                        <td>53.0</td>
-                                        <td>52.5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:50</td>
-                                        <td style="font-size: 1.5rem;">🇫🇷</td>
-                                        <td>French S&P Global Composite PMI (Oct)</td>
-                                        <td class="positive">47.7</td>
-                                        <td>46.8</td>
-                                        <td>48.1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:50</td>
-                                        <td style="font-size: 1.5rem;">🇫🇷</td>
-                                        <td>French Services PMI (Oct)</td>
-                                        <td class="positive">48.0</td>
-                                        <td>47.1</td>
-                                        <td>48.5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:55</td>
-                                        <td style="font-size: 1.5rem;">🇩🇪</td>
-                                        <td>German Composite PMI (Oct)</td>
-                                        <td class="positive">53.9</td>
-                                        <td>53.8</td>
-                                        <td>52.0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>03:55</td>
-                                        <td style="font-size: 1.5rem;">🇩🇪</td>
-                                        <td>German Services PMI (Oct)</td>
-                                        <td class="positive">54.6</td>
-                                        <td>54.5</td>
-                                        <td>51.5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>04:00</td>
-                                        <td style="font-size: 1.5rem;">🇪🇺</td>
-                                        <td>Services PMI (Oct)</td>
-                                        <td class="positive">53.0</td>
-                                        <td>52.6</td>
-                                        <td>51.3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>04:30</td>
-                                        <td style="font-size: 1.5rem;">🇬🇧</td>
-                                        <td>Composite PMI (Oct)</td>
-                                        <td class="positive">52.2</td>
-                                        <td>51.1</td>
-                                        <td>50.1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>04:30</td>
-                                        <td style="font-size: 1.5rem;">🇬🇧</td>
-                                        <td>Services PMI (Oct)</td>
-                                        <td class="positive">52.3</td>
-                                        <td>51.1</td>
-                                        <td>50.8</td>
-                                    </tr>
-                                    <tr>
-                                        <td>08:00</td>
-                                        <td style="font-size: 1.5rem;">🇧🇷</td>
-                                        <td>S&P Global Composite PMI (Oct)</td>
-                                        <td>48.2</td>
-                                        <td>-</td>
-                                        <td>46.0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>08:00</td>
-                                        <td style="font-size: 1.5rem;">🇧🇷</td>
-                                        <td>S&P Global Services PMI (Oct)</td>
-                                        <td>47.7</td>
-                                        <td>-</td>
-                                        <td>46.3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>09:45</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>S&P Global Composite PMI (Oct)</td>
-                                        <td class="negative">54.6</td>
-                                        <td>54.8</td>
-                                        <td>53.9</td>
-                                    </tr>
-                                    <tr>
-                                        <td>09:45</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>Services PMI (Oct)</td>
-                                        <td class="negative">54.8</td>
-                                        <td>55.2</td>
-                                        <td>54.2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10:00</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>ISM Non-Manufacturing PMI (Oct)</td>
-                                        <td class="positive">52.4</td>
-                                        <td>50.7</td>
-                                        <td>50.0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10:00</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>ISM Non-Manufacturing Business Activity (Oct)</td>
-                                        <td>54.3</td>
-                                        <td>-</td>
-                                        <td>49.9</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10:00</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>ISM Non-Manufacturing Employment (Oct)</td>
-                                        <td class="positive">48.2</td>
-                                        <td>47.6</td>
-                                        <td>47.2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10:00</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>ISM Non-Manufacturing New Orders (Oct)</td>
-                                        <td class="positive">56.2</td>
-                                        <td>51.0</td>
-                                        <td>50.4</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10:00</td>
-                                        <td style="font-size: 1.5rem;">🇺🇸</td>
-                                        <td>ISM Non-Manufacturing Prices (Oct)</td>
-                                        <td class="positive">70.0</td>
-                                        <td>68.0</td>
-                                        <td>69.4</td>
-                                    </tr>
-                                    <tr>
-                                        <td>19:30</td>
-                                        <td style="font-size: 1.5rem;">🇯🇵</td>
-                                        <td>Services PMI (Oct)</td>
-                                        <td>52.4</td>
-                                        <td>53.3</td>
-                                        <td>-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="macro-day-contents">
+                        <div class="earnings-day-content" data-day-content="2025-11-02">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-02"></div>
                         </div>
-                    </div>
-                    
-                    <!-- Macro Events for Thursday -->
-                    <div class="earnings-day-content" id="thursday-macro">
-                        <div class="earnings-table-wrapper">
-                            <table class="earnings-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time (Local)</th>
-                                        <th>Country</th>
-                                        <th>Event</th>
-                                        <th>Actual</th>
-                                        <th>Forecast</th>
-                                        <th>Previous</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>02:00</td>
-                                        <td style="font-size: 1.5rem;">🇩🇪</td>
-                                        <td>German Industrial Production (MoM) (Sep)</td>
-                                        <td>-</td>
-                                        <td>3.0%</td>
-                                        <td class="negative">-4.3%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>07:00</td>
-                                        <td style="font-size: 1.5rem;">🇬🇧</td>
-                                        <td>BoE Interest Rate Decision (Nov)</td>
-                                        <td>-</td>
-                                        <td>4.00%</td>
-                                        <td>4.00%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>14:00</td>
-                                        <td style="font-size: 1.5rem;">🇲🇽</td>
-                                        <td>Interest Rate Decision (Nov)</td>
-                                        <td>-</td>
-                                        <td>7.25%</td>
-                                        <td>7.50%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="earnings-day-content" data-day-content="2025-11-03">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-03"></div>
                         </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-04">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-04"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-05">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-05"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-06">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-06"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-07">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-07"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-08">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-08"></div>
                     </div>
-                    
-                    <!-- Macro Events for Friday -->
-                    <div class="earnings-day-content" id="friday-macro">
-                        <p style="text-align: center; color: #6b7280; padding: 40px 20px;">No significant events to report.</p>
+                        <div class="earnings-day-content" data-day-content="2025-11-09">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-09"></div>
                     </div>
-                    
-                    <!-- Macro Events for Saturday -->
-                    <div class="earnings-day-content" id="saturday-macro">
-                        <div class="earnings-table-wrapper">
-                            <table class="earnings-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time (Local)</th>
-                                        <th>Country</th>
-                                        <th>Event</th>
-                                        <th>Actual</th>
-                                        <th>Forecast</th>
-                                        <th>Previous</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>20:30</td>
-                                        <td style="font-size: 1.5rem;">🇨🇳</td>
-                                        <td>CPI (YoY) (Oct)</td>
-                                        <td>-</td>
-                                        <td>-0.3%</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20:30</td>
-                                        <td style="font-size: 1.5rem;">🇨🇳</td>
-                                        <td>CPI (MoM) (Oct)</td>
-                                        <td>-</td>
-                                        <td>0.1%</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20:30</td>
-                                        <td style="font-size: 1.5rem;">🇨🇳</td>
-                                        <td>PPI (YoY) (Oct)</td>
-                                        <td>-</td>
-                                        <td class="negative">-2.3%</td>
-                                        <td>-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="earnings-day-content" data-day-content="2025-11-10">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-10"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-11">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-11"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-12">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-12"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-13">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-13"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-14">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-14"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-15">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-15"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-16">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-16"></div>
                         </div>
                     </div>
                 </div>
@@ -650,58 +488,208 @@
       });
     }
 
-    // Macro Calendar Interactive Navigation
-    function initMacroCalendar() {
-      const weekDays = document.querySelectorAll('.week-day[data-day]');
-      const weekDaysContainer = document.querySelector('.week-days');
-      
-      // Auto-select today's date
-      const today = new Date();
-      const dayOfWeek = today.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
-      const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-      const todayName = dayNames[dayOfWeek];
-      
-      // Set today as active and scroll to it
-      weekDays.forEach(day => {
-        const dayAttr = day.getAttribute('data-day');
-        if (dayAttr === todayName) {
-          day.classList.add('active');
-          const targetContent = document.getElementById(`${todayName}-macro`);
-          if (targetContent) {
-            targetContent.classList.add('active');
-          }
-          // Scroll today's date to the leftmost position
-          setTimeout(() => {
-            day.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-          }, 100);
+    const MACRO_EVENTS = {
+      '2025-11-02': { message: 'No significant events to report.' },
+      '2025-11-03': { message: 'No significant events to report.' },
+      '2025-11-04': { message: 'No significant events to report.' },
+      '2025-11-05': {
+        rows: [
+          { time: '02:00', country: '🇩🇪', event: 'German Factory Orders (MoM) (Sep)', actual: '1.1%', actualClass: 'positive', forecast: '0.9%', previous: '-0.4%', previousClass: 'negative' },
+          { time: '03:15', country: '🇪🇸', event: 'Spanish Services PMI (Oct)', actual: '56.6', actualClass: 'positive', forecast: '54.8', previous: '54.3' },
+          { time: '03:45', country: '🇮🇹', event: 'Italian Composite PMI (Oct)', actual: '53.1', actualClass: 'positive', forecast: '51.7', previous: '51.7' },
+          { time: '03:45', country: '🇮🇹', event: 'Italian Services PMI (Oct)', actual: '54.0', actualClass: 'positive', forecast: '53.0', previous: '52.5' },
+          { time: '03:50', country: '🇫🇷', event: 'French S&P Global Composite PMI (Oct)', actual: '47.7', actualClass: 'positive', forecast: '46.8', previous: '48.1' },
+          { time: '03:50', country: '🇫🇷', event: 'French Services PMI (Oct)', actual: '48.0', actualClass: 'positive', forecast: '47.1', previous: '48.5' },
+          { time: '03:55', country: '🇩🇪', event: 'German Composite PMI (Oct)', actual: '53.9', actualClass: 'positive', forecast: '53.8', previous: '52.0' },
+          { time: '03:55', country: '🇩🇪', event: 'German Services PMI (Oct)', actual: '54.6', actualClass: 'positive', forecast: '54.5', previous: '51.5' },
+          { time: '04:00', country: '🇪🇺', event: 'Services PMI (Oct)', actual: '53.0', actualClass: 'positive', forecast: '52.6', previous: '51.3' },
+          { time: '04:30', country: '🇬🇧', event: 'Composite PMI (Oct)', actual: '52.2', actualClass: 'positive', forecast: '51.1', previous: '50.1' },
+          { time: '04:30', country: '🇬🇧', event: 'Services PMI (Oct)', actual: '52.3', actualClass: 'positive', forecast: '51.1', previous: '50.8' },
+          { time: '08:00', country: '🇧🇷', event: 'S&P Global Composite PMI (Oct)', actual: '48.2', forecast: '-', previous: '46.0' },
+          { time: '08:00', country: '🇧🇷', event: 'S&P Global Services PMI (Oct)', actual: '47.7', forecast: '-', previous: '46.3' },
+          { time: '09:45', country: '🇺🇸', event: 'S&P Global Composite PMI (Oct)', actual: '54.6', actualClass: 'negative', forecast: '54.8', previous: '53.9' },
+          { time: '09:45', country: '🇺🇸', event: 'Services PMI (Oct)', actual: '54.8', actualClass: 'negative', forecast: '55.2', previous: '54.2' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing PMI (Oct)', actual: '52.4', actualClass: 'positive', forecast: '50.7', previous: '50.0' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing Business Activity (Oct)', actual: '54.3', forecast: '-', previous: '49.9' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing Employment (Oct)', actual: '48.2', actualClass: 'positive', forecast: '47.6', previous: '47.2' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing New Orders (Oct)', actual: '56.2', actualClass: 'positive', forecast: '51.0', previous: '50.4' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing Prices (Oct)', actual: '70.0', actualClass: 'positive', forecast: '68.0', previous: '69.4' },
+          { time: '19:30', country: '🇯🇵', event: 'Services PMI (Oct)', actual: '52.4', forecast: '53.3', previous: '-' }
+        ]
+      },
+      '2025-11-06': {
+        rows: [
+          { time: '02:00', country: '🇩🇪', event: 'German Industrial Production (MoM) (Sep)', actual: '-', forecast: '3.0%', previous: '-4.3%', previousClass: 'negative' },
+          { time: '07:00', country: '🇬🇧', event: 'BoE Interest Rate Decision (Nov)', actual: '-', forecast: '4.00%', previous: '4.00%' },
+          { time: '14:00', country: '🇲🇽', event: 'Interest Rate Decision (Nov)', actual: '-', forecast: '7.25%', previous: '7.50%' }
+        ]
+      },
+      '2025-11-07': { message: 'No significant events to report.' },
+      '2025-11-08': {
+        rows: [
+          { time: '20:30', country: '🇨🇳', event: 'CPI (YoY) (Oct)', actual: '-', forecast: '-0.3%', previous: '-' },
+          { time: '20:30', country: '🇨🇳', event: 'CPI (MoM) (Oct)', actual: '-', forecast: '0.1%', previous: '-' },
+          { time: '20:30', country: '🇨🇳', event: 'PPI (YoY) (Oct)', actual: '-', forecast: '-2.3%', previous: '-' }
+        ]
+      },
+      '2025-11-09': { message: 'No significant events scheduled.' },
+      '2025-11-10': {
+        rows: [
+          { time: '-', country: '🇪🇺', event: 'EU Sentix Investor Confidence (Nov)', actual: '-', forecast: '-3.9', previous: '-' }
+        ]
+      },
+      '2025-11-11': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Unemployment Rate (Sep)', actual: '-', forecast: '4.9%', previous: '4.8%' },
+          { time: '-', country: '🇪🇺', event: "ECB's Lagarde Speaks", actual: '-', forecast: '-', previous: '-' }
+        ]
+      },
+      '2025-11-12': {
+        rows: [
+          { time: '-', country: '🇩🇪', event: 'Germany CPI (MoM) (Oct)', actual: '-', forecast: '0.3%', previous: '0.3%' },
+          { time: '-', country: '🌐', event: 'OPEC Monthly Report', actual: '-', forecast: '-', previous: '-' }
+        ]
+      },
+      '2025-11-13': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK GDP (YoY)', actual: '-', forecast: '-', previous: '1.4%' },
+          { time: '-', country: '🇬🇧', event: 'UK Business Investment (QoQ)', actual: '-', forecast: '-0.7%', previous: '-1.1%' },
+          { time: '-', country: '🇫🇷', event: 'France Unemployment Rate', actual: '-', forecast: '7.6%', previous: '7.5%' },
+          { time: '-', country: '🇺🇸', event: 'US CPI (YoY)', actual: '-', forecast: '-', previous: '3.0%' },
+          { time: '-', country: '🇺🇸', event: 'US Initial Jobless Claims', actual: '-', forecast: '-', previous: '218K' }
+        ]
+      },
+      '2025-11-14': {
+        rows: [
+          { time: '-', country: '🇪🇺', event: 'EU GDP (YoY)', actual: '-', forecast: '1.3%', previous: '1.3%' }
+        ]
+      },
+      '2025-11-15': { message: 'No significant events scheduled.' },
+      '2025-11-16': { message: 'No significant events scheduled.' }
+    };
+
+    const MACRO_HEADERS = ['Country', 'Event', 'Actual', 'Forecast', 'Previous'];
+
+    function createCell(value, className) {
+      const safeValue = value === undefined || value === null ? '-' : value;
+      return `<td${className ? ` class="${className}"` : ''}>${safeValue}</td>`;
+    }
+
+    function renderMacroTables() {
+      const wrappers = document.querySelectorAll('.earnings-table-wrapper[data-day-table]');
+      wrappers.forEach(wrapper => {
+        const dateKey = wrapper.dataset.dayTable;
+        const data = MACRO_EVENTS[dateKey];
+
+        if (!data) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">No data available.</p>`;
+          return;
         }
-      });
-      
-      weekDays.forEach(day => {
-        day.addEventListener('click', () => {
-          // Remove active class from all days
-          weekDays.forEach(d => d.classList.remove('active'));
-          
-          // Add active class to clicked day
-          day.classList.add('active');
-          
-          // Hide all macro content
-          document.querySelectorAll('.earnings-day-content').forEach(content => {
-            content.classList.remove('active');
-          });
-          
-          // Show corresponding macro content
-          const dayName = day.getAttribute('data-day');
-          const targetContent = document.getElementById(`${dayName}-macro`);
-          if (targetContent) {
-            targetContent.classList.add('active');
-          }
-        });
+
+        if (data.message) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">${data.message}</p>`;
+          return;
+        }
+
+        const rowsHtml = (data.rows || []).map(row => `
+          <tr>
+            <td>${row.country || '-'}</td>
+            <td>${row.event || '-'}</td>
+            ${createCell(row.actual, row.actualClass)}
+            ${createCell(row.forecast, row.forecastClass)}
+            ${createCell(row.previous, row.previousClass)}
+          </tr>
+        `).join('');
+
+        wrapper.innerHTML = `
+          <table class="earnings-table">
+            <thead>
+              <tr>${MACRO_HEADERS.map(label => `<th>${label}</th>`).join('')}</tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        `;
       });
     }
 
-    // Init
+    function initMacroCalendar() {
+      const weekDays = Array.from(document.querySelectorAll('.week-day'));
+      const weekDaysContainer = document.querySelector('.week-days');
+      const prevBtn = document.querySelector('.week-nav-btn.prev');
+      const nextBtn = document.querySelector('.week-nav-btn.next');
+      const allContents = Array.from(document.querySelectorAll('.earnings-day-content'));
+
+      const updateNavState = () => {
+        if (!prevBtn || !nextBtn) return;
+        const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+        prevBtn.disabled = activeIndex <= 0;
+        nextBtn.disabled = activeIndex === -1 || activeIndex >= weekDays.length - 1;
+      };
+
+      const showDay = (day, shouldScroll = true) => {
+        if (!day) return;
+        const dateKey = day.dataset.date;
+
+        weekDays.forEach(d => d.classList.remove('active'));
+          day.classList.add('active');
+
+        allContents.forEach(content => content.classList.remove('active'));
+        const target = document.querySelector(`.earnings-day-content[data-day-content="${dateKey}"]`);
+        if (target) {
+          target.classList.add('active');
+          }
+
+        if (shouldScroll) {
+          const behavior = weekDaysContainer?.dataset.instant === 'true' ? 'auto' : 'smooth';
+          setTimeout(() => {
+            day.scrollIntoView({ behavior, inline: 'start', block: 'nearest' });
+          }, 50);
+        }
+
+        updateNavState();
+      };
+
+      const todayIso = new Date().toISOString().split('T')[0];
+      let activated = false;
+
+      weekDays.forEach(day => {
+        if (!activated && day.dataset.date === todayIso) {
+          showDay(day, false);
+          activated = true;
+        }
+      });
+
+      if (!activated && weekDays.length) {
+        showDay(weekDays[0], false);
+      }
+      
+      weekDays.forEach(day => {
+        day.addEventListener('click', () => showDay(day, true));
+      });
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (activeIndex > 0) {
+            showDay(weekDays[activeIndex - 1]);
+          }
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (activeIndex < weekDays.length - 1) {
+            showDay(weekDays[activeIndex + 1]);
+          }
+        });
+      }
+
+      updateNavState();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      renderMacroTables();
       initMacroCalendar();
     });
   </script>
@@ -728,16 +716,9 @@
       font-weight: 600;
     }
     
-    /* Hide Actual column on all devices */
-    .earnings-table thead th:nth-child(4),
-    .earnings-table tbody td:nth-child(4) {
-      display: none;
-    }
-    
     /* Ensure proper emoji rendering */
-    .earnings-table tbody td:nth-child(2) {
+    .earnings-table tbody td:nth-child(1) {
       font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
-      font-size: 1.8rem !important;
       text-align: center;
     }
   </style>
