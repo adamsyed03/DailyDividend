@@ -165,11 +165,60 @@
     .cta-bar a:hover { background: rgba(255,255,255,0.28); }
 
     @media (max-width: 1024px) {
-      .hf-wrapper { grid-template-columns: 1fr; }
+      .hf-wrapper { grid-template-columns: 1fr; gap: 20px; }
+      .hf-panel { padding: 22px; }
+      .metric-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
     }
     @media (max-width: 768px) {
-      .hf-hero { padding-top: 140px; }
-      .hf-wrapper { margin-top: -40px; }
+      .hf-hero { padding: 120px 16px 46px; }
+      .hf-hero h1 { font-size: 2.2rem; }
+      .hf-hero p { font-size: 0.95rem; }
+      .hf-search input { width: 100%; max-width: none; font-size: 0.95rem; padding: 12px 16px; }
+
+      .hf-wrapper { margin-top: -36px; padding: 0 16px; gap: 18px; }
+      .hf-panel { padding: 20px; border-radius: 16px; }
+
+      .fund-card { padding: 16px; }
+      .fund-card h3 { font-size: 0.98rem; }
+      .fund-meta { font-size: 0.78rem; }
+      .fund-tag { font-size: 0.66rem; padding: 4px 8px; }
+
+      .fund-header h2 { font-size: 1.35rem; }
+      .fund-header .pill { font-size: 0.72rem; padding: 5px 12px; }
+      .metric-card { padding: 16px; border-radius: 14px; }
+      .metric-card strong { font-size: 1.2rem; }
+      .metric-card span { font-size: 0.7rem; }
+
+      .holdings-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+      .holding-card { padding: 16px; border-radius: 16px; gap: 10px; }
+      .holding-ticker { font-size: 1.15rem; }
+      .holding-company { font-size: 0.85rem; }
+      .holding-stats { font-size: 0.7rem; gap: 6px; }
+      .holding-stats span { padding: 5px 8px; }
+      .holding-thesis { font-size: 0.8rem; }
+
+      .insights-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+      .insight-card { padding: 16px; border-radius: 16px; }
+      .insight-card ul { font-size: 0.82rem; gap: 6px; }
+    }
+    @media (max-width: 520px) {
+      .hf-hero { padding: 110px 14px 40px; }
+      .hf-hero h1 { font-size: 1.9rem; }
+      .hf-hero p { font-size: 0.9rem; }
+
+      .hf-panel h2 { font-size: 0.95rem; }
+      .metric-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+      .metric-card { padding: 14px; }
+      .metric-card strong { font-size: 1.05rem; }
+
+      .holdings-grid { grid-template-columns: 1fr; }
+      .holding-card { padding: 15px; }
+      .holding-ticker { font-size: 1.1rem; }
+      .holding-company { font-size: 0.82rem; }
+      .holding-thesis { font-size: 0.78rem; line-height: 1.4; }
+
+      .fund-card { padding: 14px; }
+      .fund-meta { font-size: 0.75rem; }
     }
   </style>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
@@ -261,6 +310,46 @@
         closeMobileMenu();
       }
     });
+
+    // Tools dropdown functionality
+    const toolsDropdown = document.getElementById('toolsDropdown');
+    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+      toolsDropdown.addEventListener('mouseenter', () => {
+        toolsDropdownMenu.classList.add('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+      });
+
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsDropdownMenu.classList.remove('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      toolsDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = toolsDropdownMenu.classList.contains('active');
+        toolsDropdownMenu.classList.toggle('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!toolsDropdown.contains(e.target)) {
+          toolsDropdownMenu.classList.remove('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      toolsDropdownBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          toolsDropdownMenu.classList.toggle('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+        }
+      });
+    }
 
     const funds = [
       {
