@@ -2645,3 +2645,203 @@ input:valid {
    for optimal viewing across all devices.
    Uses CSS Grid and Flexbox for efficient layouts.
 */
+
+/* ===========================================
+   Hedge Fund Positioning Snapshot
+   (scoped with .hf- prefix)
+   =========================================== */
+
+.hf-fund-section {
+    max-width: 1200px;
+    margin: 70px auto 110px;
+    padding: 0 20px;
+    font-family: inherit;
+    color: var(--color-gray-900, #111827);
+}
+
+.hf-fund-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.hf-fund-title {
+    font-size: clamp(1.9rem, 3vw, 2.3rem);
+    font-weight: 700;
+    margin: 0;
+}
+
+.hf-fund-blurb {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-gray-600, #4b5563);
+    margin: 0;
+}
+
+.hf-fund-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: var(--color-gray-500, #6b7280);
+}
+
+.hf-fund-meta i {
+    color: var(--color-gray-400, #9ca3af);
+    margin-right: 6px;
+}
+
+.hf-fund-source {
+    font-size: 0.85rem;
+    color: var(--color-accent, #2563eb);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hf-fund-source:hover,
+.hf-fund-source:focus {
+    text-decoration: underline;
+}
+
+.hf-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.hf-kpi-card {
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hf-kpi-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gray-500, #6b7280);
+}
+
+.hf-kpi-value {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-gray-900, #111827);
+}
+
+.hf-sector-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 26px;
+}
+
+.hf-sector-chip {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.hf-holdings-title {
+    margin: 0 0 14px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-gray-900, #111827);
+}
+
+.hf-holdings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 20px;
+}
+
+.hf-holding-card {
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hf-holding-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.hf-holding-rank {
+    font-size: 0.85rem;
+    color: var(--color-gray-500, #6b7280);
+    font-weight: 600;
+}
+
+.hf-holding-ticker {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-gray-900, #111827);
+}
+
+.hf-holding-issuer {
+    font-size: 0.92rem;
+    color: var(--color-gray-700, #374151);
+}
+
+.hf-holding-weight {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-gray-900, #111827);
+}
+
+.hf-holding-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(209, 213, 219, 0.6);
+    overflow: hidden;
+}
+
+.hf-holding-bar span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #1d4ed8, #7c3aed);
+}
+
+.hf-holding-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--color-gray-600, #4b5563);
+}
+
+@media (max-width: 768px) {
+    .hf-fund-section {
+        margin: 60px auto 90px;
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 540px) {
+    .hf-kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .hf-holdings-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
