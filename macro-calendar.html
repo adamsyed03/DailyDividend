@@ -38,7 +38,7 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      max-width: clamp(420px, 80vw, 860px);
+      max-width: clamp(360px, 90vw, 640px);
       padding: 10px 6px;
     }
 
@@ -52,9 +52,9 @@
     }
 
     .week-day {
-      flex: 0 0 168px;
-      min-width: 168px;
-      padding: 22px 18px;
+      flex: 0 0 calc((100% - 48px) / 4);
+      min-width: 150px;
+      padding: 20px 16px;
       scroll-snap-align: start;
     }
 
@@ -79,6 +79,12 @@
     .earnings-table tbody td:nth-child(1) {
       font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
       text-align: center;
+      width: 64px;
+    }
+
+    .earnings-table thead th:nth-child(1) {
+      text-align: center;
+      width: 64px;
     }
 
     .week-nav-btn {
@@ -164,11 +170,12 @@
       }
       .week-days::-webkit-scrollbar { display: none; }
       .week-day {
-        min-width: 135px;
-        padding: 18px 14px;
+        flex: 0 0 calc((100% - 36px) / 4);
+        min-width: 120px;
+        padding: 16px 12px;
       }
       .day-label {
-        font-size: 0.98rem !important;
+        font-size: 0.9rem !important;
       }
       
       .earnings-table-wrapper {
@@ -176,12 +183,12 @@
         -webkit-overflow-scrolling: touch;
       }
       
-    .earnings-table {
+      .earnings-table {
         min-width: 100%;
         font-size: 0.85rem !important;
       }
       
-    .earnings-table thead th {
+      .earnings-table thead th {
         padding: 10px 6px !important;
         font-size: 0.72rem !important;
       }
@@ -219,6 +226,19 @@
       .currency-badge {
         font-size: 0.7rem !important;
         padding: 3px 8px !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .week-days {
+        gap: 6px;
+      }
+      .week-day {
+        flex: 0 0 calc((100% - 18px) / 4);
+        min-width: 100px;
+        padding: 12px 8px;
+      }
+      .day-label {
+        font-size: 0.8rem !important;
       }
     }
   </style>
@@ -608,9 +628,15 @@
         `).join('');
 
         wrapper.innerHTML = `
-          <table class="earnings-table">
+          <table class="earnings-table" role="table" aria-label="Macro events">
             <thead>
-              <tr>${MACRO_HEADERS.map(label => `<th>${label}</th>`).join('')}</tr>
+              <tr>
+                <th scope="col">Country</th>
+                <th scope="col">Event</th>
+                <th scope="col">Actual</th>
+                <th scope="col">Forecast</th>
+                <th scope="col">Previous</th>
+              </tr>
             </thead>
             <tbody>${rowsHtml}</tbody>
           </table>
