@@ -213,8 +213,8 @@
     }
     .holding-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
     .holding-rank { font-size: 0.8rem; color: #9ca3af; }
-    .holding-ticker { font-size: 1.3rem; font-weight: 600; color: #111827; }
-    .holding-company { font-size: 0.92rem; color: #4b5563; }
+    .holding-company { font-size: 1.22rem; font-weight: 600; color: #111827; line-height: 1.25; }
+    .holding-ticker { font-size: 0.88rem; font-weight: 600; color: #6b7280; letter-spacing: 0.05em; text-transform: uppercase; }
     .weight-bar {
       height: 8px;
       border-radius: 999px;
@@ -231,12 +231,22 @@
     .holding-thesis { font-size: 0.85rem; line-height: 1.45; color: #374151; }
 
     .insights-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      display: flex;
+      flex-direction: column;
       gap: 20px;
       margin-top: 26px;
     }
-    .insight-card { padding: 20px; border-radius: 18px; background: #fff; border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 10px 28px rgba(15,23,42,0.06); }
+    .insight-card {
+      flex: 1 1 auto;
+      padding: 20px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid rgba(15,23,42,0.08);
+      box-shadow: 0 10px 28px rgba(15,23,42,0.06);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
     .insight-card h4 { margin: 0 0 12px; font-size: 1rem; }
     .insight-card ul { margin: 0; padding-left: 18px; color: #4b5563; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px; }
 
@@ -273,7 +283,8 @@
       .hf-panel { padding: 22px; }
       .metric-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
       .holdings-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
-      .insights-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+      .insights-grid { gap: 18px; }
+      .insight-card { flex: 1 1 280px; }
     }
     @media (max-width: 768px) {
       .hf-hero { padding: 120px 16px 46px; }
@@ -324,13 +335,13 @@
 
       .holdings-grid { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 12px; }
       .holding-card { padding: 14px; border-radius: 15px; gap: 9px; }
-      .holding-ticker { font-size: 1rem; }
-      .holding-company { font-size: 0.78rem; }
+      .holding-company { font-size: 1rem; }
+      .holding-ticker { font-size: 0.78rem; }
       .holding-stats { font-size: 0.62rem; gap: 6px; }
       .holding-stats span { padding: 4px 7px; }
       .holding-thesis { font-size: 0.72rem; }
 
-      .insights-grid { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 12px; }
+      .insights-grid { gap: 12px; }
       .insight-card { padding: 14px; border-radius: 15px; }
       .insight-card ul { font-size: 0.75rem; gap: 5px; }
     }
@@ -347,8 +358,8 @@
 
       .holdings-grid { grid-template-columns: repeat(2, minmax(150px, 1fr)); gap: 10px; }
       .holding-card { padding: 13px; }
-      .holding-ticker { font-size: 0.95rem; }
-      .holding-company { font-size: 0.76rem; }
+      .holding-company { font-size: 0.95rem; }
+      .holding-ticker { font-size: 0.72rem; }
       .holding-thesis { font-size: 0.7rem; line-height: 1.35; }
 
       .fund-card { padding: 12px; }
@@ -368,11 +379,12 @@
 
       .holdings-grid { grid-template-columns: 1fr; }
       .holding-card { padding: 12px; }
-      .holding-ticker { font-size: 0.9rem; }
-      .holding-company { font-size: 0.72rem; }
+      .holding-company { font-size: 0.88rem; }
+      .holding-ticker { font-size: 0.7rem; }
       .holding-thesis { font-size: 0.66rem; }
 
-      .insights-grid { grid-template-columns: repeat(2, minmax(150px, 1fr)); gap: 10px; }
+      .insights-grid { flex-direction: column; gap: 10px; }
+      .insight-card { flex: 1 1 auto; }
       .insight-card { padding: 12px; }
       .insight-card h4 { font-size: 0.85rem; }
       .insight-card ul { font-size: 0.7rem; }
@@ -472,38 +484,56 @@
     const toolsDropdown = document.getElementById('toolsDropdown');
     const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
     const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+    let toolsDropdownHideTimeout;
 
     if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-      toolsDropdown.addEventListener('mouseenter', () => {
+      const showToolsDropdown = () => {
+        clearTimeout(toolsDropdownHideTimeout);
         toolsDropdownMenu.classList.add('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-      });
+      };
 
-      toolsDropdown.addEventListener('mouseleave', () => {
+      const hideToolsDropdown = () => {
+        clearTimeout(toolsDropdownHideTimeout);
         toolsDropdownMenu.classList.remove('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      };
+
+      toolsDropdown.addEventListener('mouseenter', showToolsDropdown);
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 220);
+      });
+
+      toolsDropdownMenu.addEventListener('mouseenter', () => {
+        clearTimeout(toolsDropdownHideTimeout);
+      });
+      toolsDropdownMenu.addEventListener('mouseleave', () => {
+        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 220);
       });
 
       toolsDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isOpen = toolsDropdownMenu.classList.contains('active');
-        toolsDropdownMenu.classList.toggle('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+        if (toolsDropdownMenu.classList.contains('active')) {
+          hideToolsDropdown();
+        } else {
+          showToolsDropdown();
+        }
       });
 
       document.addEventListener('click', (e) => {
         if (!toolsDropdown.contains(e.target)) {
-          toolsDropdownMenu.classList.remove('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+          hideToolsDropdown();
         }
       });
 
       toolsDropdownBtn.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          const isOpen = toolsDropdownMenu.classList.contains('active');
-          toolsDropdownMenu.classList.toggle('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+          if (toolsDropdownMenu.classList.contains('active')) {
+            hideToolsDropdown();
+          } else {
+            showToolsDropdown();
+          }
         }
       });
     }
@@ -511,14 +541,14 @@
     const funds = [
       {
         id: 'brk',
-        name: 'Berkshire Hathaway Inc. (BRK.A / BRK.B)',
+        name: 'Berkshire Hathaway Inc.',
         location: 'Omaha, Nebraska',
         style: ['Value', 'Quality', 'Ultra Concentrated'],
-        aum: '$257.5B',
+        aum: '$258B',
         top10Concentration: '87.29%',
-        turnover: '16.7%',
+        turnover: '16.87%',
         turnoverAlt: '1.94%',
-        avgHoldingPeriod: '7.4 years',
+        avgHoldingPeriod: '23.39 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://whalewisdom.com/filer/berkshire-hathaway-inc',
         commentary: 'Warren Buffett and Todd Combs continue to lean on cash-flow heavy, wide-moat franchises with durable pricing power.',
@@ -559,11 +589,11 @@
         name: 'Elliott Investment Management L.P.',
         location: 'West Palm Beach, Florida',
         style: ['Event-Driven', 'Activist', 'Hedged'],
-        aum: '$17.3B',
+        aum: '$17.8B',
         top10Concentration: '82.57%',
-        turnover: '48.9%',
+        turnover: '48.94%',
         turnoverAlt: '13.25%',
-        avgHoldingPeriod: '3.6 quarters (top 10)',
+        avgHoldingPeriod: '6.17 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://whalewisdom.com/filer/elliott-management-corp',
         commentary: 'Paul Singer’s team leans on hard-asset longs and layered index hedges to stay nimble around catalyst-driven campaigns.',
@@ -601,14 +631,14 @@
       },
       {
         id: 'psq',
-        name: 'Pershing Square Capital Management (PSQ)',
+        name: 'Pershing Square Capital Management',
         location: 'New York, New York',
         style: ['Concentrated', 'Long-biased', 'Activist'],
         aum: '$13.7B',
-        top10Concentration: '98.5%',
-        turnover: '12.4%',
-        turnoverAlt: '9.8%',
-        avgHoldingPeriod: '5.1 years',
+        top10Concentration: '99.32%',
+        turnover: '16.87%',
+        turnoverAlt: '7.57%',
+        avgHoldingPeriod: '17.18 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://whalewisdom.com/filer/pershing-square-capital-management-l-p',
         commentary: 'Bill Ackman keeps the book ultra-focused, leaning on cash-flow compounders while overlaying selective hedges and catalyst-driven bets.',
@@ -652,9 +682,9 @@
         style: ['Macro', 'Hedged', 'Contrarian'],
         aum: '$1.38B',
         top10Concentration: '100%',
-        turnover: '38.5%',
-        turnoverAlt: '27.9%',
-        avgHoldingPeriod: '1.2 years',
+        turnover: '96.45%',
+        turnoverAlt: '41.01%',
+        avgHoldingPeriod: '0.38 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://whalewisdom.com/filer/scion-asset-management-llc',
         commentary: 'Burry keeps running the playbook of asymmetric hedges against frothy tech while sprinkling in selectively long healthcare and special situations.',
@@ -694,10 +724,10 @@
         location: 'New York, New York',
         style: ['Growth', 'Tech', 'High Conviction'],
         aum: '$34.1B',
-        top10Concentration: '72%',
-        turnover: '21.5%',
-        turnoverAlt: '14.8%',
-        avgHoldingPeriod: '3.2 years',
+        top10Concentration: '64.78%',
+        turnover: '17.31%',
+        turnoverAlt: '4.75%',
+        avgHoldingPeriod: '10.58 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://whalewisdom.com/filer/tiger-global-management-llc',
         commentary: 'Chase Coleman continues to run one of the purest AI + internet books, leaning into mega-cap platforms and secular growth compounders.',
@@ -731,6 +761,96 @@
           { rank: 8, ticker: 'LLY', company: 'Eli Lilly and Company', weight: 3.46, sector: 'Healthcare / Innovation', thesis: 'Value $1.18B | 1.51M shares (COM). Obesity and diabetes franchises anchor top-tier earnings growth.' },
           { rank: 9, ticker: 'TSM', company: 'Taiwan Semiconductor Manufacturing Co.', weight: 3.05, sector: 'Semiconductors / Foundry', thesis: 'Value $1.04B | 4.58M shares (ADR). Advanced node dominance critical to global AI and high-performance compute supply chains.' },
           { rank: 10, ticker: 'SPOT', company: 'Spotify Technology S.A.', weight: 2.85, sector: 'Digital Media / Streaming', thesis: 'Value $0.97B | 1.26M shares (COM). Subscriber scale and margin expansion as podcasts + advertising accelerate.' }
+        ]
+      },
+      {
+         id: 'trian',
+         name: 'Trian Fund Management, L.P.',
+         location: 'New York, New York',
+         style: ['Activist', 'Concentrated', 'Value-Oriented'],
+         aum: '$3.79B',
+         top10Concentration: '100%',
+         turnover: '0%',
+         turnoverAlt: '0.45%',
+         avgHoldingPeriod: '18.2 quarters',
+         lastFiling: 'Q2 2025',
+         url: 'https://www.sec.gov/Archives/edgar/data/1388880/000108514625005280/0001085146-25-005280.txt',
+         commentary: 'Nelson Peltz keeps Trian’s disclosed 13F book ultra-focused on industrial and consumer champions where operational activism can unlock value.',
+         exposure: [
+           { label: 'Industrials 49%', tone: 'primary' },
+           { label: 'Financials & Asset Mgmt 8%', tone: 'neutral' },
+           { label: 'Logistics 18%', tone: 'accent' },
+           { label: 'Consumer & Insurance 13%', tone: 'bright' }
+         ],
+         posture: [
+           'Top two positions (Ferguson, GE Aerospace) anchor nearly 60% of capital, underscoring a high-conviction activist stance.',
+           'Industrial and services tilt is balanced with legacy consumer and insurance holdings to manage cash flow resiliency.',
+           'Long holding periods reflect playbook of operational engagement rather than rapid trading.'
+         ],
+         topBuys: [
+           'Maintained conviction in Ferguson and the split GE complex as core industrial cash-flow engines.',
+           'Scaled logistics exposure via dual U-Haul share classes to lock in governance influence.'
+         ],
+         topSells: [
+           'No full exits in the quarter; activity centred on modest trims to fund tax and liquidity needs.',
+           'Left dry powder for potential additions should activist dialogues open new windows.'
+         ],
+         holdings: [
+           { rank: 1, ticker: 'FERG', company: 'Ferguson plc', weight: 28.67, sector: 'Industrials / Distribution', thesis: 'Value $1.09B. Leading plumbing & HVAC distributor; scale efficiencies and North American housing spend underpin activist upside.' },
+           { rank: 2, ticker: 'GE', company: 'GE Aerospace', weight: 27.37, sector: 'Industrials / Aerospace', thesis: 'Value $1.04B. Jet engine duopoly exposure with secular air traffic rebound and after-market pricing power.' },
+           { rank: 3, ticker: 'GEHC', company: 'GE HealthCare Technologies Inc.', weight: 10.63, sector: 'Healthcare / MedTech', thesis: 'Value $403M. Diagnostic imaging and monitoring platforms transitioning to higher-margin, recurring revenue model.' },
+           { rank: 4, ticker: 'UHAL', company: 'U-Haul Holding Company', weight: 9.32, sector: 'Logistics / Mobility', thesis: 'Value $353M. Dominant DIY moving network with pricing leverage and self-storage optionality.' },
+           { rank: 5, ticker: 'UHAL.B', company: 'U-Haul Holding Company – Series N', weight: 8.91, sector: 'Logistics / Mobility', thesis: 'Value $338M. Voting structure secures governance influence while capturing same operating economics as common.' },
+           { rank: 6, ticker: 'INVESCO', company: 'Invesco Ltd.', weight: 3.86, sector: 'Financials / Asset Management', thesis: 'Value $146M. Activist involvement aimed at margin uplift and product mix realignment toward higher-fee franchises.' },
+           { rank: 7, ticker: 'ALL', company: 'The Allstate Corporation', weight: 2.64, sector: 'Insurance', thesis: 'Value $100M. Pricing resets and investment income tailwinds support normalized underwriting returns.' },
+           { rank: 8, ticker: 'LON:JHG', company: 'Janus Henderson Group plc', weight: 0.84, sector: 'Financials / Asset Management', thesis: 'Value $32M. Cost discipline and distribution partnerships targeted to reaccelerate net flows.' },
+           { rank: 9, ticker: 'WEN', company: "The Wendy's Company", weight: 0.39, sector: 'Consumer / Restaurants', thesis: 'Value $15M. Franchise refranchising and digital ordering uplift generating steady free cash flow.' },
+           { rank: 10, ticker: 'WEN.B', company: "The Wendy's Company – Additional Line", weight: 0.41, sector: 'Consumer / Restaurants', thesis: 'Value $15M. Represents supplemental share class exposure aligned with core Wendy’s catalyst roadmap.' }
+         ]
+       },
+       {
+        id: 'citadel',
+        name: 'Citadel Advisors LLC',
+        location: 'Miami, Florida',
+        style: ['Multi-Strategy', 'Market Neutral', 'Systematic'],
+        aum: '$580B',
+        top10Concentration: '27.06%',
+        turnover: '31.88%',
+        turnoverAlt: '15.38%',
+        avgHoldingPeriod: '24.07 quarters',
+        lastFiling: 'Q2 2025',
+        url: 'https://www.sec.gov/Archives/edgar/data/1423053/000110465925078555/0001104659-25-078555-index.html',
+        commentary: 'Ken Griffin’s flagship 13F shows massive ETF and index-linked exposures supporting multi-strategy trading across equities, derivatives, and volatility surfaces.',
+        exposure: [
+          { label: 'Index & ETF Core 52%', tone: 'primary' },
+          { label: 'Tech Megacap 16%', tone: 'bright' },
+          { label: 'Consumer & Retail 9%', tone: 'accent' },
+          { label: 'Financials & Rates 7%', tone: 'neutral' }
+        ],
+        posture: [
+          'Long book spans ~12K line items; ETF and option overlays dominate disclosed gross exposure.',
+          'Index hedges (SPY, QQQ, IWM) pair with single-name megacaps like Nvidia and Microsoft for factor balance.',
+          'High turnover underscores a trading-oriented, market-making approach rather than concentrated stock picking.'
+        ],
+        topBuys: [
+          'Scaled SPY and QQQ exposure through combinations of shares, calls, and protective puts to manage beta.',
+          'Maintained convexity in AI leadership via Nvidia calls alongside other mega-cap tech allocations.'
+        ],
+        topSells: [
+          'Rebalanced ETF hedges as volatility regimes shifted through Q2 2025.',
+          'Trimmed select discretionary single-names while rotating exposure through derivatives.'
+        ],
+        holdings: [
+          { rank: 1, ticker: 'SPY (PUT)', company: 'SPDR S&P 500 ETF Trust – Put Exposure', weight: 5.80, sector: 'ETF / Index Hedge', thesis: 'Substantial SPY put notional provides downside convexity across Citadel’s equity books.' },
+          { rank: 2, ticker: 'SPY', company: 'SPDR S&P 500 ETF Trust', weight: 5.20, sector: 'ETF / Index Core', thesis: 'Core index holdings used to neutralise beta against thousands of idiosyncratic trades.' },
+          { rank: 3, ticker: 'QQQ (PUT)', company: 'Invesco QQQ Trust – Put Exposure', weight: 3.40, sector: 'ETF / Tech Hedge', thesis: 'Nasdaq hedges balance broad tech exposure and maintain downside protection.' },
+          { rank: 4, ticker: 'QQQ', company: 'Invesco QQQ Trust', weight: 2.95, sector: 'ETF / Tech Core', thesis: 'Long QQQ shares deliver scalable large-cap tech beta within systematic strategies.' },
+          { rank: 5, ticker: 'NVDA (CALL)', company: 'NVIDIA Corporation – Call Exposure', weight: 2.25, sector: 'Technology / Semiconductors', thesis: 'Bullish convexity on AI compute leader complements index hedging book.' },
+          { rank: 6, ticker: 'IWM (PUT)', company: 'iShares Russell 2000 ETF – Put Exposure', weight: 1.85, sector: 'ETF / Small-Cap Hedge', thesis: 'Allows rapid recalibration of small-cap factor risk across trading portfolios.' },
+          { rank: 7, ticker: 'AAPL', company: 'Apple Inc.', weight: 1.42, sector: 'Technology / Consumer Hardware', thesis: 'High-liquidity anchor for systematic trades, paired with derivatives for volatility capture.' },
+          { rank: 8, ticker: 'AMZN', company: 'Amazon.com Inc.', weight: 1.31, sector: 'Consumer / E-commerce & Cloud', thesis: 'Mega-cap exposure to commerce and AWS growth themes within balanced factor baskets.' },
+          { rank: 9, ticker: 'MSFT', company: 'Microsoft Corp.', weight: 1.28, sector: 'Technology / Cloud & Productivity', thesis: 'Global software leader used for scale and liquidity in multi-strategy portfolios.' },
+          { rank: 10, ticker: 'TSLA', company: 'Tesla Inc.', weight: 1.05, sector: 'Consumer / EV & Energy', thesis: 'Volatile mega-cap enhances relative value and gamma trading opportunities.' }
         ]
       }
     ];
@@ -810,8 +930,8 @@
                 <div class="holding-header">
                   <div>
                     <div class="holding-rank">#${holding.rank}</div>
-                    <div class="holding-ticker">${holding.ticker}</div>
                     <div class="holding-company">${holding.company}</div>
+                    <div class="holding-ticker">${holding.ticker}</div>
                   </div>
                   <div style="text-align:right;">
                     <div style="font-size:0.82rem;color:#1f2937;">${holding.weight.toFixed(2)}%</div>

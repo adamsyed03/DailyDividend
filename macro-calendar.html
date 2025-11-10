@@ -594,7 +594,7 @@
       '2025-11-16': { message: 'No significant events scheduled.' }
     };
 
-    const MACRO_HEADERS = ['Country', 'Event', 'Actual', 'Forecast', 'Previous'];
+    const MACRO_HEADERS = ['Country', 'Event', 'Forecast', 'Previous'];
 
     function createCell(value, className) {
       const safeValue = value === undefined || value === null ? '-' : value;
@@ -621,7 +621,6 @@
           <tr>
             <td>${row.country || '-'}</td>
             <td>${row.event || '-'}</td>
-            ${createCell(row.actual, row.actualClass)}
             ${createCell(row.forecast, row.forecastClass)}
             ${createCell(row.previous, row.previousClass)}
           </tr>
@@ -633,7 +632,6 @@
               <tr>
                 <th scope="col">Country</th>
                 <th scope="col">Event</th>
-                <th scope="col">Actual</th>
                 <th scope="col">Forecast</th>
                 <th scope="col">Previous</th>
               </tr>
@@ -650,55 +648,67 @@
       const prevBtn = document.querySelector('.week-nav-btn.prev');
       const nextBtn = document.querySelector('.week-nav-btn.next');
       const allContents = Array.from(document.querySelectorAll('.earnings-day-content'));
-
+ 
       const updateNavState = () => {
         if (!prevBtn || !nextBtn) return;
         const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
         prevBtn.disabled = activeIndex <= 0;
         nextBtn.disabled = activeIndex === -1 || activeIndex >= weekDays.length - 1;
       };
-
-      const showDay = (day, shouldScroll = true) => {
+ 
+      const showDay = (day, options = {}) => {
         if (!day) return;
         const dateKey = day.dataset.date;
-
+        const {
+          shouldScroll = true,
+          alignStart = false,
+          behaviorOverride
+        } = options;
+ 
         weekDays.forEach(d => d.classList.remove('active'));
           day.classList.add('active');
-
+ 
         allContents.forEach(content => content.classList.remove('active'));
         const target = document.querySelector(`.earnings-day-content[data-day-content="${dateKey}"]`);
         if (target) {
           target.classList.add('active');
           }
-
-        if (shouldScroll) {
-          const behavior = weekDaysContainer?.dataset.instant === 'true' ? 'auto' : 'smooth';
-          setTimeout(() => {
-            day.scrollIntoView({ behavior, inline: 'start', block: 'nearest' });
-          }, 50);
+ 
+        if (shouldScroll && weekDaysContainer) {
+          const behavior = behaviorOverride || (weekDaysContainer.dataset.instant === 'true' ? 'auto' : 'smooth');
+          const scrollAction = () => {
+            if (alignStart) {
+              const targetLeft = Math.max(day.offsetLeft - 8, 0);
+              weekDaysContainer.scrollTo({ left: targetLeft, behavior });
+            } else {
+              day.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+            }
+          };
+          setTimeout(scrollAction, 40);
         }
-
+ 
         updateNavState();
       };
-
-      const todayIso = new Date().toISOString().split('T')[0];
+ 
+      const now = new Date();
+      const todayIso = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
       let activated = false;
-
+ 
       weekDays.forEach(day => {
         if (!activated && day.dataset.date === todayIso) {
-          showDay(day, false);
+          showDay(day, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
           activated = true;
         }
       });
-
+ 
       if (!activated && weekDays.length) {
-        showDay(weekDays[0], false);
+        showDay(weekDays[0], { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
       }
-      
+ 
       weekDays.forEach(day => {
-        day.addEventListener('click', () => showDay(day, true));
+        day.addEventListener('click', () => showDay(day, { shouldScroll: true }));
       });
-
+ 
       if (prevBtn) {
         prevBtn.addEventListener('click', () => {
           const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
@@ -707,7 +717,7 @@
           }
         });
       }
-
+ 
       if (nextBtn) {
         nextBtn.addEventListener('click', () => {
           const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
@@ -716,7 +726,7 @@
           }
         });
       }
-
+ 
       updateNavState();
     }
 
