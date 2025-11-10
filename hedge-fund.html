@@ -528,6 +528,11 @@
           { label: 'Energy 12%', tone: 'accent' },
           { label: 'Tech & Digital 22%', tone: 'bright' }
         ],
+        posture: [
+          'Equity book remains anchored by consumer and payments franchises with consistent cash return profiles.',
+          'Energy exposure (Chevron + Occidental) reflects Buffett’s preference for shareholder-friendly producers with optionality on higher oil.',
+          'Top 10 concentration above 85% underscores the bar to enter the portfolio.'
+        ],
         topBuys: [
           'Incremental adds to UnitedHealth, Nucor, Lennar, Pool, D.R. Horton (all sub 1% sizing) show a tilt toward healthcare resilience and US housing demand.',
           'No blockbuster new positions – cash pile remains north of $180B, highlighting patience at current equity valuations.'
@@ -568,6 +573,11 @@
           { label: 'Consumer Discretionary 14%', tone: 'accent' },
           { label: 'Financials 11%', tone: 'bright' }
         ],
+        posture: [
+          'Commodity-linked longs (Triple Flag, Phillips 66, Suncor) drive cash flow while activist catalysts unlock value.',
+          'Layered equity index and single-name puts temper downside as the team leans into cyclical exposures.',
+          'Average holding period under four quarters—portfolio positioned for catalyst velocity over multi-year compounding.'
+        ],
         topBuys: [
           'Scaled commodity-linked longs (Triple Flag, Phillips 66, Suncor) to keep upside tied to supply-side themes.',
           'Maintained Southwest turnaround stake while refreshing macro hedges to balance cyclicality.'
@@ -607,6 +617,11 @@
           { label: 'Technology 24%', tone: 'bright' },
           { label: 'Real Assets 20%', tone: 'primary' },
           { label: 'Travel & Leisure 17%', tone: 'neutral' }
+        ],
+        posture: [
+          'Portfolio remains ultra concentrated in mobility, digital platforms, and real asset fee streams.',
+          'Uber now the flagship position, paired with Brookfield to balance cash-flow durability against growth optionality.',
+          'Active use of sector hedges is minimal—the book runs net long with tight risk around core holdings.'
         ],
         topBuys: [
           'Scaled Uber to the franchise’s largest position, reflecting conviction in mobility, delivery, and fintech optionality.',
@@ -649,6 +664,11 @@
           { label: 'Energy 4%', tone: 'neutral' },
           { label: 'Consumer Cyclicals 3%', tone: 'bright' }
         ],
+        posture: [
+          'Book is dominated by AI and tech downside hedges via deep puts on Palantir and Nvidia.',
+          'Selective long calls in healthcare and energy provide asymmetric upside without heavy capital deployment.',
+          'Net exposure stays low—portfolio expresses macro caution rather than directional growth bets.'
+        ],
         topBuys: [
           'Sized Palantir and Nvidia puts as core macro hedges against AI euphoria and stretched software multiples.',
           'Stuck with call spreads in Pfizer and Halliburton to capture idiosyncratic catalysts while limiting downside.'
@@ -686,6 +706,11 @@
           { label: 'E-commerce 23%', tone: 'accent' },
           { label: 'Gaming & Media 18%', tone: 'primary' },
           { label: 'Healthcare Innovation 11%', tone: 'neutral' }
+        ],
+        posture: [
+          'Hyper-concentrated in mega-cap AI platforms and high-growth consumer tech franchises.',
+          'Minimal hedging—portfolio expression is long-term secular adoption rather than tactical trading.',
+          'Top 10 accounts for more than 70% of capital, reflecting conviction in scalable software and data-driven businesses.'
         ],
         topBuys: [
           'Added to Nvidia and Microsoft to keep pace with the AI infrastructure arms race.',
@@ -807,9 +832,7 @@
           <article class="insight-card">
             <h4><i class="fas fa-lightbulb"></i> Portfolio Posture</h4>
             <ul>
-              <li>Equity book remains anchored by consumer and payments franchises with consistent cash return profiles.</li>
-              <li>Energy exposure (Chevron + Occidental) reflects Buffett’s preference for shareholder-friendly producers with optionality on higher oil.</li>
-              <li>Top 10 concentration above 85% underscores the bar to enter the portfolio.</li>
+              ${(fund.posture || ['Concentrated equity portfolio focused on repeatable free-cash-flow compounders.']).map(item => `<li>${item}</li>`).join('')}
             </ul>
           </article>
           <article class="insight-card">
