@@ -413,6 +413,7 @@
             <a href="earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
             <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
             <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+            <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-microchip"></i> Company Analysis</a>
           </div>
         </div>
       </div>
@@ -430,6 +431,7 @@
             <a href="earnings.html" onclick="closeMobileMenu()"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
             <a href="macro-calendar.html" onclick="closeMobileMenu()"><i class="fas fa-chart-line"></i> Macro Calendar</a>
             <a href="hedge-fund.html" onclick="closeMobileMenu()"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+        <a href="company-analysis.html" onclick="closeMobileMenu()"><i class="fas fa-microchip"></i> Company Analysis</a>
           </div>
         </details>
       </div>
@@ -544,14 +546,14 @@
         name: 'Berkshire Hathaway Inc.',
         location: 'Omaha, Nebraska',
         style: ['Value', 'Quality', 'Ultra Concentrated'],
-        aum: '$258B',
+        publicEquities: '$258B',
         top10Concentration: '87.29%',
         turnover: '16.87%',
         turnoverAlt: '1.94%',
         avgHoldingPeriod: '23.39 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://whalewisdom.com/filer/berkshire-hathaway-inc',
-        commentary: 'Warren Buffett and Todd Combs continue to lean on cash-flow heavy, wide-moat franchises with durable pricing power.',
+        commentary: 'Greg Abel now steers the equity book, leaning on cash-flow heavy, wide-moat franchises with durable pricing power.',
         exposure: [
           { label: 'Financials 46%', tone: 'primary' },
           { label: 'Consumer Staples 16%', tone: 'neutral' },
@@ -560,7 +562,7 @@
         ],
         posture: [
           'Equity book remains anchored by consumer and payments franchises with consistent cash return profiles.',
-          'Energy exposure (Chevron + Occidental) reflects Buffett’s preference for shareholder-friendly producers with optionality on higher oil.',
+          'Energy exposure (Chevron + Occidental) reflects Abel’s preference for shareholder-friendly producers with optionality on higher oil.',
           'Top 10 concentration above 85% underscores the bar to enter the portfolio.'
         ],
         topBuys: [
@@ -572,7 +574,7 @@
           'Light reductions in T-Mobile, DaVita, Charter Communications; portfolio turnover continues to sit in the teens.'
         ],
         holdings: [
-          { rank: 1, ticker: 'AAPL', company: 'Apple Inc.', weight: 22.31, sector: 'Technology', thesis: 'Buffett continues to call Apple a “consumer products company” with unmatched ecosystem stickiness. Free cash flow backs relentless buybacks.' },
+          { rank: 1, ticker: 'AAPL', company: 'Apple Inc.', weight: 22.31, sector: 'Technology', thesis: 'Berkshire leadership continues to call Apple a “consumer products company” with unmatched ecosystem stickiness. Free cash flow backs relentless buybacks.' },
           { rank: 2, ticker: 'AXP', company: 'American Express Co.', weight: 18.78, sector: 'Financials', thesis: 'Closed-loop payments model delivers superior spend visibility and pricing power across premium consumers and SMEs.' },
           { rank: 3, ticker: 'BAC', company: 'Bank of America Corp.', weight: 11.12, sector: 'Financials', thesis: 'Scale retail deposit base lowers funding costs while digital investments expand operating leverage in core lending.' },
           { rank: 4, ticker: 'KO', company: 'Coca-Cola Co.', weight: 10.99, sector: 'Consumer Staples', thesis: 'Capital-light franchise model and brand equity translate into resilient pricing power through cycles.' },
@@ -589,7 +591,7 @@
         name: 'Elliott Investment Management L.P.',
         location: 'West Palm Beach, Florida',
         style: ['Event-Driven', 'Activist', 'Hedged'],
-        aum: '$17.8B',
+        publicEquities: '$17.8B',
         top10Concentration: '82.57%',
         turnover: '48.94%',
         turnoverAlt: '13.25%',
@@ -634,7 +636,7 @@
         name: 'Pershing Square Capital Management',
         location: 'New York, New York',
         style: ['Concentrated', 'Long-biased', 'Activist'],
-        aum: '$13.7B',
+        publicEquities: '$13.7B',
         top10Concentration: '99.32%',
         turnover: '16.87%',
         turnoverAlt: '7.57%',
@@ -680,7 +682,7 @@
         name: 'Scion Asset Management (Michael Burry)',
         location: 'Saratoga, California',
         style: ['Macro', 'Hedged', 'Contrarian'],
-        aum: '$1.38B',
+        publicEquities: '$1.38B',
         top10Concentration: '100%',
         turnover: '96.45%',
         turnoverAlt: '41.01%',
@@ -723,7 +725,7 @@
         name: 'Tiger Global Management LLC',
         location: 'New York, New York',
         style: ['Growth', 'Tech', 'High Conviction'],
-        aum: '$34.1B',
+        publicEquities: '$34.1B',
         top10Concentration: '64.78%',
         turnover: '17.31%',
         turnoverAlt: '4.75%',
@@ -768,14 +770,14 @@
          name: 'Trian Fund Management, L.P.',
          location: 'New York, New York',
          style: ['Activist', 'Concentrated', 'Value-Oriented'],
-         aum: '$3.79B',
+         publicEquities: '$3.79B',
          top10Concentration: '100%',
          turnover: '0%',
          turnoverAlt: '0.45%',
          avgHoldingPeriod: '18.2 quarters',
          lastFiling: 'Q2 2025',
          url: 'https://www.sec.gov/Archives/edgar/data/1388880/000108514625005280/0001085146-25-005280.txt',
-         commentary: 'Nelson Peltz keeps Trian’s disclosed 13F book ultra-focused on industrial and consumer champions where operational activism can unlock value.',
+        commentary: 'Nelson Peltz keeps Trian’s disclosed equity book ultra-focused on industrial and consumer champions where operational activism can unlock value.',
          exposure: [
            { label: 'Industrials 49%', tone: 'primary' },
            { label: 'Financials & Asset Mgmt 8%', tone: 'neutral' },
@@ -813,14 +815,14 @@
         name: 'Citadel Advisors LLC',
         location: 'Miami, Florida',
         style: ['Multi-Strategy', 'Market Neutral', 'Systematic'],
-        aum: '$580B',
+        publicEquities: '$580B',
         top10Concentration: '27.06%',
         turnover: '31.88%',
         turnoverAlt: '15.38%',
         avgHoldingPeriod: '24.07 quarters',
         lastFiling: 'Q2 2025',
         url: 'https://www.sec.gov/Archives/edgar/data/1423053/000110465925078555/0001104659-25-078555-index.html',
-        commentary: 'Ken Griffin’s flagship 13F shows massive ETF and index-linked exposures supporting multi-strategy trading across equities, derivatives, and volatility surfaces.',
+        commentary: 'Ken Griffin’s flagship equity disclosure shows massive ETF and index-linked exposures supporting multi-strategy trading across equities, derivatives, and volatility surfaces.',
         exposure: [
           { label: 'Index & ETF Core 52%', tone: 'primary' },
           { label: 'Tech Megacap 16%', tone: 'bright' },
@@ -904,12 +906,12 @@
           <h2 style="margin:0;font-size:1.6rem;">${fund.name}</h2>
           <div style="display:flex;flex-wrap:wrap;gap:8px;color:#6b7280;font-size:0.85rem;">
             <span><i class="fas fa-location-dot"></i> ${fund.location}</span>
-            <span><i class="fas fa-calendar-alt"></i> Form 13F – ${fund.lastFiling}</span>
+            <span><i class="fas fa-calendar-alt"></i> Latest filing ${fund.lastFiling}</span>
           </div>
         </div>
 
         <div class="metric-grid">
-          <div class="metric-card"><span>13F Assets</span><strong>${fund.aum}</strong><small style="display:block;margin-top:6px;">Reported to SEC</small></div>
+          <div class="metric-card"><span>Public Equities</span><strong>${fund.publicEquities}</strong><small style="display:block;margin-top:6px;">Reported to SEC</small></div>
           <div class="metric-card"><span>Top 10 Concentration</span><strong>${fund.top10Concentration}</strong><small style="display:block;margin-top:6px;">Portfolio focus</small></div>
           <div class="metric-card"><span>Reported Turnover</span><strong>${fund.turnover}</strong><small style="display:block;margin-top:6px;">Quarterly activity</small></div>
           <div class="metric-card"><span>Alternate Turnover</span><strong>${fund.turnoverAlt}</strong><small style="display:block;margin-top:6px;">Value-adjusted</small></div>
@@ -935,7 +937,7 @@
                   </div>
                   <div style="text-align:right;">
                     <div style="font-size:0.82rem;color:#1f2937;">${holding.weight.toFixed(2)}%</div>
-                    <div style="font-size:0.72rem;color:#6b7280;">of 13F</div>
+                    <div style="font-size:0.72rem;color:#6b7280;">of public equities</div>
                   </div>
                 </div>
                 <div class="weight-bar"><div class="weight-fill" style="width:${Math.min(holding.weight, 40)}%;"></div></div>
