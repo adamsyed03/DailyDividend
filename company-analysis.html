@@ -23,7 +23,7 @@
       --success: #16a34a;
       --warning: #f59e0b;
       --danger: #dc2626;
-      font-size: 16px;
+      font-size: 15px;
     }
     * { box-sizing: border-box; }
     body {
@@ -255,12 +255,13 @@
       flex-direction: column;
       gap: 14px;
       margin-bottom: 0;
-      max-width: 220px;
+      max-width: 180px;
+      flex: 0 0 180px;
     }
     .metric-card {
       background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
       border-radius: 18px;
-      padding: 15px;
+      padding: 12px;
       border: 1px solid rgba(37, 99, 235, 0.15);
       color: #1d4ed8;
       text-align: center;
@@ -274,7 +275,7 @@
     .metric-card strong {
       display: block;
       margin-top: 10px;
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       color: #1e3a8a;
     }
     .chart-card {
@@ -287,9 +288,9 @@
     .metric-chart-row {
       display: flex;
       gap: 24px;
-      align-items: stretch;
+      align-items: flex-start;
       margin-bottom: 30px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     .chart-mix-card {
       flex: 1 1 320px;
@@ -404,26 +405,29 @@
       .metric-grid { max-width: none; }
     }
     @media (max-width: 600px) {
-      .ca-hero { padding: 90px 16px 60px; }
-      .ca-hero h1 { font-size: 1.9rem; }
-      .ca-hero p { display: none; }
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
-      .metric-grid { max-width: none; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-      .metric-card { padding: 14px; min-width: 48%; }
-      .metric-card span { font-size: 0.72rem; }
-      .metric-card strong { font-size: 1.35rem; }
-      .detail-header p { font-size: 0.85rem; }
-      .chart-mix-card .chart-body { height: 220px; }
-      .chart-earnings .chart-body { height: 220px; }
-      .chart-card { padding: 20px; }
-      .chart-card h3 { font-size: 0.95rem; }
-      .chart-card p { font-size: 0.78rem; }
-      .snapshot-card { padding: 14px; }
-      .snapshot-card h4 { font-size: 0.88rem; }
-      .snapshot-card ul { font-size: 0.8rem; }
-      .insight-box { padding: 16px; }
-      .insight-box p { font-size: 0.85rem; }
-    }
+       .ca-hero { padding: 72px 14px 42px; }
+       .ca-hero h1 { font-size: 1.7rem; }
+       .ca-wrapper { margin: -32px auto 60px; padding: 0 14px; }
+       .ca-panel { padding: 18px; border-radius: 18px; }
+       .detail-header { gap: 10px; }
+       .detail-header p { font-size: 0.82rem; line-height: 1.45; }
+       .metric-chart-row { flex-direction: column; gap: 16px; align-items: stretch; }
+       .metric-grid { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: none; }
+       .metric-card { min-width: calc(50% - 10px); padding: 10px; border-radius: 14px; }
+       .metric-card span { font-size: 0.68rem; }
+       .metric-card strong { font-size: 1.15rem; }
+       .chart-card { padding: 16px; border-radius: 16px; }
+       .chart-card h3 { font-size: 0.95rem; }
+       .chart-card p { font-size: 0.74rem; }
+       .chart-mix-card .chart-body { height: 190px; }
+       .chart-earnings .chart-body { height: 210px; }
+       .snapshot-grid { grid-template-columns: 1fr; gap: 12px; }
+       .snapshot-card { padding: 12px; border-radius: 16px; }
+       .insight-layout { grid-template-columns: 1fr; gap: 14px; }
+       .insight-box { padding: 12px; border-radius: 16px; }
+       .analyst-card { max-width: none; }
+       .analyst-card .chart-holder { height: 210px; }
+     }
     @media (max-width: 820px) {
       .nav-links { display: none; }
       .mobile-menu-btn {
@@ -537,11 +541,6 @@
             <div class="company-meta">
               <span><i class="fas fa-location-dot"></i> Santa Clara, California</span>
               <span><i class="fas fa-calendar"></i> Latest quarter Q2 FY26</span>
-            </div>
-            <div class="company-tags">
-              <span class="company-tag"><i class="fas fa-server"></i> Data Center</span>
-              <span class="company-tag"><i class="fas fa-gamepad"></i> Gaming</span>
-              <span class="company-tag"><i class="fas fa-car"></i> Auto & Robotics</span>
             </div>
           </article>
         </div>
