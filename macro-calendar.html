@@ -38,7 +38,7 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      max-width: clamp(360px, 90vw, 640px);
+      max-width: clamp(420px, 80vw, 860px);
       padding: 10px 6px;
     }
 
@@ -52,9 +52,9 @@
     }
 
     .week-day {
-      flex: 0 0 calc((100% - 48px) / 4);
-      min-width: 150px;
-      padding: 20px 16px;
+      flex: 0 0 168px;
+      min-width: 168px;
+      padding: 22px 18px;
       scroll-snap-align: start;
     }
 
@@ -170,9 +170,8 @@
       }
       .week-days::-webkit-scrollbar { display: none; }
       .week-day {
-        flex: 0 0 calc((100% - 36px) / 4);
-        min-width: 120px;
-        padding: 16px 12px;
+        min-width: 135px;
+        padding: 18px 14px;
       }
       .day-label {
         font-size: 0.9rem !important;
@@ -230,15 +229,14 @@
     }
     @media (max-width: 480px) {
       .week-days {
-        gap: 6px;
+        gap: 12px;
       }
       .week-day {
-        flex: 0 0 calc((100% - 18px) / 4);
-        min-width: 100px;
-        padding: 12px 8px;
+        min-width: 135px;
+        padding: 18px 14px;
       }
       .day-label {
-        font-size: 0.8rem !important;
+        font-size: 0.98rem !important;
       }
     }
   </style>
@@ -383,6 +381,27 @@
                             <div class="week-day" data-date="2025-11-16">
                                 <div class="day-label">Sun, Nov 16</div>
                             </div>
+                            <div class="week-day" data-date="2025-11-17">
+                                <div class="day-label">Mon, Nov 17</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-18">
+                                <div class="day-label">Tue, Nov 18</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-19">
+                                <div class="day-label">Wed, Nov 19</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-20">
+                                <div class="day-label">Thu, Nov 20</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-21">
+                                <div class="day-label">Fri, Nov 21</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-22">
+                                <div class="day-label">Sat, Nov 22</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-23">
+                                <div class="day-label">Sun, Nov 23</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
@@ -432,6 +451,27 @@
                     </div>
                         <div class="earnings-day-content" data-day-content="2025-11-16">
                             <div class="earnings-table-wrapper" data-day-table="2025-11-16"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-17">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-17"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-18">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-18"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-19">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-19"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-20">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-20"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-21">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-21"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-22">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-22"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-23">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-23"></div>
                         </div>
                     </div>
                 </div>
@@ -597,7 +637,39 @@
         ]
       },
       '2025-11-15': { message: 'No significant events scheduled.' },
-      '2025-11-16': { message: 'No significant events scheduled.' }
+      '2025-11-16': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan GDP Growth', actual: '-', forecast: '-2.5%', previous: '2.2%' }
+        ]
+      },
+      '2025-11-17': {
+        rows: [
+          { time: '-', country: '🇮🇹', event: 'Italy Inflation Rate YoY', actual: '-', forecast: '1.2%', previous: '1.6%' }
+        ]
+      },
+      '2025-11-18': { message: 'No significant events scheduled.' },
+      '2025-11-19': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Inflation Rate YoY', actual: '-', forecast: '3.6%', previous: '3.8%' },
+          { time: '-', country: '🇮🇩', event: 'Indonesia Interest Rate Decision', actual: '-', forecast: '4.5%', previous: '4.75%' },
+          { time: '-', country: '🇿🇦', event: 'South Africa Inflation YoY', actual: '-', forecast: '3.5%', previous: '3.3%' },
+          { time: '-', country: '🇪🇺', event: 'EU Inflation Rate YoY', actual: '-', forecast: '2.1%', previous: '2.2%' }
+        ]
+      },
+      '2025-11-20': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan Inflation Rate YoY', actual: '-', forecast: '3.1%', previous: '2.9%' }
+        ]
+      },
+      '2025-11-21': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Manufacturing PMI', actual: '-', forecast: '49.5', previous: '49.7' },
+          { time: '-', country: '🇬🇧', event: 'UK Services PMI', actual: '-', forecast: '52', previous: '51.9' },
+          { time: '-', country: '🇩🇪', event: 'Germany Manufacturing PMI', actual: '-', forecast: '50.1', previous: '49.6' }
+        ]
+      },
+      '2025-11-22': { message: 'No significant events scheduled.' },
+      '2025-11-23': { message: 'No significant events scheduled.' }
     };
 
     const MACRO_HEADERS = ['Country', 'Event', 'Forecast', 'Previous'];

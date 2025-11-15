@@ -22,6 +22,25 @@
   <style>
     body { margin: 0; font-family: Inter, sans-serif; }
     .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    
+    /* Ensure dropdown menu works */
+    .nav-dropdown-menu {
+      display: none !important;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 240px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      gap: 6px;
+      z-index: 1001;
+    }
+    .nav-dropdown-menu.active {
+      display: flex !important;
+    }
 
     .week-calendar {
       display: flex;
@@ -343,6 +362,27 @@
                             <div class="week-day" data-day="nov16" data-date="2025-11-16">
                                 <div class="day-label">Sun, Nov 16</div>
                             </div>
+                            <div class="week-day" data-day="nov17" data-date="2025-11-17">
+                                <div class="day-label">Mon, Nov 17</div>
+                            </div>
+                            <div class="week-day" data-day="nov18" data-date="2025-11-18">
+                                <div class="day-label">Tue, Nov 18</div>
+                            </div>
+                            <div class="week-day" data-day="nov19" data-date="2025-11-19">
+                                <div class="day-label">Wed, Nov 19</div>
+                            </div>
+                            <div class="week-day" data-day="nov20" data-date="2025-11-20">
+                                <div class="day-label">Thu, Nov 20</div>
+                            </div>
+                            <div class="week-day" data-day="nov21" data-date="2025-11-21">
+                                <div class="day-label">Fri, Nov 21</div>
+                            </div>
+                            <div class="week-day" data-day="nov22" data-date="2025-11-22">
+                                <div class="day-label">Sat, Nov 22</div>
+                            </div>
+                            <div class="week-day" data-day="nov23" data-date="2025-11-23">
+                                <div class="day-label">Sun, Nov 23</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -421,15 +461,40 @@
                     <div class="earnings-day-content" id="nov16-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2025-11-16"></div>
                     </div>
-                </div>
-                
-                <!-- Notable Earnings Next Week - Bottom Section -->
-                <div class="notable-earnings-bottom">
-                    <h3 class="notable-title">
-                        <i class="fas fa-star"></i> Notable Earnings Next Week
-                    </h3>
-                    <div class="notable-grid" id="notableEarningsGrid">
-                        <!-- Populated via renderNotableEarnings() -->
+                    
+                    <!-- Earnings Table for Monday Nov 17 -->
+                    <div class="earnings-day-content" id="nov17-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-17"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Nov 18 -->
+                    <div class="earnings-day-content" id="nov18-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-18"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Nov 19 -->
+                    <div class="earnings-day-content" id="nov19-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-19"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Nov 20 -->
+                    <div class="earnings-day-content" id="nov20-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-20"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Nov 21 -->
+                    <div class="earnings-day-content" id="nov21-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-21"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Nov 22 -->
+                    <div class="earnings-day-content" id="nov22-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-22"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Nov 23 -->
+                    <div class="earnings-day-content" id="nov23-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-23"></div>
                     </div>
                 </div>
             </div>
@@ -549,7 +614,41 @@
         ]
       },
       '2025-11-15': { message: 'No significant events scheduled.' },
-      '2025-11-16': { message: 'No significant events scheduled.' }
+      '2025-11-16': { message: 'No significant events scheduled.' },
+      '2025-11-17': {
+        rows: [
+          ['TCOM', 'Trip.com Group Limited', 'Q3 2025 Earnings Announcement', 'AMC', '$7.98', '$47.1B']
+        ]
+      },
+      '2025-11-18': {
+        rows: [
+          ['HD', 'The Home Depot, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$3.66', '$360.69B'],
+          ['PDD', 'PDD Holdings Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$16.57', '$185.9B'],
+          ['MDT', 'Medtronic plc', 'Q2 2026 Earnings Announcement', 'BMO', '$1.31', '$122.96B'],
+          ['BIDU', 'Baidu, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$8.37', '$42.94B']
+        ]
+      },
+      '2025-11-19': {
+        rows: [
+          ['NVDA', 'NVIDIA Corporation', 'Q3 2026 Earnings Announcement', 'AMC', '$1.25', '$4.63T'],
+          ['TJX', 'The TJX Companies, Inc.', 'Q3 2026 Earnings Announcement', 'BMO', '$1.22', '$162.58B'],
+          ['PANW', 'Palo Alto Networks, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$0.89', '$140.39B'],
+          ['LOW', 'Lowe\'s Companies, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$2.81', '$127.78B'],
+          ['TGT', 'Target Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$2.3', '$40.85B']
+        ]
+      },
+      '2025-11-20': {
+        rows: [
+          ['WMT', 'Walmart Inc.', 'Q3 2026 Earnings Announcement', 'BMO', '$0.6', '$817.06B'],
+          ['INTU', 'Intuit Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$3.09', '$184.68B'],
+          ['NTES', 'NetEase, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$14.83', '$90.02B'],
+          ['ROST', 'Ross Stores, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$1.4', '$52.22B'],
+          ['VEEV', 'Veeva Systems Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$1.95', '$48.08B']
+        ]
+      },
+      '2025-11-21': { message: 'No significant earnings being announced today.' },
+      '2025-11-22': { message: '' },
+      '2025-11-23': { message: '' }
     };
 
     const NOTABLE_BLOCKS = [
@@ -577,7 +676,42 @@
       }
     ];
 
+    const NOTABLE_EARNINGS_NEXT_WEEK = {
+      '2025-11-22': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Wednesday, Dec 3', companies: [{ symbol: 'CRM', name: 'Salesforce' }, { symbol: 'RY', name: 'Royal Bank of Canada' }] },
+          { label: 'Thursday, Dec 4', companies: [{ symbol: 'TD', name: 'Toronto Dominion Bank' }] }
+        ]
+      },
+      '2025-11-23': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Wednesday, Dec 3', companies: [{ symbol: 'CRM', name: 'Salesforce' }, { symbol: 'RY', name: 'Royal Bank of Canada' }] },
+          { label: 'Thursday, Dec 4', companies: [{ symbol: 'TD', name: 'Toronto Dominion Bank' }] }
+        ]
+      }
+    };
+
     const TABLE_HEADERS = ['Symbol', 'Company', 'Event', 'Time', 'EPS Est.', 'Market Cap'];
+
+    const COMPANY_DESCRIPTIONS = {
+      'HD': 'Home Depot is the largest home-improvement retailer in the U.S., selling building materials, tools, appliances, and services to both consumers and professional contractors. Its model is based on high-volume retail sales through large warehouse-style stores, supported by a growing omnichannel presence. A key profit driver is merchandise with strong private-label penetration and in-store services like installation and repairs.',
+      'PDD': 'PDD operates e-commerce platforms such as Pinduoduo in China and Temu globally. Its model uses ultra-low prices and gamified group buying to drive huge volumes. The company makes money through transaction services, advertising, and merchant fees, while using supply-chain efficiency and aggressive overseas expansion to scale.',
+      'MDT': 'Medtronic is one of the world\'s largest medical device manufacturers, producing pacemakers, insulin pumps, surgical tools, and other advanced health technologies. Its business model relies on long product lifecycles, FDA-regulated markets, and recurring revenue from consumables and maintenance. Hospitals and clinics are its main customers, and its global scale gives it strong pricing and distribution power.',
+      'BIDU': 'Baidu is China\'s leading search engine and a major AI company. It earns money mainly from advertising, cloud services, and AI products such as autonomous driving platforms. The company is shifting from traditional search ads toward AI-driven enterprise services to diversify revenue.',
+      'NVDA': 'NVIDIA designs GPUs used in gaming, data centers, and especially AI workloads. Its business model is built around selling high-performance chips and software ecosystems such as CUDA that create strong lock-in with developers. The biggest growth driver today is data-center GPUs used for AI training and inference.',
+      'TJX': 'TJX is a global off-price retailer operating T.J. Maxx, Marshalls, and HomeGoods. Its business model is buying branded inventory at steep discounts and selling it through a "treasure hunt" shopping experience. Constantly changing assortment and low prices attract high-frequency shoppers, driving strong cash flows.',
+      'PANW': 'Palo Alto Networks is a leading cybersecurity provider offering firewalls, cloud security, and threat-detection platforms. Its model blends hardware sales with high-margin recurring subscription revenue. Growth is driven by enterprises shifting workloads to the cloud and needing full-stack security solutions.',
+      'LOW': 'Lowe\'s is the second-largest home-improvement retailer in the U.S., competing directly with Home Depot. The company sells building materials, appliances, décor, and contractor services. It focuses heavily on serving "Pro" customers (contractors and builders), which are higher-spending and more loyal than retail consumers.',
+      'TGT': 'Target operates a national chain of general-merchandise retail stores in the U.S. with a focus on curated product selection, private labels, and a strong brand aesthetic. It generates revenue through in-store sales, e-commerce, and its profitable credit-card partnership. The company differentiates itself with stylish private brands and same-day fulfillment options like Drive Up and Shipt.',
+      'WMT': 'Walmart is the world\'s largest retailer, operating supermarkets, hypermarkets, and online platforms. Its business model is built around everyday low pricing, massive purchasing scale, and efficient logistics. Increasingly, Walmart earns higher-margin revenue from e-commerce, advertising, and membership programs.',
+      'INTU': 'Intuit makes financial and tax software such as TurboTax, QuickBooks, and Credit Karma. Its business model relies on subscription and usage-based services for individuals and small businesses. The company benefits from strong switching costs and deep integrations with banking and payroll systems.',
+      'NTES': 'NetEase is a major Chinese online gaming and entertainment company. It develops and operates PC and mobile games, and licenses content globally. Recurring in-game spending drives its revenue, supported by a pipeline of new titles and partnerships with global studios.',
+      'ROST': 'Ross is an off-price retailer selling discounted apparel and home goods through Ross Dress for Less and dd\'s Discounts. Like TJX, it buys excess inventory from brands at low cost and resells it cheaply to consumers. Its low-cost model, simple stores, and fast inventory turnover support strong profitability.',
+      'VEEV': 'Veeva provides cloud software for the global life-sciences industry. Its products help pharmaceutical companies manage clinical trials, sales teams, regulatory filings, and data compliance. With high switching costs and industry-specific design, Veeva enjoys long-term subscription contracts and low churn.',
+      'TCOM': 'Trip.com is one of Asia\'s largest online travel agencies, offering hotel bookings, flights, vacation packages, and travel services. It makes money through commissions, service fees, and advertising on its platform. The company benefits from China\'s travel demand, international expansion, and integration with global travel partners.'
+    };
 
     function buildTimeBadge(time) {
       if (!time || time === '-') return '-';
@@ -601,12 +735,70 @@
           return;
         }
 
+        const notableData = NOTABLE_EARNINGS_NEXT_WEEK[dateKey];
+        
+        if (notableData) {
+          const notableHtml = notableData.days.map(day => {
+            if (day.companies && day.companies.length) {
+              return `
+                <div class="notable-day-group">
+                  <div class="notable-day-label">${day.label}</div>
+                  <div class="notable-companies-row">
+                    ${day.companies.map(company => `
+                      <div class="notable-company-card">
+                        <span class="notable-symbol">${company.symbol}</span>
+                        <span class="notable-name">${company.name}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `;
+            }
+            const message = day.message || 'No notable earnings yet.';
+            return `
+              <div class="notable-day-group">
+                <div class="notable-day-label">${day.label}</div>
+                <p style="text-align:center; color:#6b7280; margin:0;">${message}</p>
+              </div>
+            `;
+          }).join('');
+          
+          wrapper.innerHTML = `
+            <div class="notable-earnings-bottom" style="margin-top: 0;">
+              <h3 class="notable-title">
+                <i class="fas fa-star"></i> Notable Earnings Next Week
+              </h3>
+              <div class="notable-grid">
+                ${notableHtml}
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
         if (data.message) {
           wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">${data.message}</p>`;
           return;
         }
 
-        const rows = (data.rows || []).map(([symbol, company, event, time, eps, cap]) => `
+        const rows = (data.rows || []).map(([symbol, company, event, time, eps, cap]) => {
+          const description = COMPANY_DESCRIPTIONS[symbol] || '';
+          if (description) {
+            return `
+          <tr>
+            <td class="symbol">${symbol}</td>
+            <td class="company company-with-tooltip">
+              ${company}
+              <span class="company-tooltip">${description}</span>
+            </td>
+            <td>${event}</td>
+            <td>${buildTimeBadge(time)}</td>
+            <td>${eps}</td>
+            <td>${cap}</td>
+          </tr>
+        `;
+          }
+          return `
           <tr>
             <td class="symbol">${symbol}</td>
             <td class="company">${company}</td>
@@ -615,7 +807,8 @@
             <td>${eps}</td>
             <td>${cap}</td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
 
         wrapper.innerHTML = `
           <table class="earnings-table">
@@ -658,47 +851,49 @@
     });
 
     // Tools dropdown functionality
-    const toolsDropdown = document.getElementById('toolsDropdown');
-    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
-    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+    function initToolsDropdown() {
+      const toolsDropdown = document.getElementById('toolsDropdown');
+      const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+      const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
 
-    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-      // Hover functionality
-      toolsDropdown.addEventListener('mouseenter', () => {
-        toolsDropdownMenu.classList.add('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-      });
-
-      toolsDropdown.addEventListener('mouseleave', () => {
-        toolsDropdownMenu.classList.remove('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
-      });
-
-      // Click/touch functionality
-      toolsDropdownBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = toolsDropdownMenu.classList.contains('active');
-        toolsDropdownMenu.classList.toggle('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!toolsDropdown.contains(e.target)) {
+      if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+        let hideTimeout;
+        const showMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.add('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+        };
+        const hideMenu = () => {
+          clearTimeout(hideTimeout);
           toolsDropdownMenu.classList.remove('active');
           toolsDropdownBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
+        };
+        
+        // Hover functionality
+        toolsDropdown.addEventListener('mouseenter', showMenu);
+        toolsDropdown.addEventListener('mouseleave', () => hideTimeout = setTimeout(hideMenu, 200));
 
-      // Keyboard navigation
-      toolsDropdownBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
+        // Click/touch functionality
+        toolsDropdownBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
           const isOpen = toolsDropdownMenu.classList.contains('active');
-          toolsDropdownMenu.classList.toggle('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
-        }
-      });
+          if (isOpen) hideMenu(); else showMenu();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+          if (!toolsDropdown.contains(event.target)) hideMenu();
+        });
+
+        // Keyboard navigation
+        toolsDropdownBtn.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            const isOpen = toolsDropdownMenu.classList.contains('active');
+            if (isOpen) hideMenu(); else showMenu();
+          }
+        });
+      }
     }
 
     // Earnings Calendar Interactive Navigation
@@ -750,7 +945,6 @@
           }, 50);
         }
 
-        renderNotableEarnings(activeDate);
         updateNavState();
       };
 
@@ -804,45 +998,11 @@
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
+      initToolsDropdown();
       renderEarningsTables();
       initEarningsCalendar();
-      renderNotableEarnings(new Date().toISOString().split('T')[0]);
     });
 
-    function renderNotableEarnings(activeDateIso) {
-      const grid = document.getElementById('notableEarningsGrid');
-      if (!grid) return;
-
-      const targetIso = activeDateIso || new Date().toISOString().split('T')[0];
-      const block = NOTABLE_BLOCKS.find(({ start, end }) => targetIso >= start && targetIso <= end)
-        || NOTABLE_BLOCKS[0];
-
-      grid.innerHTML = block.days.map(day => {
-        if (day.companies && day.companies.length) {
-          return `
-            <div class="notable-day-group">
-              <div class="notable-day-label">${day.label}</div>
-              <div class="notable-companies-row">
-                ${day.companies.map(company => `
-                  <div class="notable-company-card">
-                    <span class="notable-symbol">${company.symbol}</span>
-                    <span class="notable-name">${company.name}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        }
-
-        const message = day.message || 'No notable earnings yet.';
-        return `
-          <div class="notable-day-group">
-            <div class="notable-day-label">${day.label}</div>
-            <p style="text-align:center; color:#6b7280; margin:0;">${message}</p>
-          </div>
-        `;
-      }).join('');
-    }
   </script>
 
   <style>
@@ -951,6 +1111,110 @@
       color: rgba(255, 255, 255, 0.9);
     }
     
+    /* Company Tooltip Styles */
+    .company-with-tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-block;
+    }
+    
+    /* Ensure tooltip container doesn't clip content */
+    .earnings-table-wrapper {
+      overflow: visible !important;
+    }
+    
+    .earnings-table {
+      overflow: visible !important;
+    }
+    
+    .earnings-day-content {
+      overflow: visible !important;
+    }
+    
+    .earnings-main {
+      overflow: visible !important;
+    }
+    
+    .earnings-layout {
+      overflow: visible !important;
+    }
+    
+    .earnings-table tbody td {
+      overflow: visible !important;
+      position: relative;
+    }
+    
+    .company-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 18px 24px;
+      background: #1f2937;
+      color: #f9fafb;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      min-width: 400px;
+      max-width: 900px;
+      width: max-content;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+      transform: translateX(-50%) translateY(-5px);
+      pointer-events: none;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .company-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1f2937;
+    }
+    
+    .company-with-tooltip:hover .company-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+      /* Ensure tooltip doesn't overflow on small screens */
+    @media (max-width: 768px) {
+      .company-tooltip {
+        left: 0;
+        transform: translateX(0) translateY(-5px);
+        max-width: calc(100vw - 40px);
+        min-width: 280px;
+        font-size: 0.95rem;
+        padding: 16px 18px;
+      }
+      
+      .company-tooltip::after {
+        left: 30px;
+        transform: translateX(0);
+      }
+      
+      .company-with-tooltip:hover .company-tooltip {
+        transform: translateX(0) translateY(0);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .company-tooltip {
+        min-width: 250px;
+        font-size: 0.9rem;
+        padding: 14px 16px;
+      }
+    }
+    
     @media (max-width: 768px) {
       .notable-earnings-bottom {
         margin-top: 40px;
@@ -964,6 +1228,12 @@
       .notable-grid {
         grid-template-columns: 1fr;
         gap: 20px;
+      }
+      
+      .company-tooltip {
+        max-width: 280px;
+        font-size: 0.8rem;
+        padding: 10px 12px;
       }
     }
   </style>
