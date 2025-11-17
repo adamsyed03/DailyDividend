@@ -132,6 +132,308 @@
       background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%) !important;
       color: white !important;
     }
+    
+    /* Premium Quiz Button - Apple-inspired Design */
+    .quiz-button-premium {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      text-decoration: none;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+                  0 1px 4px rgba(0, 0, 0, 0.04);
+      min-width: 320px;
+      max-width: 420px;
+      width: 100%;
+    }
+    
+    .quiz-button-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 24px;
+    }
+    
+    .quiz-button-premium:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12),
+                  0 4px 12px rgba(0, 0, 0, 0.08),
+                  0 0 0 1px #d1d5db;
+      border-color: #d1d5db;
+      background: #ffffff;
+    }
+    
+    .quiz-button-premium:hover::before {
+      opacity: 1;
+    }
+    
+    .quiz-button-premium:active {
+      transform: translateY(-2px) scale(1.01);
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .quiz-button-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px 40px;
+      width: 100%;
+      z-index: 2;
+    }
+    
+    .quiz-button-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: #f3f4f6;
+      border-radius: 14px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+    
+    .quiz-button-icon i {
+      font-size: 24px;
+      color: #25d366;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-icon {
+      background: #25d366;
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-icon i {
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    .quiz-button-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      flex: 1;
+      text-align: left;
+    }
+    
+    .quiz-button-main-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-button-sub-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-button-premium:hover .quiz-button-main-text {
+      color: #1f2937;
+    }
+    
+    .quiz-button-premium:hover .quiz-button-sub-text {
+      color: #374151;
+    }
+    
+    .quiz-button-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+    
+    .quiz-button-arrow i {
+      font-size: 18px;
+      color: #374151;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-arrow {
+      background: #374151;
+      transform: translateX(4px);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-arrow i {
+      color: white;
+      transform: translateX(2px);
+    }
+    
+    .quiz-button-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(37, 211, 102, 0.1),
+        transparent
+      );
+      transition: left 0.6s ease;
+      z-index: 3;
+      border-radius: 24px;
+    }
+    
+    .quiz-button-premium:hover .quiz-button-shine {
+      left: 100%;
+      transition: left 0.6s ease;
+    }
+    
+    /* Animated Background Shapes */
+    .test-bg-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+    
+    .test-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(229, 231, 235, 0.4);
+      animation: float 20s infinite ease-in-out;
+    }
+    
+    .test-shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+    
+    .test-shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -50px;
+      right: -50px;
+      animation-delay: 7s;
+    }
+    
+    .test-shape-3 {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      right: 10%;
+      animation-delay: 14s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
+      33% {
+        transform: translate(30px, -30px) scale(1.1);
+        opacity: 0.4;
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
+        opacity: 0.35;
+      }
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .quiz-button-premium {
+        min-width: 280px;
+        max-width: 100%;
+      }
+      
+      .quiz-button-content {
+        padding: 20px 28px;
+        gap: 12px;
+      }
+      
+      .quiz-button-icon {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .quiz-button-icon i {
+        font-size: 20px;
+      }
+      
+      .quiz-button-main-text {
+        font-size: 18px;
+      }
+      
+      .quiz-button-sub-text {
+        font-size: 13px;
+      }
+      
+      .quiz-button-arrow {
+        width: 36px;
+        height: 36px;
+      }
+      
+      .quiz-button-arrow i {
+        font-size: 16px;
+      }
+      
+      .test-shape-1 {
+        width: 200px;
+        height: 200px;
+      }
+      
+      .test-shape-2 {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .test-shape-3 {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .quiz-button-premium {
+        min-width: 100%;
+      }
+      
+      .quiz-button-content {
+        padding: 18px 24px;
+        gap: 10px;
+      }
+      
+      .quiz-button-text {
+        min-width: 0;
+      }
+    }
   </style>
 
   <!-- Favicon -->
@@ -420,13 +722,38 @@
   <!-- =========================
        TEST
   ========================== -->
-    <section id="test" class="test-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div class="container" style="text-align: center; padding: 60px 20px;">
-            <div class="section-header">
-                <h2>You think you know markets?</h2>
+    <section id="test" class="test-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f9fafb; position: relative; overflow: hidden;">
+        <!-- Animated background elements -->
+        <div class="test-bg-shapes">
+            <div class="test-shape test-shape-1"></div>
+            <div class="test-shape test-shape-2"></div>
+            <div class="test-shape test-shape-3"></div>
+        </div>
+        
+        <div class="container" style="text-align: center; padding: 60px 20px; position: relative; z-index: 1;">
+            <div class="section-header" style="margin-bottom: 48px;">
+                <h2 style="color: #1f2937; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em;">
+                    You think you know markets?
+                </h2>
+                <p style="color: #6b7280; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                    Challenge yourself with our interactive quiz
+                </p>
             </div>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdvzzB8OlmLKfrLpFOIGGNituPbpDtcvamTYPsBafPS3YS-Qw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" class="cta-button" aria-label="Open the Test your knowledge form" style="font-size: 22px; padding: 18px 32px; display: inline-block; text-decoration: none;">
-                Test your knowledge
+            
+            <a href="https://qzzr.com/view/Jf901m2c" target="_blank" rel="noopener noreferrer" class="quiz-button-premium" aria-label="Take the market knowledge quiz">
+                <span class="quiz-button-content">
+                    <span class="quiz-button-icon">
+                        <i class="fas fa-brain"></i>
+                    </span>
+                    <span class="quiz-button-text">
+                        <span class="quiz-button-main-text">Test Your Knowledge</span>
+                        <span class="quiz-button-sub-text">Take the challenge</span>
+                    </span>
+                    <span class="quiz-button-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </span>
+                <span class="quiz-button-shine"></span>
             </a>
         </div>
     </section>
