@@ -21,7 +21,111 @@
   <!-- Critical CSS for faster loading -->
   <style>
     body { margin: 0; font-family: Inter, sans-serif; }
-    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    .navbar { 
+      position: fixed; 
+      top: 0; 
+      left: 0;
+      right: 0;
+      width: 100%; 
+      z-index: 1000; 
+      background: rgba(255, 255, 255, 0.99);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.7);
+      backdrop-filter: blur(16px);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+      margin: 0;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #4b5563;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 12px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus {
+      color: #111827;
+      background: rgba(229, 231, 235, 0.7);
+      outline: none;
+    }
+    .nav-dropdown {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav-dropdown-btn {
+      background: none;
+      border: none;
+      font: inherit;
+      color: #4b5563;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown-btn:hover,
+    .nav-dropdown-btn:focus {
+      color: #111827;
+      background: rgba(229, 231, 235, 0.7);
+      outline: none;
+    }
+    .nav-dropdown-menu {
+      display: none !important;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 240px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      gap: 6px;
+      z-index: 1001;
+    }
+    .nav-dropdown-menu.active {
+      display: flex !important;
+    }
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #4b5563;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+    .nav-dropdown-item:hover {
+      background: #f3f4f6;
+      color: #111827;
+    }
     
     .week-calendar {
       display: flex;
@@ -420,6 +524,27 @@
                             <div class="week-day" data-date="2025-11-29">
                                 <div class="day-label">Sat, Nov 29</div>
                             </div>
+                            <div class="week-day" data-date="2025-12-02">
+                                <div class="day-label">Tue, Dec 2</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-03">
+                                <div class="day-label">Wed, Dec 3</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-04">
+                                <div class="day-label">Thu, Dec 4</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-05">
+                                <div class="day-label">Fri, Dec 5</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-06">
+                                <div class="day-label">Sat, Dec 6</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-07">
+                                <div class="day-label">Sun, Dec 7</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-08">
+                                <div class="day-label">Mon, Dec 8</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
@@ -508,6 +633,27 @@
                         </div>
                         <div class="earnings-day-content" data-day-content="2025-11-29">
                             <div class="earnings-table-wrapper" data-day-table="2025-11-29"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-02">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-02"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-03">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-03"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-04">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-04"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-05">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-05"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-06">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-06"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-07">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-07"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-08">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-08"></div>
                         </div>
                     </div>
                 </div>
@@ -745,10 +891,127 @@
           { time: '-', country: '🇨🇳', event: 'China Manufacturing PMI', actual: '-', forecast: '-', previous: '49' },
           { time: '-', country: '🇨🇳', event: 'China Non-Manufacturing PMI', actual: '-', forecast: '-', previous: '50.1', previousClass: 'positive' }
         ]
-      }
+      },
+      '2025-12-02': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Consumer Confidence', actual: '-', forecast: '36.1', previous: '35.8', previousClass: 'negative' },
+          { time: '-', country: '🇬🇧', event: 'Nationwide Housing Pricing YoY', actual: '-', forecast: '0.20%', previous: '0.30%', previousClass: 'positive' },
+          { time: '-', country: '🇫🇷', event: 'Budget Balance', actual: '-', forecast: '€-164.0B', previous: '€-155.4B', previousClass: 'positive' },
+          { time: '-', country: '🇧🇷', event: 'Industrial Production YoY', actual: '-', forecast: '0.70%', previous: '2%', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'Fed Bowman Speech', actual: '-', forecast: '-', previous: '-' }
+        ]
+      },
+      '2025-12-03': {
+        rows: [
+          { time: '-', country: '🇺🇸', event: 'Export Prices YoY', actual: '-', forecast: '4.10%', previous: '3.40%', previousClass: 'negative' },
+          { time: '-', country: '🇺🇸', event: 'Import Prices YoY', actual: '-', forecast: '0.60%', previous: '0.00%', previousClass: 'negative' },
+          { time: '-', country: '🇷🇺', event: 'Unemployment Rate', actual: '-', forecast: '2.20%', previous: '2.20%' }
+        ]
+      },
+      '2025-12-04': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Foreign Exchange Reserves', actual: '-', forecast: '-', previous: '$1347.4B' }
+        ]
+      },
+      '2025-12-05': {
+        rows: [
+          { time: '-', country: '🇮🇳', event: 'RBI Interest Rate Decision', actual: '-', forecast: '5.25%', previous: '5.50%' },
+          { time: '-', country: '🇪🇺', event: 'Employment Change YoY Final', actual: '-', forecast: '0.50%', previous: '0.60%', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'Core PCE Price Index YoY', actual: '-', forecast: '2.80%', previous: '2.90%' }
+        ]
+      },
+      '2025-12-06': { message: 'No significant events scheduled.' },
+      '2025-12-07': {
+        rows: [
+          { time: '-', country: '🇨🇳', event: 'Foreign Exchange Reserves', actual: '-', forecast: '$3.35T', previous: '$3.343T', previousClass: 'negative' },
+          { time: '-', country: '🇯🇵', event: 'GDP Growth Annualised Rate', actual: '-', forecast: '-1.80%', previous: '2.30%', previousClass: 'positive' }
+        ]
+      },
+      '2025-12-08': { message: 'No significant events scheduled.' }
     };
 
     const MACRO_HEADERS = ['Country', 'Event', 'Forecast', 'Previous'];
+
+    const MACRO_EVENT_DESCRIPTIONS = {
+      'Consumer Confidence': 'Tracks households\' expectations about the wider economy and business; e.g., affecting income, jobs, and spending. Strong sentiment usually supports economic growth.',
+      'Nationwide Housing Pricing YoY': 'Measures annual change in UK house prices. Gives insight into housing demand and household wealth effects.',
+      'Budget Balance': 'Shows the government\'s fiscal position - a deficit or surplus can affect bond issuance, borrowing costs, and fiscal policy.',
+      'Industrial Production YoY': 'Measures Brazil\'s output in manufacturing, mining, and utilities versus last year.',
+      'Fed Bowman Speech': 'Speech from a Federal Reserve Governor. Markets look for signals on rates, inflation, and economic risks.',
+      'Export Prices YoY': 'Tracks how prices of exported goods have changed over the year. Helps assess competitiveness and pricing power.',
+      'Import Prices YoY': 'Tracks how prices of imported goods have changed over the year.',
+      'Unemployment Rate': 'Shows the share of the labor force without work. The lack of change year on year in Russia is interesting, perhaps due to ongoing war with Ukraine. Perhaps methodology here and the sub-sectors of unemployment would prove useful.',
+      'Foreign Exchange Reserves': 'The stock of foreign currencies held by the central bank. Signals financial stability and the ability to manage currency moves.',
+      'RBI Interest Rate Decision': 'India\'s central bank sets its policy rate. The predicted increase in the rate by 25 base points, a move in the opposite direction to the Fed, where the market is pricing in another cut in December.',
+      'Employment Change YoY Final': 'Measures the annual change in the number of people employed. A clear gauge of labor-market strength.',
+      'Core PCE Price Index YoY': 'The Fed\'s preferred inflation measure, excluding food and energy. Important for US rate expectations.',
+      'GDP Growth Annualised Rate': 'Measures economic growth for the quarter, scaled to an annual pace. Provides a clear signal of the economy\'s direction and speed.',
+      'Exports YoY': 'This shows how much Korea\'s exports have risen or fallen compared to a year ago. Markets watch it to understand global demand and trade momentum.',
+      'CPI Growth YoY': 'Measures how fast consumer prices are rising in Korea versus last year. A key signal for inflation pressures and central bank policy outlook.',
+      'Imports YoY': 'Tracks changes in import volumes compared with a year ago. Gives insight into domestic demand in Korea alongside export metrics.',
+      'S&P Global Manufacturing PMI (final)': 'Survey of factory activity covering elements of the Japanese economy including output, orders and employment. A forward-looking read on manufacturing strength',
+      'BoJ Gov Ueda Speech': 'Comments from the Bank of Japan Governor on policy and economic conditions. Signals potential shifts in Japan\'s rate stance or yield-curve policy, but no forecast in terms of specific',
+      'RatingDog Manufacturing PMI': 'RatingDog Manufacturing PMI offers a granular read on things such as production and export demand in the Chinese economy, an important sector of its economy.',
+      'S&P Global Manufacturing PMI': 'The S&P Global Manufacturing PMI offers insight on a country\'s manufacturing sector health, shedding light on orders, production and export demand. A number over 50 is expansion',
+      'German Factory Orders (MoM) (Sep)': 'Measures the value of new orders received by German manufacturers. A leading indicator of industrial production and economic activity.',
+      'Spanish Services PMI (Oct)': 'Survey-based indicator of service sector activity in Spain. Values above 50 indicate expansion, below 50 indicate contraction.',
+      'Italian Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in Italy. Provides a comprehensive view of private sector economic health.',
+      'Italian Services PMI (Oct)': 'Survey-based indicator of service sector activity in Italy. Tracks business conditions in services industries.',
+      'French S&P Global Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in France. A key indicator of overall economic momentum.',
+      'French Services PMI (Oct)': 'Survey-based indicator of service sector activity in France. Tracks business conditions and sentiment in services industries.',
+      'German Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in Germany. Provides a comprehensive view of private sector economic health.',
+      'German Services PMI (Oct)': 'Survey-based indicator of service sector activity in Germany. Values above 50 indicate expansion in the services sector.',
+      'Services PMI (Oct)': 'Survey-based indicator of service sector activity. Tracks business conditions, new orders, and employment in services industries.',
+      'Composite PMI (Oct)': 'Combined measure of manufacturing and services activity. Provides a comprehensive view of private sector economic health.',
+      'ISM Non-Manufacturing PMI (Oct)': 'U.S. Institute for Supply Management survey of service sector activity. Values above 50 indicate expansion.',
+      'ISM Non-Manufacturing Business Activity (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking business activity levels in the U.S. service sector.',
+      'ISM Non-Manufacturing Employment (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking employment trends in the U.S. service sector.',
+      'ISM Non-Manufacturing New Orders (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking new orders received by U.S. service sector companies.',
+      'ISM Non-Manufacturing Prices (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking price changes in the U.S. service sector.',
+      'German Industrial Production (MoM) (Sep)': 'Measures the volume of output from German manufacturing, mining, and utilities sectors. A key indicator of industrial activity.',
+      'BoE Interest Rate Decision (Nov)': 'The Bank of England sets its benchmark interest rate. Affects borrowing costs, inflation, and currency valuation.',
+      'Interest Rate Decision (Nov)': 'Central bank sets its benchmark interest rate. Affects borrowing costs, inflation expectations, and currency valuation.',
+      'CPI (YoY) (Oct)': 'Consumer Price Index measures inflation by tracking price changes of a basket of goods and services compared to a year ago.',
+      'CPI (MoM) (Oct)': 'Consumer Price Index measures inflation by tracking price changes of a basket of goods and services compared to the previous month.',
+      'PPI (YoY) (Oct)': 'Producer Price Index measures inflation at the wholesale level by tracking price changes of goods sold by producers.',
+      'EU Sentix Investor Confidence (Nov)': 'Survey-based measure of investor sentiment in the Eurozone. Positive values indicate optimism, negative values indicate pessimism.',
+      'UK Unemployment Rate (Sep)': 'Measures the percentage of the labor force that is unemployed and actively seeking work. A key indicator of labor market health.',
+      'ECB\'s Lagarde Speaks': 'Comments from the European Central Bank President on monetary policy and economic conditions. Markets watch for signals on interest rates and policy direction.',
+      'Germany CPI (MoM) (Oct)': 'Consumer Price Index measures inflation in Germany by tracking price changes compared to the previous month.',
+      'OPEC Monthly Report': 'Organization of the Petroleum Exporting Countries publishes monthly analysis of oil market conditions, supply, demand, and price forecasts.',
+      'UK GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in the UK compared to a year ago. A key indicator of economic growth.',
+      'UK Business Investment (QoQ)': 'Measures capital spending by UK businesses on equipment, buildings, and other assets. A leading indicator of economic activity.',
+      'France Unemployment Rate': 'Measures the percentage of the French labor force that is unemployed and actively seeking work.',
+      'US CPI (YoY)': 'Consumer Price Index measures inflation in the United States by tracking price changes of a basket of goods and services compared to a year ago.',
+      'US Initial Jobless Claims': 'Measures the number of people filing for unemployment benefits for the first time. A weekly indicator of labor market health.',
+      'EU GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in the Eurozone compared to a year ago.',
+      'Japan GDP Growth': 'Gross Domestic Product measures the total value of goods and services produced in Japan. A key indicator of economic growth.',
+      'Italy Inflation Rate YoY': 'Measures the annual rate of price increases in Italy. A key indicator of inflation pressures and purchasing power.',
+      'UK Inflation Rate YoY': 'Measures the annual rate of price increases in the UK. A key indicator of inflation pressures and central bank policy outlook.',
+      'Indonesia Interest Rate Decision': 'Bank Indonesia sets its benchmark interest rate. Affects borrowing costs, inflation, and currency valuation.',
+      'South Africa Inflation YoY': 'Measures the annual rate of price increases in South Africa. A key indicator of inflation pressures.',
+      'EU Inflation Rate YoY': 'Measures the annual rate of price increases in the Eurozone. A key indicator of inflation pressures and ECB policy outlook.',
+      'Japan Inflation Rate YoY': 'Measures the annual rate of price increases in Japan. A key indicator of inflation pressures and Bank of Japan policy outlook.',
+      'UK Manufacturing PMI': 'Survey-based indicator of manufacturing activity in the UK. Values above 50 indicate expansion in the manufacturing sector.',
+      'UK Services PMI': 'Survey-based indicator of service sector activity in the UK. Values above 50 indicate expansion in the services sector.',
+      'Germany Manufacturing PMI': 'Survey-based indicator of manufacturing activity in Germany. Values above 50 indicate expansion in the manufacturing sector.',
+      'US Industrial Production YoY (Sep)': 'Measures the annual change in output from U.S. manufacturing, mining, and utilities sectors. A key indicator of industrial activity.',
+      'German GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in Germany compared to a year ago.',
+      'US PPI (MoM)': 'Producer Price Index measures inflation at the wholesale level by tracking price changes of goods sold by producers compared to the previous month.',
+      'US Consumer Confidence': 'Survey-based measure of consumer sentiment about current and future economic conditions. Higher values indicate greater optimism.',
+      'BoJ Core CPI (YoY)': 'Bank of Japan\'s preferred inflation measure excluding fresh food. A key indicator for monetary policy decisions.',
+      'US Q3 GDP (QoQ)': 'Gross Domestic Product measures the total value of goods and services produced in the U.S. compared to the previous quarter.',
+      'US PCE Price Index (YoY)': 'Personal Consumption Expenditures Price Index measures inflation by tracking price changes of goods and services consumed by households.',
+      'US New Home Sales': 'Measures the number of newly constructed homes sold. A key indicator of housing market strength and consumer confidence.',
+      'Japan Industrial Production (MoM)': 'Measures the monthly change in output from Japanese manufacturing, mining, and utilities sectors.',
+      'German Retail Sales (MoM)': 'Measures the monthly change in retail sales in Germany. A key indicator of consumer spending and economic activity.',
+      'Swiss GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in Switzerland compared to a year ago.',
+      'Spanish CPI (YoY)': 'Consumer Price Index measures inflation in Spain by tracking price changes compared to a year ago.',
+      'German Unemployment Rate (Nov)': 'Measures the percentage of the German labor force that is unemployed and actively seeking work.',
+      'Germany CPI (YoY)': 'Consumer Price Index measures inflation in Germany by tracking price changes compared to a year ago.',
+      'China Manufacturing PMI': 'Survey-based indicator of manufacturing activity in China. Values above 50 indicate expansion in the manufacturing sector.',
+      'China Non-Manufacturing PMI': 'Survey-based indicator of service sector activity in China. Values above 50 indicate expansion in the services sector.'
+    };
 
     function createCell(value, className) {
       const safeValue = value === undefined || value === null ? '-' : value;
@@ -771,14 +1034,20 @@
           return;
         }
 
-        const rowsHtml = (data.rows || []).map(row => `
+        const rowsHtml = (data.rows || []).map(row => {
+          const description = MACRO_EVENT_DESCRIPTIONS[row.event] || '';
+          const eventCell = description 
+            ? `<td class="event-with-tooltip">${row.event || '-'}<span class="event-tooltip">${description}</span></td>`
+            : `<td>${row.event || '-'}</td>`;
+          return `
           <tr>
             <td>${row.country || '-'}</td>
-            <td>${row.event || '-'}</td>
+            ${eventCell}
             ${createCell(row.forecast, row.forecastClass)}
             ${createCell(row.previous, row.previousClass)}
           </tr>
-        `).join('');
+        `;
+        }).join('');
 
         wrapper.innerHTML = `
           <table class="earnings-table" role="table" aria-label="Macro events">
@@ -847,16 +1116,37 @@
       const now = new Date();
       const todayIso = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
       let activated = false;
- 
+      let closestDay = null;
+      let closestDiff = Infinity;
+
+      // First, try to find today's exact date
       weekDays.forEach(day => {
         if (!activated && day.dataset.date === todayIso) {
           showDay(day, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
           activated = true;
         }
+        
+        // Also track the closest date to today
+        if (day.dataset.date) {
+          const dayDate = new Date(day.dataset.date);
+          const todayDate = new Date(todayIso);
+          const diff = Math.abs(dayDate - todayDate);
+          if (diff < closestDiff) {
+            closestDiff = diff;
+            closestDay = day;
+          }
+        }
       });
- 
-      if (!activated && weekDays.length) {
-        showDay(weekDays[0], { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+
+      // If today's date not found, use the closest date
+      if (!activated) {
+        if (closestDay) {
+          showDay(closestDay, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+          activated = true;
+        } else if (weekDays.length) {
+          // Fallback to first day if no dates found
+          showDay(weekDays[0], { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+        }
       }
  
       weekDays.forEach(day => {
@@ -916,6 +1206,110 @@
     .earnings-table tbody td:nth-child(1) {
       font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
       text-align: center;
+    }
+    
+    /* Event Tooltip Styles */
+    .event-with-tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-block;
+    }
+    
+    /* Ensure tooltip container doesn't clip content */
+    .earnings-table-wrapper {
+      overflow: visible !important;
+    }
+    
+    .earnings-table {
+      overflow: visible !important;
+    }
+    
+    .earnings-day-content {
+      overflow: visible !important;
+    }
+    
+    .earnings-main {
+      overflow: visible !important;
+    }
+    
+    .earnings-layout {
+      overflow: visible !important;
+    }
+    
+    .earnings-table tbody td {
+      overflow: visible !important;
+      position: relative;
+    }
+    
+    .event-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 18px 24px;
+      background: #1f2937;
+      color: #f9fafb;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      min-width: 400px;
+      max-width: 900px;
+      width: max-content;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+      transform: translateX(-50%) translateY(-5px);
+      pointer-events: none;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .event-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1f2937;
+    }
+    
+    .event-with-tooltip:hover .event-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    /* Ensure tooltip doesn't overflow on small screens */
+    @media (max-width: 768px) {
+      .event-tooltip {
+        left: 0;
+        transform: translateX(0) translateY(-5px);
+        max-width: calc(100vw - 40px);
+        min-width: 280px;
+        font-size: 0.95rem;
+        padding: 16px 18px;
+      }
+      
+      .event-tooltip::after {
+        left: 30px;
+        transform: translateX(0);
+      }
+      
+      .event-with-tooltip:hover .event-tooltip {
+        transform: translateX(0) translateY(0);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .event-tooltip {
+        min-width: 250px;
+        font-size: 0.9rem;
+        padding: 14px 16px;
+      }
     }
   </style>
 </body>
