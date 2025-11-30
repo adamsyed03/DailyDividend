@@ -524,6 +524,9 @@
                             <div class="week-day" data-date="2025-11-29">
                                 <div class="day-label">Sat, Nov 29</div>
                             </div>
+                            <div class="week-day" data-date="2025-12-01">
+                                <div class="day-label">Mon, Dec 1</div>
+                            </div>
                             <div class="week-day" data-date="2025-12-02">
                                 <div class="day-label">Tue, Dec 2</div>
                             </div>
@@ -633,6 +636,9 @@
                         </div>
                         <div class="earnings-day-content" data-day-content="2025-11-29">
                             <div class="earnings-table-wrapper" data-day-table="2025-11-29"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-01">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-01"></div>
                         </div>
                         <div class="earnings-day-content" data-day-content="2025-12-02">
                             <div class="earnings-table-wrapper" data-day-table="2025-12-02"></div>
@@ -892,6 +898,21 @@
           { time: '-', country: '🇨🇳', event: 'China Non-Manufacturing PMI', actual: '-', forecast: '-', previous: '50.1', previousClass: 'positive' }
         ]
       },
+      '2025-12-01': {
+        rows: [
+          { time: '-', country: '🇰🇷', event: 'Exports YoY', actual: '-', forecast: '3.60%', previous: '5.70%', previousClass: 'positive' },
+          { time: '-', country: '🇰🇷', event: 'CPI Growth YoY', actual: '-', forecast: '2.4', previous: '-' },
+          { time: '-', country: '🇰🇷', event: 'Imports YoY', actual: '-', forecast: '3.40%', previous: '-1.50%', previousClass: 'negative' },
+          { time: '-', country: '🇯🇵', event: 'S&P Global Manufacturing PMI (final)', actual: '-', forecast: '48.8', previous: '48.2' },
+          { time: '-', country: '🇯🇵', event: 'BoJ Gov Ueda Speech', actual: '-', forecast: '-', previous: '-' },
+          { time: '-', country: '🇨🇳', event: 'RatingDog Manufacturing PMI', actual: '-', forecast: '50.9', previous: '50.6', previousClass: 'positive' },
+          { time: '-', country: '🇷🇺', event: 'S&P Global Manufacturing PMI', actual: '-', forecast: '0.80%', previous: '1.60%', previousClass: 'positive' },
+          { time: '-', country: '🇬🇧', event: 'S&P Global Manufacturing PMI Final', actual: '-', forecast: '50.2', previous: '49.7' },
+          { time: '-', country: '🇺🇸', event: 'S&P Global Manufacturing PMI Final', actual: '-', forecast: '51.9', previous: '52.5', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'ISM Manufacturing PMI', actual: '-', forecast: '49.3', previous: '48.7' },
+          { time: '-', country: '🇰🇷', event: 'Inflation rate YoY', actual: '-', forecast: '-0.30%', previous: '0.30%', previousClass: 'positive' }
+        ]
+      },
       '2025-12-02': {
         rows: [
           { time: '-', country: '🇯🇵', event: 'Consumer Confidence', actual: '-', forecast: '36.1', previous: '35.8', previousClass: 'negative' },
@@ -949,10 +970,13 @@
       'Exports YoY': 'This shows how much Korea\'s exports have risen or fallen compared to a year ago. Markets watch it to understand global demand and trade momentum.',
       'CPI Growth YoY': 'Measures how fast consumer prices are rising in Korea versus last year. A key signal for inflation pressures and central bank policy outlook.',
       'Imports YoY': 'Tracks changes in import volumes compared with a year ago. Gives insight into domestic demand in Korea alongside export metrics.',
-      'S&P Global Manufacturing PMI (final)': 'Survey of factory activity covering elements of the Japanese economy including output, orders and employment. A forward-looking read on manufacturing strength',
-      'BoJ Gov Ueda Speech': 'Comments from the Bank of Japan Governor on policy and economic conditions. Signals potential shifts in Japan\'s rate stance or yield-curve policy, but no forecast in terms of specific',
+      'Inflation rate YoY': 'Shows how prices across the Korean economy are rising relative to last year. Important for interest-rate expectations, as well as consumer and business confidence in planning for future purchases, especially large ones.',
       'RatingDog Manufacturing PMI': 'RatingDog Manufacturing PMI offers a granular read on things such as production and export demand in the Chinese economy, an important sector of its economy.',
-      'S&P Global Manufacturing PMI': 'The S&P Global Manufacturing PMI offers insight on a country\'s manufacturing sector health, shedding light on orders, production and export demand. A number over 50 is expansion',
+      'ISM Manufacturing PMI': 'US manufacturing survey by the Institute for Supply Management with strong market influence in measuring the health of the US manufacturing sector. Gives an early signal on output, hiring and supply-chain conditions',
+      'S&P Global Manufacturing PMI (final)': 'Survey of factory activity covering elements of the Japanese economy including output, orders and employment. A forward-looking read on manufacturing strength',
+      'BoJ Gov Ueda Speech': 'Comments from the Bank of Japan Governor on policy and economic conditions. Signals potential shifts in Japan\'s rate stance or yield-curve policy, but no forecast in terms of specific rate cuts.',
+      'RatingDog Manufacturing PMI': 'RatingDog Manufacturing PMI offers a granular read on things such as production and export demand in the Chinese economy, an important sector of its economy.',
+      'S&P Global Manufacturing PMI': 'The S&P Global Manufacturing PMI offers insight on a country\'s manufacturing sector health, shedding light on orders, production and export demand. A number over 50 is expansion, and one below 50 is contraction',
       'German Factory Orders (MoM) (Sep)': 'Measures the value of new orders received by German manufacturers. A leading indicator of industrial production and economic activity.',
       'Spanish Services PMI (Oct)': 'Survey-based indicator of service sector activity in Spain. Values above 50 indicate expansion, below 50 indicate contraction.',
       'Italian Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in Italy. Provides a comprehensive view of private sector economic health.',
