@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools - Daily Dividend</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css?v=17">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #f3f4f6;
+      padding: 100px 20px 40px;
+      min-height: 100vh;
+    }
+    .tools-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .tool-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    .tool-card i {
+      font-size: 2.5rem;
+      color: #667eea;
+      margin-bottom: 16px;
+    }
+    .tool-card h3 {
+      margin: 0 0 10px 0;
+      color: #1f2937;
+    }
+    .tool-card p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    h1 {
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .logout-btn:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <script type="module">
+    import { isRemembered } from '../auth.js';
+    if (!isRemembered()) {
+      window.location.href = '/login.html';
+    }
+  </script>
+
+  <div style="position: relative;">
+    <button id="logout-btn">Log out</button>
+    <script type="module">
+      import { logout } from '../auth.js';
+      const btn = document.getElementById('logout-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          logout();
+          window.location.href = '/login.html';
+        });
+      }
+    </script>
+  </div>
+
+  <div class="tools-container">
+    <h1>Premium Tools</h1>
+    <p style="color: #6b7280;">Access your exclusive financial tools and data</p>
+    
+    <div class="tools-grid">
+      <a href="earnings.html" class="tool-card">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Earnings Calendar</h3>
+        <p>Track upcoming earnings announcements from major companies</p>
+      </a>
+      
+      <a href="macro-calendar.html" class="tool-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Macro Calendar</h3>
+        <p>Track high-impact macro economic events and data releases</p>
+      </a>
+      
+      <a href="hedge-fund.html" class="tool-card">
+        <i class="fas fa-briefcase"></i>
+        <h3>Hedge Fund Positioning</h3>
+        <p>Explore institutional portfolios and positioning dynamics</p>
+      </a>
+      
+      <a href="company-analysis.html" class="tool-card">
+        <i class="fas fa-microchip"></i>
+        <h3>Company Analysis</h3>
+        <p>Deep dives on companies with revenue, earnings, and financial ratios</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
+

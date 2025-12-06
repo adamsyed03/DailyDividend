@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign in | Daily Dividend</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 60px 20px;
+      background: url('loginscreenbackground.jpg') center center / cover no-repeat fixed;
+      color: #fff;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+    
+    .login-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      color: #1f2937;
+    }
+    
+    .login-container h2 {
+      margin: 0 0 10px 0;
+      color: #1f2937;
+    }
+    
+    .login-container p {
+      margin: 0 0 20px 0;
+      color: #6b7280;
+    }
+    
+    input, button {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 8px 0;
+      border: 2px solid #e5e7eb;
+      font-size: 1rem;
+      font-family: inherit;
+      width: 100%;
+      max-width: 300px;
+      box-sizing: border-box;
+    }
+    
+    input {
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    #msg {
+      margin-top: 15px;
+      min-height: 20px;
+      color: #dc2626;
+      font-size: 0.9rem;
+    }
+    
+    #msg.success {
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Members Only</h2>
+    <p>Enter your WhatsApp number to continue.</p>
+    <input id="num" placeholder="+44..." />
+    <br>
+    <button id="btn">Continue</button>
+    <p id="msg"></p>
+  </div>
+
+  <script type="module">
+    import { checkMembership, rememberLogin, isRemembered } from './auth.js';
+
+    // If already logged in, skip straight to tools
+    if (isRemembered()) {
+      window.location.href = '/tools/index.html';
+    }
+
+    const input = document.getElementById('num');
+    const btn   = document.getElementById('btn');
+    const msg   = document.getElementById('msg');
+
+    async function handleLogin() {
+      msg.textContent = '';
+      msg.classList.remove('success');
+      const phone = (input.value || '').trim();
+      if (!phone) {
+        msg.textContent = 'Enter your phone number.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Checking...';
+
+      try {
+        const ok = await checkMembership(phone);
+        if (ok) {
+          rememberLogin(phone);
+          msg.textContent = 'Success! Redirecting...';
+          msg.classList.add('success');
+          setTimeout(() => {
+            window.location.href = '/tools/index.html';
+          }, 500);
+        } else {
+          msg.textContent = 'Not registered yet. Please check your phone number format.';
+          btn.disabled = false;
+          btn.textContent = 'Continue';
+        }
+      } catch (e) {
+        console.error('Login error:', e);
+        console.error('Error details:', {
+          message: e.message,
+          name: e.name,
+          stack: e.stack
+        });
+        
+        // More specific error message
+        let errorMsg = 'Network error. Please try again.';
+        if (e.message && e.message.includes('CORS')) {
+          errorMsg = 'CORS error. The Google Apps Script may need to be redeployed. Please use the /exec URL instead of /echo URL.';
+        } else if (e.message && e.message.includes('Failed to fetch')) {
+          errorMsg = 'Connection failed. Please check: 1) Your internet connection, 2) The Google Apps Script is deployed, 3) Use the /exec URL (not /echo).';
+        }
+        
+        msg.textContent = errorMsg;
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      }
+    }
+
+    btn.addEventListener('click', handleLogin);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>
