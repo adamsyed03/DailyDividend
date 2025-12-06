@@ -111,6 +111,40 @@
     #msg.success {
       color: #059669;
     }
+    
+    .signup-button {
+      background: transparent;
+      border: 2px solid #667eea;
+      color: #667eea;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    
+    .signup-button:hover {
+      background: rgba(102, 126, 234, 0.1);
+      border-color: #764ba2;
+      color: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+    
+    .login-links {
+      margin-top: 12px;
+      text-align: center;
+    }
+    
+    .login-links a {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      display: inline-block;
+    }
+    
+    .login-links a:hover {
+      color: #764ba2;
+    }
   </style>
 </head>
 <body>
@@ -120,7 +154,12 @@
     <input id="num" placeholder="+44..." />
     <br>
     <button id="btn">Continue</button>
+    <button id="signupBtn" class="signup-button" onclick="window.location.href='index.html'">Sign up</button>
     <p id="msg"></p>
+    
+    <div class="login-links">
+      <a href="index.html">← Go back home</a>
+    </div>
   </div>
 
   <script type="module">
