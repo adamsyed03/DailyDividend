@@ -528,7 +528,7 @@
         <a href="../index.html#test">Test</a>
         <a href="../index.html#terms">Terms</a>
         <a href="../index.html#contact">Contact</a>
-        <a href="#" id="logoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         <div class="nav-dropdown" id="toolsDropdown">
           <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" id="toolsDropdownBtn">
             Tools <i class="fas fa-chevron-down"></i>
@@ -1001,21 +1001,23 @@
       if (logoutBtn) {
         // Since the guard script at the top ensures we're logged in, always show the button
         logoutBtn.style.display = 'inline-block';
+        logoutBtn.style.visibility = 'visible';
+        logoutBtn.style.opacity = '1';
         
-        // Import and set up logout handler
-        const { logout } = await import('../auth.js');
-        
-        // Remove any existing listeners to prevent duplicates
-        const newBtn = logoutBtn.cloneNode(true);
-        logoutBtn.parentNode.replaceChild(newBtn, logoutBtn);
-        
-        newBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (confirm('Are you sure you want to logout?')) {
-            logout();
-            window.location.href = '/login.html';
-          }
-        });
+        // Import and set up logout handler (only once)
+        if (!logoutBtn.dataset.listenerAttached) {
+          const { logout } = await import('../auth.js');
+          
+          logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+              logout();
+              window.location.href = '/login.html';
+            }
+          });
+          
+          logoutBtn.dataset.listenerAttached = 'true';
+        }
       }
     }
 
