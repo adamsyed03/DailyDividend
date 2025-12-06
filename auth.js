@@ -1,57 +1,61 @@
-// auth.js
+// =============================
+// DAILY DIVIDEND AUTH CONTROLLER
+// =============================
+
 export const CONFIG = {
+  // YOUR CORRECT WEB APP URL
   GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyN2q9eBr_PKg1YKhprjCZyQRSBWzYi9IMRxX-QF1UGUMytJ4ahJSmHxP3zM-qEB2rw/exec',
+  
   STORAGE_KEY: 'dd_member',
   STORAGE_PHONE: 'dd_user_phone',
 };
 
+// -----------------------------
+// Check if phone exists in the Sheet
+// -----------------------------
 export async function checkMembership(phone) {
-  const url = `${CONFIG.GOOGLE_SCRIPT_URL}?mode=check&phone=${encodeURIComponent(phone.trim())}`;
-  
-  console.log('Attempting to fetch:', url);
-  
+  const clean = phone.trim();
+  const url = `${CONFIG.GOOGLE_SCRIPT_URL}?mode=check&phone=${encodeURIComponent(clean)}`;
+
   try {
-    const res = await fetch(url, { 
-      method: 'GET', 
-      cache: 'no-store'
+    const res = await fetch(url, {
+      method: 'GET',
+      cache: 'no-store',
     });
-    
+
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      throw new Error(`HTTP ${res.status}`);
     }
-    
+
     const text = (await res.text()).trim();
-    console.log('Response from server:', text);
+
+    // Should be exactly: "ok" or "no"
     return text === 'ok';
-  } catch (error) {
-    console.error('checkMembership error:', error);
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
-    console.error('URL attempted:', url);
-    
-    // Check if it's a CORS/network error
-    if (error.name === 'TypeError' && (error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
-      console.error('This appears to be a CORS or network connectivity issue.');
-      console.error('Please verify:');
-      console.error('1. The Google Apps Script is deployed as a Web App');
-      console.error('2. "Who has access" is set to "Anyone"');
-      console.error('3. The URL is correct and accessible');
-      console.error('4. Test the URL directly in a browser:', url);
-    }
-    
-    throw error;
+
+  } catch (err) {
+    console.error('Membership check failed:', err);
+    throw new Error('NETWORK_FAIL');
   }
 }
 
+// -----------------------------
+// Save login locally
+// -----------------------------
 export function rememberLogin(phone) {
   localStorage.setItem(CONFIG.STORAGE_KEY, 'true');
   localStorage.setItem(CONFIG.STORAGE_PHONE, phone);
 }
 
+// -----------------------------
+// Is user already logged in?
+// -----------------------------
 export function isRemembered() {
   return localStorage.getItem(CONFIG.STORAGE_KEY) === 'true';
 }
 
+// -----------------------------
+// Logout user
+// -----------------------------
 export function logout() {
   localStorage.removeItem(CONFIG.STORAGE_KEY);
   localStorage.removeItem(CONFIG.STORAGE_PHONE);

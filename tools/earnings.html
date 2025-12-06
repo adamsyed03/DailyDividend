@@ -16,6 +16,17 @@
     import { isRemembered } from '../auth.js';
     if (!isRemembered()) {
       window.location.href = '/login.html';
+    } else {
+      // Immediately show logout button if logged in (before DOMContentLoaded)
+      const showLogout = () => {
+        const btn = document.getElementById('logoutBtn');
+        if (btn) btn.style.display = 'inline-block';
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', showLogout);
+      } else {
+        showLogout();
+      }
     }
   </script>
   
@@ -30,6 +41,22 @@
   <style>
     body { margin: 0; font-family: Inter, sans-serif; }
     .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    
+    /* Ensure logout button is always visible when logged in */
+    #logoutBtn {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    
+    /* Mobile-friendly logout button */
+    @media (max-width: 768px) {
+      #logoutBtn {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+      }
+    }
     
     /* Ensure dropdown menu works */
     .nav-dropdown-menu {
@@ -1264,31 +1291,43 @@
       updateNavState();
     }
 
-    // Logout functionality
+    // Logout functionality - Always show if we're on this page (guard ensures we're logged in)
     async function initLogout() {
       const logoutBtn = document.getElementById('logoutBtn');
       if (logoutBtn) {
-        const { isRemembered, logout } = await import('../auth.js');
-        if (isRemembered()) {
-          logoutBtn.style.display = 'inline-block';
-          logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('Are you sure you want to logout?')) {
-              logout();
-              window.location.href = '/login.html';
-            }
-          });
-        }
+        // Since the guard script at the top ensures we're logged in, always show the button
+        logoutBtn.style.display = 'inline-block';
+        
+        // Import and set up logout handler
+        const { logout } = await import('../auth.js');
+        
+        // Remove any existing listeners to prevent duplicates
+        const newBtn = logoutBtn.cloneNode(true);
+        logoutBtn.parentNode.replaceChild(newBtn, logoutBtn);
+        
+        newBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm('Are you sure you want to logout?')) {
+            logout();
+            window.location.href = '/login.html';
+          }
+        });
       }
     }
 
-    // Init
-    document.addEventListener('DOMContentLoaded', () => {
+    // Init - Run immediately if DOM is ready, otherwise wait for DOMContentLoaded
+    function initialize() {
       initToolsDropdown();
       renderEarningsTables();
       initEarningsCalendar();
       initLogout();
-    });
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+      initialize();
+    }
 
   </script>
 
