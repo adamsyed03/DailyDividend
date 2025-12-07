@@ -610,14 +610,14 @@
     }
     @media (max-width: 960px) {
       .ca-wrapper { grid-template-columns: 1fr; }
-      .insight-layout { grid-template-columns: 1fr; }
+      .insight-layout { grid-template-columns: 1fr; padding-right: 0; }
       .metric-chart-row { flex-direction: column; }
       .metric-grid { max-width: none; }
       .meta-main-layout { grid-template-columns: 1fr; gap: 20px; }
       .meta-kpi-column { order: 1; }
       .meta-content-column { order: 2; }
       .meta-charts-column { flex-direction: column; }
-      .meta-bottom-row { flex-direction: column; }
+      .meta-bottom-row { grid-template-columns: 1fr; padding-right: 0; }
       .meta-insights-column { flex: 1 1 0; }
       .analyst-table-card { flex: 1 1 0; max-width: 100%; }
     }
@@ -634,7 +634,7 @@
        .meta-kpi-column { order: 1; }
        .meta-content-column { order: 2; }
        .meta-charts-column { flex-direction: column; gap: 16px; }
-       .meta-bottom-row { flex-direction: column; gap: 16px; }
+       .meta-bottom-row { grid-template-columns: 1fr; gap: 16px; padding-right: 0; }
        .meta-insights-column { flex: 1 1 0; }
        .analyst-table-card { flex: 1 1 0; max-width: 100%; }
        .metric-card { min-width: calc(50% - 10px); padding: 10px; border-radius: 14px; }
