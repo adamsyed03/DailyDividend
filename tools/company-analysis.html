@@ -775,6 +775,13 @@
               <span><i class="fas fa-calendar"></i> Latest quarter Q3 2025</span>
             </div>
           </article>
+          <article class="company-card" role="button" tabindex="0" data-company="disney">
+            <h3>The Walt Disney Company</h3>
+            <div class="company-meta">
+              <span><i class="fas fa-location-dot"></i> Burbank, California</span>
+              <span><i class="fas fa-calendar"></i> Latest quarter Q4 FY25</span>
+            </div>
+          </article>
         </div>
       </aside>
 
@@ -1092,6 +1099,177 @@
                   <tr>
                     <td><span class="rating-badge" style="background:rgba(239,68,68,0.15);color:#dc2626;">Sell</span></td>
                     <td><strong>0</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="data-source" style="text-align: right; font-size: 0.75rem; color: #94a3b8; margin-top: 6px; font-style: italic;">
+              Source: Yahoo Finance
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Walt Disney Company Section -->
+      <section class="ca-panel company-section" id="disneyDetail" aria-live="polite">
+        <div class="detail-header">
+          <h2 style="margin:0;font-size:1.8rem;">The Walt Disney Company (DIS)</h2>
+          <span class="detail-pill"><i class="fas fa-film"></i> Media, entertainment & experiences</span>
+          <div class="detail-meta">
+            <span><i class="fas fa-dollar-sign"></i> Market cap ≈ $190B</span>
+          </div>
+          <p style="margin:6px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+            Disney is a diversified global entertainment company spanning film and TV studios, linear networks, sports media, streaming, and theme parks. Its core assets include Disney, Pixar, Marvel, Star Wars, 20th Century Studios and ESPN, monetized across theatrical releases, television, direct-to-consumer streaming, licensing and consumer products.
+          </p>
+          <p style="margin:12px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+            The company’s business is organized into three primary segments: Entertainment (studios, TV and streaming), Sports (ESPN) and Experiences (parks, resorts, cruise lines and consumer products). Disney is in the midst of a strategic transition, turning its direct-to-consumer streaming platforms profitable while continuing to invest heavily in its ESPN franchise and global parks & experiences footprint.
+          </p>
+        </div>
+
+        <article class="chart-card" style="margin-bottom:30px;">
+          <header>
+            <div>
+              <h3>Financial Snapshot</h3>
+              <p>Quarterly ratios and income statement highlights worth tracking each earnings season.</p>
+            </div>
+          </header>
+          <div class="snapshot-grid">
+            <div class="snapshot-card">
+              <h4><i class="fas fa-percentage"></i> Profitability</h4>
+              <ul>
+                <li>Net margin FY25: <strong>~13%</strong></li>
+                <li>Segment operating margin FY25: <strong>~19%</strong></li>
+                <li>Free cash flow margin FY25: <strong>~11%</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-chart-line"></i> Growth</h4>
+              <ul>
+                <li>Revenue YoY (FY25 vs FY24): <strong>+3%</strong></li>
+                <li>Income before taxes YoY: <strong>+59%</strong></li>
+                <li>Adjusted EPS YoY: <strong>+19%</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-trophy"></i> Competitive Positioning</h4>
+              <ul>
+                <li>Global IP portfolio across <strong>Disney, Pixar, Marvel, Star Wars, 20th Century, ESPN</strong></li>
+                <li>Parks & Experiences provide <strong>high-barrier, high-margin cash flows</strong></li>
+                <li>Streaming footprint (Disney+, Hulu, ESPN+) now a <strong>core growth engine</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-gauge-high"></i> Balance Sheet & Cash</h4>
+              <ul>
+                <li>Cash & equivalents (FY25): <strong>≈ $5.7B</strong></li>
+                <li>Total borrowings: <strong>≈ $42B</strong></li>
+                <li>Free cash flow (FY25): <strong>≈ $10.1B (~11% margin)</strong></li>
+                <li>FY26 plan: <strong>$1.50 dividend per share & ~$7B in share repurchases</strong></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div class="meta-main-layout">
+          <div class="meta-kpi-column">
+            <div class="metric-card">
+              <span>REVENUE (QoQ)</span>
+              <strong>$22.5B</strong>
+            </div>
+            <div class="metric-card">
+              <span>NET INCOME (QoQ)</span>
+              <strong>≈ $1.3B</strong>
+            </div>
+            <div class="metric-card">
+              <span>TRAILING P/E</span>
+              <strong>≈ 26×</strong>
+            </div>
+            <div class="metric-card">
+              <span>EPS (TTM)</span>
+              <strong>≈ $6.85</strong>
+            </div>
+            <div class="metric-card">
+              <span>NET MARGIN (FY25)</span>
+              <strong>≈ 13%</strong>
+            </div>
+            <div class="metric-card">
+              <span>REV GROWTH (YoY)</span>
+              <strong>+3%</strong>
+            </div>
+          </div>
+
+          <div class="meta-content-column">
+            <div class="meta-charts-column">
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Revenue Mix</h3>
+                  </div>
+                </header>
+                <div class="chart-body" style="height: 220px;">
+                  <canvas id="disneyRevenueMixChart" aria-label="Disney revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Regional Revenue Split</h3>
+                  </div>
+                </header>
+                <div class="chart-body" style="height: 220px;">
+                  <canvas id="disneyRegionalRevenueChart" aria-label="Disney regional revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-bottom-row">
+          <div class="meta-insights-column">
+            <div class="insight-box">
+              <h4><i class="fas fa-shield-halved"></i> Risk Watchlist</h4>
+              <p>Cyclical theatrical results, ongoing linear TV declines, ESPN cost inflation, and competitive pressure in global streaming markets pose medium-term margin risks. High capex for content and park expansions may constrain free cash flow during FY26 if macro conditions weaken.</p>
+            </div>
+
+            <div class="insight-box">
+              <h4><i class="fas fa-rocket"></i> Growth Drivers</h4>
+              <p>DTC profitability inflection, the launch of ESPN’s full direct-to-consumer service, strong international park growth and cruise expansion, and a deep franchise slate (Zootopia, Avatar, Moana, Toy Story, Avengers and more) support multi-year revenue expansion. Strategic park, cruise and regional investments are designed to generate long-lived, recurring cash flows.</p>
+            </div>
+          </div>
+
+          <div class="meta-analyst-column">
+            <div class="analyst-table-card">
+              <header>
+                <h3>Analyst Recommendations</h3>
+              </header>
+              <table class="analyst-table">
+                <thead>
+                  <tr>
+                    <th>Rating</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="rating-badge rating-strong-buy">Strong Buy</span></td>
+                    <td><strong>31</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-buy">Buy</span></td>
+                    <td><strong>5</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-hold">Hold</span></td>
+                    <td><strong>20</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge" style="background:rgba(249,115,22,0.15);color:#ea580c;">Underperform</span></td>
+                    <td><strong>5</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge" style="background:rgba(239,68,68,0.15);color:#dc2626;">Sell</span></td>
+                    <td><strong>1</strong></td>
                   </tr>
                 </tbody>
               </table>
@@ -1474,6 +1652,147 @@
       });
     }
 
+    // Disney Revenue Mix Chart
+    const disneyRevenueMixCtx = document.getElementById('disneyRevenueMixChart');
+    if (disneyRevenueMixCtx) {
+      const disneyRevenueMixData = [10.21, 3.98, 8.77];
+      const disneyRevenueMixTotal = disneyRevenueMixData.reduce((sum, value) => sum + value, 0);
+      new Chart(disneyRevenueMixCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Entertainment', 'Sports (ESPN)', 'Experiences'],
+          datasets: [{
+            data: disneyRevenueMixData,
+            backgroundColor: [
+              'rgba(59,130,246,0.85)',
+              'rgba(56,189,248,0.75)',
+              'rgba(244,114,182,0.75)'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 3,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 280, easing: 'easeOutQuad' },
+          responsiveAnimationDuration: 0,
+          interaction: { mode: 'nearest', intersect: true },
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'rgba(30, 41, 59, 0.88)',
+                boxWidth: 14,
+                boxHeight: 10,
+                padding: 15,
+                font: { size: 11, family: "Inter" },
+                generateLabels: (chart) => {
+                  const data = chart.data;
+                  if (!data.labels?.length) return [];
+                  const meta = chart.getDatasetMeta(0);
+                  return data.labels.map((label, index) => {
+                    const style = meta.controller.getStyle(index);
+                    return {
+                      text: label,
+                      fillStyle: style.backgroundColor,
+                      strokeStyle: style.borderColor,
+                      lineWidth: style.borderWidth,
+                      datasetIndex: 0,
+                      index
+                    };
+                  });
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.parsed;
+                  const percentage = ((value / disneyRevenueMixTotal) * 100).toFixed(1);
+                  return `${percentage}% of revenue`;
+                },
+                title: (items) => items?.[0]?.label || ''
+              }
+            }
+          },
+          cutout: '55%'
+        }
+      });
+    }
+
+    // Disney Regional Revenue Split Chart
+    const disneyRegionalCtx = document.getElementById('disneyRegionalRevenueChart');
+    if (disneyRegionalCtx) {
+      const disneyRegionalData = [52.5, 10.3, 7.0, 5.8];
+      const disneyRegionalTotal = disneyRegionalData.reduce((sum, value) => sum + value, 0);
+      new Chart(disneyRegionalCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['US & Canada', 'Europe', 'Asia-Pacific', 'Rest of World'],
+          datasets: [{
+            data: disneyRegionalData,
+            backgroundColor: [
+              'rgba(59,130,246,0.85)',
+              'rgba(56,189,248,0.75)',
+              'rgba(129,140,248,0.8)',
+              'rgba(244,114,182,0.75)'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 3,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 280, easing: 'easeOutQuad' },
+          responsiveAnimationDuration: 0,
+          interaction: { mode: 'nearest', intersect: true },
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'rgba(30, 41, 59, 0.88)',
+                boxWidth: 14,
+                boxHeight: 10,
+                padding: 15,
+                font: { size: 11, family: "Inter" },
+                generateLabels: (chart) => {
+                  const data = chart.data;
+                  if (!data.labels?.length) return [];
+                  const meta = chart.getDatasetMeta(0);
+                  return data.labels.map((label, index) => {
+                    const style = meta.controller.getStyle(index);
+                    return {
+                      text: label,
+                      fillStyle: style.backgroundColor,
+                      strokeStyle: style.borderColor,
+                      lineWidth: style.borderWidth,
+                      datasetIndex: 0,
+                      index
+                    };
+                  });
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.parsed;
+                  const percentage = ((value / disneyRegionalTotal) * 100).toFixed(1);
+                  return `${percentage}% of revenue`;
+                },
+                title: (items) => items?.[0]?.label || ''
+              }
+            }
+          },
+          cutout: '55%'
+        }
+      });
+    }
+
 
     // Company card navigation - Tab switching (using data attributes for reliability)
     (function() {
@@ -1530,6 +1849,8 @@
               switchCompany('metaDetail');
             } else if (companyId === 'nvidia') {
               switchCompany('companyDetail');
+            } else if (companyId === 'disney') {
+              switchCompany('disneyDetail');
             }
           });
         });
