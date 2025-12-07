@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Company Analysis – NVIDIA (NVDA) | Daily Dividend</title>
-  <meta name="description" content="Daily Dividend company analysis hub delivering quarterly-ready deep dives on NVIDIA with revenue, earnings, analyst sentiment, and financial ratios.">
+  <title>Company Analysis – NVIDIA (NVDA), Meta (META) | Daily Dividend</title>
+  <meta name="description" content="Daily Dividend company analysis hub delivering quarterly-ready deep dives on NVIDIA and Meta Platforms with revenue, earnings, analyst sentiment, and financial ratios.">
   
   <!-- Access Control -->
   <script type="module">
@@ -217,6 +217,29 @@
       box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
       padding: 26px;
     }
+    .company-content-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .ca-panel.company-section {
+      display: none !important;
+      width: 100%;
+      transition: opacity 0.25s ease;
+    }
+    .ca-panel.company-section.active {
+      display: block !important;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     .company-list {
       display: flex;
       flex-direction: column;
@@ -310,56 +333,206 @@
     }
     .metric-card strong {
       display: block;
-      margin-top: 10px;
-      font-size: 1.35rem;
+      margin-top: 8px;
+      font-size: 1.2rem;
       color: #1e3a8a;
     }
     .chart-card {
       background: var(--surface-soft);
-      border-radius: 22px;
-      padding: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      margin-bottom: 26px;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      margin-bottom: 20px;
     }
     .metric-chart-row {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       align-items: flex-start;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       flex-wrap: nowrap;
     }
     .chart-mix-card {
-      flex: 1 1 320px;
+      flex: 1 1 280px;
       display: flex;
       flex-direction: column;
+      max-width: 400px;
+    }
+    .meta-main-layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .meta-kpi-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .meta-kpi-column .metric-card {
+      width: 100%;
+      max-width: none;
+    }
+    .meta-content-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .meta-charts-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+    .meta-charts-column .chart-mix-card {
+      width: 100%;
+      max-width: none;
+    }
+    .meta-bottom-row {
+      display: grid;
+      grid-template-columns: 65% 35%;
+      gap: 24px;
+      align-items: stretch;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 8px;
+      padding-right: 28px;
+    }
+    .analyst-table-card h3 {
+      text-align: center;
+    }
+    .meta-insights-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      min-width: 0;
+    }
+    .meta-insights-column .insight-box {
+      width: 100%;
+    }
+    .meta-analyst-column {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .meta-analyst-column .analyst-table-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .analyst-table-card {
+      background: var(--surface-soft);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .analyst-table-card header {
+      margin-bottom: 12px;
+    }
+    .analyst-table-card h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .analyst-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+    }
+    .analyst-table thead th {
+      text-align: left;
+      padding: 12px 8px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(226, 232, 240, 0.6);
+    }
+    .analyst-table tbody td {
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+      vertical-align: middle;
+    }
+    .analyst-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .analyst-table tbody td:last-child {
+      text-align: right;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      min-width: 90px;
+      text-align: center;
+    }
+    .rating-strong-buy {
+      background: rgba(21, 128, 61, 0.15);
+      color: #15803d;
+    }
+    .rating-buy {
+      background: rgba(74, 222, 128, 0.15);
+      color: #16a34a;
+    }
+    .rating-hold {
+      background: rgba(250, 204, 21, 0.15);
+      color: #ca8a04;
+    }
+    .chart-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1 1 280px;
+      max-width: 400px;
     }
     .chart-mix-card .chart-body {
       flex: 1;
-      height: 240px;
+      height: 140px;
     }
     .chart-earnings {
       display: flex;
       flex-direction: column;
     }
     .chart-earnings .chart-body {
-      height: 260px;
+      height: 200px;
     }
     .chart-card header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 12px;
+      gap: 3px;
+      margin-bottom: 8px;
     }
     .chart-card h3 {
       margin: 0;
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       text-align: center;
+      font-weight: 600;
     }
     .chart-card p {
       margin: 0;
       color: var(--text-secondary);
-      font-size: 0.88rem;
+      font-size: 0.8rem;
       text-align: center;
     }
     .snapshot-grid {
@@ -408,10 +581,11 @@
     }
     .insight-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-      gap: 20px;
+      grid-template-columns: 65% 35%;
+      gap: 24px;
       align-items: stretch;
       margin-top: 24px;
+      padding-right: 28px;
     }
     .insight-column {
       display: flex;
@@ -439,6 +613,13 @@
       .insight-layout { grid-template-columns: 1fr; }
       .metric-chart-row { flex-direction: column; }
       .metric-grid { max-width: none; }
+      .meta-main-layout { grid-template-columns: 1fr; gap: 20px; }
+      .meta-kpi-column { order: 1; }
+      .meta-content-column { order: 2; }
+      .meta-charts-column { flex-direction: column; }
+      .meta-bottom-row { flex-direction: column; }
+      .meta-insights-column { flex: 1 1 0; }
+      .analyst-table-card { flex: 1 1 0; max-width: 100%; }
     }
     @media (max-width: 600px) {
        .ca-hero { padding: 72px 14px 42px; }
@@ -449,6 +630,13 @@
        .detail-header p { font-size: 0.82rem; line-height: 1.45; }
        .metric-chart-row { flex-direction: column; gap: 16px; align-items: stretch; }
        .metric-grid { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: none; }
+       .meta-main-layout { grid-template-columns: 1fr; gap: 16px; }
+       .meta-kpi-column { order: 1; }
+       .meta-content-column { order: 2; }
+       .meta-charts-column { flex-direction: column; gap: 16px; }
+       .meta-bottom-row { flex-direction: column; gap: 16px; }
+       .meta-insights-column { flex: 1 1 0; }
+       .analyst-table-card { flex: 1 1 0; max-width: 100%; }
        .metric-card { min-width: calc(50% - 10px); padding: 10px; border-radius: 14px; }
        .metric-card span { font-size: 0.68rem; }
        .metric-card strong { font-size: 1.15rem; }
@@ -573,17 +761,25 @@
       <aside class="ca-panel" aria-label="Company list">
         <h2 style="margin:0 0 18px;font-size:1.08rem;">Companies</h2>
         <div class="company-list">
-          <article class="company-card active" role="button" tabindex="0">
+          <article class="company-card active" role="button" tabindex="0" data-company="nvidia">
             <h3>NVIDIA Corporation</h3>
             <div class="company-meta">
               <span><i class="fas fa-location-dot"></i> Santa Clara, California</span>
               <span><i class="fas fa-calendar"></i> Latest quarter Q2 FY26</span>
             </div>
           </article>
+          <article class="company-card" role="button" tabindex="0" data-company="meta">
+            <h3>Meta Platforms, Inc.</h3>
+            <div class="company-meta">
+              <span><i class="fas fa-location-dot"></i> Menlo Park, California</span>
+              <span><i class="fas fa-calendar"></i> Latest quarter Q3 2025</span>
+            </div>
+          </article>
         </div>
       </aside>
 
-      <section class="ca-panel" id="companyDetail" aria-live="polite">
+      <div class="company-content-wrapper">
+        <section class="ca-panel company-section active" id="companyDetail" aria-live="polite">
         <div class="detail-header">
           <h2 style="margin:0;font-size:1.8rem;">NVIDIA Corporation (NVDA)</h2>
           <span class="detail-pill"><i class="fas fa-microchip"></i> AI Infrastructure</span>
@@ -699,19 +895,214 @@
               <p>Blackwell-class accelerators and hyperscaler AI buildouts keep Data Center revenue compounding at double-digit sequential rates.</p>
             </div>
           </div>
-          <article class="chart-card analyst-card" style="max-width:420px;">
-            <header>
-              <div>
+          <div class="meta-analyst-column">
+            <article class="analyst-table-card">
+              <header>
                 <h3>Analyst Recommendations</h3>
-                <p>Stacked bars show total covering analysts; each color is a rating category.</p>
-              </div>
-            </header>
-            <div class="chart-holder" style="height:260px;">
-              <canvas id="analystChart" aria-label="Analyst recommendations chart" role="img"></canvas>
+              </header>
+              <table class="analyst-table">
+                <thead>
+                  <tr>
+                    <th>Rating</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="rating-badge rating-strong-buy">Strong Buy</span></td>
+                    <td><strong>10</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-buy">Buy</span></td>
+                    <td><strong>49</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-hold">Hold</span></td>
+                    <td><strong>5</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge" style="background:rgba(239,68,68,0.15);color:#dc2626;">Sell</span></td>
+                    <td><strong>0</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <div class="data-source" style="text-align: right; font-size: 0.75rem; color: #94a3b8; margin-top: 6px; font-style: italic;">
+              Source: Yahoo Finance
             </div>
-          </article>
+          </div>
         </div>
       </section>
+
+      <!-- Meta Platforms, Inc. Section -->
+      <section class="ca-panel company-section" id="metaDetail" aria-live="polite">
+        <div class="detail-header">
+          <h2 style="margin:0;font-size:1.8rem;">Meta Platforms, Inc. (META)</h2>
+          <span class="detail-pill"><i class="fas fa-network-wired"></i> Social platforms & AI infrastructure</span>
+          <div class="detail-meta">
+            <span><i class="fas fa-dollar-sign"></i> Market cap ≈ $1.8T</span>
+          </div>
+          <p style="margin:6px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+            Meta operates one of the largest consumer internet ecosystems in the world across Facebook, Instagram, WhatsApp, and Messenger. The core business is performance advertising delivered through large-scale recommendation systems, trained on engagement and commerce data across billions of users.
+          </p>
+          <p style="margin:12px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+            Under the Meta Superintelligence Labs umbrella, the company is aggressively investing in frontier AI models, compute infrastructure, and AI-native products like Meta AI, Vibes, and AI-powered glasses. Reality Labs (VR/AR hardware and software) remains a long-duration bet on the next computing platform and is currently a drag on profitability.
+          </p>
+        </div>
+
+        <article class="chart-card" style="margin-bottom:30px;">
+          <header>
+            <div>
+              <h3>Financial Snapshot</h3>
+              <p>Quarterly ratios and income statement highlights worth tracking each earnings season.</p>
+            </div>
+          </header>
+          <div class="snapshot-grid">
+            <div class="snapshot-card">
+              <h4><i class="fas fa-percentage"></i> Profitability</h4>
+              <ul>
+                <li>Net margin Q3 2025 (GAAP, after charge): <strong>~5%</strong></li>
+                <li>Operating margin Q3 2025: <strong>40%</strong></li>
+                <li>Gross margin Q3 2025: <strong>~82%</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-chart-line"></i> Growth</h4>
+              <ul>
+                <li>Revenue YoY (Q3 2025 vs Q3 2024): <strong>+26%</strong></li>
+                <li>Average price per ad YoY: <strong>+10%</strong></li>
+                <li>Daily active people (DAP) YoY: <strong>+8% to ~3.54B</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-trophy"></i> Competitive Positioning</h4>
+              <ul>
+                <li><strong>#1 global social ecosystem</strong> with ~3.5B daily users across the Family of Apps</li>
+                <li>Core moat: <strong>massive user scale, engagement, and AI-powered ad optimization</strong></li>
+                <li>Key competitive pressures: <strong>TikTok, YouTube, Snap, and privacy / platform changes from Apple & Google</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-gauge-high"></i> Balance Sheet & Cash</h4>
+              <ul>
+                <li>Cash & marketable securities (Q3 2025): <strong>≈ $44.5B</strong></li>
+                <li>Free cash flow (Q3 2025): <strong>≈ $10.6B (~21% FCF margin)</strong></li>
+                <li>Quarterly dividend per share (Q3 2025): <strong>$0.525</strong></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div class="meta-main-layout">
+          <div class="meta-kpi-column">
+            <div class="metric-card">
+              <span>Revenue (QoQ)</span>
+              <strong>$51.2B</strong>
+            </div>
+            <div class="metric-card">
+              <span>Net Income (QoQ)</span>
+              <strong>≈ $18.6B</strong>
+              <small style="display:block;font-size:0.7rem;margin-top:4px;opacity:0.8;">GAAP: $2.7B</small>
+            </div>
+            <div class="metric-card">
+              <span>Trailing P/E</span>
+              <strong>≈ 32×</strong>
+            </div>
+            <div class="metric-card">
+              <span>EPS (TTM)</span>
+              <strong>≈ $22.6</strong>
+            </div>
+            <div class="metric-card">
+              <span>Net Margin (adj)</span>
+              <strong>~36%</strong>
+            </div>
+            <div class="metric-card">
+              <span>Rev Growth (YoY)</span>
+              <strong>+26%</strong>
+            </div>
+          </div>
+
+          <div class="meta-content-column">
+            <div class="meta-charts-column">
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Revenue Mix</h3>
+                    <p>Business line contribution in billions – Meta Platforms Q3 2025.</p>
+                  </div>
+                </header>
+                <div class="chart-body">
+                  <canvas id="metaRevenueMixChart" aria-label="Meta revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Regional Revenue Split</h3>
+                    <p>Geographic contribution in billions – Meta Platforms Q3 2025.</p>
+                  </div>
+                </header>
+                <div class="chart-body">
+                  <canvas id="metaRegionalRevenueChart" aria-label="Meta regional revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-bottom-row">
+          <div class="meta-insights-column">
+            <div class="insight-box">
+              <h4><i class="fas fa-shield-halved"></i> Risk Watchlist</h4>
+              <p>Privacy regulation (EU and US), youth-safety litigation risk, and potential structural changes to ad targeting (e.g., Less Personalized Ads requirements in the EU) remain key overhangs. Heavy AI capex and elevated operating expenses in 2025–2026 could compress margins if revenue growth slows.</p>
+            </div>
+
+            <div class="insight-box">
+              <h4><i class="fas fa-rocket"></i> Growth Drivers</h4>
+              <p>Further monetization of Reels and short-form video, improved AI ad ranking and measurement, business messaging (WhatsApp) and AI agents, as well as scaled adoption of AI glasses and future AR devices are the primary levers for sustaining double-digit top-line growth.</p>
+            </div>
+          </div>
+
+          <div class="meta-analyst-column">
+            <div class="analyst-table-card">
+              <header>
+                <h3>Analyst Recommendations</h3>
+              </header>
+              <table class="analyst-table">
+                <thead>
+                  <tr>
+                    <th>Rating</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="rating-badge rating-strong-buy">Strong Buy</span></td>
+                    <td><strong>10</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-buy">Buy</span></td>
+                    <td><strong>50</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-hold">Hold</span></td>
+                    <td><strong>7</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge" style="background:rgba(239,68,68,0.15);color:#dc2626;">Sell</span></td>
+                    <td><strong>0</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="data-source" style="text-align: right; font-size: 0.75rem; color: #94a3b8; margin-top: 6px; font-style: italic;">
+              Source: Yahoo Finance
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
     </div>
   </main>
 
@@ -905,10 +1296,10 @@
             position: 'right',
             labels: {
               color: 'rgba(30, 41, 59, 0.88)',
-              boxWidth: 16,
-              boxHeight: 12,
-              padding: 12,
-              font: { size: 12, family: "Inter" },
+              boxWidth: 14,
+              boxHeight: 10,
+              padding: 8,
+              font: { size: 11, family: "Inter" },
               generateLabels: (chart) => {
                 const data = chart.data;
                 if (!data.labels?.length) return [];
@@ -942,58 +1333,215 @@
       }
     });
 
-    const analystCtx = document.getElementById('analystChart');
-    const months = ['Aug', 'Sep', 'Oct', 'Nov'];
-    const strongBuy = [10, 10, 10, 10];
-    const buy = [47, 48, 49, 49];
-    const hold = [7, 5, 5, 5];
-    const sell = [0, 0, 0, 0];
-
-    new Chart(analystCtx, {
-      type: 'bar',
-      data: {
-        labels: months,
-        datasets: [
-          { label: 'Strong Buy', data: strongBuy, backgroundColor: '#15803d', stack: 'stack' },
-          { label: 'Buy', data: buy, backgroundColor: '#4ade80', stack: 'stack' },
-          { label: 'Hold', data: hold, backgroundColor: '#facc15', stack: 'stack' },
-          { label: 'Sell', data: sell, backgroundColor: '#ef4444', stack: 'stack' }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 240, easing: 'easeOutQuad' },
-        responsiveAnimationDuration: 0,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: 'rgba(30, 41, 59, 0.88)',
-              boxWidth: 16,
-              boxHeight: 12,
-              padding: 10,
-              font: { size: 12, family: "Inter" }
+    // Meta Platforms Revenue Mix Chart
+    const metaRevenueMixCtx = document.getElementById('metaRevenueMixChart');
+    if (metaRevenueMixCtx) {
+      const metaRevenueMixData = [50.082, 0.690, 0.470];
+      const metaRevenueMixTotal = metaRevenueMixData.reduce((sum, value) => sum + value, 0);
+      new Chart(metaRevenueMixCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Advertising', 'Messaging & Subscriptions', 'Reality Labs & Devices'],
+          datasets: [{
+            data: metaRevenueMixData,
+            backgroundColor: [
+              'rgba(59,130,246,0.85)',
+              'rgba(56,189,248,0.75)',
+              'rgba(244,114,182,0.75)'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 3,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 280, easing: 'easeOutQuad' },
+          responsiveAnimationDuration: 0,
+          interaction: { mode: 'nearest', intersect: true },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                color: 'rgba(30, 41, 59, 0.88)',
+                boxWidth: 14,
+                boxHeight: 10,
+                padding: 8,
+                font: { size: 11, family: "Inter" },
+                generateLabels: (chart) => {
+                  const data = chart.data;
+                  if (!data.labels?.length) return [];
+                  const meta = chart.getDatasetMeta(0);
+                  return data.labels.map((label, index) => {
+                    const style = meta.controller.getStyle(index);
+                    return {
+                      text: label,
+                      fillStyle: style.backgroundColor,
+                      strokeStyle: style.borderColor,
+                      lineWidth: style.borderWidth,
+                      datasetIndex: 0,
+                      index
+                    };
+                  });
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.parsed;
+                  const percentage = ((value / metaRevenueMixTotal) * 100).toFixed(1);
+                  return `${percentage}% of revenue`;
+                },
+                title: (items) => items?.[0]?.label || ''
+              }
             }
           },
-          tooltip: { callbacks: { label: (context) => `${context.dataset.label}: ${context.parsed.y}` } }
+          cutout: '55%'
+        }
+      });
+    }
+
+    // Meta Platforms Regional Revenue Chart
+    const metaRegionalRevenueCtx = document.getElementById('metaRegionalRevenueChart');
+    if (metaRegionalRevenueCtx) {
+      const metaRegionalRevenueData = [19.708, 11.566, 14.304, 5.664];
+      const metaRegionalRevenueTotal = metaRegionalRevenueData.reduce((sum, value) => sum + value, 0);
+      new Chart(metaRegionalRevenueCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['US & Canada', 'Europe', 'Asia-Pacific', 'Rest of World'],
+          datasets: [{
+            data: metaRegionalRevenueData,
+            backgroundColor: [
+              'rgba(59,130,246,0.85)',
+              'rgba(56,189,248,0.75)',
+              'rgba(129,140,248,0.8)',
+              'rgba(244,114,182,0.75)'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 3,
+            hoverOffset: 6
+          }]
         },
-        scales: {
-          x: {
-            stacked: true,
-            ticks: { color: 'rgba(71, 85, 105, 0.85)' },
-            grid: { display: false }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 280, easing: 'easeOutQuad' },
+          responsiveAnimationDuration: 0,
+          interaction: { mode: 'nearest', intersect: true },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                color: 'rgba(30, 41, 59, 0.88)',
+                boxWidth: 14,
+                boxHeight: 10,
+                padding: 8,
+                font: { size: 11, family: "Inter" },
+                generateLabels: (chart) => {
+                  const data = chart.data;
+                  if (!data.labels?.length) return [];
+                  const meta = chart.getDatasetMeta(0);
+                  return data.labels.map((label, index) => {
+                    const style = meta.controller.getStyle(index);
+                    return {
+                      text: label,
+                      fillStyle: style.backgroundColor,
+                      strokeStyle: style.borderColor,
+                      lineWidth: style.borderWidth,
+                      datasetIndex: 0,
+                      index
+                    };
+                  });
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.parsed;
+                  const percentage = ((value / metaRegionalRevenueTotal) * 100).toFixed(1);
+                  return `${percentage}% of revenue`;
+                },
+                title: (items) => items?.[0]?.label || ''
+              }
+            }
           },
-          y: {
-            stacked: true,
-            ticks: { color: 'rgba(71, 85, 105, 0.85)' },
-            grid: { color: 'rgba(203, 213, 225, 0.35)' },
-            beginAtZero: true,
-            suggestedMax: 70
-          }
+          cutout: '55%'
+        }
+      });
+    }
+
+
+    // Company card navigation - Tab switching (using data attributes for reliability)
+    (function() {
+      function switchCompany(companyId) {
+        // Hide ALL sections by removing active class (CSS !important will handle display)
+        const allSections = document.querySelectorAll('.company-section');
+        allSections.forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        // Show target section by adding active class
+        const targetSection = document.getElementById(companyId);
+        if (targetSection) {
+          targetSection.classList.add('active');
+        } else {
+          console.error('Section not found:', companyId);
         }
       }
-    });
+      
+      function initCompanyCards() {
+        const cards = document.querySelectorAll('.company-card[data-company]');
+        console.log('Found company cards:', cards.length);
+        
+        if (cards.length === 0) {
+          console.warn('No company cards with data-company attribute found');
+          return;
+        }
+        
+        // Ensure only NVIDIA is visible on load (remove active from Meta if present)
+        const allSections = document.querySelectorAll('.company-section');
+        allSections.forEach(section => {
+          if (section.id === 'companyDetail') {
+            section.classList.add('active');
+          } else {
+            section.classList.remove('active');
+          }
+        });
+        
+        // Add click handlers
+        cards.forEach(card => {
+          card.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const companyId = this.getAttribute('data-company');
+            console.log('Clicked company:', companyId);
+            
+            // Update active card
+            document.querySelectorAll('.company-card').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Switch sections based on data attribute
+            if (companyId === 'meta') {
+              switchCompany('metaDetail');
+            } else if (companyId === 'nvidia') {
+              switchCompany('companyDetail');
+            }
+          });
+        });
+      }
+      
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCompanyCards);
+      } else {
+        initCompanyCards();
+      }
+    })();
 
     // Logout functionality - Always show if we're on this page (guard ensures we're logged in)
     async function initLogout() {

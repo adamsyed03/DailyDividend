@@ -549,7 +549,7 @@
                     <!-- Earnings Table for Monday Nov 24 -->
                     <div class="earnings-day-content" id="nov24-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2025-11-24"></div>
-                    </div>
+                </div>
                     
                     <!-- Earnings Table for Tuesday Nov 25 -->
                     <div class="earnings-day-content" id="nov25-earnings">
@@ -1225,14 +1225,14 @@
           showDay(closestDay);
           activated = true;
         } else {
-          const today = new Date();
-          const fallbackName = dayNames[today.getDay()];
-          const fallback = weekDays.find(day => day.getAttribute('data-day') === fallbackName);
-          if (fallback) {
-            showDay(fallback);
-            activated = true;
-          } else if (weekDays.length) {
-            showDay(weekDays[0]);
+        const today = new Date();
+        const fallbackName = dayNames[today.getDay()];
+        const fallback = weekDays.find(day => day.getAttribute('data-day') === fallbackName);
+        if (fallback) {
+          showDay(fallback);
+          activated = true;
+        } else if (weekDays.length) {
+          showDay(weekDays[0]);
           }
         }
       }
