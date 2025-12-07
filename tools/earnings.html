@@ -461,6 +461,27 @@
                             <div class="week-day" data-day="dec7" data-date="2025-12-07">
                                 <div class="day-label">Sun, Dec 7</div>
                             </div>
+                            <div class="week-day" data-day="dec8" data-date="2025-12-08">
+                                <div class="day-label">Mon, Dec 8</div>
+                            </div>
+                            <div class="week-day" data-day="dec9" data-date="2025-12-09">
+                                <div class="day-label">Tue, Dec 9</div>
+                            </div>
+                            <div class="week-day" data-day="dec10" data-date="2025-12-10">
+                                <div class="day-label">Wed, Dec 10</div>
+                            </div>
+                            <div class="week-day" data-day="dec11" data-date="2025-12-11">
+                                <div class="day-label">Thu, Dec 11</div>
+                            </div>
+                            <div class="week-day" data-day="dec12" data-date="2025-12-12">
+                                <div class="day-label">Fri, Dec 12</div>
+                            </div>
+                            <div class="week-day" data-day="dec13" data-date="2025-12-13">
+                                <div class="day-label">Sat, Dec 13</div>
+                            </div>
+                            <div class="week-day" data-day="dec14" data-date="2025-12-14">
+                                <div class="day-label">Sun, Dec 14</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -640,9 +661,39 @@
                         <div class="earnings-table-wrapper" data-day-table="2025-12-06"></div>
                     </div>
                     
-                    <!-- Earnings Table for Sunday Dec 7 -->
-                    <div class="earnings-day-content" id="dec7-earnings">
-                        <div class="earnings-table-wrapper" data-day-table="2025-12-07"></div>
+                    <!-- Earnings Table for Monday Dec 8 -->
+                    <div class="earnings-day-content" id="dec8-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-08"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 9 -->
+                    <div class="earnings-day-content" id="dec9-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-09"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 10 -->
+                    <div class="earnings-day-content" id="dec10-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-10"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 11 -->
+                    <div class="earnings-day-content" id="dec11-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-11"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 12 -->
+                    <div class="earnings-day-content" id="dec12-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-12"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 13 -->
+                    <div class="earnings-day-content" id="dec13-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-13"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 14 -->
+                    <div class="earnings-day-content" id="dec14-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-14"></div>
                     </div>
                 </div>
             </div>
@@ -860,7 +911,37 @@
         ]
       },
       '2025-12-06': { message: '' },
-      '2025-12-07': { message: '' }
+      '2025-12-07': { message: '' },
+      '2025-12-08': {
+        rows: [
+          ['TOL', 'Toll Brothers, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$4.88', '$13.64B']
+        ]
+      },
+      '2025-12-09': {
+        rows: [
+          ['AZO', 'AutoZone, Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$32.4', '$63.7B'],
+          ['FERG', 'Ferguson Enterprises Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$2.72', '$49.87B'],
+          ['CASY', 'Casey\'s General Stores, Inc.', 'Q2 2026 Earnings Announcement', 'AMC', '$5.2', '$21.08B']
+        ]
+      },
+      '2025-12-10': {
+        rows: [
+          ['ORCL', 'Oracle Corporation', 'Q2 2026 Earnings Announcement', 'AMC', '$1.64', '$620.28B'],
+          ['ADBE', 'Adobe Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$5.4', '$146.88B'],
+          ['SNPS', 'Synopsys, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$2.88', '$88.95B']
+        ]
+      },
+      '2025-12-11': {
+        rows: [
+          ['AVGO', 'Broadcom Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$1.87', '$1.84T'],
+          ['COST', 'Costco Wholesale Corporation', 'Q1 2026 Earnings Announcement', 'AMC', '$4.28', '$396.77B'],
+          ['CIEN', 'Ciena Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '$0.77', '$28.52B'],
+          ['LULU', 'Lululemon Athletica inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$2.72', '$22.77B']
+        ]
+      },
+      '2025-12-12': { message: 'No significant events to report.' },
+      '2025-12-13': { message: '' },
+      '2025-12-14': { message: '' }
     };
 
     const NOTABLE_BLOCKS = [
@@ -940,6 +1021,26 @@
           { label: 'Wednesday, Dec 10', companies: [{ symbol: 'ADBE', name: 'Adobe' }] },
           { label: 'Thursday, Dec 11', companies: [{ symbol: 'AVGO', name: 'Broadcom' }, { symbol: 'COST', name: 'Costco' }, { symbol: 'LULU', name: 'Lululemon' }] }
         ]
+      },
+      '2025-12-13': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Monday, Dec 15', message: 'No significant earnings.' },
+          { label: 'Tuesday, Dec 16', companies: [{ symbol: 'HEI', name: 'HEICO Corporation' }] },
+          { label: 'Wednesday, Dec 17', companies: [{ symbol: 'MU', name: 'Micron Technology' }] },
+          { label: 'Thursday, Dec 18', companies: [{ symbol: 'ACN', name: 'Accenture' }, { symbol: 'NKE', name: 'Nike' }, { symbol: 'FDX', name: 'FedEx Corp' }, { symbol: 'CCL', name: 'Carnival Corporation' }] },
+          { label: 'Friday, Dec 19', message: 'No significant earnings.' }
+        ]
+      },
+      '2025-12-14': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Monday, Dec 15', message: 'No significant earnings.' },
+          { label: 'Tuesday, Dec 16', companies: [{ symbol: 'HEI', name: 'HEICO Corporation' }] },
+          { label: 'Wednesday, Dec 17', companies: [{ symbol: 'MU', name: 'Micron Technology' }] },
+          { label: 'Thursday, Dec 18', companies: [{ symbol: 'ACN', name: 'Accenture' }, { symbol: 'NKE', name: 'Nike' }, { symbol: 'FDX', name: 'FedEx Corp' }, { symbol: 'CCL', name: 'Carnival Corporation' }] },
+          { label: 'Friday, Dec 19', message: 'No significant earnings.' }
+        ]
       }
     };
 
@@ -986,7 +1087,24 @@
       'TD': 'The Toronto-Dominion Bank (TD Bank) is one of Canada\'s largest banks with significant operations in the United States. The bank provides retail banking, commercial banking, wealth management, and capital markets services. Its business model generates revenue from interest income and fees. TD benefits from strong market positions in Canada and the U.S. Northeast, diversified revenue streams, and a large customer base.',
       'BMO': 'Bank of Montreal is one of Canada\'s oldest and largest banks with operations in Canada and the United States. The bank provides personal and commercial banking, wealth management, and capital markets services. Its business model generates revenue from interest income on loans and fees from banking services. BMO benefits from strong market positions in Canada, U.S. expansion, and diversified business lines.',
       'KR': 'The Kroger Co. operates one of the largest supermarket chains in the United States. The company operates grocery stores, multi-department stores, and e-commerce platforms. Its business model relies on retail sales of food, fuel, and general merchandise. Kroger benefits from scale, private-label brands, customer loyalty programs, and investments in digital capabilities.',
-      'VSCO': 'Victoria\'s Secret & Co. operates a specialty retailer of women\'s intimate apparel, personal care, and beauty products. The company operates Victoria\'s Secret and PINK stores, as well as e-commerce platforms. Its business model relies on retail sales through stores and online channels. Victoria\'s Secret benefits from brand recognition, customer loyalty, and a focus on product innovation and marketing.'
+      'VSCO': 'Victoria\'s Secret & Co. operates a specialty retailer of women\'s intimate apparel, personal care, and beauty products. The company operates Victoria\'s Secret and PINK stores, as well as e-commerce platforms. Its business model relies on retail sales through stores and online channels. Victoria\'s Secret benefits from brand recognition, customer loyalty, and a focus on product innovation and marketing.',
+      'TOL': 'Toll Brothers is a luxury homebuilder in the U.S., catering to move-up, empty-nester, active-adult, and second-home buyers through a build-to-order model.',
+      'AZO': 'AutoZone is a leading retailer and distributor of automotive replacement parts and accessories in the Americas, serving both DIY customers and professional repair shops.',
+      'FERG': 'Ferguson Enterprises is a leading value-added distributor of plumbing and heating products to professional contractors across North America.',
+      'CASY': 'Casey\'s General Stores operates a chain of convenience stores in the Midwest and South, known for its fresh prepared food, particularly pizza, alongside fuel and general merchandise.',
+      'ORCL': 'Oracle provides integrated cloud applications and platform services, including database software and enterprise resource planning (ERP) systems, serving global businesses.',
+      'ADBE': 'Adobe is a global leader in digital media and digital experience solutions, known for creative software like Photoshop and Acrobat, as well as marketing and analytics cloud services.',
+      'SNPS': 'Synopsys is a leader in electronic design automation (EDA) software and silicon IP, enabling engineers to design and verify advanced semiconductor chips and electronic systems.',
+      'AVGO': 'Broadcom designs, develops, and supplies a broad range of semiconductor and infrastructure software solutions for data center, networking, broadband, and wireless markets.',
+      'COST': 'Costco operates membership warehouses offering a limited selection of nationally branded and private-label products at low prices, driving high sales volume and rapid inventory turnover.',
+      'CIEN': 'Ciena provides networking systems, services, and software, specializing in optical and Ethernet connectivity to support high-bandwidth communications for carriers and enterprises.',
+      'LULU': 'Lululemon is an athletic apparel retailer designing and selling premium technical athletic wear for yoga, running, and training, distributing through company-operated stores and e-commerce.',
+      'HEI': 'HEICO Corporation designs and manufactures electronic, electro-optical, and mechanical products for the aerospace, defense, and space industries.',
+      'MU': 'Micron Technology manufactures memory and storage solutions, including DRAM, NAND, and NOR flash, essential for computing, networking, and mobile devices.',
+      'ACN': 'Accenture is a global professional services company providing a wide range of services in strategy, consulting, digital, technology, and operations.',
+      'NKE': 'Nike designs, develops, markets, and sells athletic footwear, apparel, equipment, and accessories globally, leveraging a powerful brand and athlete endorsements.',
+      'FDX': 'FedEx provides customers and businesses worldwide with a broad portfolio of transportation, e-commerce, and business services.',
+      'CCL': 'Carnival Corporation is the world\'s largest leisure travel company, operating multiple cruise line brands including Carnival, Princess, and Holland America.'
     };
 
     function buildTimeBadge(time) {
@@ -1020,12 +1138,24 @@
                 <div class="notable-day-group">
                   <div class="notable-day-label">${day.label}</div>
                   <div class="notable-companies-row">
-                    ${day.companies.map(company => `
-                      <div class="notable-company-card">
-                        <span class="notable-symbol">${company.symbol}</span>
-                        <span class="notable-name">${company.name}</span>
-                      </div>
-                    `).join('')}
+                    ${day.companies.map(company => {
+                      const description = COMPANY_DESCRIPTIONS[company.symbol] || '';
+                      if (description) {
+                        return `
+                          <div class="notable-company-card company-with-tooltip" style="display: flex;">
+                            <span class="notable-symbol">${company.symbol}</span>
+                            <span class="notable-name">${company.name}</span>
+                            <span class="company-tooltip" style="width: 300px; min-width: 250px;">${description}</span>
+                          </div>
+                        `;
+                      }
+                      return `
+                        <div class="notable-company-card">
+                          <span class="notable-symbol">${company.symbol}</span>
+                          <span class="notable-name">${company.name}</span>
+                        </div>
+                      `;
+                    }).join('')}
                   </div>
                 </div>
               `;
