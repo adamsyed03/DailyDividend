@@ -236,9 +236,12 @@ main {
 
 .ct-stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
   margin-top: 14px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .ct-stat-card {
@@ -268,6 +271,8 @@ main {
   font-size: 0.8rem;
   color: #6b7280;
 }
+
+/* (Industry mix card removed) */
 
 .ct-section-card {
   margin-top: 4px;
@@ -689,6 +694,8 @@ main {
     margin: -40px auto 40px;
     padding: 0 16px;
   }
+
+  /* industry mix removed on mobile too */
 
   .ct-timeline-item {
     padding: 9px 10px 11px 12px;

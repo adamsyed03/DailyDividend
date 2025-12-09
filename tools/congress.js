@@ -16,9 +16,9 @@
  * @property {string} politicianId
  * @property {string} ticker
  * @property {string} company
- * @property {"Stock"|"Option"|"Fund"} assetType
+ * @property {"Stock"|"Option"|"Fund"|"Bond"|"RealEstate"} assetType
  * @property {"Buy"|"Sell"} transactionType
- * @property {"Direct"|"Exercise"|"Donation"} mechanism
+ * @property {"Direct"|"Exercise"|"Donation"|"Redemption"} mechanism
  * @property {string} tradeDate // ISO YYYY-MM-DD
  * @property {string} notificationDate // ISO
  * @property {string} amountBracket
@@ -36,8 +36,26 @@ const politicians = [
     chamber: "House",
     party: "D",
     stateDistrict: "CA11",
-     profileNote:
+    profileNote:
        "Member of the U.S. House of Representatives for California’s 11th congressional district, and former Speaker of the House.",
+  },
+  {
+    id: "beyer",
+    name: "Donald S. Beyer Jr.",
+    chamber: "House",
+    party: "D",
+    stateDistrict: "VA08",
+    profileNote:
+      "Member of the U.S. House of Representatives serving Virginia’s 8th congressional district, representing Northern Virginia in Congress.",
+  },
+  {
+    id: "rose",
+    name: "Hon. John W. Rose",
+    chamber: "House",
+    party: "R",
+    stateDistrict: "TN06",
+    profileNote:
+      "Member of the U.S. House of Representatives for Tennessee’s 6th congressional district.",
   },
 ];
 
@@ -228,6 +246,395 @@ const trades = [
     reportedYear: 2025,
     tradeYear: 2024,
   },
+  // --- Beyer 2025 PTR trades (including 2024 trades reported in 2025) ---
+  // Filing ID 20033325 – 2025-10 trades (municipal bonds)
+  {
+    id: "beyer-2025-10-22-ct-bond",
+    politicianId: "beyer",
+    ticker: "CT_MUNI",
+    company: "Connecticut State Special Tax 5.00% 01/01/2037",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2025-10-22",
+    notificationDate: "2025-11-02",
+    amountBracket: "$15,001 – $50,000",
+    notes:
+      "Purchase of 40,000 units of Connecticut St SPL Tax 5.00% 01/01/2037 municipal bond.",
+    filingId: "20033325",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "beyer-2025-10-31-king-bond",
+    politicianId: "beyer",
+    ticker: "KING_WA_MUNI",
+    company: "King County, Washington 4.00% 12/01/2032",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2025-10-31",
+    notificationDate: "2025-11-02",
+    amountBracket: "$15,001 – $50,000",
+    notes:
+      "Purchase of 35,000 units of King Cnty Wash 4.00% 12/01/2032 municipal bond.",
+    filingId: "20033325",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "beyer-2025-10-14-north-allegheny-redemption",
+    politicianId: "beyer",
+    ticker: "NALLEGHENY_PA_MUNI",
+    company: "North Allegheny, Pennsylvania School District 5.00% 05/01/2030",
+    assetType: "Bond",
+    transactionType: "Sell",
+    mechanism: "Redemption",
+    tradeDate: "2025-10-14",
+    notificationDate: "2025-10-22",
+    amountBracket: "$15,001 – $50,000",
+    notes:
+      "Redemption of North Allegheny PA Sch 5.00% 05/01/2030 municipal bond.",
+    filingId: "20033325",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "beyer-2025-10-23-st-john-baptist-bond",
+    politicianId: "beyer",
+    ticker: "STJOHN_LA_MUNI",
+    company: "St John the Baptist Parish Variable Rate 06/01/2037",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2025-10-23",
+    notificationDate: "2025-11-02",
+    amountBracket: "$50,001 – $100,000",
+    notes:
+      "Purchase of 55,000 units of St John Baptist Parish Var 06/01/2037 municipal bond.",
+    filingId: "20033325",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  // Filing ID 20032200 – 2025-09 municipal redemption
+  {
+    id: "beyer-2025-09-18-mass-sch-bld-redemption",
+    politicianId: "beyer",
+    ticker: "MASS_SCH_MUNI",
+    company: "Massachusetts State School Building Authority 5.00%",
+    assetType: "Bond",
+    transactionType: "Sell",
+    mechanism: "Redemption",
+    tradeDate: "2025-09-18",
+    notificationDate: "2025-10-02",
+    amountBracket: "$50,001 – $100,000",
+    notes: "Redemption of Massachusetts St Sch Bld 5.00% municipal bond.",
+    filingId: "20032200",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  // Filing ID 20030746 – 2025-07 municipal maturity
+  {
+    id: "beyer-2025-07-01-oklahoma-maturity",
+    politicianId: "beyer",
+    ticker: "OK_OKLA_MUNI",
+    company: "Oklahoma County, OK Independent 3.00% 07/01/2025",
+    assetType: "Bond",
+    transactionType: "Sell",
+    mechanism: "Redemption",
+    tradeDate: "2025-07-01",
+    notificationDate: "2025-07-27",
+    amountBracket: "$15,001 – $50,000",
+    notes:
+      "Bond reached maturity; redemption of Oklahoma Cnty OK Indep 3.00% 07/01/2025 municipal bond.",
+    filingId: "20030746",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  // Filing ID 20030262 – 2025-04 municipal purchase
+  {
+    id: "beyer-2025-04-08-uw-bond",
+    politicianId: "beyer",
+    ticker: "UW_MUNI",
+    company: "University of Washington 4.00% 12/01/2033",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2025-04-08",
+    notificationDate: "2025-05-02",
+    amountBracket: "$15,001 – $50,000",
+    notes:
+      "Purchase of 30,000 units University of Washington 4.00% maturing 12/01/2033 municipal bond.",
+    filingId: "20030262",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  // Filing ID 20027932 – 2025-02 municipal purchase
+  {
+    id: "beyer-2025-02-12-maryland-health-bond",
+    politicianId: "beyer",
+    ticker: "MD_HEALTH_MUNI",
+    company: "Maryland State Health Variable Rate 07/01/2045",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2025-02-12",
+    notificationDate: "2025-03-08",
+    amountBracket: "$50,001 – $100,000",
+    notes:
+      "Purchase of 50,000 units Maryland State Health Var 07/01/2045 municipal bond.",
+    filingId: "20027932",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  // Filing ID 20026517 – late-2024 trades reported in 2025
+  {
+    id: "beyer-2024-12-02-dallas-rapid-maturity",
+    politicianId: "beyer",
+    ticker: "DALLAS_TX_MUNI",
+    company: "Dallas, Texas Area Rapid Transit 5.00% 12/01/2025",
+    assetType: "Bond",
+    transactionType: "Sell",
+    mechanism: "Redemption",
+    tradeDate: "2024-12-02",
+    notificationDate: "2025-01-06",
+    amountBracket: "$1,001 – $15,000",
+    notes:
+      "Called security; maturity/redemption of Dallas Tex Area Rapid 5.00% 12/01/2025 bond.",
+    filingId: "20026517",
+    reportedYear: 2025,
+    tradeYear: 2024,
+  },
+  {
+    id: "beyer-2024-12-23-duke-street-sale",
+    politicianId: "beyer",
+    ticker: "DUKE_ST_LLCOI",
+    company: "Duke Street LLC – 50% interest in 2712 Duke Street, Alexandria, VA",
+    assetType: "RealEstate",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2024-12-23",
+    notificationDate: "2024-12-26",
+    amountBracket: "$5,000,001 – $25,000,000",
+    notes:
+      "Sale of 2712 Duke Street, Alexandria, Virginia (50% interest via Duke Street LLC).",
+    filingId: "20026517",
+    reportedYear: 2025,
+    tradeYear: 2024,
+  },
+  {
+    id: "beyer-2024-12-04-oklahoma-15000-bond",
+    politicianId: "beyer",
+    ticker: "OK_OKLA_MUNI",
+    company: "Oklahoma County, OK Independent 3.00% 07/01/2025",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2024-12-04",
+    notificationDate: "2025-01-06",
+    amountBracket: "$1,001 – $15,000",
+    notes:
+      "Purchase of 15,000 units Oklahoma County, OK Indep 3.00% 07/01/2025 municipal bond.",
+    filingId: "20026517",
+    reportedYear: 2025,
+    tradeYear: 2024,
+  },
+  {
+    id: "beyer-2024-12-04-oklahoma-5000-bond",
+    politicianId: "beyer",
+    ticker: "OK_OKLA_MUNI",
+    company: "Oklahoma County, OK Independent 3.00% 07/01/2025",
+    assetType: "Bond",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2024-12-04",
+    notificationDate: "2025-01-06",
+    amountBracket: "$1,001 – $15,000",
+    notes:
+      "Purchase of 5,000 units Oklahoma County, OK Indep 3.00% 07/01/2025 municipal bond.",
+    filingId: "20026517",
+    reportedYear: 2025,
+    tradeYear: 2024,
+  },
+  // --- Hon. John W. Rose (TN-06) 2025 trades ---
+  // Filing 20030611
+  {
+    id: "rose-2025-20030611-fnsxx-1",
+    politicianId: "rose",
+    ticker: "FNSXX",
+    company: "FIMM Money Market Port Fund Instl Cl M/M",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-23",
+    notificationDate: "2025-06-24",
+    amountBracket: "$15,001 – $50,000",
+    notes: "",
+    filingId: "20030611",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030611-ogvxx-1",
+    politicianId: "rose",
+    ticker: "OGVXX",
+    company: "JPMorgan U.S. Government Money Market Fund Capital Cl M/M",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-23",
+    notificationDate: "2025-06-24",
+    amountBracket: "$1,000,001 – $5,000,000",
+    notes: "",
+    filingId: "20030611",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  // Filing 20030610
+  {
+    id: "rose-2025-20030610-googl-1",
+    politicianId: "rose",
+    ticker: "GOOGL",
+    company: "Alphabet Inc. Class A",
+    assetType: "Stock",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$1,000,001 – $5,000,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-goog-1",
+    politicianId: "rose",
+    ticker: "GOOG",
+    company: "Alphabet Inc. Class C",
+    assetType: "Stock",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$250,001 – $500,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-cwgix-1",
+    politicianId: "rose",
+    ticker: "CWGIX",
+    company: "American Funds Capital World Growth & Income Fund (Class A)",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-07-04",
+    amountBracket: "$250,001 – $500,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-aepgx-1",
+    politicianId: "rose",
+    ticker: "AEPGX",
+    company: "American Funds EuroPacific Fund (Class A)",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$250,001 – $500,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-agthx-1",
+    politicianId: "rose",
+    ticker: "AGTHX",
+    company: "American Funds Growth Fund of America (Class A)",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$500,001 – $1,000,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-aivsx-1",
+    politicianId: "rose",
+    ticker: "AIVSX",
+    company: "American Funds Investment Co. of America (Class A)",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$250,001 – $500,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-smcwx-1",
+    politicianId: "rose",
+    ticker: "SMCWX",
+    company: "American Funds SmallCap World Fund (Class A)",
+    assetType: "Fund",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$500,001 – $1,000,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-ogvxx-2",
+    politicianId: "rose",
+    ticker: "OGVXX",
+    company: "JPMorgan U.S. Government Money Market Fund Capital Cl M/M",
+    assetType: "Fund",
+    transactionType: "Buy",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$1,000,001 – $5,000,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
+  {
+    id: "rose-2025-20030610-msft-1",
+    politicianId: "rose",
+    ticker: "MSFT",
+    company: "Microsoft Corporation",
+    assetType: "Stock",
+    transactionType: "Sell",
+    mechanism: "Direct",
+    tradeDate: "2025-06-03",
+    notificationDate: "2025-06-04",
+    amountBracket: "$250,001 – $500,000",
+    notes: "",
+    filingId: "20030610",
+    reportedYear: 2025,
+    tradeYear: 2025,
+  },
 ];
 
 // Basic 2-sentence business model descriptions per ticker
@@ -248,6 +655,48 @@ const companyDescriptions = {
     "Tempus AI builds a data and analytics platform for precision medicine, aggregating clinical and molecular data to help physicians personalize cancer and other complex treatments. It partners with healthcare providers and biopharma companies to support diagnostics, drug discovery, and clinical decision support tools.",
   VST:
     "Vistra Corp. is an integrated power company that owns and operates a diversified fleet of generation assets, including natural gas, nuclear, renewable, and battery storage resources. It supplies electricity and related services to residential, commercial, and industrial customers across U.S. markets with a focus on reliability and risk‑managed pricing.",
+  NVDA:
+    "NVIDIA designs GPUs and accelerated computing platforms used in gaming, data centers, and AI workloads. Its chips and CUDA software stack are key infrastructure for modern machine learning and high‑performance computing.",
+  PANW:
+    "Palo Alto Networks provides next‑generation firewalls, cloud security, and endpoint protection to enterprises and governments. It generates recurring revenue from subscription security services that protect networks and applications.",
+  CT_MUNI:
+    "Connecticut State Special Tax 5.00% 2037 is a municipal bond backed by pledged state tax revenues, typically used to finance public projects. Investors receive tax‑advantaged interest payments tied to Connecticut’s credit quality.",
+  KING_WA_MUNI:
+    "King County, Washington 4.00% 2032 is a municipal bond issued by King County to fund local projects and infrastructure. The bond’s payments depend on the county’s tax base and fiscal health.",
+  NALLEGHENY_PA_MUNI:
+    "North Allegheny, Pennsylvania School District 5.00% 2030 is a school district municipal bond used to finance education facilities. Debt service is funded from local property taxes and school revenues.",
+  STJOHN_LA_MUNI:
+    "St. John the Baptist Parish Variable Rate 2037 is a Louisiana municipal revenue bond with variable interest, typically tied to specific parish projects. Investors bear both credit and interest‑rate risk in exchange for tax‑favored income.",
+  MASS_SCH_MUNI:
+    "Massachusetts School Building Authority 5.00% is a municipal bond financing school construction and renovation across the state. Payments are supported by dedicated state revenues and appropriations.",
+  OK_OKLA_MUNI:
+    "Oklahoma County Independent School District 3.00% 2025 is a local municipal bond funding school operations and capital projects. It is backed by the tax base of the Oklahoma County school district.",
+  UW_MUNI:
+    "University of Washington 4.00% 2033 is a higher‑education revenue bond backed by the university system. Proceeds support campus facilities and infrastructure, with payments tied to tuition and other revenues.",
+  MD_HEALTH_MUNI:
+    "Maryland State Health Variable Rate 2045 is a healthcare‑related municipal bond used to finance medical facilities and health projects. It offers tax‑advantaged income backed by healthcare system and state‑related revenues.",
+  DALLAS_TX_MUNI:
+    "Dallas, Texas Area Rapid Transit 5.00% 2025 is a transit revenue bond supporting the Dallas public transportation system. Debt service comes from dedicated transit revenues and sales taxes.",
+  DUKE_ST_LLCOI:
+    "Duke Street LLC – 2712 Duke Street is an interest in a commercial real‑estate property in Alexandria, Virginia. Returns depend on property income and sale proceeds rather than traditional bond coupons.",
+  FNSXX:
+    "FNSXX is a Fidelity institutional money‑market fund that invests in short‑term, high‑quality instruments. It is designed to preserve capital and provide daily liquidity with modest interest income.",
+  OGVXX:
+    "OGVXX is a JPMorgan U.S. government money‑market fund that holds Treasury and agency securities. It functions as a cash‑equivalent vehicle focused on safety and liquidity rather than growth.",
+  GOOG:
+    "Alphabet Inc. Class C shares represent non‑voting equity in the parent company of Google, YouTube, and other services. They track the same economic exposure as Class A shares but without shareholder voting rights.",
+  CWGIX:
+    "American Funds Capital World Growth & Income (Class A) is a global mutual fund investing in dividend‑paying stocks across developed and emerging markets. It targets a mix of growth and current income.",
+  AEPGX:
+    "American Funds EuroPacific Growth (Class A) is an international equity mutual fund focused on companies outside the U.S., especially in Europe and the Pacific region. It aims for long‑term capital appreciation.",
+  AGTHX:
+    "American Funds Growth Fund of America (Class A) is a large‑cap growth mutual fund that invests primarily in U.S. and global equities with above‑average earnings prospects.",
+  AIVSX:
+    "American Funds Investment Company of America (Class A) is a diversified equity mutual fund emphasizing established, dividend‑paying companies with long operating histories.",
+  SMCWX:
+    "American Funds SmallCap World (Class A) is a global small‑cap mutual fund investing in smaller companies across both developed and emerging markets.",
+  MSFT:
+    "Microsoft develops and sells software, cloud infrastructure (Azure), productivity tools (Office, Teams), and gaming content (Xbox). It is one of the world’s largest technology platforms with recurring cloud and subscription revenue.",
   "N/A":
     "This entry represents an investment fund whose underlying holdings span multiple securities and sectors rather than a single operating company.",
 };
@@ -324,6 +773,8 @@ function computeStats(tradesForStats) {
   let sells = 0;
   let lowSum = 0;
   let highSum = 0;
+  /** @type {Record<string, {count:number,lowSum:number,highSum:number}>} */
+  const byAssetType = {};
 
   tradesForStats.forEach((t) => {
     if (t.transactionType === "Buy") buys += 1;
@@ -333,6 +784,14 @@ function computeStats(tradesForStats) {
     if (range) {
       lowSum += range.low;
       highSum += range.high;
+
+      const key = t.assetType || "Other";
+      if (!byAssetType[key]) {
+        byAssetType[key] = { count: 0, lowSum: 0, highSum: 0 };
+      }
+      byAssetType[key].count += 1;
+      byAssetType[key].lowSum += range.low;
+      byAssetType[key].highSum += range.high;
     }
   });
 
@@ -342,6 +801,7 @@ function computeStats(tradesForStats) {
     sells,
     lowSum,
     highSum,
+    byAssetType,
   };
 }
 
@@ -428,6 +888,7 @@ function renderProfile(politician, polTrades) {
   if (!profileEl) return;
 
   const stats = computeStats(polTrades);
+  const volumeLabel = formatDollarRange(stats.lowSum, stats.highSum);
 
   profileEl.innerHTML = `
     <div class="ct-profile-header ct-panel ct-section-card">
@@ -444,17 +905,14 @@ function renderProfile(politician, polTrades) {
         <div class="ct-stat-card">
           <div class="ct-stat-label">Total trades</div>
           <div class="ct-stat-value">${stats.total}</div>
-          <div class="ct-stat-sub">Reported in 2025 PTR filings</div>
         </div>
         <div class="ct-stat-card">
           <div class="ct-stat-label">Buys vs. sells</div>
           <div class="ct-stat-value">${stats.buys} buys · ${stats.sells} sells</div>
-          <div class="ct-stat-sub">Based on disclosed transaction type</div>
         </div>
         <div class="ct-stat-card">
           <div class="ct-stat-label">Disclosed volume range</div>
-          <div class="ct-stat-value">${formatDollarRange(stats.lowSum, stats.highSum)}</div>
-          <div class="ct-stat-sub">Approximate dollar range across all trades</div>
+          <div class="ct-stat-value">${volumeLabel}</div>
         </div>
       </div>
     </div>
