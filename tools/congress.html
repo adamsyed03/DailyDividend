@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Congress Trade Monitor | Daily Dividend</title>
+
+  <!-- Access Control -->
+  <script type="module">
+    import { isRemembered } from '../auth.js';
+    if (!isRemembered()) {
+      window.location.href = '/login.html';
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+
+  <link rel="stylesheet" href="congress.css">
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="../index.html"><img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" width="118" height="40" style="border-radius:12px;"></a>
+      </div>
+      <div class="nav-links" role="menubar">
+        <a href="../index.html#features">Why Us</a>
+        <a href="../index.html#how-it-works">How it Works</a>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#test">Test</a>
+        <a href="../index.html#terms">Terms</a>
+        <a href="../index.html#contact">Contact</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <div class="nav-dropdown" id="toolsDropdown">
+          <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" id="toolsDropdownBtn">
+            Tools <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+            <a href="earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
+            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
+            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+            <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-microchip"></i> Company Analysis</a>
+            <a href="congress.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
+          </div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html#features" onclick="closeMobileMenu()">Why Us</a>
+        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+        <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
+        <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
+        <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <details class="mobile-menu-dropdown">
+          <summary>Tools</summary>
+          <div class="mobile-menu-dropdown-content">
+            <a href="earnings.html" onclick="closeMobileMenu()"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
+            <a href="macro-calendar.html" onclick="closeMobileMenu()"><i class="fas fa-chart-line"></i> Macro Calendar</a>
+            <a href="hedge-fund.html" onclick="closeMobileMenu()"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+            <a href="company-analysis.html" onclick="closeMobileMenu()"><i class="fas fa-microchip"></i> Company Analysis</a>
+            <a href="congress.html" onclick="closeMobileMenu()"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="ct-hero" aria-labelledby="ct-hero-heading">
+      <h1 id="ct-hero-heading">Congress Trade Monitor</h1>
+      <p>Browse and dive into individual members’ stock, option, and fund trades reported in official filings.</p>
+    </section>
+
+    <!-- Landing view: grid of members -->
+    <section id="ct-landing" class="ct-landing" aria-label="Congress members">
+      <div class="ct-panel ct-landing-inner">
+        <div class="ct-landing-header">
+          <div>
+            <h2 class="ct-section-title">Select a member of Congress</h2>
+            <p class="ct-landing-subtitle">Start with Nancy Pelosi; more members will be added over time.</p>
+          </div>
+        </div>
+        <div id="ct-landing-list" class="ct-landing-grid">
+          <!-- Member cards rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Detail view: single member profile -->
+    <div id="ct-detail" class="ct-wrapper" style="display:none;">
+      <section class="ct-main" aria-label="Member trade detail">
+        <section id="ct-profile" class="ct-section-card"></section>
+
+        <section class="ct-panel ct-section-card" aria-labelledby="ct-timeline-heading">
+          <div class="ct-section-header">
+            <h2 id="ct-timeline-heading" class="ct-section-title">Trade Timeline</h2>
+          </div>
+          <div id="ct-timeline"></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const mobileMenu = document.getElementById('mobileMenu');
+    function toggleMobileMenu() {
+      if (mobileMenu) mobileMenu.classList.toggle('active');
+    }
+    function closeMobileMenu() {
+      if (mobileMenu) mobileMenu.classList.remove('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (
+        mobileMenu &&
+        mobileMenu.classList.contains('active') &&
+        !mobileMenu.contains(e.target) &&
+        !mobileMenuBtn.contains(e.target)
+      ) {
+        closeMobileMenu();
+      }
+    });
+
+    // Tools dropdown functionality
+    function initToolsDropdown() {
+      const toolsDropdown = document.getElementById('toolsDropdown');
+      const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+      const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+      if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+        let hideTimeout;
+        const showMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.add('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+        };
+        const hideMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.remove('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+        };
+
+        toolsDropdown.addEventListener('mouseenter', showMenu);
+        toolsDropdown.addEventListener('mouseleave', () => {
+          hideTimeout = setTimeout(hideMenu, 200);
+        });
+
+        toolsDropdownBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          if (isOpen) hideMenu();
+          else showMenu();
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!toolsDropdown.contains(event.target)) hideMenu();
+        });
+
+        toolsDropdownBtn.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            const isOpen = toolsDropdownMenu.classList.contains('active');
+            if (isOpen) hideMenu();
+            else showMenu();
+          }
+        });
+      }
+    }
+
+    // Initialize dropdown + logout
+    function initNavbar() {
+      initToolsDropdown();
+      initLogout();
+    }
+
+    // Logout functionality (mirrors other tools pages)
+    async function initLogout() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (!logoutBtn) return;
+
+      logoutBtn.style.display = 'inline-block';
+      logoutBtn.style.visibility = 'visible';
+      logoutBtn.style.opacity = '1';
+
+      if (!logoutBtn.dataset.listenerAttached) {
+        const { logout } = await import('../auth.js');
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm('Are you sure you want to logout?')) {
+            logout();
+            window.location.href = '/login.html';
+          }
+        });
+        logoutBtn.dataset.listenerAttached = 'true';
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initNavbar);
+    } else {
+      initNavbar();
+    }
+  </script>
+  <script src="congress.js"></script>
+</body>
+</html>
+
+
