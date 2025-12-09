@@ -675,6 +675,7 @@ function renderLanding() {
   politicians.forEach((p) => {
     const tradesForPol = getTradesForPolitician(p.id);
     const stats = computeStats(tradesForPol);
+    const volumeLabel = formatDollarRange(stats.lowSum, stats.highSum).replace(/M/g, "m");
 
     const card = document.createElement("button");
     card.type = "button";
@@ -686,11 +687,10 @@ function renderLanding() {
           <div class="ct-landing-name">${p.name}</div>
           <div class="ct-landing-meta">${buildPelosiBadge(p)}</div>
         </div>
-        <div class="ct-landing-pill">${stats.total} reported trades</div>
       </div>
       <div class="ct-landing-footer">
-        <span>Disclosed volume: ${formatDollarRange(stats.lowSum, stats.highSum)}</span>
-        <span class="ct-landing-cta">View profile <span aria-hidden="true">→</span></span>
+        <span>Volume: ${volumeLabel}</span>
+        <span class="ct-landing-cta">${stats.total} reported trades</span>
       </div>
     `;
 

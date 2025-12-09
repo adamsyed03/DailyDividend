@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Company Analysis – NVIDIA (NVDA), Meta (META) | Daily Dividend</title>
-  <meta name="description" content="Daily Dividend company analysis hub delivering quarterly-ready deep dives on NVIDIA and Meta Platforms with revenue, earnings, analyst sentiment, and financial ratios.">
+  <title>Company Analysis - Daily Dividend</title>
+  <meta name="description" content="Daily Dividend company analysis hub with deep dives on NVIDIA, Meta, Disney, Amazon, Netflix, and Alphabet including revenue mix, regional split, KPIs, and analyst sentiment.">
   
   <!-- Access Control -->
   <script type="module">
@@ -69,6 +69,7 @@
       color: var(--text-primary);
       min-height: 100vh;
       padding: 0 12px;
+      overflow-x: hidden;
     }
     body * {
       font-family: inherit;
@@ -624,8 +625,10 @@
     @media (max-width: 600px) {
        .ca-hero { padding: 72px 14px 42px; }
        .ca-hero h1 { font-size: 1.7rem; }
-       .ca-wrapper { margin: -32px auto 60px; padding: 0 14px; }
+       .ca-wrapper { margin: -32px auto 52px; padding: 0 14px; grid-template-columns: 1fr; }
        .ca-panel { padding: 18px; border-radius: 18px; }
+       .company-list { gap: 14px; }
+       .company-card { padding: 14px; border-radius: 16px; }
        .detail-header { gap: 10px; }
        .detail-header p { font-size: 0.82rem; line-height: 1.45; }
        .metric-chart-row { flex-direction: column; gap: 16px; align-items: stretch; }
@@ -2299,6 +2302,7 @@
       initLogout();
     }
   </script>
+  <script src="tools-nav.js"></script>
 </body>
 </html>
-
+ 
