@@ -1,10 +1,25 @@
 /* Congress Trade Monitor - layout & styling */
 
+:root {
+  --ct-bg-body: #f3f4f6;
+  --ct-surface: #ffffff;
+  --ct-surface-elevated: #ffffff;
+  --ct-surface-soft: #f9fafb;
+  --ct-surface-card: #f9fafb;
+  --ct-text-primary: #111827;
+  --ct-text-secondary: #4b5563;
+  --ct-text-muted: #6b7280;
+  --ct-card-title: #111827;
+  --ct-accent: #2563eb;
+  --ct-accent-soft: #eff6ff;
+  --ct-accent-strong: #1d4ed8;
+}
+
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f3f4f6;
-  color: #111827;
+  background: var(--ct-bg-body);
+  color: var(--ct-text-primary);
 }
 
 /* Top navigation – mirror tools/company-analysis layout */
@@ -162,8 +177,9 @@ main {
 
 .ct-hero h1 {
   margin: 0 0 10px;
-  font-size: clamp(2.1rem, 4vw, 3rem);
+  font-size: clamp(2.3rem, 4.2vw, 3.4rem);
   letter-spacing: -0.02em;
+  font-weight: 600;
 }
 
 .ct-hero p {
@@ -182,11 +198,27 @@ main {
 }
 
 .ct-panel {
-  background: #ffffff;
-  border-radius: 22px;
-  border: 1px solid rgba(229, 231, 235, 0.75);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 40%, #f3f4f6 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  box-shadow:
+    0 22px 45px rgba(15, 23, 42, 0.10),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
   padding: 22px 22px 24px;
+}
+
+.ct-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.04), transparent 55%);
+  mix-blend-mode: lighten;
+  opacity: 0.9;
 }
 
 .ct-main {
@@ -230,7 +262,7 @@ main {
 .ct-profile-note {
   margin: 4px 0 0;
   font-size: 0.92rem;
-  color: #374151;
+  color: var(--ct-text-secondary);
   line-height: 1.7;
 }
 
@@ -314,7 +346,7 @@ main {
 .ct-landing-subtitle {
   margin: 4px 0 0;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--ct-text-secondary);
 }
 
 .ct-landing-grid {
@@ -324,15 +356,29 @@ main {
 }
 
 .ct-landing-card {
+  position: relative;
+  overflow: hidden;
   border-radius: 18px;
-  border: 1px solid rgba(229, 231, 235, 0.95);
-  background: #f9fafb;
+  border: 1px solid rgba(209, 213, 219, 0.9);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 40%, #f3f4f6 100%);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.ct-landing-card::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 0 0, rgba(37, 99, 235, 0.12), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.04), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
 }
 
 .ct-landing-card-header {
@@ -345,12 +391,13 @@ main {
 .ct-landing-name {
   font-weight: 600;
   font-size: 1rem;
-  color: #111827;
+  letter-spacing: -0.01em;
+  color: var(--ct-text-primary);
 }
 
 .ct-landing-meta {
   font-size: 0.82rem;
-  color: #6b7280;
+  color: var(--ct-text-secondary);
 }
 
 .ct-landing-pill {
@@ -368,7 +415,7 @@ main {
   justify-content: space-between;
   align-items: center;
   font-size: 0.8rem;
-  color: #4b5563;
+  color: var(--ct-text-secondary);
 }
 
 .ct-landing-cta {
@@ -380,10 +427,14 @@ main {
 }
 
 .ct-landing-card:hover {
-  background: #ffffff;
-  border-color: #2563eb;
-  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 30%, #e5f0ff 100%);
+  border-color: rgba(37, 99, 235, 0.85);
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.20);
+  transform: translateY(-3px);
+}
+
+.ct-landing-card:hover::before {
+  opacity: 1;
 }
 
 /* Timeline */
