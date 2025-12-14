@@ -147,9 +147,10 @@
           toolsDropdownBtn.setAttribute('aria-expanded', 'false');
         };
 
+        // Hover functionality with relaxed hide delay
         toolsDropdown.addEventListener('mouseenter', showMenu);
         toolsDropdown.addEventListener('mouseleave', () => {
-          hideTimeout = setTimeout(hideMenu, 200);
+          hideTimeout = setTimeout(hideMenu, 700);
         });
 
         toolsDropdownBtn.addEventListener('click', (event) => {

@@ -547,16 +547,17 @@
         toolsDropdownBtn.setAttribute('aria-expanded', 'false');
       };
 
+      // Hover functionality with slower hide
       toolsDropdown.addEventListener('mouseenter', showToolsDropdown);
       toolsDropdown.addEventListener('mouseleave', () => {
-        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 220);
+        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 700);
       });
 
       toolsDropdownMenu.addEventListener('mouseenter', () => {
         clearTimeout(toolsDropdownHideTimeout);
       });
       toolsDropdownMenu.addEventListener('mouseleave', () => {
-        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 220);
+        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 700);
       });
 
       toolsDropdownBtn.addEventListener('click', (e) => {

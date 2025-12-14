@@ -1749,8 +1749,9 @@
         toolsDropdownMenu.classList.remove('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'false');
       };
+      // Hover functionality with relaxed hide delay
       toolsDropdown.addEventListener('mouseenter', showMenu);
-      toolsDropdown.addEventListener('mouseleave', () => hideTimeout = setTimeout(hideMenu, 200));
+      toolsDropdown.addEventListener('mouseleave', () => hideTimeout = setTimeout(hideMenu, 700));
       toolsDropdownBtn.addEventListener('click', (event) => {
         event.stopPropagation();
         const isOpen = toolsDropdownMenu.classList.contains('active');

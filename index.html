@@ -545,7 +545,12 @@
                 <div class="hero-cta">
           <form class="signup-form" role="form" aria-label="Sign up for Daily Dividend" onsubmit="return false;">
                         <div class="input-group">
-              <input type="tel" id="countryCode" name="countryCode" placeholder="+44" maxlength="4" value="+44" aria-label="Country code" required>
+              <select id="countryCode" name="countryCode" aria-label="Country code" required>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="other">Other – enter full number below</option>
+              </select>
               <input type="tel" id="phoneInput" name="phoneNumber" placeholder="Phone number" maxlength="15" aria-label="Phone number" required>
                         </div>
             <button type="button" class="cta-button" onclick="openPhoneModal()" aria-label="Get started with Daily Dividend">
@@ -716,7 +721,12 @@
                 <p>Join thousands of users who are already staying ahead with Daily Dividend</p>
                 <div class="cta-form">
                     <div class="input-group">
-                        <input type="tel" id="countryCodeBottom" placeholder="+44" maxlength="4" value="+44">
+                        <select id="countryCodeBottom" aria-label="Country code">
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="other">Other – enter full number below</option>
+                        </select>
                         <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
                     </div>
           <button class="cta-button" onclick="openPhoneModal()"><i class="fab fa-whatsapp"></i> Start Your Journey</button>
@@ -892,6 +902,79 @@
     // 1) Replace with your deployed /exec URL
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec';
 
+    // Country code list (abbreviated visual labels, full list of prefixes)
+    const COUNTRY_CODES = [
+      { value: '+44', label: '🇬🇧 +44' },
+      { value: '+91', label: '🇮🇳 +91' },
+      { value: '+1',  label: '🇺🇸 +1' },
+      { value: '+61', label: '🇦🇺 +61' },
+      { value: '+65', label: '🇸🇬 +65' },
+      { value: '+971', label: '🇦🇪 +971' },
+      { value: '+49', label: '🇩🇪 +49' },
+      { value: '+33', label: '🇫🇷 +33' },
+      { value: '+39', label: '🇮🇹 +39' },
+      { value: '+34', label: '🇪🇸 +34' },
+      { value: '+81', label: '🇯🇵 +81' },
+      { value: '+82', label: '🇰🇷 +82' },
+      { value: '+86', label: '🇨🇳 +86' },
+      { value: '+852', label: '🇭🇰 +852' },
+      { value: '+886', label: '🇹🇼 +886' },
+      { value: '+41', label: '🇨🇭 +41' },
+      { value: '+46', label: '🇸🇪 +46' },
+      { value: '+47', label: '🇳🇴 +47' },
+      { value: '+45', label: '🇩🇰 +45' },
+      { value: '+31', label: '🇳🇱 +31' },
+      { value: '+32', label: '🇧🇪 +32' },
+      { value: '+352', label: '🇱🇺 +352' },
+      { value: '+353', label: '🇮🇪 +353' },
+      { value: '+61', label: '🇦🇺 +61' },
+      { value: '+64', label: '🇳🇿 +64' },
+      { value: '+55', label: '🇧🇷 +55' },
+      { value: '+52', label: '🇲🇽 +52' },
+      { value: '+27', label: '🇿🇦 +27' },
+      { value: '+234', label: '🇳🇬 +234' },
+      { value: '+254', label: '🇰🇪 +254' },
+      { value: '+92', label: '🇵🇰 +92' },
+      { value: '+880', label: '🇧🇩 +880' },
+      { value: '+94', label: '🇱🇰 +94' },
+      { value: '+60', label: '🇲🇾 +60' },
+      { value: '+62', label: '🇮🇩 +62' },
+      { value: '+63', label: '🇵🇭 +63' },
+      { value: '+66', label: '🇹🇭 +66' },
+      { value: '+90', label: '🇹🇷 +90' },
+      { value: '+7', label: '🇷🇺 +7' },
+      { value: '+420', label: '🇨🇿 +420' },
+      { value: '+48', label: '🇵🇱 +48' },
+      { value: '+30', label: '🇬🇷 +30' },
+      { value: '+52', label: '🇲🇽 +52' },
+      { value: '+54', label: '🇦🇷 +54' },
+      { value: '+56', label: '🇨🇱 +56' },
+      { value: '+57', label: '🇨🇴 +57' },
+      { value: '+51', label: '🇵🇪 +51' },
+      { value: '+58', label: '🇻🇪 +58' },
+      { value: '+20', label: '🇪🇬 +20' },
+      { value: '+212', label: '🇲🇦 +212' },
+      { value: '+972', label: '🇮🇱 +972' },
+      { value: 'other', label: 'Other – enter full number below' }
+    ];
+
+    function populateCountryCodeSelects() {
+      const selects = [
+        document.getElementById('countryCode'),
+        document.getElementById('countryCodeBottom')
+      ].filter(Boolean);
+
+      selects.forEach(select => {
+        select.innerHTML = '';
+        COUNTRY_CODES.forEach(({ value, label }) => {
+          const opt = document.createElement('option');
+          opt.value = value;
+          opt.textContent = label;
+          select.appendChild(opt);
+        });
+      });
+    }
+
     // Keep forms always pointing to correct URL
     function wireForms() {
       const f1 = document.getElementById('phoneSignupForm');
@@ -902,10 +985,13 @@
 
     // Open/Close modals + populate phone
     function openPhoneModal() {
-      const cc = (document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '').trim();
+      const rawCc = (document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '').trim();
       const pn = (document.getElementById('phoneInput')?.value || document.getElementById('phoneInputBottom')?.value || '').trim();
+
+      if (!pn) { alert('Please enter a valid phone number'); return; }
+
+      const cc = (!rawCc || rawCc === 'other') ? '' : rawCc;
       const full = (cc + pn).replace(/\s+/g, '');
-      if (!full || full === '+44') { alert('Please enter a valid phone number'); return; }
       document.getElementById('signupPhoneDisplay').value = full;
       document.getElementById('phoneSignupModal').style.display = 'flex';
     }
@@ -1001,30 +1087,41 @@
     const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
 
     if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-      // Hover functionality
-      toolsDropdown.addEventListener('mouseenter', () => {
+      let toolsHideTimeout;
+
+      const showToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
         toolsDropdownMenu.classList.add('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-      });
+      };
 
-      toolsDropdown.addEventListener('mouseleave', () => {
+      const hideToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
         toolsDropdownMenu.classList.remove('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      };
+
+      // Hover functionality (with relaxed hide delay)
+      toolsDropdown.addEventListener('mouseenter', showToolsMenu);
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsHideTimeout = setTimeout(hideToolsMenu, 700);
       });
 
       // Click/touch functionality
       toolsDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = toolsDropdownMenu.classList.contains('active');
-        toolsDropdownMenu.classList.toggle('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+        if (isOpen) {
+          hideToolsMenu();
+        } else {
+          showToolsMenu();
+        }
       });
 
       // Close dropdown when clicking outside
       document.addEventListener('click', (e) => {
         if (!toolsDropdown.contains(e.target)) {
-          toolsDropdownMenu.classList.remove('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+          hideToolsMenu();
         }
       });
 
@@ -1033,14 +1130,18 @@
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           const isOpen = toolsDropdownMenu.classList.contains('active');
-          toolsDropdownMenu.classList.toggle('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+          if (isOpen) {
+            hideToolsMenu();
+          } else {
+            showToolsMenu();
+          }
         }
       });
     }
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
+      populateCountryCodeSelects();
       wireForms();
       enhanceSubmission('phoneSignupForm', '.phone-signup-submit-btn');
       enhanceSubmission('waitlistForm', '.waitlist-submit-btn');

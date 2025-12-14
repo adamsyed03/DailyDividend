@@ -396,7 +396,9 @@
                             <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem">
                                 <i class="fas fa-microchip"></i> Company Analysis
                             </a>
-                            <!-- Add more tools here in the future -->
+                            <a href="tools/congress.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-landmark"></i> Congress Trade Monitor
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -424,6 +426,9 @@
                              </a>
                              <a href="company-analysis.html" onclick="closeMobileMenu()">
                                  <i class="fas fa-microchip"></i> Company Analysis
+                             </a>
+                             <a href="tools/congress.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-landmark"></i> Congress Trade Monitor
                              </a>
                          </div>
                      </details>
@@ -717,30 +722,41 @@
     const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
 
     if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-      // Hover functionality
-      toolsDropdown.addEventListener('mouseenter', () => {
+      let toolsHideTimeout;
+
+      const showToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
         toolsDropdownMenu.classList.add('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-      });
+      };
 
-      toolsDropdown.addEventListener('mouseleave', () => {
+      const hideToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
         toolsDropdownMenu.classList.remove('active');
         toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      };
+
+      // Hover functionality (with relaxed hide delay)
+      toolsDropdown.addEventListener('mouseenter', showToolsMenu);
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsHideTimeout = setTimeout(hideToolsMenu, 700);
       });
 
       // Click/touch functionality
       toolsDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = toolsDropdownMenu.classList.contains('active');
-        toolsDropdownMenu.classList.toggle('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+        if (isOpen) {
+          hideToolsMenu();
+        } else {
+          showToolsMenu();
+        }
       });
 
       // Close dropdown when clicking outside
       document.addEventListener('click', (e) => {
         if (!toolsDropdown.contains(e.target)) {
-          toolsDropdownMenu.classList.remove('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+          hideToolsMenu();
         }
       });
 
@@ -749,8 +765,11 @@
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           const isOpen = toolsDropdownMenu.classList.contains('active');
-          toolsDropdownMenu.classList.toggle('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', !isOpen);
+          if (isOpen) {
+            hideToolsMenu();
+          } else {
+            showToolsMenu();
+          }
         }
       });
     }
@@ -875,6 +894,51 @@
           { time: '-', country: '🇩🇪', event: 'German GDP (YoY)', actual: '-', forecast: '0.0%', previous: '0.0%' },
           { time: '-', country: '🇺🇸', event: 'US PPI (MoM)', actual: '-', forecast: '0.3%', previous: '-0.1%', previousClass: 'negative' },
           { time: '-', country: '🇺🇸', event: 'US Consumer Confidence', actual: '-', forecast: '93.4', previous: '94.6', previousClass: 'positive' }
+        ]
+      },
+      '2025-12-15': {
+        rows: [
+          { time: '-', country: '🇨🇳', event: 'China Unemployment Rate', actual: '-', forecast: '5.2%', previous: '5.1%' },
+          { time: '-', country: '🇮🇳', event: 'India Inflation Rate YoY', actual: '-', forecast: '-0.5%', previous: '-1.21%' },
+          { time: '-', country: '🇪🇺', event: 'EU Industrial Production', actual: '-', forecast: '1.6%', previous: '1.2%' },
+          { time: '-', country: '🇨🇦', event: 'Canada Inflation Rate', actual: '-', forecast: '2.3%', previous: '2.2%' }
+        ]
+      },
+      '2025-12-16': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan Manufacturing PMI', actual: '-', forecast: '49.5', previous: '48.7' },
+          { time: '-', country: '🇮🇳', event: 'India Composite PMI', actual: '-', forecast: '60.2', previous: '59.7' },
+          { time: '-', country: '🇬🇧', event: 'UK Unemployment Rate', actual: '-', forecast: '5.1%', previous: '5.0%' },
+          { time: '-', country: '🇫🇷', event: 'France Composite PMI', actual: '-', forecast: '50.6', previous: '50.4' },
+          { time: '-', country: '🇩🇪', event: 'Germany Composite PMI', actual: '-', forecast: '52.9', previous: '52.4' },
+          { time: '-', country: '🇪🇺', event: 'EU Composite PMI', actual: '-', forecast: '53.6', previous: '52.8%' },
+          { time: '-', country: '🇪🇺', event: 'EU Manufacturing PMI', actual: '-', forecast: '50.1', previous: '49.6' },
+          { time: '-', country: '🇪🇺', event: 'EU Services PMI', actual: '-', forecast: '53.8', previous: '53.6' },
+          { time: '-', country: '🇮🇹', event: 'Italy Inflation Rate YoY', actual: '-', forecast: '1.1%', previous: '1.3%' },
+          { time: '-', country: '🇬🇧', event: 'UK Composite PMI', actual: '-', forecast: '52.0', previous: '51.3' },
+          { time: '-', country: '🇪🇺', event: 'EU Balance of Trade', actual: '-', forecast: '-', previous: '-' },
+          { time: '-', country: '🇺🇸', event: 'US Unemployment Rate', actual: '-', forecast: '4.6%', previous: '4.4%' }
+        ]
+      },
+      '2025-12-17': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Inflation Rate YoY', actual: '-', forecast: '3.4%', previous: '3.6%' },
+          { time: '-', country: '🇪🇺', event: 'EU Inflation Rate YoY', actual: '-', forecast: '2.2%', previous: '2.1%' }
+        ]
+      },
+      '2025-12-18': {
+        rows: [
+          { time: '-', country: '🇫🇷', event: 'France Business Confidence', actual: '-', forecast: '-', previous: '-' },
+          { time: '-', country: '🇬🇧', event: 'BoE Interest Rate Decision', actual: '-', forecast: '3.75%', previous: '4.00%' },
+          { time: '-', country: '🇪🇺', event: 'ECB Interest Rate Decision', actual: '-', forecast: '2.15%', previous: '2.15%' },
+          { time: '-', country: '🇺🇸', event: 'US Inflation Rate YoY', actual: '-', forecast: '3.0%', previous: '-' },
+          { time: '-', country: '🇯🇵', event: 'Japan Inflation Rate YoY', actual: '-', forecast: '2.9%', previous: '3.0%' }
+        ]
+      },
+      '2025-12-19': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'BoJ Interest Rate Decision', actual: '-', forecast: '0.75%', previous: '0.50%' },
+          { time: '-', country: '🇬🇧', event: 'UK Retail Sales (MoM)', actual: '-', forecast: '0.4%', previous: '-1.1%' }
         ]
       },
       '2025-11-26': {
