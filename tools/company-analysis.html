@@ -773,6 +773,20 @@
               <span><i class="fas fa-calendar"></i> Latest quarter Q2 FY26</span>
             </div>
           </article>
+          <article class="company-card" role="button" tabindex="0" data-company="broadcom">
+            <h3>Broadcom Inc. (AVGO)</h3>
+            <div class="company-meta">
+              <span><i class="fas fa-location-dot"></i> San Jose, California</span>
+              <span><i class="fas fa-calendar"></i> Latest quarter Q3 FY25</span>
+            </div>
+          </article>
+          <article class="company-card" role="button" tabindex="0" data-company="apple">
+            <h3>Apple Inc. (AAPL)</h3>
+            <div class="company-meta">
+              <span><i class="fas fa-location-dot"></i> Cupertino, California</span>
+              <span><i class="fas fa-calendar"></i> Latest quarter Q4 FY25</span>
+            </div>
+          </article>
           <article class="company-card" role="button" tabindex="0" data-company="meta">
             <h3>Meta Platforms, Inc.</h3>
             <div class="company-meta">
@@ -962,6 +976,306 @@
             </article>
             <div class="data-source" style="text-align: right; font-size: 0.75rem; color: #94a3b8; margin-top: 6px; font-style: italic;">
               Source: Yahoo Finance
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Broadcom Inc. Section -->
+      <section class="ca-panel company-section" id="broadcomDetail" aria-live="polite">
+        <div class="detail-header">
+          <h2 style="margin:0;font-size:1.8rem;">Broadcom Inc. (AVGO)</h2>
+          <span class="detail-pill"><i class="fas fa-microchip"></i> Semiconductors & infrastructure software</span>
+          <div class="detail-meta">
+            <span><i class="fas fa-dollar-sign"></i> Market cap ≈ $1.7T</span>
+          </div>
+          <p style="margin:6px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+            Broadcom is a global technology giant that designs specialized computer chips and enterprise software used across AI data centers,
+            cloud and business networks, broadband systems, and wireless infrastructure. Its hardware powers much of today’s digital and AI
+            infrastructure, while its software arm — led by VMware and a suite of mainframe and application tools — generates stable,
+            high-margin subscription revenue. The company’s growth is fueled by rising demand for AI networking and custom chips, the
+            transition of VMware customers to subscription-based services, and its disciplined approach to spending and debt reduction.
+          </p>
+        </div>
+
+        <article class="chart-card" style="margin-bottom:30px;">
+          <header>
+            <div>
+              <h3>Financial Snapshot</h3>
+              <p>Margins, growth, and cash generation across FY2024 and FY2025 year‑to‑date.</p>
+            </div>
+          </header>
+          <div class="snapshot-grid">
+            <div class="snapshot-card">
+              <h4><i class="fas fa-percentage"></i> Profitability</h4>
+              <ul>
+                <li>Operating margin FY2025 YTD: <strong>39.2%</strong></li>
+                <li>Net margin FY2025 YTD: <strong>31.9%</strong></li>
+                <li>FY2024 operating margin: <strong>26.1%</strong>, net margin: <strong>11.4%</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-chart-line"></i> Growth</h4>
+              <ul>
+                <li>Total revenue FY2025 YTD: <strong>$45.9B</strong> (+22% YoY)</li>
+                <li>Semiconductor Solutions revenue: <strong>+18% YoY</strong></li>
+                <li>Infrastructure Software revenue: <strong>+28% YoY</strong></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-trophy"></i> Business Mix</h4>
+              <ul>
+                <li>Products (semiconductors) driven by AI networking, custom accelerators, and broadband/RF</li>
+                <li>Subscriptions & services led by VMware, mainframe, and security software</li>
+                <li>Asia-heavy shipment footprint due to contract manufacturing and hyperscale supply chains</li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-gauge-high"></i> Balance Sheet & Cash</h4>
+              <ul>
+                <li>Cash & equivalents (Q3 FY2025): <strong>$10.7B</strong></li>
+                <li>Long‑term debt: <strong>$62.8B</strong> vs equity of <strong>$73.3B</strong></li>
+                <li>Free cash flow FY2025 YTD: <strong>$19.4B</strong> (≈42% FCF margin)</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div class="meta-main-layout">
+          <div class="meta-kpi-column" id="broadcomKpiColumn">
+          </div>
+
+          <div class="meta-content-column">
+            <div class="meta-charts-column">
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Revenue Mix</h3>
+                    <p>Semiconductor vs infrastructure software contribution – Broadcom FY2025 YTD.</p>
+                  </div>
+                </header>
+                <div class="chart-body" style="height: 220px;">
+                  <canvas id="broadcomRevenueMixChart" aria-label="Broadcom revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Regional Revenue Split</h3>
+                    <p>Revenue by country of shipment – Broadcom FY2024.</p>
+                  </div>
+                </header>
+                <div class="chart-body" style="height: 220px;">
+                  <canvas id="broadcomRegionalRevenueChart" aria-label="Broadcom regional revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-bottom-row">
+          <div class="meta-insights-column">
+            <div class="insight-box">
+              <h4><i class="fas fa-shield-halved"></i> Risk Watchlist</h4>
+              <p>
+                Key risks include dependence on hyperscale AI capex cycles, customer concentration among a handful of large cloud
+                and OEM accounts, and execution around the VMware subscription transition and restructuring. High leverage post‑VMware,
+                regulatory and trade tensions around China, and supply‑chain concentration in Asia are additional watchpoints.
+              </p>
+            </div>
+
+            <div class="insight-box">
+              <h4><i class="fas fa-rocket"></i> Growth Drivers</h4>
+              <p>
+                Growth is anchored by AI networking and custom accelerators, VMware Cloud Foundation adoption across hybrid and
+                private clouds, and high‑margin infrastructure software spanning mainframe, security, and application networking.
+                Strong free cash flow supports rapid deleveraging, dividends, and selective M&A, keeping the platform acquisition
+                flywheel turning.
+              </p>
+            </div>
+          </div>
+
+          <div class="meta-analyst-column">
+            <div class="analyst-table-card">
+              <header>
+                <h3>Analyst Recommendations</h3>
+              </header>
+              <table class="analyst-table">
+                <thead>
+                  <tr>
+                    <th>Rating</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="rating-badge rating-strong-buy">Strong Buy</span></td>
+                    <td><strong>9</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-buy">Buy</span></td>
+                    <td><strong>36</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-hold">Hold</span></td>
+                    <td><strong>2</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Apple Inc. Section -->
+      <section class="ca-panel company-section" id="appleDetail" aria-live="polite">
+        <div class="detail-header">
+          <h2 style="margin:0;font-size:1.8rem;">Apple Inc. (AAPL)</h2>
+          <span class="detail-pill"><i class="fas fa-mobile-screen-button"></i> Consumer Technology &amp; Services Ecosystem</span>
+          <div class="detail-meta">
+            <span><i class="fas fa-location-dot"></i> Cupertino, California</span>
+            <span><i class="fas fa-dollar-sign"></i> Market cap ≈ $4.1T</span>
+          </div>
+          <p style="margin:6px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+            Apple designs and markets a premium portfolio of consumer technology products — including the iPhone, Mac, iPad, wearables,
+            home devices, and accessories — powered by tightly integrated operating systems and proprietary Apple Silicon. Complementing
+            its hardware ecosystem, Apple operates a fast-growing Services business spanning the App Store, cloud storage, advertising,
+            digital payments, media subscriptions, enterprise software, and warranty programs, all of which generate high-margin recurring
+            revenue. The company reports across five geographic regions: the Americas, Europe, Greater China, Japan, and Rest of Asia
+            Pacific.
+          </p>
+        </div>
+
+        <article class="chart-card" style="margin-bottom:30px;">
+          <header>
+            <div>
+              <h3>Financial Snapshot</h3>
+              <p>Headline growth, profitability, and cash generation for FY2025 versus FY2024.</p>
+            </div>
+          </header>
+          <div class="snapshot-grid">
+            <div class="snapshot-card">
+              <h4><i class="fas fa-chart-line"></i> Headline Performance</h4>
+              <ul>
+                <li>Net sales FY2025: <strong>$416.2B</strong> (<strong>+6.4%</strong> YoY)</li>
+                <li>Operating income FY2025: <strong>$133.1B</strong> (<strong>+8%</strong> YoY)</li>
+                <li>Net income FY2025: <strong>$112.0B</strong> (<strong>+19.5%</strong> YoY)</li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-percentage"></i> Profitability</h4>
+              <ul>
+                <li>Gross margin FY2025: <strong>46.9%</strong> ($195.2B)</li>
+                <li>Operating margin FY2025: <strong>32.0%</strong> (vs 31.5% in FY2024)</li>
+                <li>Net margin FY2025: <strong>26.9%</strong> (vs 24.0% in FY2024)</li>
+                <li><em>Margins expanded meaningfully in FY2025, driven by a larger contribution from Services.</em></li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-layer-group"></i> Business Mix</h4>
+              <ul>
+                <li>Products FY2025 revenue: <strong>$307.0B</strong> (<strong>+4%</strong> YoY)</li>
+                <li>Services FY2025 revenue: <strong>$109.2B</strong> (<strong>+14%</strong> YoY)</li>
+                <li>Services remain the key margin and recurring‑revenue growth engine.</li>
+              </ul>
+            </div>
+            <div class="snapshot-card">
+              <h4><i class="fas fa-gauge-high"></i> Balance Sheet & Cash</h4>
+              <ul>
+                <li>Total cash & marketable securities: <strong>$132.4B</strong></li>
+                <li>Total interest‑bearing debt: <strong>$98.7B</strong> (net cash positive)</li>
+                <li>Free cash flow FY2025: <strong>$98.8B</strong>; capital returned: <strong>$106.1B</strong></li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div class="meta-main-layout">
+          <div class="meta-kpi-column" id="appleKpiColumn">
+          </div>
+
+          <div class="meta-content-column">
+            <div class="meta-charts-column">
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Revenue by Product</h3>
+                    <p>FY2025 net sales by major product category and Services – Apple Inc.</p>
+                  </div>
+                </header>
+                <div class="chart-body" style="height: 220px;">
+                  <canvas id="appleRevenueMixChart" aria-label="Apple revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+
+              <article class="chart-card chart-mix-card">
+                <header>
+                  <div>
+                    <h3>Geographic Revenue Split</h3>
+                    <p>FY2025 revenue by region, highlighting strength outside Greater China.</p>
+                  </div>
+                </header>
+                <div class="chart-body" style="height: 220px;">
+                  <canvas id="appleRegionalRevenueChart" aria-label="Apple regional revenue breakdown pie chart" role="img"></canvas>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta-bottom-row">
+          <div class="meta-insights-column">
+            <div class="insight-box">
+              <h4><i class="fas fa-shield-halved"></i> Risk Watchlist</h4>
+              <p>
+                Key risks include heavy exposure to China for both demand and supply, ongoing tariff and trade‑policy uncertainty, and
+                hardware cyclicality tied to iPhone replacement cycles. Apple also faces sustained regulatory pressure around the App
+                Store, digital markets, and tax, as well as FX and macro headwinds that can weigh on discretionary spending.
+              </p>
+            </div>
+
+            <div class="insight-box">
+              <h4><i class="fas fa-rocket"></i> Growth Drivers</h4>
+              <p>
+                Growth is supported by Services expansion, a premium iPhone mix, and continued advantages from Apple Silicon in Mac and
+                iPad. A larger installed base, strong loyalty, double‑digit growth across Europe, Japan, and Rest of Asia Pacific, and
+                optional upside from new platforms such as spatial computing give Apple multiple levers beyond the core iPhone cycle.
+              </p>
+            </div>
+          </div>
+
+          <div class="meta-analyst-column">
+            <div class="analyst-table-card">
+              <header>
+                <h3>Analyst Recommendations</h3>
+              </header>
+              <table class="analyst-table">
+                <thead>
+                  <tr>
+                    <th>Rating</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="rating-badge rating-strong-buy">Strong Buy</span></td>
+                    <td><strong>5</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-buy">Buy</span></td>
+                    <td><strong>24</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge rating-hold">Hold</span></td>
+                    <td><strong>15</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="rating-badge" style="background:rgba(239,68,68,0.15);color:#dc2626;">Sell</span></td>
+                    <td><strong>5</strong></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -1800,11 +2114,11 @@
               backgroundColor:
                 colors ||
                 [
-                  'rgba(59,130,246,0.85)',
-                  'rgba(56,189,248,0.75)',
-                  'rgba(129,140,248,0.8)',
-                  'rgba(244,114,182,0.75)',
-                  'rgba(248,250,252,0.65)',
+                  'rgba(59,130,246,0.9)',   // blue
+                  'rgba(56,189,248,0.85)', // sky
+                  'rgba(129,140,248,0.9)', // indigo
+                  'rgba(244,114,182,0.9)', // pink
+                  'rgba(22,163,74,0.85)',  // green (no gray)
                 ],
               borderColor: '#ffffff',
               borderWidth: 3,
@@ -1918,6 +2232,24 @@
       renderKpis('netflixKpiColumn', nflx.kpis);
     }
 
+    function initBroadcomCharts() {
+      const avgo = companiesData && companiesData.AVGO;
+      if (!avgo) return;
+
+      createDonutChart('broadcomRevenueMixChart', avgo.revenueMix);
+      createDonutChart('broadcomRegionalRevenueChart', avgo.regionalSplit);
+      renderKpis('broadcomKpiColumn', avgo.kpis);
+    }
+
+    function initAppleCharts() {
+      const aapl = companiesData && companiesData.AAPL;
+      if (!aapl) return;
+
+      createDonutChart('appleRevenueMixChart', aapl.revenueMix);
+      createDonutChart('appleRegionalRevenueChart', aapl.regionalSplit);
+      renderKpis('appleKpiColumn', aapl.kpis);
+    }
+
     function initCompanyCharts() {
       try {
         initMetaCharts();
@@ -1925,6 +2257,8 @@
         initAmazonCharts();
         initAlphabetCharts();
         initNetflixCharts();
+        initBroadcomCharts();
+        initAppleCharts();
       } catch (err) {
         console.error('Error initialising company charts:', err);
       }
@@ -2110,11 +2444,11 @@
         datasets: [{
           data: revenueMixData,
           backgroundColor: [
-            'rgba(59,130,246,0.85)',
-            'rgba(56,189,248,0.75)',
-            'rgba(129,140,248,0.8)',
-            'rgba(244,114,182,0.75)',
-            'rgba(248,250,252,0.65)'
+            'rgba(59,130,246,0.9)',   // blue
+            'rgba(56,189,248,0.85)', // sky
+            'rgba(129,140,248,0.9)', // indigo
+            'rgba(244,114,182,0.9)', // pink
+            'rgba(22,163,74,0.85)'   // green (no gray)
           ],
           borderColor: '#ffffff',
           borderWidth: 3,
@@ -2205,6 +2539,8 @@
         const urlCompany = params.get('company');
         const companyToSectionId = {
           nvidia: 'companyDetail',
+          broadcom: 'broadcomDetail',
+          apple: 'appleDetail',
           meta: 'metaDetail',
           disney: 'disneyDetail',
           amazon: 'amazonDetail',
@@ -2249,6 +2585,10 @@
               switchCompany('metaDetail');
             } else if (companyId === 'nvidia') {
               switchCompany('companyDetail');
+            } else if (companyId === 'broadcom') {
+              switchCompany('broadcomDetail');
+            } else if (companyId === 'apple') {
+              switchCompany('appleDetail');
             } else if (companyId === 'disney') {
               switchCompany('disneyDetail');
             } else if (companyId === 'amazon') {
