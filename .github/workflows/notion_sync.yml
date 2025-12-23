@@ -33,17 +33,35 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
       
+      - name: Copy files to docs for GitHub Pages
+        run: |
+          # Create docs directory if it doesn't exist
+          mkdir -p docs
+          
+          # Clean existing directories before copying
+          rm -rf docs/daily docs/data
+          
+          # Copy daily and data directories
+          cp -r daily docs/
+          cp -r data docs/
+          
+          # Copy required root assets
+          cp styles.css docs/ 2>/dev/null || true
+          cp index.html docs/ 2>/dev/null || true
+      
       - name: Check for changes
         id: git-check
         run: |
-          git diff --quiet data/daily/ || echo "changed=true" >> $GITHUB_OUTPUT
+          if [ -n "$(git status --porcelain data/daily/ docs/)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
       
       - name: Commit and push changes
         if: steps.git-check.outputs.changed == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add data/daily/
+          git add data/daily/ docs/
           git commit -m "chore: update daily market wrap-up from Notion [skip ci]"
           git push
 
