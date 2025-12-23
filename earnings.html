@@ -477,6 +477,27 @@
                             <div class="week-day" data-day="dec21" data-date="2025-12-21">
                                 <div class="day-label">Sun, Dec 21</div>
                             </div>
+                            <div class="week-day" data-day="dec22" data-date="2025-12-22">
+                                <div class="day-label">Mon, Dec 22</div>
+                            </div>
+                            <div class="week-day" data-day="dec23" data-date="2025-12-23">
+                                <div class="day-label">Tue, Dec 23</div>
+                            </div>
+                            <div class="week-day" data-day="dec24" data-date="2025-12-24">
+                                <div class="day-label">Wed, Dec 24</div>
+                            </div>
+                            <div class="week-day" data-day="dec25" data-date="2025-12-25">
+                                <div class="day-label">Thu, Dec 25</div>
+                            </div>
+                            <div class="week-day" data-day="dec26" data-date="2025-12-26">
+                                <div class="day-label">Fri, Dec 26</div>
+                            </div>
+                            <div class="week-day" data-day="dec27" data-date="2025-12-27">
+                                <div class="day-label">Sat, Dec 27</div>
+                            </div>
+                            <div class="week-day" data-day="dec28" data-date="2025-12-28">
+                                <div class="day-label">Sun, Dec 28</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -729,6 +750,41 @@
                     <!-- Earnings Table for Sunday Dec 21 -->
                     <div class="earnings-day-content" id="dec21-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2025-12-21"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 22 -->
+                    <div class="earnings-day-content" id="dec22-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-22"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 23 -->
+                    <div class="earnings-day-content" id="dec23-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-23"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 24 -->
+                    <div class="earnings-day-content" id="dec24-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-24"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 25 -->
+                    <div class="earnings-day-content" id="dec25-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-25"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 26 -->
+                    <div class="earnings-day-content" id="dec26-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-26"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 27 -->
+                    <div class="earnings-day-content" id="dec27-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-27"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 28 -->
+                    <div class="earnings-day-content" id="dec28-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-28"></div>
                     </div>
                 </div>
             </div>
@@ -1010,7 +1066,23 @@
         ]
       },
       '2025-12-20': { message: '' },
-      '2025-12-21': { message: '' }
+      '2025-12-21': { message: '' },
+      '2025-12-22': {
+        rows: [
+          ['DJCO', 'Daily Journal Corporation', '-', '-', '-', '$732.4M'],
+          ['EBF', 'Ennis Inc', '-', '-', '$0.41', '$471.8M']
+        ]
+      },
+      '2025-12-23': { message: '' },
+      '2025-12-24': {
+        rows: [
+          ['SCS', 'Steelcase Inc', 'Q3 2026 Earnings Announcement', '-', '$0.28', '$1.85B']
+        ]
+      },
+      '2025-12-25': { message: '' },
+      '2025-12-26': { message: '' },
+      '2025-12-27': { message: '' },
+      '2025-12-28': { message: '' }
     };
 
     const NOTABLE_BLOCKS = [
@@ -1162,7 +1234,10 @@
       'ACN': 'Accenture is a global consulting and IT services firm that helps enterprises with strategy, digital transformation, and managed services. It earns revenue from large, often multi‑year projects and outsourcing contracts, with deep client relationships and industry specialization supporting repeat business.',
       'NKE': 'Nike designs, markets, and sells athletic footwear, apparel, and equipment under the Nike and Jordan brands. The business leverages powerful branding and athlete endorsements across wholesale and fast‑growing direct‑to‑consumer channels to drive premium pricing and global scale.',
       'FDX': 'FedEx operates global express delivery, ground shipping, and logistics services for consumers and businesses. Its integrated air‑and‑ground network generates revenue based on shipment volumes and pricing, with profitability tied to network efficiency and mix of higher‑margin express services.',
-      'CCL': 'Carnival Corporation & plc is a leading global cruise operator with multiple brands serving different customer segments and regions. It monetizes cruise vacations through ticket revenue and high‑margin onboard spending such as excursions, casinos, food, and beverages, while leveraging fleet scale to manage costs.'
+      'CCL': 'Carnival Corporation & plc is a leading global cruise operator with multiple brands serving different customer segments and regions. It monetizes cruise vacations through ticket revenue and high‑margin onboard spending such as excursions, casinos, food, and beverages, while leveraging fleet scale to manage costs.',
+      'DJCO': 'Daily Journal Corporation is a diversified holding company with interests in legal publishing and software, alongside a portfolio of long-term equity investments.',
+      'EBF': 'Ennis Inc is a commercial printing and business forms company serving enterprises with branded documents, labels, and transactional print products.',
+      'SCS': 'Steelcase Inc is a global office furniture and workplace solutions company, best known for designing desks, seating, and hybrid-work environments for corporate and institutional clients.'
     };
 
     function buildTimeBadge(time) {
@@ -1274,6 +1349,29 @@
             </tbody>
           </table>
         `;
+      });
+      
+      // Add mouse tracking for tooltips
+      document.querySelectorAll('.company-with-tooltip').forEach(element => {
+        const tooltip = element.querySelector('.company-tooltip');
+        if (!tooltip) return;
+        
+        element.addEventListener('mouseenter', () => {
+          tooltip.style.opacity = '1';
+          tooltip.style.visibility = 'visible';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          tooltip.style.visibility = 'hidden';
+        });
+        
+        element.addEventListener('mousemove', (e) => {
+          const offset = 15;
+          tooltip.style.left = (e.clientX + offset) + 'px';
+          tooltip.style.top = (e.clientY + offset) + 'px';
+          tooltip.style.transform = 'none';
+        });
       });
     }
 
@@ -1632,10 +1730,7 @@
     }
     
     .company-tooltip {
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
+      position: fixed;
       padding: 18px 24px;
       background: #1f2937;
       color: #f9fafb;
@@ -1649,8 +1744,7 @@
       z-index: 10000;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-      transform: translateX(-50%) translateY(-5px);
+      transition: opacity 0.2s ease, visibility 0.2s ease;
       pointer-events: none;
       white-space: normal;
       word-wrap: break-word;
@@ -1658,39 +1752,15 @@
     }
     
     .company-tooltip::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: #1f2937;
+      display: none;
     }
     
-    .company-with-tooltip:hover .company-tooltip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(-50%) translateY(0);
-    }
-    
-      /* Ensure tooltip doesn't overflow on small screens */
     @media (max-width: 768px) {
       .company-tooltip {
-        left: 0;
-        transform: translateX(0) translateY(-5px);
         max-width: calc(100vw - 40px);
         min-width: 280px;
         font-size: 0.95rem;
         padding: 16px 18px;
-      }
-      
-      .company-tooltip::after {
-        left: 30px;
-        transform: translateX(0);
-      }
-      
-      .company-with-tooltip:hover .company-tooltip {
-        transform: translateX(0) translateY(0);
       }
     }
     

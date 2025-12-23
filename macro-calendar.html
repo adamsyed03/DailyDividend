@@ -599,6 +599,27 @@
                             <div class="week-day" data-date="2025-12-21">
                                 <div class="day-label">Sun, Dec 21</div>
                             </div>
+                            <div class="week-day" data-date="2025-12-22">
+                                <div class="day-label">Mon, Dec 22</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-23">
+                                <div class="day-label">Tue, Dec 23</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-24">
+                                <div class="day-label">Wed, Dec 24</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-25">
+                                <div class="day-label">Thu, Dec 25</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-26">
+                                <div class="day-label">Fri, Dec 26</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-27">
+                                <div class="day-label">Sat, Dec 27</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-28">
+                                <div class="day-label">Sun, Dec 28</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
@@ -750,6 +771,27 @@
                         </div>
                         <div class="earnings-day-content" data-day-content="2025-12-21">
                             <div class="earnings-table-wrapper" data-day-table="2025-12-21"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-22">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-22"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-23">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-23"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-24">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-24"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-25">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-25"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-26">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-26"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-27">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-27"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-28">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-28"></div>
                         </div>
                     </div>
                 </div>
@@ -1097,7 +1139,39 @@
           { time: '-', country: '🇯🇵', event: 'GDP Growth Annualised Rate', actual: '-', forecast: '-1.80%', previous: '2.30%', previousClass: 'positive' }
         ]
       },
-      '2025-12-08': { message: 'No significant events scheduled.' }
+      '2025-12-08': { message: 'No significant events scheduled.' },
+      '2025-12-21': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'Business investment YoY Final', actual: '-', forecast: '0.70%', previous: '3%' },
+          { time: '-', country: '🇬🇧', event: 'GDP Growth Rate YoY Final', actual: '-', forecast: '1.30%', previous: '1.40%' }
+        ]
+      },
+      '2025-12-22': {
+        rows: [
+          { time: '-', country: '🇺🇸', event: 'Industrial Production YoY', actual: '-', forecast: '1.10%', previous: '1.60%' },
+          { time: '-', country: '🇺🇸', event: 'Manufacturing Production YoY', actual: '-', forecast: '1%', previous: '1.5%' },
+          { time: '-', country: '🇺🇸', event: 'CB Consumer Confidence', actual: '-', forecast: '89', previous: '88.7' }
+        ]
+      },
+      '2025-12-23': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Leading Economic Index Final', actual: '-', forecast: '110', previous: '108.2' },
+          { time: '-', country: '🇨🇦', event: 'Budget balance', actual: '-', forecast: 'C$-3.52B', previous: 'C$-5.02B' }
+        ]
+      },
+      '2025-12-24': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Unemployment rate', actual: '-', forecast: '2.60%', previous: '2.60%' }
+        ]
+      },
+      '2025-12-25': {
+        rows: [
+          { time: '-', country: '🇷🇺', event: 'Business confidence', actual: '-', forecast: '-2', previous: '-1.8' }
+        ]
+      },
+      '2025-12-26': { message: 'No significant events to report.' },
+      '2025-12-27': { message: 'No significant events to report.' },
+      '2025-12-28': { message: 'No significant events to report.' }
     };
 
     const MACRO_HEADERS = ['Country', 'Event', 'Forecast', 'Previous'];
@@ -1183,7 +1257,15 @@
       'German Unemployment Rate (Nov)': 'Measures the percentage of the German labor force that is unemployed and actively seeking work.',
       'Germany CPI (YoY)': 'Consumer Price Index measures inflation in Germany by tracking price changes compared to a year ago.',
       'China Manufacturing PMI': 'Survey-based indicator of manufacturing activity in China. Values above 50 indicate expansion in the manufacturing sector.',
-      'China Non-Manufacturing PMI': 'Survey-based indicator of service sector activity in China. Values above 50 indicate expansion in the services sector.'
+      'China Non-Manufacturing PMI': 'Survey-based indicator of service sector activity in China. Values above 50 indicate expansion in the services sector.',
+      'Business investment YoY Final': 'Measures the annual change in UK corporate spending on equipment, buildings, and technology, signalling business confidence and future growth momentum.',
+      'GDP Growth Rate YoY Final': 'The final estimate of annual economic growth, capturing overall expansion or contraction across the UK economy.',
+      'Manufacturing Production YoY': 'Focuses specifically on factory output growth, highlighting strength or weakness in the manufacturing sector.',
+      'CB Consumer Confidence': 'A survey-based measure of household sentiment on jobs, income, and spending prospects, often leading consumer spending trends.',
+      'Leading Economic Index Final': 'A composite index of forward-looking indicators used to predict Japan\'s economic direction over the coming months.',
+      'Budget balance': 'Shows the difference between government revenues and expenditures, indicating fiscal health and borrowing needs.',
+      'Unemployment rate': 'Measures the share of the labor force without work, reflecting labor market tightness and wage pressure risks.',
+      'Business confidence': 'A survey of corporate sentiment on current conditions and future outlook, providing insight into economic resilience under sanctions.'
     };
 
     function createCell(value, className) {
@@ -1235,6 +1317,29 @@
             <tbody>${rowsHtml}</tbody>
           </table>
         `;
+      });
+      
+      // Add mouse tracking for tooltips
+      document.querySelectorAll('.event-with-tooltip').forEach(element => {
+        const tooltip = element.querySelector('.event-tooltip');
+        if (!tooltip) return;
+        
+        element.addEventListener('mouseenter', () => {
+          tooltip.style.opacity = '1';
+          tooltip.style.visibility = 'visible';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          tooltip.style.visibility = 'hidden';
+        });
+        
+        element.addEventListener('mousemove', (e) => {
+          const offset = 15;
+          tooltip.style.left = (e.clientX + offset) + 'px';
+          tooltip.style.top = (e.clientY + offset) + 'px';
+          tooltip.style.transform = 'none';
+        });
       });
     }
 
@@ -1536,20 +1641,7 @@
     }
     
     .event-tooltip::after {
-      content: '';
-      position: absolute;
-      top: var(--arrow-top, 100%);
-      left: 50%;
-      transform: translateX(-50%) translateY(var(--arrow-translate, 0));
-      border: 6px solid transparent;
-      border-top-color: #1f2937;
-    }
-    
-    .event-tooltip[data-position="below"]::after {
-      top: 0;
-      transform: translateX(-50%) translateY(-100%);
-      border-top-color: transparent;
-      border-bottom-color: #1f2937;
+      display: none;
     }
     
     .event-with-tooltip {
