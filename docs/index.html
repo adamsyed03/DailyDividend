@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Daily Dividend - Markets within minutes | Stay Informed, Stay Ahead</title>
+  <meta name="description" content="Get daily Markets Brief, market insights, and educational content delivered directly to your WhatsApp. Join thousands of investors staying informed with Daily Dividend's finance service.">
+  <meta name="keywords" content="finance news, WhatsApp service, market insights, financial education, investment news, stock market, daily dividend, financial assistant">
+  <meta name="author" content="Daily Dividend">
+  <meta name="robots" content="index, follow">
+
+  <!-- OG / Twitter -->
+  <meta property="og:title" content="Daily Dividend - Markets within minutes">
+  <meta property="og:description" content="Get daily Markets Brief and market insights delivered to your WhatsApp. Join our community of informed investors.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dailydividend.info">
+  <meta property="og:image" content="https://dailydividend.info/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://dailydividend.info">
+
+  <!-- Fonts / Icons / Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="styles.css?v=16">
+  
+  <!-- Critical CSS for faster loading -->
+  <style>
+    body { margin: 0; font-family: Inter, sans-serif; }
+    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    .hero { padding-top: 80px; }
+    .phone-signup-modal, .waitlist-modal { display: none; }
+    
+    /* Mobile menu styles */
+    .mobile-menu-btn { display: none; }
+    .mobile-menu { display: none; }
+    
+    @media (max-width: 768px) {
+      .hero { padding-top: 120px; }
+      .nav-container { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        height: auto; 
+        padding: 15px 20px; 
+        gap: 0;
+      }
+      .nav-links { display: none; }
+      .mobile-menu-btn { 
+        display: block; 
+        background: none; 
+        border: none; 
+        font-size: 24px; 
+        color: #333; 
+        cursor: pointer;
+        padding: 5px;
+        order: 2;
+      }
+      .nav-logo { order: 1; }
+      .mobile-menu { 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: white; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .mobile-menu.active { display: flex; }
+      .mobile-menu a { 
+        text-decoration: none; 
+        color: #333; 
+        font-weight: 500; 
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .mobile-menu a:last-child { border-bottom: none; }
+      
+      /* Additional spacing for hero content */
+      .hero-content { margin-top: 20px; }
+      
+      /* Mobile How it Works layout */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+      }
+      .step-number {
+        margin-bottom: 10px;
+      }
+      .step-content {
+        text-align: center;
+      }
+    }
+    
+    /* Override any purple backgrounds */
+    .contact-section, .footer, .contact-content, .social-proof {
+      background-color: white !important;
+      background: white !important;
+    }
+    .contact-section *, .footer *, .contact-content *, .social-proof * {
+      background-color: transparent !important;
+      background: transparent !important;
+    }
+    
+    /* Restore social media icon colors */
+    .social-icon.linkedin {
+      background-color: #0077b5 !important;
+      color: white !important;
+    }
+    .social-icon.whatsapp {
+      background-color: #25d366 !important;
+      color: white !important;
+    }
+    .social-icon.instagram {
+      background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%) !important;
+      color: white !important;
+    }
+    
+    /* Premium Quiz Button - Apple-inspired Design */
+    .quiz-button-premium {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      text-decoration: none;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+                  0 1px 4px rgba(0, 0, 0, 0.04);
+      min-width: 320px;
+      max-width: 420px;
+      width: 100%;
+    }
+    
+    .quiz-button-premium::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 24px;
+    }
+    
+    .quiz-button-premium:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12),
+                  0 4px 12px rgba(0, 0, 0, 0.08),
+                  0 0 0 1px #d1d5db;
+      border-color: #d1d5db;
+      background: #ffffff;
+    }
+    
+    .quiz-button-premium:hover::before {
+      opacity: 1;
+    }
+    
+    .quiz-button-premium:active {
+      transform: translateY(-2px) scale(1.01);
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .quiz-button-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px 40px;
+      width: 100%;
+      z-index: 2;
+    }
+    
+    .quiz-button-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: #f3f4f6;
+      border-radius: 14px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+    
+    .quiz-button-icon i {
+      font-size: 24px;
+      color: #25d366;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-icon {
+      background: #25d366;
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-icon i {
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    .quiz-button-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      flex: 1;
+      text-align: left;
+    }
+    
+    .quiz-button-main-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-button-sub-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+      transition: all 0.3s ease;
+    }
+    
+    .quiz-button-premium:hover .quiz-button-main-text {
+      color: #1f2937;
+    }
+    
+    .quiz-button-premium:hover .quiz-button-sub-text {
+      color: #374151;
+    }
+    
+    .quiz-button-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+    
+    .quiz-button-arrow i {
+      font-size: 18px;
+      color: #374151;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-arrow {
+      background: #374151;
+      transform: translateX(4px);
+    }
+    
+    .quiz-button-premium:hover .quiz-button-arrow i {
+      color: white;
+      transform: translateX(2px);
+    }
+    
+    .quiz-button-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(37, 211, 102, 0.1),
+        transparent
+      );
+      transition: left 0.6s ease;
+      z-index: 3;
+      border-radius: 24px;
+    }
+    
+    .quiz-button-premium:hover .quiz-button-shine {
+      left: 100%;
+      transition: left 0.6s ease;
+    }
+    
+    /* Animated Background Shapes */
+    .test-bg-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+    
+    .test-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(229, 231, 235, 0.4);
+      animation: float 20s infinite ease-in-out;
+    }
+    
+    .test-shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+    
+    .test-shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -50px;
+      right: -50px;
+      animation-delay: 7s;
+    }
+    
+    .test-shape-3 {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      right: 10%;
+      animation-delay: 14s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+      }
+      33% {
+        transform: translate(30px, -30px) scale(1.1);
+        opacity: 0.4;
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
+        opacity: 0.35;
+      }
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .quiz-button-premium {
+        min-width: 280px;
+        max-width: 100%;
+      }
+      
+      .quiz-button-content {
+        padding: 20px 28px;
+        gap: 12px;
+      }
+      
+      .quiz-button-icon {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .quiz-button-icon i {
+        font-size: 20px;
+      }
+      
+      .quiz-button-main-text {
+        font-size: 18px;
+      }
+      
+      .quiz-button-sub-text {
+        font-size: 13px;
+      }
+      
+      .quiz-button-arrow {
+        width: 36px;
+        height: 36px;
+      }
+      
+      .quiz-button-arrow i {
+        font-size: 16px;
+      }
+      
+      .test-shape-1 {
+        width: 200px;
+        height: 200px;
+      }
+      
+      .test-shape-2 {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .test-shape-3 {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .quiz-button-premium {
+        min-width: 100%;
+      }
+      
+      .quiz-button-content {
+        padding: 18px 24px;
+        gap: 10px;
+      }
+      
+      .quiz-button-text {
+        min-width: 0;
+      }
+    }
+  </style>
+
+  <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Daily Dividend",
+    "description": "Markets Brief and education service delivered via WhatsApp",
+    "url": "https://dailydividend.info",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WhatsApp",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP", "description": "Free tier with premium options" }
+  }
+  </script>
+</head>
+
+<body>
+  <!-- =========================
+       NAV
+  ========================== -->
+     <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-logo">
+        <img src="DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
+            </div>
+        <div class="nav-links" role="menubar">
+                     <a href="#features">Why Us</a>
+                    <a href="#how-it-works">How it Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#test">Test</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                    
+                    <!-- Tools Dropdown -->
+                    <div class="nav-dropdown" id="toolsDropdown">
+                        <button class="nav-dropdown-btn" 
+                                aria-haspopup="true" 
+                                aria-expanded="false" 
+                                id="toolsDropdownBtn">
+                            Tools
+                        </button>
+                        <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+                            <a href="earnings.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-calendar-alt"></i> Earnings Calendar
+                            </a>
+                            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-chart-line"></i> Macro Calendar
+                            </a>
+                            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-briefcase"></i> Hedge Fund Positioning
+                            </a>
+                            <a href="tools/company-analysis.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-microchip"></i> Company Analysis
+                            </a>
+                            <a href="tools/congress.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-landmark"></i> Congress Trade Monitor
+                            </a>
+                            <!-- Add more tools here in the future -->
+                        </div>
+                    </div>
+                </div>
+                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                     <i class="fas fa-bars"></i>
+                 </button>
+                 <div class="mobile-menu" id="mobileMenu">
+                     <a href="#features" onclick="closeMobileMenu()">Why Us</a>
+                     <a href="#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+                     <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+                     <a href="#test" onclick="closeMobileMenu()">Test</a>
+                     <a href="#terms" onclick="closeMobileMenu()">Terms</a>
+                     <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+                     <details class="mobile-menu-dropdown">
+                         <summary>Tools</summary>
+                         <div class="mobile-menu-dropdown-content">
+                             <a href="earnings.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-calendar-alt"></i> Earnings Calendar
+                             </a>
+                             <a href="macro-calendar.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-chart-line"></i> Macro Calendar
+                             </a>
+                             <a href="hedge-fund.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-briefcase"></i> Hedge Fund Positioning
+                             </a>
+                             <a href="tools/company-analysis.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-microchip"></i> Company Analysis
+                             </a>
+                             <a href="tools/congress.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-landmark"></i> Congress Trade Monitor
+                             </a>
+                         </div>
+                     </details>
+                </div>
+        </div>
+    </nav>
+
+  <!-- =========================
+       HERO
+  ========================== -->
+  <section class="hero" role="banner">
+        <div class="hero-container">
+            <div class="hero-content">
+        <h1 class="hero-title"><span class="gradient-text">Daily Dividend</span></h1>
+        <p class="hero-subtitle">Markets within minutes</p>
+
+                <div class="hero-cta">
+          <form class="signup-form" role="form" aria-label="Sign up for Daily Dividend" onsubmit="return false;">
+                        <div class="input-group">
+              <select id="countryCode" name="countryCode" aria-label="Country code" required>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="other">Other – enter full number below</option>
+              </select>
+              <input type="tel" id="phoneInput" name="phoneNumber" placeholder="Phone number" maxlength="15" aria-label="Phone number" required>
+                        </div>
+            <button type="button" class="cta-button" onclick="openPhoneModal()" aria-label="Get started with Daily Dividend">
+              <i class="fas fa-rocket" aria-hidden="true"></i> Get Started Free
+                        </button>
+          </form>
+                    <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
+                </div>
+            </div>
+
+      <!-- RIGHT VISUAL (WhatsApp mockup image) -->
+            <div class="hero-visual">
+                <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       FEATURES
+  ========================== -->
+  <section id="features" class="features" role="region" aria-labelledby="features-heading">
+        <div class="container">
+            <div class="section-header">
+        <h2 id="features-heading">Why Choose Daily Dividend?</h2>
+                <p>Everything you need to stay on top of your financial game</p>
+            </div>
+
+      <div class="features-grid" role="list">
+        <div class="feature-card" role="listitem">
+          <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
+                    <h3>Daily Briefings</h3>
+                    <p>Get curated Markets Brief delivered to your WhatsApp every morning. No more information overload.</p>
+                    </div>
+        <div class="feature-card" role="listitem">
+          <div class="feature-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h3>Breaking News Alerts</h3>
+                    <p>Receive real time updates on the market's biggest moves - Global Macro shifts, Equities swings, Trade Talk breakthroughs and more. Every alert is handpicked, so you'll never get spammed.</p>
+                </div>
+        <div class="feature-card" role="listitem">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Specialised Content</h3>
+                    <p>We only add crucial information with no fluff in our content and absolutely no advertisements. Quality over quantity, always.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       HOW IT WORKS
+  ========================== -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+        <p>Democratizing high finance</p>
+            </div>
+            <div class="steps">
+        <div class="step"><div class="step-number">1</div><div class="step-content">
+                        <h3>Sign Up</h3>
+          <p>Sign up in seconds with your phone number.</p>
+        </div></div>
+        <div class="step"><div class="step-number">2</div><div class="step-content">
+          <h3>Receive Premium Content</h3>
+          <p>Get daily Markets Brief packed with institutional-grade analysis, market insights, and educational content.</p>
+        </div></div>
+        <div class="step"><div class="step-number">3</div><div class="step-content">
+          <h3>Level Up</h3>
+          <p>User experience is at the forefront of our team's ambitions and therefore we make sure there is no step 3! Yes, you read that right!</p>
+        </div></div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       PRICING
+  ========================== -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Pricing</h2>
+                <p>Start free, upgrade when you're ready</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="pricing-card free">
+                    <div class="pricing-header">
+                         <h3>Beginner</h3>
+             <div class="price"><span class="currency">£</span><span class="amount">0</span><span class="period">/month</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                         <li><i class="fas fa-check"></i> Institutional-grade Daily Market Brief</li>
+                         <li><i class="fas fa-check"></i> Global Coverage: US · Europe · Asia (Equities + Macro)</li>
+                         <li><i class="fas fa-check"></i> Frictionless Delivery</li>
+                    </ul>
+           <button class="pricing-button" onclick="openPhoneModal()">Get Started</button>
+                </div>
+
+        <div class="pricing-card pro coming-soon-card">
+          <div class="coming-soon-sticker"><i class="fas fa-rocket"></i><span>Coming Soon</span></div>
+                    <div class="pricing-header">
+                         <h3 style="opacity: 0.5; position: relative; z-index: 10;">Intermediate</h3>
+             <div class="price" style="display: none;"><span class="currency">£</span><span class="amount">2.99</span><span class="period">/month + VAT</span></div>
+                        </div>
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-text">Not Available Yet</div></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Markets Brief access</li>
+                        <li><i class="fas fa-check"></i> Tier 2 content (industry analysis reports, stock pitches, etc.)</li>
+                        <li><i class="fas fa-check"></i> Free access to new features</li>
+                    </ul>
+          <button class="pricing-button coming-soon-button" onclick="openWaitlistModal()">
+            <i class="fas fa-bell"></i> Join Waitlist
+          </button>
+                </div>
+
+        <div class="pricing-card premium coming-soon-card">
+          <div class="coming-soon-sticker"><i class="fas fa-gem"></i><span>Coming Soon</span></div>
+                    <div class="pricing-header">
+                         <h3 style="opacity: 0.5; position: relative; z-index: 10;">Advanced</h3>
+             <div class="price" style="display: none;"><span class="currency">£</span><span class="amount">14.99</span><span class="period">/month + VAT</span></div>
+                        </div>
+          <div class="lock-overlay"><div class="lock-icon">🔒</div><div class="lock-text">Not Available Yet</div></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Markets Brief access</li>
+                        <li><i class="fas fa-check"></i> Tier 2 content access</li>
+                        <li><i class="fas fa-check"></i> Community access, events, and catered job preparation tools</li>
+                    </ul>
+          <button class="pricing-button coming-soon-button" onclick="openWaitlistModal()">
+            <i class="fas fa-bell"></i> Join Waitlist
+          </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       SOCIAL PROOF
+  ========================== -->
+    <section class="social-proof" style="background-color: white !important; background: white !important;">
+        <div class="container">
+            <div class="section-header">
+                 <h2>Trusted by Leading Industry Experts</h2>
+                <p>Join our growing community of finance enthusiasts</p>
+            </div>
+            <div class="testimonials">
+                <div class="testimonial">
+          <div class="testimonial-content"><p>"Daily Dividend has completely changed how I stay informed about the markets. The WhatsApp format is so convenient!"</p></div>
+          <div class="testimonial-author"><div class="author-avatar">S</div><div class="author-info"><h4>Sarah Johnson</h4><span>Doctor</span></div></div>
+                </div>
+                <div class="testimonial">
+          <div class="testimonial-content"><p>"The educational content is fantastic. I've learned so much about personal finance in just a few weeks."</p></div>
+          <div class="testimonial-author"><div class="author-avatar">M</div><div class="author-info"><h4>Mike Chen</h4><span>Software Engineer</span></div></div>
+                </div>
+                <div class="testimonial">
+          <div class="testimonial-content"><p>"The Markets Brief is incredibly insightful. I get all the key market movements and analysis I need without any fluff or ads."</p></div>
+          <div class="testimonial-author"><div class="author-avatar">A</div><div class="author-info"><h4>Alex Rodriguez</h4><span>Small Business Owner</span></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       CTA
+  ========================== -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Financial Knowledge?</h2>
+                <p>Join thousands of users who are already staying ahead with Daily Dividend</p>
+                <div class="cta-form">
+                    <div class="input-group">
+                        <select id="countryCodeBottom" aria-label="Country code">
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="other">Other – enter full number below</option>
+                        </select>
+                        <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
+                    </div>
+          <button class="cta-button" onclick="openPhoneModal()"><i class="fab fa-whatsapp"></i> Start Your Journey</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       TEST
+  ========================== -->
+    <section id="test" class="test-section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f9fafb; position: relative; overflow: hidden;">
+        <!-- Animated background elements -->
+        <div class="test-bg-shapes">
+            <div class="test-shape test-shape-1"></div>
+            <div class="test-shape test-shape-2"></div>
+            <div class="test-shape test-shape-3"></div>
+        </div>
+        
+        <div class="container" style="text-align: center; padding: 60px 20px; position: relative; z-index: 1;">
+            <div class="section-header" style="margin-bottom: 48px;">
+                <h2 style="color: #1f2937; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em;">
+                    You think you know markets?
+                </h2>
+                <p style="color: #6b7280; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                    Challenge yourself with our interactive quiz
+                </p>
+            </div>
+            
+            <a href="https://qzzr.com/view/Jf901m2c" target="_blank" rel="noopener noreferrer" class="quiz-button-premium" aria-label="Take the market knowledge quiz">
+                <span class="quiz-button-content">
+                    <span class="quiz-button-icon">
+                        <i class="fas fa-brain"></i>
+                    </span>
+                    <span class="quiz-button-text">
+                        <span class="quiz-button-main-text">Test Your Knowledge</span>
+                        <span class="quiz-button-sub-text">Take the challenge</span>
+                    </span>
+                    <span class="quiz-button-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </span>
+                <span class="quiz-button-shine"></span>
+            </a>
+        </div>
+    </section>
+
+  <!-- =========================
+       TERMS
+  ========================== -->
+    <section id="terms" class="terms-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Terms and Conditions</h2>
+                <p>Please read these terms carefully before using our service</p>
+            </div>
+            <div class="terms-content">
+                <div class="terms-text">
+                    <h3>1. Service Description</h3>
+                    <p>Daily Dividend provides Markets Brief, market insights, and educational content via WhatsApp. Our service is designed to help users stay informed about financial markets and personal finance topics.</p>
+                    <h3>2. User Responsibilities</h3>
+                    <p>Users are responsible for providing accurate contact information and understanding that financial information provided is for educational purposes only and should not be considered as financial advice.</p>
+                    <h3>3. Privacy and Data Protection</h3>
+                    <p>We respect your privacy and are committed to protecting your personal information. Your phone number and preferences are used solely to deliver our service and will not be shared with third parties without your consent.</p>
+                    <h3>4. Service Availability</h3>
+                    <p>While we strive to provide continuous service, we cannot guarantee uninterrupted access. Service may be temporarily unavailable due to maintenance, technical issues, or circumstances beyond our control.</p>
+                    <h3>5. Limitation of Liability</h3>
+                    <p>Daily Dividend shall not be liable for any financial losses or decisions made based on the information provided through our service. All financial decisions are the sole responsibility of the user.</p>
+                    <h3>6. Changes to Terms</h3>
+                    <p>We reserve the right to modify these terms at any time. Users will be notified of significant changes via WhatsApp or email.</p>
+                    <h3>7. Contact Information</h3>
+          <p>For questions about these terms, please contact us at admin@dailydividend.info</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       CONTACT
+  ========================== -->
+     <section id="contact" class="contact-section" style="background-color: white !important; background: white !important;">
+         <div class="container" style="background-color: white !important; background: white !important;">
+             <div class="contact-content" style="background-color: white !important; background: white !important;">
+                <div class="contact-info">
+                     <h3 style="color: black;">Get in Touch</h3>
+                    <div class="contact-details">
+             <div class="contact-item" style="color: black;"><i class="fas fa-envelope" style="color: black;"></i><span style="color: black;">admin@dailydividend.info</span></div>
+             <div class="contact-item" style="color: black;"><i class="fab fa-whatsapp" style="color: black;"></i><span style="color: black;">WhatsApp: +44 7449 222602</span></div>
+                    </div>
+                </div>
+                <div class="social-links">
+                     <h4 style="color: black;">Follow Us</h4>
+                    <div class="social-icons">
+             <a href="https://instagram.com/dailydividend_news" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+             <a href="https://linkedin.com/company/dailydividend" target="_blank" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
+             <a href="https://wa.me/447449222602" target="_blank" class="social-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+     <footer class="footer" style="background-color: white !important; text-align: center;">
+         <div class="container" style="text-align: center;">
+             <div style="text-align: center;">
+                 <p style="color: black; margin: 0;">&copy; 2025 Daily Dividend. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+  <!-- Hidden target iframe -->
+  <iframe name="gas_iframe" id="gas_iframe" style="display:none"></iframe>
+
+  <!-- PHONE SIGNUP MODAL -->
+  <div id="phoneSignupModal" class="phone-signup-modal" style="display:none;">
+    <div class="phone-signup-modal__content">
+      <div class="phone-signup-modal__header">
+        <div class="phone-signup-modal__icon"><i class="fas fa-user-plus"></i></div>
+        <h3>Complete Your Signup</h3>
+        <p>Just a few more details to get you started!</p>
+      </div>
+
+      <!-- GET form → GAS (no CORS), hidden iframe -->
+      <form id="phoneSignupForm" method="GET" target="gas_iframe" action="https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec" novalidate>
+        <div class="form-group"><label for="signupFirstName">First Name</label><input type="text" id="signupFirstName" name="first_name" required></div>
+        <div class="form-group"><label for="signupLastName">Last Name</label><input type="text" id="signupLastName" name="last_name" required></div>
+        <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
+        <div class="form-group"><label for="signupPhoneDisplay">Phone Number</label><input type="text" id="signupPhoneDisplay" name="phone" readonly class="readonly-field"></div>
+        <input type="hidden" name="page" value="landing_page_signup">
+        <input type="hidden" name="ts" id="ts_signup" value="">
+        <div style="text-align: center; margin-top: 20px;">
+          <button type="submit" class="phone-signup-submit-btn" style="display: inline-block; margin: 0 auto;"><i class="fas fa-check"></i> Complete Signup</button>
+        </div>
+      </form>
+
+      <button class="phone-signup-modal__close" onclick="closePhoneSignupModal()"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <!-- WAITLIST MODAL -->
+  <div id="waitlistModal" class="waitlist-modal" style="display:none;">
+    <div class="waitlist-modal__content">
+      <div class="waitlist-modal__header">
+        <div class="waitlist-modal__icon"><i class="fas fa-rocket"></i></div>
+        <h3>Join the Waitlist</h3>
+        <p>Be the first to know when premium features launch!</p>
+      </div>
+
+      <form id="waitlistForm" method="GET" target="gas_iframe" action="https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec" novalidate>
+        <div class="form-group"><label for="firstName">First Name</label><input type="text" id="firstName" name="first_name" required></div>
+        <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" name="last_name" required></div>
+        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
+        <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required></div>
+        <input type="hidden" name="page" value="waitlist">
+        <input type="hidden" name="ts" id="ts_waitlist" value="">
+        <div style="text-align: center; margin-top: 20px;">
+          <button type="submit" class="waitlist-submit-btn" style="display: inline-block; margin: 0 auto;"><i class="fas fa-bell"></i> Join Waitlist</button>
+        </div>
+      </form>
+
+      <button class="waitlist-modal__close" onclick="closeWaitlistModal()"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <!-- =========================================
+       INLINE SCRIPT: submission + UX handling
+       (Do NOT include your old script.js for forms)
+  ========================================== -->
+  <script>
+    // 1) Replace with your deployed /exec URL
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec';
+
+    // Country code list (abbreviated visual labels, full list of prefixes)
+    const COUNTRY_CODES = [
+      { value: '+44', label: '🇬🇧 +44' },
+      { value: '+91', label: '🇮🇳 +91' },
+      { value: '+1',  label: '🇺🇸 +1' },
+      { value: '+61', label: '🇦🇺 +61' },
+      { value: '+65', label: '🇸🇬 +65' },
+      { value: '+971', label: '🇦🇪 +971' },
+      { value: '+49', label: '🇩🇪 +49' },
+      { value: '+33', label: '🇫🇷 +33' },
+      { value: '+39', label: '🇮🇹 +39' },
+      { value: '+34', label: '🇪🇸 +34' },
+      { value: '+81', label: '🇯🇵 +81' },
+      { value: '+82', label: '🇰🇷 +82' },
+      { value: '+86', label: '🇨🇳 +86' },
+      { value: '+852', label: '🇭🇰 +852' },
+      { value: '+886', label: '🇹🇼 +886' },
+      { value: '+41', label: '🇨🇭 +41' },
+      { value: '+46', label: '🇸🇪 +46' },
+      { value: '+47', label: '🇳🇴 +47' },
+      { value: '+45', label: '🇩🇰 +45' },
+      { value: '+31', label: '🇳🇱 +31' },
+      { value: '+32', label: '🇧🇪 +32' },
+      { value: '+352', label: '🇱🇺 +352' },
+      { value: '+353', label: '🇮🇪 +353' },
+      { value: '+61', label: '🇦🇺 +61' },
+      { value: '+64', label: '🇳🇿 +64' },
+      { value: '+55', label: '🇧🇷 +55' },
+      { value: '+52', label: '🇲🇽 +52' },
+      { value: '+27', label: '🇿🇦 +27' },
+      { value: '+234', label: '🇳🇬 +234' },
+      { value: '+254', label: '🇰🇪 +254' },
+      { value: '+92', label: '🇵🇰 +92' },
+      { value: '+880', label: '🇧🇩 +880' },
+      { value: '+94', label: '🇱🇰 +94' },
+      { value: '+60', label: '🇲🇾 +60' },
+      { value: '+62', label: '🇮🇩 +62' },
+      { value: '+63', label: '🇵🇭 +63' },
+      { value: '+66', label: '🇹🇭 +66' },
+      { value: '+90', label: '🇹🇷 +90' },
+      { value: '+7', label: '🇷🇺 +7' },
+      { value: '+420', label: '🇨🇿 +420' },
+      { value: '+48', label: '🇵🇱 +48' },
+      { value: '+30', label: '🇬🇷 +30' },
+      { value: '+52', label: '🇲🇽 +52' },
+      { value: '+54', label: '🇦🇷 +54' },
+      { value: '+56', label: '🇨🇱 +56' },
+      { value: '+57', label: '🇨🇴 +57' },
+      { value: '+51', label: '🇵🇪 +51' },
+      { value: '+58', label: '🇻🇪 +58' },
+      { value: '+20', label: '🇪🇬 +20' },
+      { value: '+212', label: '🇲🇦 +212' },
+      { value: '+972', label: '🇮🇱 +972' },
+      { value: 'other', label: 'Other – enter full number below' }
+    ];
+
+    function populateCountryCodeSelects() {
+      const selects = [
+        document.getElementById('countryCode'),
+        document.getElementById('countryCodeBottom')
+      ].filter(Boolean);
+
+      selects.forEach(select => {
+        select.innerHTML = '';
+        COUNTRY_CODES.forEach(({ value, label }) => {
+          const opt = document.createElement('option');
+          opt.value = value;
+          opt.textContent = label;
+          select.appendChild(opt);
+        });
+      });
+    }
+
+    // Keep forms always pointing to correct URL
+    function wireForms() {
+      const f1 = document.getElementById('phoneSignupForm');
+      const f2 = document.getElementById('waitlistForm');
+      if (f1) f1.action = GAS_URL;
+      if (f2) f2.action = GAS_URL;
+    }
+
+    // Open/Close modals + populate phone
+    function openPhoneModal() {
+      const rawCc = (document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '').trim();
+      const pn = (document.getElementById('phoneInput')?.value || document.getElementById('phoneInputBottom')?.value || '').trim();
+
+      if (!pn) { alert('Please enter a valid phone number'); return; }
+
+      const cc = (!rawCc || rawCc === 'other') ? '' : rawCc;
+      const full = (cc + pn).replace(/\s+/g, '');
+      document.getElementById('signupPhoneDisplay').value = full;
+      document.getElementById('phoneSignupModal').style.display = 'flex';
+    }
+    function closePhoneSignupModal() {
+      document.getElementById('phoneSignupModal').style.display = 'none';
+      document.getElementById('phoneSignupForm').reset();
+    }
+    function openWaitlistModal(){ document.getElementById('waitlistModal').style.display='flex'; }
+    function closeWaitlistModal(){ document.getElementById('waitlistModal').style.display='none'; document.getElementById('waitlistForm').reset(); }
+
+    // Disable submit buttons and add timestamp
+    function enhanceSubmission(formId, btnSelector) {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      form.addEventListener('submit', () => {
+        const ts = form.querySelector('input[name="ts"]');
+        if (ts) ts.value = Date.now().toString();
+        const btn = form.querySelector(btnSelector);
+        if (btn) { 
+          btn.disabled = true; 
+          btn.innerHTML = 'Submitting…'; 
+          
+          // Fallback timeout - reset button after 3 seconds if no response
+          setTimeout(() => {
+            if (btn.disabled) {
+              btn.disabled = false;
+              btn.innerHTML = btn.classList.contains('phone-signup-submit-btn') ? 
+                '<i class="fas fa-check"></i> Complete Signup' : 
+                '<i class="fas fa-bell"></i> Join Waitlist';
+              alert('Sign up successful! We will be in touch shortly!');
+              try { closePhoneSignupModal(); closeWaitlistModal(); } catch {}
+            }
+          }, 3000);
+        }
+      });
+    }
+
+    // Listen for postMessage from GAS (success or error)
+    window.addEventListener('message', (ev) => {
+      try {
+        // Check if message is from Google Apps Script
+        if (!ev || !ev.data || !ev.origin || !ev.origin.includes('script.google.com')) return;
+        const { status, reason } = ev.data;
+      if (status === 'OK') {
+        // Show success message
+        alert('Sign up successful! We will be in touch shortly!');
+        try { closePhoneSignupModal(); closeWaitlistModal(); } catch {}
+        // Reset buttons
+        document.querySelectorAll('.phone-signup-submit-btn,.waitlist-submit-btn').forEach(btn => {
+          btn.disabled = false; 
+          btn.innerHTML = btn.innerHTML.replace('Submitting…', btn.classList.contains('phone-signup-submit-btn') ? '<i class="fas fa-check"></i> Complete Signup' : '<i class="fas fa-bell"></i> Join Waitlist');
+        });
+      } else if (status === 'ERR') {
+        alert('Submission failed: ' + (reason || 'Unknown error'));
+        document.querySelectorAll('.phone-signup-submit-btn,.waitlist-submit-btn').forEach(btn => {
+          btn.disabled = false; 
+          btn.innerHTML = btn.innerHTML.replace('Submitting…', btn.classList.contains('phone-signup-submit-btn') ? '<i class="fas fa-check"></i> Complete Signup' : '<i class="fas fa-bell"></i> Join Waitlist');
+        });
+      }
+      } catch (e) {
+        console.error('postMessage error:', e);
+      }
+    });
+
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+      }
+    }
+    
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.remove('active');
+      }
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (mobileMenu && mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Tools dropdown functionality
+    const toolsDropdown = document.getElementById('toolsDropdown');
+    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+      let toolsHideTimeout;
+
+      const showToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
+        toolsDropdownMenu.classList.add('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+      };
+
+      const hideToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
+        toolsDropdownMenu.classList.remove('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      };
+
+      // Hover functionality (with relaxed hide delay)
+      toolsDropdown.addEventListener('mouseenter', showToolsMenu);
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsHideTimeout = setTimeout(hideToolsMenu, 700);
+      });
+
+      // Click/touch functionality
+      toolsDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = toolsDropdownMenu.classList.contains('active');
+        if (isOpen) {
+          hideToolsMenu();
+        } else {
+          showToolsMenu();
+        }
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!toolsDropdown.contains(e.target)) {
+          hideToolsMenu();
+        }
+      });
+
+      // Keyboard navigation
+      toolsDropdownBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          if (isOpen) {
+            hideToolsMenu();
+          } else {
+            showToolsMenu();
+          }
+        }
+      });
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      populateCountryCodeSelects();
+      wireForms();
+      enhanceSubmission('phoneSignupForm', '.phone-signup-submit-btn');
+      enhanceSubmission('waitlistForm', '.waitlist-submit-btn');
+    });
+  </script>
+</body>
+</html>
