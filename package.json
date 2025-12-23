@@ -4,10 +4,14 @@
   "description": "Daily Dividend - Markets within minutes",
   "scripts": {
     "dev": "npx live-server --port=8000 --open=/index.html",
-    "start": "npx live-server --port=8000"
+    "start": "npx live-server --port=8000",
+    "notion-sync": "node scripts/notion_sync.mjs"
   },
   "keywords": [],
   "author": "Daily Dividend",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@notionhq/client": "^2.2.15"
+  }
 }
 
