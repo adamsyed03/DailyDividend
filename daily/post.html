@@ -136,7 +136,7 @@
 </head>
 <body>
   <div class="daily-post-container">
-    <a href="/daily/index.html" class="back-link">← Back to Daily Wrap-Up</a>
+    <a href="index.html" class="back-link">← Back to Daily Wrap-Up</a>
     <div id="content">
       <div class="loading">Loading post...</div>
     </div>
@@ -153,7 +153,7 @@
           throw new Error('Invalid or missing date parameter');
         }
         
-        const response = await fetch(`/data/daily/${date}.json`);
+        const response = await fetch(`../data/daily/${date}.json`);
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error('Post not found');
