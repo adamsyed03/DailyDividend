@@ -136,74 +136,151 @@ function extractPlainText(richTextArray) {
 }
 
 /**
- * Parse date from "DAILY DIVIDEND | Tue, Dec 23" format
- * Returns ISO date string (YYYY-MM-DD) or null if parsing fails
+ * Format as YYYY-MM-DD and validate date parts.
  */
-function parseDailyDividendDate(text) {
-  // Match patterns like "DAILY DIVIDEND | Tue, Dec 23" or "DAILY DIVIDEND | Tue, Dec 23, 2025"
-  const match = text.match(/DAILY DIVIDEND\s*\|\s*([A-Za-z]{3}),\s*([A-Za-z]{3})\s+(\d{1,2})(?:,\s*(\d{4}))?/i);
-  if (!match) return null;
-  
-  const [, dayName, monthName, day, year] = match;
-  const currentYear = new Date().getFullYear();
-  const targetYear = year ? parseInt(year) : currentYear;
-  
-  const monthMap = {
-    'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
-    'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
-  };
-  
-  const monthIndex = monthMap[monthName.toLowerCase().substring(0, 3)];
-  if (monthIndex === undefined) return null;
-  
-  const dayNum = parseInt(day);
-  if (isNaN(dayNum)) return null;
-  
-  try {
-    const date = new Date(targetYear, monthIndex, dayNum);
-    // Validate the date is correct (handles invalid dates like Feb 30)
-    if (date.getFullYear() !== targetYear || date.getMonth() !== monthIndex || date.getDate() !== dayNum) {
-      return null;
-    }
-    
-    // Format as YYYY-MM-DD
-    const yearStr = date.getFullYear().toString();
-    const monthStr = (date.getMonth() + 1).toString().padStart(2, '0');
-    const dayStr = date.getDate().toString().padStart(2, '0');
-    return `${yearStr}-${monthStr}-${dayStr}`;
-  } catch (e) {
+function toIsoDate(yearNum, monthIndex, dayNum) {
+  if (!Number.isInteger(yearNum) || !Number.isInteger(monthIndex) || !Number.isInteger(dayNum)) return null;
+  if (monthIndex < 0 || monthIndex > 11) return null;
+  if (dayNum < 1 || dayNum > 31) return null;
+
+  const date = new Date(yearNum, monthIndex, dayNum);
+  // Validate the date is correct (handles invalid dates like Feb 30)
+  if (date.getFullYear() !== yearNum || date.getMonth() !== monthIndex || date.getDate() !== dayNum) {
     return null;
   }
+
+  const yearStr = date.getFullYear().toString();
+  const monthStr = (date.getMonth() + 1).toString().padStart(2, '0');
+  const dayStr = date.getDate().toString().padStart(2, '0');
+  return `${yearStr}-${monthStr}-${dayStr}`;
 }
 
 /**
- * Extract title from "DAILY DIVIDEND | Tue, Dec 23 Title text here" format
+ * Parse "DAILY DIVIDEND | ..." headings/paragraph delimiters.
+ *
+ * Supports common variants:
+ * - DAILY DIVIDEND | Tue, Dec 23 Title
+ * - DAILY DIVIDEND | Tue Dec 23 Title
+ * - DAILY DIVIDEND | Tuesday, December 23, 2025 Title
+ * - DAILY DIVIDEND | 12/23/2025 Title
+ *
+ * Returns { date: 'YYYY-MM-DD', title: string } or null.
  */
-function extractTitleFromDailyDividend(text) {
-  // Remove the "DAILY DIVIDEND | Date" part and get the rest as title
-  const match = text.match(/DAILY DIVIDEND\s*\|\s*[A-Za-z]{3},\s*[A-Za-z]{3}\s+\d{1,2}(?:,\s*\d{4})?\s*(.+)/i);
-  return match ? match[1].trim() : '';
+function parseDailyDividendDelimiter(text) {
+  const raw = (text || '').trim();
+  const prefixMatch = raw.match(/^\s*DAILY\s+DIVIDEND\s*\|\s*(.+)$/i);
+  if (!prefixMatch) return null;
+
+  const remainder = prefixMatch[1].trim();
+  const currentYear = new Date().getFullYear();
+
+  // Also allow ISO date anywhere after the prefix: "DAILY DIVIDEND | 2025-12-23 — Title"
+  {
+    const m = remainder.match(/^(\d{4})-(\d{2})-(\d{2})(?:\s*[—-]\s*(.*))?$/);
+    if (m) {
+      const yearNum = parseInt(m[1], 10);
+      const monthNum = parseInt(m[2], 10);
+      const dayNum = parseInt(m[3], 10);
+      const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
+      if (iso) return { date: iso, title: (m[4] || '').trim() };
+    }
+  }
+
+  const monthMap = {
+    jan: 0, january: 0,
+    feb: 1, february: 1,
+    mar: 2, march: 2,
+    apr: 3, april: 3,
+    may: 4,
+    jun: 5, june: 5,
+    jul: 6, july: 6,
+    aug: 7, august: 7,
+    sep: 8, sept: 8, september: 8,
+    oct: 9, october: 9,
+    nov: 10, november: 10,
+    dec: 11, december: 11,
+  };
+
+  // Month-name format (optionally preceded by day-of-week, with flexible commas/periods)
+  // Examples:
+  // "Tue, Dec 23 Title"
+  // "Tue Dec 23 Title"
+  // "Tuesday, December 23, 2025 Title"
+  {
+    const m = remainder.match(
+      /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?\s*(.*)$/i
+    );
+    if (m) {
+      const monthKey = m[1].toLowerCase().replace('.', '');
+      const monthIndex = monthMap[monthKey];
+      const dayNum = parseInt(m[2], 10);
+      const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+      const iso = toIsoDate(yearNum, monthIndex, dayNum);
+      if (iso) return { date: iso, title: (m[4] || '').trim() };
+    }
+  }
+
+  // Numeric format (assume MM/DD[/YYYY] or MM-DD[-YYYY]), optionally preceded by day-of-week
+  // Example: "12/23/2025 Title"
+  {
+    const m = remainder.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\s*(.*)$/);
+    if (m) {
+      const monthNum = parseInt(m[1], 10);
+      const dayNum = parseInt(m[2], 10);
+      let yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+      if (m[3] && m[3].length === 2) yearNum = 2000 + yearNum;
+      const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
+      if (iso) return { date: iso, title: (m[4] || '').trim() };
+    }
+  }
+
+  return null;
 }
 
 /**
  * Get all blocks from a Notion page (handles pagination)
  */
-async function getAllBlocks(blockId) {
+async function listChildBlocks(blockId) {
   const blocks = [];
   let cursor = undefined;
-  
+
   do {
     const response = await notion.blocks.children.list({
       block_id: blockId,
       start_cursor: cursor,
       page_size: 100,
     });
-    
+
     blocks.push(...response.results);
     cursor = response.next_cursor;
   } while (cursor);
-  
+
   return blocks;
+}
+
+/**
+ * Recursively fetch blocks so entries inside toggles/columns/synced blocks are included.
+ * Avoids traversing sub-pages/databases (child_page/child_database).
+ */
+async function getAllBlocks(blockId) {
+  const rootChildren = await listChildBlocks(blockId);
+  const flattened = [];
+
+  for (const block of rootChildren) {
+    flattened.push(block);
+
+    if (block?.has_children && block.type !== 'child_page' && block.type !== 'child_database') {
+      try {
+        const nested = await getAllBlocks(block.id);
+        flattened.push(...nested);
+      } catch (e) {
+        // Non-fatal: keep going even if a nested block can't be fetched
+        console.warn(`Warning: failed to fetch nested children for block ${block.id} (${block.type})`);
+      }
+    }
+  }
+
+  return flattened;
 }
 
 /**
@@ -216,13 +293,19 @@ function parseEntries(blocks) {
   let inList = false;
   let listType = null;
   let listItems = [];
-  let hasH2Blocks = false;
+  let hasHeadingDelimiters = false;
   
-  // First pass: check if we have any H2 blocks
+  // First pass: check if we have any heading delimiters we can parse
   for (const block of blocks) {
-    if (block.type === 'heading_2') {
-      hasH2Blocks = true;
-      break;
+    if (block.type === 'heading_1' || block.type === 'heading_2' || block.type === 'heading_3') {
+      const rich = block[block.type]?.rich_text || [];
+      const text = extractPlainText(rich);
+      const isIso = /^\d{4}-\d{2}-\d{2}\s*—\s*.+$/.test(text);
+      const isDaily = /^\s*DAILY\s+DIVIDEND\s*\|/i.test(text) && !!parseDailyDividendDelimiter(text);
+      if (isIso || isDaily) {
+        hasHeadingDelimiters = true;
+        break;
+      }
     }
   }
   
@@ -232,34 +315,34 @@ function parseEntries(blocks) {
     let entryDate = null;
     let entryTitle = null;
     
-    // Check if this is a heading_2 block (entry separator)
-    if (type === 'heading_2') {
-      const h2Text = extractPlainText(block.heading_2?.rich_text || []);
+    // Check if this is a heading delimiter (entry separator)
+    if (type === 'heading_1' || type === 'heading_2' || type === 'heading_3') {
+      const headingText = extractPlainText(block[type]?.rich_text || []);
       
       // Try format 1: YYYY-MM-DD — Title
-      const match1 = h2Text.match(/^(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/);
+      const match1 = headingText.match(/^(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/);
       if (match1) {
         isEntryDelimiter = true;
         entryDate = match1[1];
         entryTitle = match1[2];
       } else {
-        // Try format 2: DAILY DIVIDEND | Tue, Dec 23 Title
-        const parsedDate = parseDailyDividendDate(h2Text);
-        if (parsedDate) {
+        // Try format 2: DAILY DIVIDEND | ... (many variants)
+        const parsed = parseDailyDividendDelimiter(headingText);
+        if (parsed?.date) {
           isEntryDelimiter = true;
-          entryDate = parsedDate;
-          entryTitle = extractTitleFromDailyDividend(h2Text) || h2Text.replace(/DAILY DIVIDEND\s*\|\s*[A-Za-z]{3},\s*[A-Za-z]{3}\s+\d{1,2}(?:,\s*\d{4})?\s*/i, '').trim();
+          entryDate = parsed.date;
+          entryTitle = parsed.title || 'Untitled';
         }
       }
-    } else if (type === 'paragraph' && !hasH2Blocks) {
+    } else if (type === 'paragraph' && !hasHeadingDelimiters) {
       // Fallback: treat paragraph lines starting with "DAILY DIVIDEND |" as delimiters
       const paraText = extractPlainText(block.paragraph?.rich_text || []);
-      if (paraText.trim().toUpperCase().startsWith('DAILY DIVIDEND |')) {
-        const parsedDate = parseDailyDividendDate(paraText);
-        if (parsedDate) {
+      if (/^\s*DAILY\s+DIVIDEND\s*\|/i.test(paraText)) {
+        const parsed = parseDailyDividendDelimiter(paraText);
+        if (parsed?.date) {
           isEntryDelimiter = true;
-          entryDate = parsedDate;
-          entryTitle = extractTitleFromDailyDividend(paraText) || paraText.replace(/DAILY DIVIDEND\s*\|\s*[A-Za-z]{3},\s*[A-Za-z]{3}\s+\d{1,2}(?:,\s*\d{4})?\s*/i, '').trim();
+          entryDate = parsed.date;
+          entryTitle = parsed.title || 'Untitled';
         }
       }
     }
