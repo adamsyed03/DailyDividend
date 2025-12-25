@@ -4,12 +4,111 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daily Market Wrap-Up - Daily Dividend</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="../styles.css?v=17">
   <style>
     .daily-container {
       max-width: 900px;
       margin: 0 auto;
-      padding: 120px 20px 40px;
+      padding: 110px 20px 40px;
+    }
+
+    .daily-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .daily-header h1 {
+      margin: 0;
+      color: #111827;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .daily-subtitle {
+      margin-top: 8px;
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
+
+    .daily-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .daily-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .daily-search i {
+      position: absolute;
+      left: 12px;
+      color: #9ca3af;
+      pointer-events: none;
+      font-size: 0.95rem;
+    }
+
+    .daily-search input {
+      width: min(420px, 70vw);
+      padding: 10px 12px 10px 34px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .daily-search input:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    .dd-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: white;
+      color: #111827;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .dd-btn:hover {
+      background: #f9fafb;
+      box-shadow: 0 6px 16px rgba(17, 24, 39, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .dd-btn:active {
+      transform: translateY(0px);
+      box-shadow: none;
+    }
+
+    .dd-meta {
+      margin-top: 10px;
+      color: #6b7280;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .latest-entry {
       background: white;
@@ -84,16 +183,245 @@
       border-radius: 8px;
       margin: 20px 0;
     }
+
+    @media (max-width: 768px) {
+      .daily-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .daily-controls {
+        justify-content: flex-start;
+      }
+      .daily-search input {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="daily-container">
+  <a class="sr-only" href="#main">Skip to content</a>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="../index.html">
+          <img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
+        </a>
+      </div>
+      <div class="nav-links" role="menubar">
+        <a href="../index.html#features">Why Us</a>
+        <a href="../index.html#how-it-works">How it Works</a>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#terms">Terms</a>
+        <a href="../index.html#contact">Contact</a>
+
+        <div class="nav-dropdown" id="toolsDropdown">
+          <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" id="toolsDropdownBtn">
+            Tools
+          </button>
+          <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+            <a href="index.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-newspaper"></i> Daily Market Wrap-Up</a>
+            <a href="../earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
+            <a href="../macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
+            <a href="../hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+            <a href="../company-analysis.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-microchip"></i> Company Analysis</a>
+            <a href="../tools/congress.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
+          </div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html#features" onclick="closeMobileMenu()">Why Us</a>
+        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+        <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
+        <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <details class="mobile-menu-dropdown">
+          <summary>Tools</summary>
+          <div class="mobile-menu-dropdown-content">
+            <a href="index.html" onclick="closeMobileMenu()">
+              <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
+            </a>
+            <a href="../earnings.html" onclick="closeMobileMenu()">
+              <i class="fas fa-calendar-alt"></i> Earnings Calendar
+            </a>
+            <a href="../macro-calendar.html" onclick="closeMobileMenu()">
+              <i class="fas fa-chart-line"></i> Macro Calendar
+            </a>
+            <a href="../hedge-fund.html" onclick="closeMobileMenu()">
+              <i class="fas fa-briefcase"></i> Hedge Fund Positioning
+            </a>
+            <a href="../company-analysis.html" onclick="closeMobileMenu()">
+              <i class="fas fa-microchip"></i> Company Analysis
+            </a>
+            <a href="../tools/congress.html" onclick="closeMobileMenu()">
+              <i class="fas fa-landmark"></i> Congress Trade Monitor
+            </a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main" class="daily-container" role="main">
+    <div class="daily-header">
+      <div>
+        <h1>Daily Market Wrap-Up</h1>
+        <div class="daily-subtitle">Fast, digestible market notes — synced from Notion.</div>
+        <div class="dd-meta" id="meta"></div>
+      </div>
+      <div class="daily-controls">
+        <div class="daily-search">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input id="searchInput" type="search" placeholder="Search entries (press /)" autocomplete="off" />
+        </div>
+        <button class="dd-btn" id="clearBtn" type="button"><i class="fas fa-xmark"></i> Clear</button>
+        <button class="dd-btn" id="refreshBtn" type="button"><i class="fas fa-rotate"></i> Refresh</button>
+      </div>
+    </div>
+
     <div id="content">
       <div class="loading">Loading daily market wrap-up...</div>
     </div>
-  </div>
+  </main>
 
   <script>
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) mobileMenu.classList.toggle('active');
+    }
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) mobileMenu.classList.remove('active');
+    }
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (mobileMenu && mobileMenu.classList.contains('active') &&
+          !mobileMenu.contains(e.target) && mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Tools dropdown functionality
+    function initToolsDropdown() {
+      const toolsDropdown = document.getElementById('toolsDropdown');
+      const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+      const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+      if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+        let hideTimeout;
+        const showMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.add('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+        };
+        const hideMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.remove('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+        };
+        toolsDropdown.addEventListener('mouseenter', showMenu);
+        toolsDropdown.addEventListener('mouseleave', () => hideTimeout = setTimeout(hideMenu, 400));
+        toolsDropdownBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          if (isOpen) hideMenu(); else showMenu();
+        });
+        document.addEventListener('click', (event) => {
+          if (!toolsDropdown.contains(event.target)) hideMenu();
+        });
+        toolsDropdownBtn.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            const isOpen = toolsDropdownMenu.classList.contains('active');
+            if (isOpen) hideMenu(); else showMenu();
+          }
+        });
+      }
+    }
+
+    let allEntries = [];
+    let lastQuery = '';
+
+    function matchesQuery(entry, query) {
+      const q = query.trim().toLowerCase();
+      if (!q) return true;
+      const hay = `${entry.date || ''} ${entry.title || ''} ${entry.excerpt || ''}`.toLowerCase();
+      return hay.includes(q);
+    }
+
+    function render(query) {
+      lastQuery = query || '';
+      const contentDiv = document.getElementById('content');
+      const metaDiv = document.getElementById('meta');
+      const q = (query || '').trim();
+
+      const filtered = allEntries.filter(e => matchesQuery(e, q));
+      if (metaDiv) {
+        metaDiv.textContent = q
+          ? `${filtered.length} result${filtered.length === 1 ? '' : 's'} for “${q}”`
+          : `${allEntries.length} entr${allEntries.length === 1 ? 'y' : 'ies'} available`;
+      }
+
+      if (filtered.length === 0) {
+        contentDiv.innerHTML = `
+          <div class="entries-list">
+            <h2>No matches</h2>
+            <div class="entry-excerpt">Try a different keyword (title, date, or excerpt).</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (!q) {
+        const latest = filtered[0];
+        const rest = filtered.slice(1);
+
+        let html = `
+          <div class="latest-entry">
+            <div class="entry-date">${escapeHtml(latest.date || '')}</div>
+            <h1>${escapeHtml(latest.title || 'Untitled')}</h1>
+            <div class="entry-excerpt">${escapeHtml(latest.excerpt || '')}</div>
+            <a href="${escapeHtml(latest.path || '')}" class="entry-link">Read full entry →</a>
+          </div>
+        `;
+
+        if (rest.length) {
+          html += `
+            <div class="entries-list">
+              <h2>Past Entries</h2>
+              ${rest.map(entry => `
+                <div class="entry-item">
+                  <a href="${escapeHtml(entry.path || '')}">${escapeHtml(entry.title || 'Untitled')}</a>
+                  <div class="entry-item-date">${escapeHtml(entry.date || '')}</div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        contentDiv.innerHTML = html;
+        return;
+      }
+
+      // Search results view
+      contentDiv.innerHTML = `
+        <div class="entries-list">
+          <h2>Results</h2>
+          ${filtered.map(entry => `
+            <div class="entry-item">
+              <a href="${escapeHtml(entry.path || '')}">${escapeHtml(entry.title || 'Untitled')}</a>
+              <div class="entry-item-date">${escapeHtml(entry.date || '')}</div>
+              <div class="entry-excerpt">${escapeHtml(entry.excerpt || '')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
     async function loadDailyContent() {
       try {
         const indexUrl = new URL('../data/daily/index.json', window.location.href);
@@ -101,48 +429,21 @@
         if (!response.ok) throw new Error(`Failed to fetch data (HTTP ${response.status})`);
         
         const data = await response.json();
-        const contentDiv = document.getElementById('content');
-        
-        let html = '';
-        
-        // Latest entry
-        if (data.latest) {
-          html += `
-            <div class="latest-entry">
-              <div class="entry-date">${data.latest.date}</div>
-              <h1>${escapeHtml(data.latest.title)}</h1>
-              <div class="entry-excerpt">${escapeHtml(data.latest.excerpt)}</div>
-              <a href="${escapeHtml(data.latest.path)}" class="entry-link">Read full entry →</a>
-            </div>
-          `;
-        }
-        
-        // Past entries list
-        if (data.entries && data.entries.length > 1) {
-          html += `
-            <div class="entries-list">
-              <h2>Past Entries</h2>
-              ${data.entries.slice(1).map(entry => `
-                <div class="entry-item">
-                  <a href="${escapeHtml(entry.path)}">${escapeHtml(entry.title)}</a>
-                  <div class="entry-item-date">${entry.date}</div>
-                </div>
-              `).join('')}
-            </div>
-          `;
-        }
+        allEntries = Array.isArray(data?.entries) ? data.entries : [];
 
-        // Empty state (no latest + no entries)
-        if (!html) {
-          html = `
+        if (!allEntries.length) {
+          document.getElementById('content').innerHTML = `
             <div class="entries-list">
               <h2>No entries yet</h2>
               <div class="entry-excerpt">Daily Market Wrap-Up entries haven’t been published yet. Check back soon.</div>
             </div>
           `;
+          const metaDiv = document.getElementById('meta');
+          if (metaDiv) metaDiv.textContent = '0 entries available';
+          return;
         }
-        
-        contentDiv.innerHTML = html;
+
+        render(lastQuery);
       } catch (error) {
         console.error('Error loading daily content:', error);
         const attemptedUrl = (() => {
@@ -167,6 +468,34 @@
       return div.innerHTML;
     }
     
+    // Wire up controls
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => render(e.target.value));
+    }
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        render('');
+        if (searchInput) searchInput.focus();
+      });
+    }
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => loadDailyContent());
+    }
+
+    // Keyboard shortcut: "/" focuses search
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+        if (searchInput) searchInput.focus();
+      }
+    });
+
+    initToolsDropdown();
     loadDailyContent();
   </script>
 </body>

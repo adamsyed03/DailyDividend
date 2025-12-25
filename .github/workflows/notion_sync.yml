@@ -43,6 +43,11 @@ jobs:
           
           # Copy daily directory
           cp -r daily docs/
+
+          # Copy tools directory (so docs-based Pages still works)
+          if [ -d "tools" ]; then
+            cp -r tools docs/
+          fi
           
           # Copy data directory (contains generated JSON)
           if [ -d "data" ]; then
@@ -51,7 +56,8 @@ jobs:
           
           # Copy required root assets
           cp styles.css docs/ 2>/dev/null || true
-          cp index.html docs/ 2>/dev/null || true
+          cp *.html docs/ 2>/dev/null || true
+          cp DDlogo.png docs/ 2>/dev/null || true
       
       - name: Check for changes
         id: git-check
