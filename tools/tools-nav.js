@@ -2,6 +2,7 @@
 // This keeps the "Tools" dropdown and mobile Tools list in sync.
 
 const TOOLS_NAV_ITEMS = [
+  { href: "../daily/index.html", icon: "fas fa-newspaper", label: "Daily Market Wrap-Up" },
   { href: "earnings.html", icon: "fas fa-calendar-alt", label: "Earnings Calendar" },
   { href: "macro-calendar.html", icon: "fas fa-chart-line", label: "Macro Calendar" },
   { href: "hedge-fund.html", icon: "fas fa-briefcase", label: "Hedge Fund Positioning" },

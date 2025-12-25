@@ -10,6 +10,76 @@
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="../styles.css?v=17">
   <style>
+    body { margin: 0; font-family: Inter, sans-serif; background: #f3f4f6; }
+    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    
+    /* Ensure dropdown menu works */
+    .nav-dropdown-menu {
+      display: none !important;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 240px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      gap: 6px;
+      z-index: 1001;
+    }
+    .nav-dropdown-menu.active {
+      display: flex !important;
+    }
+    
+    /* Mobile menu styles */
+    .mobile-menu-btn { display: none; }
+    .mobile-menu { display: none; }
+    
+    @media (max-width: 768px) {
+      .nav-container { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        height: auto; 
+        padding: 15px 20px; 
+        gap: 0;
+      }
+      .nav-links { display: none; }
+      .mobile-menu-btn { 
+        display: block; 
+        background: none; 
+        border: none; 
+        font-size: 24px; 
+        color: #333; 
+        cursor: pointer;
+        padding: 5px;
+        order: 2;
+      }
+      .nav-logo { order: 1; }
+      .mobile-menu { 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: white; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .mobile-menu.active { display: flex; }
+      .mobile-menu a { 
+        text-decoration: none; 
+        color: #333; 
+        font-weight: 500; 
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .mobile-menu a:last-child { border-bottom: none; }
+    }
+
     .daily-container {
       max-width: 900px;
       margin: 0 auto;
@@ -17,11 +87,7 @@
     }
 
     .daily-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 40px;
     }
 
     .daily-header h1 {
@@ -29,86 +95,13 @@
       color: #111827;
       letter-spacing: -0.02em;
       line-height: 1.15;
+      font-size: 2.5rem;
     }
 
     .daily-subtitle {
-      margin-top: 8px;
+      margin-top: 12px;
       color: #6b7280;
-      font-size: 0.95rem;
-    }
-
-    .daily-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .daily-search {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .daily-search i {
-      position: absolute;
-      left: 12px;
-      color: #9ca3af;
-      pointer-events: none;
-      font-size: 0.95rem;
-    }
-
-    .daily-search input {
-      width: min(420px, 70vw);
-      padding: 10px 12px 10px 34px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      background: white;
-      font-size: 0.95rem;
-      outline: none;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .daily-search input:focus {
-      border-color: #93c5fd;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-    }
-
-    .dd-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      background: white;
-      color: #111827;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-    }
-
-    .dd-btn:hover {
-      background: #f9fafb;
-      box-shadow: 0 6px 16px rgba(17, 24, 39, 0.08);
-      transform: translateY(-1px);
-    }
-
-    .dd-btn:active {
-      transform: translateY(0px);
-      box-shadow: none;
-    }
-
-    .dd-meta {
-      margin-top: 10px;
-      color: #6b7280;
-      font-size: 0.85rem;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      font-size: 1rem;
     }
     .latest-entry {
       background: white;
@@ -185,15 +178,8 @@
     }
 
     @media (max-width: 768px) {
-      .daily-header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .daily-controls {
-        justify-content: flex-start;
-      }
-      .daily-search input {
-        width: 100%;
+      .daily-header h1 {
+        font-size: 2rem;
       }
     }
   </style>
@@ -213,6 +199,7 @@
         <a href="../index.html#pricing">Pricing</a>
         <a href="../index.html#terms">Terms</a>
         <a href="../index.html#contact">Contact</a>
+        <a href="#" id="logoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
         <div class="nav-dropdown" id="toolsDropdown">
           <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" id="toolsDropdownBtn">
@@ -237,6 +224,7 @@
         <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
         <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
         <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <a href="#" id="logoutBtnMobile" style="display: none;" onclick="closeMobileMenu()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         <details class="mobile-menu-dropdown">
           <summary>Tools</summary>
           <div class="mobile-menu-dropdown-content">
@@ -266,19 +254,8 @@
 
   <main id="main" class="daily-container" role="main">
     <div class="daily-header">
-      <div>
-        <h1>Daily Market Wrap-Up</h1>
-        <div class="daily-subtitle">Fast, digestible market notes — synced from Notion.</div>
-        <div class="dd-meta" id="meta"></div>
-      </div>
-      <div class="daily-controls">
-        <div class="daily-search">
-          <i class="fas fa-search" aria-hidden="true"></i>
-          <input id="searchInput" type="search" placeholder="Search entries (press /)" autocomplete="off" />
-        </div>
-        <button class="dd-btn" id="clearBtn" type="button"><i class="fas fa-xmark"></i> Clear</button>
-        <button class="dd-btn" id="refreshBtn" type="button"><i class="fas fa-rotate"></i> Refresh</button>
-      </div>
+      <h1>Daily Market Wrap-Up</h1>
+      <div class="daily-subtitle">Markets within minutes.</div>
     </div>
 
     <div id="content">
@@ -343,42 +320,30 @@
       }
     }
 
-    let allEntries = [];
-    let lastQuery = '';
+    async function loadDailyContent() {
+      try {
+        // Add cache-busting query parameter to prevent stale data
+        const indexUrl = new URL('../data/daily/index.json', window.location.href);
+        indexUrl.searchParams.set('_t', Date.now());
+        const response = await fetch(indexUrl);
+        if (!response.ok) throw new Error(`Failed to fetch data (HTTP ${response.status})`);
+        
+        const data = await response.json();
+        const allEntries = Array.isArray(data?.entries) ? data.entries : [];
+        const contentDiv = document.getElementById('content');
 
-    function matchesQuery(entry, query) {
-      const q = query.trim().toLowerCase();
-      if (!q) return true;
-      const hay = `${entry.date || ''} ${entry.title || ''} ${entry.excerpt || ''}`.toLowerCase();
-      return hay.includes(q);
-    }
+        if (!allEntries.length) {
+          contentDiv.innerHTML = `
+            <div class="entries-list">
+              <h2>No entries yet</h2>
+              <div class="entry-excerpt">Daily Market Wrap-Up entries haven't been published yet. Check back soon.</div>
+            </div>
+          `;
+          return;
+        }
 
-    function render(query) {
-      lastQuery = query || '';
-      const contentDiv = document.getElementById('content');
-      const metaDiv = document.getElementById('meta');
-      const q = (query || '').trim();
-
-      const filtered = allEntries.filter(e => matchesQuery(e, q));
-      if (metaDiv) {
-        metaDiv.textContent = q
-          ? `${filtered.length} result${filtered.length === 1 ? '' : 's'} for “${q}”`
-          : `${allEntries.length} entr${allEntries.length === 1 ? 'y' : 'ies'} available`;
-      }
-
-      if (filtered.length === 0) {
-        contentDiv.innerHTML = `
-          <div class="entries-list">
-            <h2>No matches</h2>
-            <div class="entry-excerpt">Try a different keyword (title, date, or excerpt).</div>
-          </div>
-        `;
-        return;
-      }
-
-      if (!q) {
-        const latest = filtered[0];
-        const rest = filtered.slice(1);
+        const latest = allEntries[0];
+        const rest = allEntries.slice(1);
 
         let html = `
           <div class="latest-entry">
@@ -404,46 +369,6 @@
         }
 
         contentDiv.innerHTML = html;
-        return;
-      }
-
-      // Search results view
-      contentDiv.innerHTML = `
-        <div class="entries-list">
-          <h2>Results</h2>
-          ${filtered.map(entry => `
-            <div class="entry-item">
-              <a href="${escapeHtml(entry.path || '')}">${escapeHtml(entry.title || 'Untitled')}</a>
-              <div class="entry-item-date">${escapeHtml(entry.date || '')}</div>
-              <div class="entry-excerpt">${escapeHtml(entry.excerpt || '')}</div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    async function loadDailyContent() {
-      try {
-        const indexUrl = new URL('../data/daily/index.json', window.location.href);
-        const response = await fetch(indexUrl);
-        if (!response.ok) throw new Error(`Failed to fetch data (HTTP ${response.status})`);
-        
-        const data = await response.json();
-        allEntries = Array.isArray(data?.entries) ? data.entries : [];
-
-        if (!allEntries.length) {
-          document.getElementById('content').innerHTML = `
-            <div class="entries-list">
-              <h2>No entries yet</h2>
-              <div class="entry-excerpt">Daily Market Wrap-Up entries haven’t been published yet. Check back soon.</div>
-            </div>
-          `;
-          const metaDiv = document.getElementById('meta');
-          if (metaDiv) metaDiv.textContent = '0 entries available';
-          return;
-        }
-
-        render(lastQuery);
       } catch (error) {
         console.error('Error loading daily content:', error);
         const attemptedUrl = (() => {
@@ -467,35 +392,61 @@
       div.textContent = text;
       return div.innerHTML;
     }
-    
-    // Wire up controls
-    const searchInput = document.getElementById('searchInput');
-    const clearBtn = document.getElementById('clearBtn');
-    const refreshBtn = document.getElementById('refreshBtn');
 
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => render(e.target.value));
-    }
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        if (searchInput) searchInput.value = '';
-        render('');
-        if (searchInput) searchInput.focus();
-      });
-    }
-    if (refreshBtn) {
-      refreshBtn.addEventListener('click', () => loadDailyContent());
-    }
-
-    // Keyboard shortcut: "/" focuses search
-    document.addEventListener('keydown', (e) => {
-      if (e.key === '/' && document.activeElement && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        e.preventDefault();
-        if (searchInput) searchInput.focus();
+    // Logout functionality
+    async function initLogout() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+      
+      // Check if user is logged in
+      try {
+        const { isRemembered } = await import('../auth.js');
+        if (isRemembered()) {
+          if (logoutBtn) {
+            logoutBtn.style.display = 'inline-block';
+            logoutBtn.style.visibility = 'visible';
+            logoutBtn.style.opacity = '1';
+          }
+          if (logoutBtnMobile) {
+            logoutBtnMobile.style.display = 'block';
+            logoutBtnMobile.style.visibility = 'visible';
+            logoutBtnMobile.style.opacity = '1';
+          }
+          
+          // Set up logout handlers (only once)
+          if (logoutBtn && !logoutBtn.dataset.listenerAttached) {
+            const { logout } = await import('../auth.js');
+            logoutBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              if (confirm('Are you sure you want to logout?')) {
+                logout();
+                window.location.href = '/login.html';
+              }
+            });
+            logoutBtn.dataset.listenerAttached = 'true';
+          }
+          
+          if (logoutBtnMobile && !logoutBtnMobile.dataset.listenerAttached) {
+            const { logout } = await import('../auth.js');
+            logoutBtnMobile.addEventListener('click', (e) => {
+              e.preventDefault();
+              if (confirm('Are you sure you want to logout?')) {
+                logout();
+                window.location.href = '/login.html';
+              }
+            });
+            logoutBtnMobile.dataset.listenerAttached = 'true';
+          }
+        }
+      } catch (error) {
+        // If auth.js doesn't exist or user is not logged in, hide logout buttons
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (logoutBtnMobile) logoutBtnMobile.style.display = 'none';
       }
-    });
+    }
 
     initToolsDropdown();
+    initLogout();
     loadDailyContent();
   </script>
 </body>

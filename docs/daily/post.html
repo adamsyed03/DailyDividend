@@ -10,6 +10,76 @@
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="../styles.css?v=17">
   <style>
+    body { margin: 0; font-family: Inter, sans-serif; background: #f3f4f6; }
+    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    
+    /* Ensure dropdown menu works */
+    .nav-dropdown-menu {
+      display: none !important;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 240px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      gap: 6px;
+      z-index: 1001;
+    }
+    .nav-dropdown-menu.active {
+      display: flex !important;
+    }
+    
+    /* Mobile menu styles */
+    .mobile-menu-btn { display: none; }
+    .mobile-menu { display: none; }
+    
+    @media (max-width: 768px) {
+      .nav-container { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        height: auto; 
+        padding: 15px 20px; 
+        gap: 0;
+      }
+      .nav-links { display: none; }
+      .mobile-menu-btn { 
+        display: block; 
+        background: none; 
+        border: none; 
+        font-size: 24px; 
+        color: #333; 
+        cursor: pointer;
+        padding: 5px;
+        order: 2;
+      }
+      .nav-logo { order: 1; }
+      .mobile-menu { 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: white; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .mobile-menu.active { display: flex; }
+      .mobile-menu a { 
+        text-decoration: none; 
+        color: #333; 
+        font-weight: 500; 
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .mobile-menu a:last-child { border-bottom: none; }
+    }
+
     .daily-post-container {
       max-width: 900px;
       margin: 0 auto;
@@ -149,20 +219,7 @@
     }
 
     .post-topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
       margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    .post-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
     }
 
     .dd-btn {
@@ -194,12 +251,6 @@
 
     .dd-btn-secondary {
       color: #374151;
-    }
-
-    @media (max-width: 768px) {
-      .post-actions {
-        justify-content: flex-start;
-      }
     }
   </style>
 </head>
@@ -274,10 +325,6 @@
   <main id="main" class="daily-post-container" role="main">
     <div class="post-topbar">
       <a href="index.html" class="dd-btn dd-btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
-      <div class="post-actions">
-        <a class="dd-btn dd-btn-secondary" id="jsonBtn" href="#" target="_blank" rel="noopener noreferrer"><i class="fas fa-code"></i> JSON</a>
-        <button class="dd-btn" id="copyLinkBtn" type="button"><i class="fas fa-link"></i> Copy link</button>
-      </div>
     </div>
     <div id="content">
       <div class="loading">Loading post...</div>
@@ -352,8 +399,8 @@
         }
         
         const postUrl = new URL(`../data/daily/${date}.json`, window.location.href);
-        const jsonBtn = document.getElementById('jsonBtn');
-        if (jsonBtn) jsonBtn.href = postUrl.toString();
+        // Add cache-busting query parameter to prevent stale data
+        postUrl.searchParams.set('_t', Date.now());
 
         const response = await fetch(postUrl);
         if (!response.ok) {
@@ -421,24 +468,6 @@
       window.addEventListener('scroll', () => requestAnimationFrame(onScroll), { passive: true });
       onScroll();
     }
-
-    // Copy current page link
-    async function copyCurrentLink() {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        const btn = document.getElementById('copyLinkBtn');
-        if (btn) {
-          const prev = btn.innerHTML;
-          btn.innerHTML = '<i class="fas fa-check"></i> Copied';
-          setTimeout(() => btn.innerHTML = prev, 1200);
-        }
-      } catch {
-        // Fallback: do nothing
-      }
-    }
-
-    const copyBtn = document.getElementById('copyLinkBtn');
-    if (copyBtn) copyBtn.addEventListener('click', copyCurrentLink);
 
     initToolsDropdown();
     initReadingProgress();

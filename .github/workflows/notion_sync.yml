@@ -2,7 +2,7 @@ name: Sync Notion Daily Market Wrap-Up
 
 on:
   schedule:
-    # Run every 5 minutes
+    # Run every 5 minutes to ensure fresh data and fix cache issues
     - cron: '*/5 * * * *'
   workflow_dispatch: # Allow manual trigger
 
