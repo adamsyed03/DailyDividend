@@ -1,5 +1,16 @@
 {
-  "latest": null,
-  "entries": []
+  "latest": {
+    "date": "2025-12-23",
+    "title": "Gold hits another all-time high, Alphabet deal, Paramount drama continues",
+    "excerpt": "S&amp;P 500 +0.64% | Gold +2.48% | Bitcoin −0.20% | VIX −5.57%\n🥇 Gold hits new highs\nGold is now up nearly 70% year-to-date, as investors look for safety amid geopolitical tens...",
+    "path": "post.html?date=2025-12-23"
+  },
+  "entries": [
+    {
+      "date": "2025-12-23",
+      "title": "Gold hits another all-time high, Alphabet deal, Paramount drama continues",
+      "excerpt": "S&amp;P 500 +0.64% | Gold +2.48% | Bitcoin −0.20% | VIX −5.57%\n🥇 Gold hits new highs\nGold is now up nearly 70% year-to-date, as investors look for safety amid geopolitical tens...",
+      "path": "post.html?date=2025-12-23"
+    }
+  ]
 }
-
