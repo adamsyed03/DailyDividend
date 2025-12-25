@@ -96,8 +96,9 @@
   <script>
     async function loadDailyContent() {
       try {
-        const response = await fetch('../data/daily/index.json');
-        if (!response.ok) throw new Error('Failed to fetch data');
+        const indexUrl = new URL('../data/daily/index.json', window.location.href);
+        const response = await fetch(indexUrl);
+        if (!response.ok) throw new Error(`Failed to fetch data (HTTP ${response.status})`);
         
         const data = await response.json();
         const contentDiv = document.getElementById('content');
@@ -134,9 +135,17 @@
         contentDiv.innerHTML = html;
       } catch (error) {
         console.error('Error loading daily content:', error);
+        const attemptedUrl = (() => {
+          try {
+            return new URL('../data/daily/index.json', window.location.href).toString();
+          } catch {
+            return '(unable to resolve URL)';
+          }
+        })();
         document.getElementById('content').innerHTML = `
           <div class="error">
-            <strong>Error loading content:</strong> ${escapeHtml(error.message)}
+            <strong>Error loading content:</strong> ${escapeHtml(error.message)}<br>
+            <strong>Attempted URL:</strong> ${escapeHtml(attemptedUrl)}
           </div>
         `;
       }

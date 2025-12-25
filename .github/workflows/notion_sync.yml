@@ -39,11 +39,15 @@ jobs:
           mkdir -p docs
           
           # Clean existing directories before copying
-          rm -rf docs/daily docs/data
+          rm -rf docs/daily docs/data docs/public
           
-          # Copy daily and data directories
+          # Copy daily directory
           cp -r daily docs/
-          cp -r data docs/
+          
+          # Copy data directory (contains generated JSON)
+          if [ -d "data" ]; then
+            cp -r data docs/
+          fi
           
           # Copy required root assets
           cp styles.css docs/ 2>/dev/null || true

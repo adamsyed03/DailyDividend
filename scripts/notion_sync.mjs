@@ -19,6 +19,7 @@ if (!NOTION_TOKEN || !NOTION_PAGE_ID) {
 
 const notion = new Client({ auth: NOTION_TOKEN });
 const dataDir = join(rootDir, 'data', 'daily');
+const DRY_RUN = process.env.DRY_RUN === 'true';
 
 // Ensure data directory exists
 await fs.mkdir(dataDir, { recursive: true });
@@ -135,6 +136,56 @@ function extractPlainText(richTextArray) {
 }
 
 /**
+ * Parse date from "DAILY DIVIDEND | Tue, Dec 23" format
+ * Returns ISO date string (YYYY-MM-DD) or null if parsing fails
+ */
+function parseDailyDividendDate(text) {
+  // Match patterns like "DAILY DIVIDEND | Tue, Dec 23" or "DAILY DIVIDEND | Tue, Dec 23, 2025"
+  const match = text.match(/DAILY DIVIDEND\s*\|\s*([A-Za-z]{3}),\s*([A-Za-z]{3})\s+(\d{1,2})(?:,\s*(\d{4}))?/i);
+  if (!match) return null;
+  
+  const [, dayName, monthName, day, year] = match;
+  const currentYear = new Date().getFullYear();
+  const targetYear = year ? parseInt(year) : currentYear;
+  
+  const monthMap = {
+    'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
+    'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+  };
+  
+  const monthIndex = monthMap[monthName.toLowerCase().substring(0, 3)];
+  if (monthIndex === undefined) return null;
+  
+  const dayNum = parseInt(day);
+  if (isNaN(dayNum)) return null;
+  
+  try {
+    const date = new Date(targetYear, monthIndex, dayNum);
+    // Validate the date is correct (handles invalid dates like Feb 30)
+    if (date.getFullYear() !== targetYear || date.getMonth() !== monthIndex || date.getDate() !== dayNum) {
+      return null;
+    }
+    
+    // Format as YYYY-MM-DD
+    const yearStr = date.getFullYear().toString();
+    const monthStr = (date.getMonth() + 1).toString().padStart(2, '0');
+    const dayStr = date.getDate().toString().padStart(2, '0');
+    return `${yearStr}-${monthStr}-${dayStr}`;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Extract title from "DAILY DIVIDEND | Tue, Dec 23 Title text here" format
+ */
+function extractTitleFromDailyDividend(text) {
+  // Remove the "DAILY DIVIDEND | Date" part and get the rest as title
+  const match = text.match(/DAILY DIVIDEND\s*\|\s*[A-Za-z]{3},\s*[A-Za-z]{3}\s+\d{1,2}(?:,\s*\d{4})?\s*(.+)/i);
+  return match ? match[1].trim() : '';
+}
+
+/**
  * Get all blocks from a Notion page (handles pagination)
  */
 async function getAllBlocks(blockId) {
@@ -156,7 +207,7 @@ async function getAllBlocks(blockId) {
 }
 
 /**
- * Parse entries from blocks (separated by H2 blocks)
+ * Parse entries from blocks (separated by H2 blocks or DAILY DIVIDEND paragraphs)
  */
 function parseEntries(blocks) {
   const entries = [];
@@ -165,12 +216,55 @@ function parseEntries(blocks) {
   let inList = false;
   let listType = null;
   let listItems = [];
+  let hasH2Blocks = false;
+  
+  // First pass: check if we have any H2 blocks
+  for (const block of blocks) {
+    if (block.type === 'heading_2') {
+      hasH2Blocks = true;
+      break;
+    }
+  }
   
   for (const block of blocks) {
     const type = block.type;
+    let isEntryDelimiter = false;
+    let entryDate = null;
+    let entryTitle = null;
     
     // Check if this is a heading_2 block (entry separator)
     if (type === 'heading_2') {
+      const h2Text = extractPlainText(block.heading_2?.rich_text || []);
+      
+      // Try format 1: YYYY-MM-DD — Title
+      const match1 = h2Text.match(/^(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/);
+      if (match1) {
+        isEntryDelimiter = true;
+        entryDate = match1[1];
+        entryTitle = match1[2];
+      } else {
+        // Try format 2: DAILY DIVIDEND | Tue, Dec 23 Title
+        const parsedDate = parseDailyDividendDate(h2Text);
+        if (parsedDate) {
+          isEntryDelimiter = true;
+          entryDate = parsedDate;
+          entryTitle = extractTitleFromDailyDividend(h2Text) || h2Text.replace(/DAILY DIVIDEND\s*\|\s*[A-Za-z]{3},\s*[A-Za-z]{3}\s+\d{1,2}(?:,\s*\d{4})?\s*/i, '').trim();
+        }
+      }
+    } else if (type === 'paragraph' && !hasH2Blocks) {
+      // Fallback: treat paragraph lines starting with "DAILY DIVIDEND |" as delimiters
+      const paraText = extractPlainText(block.paragraph?.rich_text || []);
+      if (paraText.trim().toUpperCase().startsWith('DAILY DIVIDEND |')) {
+        const parsedDate = parseDailyDividendDate(paraText);
+        if (parsedDate) {
+          isEntryDelimiter = true;
+          entryDate = parsedDate;
+          entryTitle = extractTitleFromDailyDividend(paraText) || paraText.replace(/DAILY DIVIDEND\s*\|\s*[A-Za-z]{3},\s*[A-Za-z]{3}\s+\d{1,2}(?:,\s*\d{4})?\s*/i, '').trim();
+        }
+      }
+    }
+    
+    if (isEntryDelimiter) {
       // Save previous entry if exists
       if (currentEntry) {
         // Close any open list
@@ -186,23 +280,24 @@ function parseEntries(blocks) {
       }
       
       // Start new entry
-      const h2Text = extractPlainText(block.heading_2?.rich_text || []);
-      const match = h2Text.match(/^(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/);
+      currentEntry = {
+        date: entryDate,
+        title: entryTitle || 'Untitled',
+        html: '',
+      };
+      currentBlocks = [];
+      inList = false;
+      listItems = [];
       
-      if (match) {
-        currentEntry = {
-          date: match[1],
-          title: match[2],
-          html: '',
-        };
-        currentBlocks = [];
-        inList = false;
-        listItems = [];
-      } else {
-        // Invalid format, skip
-        currentEntry = null;
-        continue;
+      // Include delimiter block in content if it's a paragraph (not H2)
+      if (type === 'paragraph') {
+        const html = renderBlock(block);
+        if (html) {
+          currentBlocks.push(html);
+        }
       }
+      // For H2 delimiters, skip including them in content
+      continue;
     } else if (currentEntry) {
       // Handle list items (group consecutive list items)
       if (type === 'bulleted_list_item' || type === 'numbered_list_item') {
@@ -273,9 +368,26 @@ async function sync() {
     const entries = parseEntries(blocks);
     console.log(`Found ${entries.length} entries`);
     
-    if (entries.length === 0) {
-      console.log('No entries found. Exiting.');
+    if (DRY_RUN) {
+      console.log('\n=== DRY RUN MODE - Parsed Entries ===');
+      if (entries.length === 0) {
+        console.log('No entries found.');
+      } else {
+        entries.forEach((entry, idx) => {
+          console.log(`${idx + 1}. Date: ${entry.date} | Title: ${entry.title}`);
+        });
+      }
+      console.log('=== End Dry Run ===\n');
       return;
+    }
+    
+    if (entries.length === 0) {
+      console.error('No entries parsed from Notion. Check heading format or delimiter rules.');
+      console.error('Expected formats:');
+      console.error('  1. Heading 2: "YYYY-MM-DD — Title"');
+      console.error('  2. Heading 2: "DAILY DIVIDEND | Tue, Dec 23 Title"');
+      console.error('  3. Paragraph (if no H2): "DAILY DIVIDEND | Tue, Dec 23 Title"');
+      process.exit(1);
     }
     
     // Sort entries by date (newest first)
@@ -302,13 +414,13 @@ async function sync() {
         date: latest.date,
         title: latest.title,
         excerpt: generateExcerpt(latest.html),
-        path: `/daily/post.html?date=${latest.date}`,
+        path: `post.html?date=${latest.date}`,
       },
       entries: entries.map(entry => ({
         date: entry.date,
         title: entry.title,
         excerpt: generateExcerpt(entry.html),
-        path: `/daily/post.html?date=${entry.date}`,
+        path: `post.html?date=${entry.date}`,
       })),
     };
     

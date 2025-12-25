@@ -153,12 +153,13 @@
           throw new Error('Invalid or missing date parameter');
         }
         
-        const response = await fetch(`../data/daily/${date}.json`);
+        const postUrl = new URL(`../data/daily/${date}.json`, window.location.href);
+        const response = await fetch(postUrl);
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error('Post not found');
           }
-          throw new Error('Failed to fetch post');
+          throw new Error(`Failed to fetch post (HTTP ${response.status})`);
         }
         
         const data = await response.json();
@@ -180,9 +181,20 @@
         document.title = `${data.title} - Daily Market Wrap-Up - Daily Dividend`;
       } catch (error) {
         console.error('Error loading post:', error);
+        const attemptedUrl = (() => {
+          try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const date = urlParams.get('date');
+            if (!date) return '(missing date parameter)';
+            return new URL(`../data/daily/${date}.json`, window.location.href).toString();
+          } catch {
+            return '(unable to resolve URL)';
+          }
+        })();
         document.getElementById('content').innerHTML = `
           <div class="error">
-            <strong>Error loading post:</strong> ${escapeHtml(error.message)}
+            <strong>Error loading post:</strong> ${escapeHtml(error.message)}<br>
+            <strong>Attempted URL:</strong> ${escapeHtml(attemptedUrl)}
           </div>
         `;
       }
