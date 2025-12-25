@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Macro Calendar - Daily Dividend</title>
+  <meta name="description" content="Track high-impact macro economic events and data releases. Stay ahead with Daily Dividend's macro calendar.">
+  <meta name="keywords" content="macro calendar, economic calendar, economic data, financial calendar, forex calendar">
+  <meta name="author" content="Daily Dividend">
+  <meta name="robots" content="index, follow">
+
+  <!-- Access Control -->
+  <script type="module">
+    import { isRemembered } from '/auth.js';
+    if (!isRemembered()) window.location.href = '/login.html';
+  </script>
+
+  <!-- Fonts / Icons / Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="styles.css?v=17">
+  
+  <!-- Critical CSS for faster loading -->
+  <style>
+    body { margin: 0; font-family: Inter, sans-serif; }
+    .navbar { 
+      position: fixed; 
+      top: 0; 
+      left: 0;
+      right: 0;
+      width: 100%; 
+      z-index: 1000; 
+      background: rgba(255, 255, 255, 0.99);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.7);
+      backdrop-filter: blur(16px);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+      margin: 0;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #4b5563;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 12px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus {
+      color: #111827;
+      background: rgba(229, 231, 235, 0.7);
+      outline: none;
+    }
+    .nav-dropdown {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav-dropdown-btn {
+      background: none;
+      border: none;
+      font: inherit;
+      color: #4b5563;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown-btn:hover,
+    .nav-dropdown-btn:focus {
+      color: #111827;
+      background: rgba(229, 231, 235, 0.7);
+      outline: none;
+    }
+    .nav-dropdown-menu {
+      display: none !important;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 240px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      gap: 6px;
+      z-index: 1001;
+    }
+    .nav-dropdown-menu.active {
+      display: flex !important;
+    }
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #4b5563;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+    .nav-dropdown-item:hover {
+      background: #f3f4f6;
+      color: #111827;
+    }
+    
+    .week-calendar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .week-days {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      max-width: clamp(420px, 80vw, 860px);
+      padding: 10px 6px;
+    }
+
+    .week-days::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .week-days::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 999px;
+    }
+
+    .week-day {
+      flex: 0 0 168px;
+      min-width: 168px;
+      padding: 22px 18px;
+      scroll-snap-align: start;
+    }
+
+    .day-label {
+      font-size: 1rem;
+    }
+    
+    .earnings-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    
+    .earnings-table thead th {
+      font-size: 0.78rem;
+    }
+    
+    .earnings-table tbody td {
+      font-size: 0.95rem;
+    }
+    
+    .earnings-table tbody td:nth-child(1) {
+      font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+      text-align: center;
+      width: 64px;
+    }
+
+    .earnings-table thead th:nth-child(1) {
+      text-align: center;
+      width: 64px;
+    }
+
+    .week-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #ffffff;
+      color: #1f2937;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .week-nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .week-nav-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+    }
+    
+    /* Mobile menu styles */
+    .mobile-menu-btn { display: none; }
+    .mobile-menu { display: none; }
+    
+    @media (max-width: 768px) {
+      .nav-container { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        height: auto; 
+        padding: 15px 20px; 
+        gap: 0;
+      }
+      .nav-links { display: none; }
+      .mobile-menu-btn { 
+        display: block; 
+        background: none; 
+        border: none; 
+        font-size: 24px; 
+        color: #333; 
+        cursor: pointer;
+        padding: 5px;
+        order: 2;
+      }
+      .nav-logo { order: 1; }
+      .mobile-menu { 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: white; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .mobile-menu.active { display: flex; }
+      .mobile-menu a { 
+        text-decoration: none; 
+        color: #333; 
+        font-weight: 500; 
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .mobile-menu a:last-child { border-bottom: none; }
+      
+      /* Mobile Calendar Optimizations */
+      .week-nav-btn { display: none; }
+      .week-calendar { padding: 18px 12px; }
+      .week-days {
+        max-width: 100%;
+        gap: 12px;
+        padding: 6px 4px;
+      }
+      .week-days::-webkit-scrollbar { display: none; }
+      .week-day {
+        min-width: 135px;
+        padding: 18px 14px;
+      }
+      .day-label {
+        font-size: 0.9rem !important;
+      }
+      
+      .earnings-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .earnings-table {
+        min-width: 100%;
+        font-size: 0.85rem !important;
+      }
+      
+      .earnings-table thead th {
+        padding: 10px 6px !important;
+        font-size: 0.72rem !important;
+      }
+      
+      .earnings-table tbody td {
+        padding: 10px 6px !important;
+        font-size: 0.85rem !important;
+      }
+      
+      /* Hide Time and Currency columns on mobile */
+      .earnings-table thead th:nth-child(1),
+      .earnings-table tbody td:nth-child(1) {
+        display: none;
+      }
+      
+      .earnings-main {
+        padding: 15px 10px !important;
+      }
+      
+      .section-header h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 10px !important;
+      }
+      
+      .earnings-week-title {
+        font-size: 1.1rem !important;
+        margin-bottom: 15px !important;
+      }
+      
+      .earnings-day-title {
+        font-size: 1rem !important;
+        margin-bottom: 15px !important;
+      }
+      
+      .currency-badge {
+        font-size: 0.7rem !important;
+        padding: 3px 8px !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .week-days {
+        gap: 12px;
+      }
+      .week-day {
+        min-width: 135px;
+        padding: 18px 14px;
+      }
+      .day-label {
+        font-size: 0.98rem !important;
+      }
+    }
+  </style>
+
+  <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+</head>
+
+<body>
+  <!-- =========================
+       NAV
+  ========================== -->
+     <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
+                </a>
+            </div>
+        <div class="nav-links" role="menubar">
+                     <a href="index.html#features">Why Us</a>
+                    <a href="index.html#how-it-works">How it Works</a>
+                    <a href="index.html#pricing">Pricing</a>
+                    <a href="index.html#test">Test</a>
+                    <a href="index.html#terms">Terms</a>
+                    <a href="index.html#contact">Contact</a>
+                    <a href="#" id="logoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    
+                    <!-- Tools Dropdown -->
+                    <div class="nav-dropdown" id="toolsDropdown">
+                        <button class="nav-dropdown-btn" 
+                                aria-haspopup="true" 
+                                aria-expanded="false" 
+                                id="toolsDropdownBtn">
+                            Tools
+                        </button>
+                        <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+                            <a href="daily/index.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
+                            </a>
+                            <a href="earnings.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-calendar-alt"></i> Earnings Calendar
+                            </a>
+                            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-chart-line"></i> Macro Calendar
+                            </a>
+                            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-briefcase"></i> Hedge Fund Positioning
+                            </a>
+                            <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-microchip"></i> Company Analysis
+                            </a>
+                            <a href="tools/congress.html" class="nav-dropdown-item" role="menuitem">
+                                <i class="fas fa-landmark"></i> Congress Trade Monitor
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                     <i class="fas fa-bars"></i>
+                 </button>
+                 <div class="mobile-menu" id="mobileMenu">
+                     <a href="index.html#features" onclick="closeMobileMenu()">Why Us</a>
+                     <a href="index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+                     <a href="index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+                     <a href="index.html#test" onclick="closeMobileMenu()">Test</a>
+                     <a href="index.html#terms" onclick="closeMobileMenu()">Terms</a>
+                     <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+                     <details class="mobile-menu-dropdown">
+                         <summary>Tools</summary>
+                         <div class="mobile-menu-dropdown-content">
+                             <a href="daily/index.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
+                             </a>
+                             <a href="earnings.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-calendar-alt"></i> Earnings Calendar
+                             </a>
+                             <a href="macro-calendar.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-chart-line"></i> Macro Calendar
+                             </a>
+                             <a href="hedge-fund.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-briefcase"></i> Hedge Fund Positioning
+                             </a>
+                             <a href="company-analysis.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-microchip"></i> Company Analysis
+                             </a>
+                             <a href="tools/congress.html" onclick="closeMobileMenu()">
+                                 <i class="fas fa-landmark"></i> Congress Trade Monitor
+                             </a>
+                         </div>
+                     </details>
+                </div>
+        </div>
+    </nav>
+
+  <!-- =========================
+       MACRO CALENDAR
+  ========================== -->
+    <section id="macro-calendar" class="earnings-section" style="padding-top: 120px; min-height: 100vh;">
+        <div class="container">
+            <div class="section-header">
+                <h1 style="font-size: 2.5rem;">Macro Calendar</h1>
+            </div>
+            
+            <div class="earnings-layout" style="display: block; max-width: 1200px; margin: 0 auto;">
+                <!-- Main Macro Events This Week -->
+                <div class="earnings-main" style="width: 100%;">
+                    <!-- Week Navigation -->
+                    <div class="week-calendar">
+                        <button class="week-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
+                        <div class="week-days">
+                            <div class="week-day" data-date="2025-11-02">
+                                <div class="day-label">Sun, Nov 2</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-03">
+                                <div class="day-label">Mon, Nov 3</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-04">
+                                <div class="day-label">Tue, Nov 4</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-05">
+                                <div class="day-label">Wed, Nov 5</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-06">
+                                <div class="day-label">Thu, Nov 6</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-07">
+                                <div class="day-label">Fri, Nov 7</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-08">
+                                <div class="day-label">Sat, Nov 8</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-09">
+                                <div class="day-label">Sun, Nov 9</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-10">
+                                <div class="day-label">Mon, Nov 10</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-11">
+                                <div class="day-label">Tue, Nov 11</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-12">
+                                <div class="day-label">Wed, Nov 12</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-13">
+                                <div class="day-label">Thu, Nov 13</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-14">
+                                <div class="day-label">Fri, Nov 14</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-15">
+                                <div class="day-label">Sat, Nov 15</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-16">
+                                <div class="day-label">Sun, Nov 16</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-17">
+                                <div class="day-label">Mon, Nov 17</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-18">
+                                <div class="day-label">Tue, Nov 18</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-19">
+                                <div class="day-label">Wed, Nov 19</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-20">
+                                <div class="day-label">Thu, Nov 20</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-21">
+                                <div class="day-label">Fri, Nov 21</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-22">
+                                <div class="day-label">Sat, Nov 22</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-23">
+                                <div class="day-label">Sun, Nov 23</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-24">
+                                <div class="day-label">Mon, Nov 24</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-25">
+                                <div class="day-label">Tue, Nov 25</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-26">
+                                <div class="day-label">Wed, Nov 26</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-27">
+                                <div class="day-label">Thu, Nov 27</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-28">
+                                <div class="day-label">Fri, Nov 28</div>
+                            </div>
+                            <div class="week-day" data-date="2025-11-29">
+                                <div class="day-label">Sat, Nov 29</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-01">
+                                <div class="day-label">Mon, Dec 1</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-02">
+                                <div class="day-label">Tue, Dec 2</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-03">
+                                <div class="day-label">Wed, Dec 3</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-04">
+                                <div class="day-label">Thu, Dec 4</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-05">
+                                <div class="day-label">Fri, Dec 5</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-06">
+                                <div class="day-label">Sat, Dec 6</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-07">
+                                <div class="day-label">Sun, Dec 7</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-08">
+                                <div class="day-label">Mon, Dec 8</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-09">
+                                <div class="day-label">Tue, Dec 9</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-10">
+                                <div class="day-label">Wed, Dec 10</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-11">
+                                <div class="day-label">Thu, Dec 11</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-12">
+                                <div class="day-label">Fri, Dec 12</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-13">
+                                <div class="day-label">Sat, Dec 13</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-14">
+                                <div class="day-label">Sun, Dec 14</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-15">
+                                <div class="day-label">Mon, Dec 15</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-16">
+                                <div class="day-label">Tue, Dec 16</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-17">
+                                <div class="day-label">Wed, Dec 17</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-18">
+                                <div class="day-label">Thu, Dec 18</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-19">
+                                <div class="day-label">Fri, Dec 19</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-20">
+                                <div class="day-label">Sat, Dec 20</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-21">
+                                <div class="day-label">Sun, Dec 21</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-22">
+                                <div class="day-label">Mon, Dec 22</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-23">
+                                <div class="day-label">Tue, Dec 23</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-24">
+                                <div class="day-label">Wed, Dec 24</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-25">
+                                <div class="day-label">Thu, Dec 25</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-26">
+                                <div class="day-label">Fri, Dec 26</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-27">
+                                <div class="day-label">Sat, Dec 27</div>
+                            </div>
+                            <div class="week-day" data-date="2025-12-28">
+                                <div class="day-label">Sun, Dec 28</div>
+                            </div>
+                        </div>
+                        <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    
+                    <div class="macro-day-contents">
+                        <div class="earnings-day-content" data-day-content="2025-11-02">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-02"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-03">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-03"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-04">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-04"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-05">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-05"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-06">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-06"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-07">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-07"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-08">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-08"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-09">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-09"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-10">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-10"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-11">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-11"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-12">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-12"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-13">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-13"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-14">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-14"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-15">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-15"></div>
+                    </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-16">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-16"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-17">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-17"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-18">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-18"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-19">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-19"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-20">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-20"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-21">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-21"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-22">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-22"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-23">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-23"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-24">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-24"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-25">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-25"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-26">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-26"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-27">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-27"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-28">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-28"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-11-29">
+                            <div class="earnings-table-wrapper" data-day-table="2025-11-29"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-01">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-01"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-02">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-02"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-03">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-03"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-04">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-04"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-05">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-05"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-06">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-06"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-07">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-07"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-08">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-08"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-09">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-09"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-10">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-10"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-11">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-11"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-12">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-12"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-13">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-13"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-14">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-14"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-15">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-15"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-16">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-16"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-17">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-17"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-18">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-18"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-19">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-19"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-20">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-20"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-21">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-21"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-22">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-22"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-23">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-23"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-24">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-24"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-25">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-25"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-26">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-26"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-27">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-27"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2025-12-28">
+                            <div class="earnings-table-wrapper" data-day-table="2025-12-28"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+     <footer class="footer" style="background-color: white !important; text-align: center;">
+         <div class="container" style="text-align: center;">
+             <div style="text-align: center;">
+                 <p style="color: black; margin: 0;">&copy; 2025 Daily Dividend. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+  <script>
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+      }
+    }
+    
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.remove('active');
+      }
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (mobileMenu && mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Tools dropdown functionality
+    const toolsDropdown = document.getElementById('toolsDropdown');
+    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+      let toolsHideTimeout;
+
+      const showToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
+        toolsDropdownMenu.classList.add('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+      };
+
+      const hideToolsMenu = () => {
+        clearTimeout(toolsHideTimeout);
+        toolsDropdownMenu.classList.remove('active');
+        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+      };
+
+      // Hover functionality (with relaxed hide delay)
+      toolsDropdown.addEventListener('mouseenter', showToolsMenu);
+      toolsDropdown.addEventListener('mouseleave', () => {
+        toolsHideTimeout = setTimeout(hideToolsMenu, 700);
+      });
+
+      // Click/touch functionality
+      toolsDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = toolsDropdownMenu.classList.contains('active');
+        if (isOpen) {
+          hideToolsMenu();
+        } else {
+          showToolsMenu();
+        }
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!toolsDropdown.contains(e.target)) {
+          hideToolsMenu();
+        }
+      });
+
+      // Keyboard navigation
+      toolsDropdownBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          if (isOpen) {
+            hideToolsMenu();
+          } else {
+            showToolsMenu();
+          }
+        }
+      });
+    }
+
+    const MACRO_EVENTS = {
+      '2025-11-02': { message: 'No significant events to report.' },
+      '2025-11-03': { message: 'No significant events to report.' },
+      '2025-11-04': { message: 'No significant events to report.' },
+      '2025-11-05': {
+        rows: [
+          { time: '02:00', country: '🇩🇪', event: 'German Factory Orders (MoM) (Sep)', actual: '1.1%', actualClass: 'positive', forecast: '0.9%', previous: '-0.4%', previousClass: 'negative' },
+          { time: '03:15', country: '🇪🇸', event: 'Spanish Services PMI (Oct)', actual: '56.6', actualClass: 'positive', forecast: '54.8', previous: '54.3' },
+          { time: '03:45', country: '🇮🇹', event: 'Italian Composite PMI (Oct)', actual: '53.1', actualClass: 'positive', forecast: '51.7', previous: '51.7' },
+          { time: '03:45', country: '🇮🇹', event: 'Italian Services PMI (Oct)', actual: '54.0', actualClass: 'positive', forecast: '53.0', previous: '52.5' },
+          { time: '03:50', country: '🇫🇷', event: 'French S&P Global Composite PMI (Oct)', actual: '47.7', actualClass: 'positive', forecast: '46.8', previous: '48.1' },
+          { time: '03:50', country: '🇫🇷', event: 'French Services PMI (Oct)', actual: '48.0', actualClass: 'positive', forecast: '47.1', previous: '48.5' },
+          { time: '03:55', country: '🇩🇪', event: 'German Composite PMI (Oct)', actual: '53.9', actualClass: 'positive', forecast: '53.8', previous: '52.0' },
+          { time: '03:55', country: '🇩🇪', event: 'German Services PMI (Oct)', actual: '54.6', actualClass: 'positive', forecast: '54.5', previous: '51.5' },
+          { time: '04:00', country: '🇪🇺', event: 'Services PMI (Oct)', actual: '53.0', actualClass: 'positive', forecast: '52.6', previous: '51.3' },
+          { time: '04:30', country: '🇬🇧', event: 'Composite PMI (Oct)', actual: '52.2', actualClass: 'positive', forecast: '51.1', previous: '50.1' },
+          { time: '04:30', country: '🇬🇧', event: 'Services PMI (Oct)', actual: '52.3', actualClass: 'positive', forecast: '51.1', previous: '50.8' },
+          { time: '08:00', country: '🇧🇷', event: 'S&P Global Composite PMI (Oct)', actual: '48.2', forecast: '-', previous: '46.0' },
+          { time: '08:00', country: '🇧🇷', event: 'S&P Global Services PMI (Oct)', actual: '47.7', forecast: '-', previous: '46.3' },
+          { time: '09:45', country: '🇺🇸', event: 'S&P Global Composite PMI (Oct)', actual: '54.6', actualClass: 'negative', forecast: '54.8', previous: '53.9' },
+          { time: '09:45', country: '🇺🇸', event: 'Services PMI (Oct)', actual: '54.8', actualClass: 'negative', forecast: '55.2', previous: '54.2' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing PMI (Oct)', actual: '52.4', actualClass: 'positive', forecast: '50.7', previous: '50.0' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing Business Activity (Oct)', actual: '54.3', forecast: '-', previous: '49.9' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing Employment (Oct)', actual: '48.2', actualClass: 'positive', forecast: '47.6', previous: '47.2' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing New Orders (Oct)', actual: '56.2', actualClass: 'positive', forecast: '51.0', previous: '50.4' },
+          { time: '10:00', country: '🇺🇸', event: 'ISM Non-Manufacturing Prices (Oct)', actual: '70.0', actualClass: 'positive', forecast: '68.0', previous: '69.4' },
+          { time: '19:30', country: '🇯🇵', event: 'Services PMI (Oct)', actual: '52.4', forecast: '53.3', previous: '-' }
+        ]
+      },
+      '2025-11-06': {
+        rows: [
+          { time: '02:00', country: '🇩🇪', event: 'German Industrial Production (MoM) (Sep)', actual: '-', forecast: '3.0%', previous: '-4.3%', previousClass: 'negative' },
+          { time: '07:00', country: '🇬🇧', event: 'BoE Interest Rate Decision (Nov)', actual: '-', forecast: '4.00%', previous: '4.00%' },
+          { time: '14:00', country: '🇲🇽', event: 'Interest Rate Decision (Nov)', actual: '-', forecast: '7.25%', previous: '7.50%' }
+        ]
+      },
+      '2025-11-07': { message: 'No significant events to report.' },
+      '2025-11-08': {
+        rows: [
+          { time: '20:30', country: '🇨🇳', event: 'CPI (YoY) (Oct)', actual: '-', forecast: '-0.3%', previous: '-' },
+          { time: '20:30', country: '🇨🇳', event: 'CPI (MoM) (Oct)', actual: '-', forecast: '0.1%', previous: '-' },
+          { time: '20:30', country: '🇨🇳', event: 'PPI (YoY) (Oct)', actual: '-', forecast: '-2.3%', previous: '-' }
+        ]
+      },
+      '2025-11-09': { message: 'No significant events scheduled.' },
+      '2025-11-10': {
+        rows: [
+          { time: '-', country: '🇪🇺', event: 'EU Sentix Investor Confidence (Nov)', actual: '-', forecast: '-3.9', previous: '-' }
+        ]
+      },
+      '2025-11-11': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Unemployment Rate (Sep)', actual: '-', forecast: '4.9%', previous: '4.8%' },
+          { time: '-', country: '🇪🇺', event: "ECB's Lagarde Speaks", actual: '-', forecast: '-', previous: '-' }
+        ]
+      },
+      '2025-11-12': {
+        rows: [
+          { time: '-', country: '🇩🇪', event: 'Germany CPI (MoM) (Oct)', actual: '-', forecast: '0.3%', previous: '0.3%' },
+          { time: '-', country: '🌐', event: 'OPEC Monthly Report', actual: '-', forecast: '-', previous: '-' }
+        ]
+      },
+      '2025-11-13': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK GDP (YoY)', actual: '-', forecast: '-', previous: '1.4%' },
+          { time: '-', country: '🇬🇧', event: 'UK Business Investment (QoQ)', actual: '-', forecast: '-0.7%', previous: '-1.1%' },
+          { time: '-', country: '🇫🇷', event: 'France Unemployment Rate', actual: '-', forecast: '7.6%', previous: '7.5%' },
+          { time: '-', country: '🇺🇸', event: 'US CPI (YoY)', actual: '-', forecast: '-', previous: '3.0%' },
+          { time: '-', country: '🇺🇸', event: 'US Initial Jobless Claims', actual: '-', forecast: '-', previous: '218K' }
+        ]
+      },
+      '2025-11-14': {
+        rows: [
+          { time: '-', country: '🇪🇺', event: 'EU GDP (YoY)', actual: '-', forecast: '1.3%', previous: '1.3%' }
+        ]
+      },
+      '2025-11-15': { message: 'No significant events scheduled.' },
+      '2025-11-16': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan GDP Growth', actual: '-', forecast: '-2.5%', previous: '2.2%' }
+        ]
+      },
+      '2025-11-17': {
+        rows: [
+          { time: '-', country: '🇮🇹', event: 'Italy Inflation Rate YoY', actual: '-', forecast: '1.2%', previous: '1.6%' }
+        ]
+      },
+      '2025-11-18': { message: 'No significant events scheduled.' },
+      '2025-11-19': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Inflation Rate YoY', actual: '-', forecast: '3.6%', previous: '3.8%' },
+          { time: '-', country: '🇮🇩', event: 'Indonesia Interest Rate Decision', actual: '-', forecast: '4.5%', previous: '4.75%' },
+          { time: '-', country: '🇿🇦', event: 'South Africa Inflation YoY', actual: '-', forecast: '3.5%', previous: '3.3%' },
+          { time: '-', country: '🇪🇺', event: 'EU Inflation Rate YoY', actual: '-', forecast: '2.1%', previous: '2.2%' }
+        ]
+      },
+      '2025-11-20': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan Inflation Rate YoY', actual: '-', forecast: '3.1%', previous: '2.9%' }
+        ]
+      },
+      '2025-11-21': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Manufacturing PMI', actual: '-', forecast: '49.5', previous: '49.7' },
+          { time: '-', country: '🇬🇧', event: 'UK Services PMI', actual: '-', forecast: '52', previous: '51.9' },
+          { time: '-', country: '🇩🇪', event: 'Germany Manufacturing PMI', actual: '-', forecast: '50.1', previous: '49.6' }
+        ]
+      },
+      '2025-11-22': { message: 'No significant events scheduled.' },
+      '2025-11-23': { message: 'No significant events scheduled.' },
+      '2025-11-24': {
+        rows: [
+          { time: '-', country: '🇺🇸', event: 'US Industrial Production YoY (Sep)', actual: '-', forecast: '-', previous: '0.87%', previousClass: 'positive' }
+        ]
+      },
+      '2025-11-25': {
+        rows: [
+          { time: '-', country: '🇩🇪', event: 'German GDP (YoY)', actual: '-', forecast: '0.0%', previous: '0.0%' },
+          { time: '-', country: '🇺🇸', event: 'US PPI (MoM)', actual: '-', forecast: '0.3%', previous: '-0.1%', previousClass: 'negative' },
+          { time: '-', country: '🇺🇸', event: 'US Consumer Confidence', actual: '-', forecast: '93.4', previous: '94.6', previousClass: 'positive' }
+        ]
+      },
+      '2025-12-15': {
+        rows: [
+          { time: '-', country: '🇨🇳', event: 'China Unemployment Rate', actual: '-', forecast: '5.2%', previous: '5.1%' },
+          { time: '-', country: '🇮🇳', event: 'India Inflation Rate YoY', actual: '-', forecast: '-0.5%', previous: '-1.21%' },
+          { time: '-', country: '🇪🇺', event: 'EU Industrial Production', actual: '-', forecast: '1.6%', previous: '1.2%' },
+          { time: '-', country: '🇨🇦', event: 'Canada Inflation Rate', actual: '-', forecast: '2.3%', previous: '2.2%' }
+        ]
+      },
+      '2025-12-16': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan Manufacturing PMI', actual: '-', forecast: '49.5', previous: '48.7' },
+          { time: '-', country: '🇮🇳', event: 'India Composite PMI', actual: '-', forecast: '60.2', previous: '59.7' },
+          { time: '-', country: '🇬🇧', event: 'UK Unemployment Rate', actual: '-', forecast: '5.1%', previous: '5.0%' },
+          { time: '-', country: '🇫🇷', event: 'France Composite PMI', actual: '-', forecast: '50.6', previous: '50.4' },
+          { time: '-', country: '🇩🇪', event: 'Germany Composite PMI', actual: '-', forecast: '52.9', previous: '52.4' },
+          { time: '-', country: '🇪🇺', event: 'EU Composite PMI', actual: '-', forecast: '53.6', previous: '52.8%' },
+          { time: '-', country: '🇪🇺', event: 'EU Manufacturing PMI', actual: '-', forecast: '50.1', previous: '49.6' },
+          { time: '-', country: '🇪🇺', event: 'EU Services PMI', actual: '-', forecast: '53.8', previous: '53.6' },
+          { time: '-', country: '🇮🇹', event: 'Italy Inflation Rate YoY', actual: '-', forecast: '1.1%', previous: '1.3%' },
+          { time: '-', country: '🇬🇧', event: 'UK Composite PMI', actual: '-', forecast: '52.0', previous: '51.3' },
+          { time: '-', country: '🇪🇺', event: 'EU Balance of Trade', actual: '-', forecast: '-', previous: '-' },
+          { time: '-', country: '🇺🇸', event: 'US Unemployment Rate', actual: '-', forecast: '4.6%', previous: '4.4%' }
+        ]
+      },
+      '2025-12-17': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'UK Inflation Rate YoY', actual: '-', forecast: '3.4%', previous: '3.6%' },
+          { time: '-', country: '🇪🇺', event: 'EU Inflation Rate YoY', actual: '-', forecast: '2.2%', previous: '2.1%' }
+        ]
+      },
+      '2025-12-18': {
+        rows: [
+          { time: '-', country: '🇫🇷', event: 'France Business Confidence', actual: '-', forecast: '-', previous: '-' },
+          { time: '-', country: '🇬🇧', event: 'BoE Interest Rate Decision', actual: '-', forecast: '3.75%', previous: '4.00%' },
+          { time: '-', country: '🇪🇺', event: 'ECB Interest Rate Decision', actual: '-', forecast: '2.15%', previous: '2.15%' },
+          { time: '-', country: '🇺🇸', event: 'US Inflation Rate YoY', actual: '-', forecast: '3.0%', previous: '-' },
+          { time: '-', country: '🇯🇵', event: 'Japan Inflation Rate YoY', actual: '-', forecast: '2.9%', previous: '3.0%' }
+        ]
+      },
+      '2025-12-19': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'BoJ Interest Rate Decision', actual: '-', forecast: '0.75%', previous: '0.50%' },
+          { time: '-', country: '🇬🇧', event: 'UK Retail Sales (MoM)', actual: '-', forecast: '0.4%', previous: '-1.1%' }
+        ]
+      },
+      '2025-11-26': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'BoJ Core CPI (YoY)', actual: '-', forecast: '-', previous: '2.1%', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'US Q3 GDP (QoQ)', actual: '-', forecast: '-', previous: '3.8%', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'US PCE Price Index (YoY)', actual: '-', forecast: '2.9%', previous: '2.9%' },
+          { time: '-', country: '🇺🇸', event: 'US New Home Sales', actual: '-', forecast: '710k', previous: '800k', previousClass: 'positive' }
+        ]
+      },
+      '2025-11-27': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Japan Industrial Production (MoM)', actual: '-', forecast: '-0.5%', previous: '2.6%', previousClass: 'positive' }
+        ]
+      },
+      '2025-11-28': {
+        rows: [
+          { time: '-', country: '🇩🇪', event: 'German Retail Sales (MoM)', actual: '-', forecast: '0.3%', previous: '0.2%', previousClass: 'positive' },
+          { time: '-', country: '🇨🇭', event: 'Swiss GDP (YoY)', actual: '-', forecast: '-', previous: '1.2%', previousClass: 'positive' },
+          { time: '-', country: '🇪🇸', event: 'Spanish CPI (YoY)', actual: '-', forecast: '3.0%', previous: '3.1%', previousClass: 'positive' },
+          { time: '-', country: '🇩🇪', event: 'German Unemployment Rate (Nov)', actual: '-', forecast: '-', previous: '6.3%' },
+          { time: '-', country: '🇩🇪', event: 'Germany CPI (YoY)', actual: '-', forecast: '-', previous: '2.3%', previousClass: 'positive' }
+        ]
+      },
+      '2025-11-29': {
+        rows: [
+          { time: '-', country: '🇨🇳', event: 'China Manufacturing PMI', actual: '-', forecast: '-', previous: '49' },
+          { time: '-', country: '🇨🇳', event: 'China Non-Manufacturing PMI', actual: '-', forecast: '-', previous: '50.1', previousClass: 'positive' }
+        ]
+      },
+      '2025-12-01': {
+        rows: [
+          { time: '-', country: '🇰🇷', event: 'Exports YoY', actual: '-', forecast: '3.60%', previous: '5.70%', previousClass: 'positive' },
+          { time: '-', country: '🇰🇷', event: 'CPI Growth YoY', actual: '-', forecast: '2.4', previous: '-' },
+          { time: '-', country: '🇰🇷', event: 'Imports YoY', actual: '-', forecast: '3.40%', previous: '-1.50%', previousClass: 'negative' },
+          { time: '-', country: '🇯🇵', event: 'S&P Global Manufacturing PMI (final)', actual: '-', forecast: '48.8', previous: '48.2' },
+          { time: '-', country: '🇯🇵', event: 'BoJ Gov Ueda Speech', actual: '-', forecast: '-', previous: '-' },
+          { time: '-', country: '🇨🇳', event: 'RatingDog Manufacturing PMI', actual: '-', forecast: '50.9', previous: '50.6', previousClass: 'positive' },
+          { time: '-', country: '🇷🇺', event: 'S&P Global Manufacturing PMI', actual: '-', forecast: '0.80%', previous: '1.60%', previousClass: 'positive' },
+          { time: '-', country: '🇬🇧', event: 'S&P Global Manufacturing PMI Final', actual: '-', forecast: '50.2', previous: '49.7' },
+          { time: '-', country: '🇺🇸', event: 'S&P Global Manufacturing PMI Final', actual: '-', forecast: '51.9', previous: '52.5', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'ISM Manufacturing PMI', actual: '-', forecast: '49.3', previous: '48.7' },
+          { time: '-', country: '🇰🇷', event: 'Inflation rate YoY', actual: '-', forecast: '-0.30%', previous: '0.30%', previousClass: 'positive' }
+        ]
+      },
+      '2025-12-02': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Consumer Confidence', actual: '-', forecast: '36.1', previous: '35.8', previousClass: 'negative' },
+          { time: '-', country: '🇬🇧', event: 'Nationwide Housing Pricing YoY', actual: '-', forecast: '0.20%', previous: '0.30%', previousClass: 'positive' },
+          { time: '-', country: '🇫🇷', event: 'Budget Balance', actual: '-', forecast: '€-164.0B', previous: '€-155.4B', previousClass: 'positive' },
+          { time: '-', country: '🇧🇷', event: 'Industrial Production YoY', actual: '-', forecast: '0.70%', previous: '2%', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'Fed Bowman Speech', actual: '-', forecast: '-', previous: '-' }
+        ]
+      },
+      '2025-12-03': {
+        rows: [
+          { time: '-', country: '🇺🇸', event: 'Export Prices YoY', actual: '-', forecast: '4.10%', previous: '3.40%', previousClass: 'negative' },
+          { time: '-', country: '🇺🇸', event: 'Import Prices YoY', actual: '-', forecast: '0.60%', previous: '0.00%', previousClass: 'negative' },
+          { time: '-', country: '🇷🇺', event: 'Unemployment Rate', actual: '-', forecast: '2.20%', previous: '2.20%' }
+        ]
+      },
+      '2025-12-04': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Foreign Exchange Reserves', actual: '-', forecast: '-', previous: '$1347.4B' }
+        ]
+      },
+      '2025-12-05': {
+        rows: [
+          { time: '-', country: '🇮🇳', event: 'RBI Interest Rate Decision', actual: '-', forecast: '5.25%', previous: '5.50%' },
+          { time: '-', country: '🇪🇺', event: 'Employment Change YoY Final', actual: '-', forecast: '0.50%', previous: '0.60%', previousClass: 'positive' },
+          { time: '-', country: '🇺🇸', event: 'Core PCE Price Index YoY', actual: '-', forecast: '2.80%', previous: '2.90%' }
+        ]
+      },
+      '2025-12-06': { message: 'No significant events scheduled.' },
+      '2025-12-07': {
+        rows: [
+          { time: '-', country: '🇨🇳', event: 'Foreign Exchange Reserves', actual: '-', forecast: '$3.35T', previous: '$3.343T', previousClass: 'negative' },
+          { time: '-', country: '🇯🇵', event: 'GDP Growth Annualised Rate', actual: '-', forecast: '-1.80%', previous: '2.30%', previousClass: 'positive' }
+        ]
+      },
+      '2025-12-08': { message: 'No significant events scheduled.' },
+      '2025-12-21': {
+        rows: [
+          { time: '-', country: '🇬🇧', event: 'Business investment YoY Final', actual: '-', forecast: '0.70%', previous: '3%' },
+          { time: '-', country: '🇬🇧', event: 'GDP Growth Rate YoY Final', actual: '-', forecast: '1.30%', previous: '1.40%' }
+        ]
+      },
+      '2025-12-22': {
+        rows: [
+          { time: '-', country: '🇺🇸', event: 'Industrial Production YoY', actual: '-', forecast: '1.10%', previous: '1.60%' },
+          { time: '-', country: '🇺🇸', event: 'Manufacturing Production YoY', actual: '-', forecast: '1%', previous: '1.5%' },
+          { time: '-', country: '🇺🇸', event: 'CB Consumer Confidence', actual: '-', forecast: '89', previous: '88.7' }
+        ]
+      },
+      '2025-12-23': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Leading Economic Index Final', actual: '-', forecast: '110', previous: '108.2' },
+          { time: '-', country: '🇨🇦', event: 'Budget balance', actual: '-', forecast: 'C$-3.52B', previous: 'C$-5.02B' }
+        ]
+      },
+      '2025-12-24': {
+        rows: [
+          { time: '-', country: '🇯🇵', event: 'Unemployment rate', actual: '-', forecast: '2.60%', previous: '2.60%' }
+        ]
+      },
+      '2025-12-25': {
+        rows: [
+          { time: '-', country: '🇷🇺', event: 'Business confidence', actual: '-', forecast: '-2', previous: '-1.8' }
+        ]
+      },
+      '2025-12-26': { message: 'No significant events to report.' },
+      '2025-12-27': { message: 'No significant events to report.' },
+      '2025-12-28': { message: 'No significant events to report.' }
+    };
+
+    const MACRO_HEADERS = ['Country', 'Event', 'Forecast', 'Previous'];
+
+    const MACRO_EVENT_DESCRIPTIONS = {
+      'Consumer Confidence': 'Tracks households\' expectations about the wider economy and business; e.g., affecting income, jobs, and spending. Strong sentiment usually supports economic growth.',
+      'Nationwide Housing Pricing YoY': 'Measures annual change in UK house prices. Gives insight into housing demand and household wealth effects.',
+      'Budget Balance': 'Shows the government\'s fiscal position - a deficit or surplus can affect bond issuance, borrowing costs, and fiscal policy.',
+      'Industrial Production YoY': 'Measures Brazil\'s output in manufacturing, mining, and utilities versus last year.',
+      'Fed Bowman Speech': 'Speech from a Federal Reserve Governor. Markets look for signals on rates, inflation, and economic risks.',
+      'Export Prices YoY': 'Tracks how prices of exported goods have changed over the year. Helps assess competitiveness and pricing power.',
+      'Import Prices YoY': 'Tracks how prices of imported goods have changed over the year.',
+      'Unemployment Rate': 'Shows the share of the labor force without work. The lack of change year on year in Russia is interesting, perhaps due to ongoing war with Ukraine. Perhaps methodology here and the sub-sectors of unemployment would prove useful.',
+      'Foreign Exchange Reserves': 'The stock of foreign currencies held by the central bank. Signals financial stability and the ability to manage currency moves.',
+      'RBI Interest Rate Decision': 'India\'s central bank sets its policy rate. The predicted increase in the rate by 25 base points, a move in the opposite direction to the Fed, where the market is pricing in another cut in December.',
+      'Employment Change YoY Final': 'Measures the annual change in the number of people employed. A clear gauge of labor-market strength.',
+      'Core PCE Price Index YoY': 'The Fed\'s preferred inflation measure, excluding food and energy. Important for US rate expectations.',
+      'GDP Growth Annualised Rate': 'Measures economic growth for the quarter, scaled to an annual pace. Provides a clear signal of the economy\'s direction and speed.',
+      'Exports YoY': 'This shows how much Korea\'s exports have risen or fallen compared to a year ago. Markets watch it to understand global demand and trade momentum.',
+      'CPI Growth YoY': 'Measures how fast consumer prices are rising in Korea versus last year. A key signal for inflation pressures and central bank policy outlook.',
+      'Imports YoY': 'Tracks changes in import volumes compared with a year ago. Gives insight into domestic demand in Korea alongside export metrics.',
+      'Inflation rate YoY': 'Shows how prices across the Korean economy are rising relative to last year. Important for interest-rate expectations, as well as consumer and business confidence in planning for future purchases, especially large ones.',
+      'RatingDog Manufacturing PMI': 'RatingDog Manufacturing PMI offers a granular read on things such as production and export demand in the Chinese economy, an important sector of its economy.',
+      'ISM Manufacturing PMI': 'US manufacturing survey by the Institute for Supply Management with strong market influence in measuring the health of the US manufacturing sector. Gives an early signal on output, hiring and supply-chain conditions',
+      'S&P Global Manufacturing PMI (final)': 'Survey of factory activity covering elements of the Japanese economy including output, orders and employment. A forward-looking read on manufacturing strength',
+      'BoJ Gov Ueda Speech': 'Comments from the Bank of Japan Governor on policy and economic conditions. Signals potential shifts in Japan\'s rate stance or yield-curve policy, but no forecast in terms of specific rate cuts.',
+      'RatingDog Manufacturing PMI': 'RatingDog Manufacturing PMI offers a granular read on things such as production and export demand in the Chinese economy, an important sector of its economy.',
+      'S&P Global Manufacturing PMI': 'The S&P Global Manufacturing PMI offers insight on a country\'s manufacturing sector health, shedding light on orders, production and export demand. A number over 50 is expansion, and one below 50 is contraction',
+      'German Factory Orders (MoM) (Sep)': 'Measures the value of new orders received by German manufacturers. A leading indicator of industrial production and economic activity.',
+      'Spanish Services PMI (Oct)': 'Survey-based indicator of service sector activity in Spain. Values above 50 indicate expansion, below 50 indicate contraction.',
+      'Italian Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in Italy. Provides a comprehensive view of private sector economic health.',
+      'Italian Services PMI (Oct)': 'Survey-based indicator of service sector activity in Italy. Tracks business conditions in services industries.',
+      'French S&P Global Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in France. A key indicator of overall economic momentum.',
+      'French Services PMI (Oct)': 'Survey-based indicator of service sector activity in France. Tracks business conditions and sentiment in services industries.',
+      'German Composite PMI (Oct)': 'Combined measure of manufacturing and services activity in Germany. Provides a comprehensive view of private sector economic health.',
+      'German Services PMI (Oct)': 'Survey-based indicator of service sector activity in Germany. Values above 50 indicate expansion in the services sector.',
+      'Services PMI (Oct)': 'Survey-based indicator of service sector activity. Tracks business conditions, new orders, and employment in services industries.',
+      'Composite PMI (Oct)': 'Combined measure of manufacturing and services activity. Provides a comprehensive view of private sector economic health.',
+      'ISM Non-Manufacturing PMI (Oct)': 'U.S. Institute for Supply Management survey of service sector activity. Values above 50 indicate expansion.',
+      'ISM Non-Manufacturing Business Activity (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking business activity levels in the U.S. service sector.',
+      'ISM Non-Manufacturing Employment (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking employment trends in the U.S. service sector.',
+      'ISM Non-Manufacturing New Orders (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking new orders received by U.S. service sector companies.',
+      'ISM Non-Manufacturing Prices (Oct)': 'Component of the ISM Non-Manufacturing PMI tracking price changes in the U.S. service sector.',
+      'German Industrial Production (MoM) (Sep)': 'Measures the volume of output from German manufacturing, mining, and utilities sectors. A key indicator of industrial activity.',
+      'BoE Interest Rate Decision (Nov)': 'The Bank of England sets its benchmark interest rate. Affects borrowing costs, inflation, and currency valuation.',
+      'Interest Rate Decision (Nov)': 'Central bank sets its benchmark interest rate. Affects borrowing costs, inflation expectations, and currency valuation.',
+      'CPI (YoY) (Oct)': 'Consumer Price Index measures inflation by tracking price changes of a basket of goods and services compared to a year ago.',
+      'CPI (MoM) (Oct)': 'Consumer Price Index measures inflation by tracking price changes of a basket of goods and services compared to the previous month.',
+      'PPI (YoY) (Oct)': 'Producer Price Index measures inflation at the wholesale level by tracking price changes of goods sold by producers.',
+      'EU Sentix Investor Confidence (Nov)': 'Survey-based measure of investor sentiment in the Eurozone. Positive values indicate optimism, negative values indicate pessimism.',
+      'UK Unemployment Rate (Sep)': 'Measures the percentage of the labor force that is unemployed and actively seeking work. A key indicator of labor market health.',
+      'ECB\'s Lagarde Speaks': 'Comments from the European Central Bank President on monetary policy and economic conditions. Markets watch for signals on interest rates and policy direction.',
+      'Germany CPI (MoM) (Oct)': 'Consumer Price Index measures inflation in Germany by tracking price changes compared to the previous month.',
+      'OPEC Monthly Report': 'Organization of the Petroleum Exporting Countries publishes monthly analysis of oil market conditions, supply, demand, and price forecasts.',
+      'UK GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in the UK compared to a year ago. A key indicator of economic growth.',
+      'UK Business Investment (QoQ)': 'Measures capital spending by UK businesses on equipment, buildings, and other assets. A leading indicator of economic activity.',
+      'France Unemployment Rate': 'Measures the percentage of the French labor force that is unemployed and actively seeking work.',
+      'US CPI (YoY)': 'Consumer Price Index measures inflation in the United States by tracking price changes of a basket of goods and services compared to a year ago.',
+      'US Initial Jobless Claims': 'Measures the number of people filing for unemployment benefits for the first time. A weekly indicator of labor market health.',
+      'EU GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in the Eurozone compared to a year ago.',
+      'Japan GDP Growth': 'Gross Domestic Product measures the total value of goods and services produced in Japan. A key indicator of economic growth.',
+      'Italy Inflation Rate YoY': 'Measures the annual rate of price increases in Italy. A key indicator of inflation pressures and purchasing power.',
+      'UK Inflation Rate YoY': 'Measures the annual rate of price increases in the UK. A key indicator of inflation pressures and central bank policy outlook.',
+      'Indonesia Interest Rate Decision': 'Bank Indonesia sets its benchmark interest rate. Affects borrowing costs, inflation, and currency valuation.',
+      'South Africa Inflation YoY': 'Measures the annual rate of price increases in South Africa. A key indicator of inflation pressures.',
+      'EU Inflation Rate YoY': 'Measures the annual rate of price increases in the Eurozone. A key indicator of inflation pressures and ECB policy outlook.',
+      'Japan Inflation Rate YoY': 'Measures the annual rate of price increases in Japan. A key indicator of inflation pressures and Bank of Japan policy outlook.',
+      'UK Manufacturing PMI': 'Survey-based indicator of manufacturing activity in the UK. Values above 50 indicate expansion in the manufacturing sector.',
+      'UK Services PMI': 'Survey-based indicator of service sector activity in the UK. Values above 50 indicate expansion in the services sector.',
+      'Germany Manufacturing PMI': 'Survey-based indicator of manufacturing activity in Germany. Values above 50 indicate expansion in the manufacturing sector.',
+      'US Industrial Production YoY (Sep)': 'Measures the annual change in output from U.S. manufacturing, mining, and utilities sectors. A key indicator of industrial activity.',
+      'German GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in Germany compared to a year ago.',
+      'US PPI (MoM)': 'Producer Price Index measures inflation at the wholesale level by tracking price changes of goods sold by producers compared to the previous month.',
+      'US Consumer Confidence': 'Survey-based measure of consumer sentiment about current and future economic conditions. Higher values indicate greater optimism.',
+      'BoJ Core CPI (YoY)': 'Bank of Japan\'s preferred inflation measure excluding fresh food. A key indicator for monetary policy decisions.',
+      'US Q3 GDP (QoQ)': 'Gross Domestic Product measures the total value of goods and services produced in the U.S. compared to the previous quarter.',
+      'US PCE Price Index (YoY)': 'Personal Consumption Expenditures Price Index measures inflation by tracking price changes of goods and services consumed by households.',
+      'US New Home Sales': 'Measures the number of newly constructed homes sold. A key indicator of housing market strength and consumer confidence.',
+      'Japan Industrial Production (MoM)': 'Measures the monthly change in output from Japanese manufacturing, mining, and utilities sectors.',
+      'German Retail Sales (MoM)': 'Measures the monthly change in retail sales in Germany. A key indicator of consumer spending and economic activity.',
+      'Swiss GDP (YoY)': 'Gross Domestic Product measures the total value of goods and services produced in Switzerland compared to a year ago.',
+      'Spanish CPI (YoY)': 'Consumer Price Index measures inflation in Spain by tracking price changes compared to a year ago.',
+      'German Unemployment Rate (Nov)': 'Measures the percentage of the German labor force that is unemployed and actively seeking work.',
+      'Germany CPI (YoY)': 'Consumer Price Index measures inflation in Germany by tracking price changes compared to a year ago.',
+      'China Manufacturing PMI': 'Survey-based indicator of manufacturing activity in China. Values above 50 indicate expansion in the manufacturing sector.',
+      'China Non-Manufacturing PMI': 'Survey-based indicator of service sector activity in China. Values above 50 indicate expansion in the services sector.',
+      'Business investment YoY Final': 'Measures the annual change in UK corporate spending on equipment, buildings, and technology, signalling business confidence and future growth momentum.',
+      'GDP Growth Rate YoY Final': 'The final estimate of annual economic growth, capturing overall expansion or contraction across the UK economy.',
+      'Manufacturing Production YoY': 'Focuses specifically on factory output growth, highlighting strength or weakness in the manufacturing sector.',
+      'CB Consumer Confidence': 'A survey-based measure of household sentiment on jobs, income, and spending prospects, often leading consumer spending trends.',
+      'Leading Economic Index Final': 'A composite index of forward-looking indicators used to predict Japan\'s economic direction over the coming months.',
+      'Budget balance': 'Shows the difference between government revenues and expenditures, indicating fiscal health and borrowing needs.',
+      'Unemployment rate': 'Measures the share of the labor force without work, reflecting labor market tightness and wage pressure risks.',
+      'Business confidence': 'A survey of corporate sentiment on current conditions and future outlook, providing insight into economic resilience under sanctions.'
+    };
+
+    function createCell(value, className) {
+      const safeValue = value === undefined || value === null ? '-' : value;
+      return `<td${className ? ` class="${className}"` : ''}>${safeValue}</td>`;
+    }
+
+    function renderMacroTables() {
+      const wrappers = document.querySelectorAll('.earnings-table-wrapper[data-day-table]');
+      wrappers.forEach(wrapper => {
+        const dateKey = wrapper.dataset.dayTable;
+        const data = MACRO_EVENTS[dateKey];
+
+        if (!data) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">No data available.</p>`;
+          return;
+        }
+
+        if (data.message) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">${data.message}</p>`;
+          return;
+        }
+
+        const rowsHtml = (data.rows || []).map(row => {
+          const description = MACRO_EVENT_DESCRIPTIONS[row.event] || '';
+          const eventCell = description 
+            ? `<td class="event-with-tooltip">${row.event || '-'}<span class="event-tooltip">${description}</span></td>`
+            : `<td>${row.event || '-'}</td>`;
+          return `
+          <tr>
+            <td>${row.country || '-'}</td>
+            ${eventCell}
+            ${createCell(row.forecast, row.forecastClass)}
+            ${createCell(row.previous, row.previousClass)}
+          </tr>
+        `;
+        }).join('');
+
+        wrapper.innerHTML = `
+          <table class="earnings-table" role="table" aria-label="Macro events">
+            <thead>
+              <tr>
+                <th scope="col">Country</th>
+                <th scope="col">Event</th>
+                <th scope="col">Forecast</th>
+                <th scope="col">Previous</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        `;
+      });
+      
+      // Add mouse tracking for tooltips
+      document.querySelectorAll('.event-with-tooltip').forEach(element => {
+        const tooltip = element.querySelector('.event-tooltip');
+        if (!tooltip) return;
+        
+        element.addEventListener('mouseenter', () => {
+          tooltip.style.opacity = '1';
+          tooltip.style.visibility = 'visible';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          tooltip.style.visibility = 'hidden';
+        });
+        
+        element.addEventListener('mousemove', (e) => {
+          const offset = 15;
+          tooltip.style.left = (e.clientX + offset) + 'px';
+          tooltip.style.top = (e.clientY + offset) + 'px';
+          tooltip.style.transform = 'none';
+        });
+      });
+    }
+
+    function initMacroCalendar() {
+      const weekDays = Array.from(document.querySelectorAll('.week-day'));
+      const weekDaysContainer = document.querySelector('.week-days');
+      const prevBtn = document.querySelector('.week-nav-btn.prev');
+      const nextBtn = document.querySelector('.week-nav-btn.next');
+      const allContents = Array.from(document.querySelectorAll('.earnings-day-content'));
+ 
+      const updateNavState = () => {
+        if (!prevBtn || !nextBtn) return;
+        const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+        prevBtn.disabled = activeIndex <= 0;
+        nextBtn.disabled = activeIndex === -1 || activeIndex >= weekDays.length - 1;
+      };
+ 
+      const showDay = (day, options = {}) => {
+        if (!day) return;
+        const dateKey = day.dataset.date;
+        const {
+          shouldScroll = true,
+          alignStart = false,
+          behaviorOverride
+        } = options;
+ 
+        weekDays.forEach(d => d.classList.remove('active'));
+          day.classList.add('active');
+ 
+        allContents.forEach(content => content.classList.remove('active'));
+        const target = document.querySelector(`.earnings-day-content[data-day-content="${dateKey}"]`);
+        if (target) {
+          target.classList.add('active');
+          }
+ 
+        if (shouldScroll && weekDaysContainer) {
+          const behavior = behaviorOverride || (weekDaysContainer.dataset.instant === 'true' ? 'auto' : 'smooth');
+          const scrollAction = () => {
+            if (alignStart) {
+              const targetLeft = Math.max(day.offsetLeft - 8, 0);
+              weekDaysContainer.scrollTo({ left: targetLeft, behavior });
+            } else {
+              day.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+            }
+          };
+          setTimeout(scrollAction, 40);
+        }
+ 
+        updateNavState();
+      };
+ 
+      const now = new Date();
+      const todayIso = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
+      let activated = false;
+      let closestDay = null;
+      let closestDiff = Infinity;
+
+      // First, try to find today's exact date
+      weekDays.forEach(day => {
+        if (!activated && day.dataset.date === todayIso) {
+          showDay(day, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+          activated = true;
+        }
+        
+        // Also track the closest date to today
+        if (day.dataset.date) {
+          const dayDate = new Date(day.dataset.date);
+          const todayDate = new Date(todayIso);
+          const diff = Math.abs(dayDate - todayDate);
+          if (diff < closestDiff) {
+            closestDiff = diff;
+            closestDay = day;
+          }
+        }
+      });
+
+      // If today's date not found, use the closest date
+      if (!activated) {
+        if (closestDay) {
+          showDay(closestDay, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+          activated = true;
+        } else if (weekDays.length) {
+          // Fallback to first day if no dates found
+          showDay(weekDays[0], { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+        }
+      }
+ 
+      weekDays.forEach(day => {
+        day.addEventListener('click', () => showDay(day, { shouldScroll: true }));
+      });
+ 
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (activeIndex > 0) {
+            showDay(weekDays[activeIndex - 1]);
+          }
+        });
+      }
+ 
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (activeIndex < weekDays.length - 1) {
+            showDay(weekDays[activeIndex + 1]);
+          }
+        });
+      }
+ 
+      updateNavState();
+    }
+
+    function initTooltipPositioning() {
+      document.querySelectorAll('.event-with-tooltip').forEach(element => {
+        const tooltip = element.querySelector('.event-tooltip');
+        if (!tooltip) return;
+        
+        element.addEventListener('mouseenter', (e) => {
+          // Make tooltip visible temporarily to measure it
+          tooltip.style.visibility = 'visible';
+          tooltip.style.opacity = '0';
+          
+          const rect = element.getBoundingClientRect();
+          const tooltipRect = tooltip.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+          const scrollY = window.scrollY || window.pageYOffset;
+          
+          // Calculate position above the element (default)
+          let left = rect.left + (rect.width / 2);
+          let top = rect.top + scrollY - tooltipRect.height - 12;
+          let position = 'above';
+          
+          // Adjust if tooltip would go off the left edge
+          if (left - (tooltipRect.width / 2) < 10) {
+            left = tooltipRect.width / 2 + 10;
+          }
+          
+          // Adjust if tooltip would go off the right edge
+          if (left + (tooltipRect.width / 2) > viewportWidth - 10) {
+            left = viewportWidth - (tooltipRect.width / 2) - 10;
+          }
+          
+          // If tooltip would go off the top, show it below instead
+          if (rect.top - tooltipRect.height - 12 < 10) {
+            top = rect.bottom + scrollY + 12;
+            position = 'below';
+          }
+          
+          // Ensure tooltip doesn't go off the bottom
+          if (rect.bottom + scrollY + tooltipRect.height + 12 > viewportHeight + scrollY - 10) {
+            top = viewportHeight + scrollY - tooltipRect.height - 10;
+          }
+          
+          tooltip.style.left = left + 'px';
+          tooltip.style.top = top + 'px';
+          tooltip.style.transform = 'translateX(-50%)';
+          
+          // Update arrow position based on tooltip placement
+          if (position === 'below') {
+            tooltip.setAttribute('data-position', 'below');
+          } else {
+            tooltip.removeAttribute('data-position');
+          }
+          
+          // Now make it visible
+          tooltip.style.visibility = 'visible';
+          tooltip.style.opacity = '1';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          tooltip.style.visibility = 'hidden';
+          tooltip.style.opacity = '0';
+        });
+      });
+    }
+
+    // Logout functionality
+    function initLogout() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn && typeof auth !== 'undefined' && auth.isAuthenticated()) {
+        logoutBtn.style.display = 'inline-block';
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm('Are you sure you want to logout?')) {
+            auth.logout();
+            window.location.href = 'index.html';
+          }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMacroTables();
+      initMacroCalendar();
+      // Re-initialize tooltips after tables are rendered
+      setTimeout(initTooltipPositioning, 100);
+      initLogout();
+    });
+  </script>
+  
+  <style>
+    /* Additional styles for currency badges and value colors */
+    .currency-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #f3f4f6;
+      color: #374151;
+      font-weight: 600;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    
+    .positive {
+      color: #10b981;
+      font-weight: 600;
+    }
+    
+    .negative {
+      color: #ef4444;
+      font-weight: 600;
+    }
+    
+    /* Ensure proper emoji rendering */
+    .earnings-table tbody td:nth-child(1) {
+      font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+      text-align: center;
+    }
+    
+    /* Event Tooltip Styles */
+    .event-with-tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-block;
+    }
+    
+    /* Ensure tooltip container doesn't clip content */
+    .earnings-section {
+      overflow: visible !important;
+    }
+    
+    .container {
+      overflow: visible !important;
+    }
+    
+    .earnings-table-wrapper {
+      overflow: visible !important;
+    }
+    
+    .earnings-table {
+      overflow: visible !important;
+    }
+    
+    .earnings-day-content {
+      overflow: visible !important;
+    }
+    
+    .earnings-main {
+      overflow: visible !important;
+    }
+    
+    .earnings-layout {
+      overflow: visible !important;
+    }
+    
+    .macro-day-contents {
+      overflow: visible !important;
+    }
+    
+    .earnings-table tbody td {
+      overflow: visible !important;
+      position: relative;
+    }
+    
+    .earnings-table tbody tr {
+      overflow: visible !important;
+    }
+    
+    .event-tooltip {
+      position: fixed;
+      padding: 18px 24px;
+      background: #1f2937;
+      color: #f9fafb;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      min-width: 400px;
+      max-width: 900px;
+      width: max-content;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      pointer-events: none;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .event-tooltip::after {
+      display: none;
+    }
+    
+    .event-with-tooltip {
+      position: relative;
+    }
+    
+    .event-with-tooltip:hover .event-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Override default hover styles when JavaScript positioning is active */
+    .event-tooltip[style*="left"] {
+      position: fixed !important;
+    }
+    
+    /* Ensure tooltip doesn't overflow on small screens */
+    @media (max-width: 768px) {
+      .event-tooltip {
+        left: 0;
+        transform: translateX(0) translateY(-5px);
+        max-width: calc(100vw - 40px);
+        min-width: 280px;
+        font-size: 0.95rem;
+        padding: 16px 18px;
+      }
+      
+      .event-tooltip::after {
+        left: 30px;
+        transform: translateX(0);
+      }
+      
+      .event-with-tooltip:hover .event-tooltip {
+        transform: translateX(0) translateY(0);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .event-tooltip {
+        min-width: 250px;
+        font-size: 0.9rem;
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</body>
+</html>
+

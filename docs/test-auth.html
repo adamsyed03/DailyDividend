@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test Auth URL</title>
+  <style>
+    body { font-family: monospace; padding: 20px; }
+    input, button { padding: 10px; margin: 5px; }
+    #result { margin-top: 20px; padding: 10px; background: #f0f0f0; }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Test Google Apps Script URL</h1>
+  <input type="text" id="phone" placeholder="Enter phone number" value="+919167280679">
+  <button onclick="testURL()">Test URL</button>
+  <div id="result"></div>
+
+  <script>
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbyN2q9eBr_PKg1YKhprjCZyQRSBWzYi9IMRxX-QF1UGUMytJ4ahJSmHxP3zM-qEB2rw/exec';
+
+    async function testURL() {
+      const phone = document.getElementById('phone').value.trim();
+      const url = `${BASE_URL}?mode=check&phone=${encodeURIComponent(phone)}`;
+      const resultDiv = document.getElementById('result');
+      
+      resultDiv.innerHTML = 'Testing...<br>URL: ' + url + '<br><br>';
+      
+      try {
+        const res = await fetch(url, { method: 'GET', cache: 'no-store' });
+        resultDiv.innerHTML += 'Status: ' + res.status + '<br>';
+        resultDiv.innerHTML += 'Status Text: ' + res.statusText + '<br>';
+        resultDiv.innerHTML += 'Headers: ' + JSON.stringify([...res.headers.entries()]) + '<br><br>';
+        
+        const text = await res.text();
+        resultDiv.innerHTML += 'Response: <strong>' + text + '</strong><br>';
+        
+        if (text.trim() === 'ok') {
+          resultDiv.innerHTML += '<span class="success">✓ SUCCESS - Phone number found!</span>';
+        } else {
+          resultDiv.innerHTML += '<span class="error">✗ Phone number not found</span>';
+        }
+      } catch (error) {
+        resultDiv.innerHTML += '<span class="error">ERROR: ' + error.name + '</span><br>';
+        resultDiv.innerHTML += 'Message: ' + error.message + '<br>';
+        resultDiv.innerHTML += 'Stack: ' + error.stack;
+      }
+    }
+  </script>
+</body>
+</html>
+

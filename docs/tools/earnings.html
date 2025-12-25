@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Earnings Calendar - Daily Dividend</title>
+  <meta name="description" content="Track upcoming earnings announcements from major companies. Stay ahead with Daily Dividend's earnings calendar.">
+  <meta name="keywords" content="earnings calendar, earnings reports, company earnings, financial calendar, stock earnings">
+  <meta name="author" content="Daily Dividend">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Access Control -->
+  <script type="module">
+    import { isRemembered } from '../auth.js';
+    if (!isRemembered()) {
+      window.location.href = '../login.html';
+    } else {
+      // Immediately show logout button if logged in (before DOMContentLoaded)
+      const showLogout = () => {
+        const btn = document.getElementById('logoutBtn');
+        if (btn) btn.style.display = 'inline-block';
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', showLogout);
+      } else {
+        showLogout();
+      }
+    }
+  </script>
+  
+  <!-- Fonts / Icons / Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="../styles.css?v=17">
+  
+  <!-- Critical CSS for faster loading -->
+  <style>
+    body { margin: 0; font-family: Inter, sans-serif; }
+    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
+    
+    /* Ensure dropdown menu works */
+    .nav-dropdown-menu {
+      display: none !important;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 240px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+      gap: 6px;
+      z-index: 1001;
+    }
+    .nav-dropdown-menu.active {
+      display: flex !important;
+    }
+
+    .week-calendar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .week-days {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      max-width: clamp(420px, 80vw, 860px);
+      padding: 10px 6px;
+    }
+
+    .week-days::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .week-days::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 999px;
+    }
+
+    .week-day {
+      flex: 0 0 168px;
+      min-width: 168px;
+      padding: 22px 18px;
+      scroll-snap-align: start;
+    }
+
+    .day-label {
+      font-size: 1rem;
+    }
+
+    .week-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #ffffff;
+      color: #1f2937;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .week-nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .week-nav-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      box-shadow: none;
+    }
+    
+    /* Mobile menu styles */
+    .mobile-menu-btn { display: none; }
+    .mobile-menu { display: none; }
+    
+    @media (max-width: 768px) {
+      .nav-container { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        height: auto; 
+        padding: 15px 20px; 
+        gap: 0;
+      }
+      .nav-links { display: none; }
+      .mobile-menu-btn { 
+        display: block; 
+        background: none; 
+        border: none; 
+        font-size: 24px; 
+        color: #333; 
+        cursor: pointer;
+        padding: 5px;
+        order: 2;
+      }
+      .nav-logo { order: 1; }
+      .mobile-menu { 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: white; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .mobile-menu.active { display: flex; }
+      .mobile-menu a { 
+        text-decoration: none; 
+        color: #333; 
+        font-weight: 500; 
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .mobile-menu a:last-child { border-bottom: none; }
+      
+      /* Mobile Calendar Optimizations */
+      .week-nav-btn { display: none; }
+      .week-calendar { padding: 18px 12px; }
+      .week-days {
+        max-width: 100%;
+        gap: 12px;
+        padding: 6px 4px;
+      }
+      .week-days::-webkit-scrollbar { display: none; }
+      .week-day {
+        min-width: 135px;
+        padding: 18px 14px;
+      }
+      .day-label { font-size: 0.98rem; }
+      
+      .earnings-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .earnings-table {
+        min-width: 100%;
+        font-size: 0.75rem !important;
+      }
+      
+      .earnings-table thead th {
+        padding: 10px 6px !important;
+        font-size: 0.7rem !important;
+      }
+      
+      .earnings-table tbody td {
+        padding: 10px 6px !important;
+        font-size: 0.75rem !important;
+      }
+      
+      /* Hide Event and Time columns on mobile */
+      .earnings-table thead th:nth-child(3),
+      .earnings-table tbody td:nth-child(3) {
+        display: none;
+      }
+      
+      .earnings-table thead th:nth-child(4),
+      .earnings-table tbody td:nth-child(4) {
+        display: none;
+      }
+      
+      .earnings-main {
+        padding: 15px 10px !important;
+      }
+      
+      .section-header h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 10px !important;
+      }
+      
+      .earnings-week-title {
+        font-size: 1.1rem !important;
+        margin-bottom: 15px !important;
+      }
+      
+      .earnings-day-title {
+        font-size: 1rem !important;
+        margin-bottom: 15px !important;
+      }
+      
+      .symbol {
+        font-size: 0.8rem !important;
+      }
+      
+      .company {
+        font-size: 0.75rem !important;
+      }
+    }
+  </style>
+
+  <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+</head>
+
+<body>
+  <!-- =========================
+       NAV
+  ========================== -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="../index.html">
+          <img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
+        </a>
+      </div>
+      <div class="nav-links" role="menubar">
+        <a href="../index.html#features">Why Us</a>
+        <a href="../index.html#how-it-works">How it Works</a>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#test">Test</a>
+        <a href="../index.html#terms">Terms</a>
+        <a href="../index.html#contact">Contact</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        
+                    <!-- Tools Dropdown -->
+                    <div class="nav-dropdown" id="toolsDropdown">
+          <button class="nav-dropdown-btn" 
+                  aria-haspopup="true" 
+                  aria-expanded="false" 
+                                id="toolsDropdownBtn">
+                            Tools
+          </button>
+                        <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+            <a href="../daily/index.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-newspaper"></i> Daily Market Wrap-Up</a>
+            <a href="earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
+            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
+            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
+            <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-microchip"></i> Company Analysis</a>
+            <a href="congress.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
+          </div>
+        </div>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html#features" onclick="closeMobileMenu()">Why Us</a>
+        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+        <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
+        <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
+        <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <details class="mobile-menu-dropdown">
+                         <summary>Tools</summary>
+          <div class="mobile-menu-dropdown-content">
+            <a href="../daily/index.html" onclick="closeMobileMenu()">
+              <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
+            </a>
+            <a href="earnings.html" onclick="closeMobileMenu()">
+              <i class="fas fa-calendar-alt"></i> Earnings Calendar
+            </a>
+            <a href="macro-calendar.html" onclick="closeMobileMenu()">
+              <i class="fas fa-chart-line"></i> Macro Calendar
+            </a>
+            <a href="hedge-fund.html" onclick="closeMobileMenu()">
+              <i class="fas fa-briefcase"></i> Hedge Fund Positioning
+            </a>
+            <a href="company-analysis.html" onclick="closeMobileMenu()">
+              <i class="fas fa-microchip"></i> Company Analysis
+            </a>
+            <a href="congress.html" onclick="closeMobileMenu()">
+              <i class="fas fa-landmark"></i> Congress Trade Monitor
+            </a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =========================
+       EARNINGS CALENDAR
+  ========================== -->
+    <section id="earnings" class="earnings-section" style="padding-top: 120px; min-height: 100vh;">
+        <div class="container">
+            <div class="section-header">
+                <h1 style="font-size: 2.5rem;">Earnings Calendar</h1>
+            </div>
+            
+            <div class="earnings-layout" style="display: block; max-width: 1200px; margin: 0 auto;">
+                <!-- Main Earnings This Week -->
+                <div class="earnings-main" style="width: 100%;">
+                    <!-- Week Navigation -->
+                    <div class="week-calendar">
+                        <button class="week-nav-btn prev"><i class="fas fa-chevron-left"></i></button>
+                        <div class="week-days">
+                            <div class="week-day" data-day="sunday">
+                                <div class="day-label">Sun, Nov 2</div>
+                            </div>
+                            <div class="week-day" data-day="monday">
+                                <div class="day-label">Mon, Nov 3</div>
+                            </div>
+                            <div class="week-day" data-day="tuesday">
+                                <div class="day-label">Tue, Nov 4</div>
+                            </div>
+                            <div class="week-day" data-day="wednesday">
+                                <div class="day-label">Wed, Nov 5</div>
+                            </div>
+                            <div class="week-day" data-day="thursday">
+                                <div class="day-label">Thu, Nov 6</div>
+                            </div>
+                            <div class="week-day" data-day="friday">
+                                <div class="day-label">Fri, Nov 7</div>
+                            </div>
+                            <div class="week-day" data-day="saturday">
+                                <div class="day-label">Sat, Nov 8</div>
+                            </div>
+                            <!-- Additional Dates -->
+                            <div class="week-day" data-day="nov9" data-date="2025-11-09">
+                                <div class="day-label">Sun, Nov 9</div>
+                            </div>
+                            <div class="week-day" data-day="nov10" data-date="2025-11-10">
+                                <div class="day-label">Mon, Nov 10</div>
+                            </div>
+                            <div class="week-day" data-day="nov11" data-date="2025-11-11">
+                                <div class="day-label">Tue, Nov 11</div>
+                            </div>
+                            <div class="week-day" data-day="nov12" data-date="2025-11-12">
+                                <div class="day-label">Wed, Nov 12</div>
+                            </div>
+                            <div class="week-day" data-day="nov13" data-date="2025-11-13">
+                                <div class="day-label">Thu, Nov 13</div>
+                            </div>
+                            <div class="week-day" data-day="nov14" data-date="2025-11-14">
+                                <div class="day-label">Fri, Nov 14</div>
+                            </div>
+                            <div class="week-day" data-day="nov15" data-date="2025-11-15">
+                                <div class="day-label">Sat, Nov 15</div>
+                            </div>
+                            <div class="week-day" data-day="nov16" data-date="2025-11-16">
+                                <div class="day-label">Sun, Nov 16</div>
+                            </div>
+                            <div class="week-day" data-day="nov17" data-date="2025-11-17">
+                                <div class="day-label">Mon, Nov 17</div>
+                            </div>
+                            <div class="week-day" data-day="nov18" data-date="2025-11-18">
+                                <div class="day-label">Tue, Nov 18</div>
+                            </div>
+                            <div class="week-day" data-day="nov19" data-date="2025-11-19">
+                                <div class="day-label">Wed, Nov 19</div>
+                            </div>
+                            <div class="week-day" data-day="nov20" data-date="2025-11-20">
+                                <div class="day-label">Thu, Nov 20</div>
+                            </div>
+                            <div class="week-day" data-day="nov21" data-date="2025-11-21">
+                                <div class="day-label">Fri, Nov 21</div>
+                            </div>
+                            <div class="week-day" data-day="nov22" data-date="2025-11-22">
+                                <div class="day-label">Sat, Nov 22</div>
+                            </div>
+                            <div class="week-day" data-day="nov23" data-date="2025-11-23">
+                                <div class="day-label">Sun, Nov 23</div>
+                            </div>
+                            <div class="week-day" data-day="nov24" data-date="2025-11-24">
+                                <div class="day-label">Mon, Nov 24</div>
+                            </div>
+                            <div class="week-day" data-day="nov25" data-date="2025-11-25">
+                                <div class="day-label">Tue, Nov 25</div>
+                            </div>
+                            <div class="week-day" data-day="nov26" data-date="2025-11-26">
+                                <div class="day-label">Wed, Nov 26</div>
+                            </div>
+                            <div class="week-day" data-day="nov27" data-date="2025-11-27">
+                                <div class="day-label">Thu, Nov 27</div>
+                            </div>
+                            <div class="week-day" data-day="nov28" data-date="2025-11-28">
+                                <div class="day-label">Fri, Nov 28</div>
+                            </div>
+                            <div class="week-day" data-day="nov29" data-date="2025-11-29">
+                                <div class="day-label">Sat, Nov 29</div>
+                            </div>
+                            <div class="week-day" data-day="nov30" data-date="2025-11-30">
+                                <div class="day-label">Sun, Nov 30</div>
+                            </div>
+                            <div class="week-day" data-day="dec1" data-date="2025-12-01">
+                                <div class="day-label">Mon, Dec 1</div>
+                            </div>
+                            <div class="week-day" data-day="dec2" data-date="2025-12-02">
+                                <div class="day-label">Tue, Dec 2</div>
+                            </div>
+                            <div class="week-day" data-day="dec3" data-date="2025-12-03">
+                                <div class="day-label">Wed, Dec 3</div>
+                            </div>
+                            <div class="week-day" data-day="dec4" data-date="2025-12-04">
+                                <div class="day-label">Thu, Dec 4</div>
+                            </div>
+                            <div class="week-day" data-day="dec5" data-date="2025-12-05">
+                                <div class="day-label">Fri, Dec 5</div>
+                            </div>
+                            <div class="week-day" data-day="dec6" data-date="2025-12-06">
+                                <div class="day-label">Sat, Dec 6</div>
+                            </div>
+                            <div class="week-day" data-day="dec7" data-date="2025-12-07">
+                                <div class="day-label">Sun, Dec 7</div>
+                            </div>
+                            <div class="week-day" data-day="dec8" data-date="2025-12-08">
+                                <div class="day-label">Mon, Dec 8</div>
+                            </div>
+                            <div class="week-day" data-day="dec9" data-date="2025-12-09">
+                                <div class="day-label">Tue, Dec 9</div>
+                            </div>
+                            <div class="week-day" data-day="dec10" data-date="2025-12-10">
+                                <div class="day-label">Wed, Dec 10</div>
+                            </div>
+                            <div class="week-day" data-day="dec11" data-date="2025-12-11">
+                                <div class="day-label">Thu, Dec 11</div>
+                            </div>
+                            <div class="week-day" data-day="dec12" data-date="2025-12-12">
+                                <div class="day-label">Fri, Dec 12</div>
+                            </div>
+                            <div class="week-day" data-day="dec13" data-date="2025-12-13">
+                                <div class="day-label">Sat, Dec 13</div>
+                            </div>
+                            <div class="week-day" data-day="dec14" data-date="2025-12-14">
+                                <div class="day-label">Sun, Dec 14</div>
+                            </div>
+                            <div class="week-day" data-day="dec15" data-date="2025-12-15">
+                                <div class="day-label">Mon, Dec 15</div>
+                            </div>
+                            <div class="week-day" data-day="dec16" data-date="2025-12-16">
+                                <div class="day-label">Tue, Dec 16</div>
+                            </div>
+                            <div class="week-day" data-day="dec17" data-date="2025-12-17">
+                                <div class="day-label">Wed, Dec 17</div>
+                            </div>
+                            <div class="week-day" data-day="dec18" data-date="2025-12-18">
+                                <div class="day-label">Thu, Dec 18</div>
+                            </div>
+                            <div class="week-day" data-day="dec19" data-date="2025-12-19">
+                                <div class="day-label">Fri, Dec 19</div>
+                            </div>
+                            <div class="week-day" data-day="dec20" data-date="2025-12-20">
+                                <div class="day-label">Sat, Dec 20</div>
+                            </div>
+                            <div class="week-day" data-day="dec21" data-date="2025-12-21">
+                                <div class="day-label">Sun, Dec 21</div>
+                            </div>
+                            <div class="week-day" data-day="dec22" data-date="2025-12-22">
+                                <div class="day-label">Mon, Dec 22</div>
+                            </div>
+                            <div class="week-day" data-day="dec23" data-date="2025-12-23">
+                                <div class="day-label">Tue, Dec 23</div>
+                            </div>
+                            <div class="week-day" data-day="dec24" data-date="2025-12-24">
+                                <div class="day-label">Wed, Dec 24</div>
+                            </div>
+                            <div class="week-day" data-day="dec25" data-date="2025-12-25">
+                                <div class="day-label">Thu, Dec 25</div>
+                            </div>
+                            <div class="week-day" data-day="dec26" data-date="2025-12-26">
+                                <div class="day-label">Fri, Dec 26</div>
+                            </div>
+                            <div class="week-day" data-day="dec27" data-date="2025-12-27">
+                                <div class="day-label">Sat, Dec 27</div>
+                            </div>
+                            <div class="week-day" data-day="dec28" data-date="2025-12-28">
+                                <div class="day-label">Sun, Dec 28</div>
+                            </div>
+                        </div>
+                        <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+                    <!-- Earnings Table for Sunday -->
+                    <div class="earnings-day-content" id="sunday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-02"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday -->
+                    <div class="earnings-day-content" id="monday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-03"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday -->
+                    <div class="earnings-day-content" id="tuesday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-04"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday -->
+                    <div class="earnings-day-content" id="wednesday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-05"></div>
+                    </div>
+
+                    <!-- Earnings Table for Thursday -->
+                    <div class="earnings-day-content" id="thursday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-06"></div>
+                    </div>
+
+                    <!-- Earnings Table for Friday -->
+                    <div class="earnings-day-content" id="friday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-07"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday -->
+                    <div class="earnings-day-content" id="saturday-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-08"></div>
+                    </div>
+
+                    <!-- Earnings Table for Sunday Nov 9 -->
+                    <div class="earnings-day-content" id="nov9-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-09"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Nov 10 -->
+                    <div class="earnings-day-content" id="nov10-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-10"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Nov 11 -->
+                    <div class="earnings-day-content" id="nov11-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-11"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Nov 12 -->
+                    <div class="earnings-day-content" id="nov12-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-12"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Nov 13 -->
+                    <div class="earnings-day-content" id="nov13-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-13"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Nov 14 -->
+                    <div class="earnings-day-content" id="nov14-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-14"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Nov 15 -->
+                    <div class="earnings-day-content" id="nov15-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-15"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Nov 16 -->
+                    <div class="earnings-day-content" id="nov16-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-16"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Nov 17 -->
+                    <div class="earnings-day-content" id="nov17-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-17"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Nov 18 -->
+                    <div class="earnings-day-content" id="nov18-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-18"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Nov 19 -->
+                    <div class="earnings-day-content" id="nov19-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-19"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Nov 20 -->
+                    <div class="earnings-day-content" id="nov20-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-20"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Nov 21 -->
+                    <div class="earnings-day-content" id="nov21-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-21"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Nov 22 -->
+                    <div class="earnings-day-content" id="nov22-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-22"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Nov 23 -->
+                    <div class="earnings-day-content" id="nov23-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-23"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Nov 24 -->
+                    <div class="earnings-day-content" id="nov24-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-24"></div>
+                </div>
+                    
+                    <!-- Earnings Table for Tuesday Nov 25 -->
+                    <div class="earnings-day-content" id="nov25-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-25"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Nov 26 -->
+                    <div class="earnings-day-content" id="nov26-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-26"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Nov 27 -->
+                    <div class="earnings-day-content" id="nov27-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-27"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Nov 28 -->
+                    <div class="earnings-day-content" id="nov28-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-28"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Nov 29 -->
+                    <div class="earnings-day-content" id="nov29-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-29"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Nov 30 -->
+                    <div class="earnings-day-content" id="nov30-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-11-30"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 1 -->
+                    <div class="earnings-day-content" id="dec1-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-01"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 2 -->
+                    <div class="earnings-day-content" id="dec2-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-02"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 3 -->
+                    <div class="earnings-day-content" id="dec3-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-03"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 4 -->
+                    <div class="earnings-day-content" id="dec4-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-04"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 5 -->
+                    <div class="earnings-day-content" id="dec5-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-05"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 6 -->
+                    <div class="earnings-day-content" id="dec6-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-06"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 7 -->
+                    <div class="earnings-day-content" id="dec7-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-07"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 8 -->
+                    <div class="earnings-day-content" id="dec8-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-08"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 9 -->
+                    <div class="earnings-day-content" id="dec9-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-09"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 10 -->
+                    <div class="earnings-day-content" id="dec10-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-10"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 11 -->
+                    <div class="earnings-day-content" id="dec11-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-11"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 12 -->
+                    <div class="earnings-day-content" id="dec12-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-12"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 13 -->
+                    <div class="earnings-day-content" id="dec13-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-13"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 14 -->
+                    <div class="earnings-day-content" id="dec14-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-14"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 15 -->
+                    <div class="earnings-day-content" id="dec15-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-15"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 16 -->
+                    <div class="earnings-day-content" id="dec16-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-16"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 17 -->
+                    <div class="earnings-day-content" id="dec17-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-17"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 18 -->
+                    <div class="earnings-day-content" id="dec18-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-18"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 19 -->
+                    <div class="earnings-day-content" id="dec19-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-19"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 20 -->
+                    <div class="earnings-day-content" id="dec20-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-20"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 21 -->
+                    <div class="earnings-day-content" id="dec21-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-21"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 22 -->
+                    <div class="earnings-day-content" id="dec22-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-22"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 23 -->
+                    <div class="earnings-day-content" id="dec23-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-23"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 24 -->
+                    <div class="earnings-day-content" id="dec24-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-24"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 25 -->
+                    <div class="earnings-day-content" id="dec25-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-25"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 26 -->
+                    <div class="earnings-day-content" id="dec26-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-26"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 27 -->
+                    <div class="earnings-day-content" id="dec27-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-27"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 28 -->
+                    <div class="earnings-day-content" id="dec28-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-28"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+     <footer class="footer" style="background-color: white !important; text-align: center;">
+    <div class="container" style="text-align: center;">
+      <div style="text-align: center;">
+        <p style="color: black; margin: 0;">&copy; 2025 Daily Dividend. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const EARNINGS_DATA = {
+      '2025-11-02': { message: 'No significant events to report.' },
+      '2025-11-03': { message: 'No significant events to report.' },
+      '2025-11-04': { message: 'No significant events to report.' },
+      '2025-11-05': {
+        rows: [
+          ['TM', 'Toyota Motor Corporation', '-', 'TAS', '$5.36', '$259.66B'],
+          ['NVO', 'Novo Nordisk A/S', '-', 'TAS', '$4.24', '$214.63B'],
+          ['APP', 'AppLovin Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$2.39', '$208.72B'],
+          ['QCOM', 'QUALCOMM Incorporated', 'Q4 2025 Earnings Announcement', 'AMC', '$2.87', '$193.56B'],
+          ['ARM', 'Arm Holdings plc', 'Q2 2026 Earnings Announcement', 'AMC', '$0.33', '$169.64B'],
+          ['HOOD', 'Robinhood Markets, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$0.61', '$126.95B'],
+          ['MCK', 'McKesson Corporation', 'Q2 2026 Earnings Announcement', 'AMC', '$9.05', '$105.01B'],
+          ['DASH', 'DoorDash, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$1.25', '$101.63B']
+        ]
+      },
+      '2025-11-06': {
+        rows: [
+          ['AZN', 'AstraZeneca PLC', 'Q3 2025 Earnings Announcement', 'BMO', '$1.13', '$253.56B'],
+          ['COP', 'ConocoPhillips', 'Q3 2025 Earnings Announcement', 'BMO', '$1.41', '$110.12B'],
+          ['PH', 'Parker-Hannifin Corporation', 'Q1 2026 Earnings Announcement', 'BMO', '$6.62', '$98.35B'],
+          ['PBR', 'Petróleo Brasileiro - Petrobras', 'Q3 2025 Earnings Announcement', 'AMC', '$0.66', '$75.85B'],
+          ['ABNB', 'Airbnb, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$2.31', '$75.49B'],
+          ['NGG', 'National Grid plc', 'H1 2026 Earnings Announcement', 'TNS', '-', '$75.10B'],
+          ['CNQ', 'Canadian Natural Resources', 'Q3 2025 Earnings Announcement', 'BMO', '$0.81', '$66.64B'],
+          ['MNST', 'Monster Beverage Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$0.48', '$66.13B'],
+          ['VST', 'Vistra Corp.', 'Q3 2025 Earnings Announcement', 'BMO', '$1.96', '$64.69B']
+        ]
+      },
+      '2025-11-07': {
+        rows: [
+          ['CEG', 'Constellation Energy Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$3.13', '$114.45B'],
+          ['KKR', 'KKR & Co. Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$1.30', '$110.55B'],
+          ['ENB', 'Enbridge Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.51', '$101.72B'],
+          ['DUK', 'Duke Energy Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$1.75', '$96.15B'],
+          ['BAM', 'Brookfield Asset Management', 'Q3 2025 Earnings Announcement', 'BMO', '$0.40', '$87.57B'],
+          ['UI', 'Ubiquiti Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$2.93', '$47.31B'],
+          ['HMC', 'Honda Motor Co., Ltd.', 'Q2 2026 Earnings Announcement', 'BMO', '-', '$40.13B'],
+          ['TU', 'TELUS Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$0.27', '$22.47B'],
+          ['BIP', 'Brookfield Infrastructure Partners', 'Q3 2025 Earnings Announcement', 'BMO', '$0.31', '$16.05B']
+        ]
+      },
+      '2025-11-08': { message: 'No significant events to report.' },
+      '2025-11-09': { message: 'No significant events scheduled.' },
+      '2025-11-10': {
+        rows: [
+          ['B', 'Barrick Mining Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$0.61', '$56.48B'],
+          ['CRWV', 'CoreWeave, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.51', '$51.50B'],
+          ['OXY', 'Occidental Petroleum Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$0.49', '$40.67B'],
+          ['ASTS', 'AST SpaceMobile, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.39', '$25.37B'],
+          ['RKLB', 'Rocket Lab Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.06', '$24.99B'],
+          ['LI', 'Li Auto Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.56', '$20.38B']
+        ]
+      },
+      '2025-11-11': {
+        rows: [
+          ['SONY', 'Sony Group Corporation', 'Q2 2025 Earnings Announcement', 'BMO', '$0.27', '$165.29B'],
+          ['SE', 'Sea Limited', 'Q3 2025 Earnings Announcement', 'BMO', '$0.95', '$88.77B'],
+          ['ALC', 'Alcon Inc.', 'Q3 2025 Earnings Announcement', 'TNS', '$0.77', '$36.57B'],
+          ['AU', 'AngloGold Ashanti plc', 'Q3 2025 Earnings Announcement', 'BMO', '$1.32', '$35.03B'],
+          ['NBIS', 'Nebius Group N.V.', 'Q3 2025 Earnings Announcement', 'BMO', '-$0.39', '$27.95B'],
+          ['VOD', 'Vodafone Group Public Limited Company', 'H1 2026 Earnings Announcement', 'BMO', '-', '$27.93B'],
+          ['OKLO', 'Oklo Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '-$0.12', '$7.42B']
+        ]
+      },
+      '2025-11-12': {
+        rows: [
+          ['CSCO', 'Cisco Systems, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$0.98', '$280.07B'],
+          ['TDG', 'TransDigm Group Incorporated', 'Q4 2025 Earnings Announcement', 'BMO', '$10.06', '$72.40B'],
+          ['MFC', 'Manulife Financial Corporation', 'Q3 2025 Earnings Announcement', 'AMC', '$1.04', '$56.32B'],
+          ['FLUT', 'Flutter Entertainment plc', 'Q3 2025 Earnings Announcement', 'AMC', '$0.62', '$39.02B'],
+          ['TME', 'Tencent Music Entertainment Group', 'Q3 2025 Earnings Announcement', 'BMO', '$1.52', '$33.57B'],
+          ['IX', 'ORIX Corporation', 'Q2 2026 Earnings Announcement', 'TNS', '$0.57', '$26.75B'],
+          ['CRCL', 'Circle Internet Group', 'Q3 2025 Earnings Announcement', 'BMO', '$0.17', '$25.83B'],
+          ['GFS', 'GlobalFoundries Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.38', '$18.91B']
+        ]
+      },
+      '2025-11-13': {
+        rows: [
+          ['DIS', 'The Walt Disney Company', 'Q4 2025 Earnings Announcement', 'BMO', '$1.02', '$199.10B'],
+          ['AMAT', 'Applied Materials, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$2.10', '$183.28B'],
+          ['BN', 'Brookfield Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$0.26', '$102.89B'],
+          ['NU', 'Nu Holdings Ltd.', 'Q3 2025 Earnings Announcement', 'AMC', '$0.17', '$76.69B'],
+          ['JD', 'JD.com, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$2.89', '$45.45B'],
+          ['BAP', 'Credicorp Ltd.', 'Q3 2025 Earnings Announcement', 'AMC', '$6.31', '$20.60B'],
+          ['EC', 'Ecopetrol S.A.', 'Q3 2025 Earnings Announcement', 'AMC', '$0.36', '$20.39B']
+        ]
+      },
+      '2025-11-14': {
+        rows: [
+          ['BABA', 'Alibaba Group Holding Limited', 'Q2 2026 Earnings Announcement', 'BMO', '$5.78', '$402.02B'],
+          ['MUFG', 'Mitsubishi UFJ Financial Group, Inc.', 'Q2 2025 Earnings Announcement', 'TNS', '$0.26', '$171.98B'],
+          ['SMFG', 'Sumitomo Mitsui Financial Group, Inc.', 'Q2 2025 Earnings Announcement', 'TNS', '$0.10', '$104.56B'],
+          ['MFG', 'Mizuho Financial Group, Inc.', 'Q2 2025 Earnings Announcement', 'TNS', '$0.11', '$82.41B'],
+          ['LTM', 'LATAM Airlines Group S.A.', 'Q3 2025 Earnings Announcement', 'AMC', '$1.29', '$13.40B'],
+          ['SR', 'Spire Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '-$0.38', '$5.29B'],
+          ['CSAN', 'Cosan S.A.', 'Q3 2025 Earnings Announcement', 'TNS', '$0.21', '$4.36B'],
+          ['ABTC', 'American Bitcoin Corp', 'Q3 2025 Earnings Announcement', 'BMO', '-', '$4.29B']
+        ]
+      },
+      '2025-11-15': { message: 'No significant events scheduled.' },
+      '2025-11-16': { message: 'No significant events scheduled.' },
+      '2025-11-17': {
+        rows: [
+          ['TCOM', 'Trip.com Group Limited', 'Q3 2025 Earnings Announcement', 'AMC', '$7.98', '$47.1B']
+        ]
+      },
+      '2025-11-18': {
+        rows: [
+          ['HD', 'The Home Depot, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$3.66', '$360.69B'],
+          ['PDD', 'PDD Holdings Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$16.57', '$185.9B'],
+          ['MDT', 'Medtronic plc', 'Q2 2026 Earnings Announcement', 'BMO', '$1.31', '$122.96B'],
+          ['BIDU', 'Baidu, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$8.37', '$42.94B']
+        ]
+      },
+      '2025-11-19': {
+        rows: [
+          ['NVDA', 'NVIDIA Corporation', 'Q3 2026 Earnings Announcement', 'AMC', '$1.25', '$4.63T'],
+          ['TJX', 'The TJX Companies, Inc.', 'Q3 2026 Earnings Announcement', 'BMO', '$1.22', '$162.58B'],
+          ['PANW', 'Palo Alto Networks, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$0.89', '$140.39B'],
+          ['LOW', 'Lowe\'s Companies, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$2.81', '$127.78B'],
+          ['TGT', 'Target Corporation', 'Q3 2025 Earnings Announcement', 'BMO', '$2.3', '$40.85B']
+        ]
+      },
+      '2025-11-20': {
+        rows: [
+          ['WMT', 'Walmart Inc.', 'Q3 2026 Earnings Announcement', 'BMO', '$0.6', '$817.06B'],
+          ['INTU', 'Intuit Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$3.09', '$184.68B'],
+          ['NTES', 'NetEase, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$14.83', '$90.02B'],
+          ['ROST', 'Ross Stores, Inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$1.4', '$52.22B'],
+          ['VEEV', 'Veeva Systems Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$1.95', '$48.08B']
+        ]
+      },
+      '2025-11-21': { message: 'No significant earnings being announced today.' },
+      '2025-11-22': { message: '' },
+      '2025-11-23': { message: '' },
+      '2025-11-24': {
+        rows: [
+          ['A', 'Agilent Technologies, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$1.58', '$42.96B'],
+          ['SYM', 'Symbotic Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$0.08', '$31.75B'],
+          ['KEYS', 'Keysight Technologies, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$1.83', '$29.72B'],
+          ['ZM', 'Zoom Communications Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$1.40', '$23.79B']
+        ]
+      },
+      '2025-11-25': {
+        rows: [
+          ['BABA', 'Alibaba Group Holding Limited', 'Q2 2026 Earnings Announcement', 'BMO', '$5.78', '$364.89B'],
+          ['ADI', 'Analog Devices, Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '$2.23', '$114.29B'],
+          ['DELL', 'Dell Technologies Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$2.48', '$82.37B'],
+          ['ADSK', 'Autodesk, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$2.50', '$62.22B'],
+          ['WDAY', 'Workday, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$2.17', '$60.11B'],
+          ['ZS', 'Zscaler, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$0.86', '$43.53B'],
+          ['HPQ', 'HP Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$0.92', '$22.50B']
+        ]
+      },
+      '2025-11-26': {
+        rows: [
+          ['DE', 'Deere & Company', 'Q4 2025 Earnings Announcement', 'BMO', '$3.83', '$131.72B']
+        ]
+      },
+      '2025-11-27': { message: 'No significant events to report.' },
+      '2025-11-28': { message: 'No significant events to report.' },
+      '2025-11-29': { message: '' },
+      '2025-11-30': { message: '' },
+      '2025-12-01': {
+        rows: [
+          ['CRDO', 'Credo Technology Group Holding Ltd', 'Q2 2026 Earnings Announcement', 'AMC', '$0.50', '$30.72B'],
+          ['MDB', 'MongoDB, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$0.79', '$27.16B']
+        ]
+      },
+      '2025-12-02': {
+        rows: [
+          ['CRWD', 'CrowdStrike Holdings, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$0.94', '$127.78B'],
+          ['BNS', 'The Bank of Nova Scotia', 'Q4 2025 Earnings Announcement', 'BMO', '$1.84', '$85.54B'],
+          ['MRVL', 'Marvell Technology, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$0.74', '$77.08B'],
+          ['PSTG', 'Pure Storage, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$0.58', '$29.24B']
+        ]
+      },
+      '2025-12-03': {
+        rows: [
+          ['CRM', 'Salesforce, Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$2.86', '$220.40B'],
+          ['RY', 'Royal Bank of Canada', 'Q4 2025 Earnings Announcement', 'BMO', '$3.55', '$216.98B'],
+          ['SNOW', 'Snowflake Inc.', 'Q3 2026 Earnings Announcement', 'AMC', '$0.31', '$85.12B'],
+          ['DLTR', 'Dollar Tree, Inc.', 'Q3 2025 Earnings Announcement', 'BMO', '$1.08', '$23.13B']
+        ]
+      },
+      '2025-12-04': {
+        rows: [
+          ['TD', 'The Toronto-Dominion Bank', 'Q4 2025 Earnings Announcement', 'BMO', '$2.01', '$155.19B'],
+          ['BMO', 'Bank of Montreal', 'Q4 2025 Earnings Announcement', 'BMO', '$3.03', '$80.98B'],
+          ['KR', 'The Kroger Co.', 'Q3 2025 Earnings Announcement', 'BMO', '$0.98', '$44.58B']
+        ]
+      },
+      '2025-12-05': {
+        rows: [
+          ['VSCO', 'Victoria\'s Secret & Co.', 'Q3 2025 Earnings Announcement', 'BMO', '-$0.62', '$3.31B']
+        ]
+      },
+      '2025-12-06': { message: '' },
+      '2025-12-07': { message: '' },
+      '2025-12-08': {
+        rows: [
+          ['TOL', 'Toll Brothers, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$4.88', '$13.64B']
+        ]
+      },
+      '2025-12-09': {
+        rows: [
+          ['AZO', 'AutoZone, Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$32.4', '$63.7B'],
+          ['FERG', 'Ferguson Enterprises Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$2.72', '$49.87B'],
+          ['CASY', 'Casey\'s General Stores, Inc.', 'Q2 2026 Earnings Announcement', 'AMC', '$5.2', '$21.08B']
+        ]
+      },
+      '2025-12-10': {
+        rows: [
+          ['ORCL', 'Oracle Corporation', 'Q2 2026 Earnings Announcement', 'AMC', '$1.64', '$620.28B'],
+          ['ADBE', 'Adobe Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$5.4', '$146.88B'],
+          ['SNPS', 'Synopsys, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$2.88', '$88.95B']
+        ]
+      },
+      '2025-12-11': {
+        rows: [
+          ['AVGO', 'Broadcom Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '$1.87', '$1.84T'],
+          ['COST', 'Costco Wholesale Corporation', 'Q1 2026 Earnings Announcement', 'AMC', '$4.28', '$396.77B'],
+          ['CIEN', 'Ciena Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '$0.77', '$28.52B'],
+          ['LULU', 'Lululemon Athletica inc.', 'Q3 2025 Earnings Announcement', 'AMC', '$2.72', '$22.77B']
+        ]
+      },
+      '2025-12-12': { message: 'No significant events to report.' },
+      '2025-12-13': { message: '' },
+      '2025-12-14': { message: '' },
+      '2025-12-15': { message: 'No significant events to report.' },
+      '2025-12-16': {
+        rows: [
+          ['LEN', 'Lennar Corporation', 'Q4 2025 Earnings Announcement', 'AMC', '$2.18', '$29.48B']
+        ]
+      },
+      '2025-12-17': {
+        rows: [
+          ['MU', 'Micron Technology, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '$3.91', '$271.37B'],
+          ['GIS', 'General Mills, Inc.', 'Q2 2026 Earnings Announcement', 'BMO', '$1.02', '$24.96B'],
+          ['JBL', 'Jabil Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$2.72', '$23.86B']
+        ]
+      },
+      '2025-12-18': {
+        rows: [
+          ['ACN', 'Accenture plc', 'Q1 2026 Earnings Announcement', 'BMO', '$3.73', '$169.14B'],
+          ['NKE', 'NIKE, Inc.', 'Q2 2026 Earnings Announcement', 'AMC', '$0.38', '$99.73B'],
+          ['CTAS', 'Cintas Corporation', 'Q2 2026 Earnings Announcement', 'BMO', '$1.20', '$75.57B'],
+          ['FDX', 'FedEx Corporation', 'Q2 2026 Earnings Announcement', 'AMC', '$4.11', '$67.09B'],
+          ['HEI', 'HEICO Corporation', 'Q4 2025 Earnings Announcement', 'AMC', '$1.22', '$43.22B'],
+          ['HEI.A', 'HEICO Corporation', 'Q4 2025 Earnings Announcement', 'AMC', '-', '$37.34B'],
+          ['DRI', 'Darden Restaurants, Inc.', 'Q2 2026 Earnings Announcement', 'BMO', '$2.10', '$21.25B'],
+          ['FDS', 'FactSet Research Systems Inc.', 'Q1 2026 Earnings Announcement', 'BMO', '$4.36', '$11.06B'],
+          ['BIRK', 'Birkenstock Holding plc', 'Q4 2025 Earnings Announcement', 'BMO', '$0.36', '$8.37B']
+        ]
+      },
+      '2025-12-19': {
+        rows: [
+          ['PAYX', 'Paychex, Inc.', 'Q2 2026 Earnings Announcement', 'BMO', '$1.23', '$41.55B'],
+          ['CCL', 'Carnival Corporation & plc', 'Q4 2025 Earnings Announcement', 'BMO', '$0.25', '$37.45B']
+        ]
+      },
+      '2025-12-20': { message: '' },
+      '2025-12-21': { message: '' },
+      '2025-12-22': {
+        rows: [
+          ['DJCO', 'Daily Journal Corporation', '-', '-', '-', '$732.4M'],
+          ['EBF', 'Ennis Inc', '-', '-', '$0.41', '$471.8M']
+        ]
+      },
+      '2025-12-23': { message: '' },
+      '2025-12-24': {
+        rows: [
+          ['SCS', 'Steelcase Inc', 'Q3 2026 Earnings Announcement', '-', '$0.28', '$1.85B']
+        ]
+      },
+      '2025-12-25': { message: '' },
+      '2025-12-26': { message: '' },
+      '2025-12-27': { message: '' },
+      '2025-12-28': { message: '' }
+    };
+
+    const NOTABLE_BLOCKS = [
+      {
+        start: '2025-11-03',
+        end: '2025-11-09',
+        days: [
+          { label: 'Monday, Nov 10', message: 'No significant earnings.' },
+          { label: 'Tuesday, Nov 11', companies: [{ symbol: 'SONY', name: 'Sony Group' }, { symbol: 'VOD', name: 'Vodafone' }] },
+          { label: 'Wednesday, Nov 12', companies: [{ symbol: 'CSCO', name: 'Cisco' }, { symbol: 'TCEHY', name: 'Tencent' }] },
+          { label: 'Thursday, Nov 13', companies: [{ symbol: 'DIS', name: 'Disney' }, { symbol: 'JD', name: 'JD.com' }] },
+          { label: 'Friday, Nov 14', companies: [{ symbol: 'BABA', name: 'Alibaba' }, { symbol: 'MUFG', name: 'Mitsubishi' }, { symbol: 'MFG', name: 'Mizuho' }] }
+        ]
+      },
+      {
+        start: '2025-11-10',
+        end: '2025-11-16',
+        days: [
+          { label: 'Monday, Nov 17', companies: [{ symbol: 'TCOM', name: 'Trip.com' }] },
+          { label: 'Tuesday, Nov 18', companies: [{ symbol: 'HD', name: 'Home Depot' }, { symbol: 'BIDU', name: 'Baidu' }] },
+          { label: 'Wednesday, Nov 19', companies: [{ symbol: 'NVDA', name: 'Nvidia' }, { symbol: 'TGT', name: 'Target' }] },
+          { label: 'Thursday, Nov 20', companies: [{ symbol: 'WMT', name: 'Walmart' }] },
+          { label: 'Friday, Nov 21', message: 'No significant earnings.' }
+        ]
+      }
+    ];
+
+    const NOTABLE_EARNINGS_NEXT_WEEK = {
+      '2025-11-22': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Monday, Nov 24', companies: [{ symbol: 'A', name: 'Agilent' }, { symbol: 'ZM', name: 'Zoom' }] },
+          { label: 'Tuesday, Nov 25', companies: [{ symbol: 'BABA', name: 'Alibaba' }, { symbol: 'DELL', name: 'Dell' }, { symbol: 'WDAY', name: 'Workday' }] },
+          { label: 'Wednesday, Nov 26', companies: [{ symbol: 'DE', name: 'Deere' }] }
+        ]
+      },
+      '2025-11-23': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Monday, Nov 24', companies: [{ symbol: 'A', name: 'Agilent' }, { symbol: 'ZM', name: 'Zoom' }] },
+          { label: 'Tuesday, Nov 25', companies: [{ symbol: 'BABA', name: 'Alibaba' }, { symbol: 'DELL', name: 'Dell' }, { symbol: 'WDAY', name: 'Workday' }] },
+          { label: 'Wednesday, Nov 26', companies: [{ symbol: 'DE', name: 'Deere' }] }
+        ]
+      },
+      '2025-11-29': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Tuesday, Dec 2', companies: [{ symbol: 'CRWD', name: 'CrowdStrike' }] },
+          { label: 'Wednesday, Dec 3', companies: [{ symbol: 'CRM', name: 'Salesforce' }] },
+          { label: 'Thursday, Dec 4', companies: [{ symbol: 'TD', name: 'Toronto Dominion Bank' }] },
+          { label: 'Friday, Dec 5', companies: [{ symbol: 'VSCO', name: 'Victoria Secret' }] }
+        ]
+      },
+      '2025-11-30': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Tuesday, Dec 2', companies: [{ symbol: 'CRWD', name: 'CrowdStrike' }] },
+          { label: 'Wednesday, Dec 3', companies: [{ symbol: 'CRM', name: 'Salesforce' }] },
+          { label: 'Thursday, Dec 4', companies: [{ symbol: 'TD', name: 'Toronto Dominion Bank' }] },
+          { label: 'Friday, Dec 5', companies: [{ symbol: 'VSCO', name: 'Victoria Secret' }] }
+        ]
+      },
+      '2025-12-06': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Monday, Dec 8', companies: [{ symbol: 'ORCL', name: 'Oracle' }] },
+          { label: 'Tuesday, Dec 9', companies: [{ symbol: 'GME', name: 'GameStop' }] },
+          { label: 'Wednesday, Dec 10', companies: [{ symbol: 'ADBE', name: 'Adobe' }] },
+          { label: 'Thursday, Dec 11', companies: [{ symbol: 'AVGO', name: 'Broadcom' }, { symbol: 'COST', name: 'Costco' }, { symbol: 'LULU', name: 'Lululemon' }] }
+        ]
+      },
+      '2025-12-07': {
+        title: 'Notable earnings next week',
+        days: [
+          { label: 'Monday, Dec 8', companies: [{ symbol: 'ORCL', name: 'Oracle' }] },
+          { label: 'Tuesday, Dec 9', companies: [{ symbol: 'GME', name: 'GameStop' }] },
+          { label: 'Wednesday, Dec 10', companies: [{ symbol: 'ADBE', name: 'Adobe' }] },
+          { label: 'Thursday, Dec 11', companies: [{ symbol: 'AVGO', name: 'Broadcom' }, { symbol: 'COST', name: 'Costco' }, { symbol: 'LULU', name: 'Lululemon' }] }
+        ]
+      }
+    };
+
+    const TABLE_HEADERS = ['Symbol', 'Company', 'Event', 'Time', 'EPS Est.', 'Market Cap'];
+
+    const COMPANY_DESCRIPTIONS = {
+      'HD': 'Home Depot is the largest home-improvement retailer in the U.S., selling building materials, tools, appliances, and services to both consumers and professional contractors. Its model is based on high-volume retail sales through large warehouse-style stores, supported by a growing omnichannel presence. A key profit driver is merchandise with strong private-label penetration and in-store services like installation and repairs.',
+      'PDD': 'PDD operates e-commerce platforms such as Pinduoduo in China and Temu globally. Its model uses ultra-low prices and gamified group buying to drive huge volumes. The company makes money through transaction services, advertising, and merchant fees, while using supply-chain efficiency and aggressive overseas expansion to scale.',
+      'MDT': 'Medtronic is one of the world\'s largest medical device manufacturers, producing pacemakers, insulin pumps, surgical tools, and other advanced health technologies. Its business model relies on long product lifecycles, FDA-regulated markets, and recurring revenue from consumables and maintenance. Hospitals and clinics are its main customers, and its global scale gives it strong pricing and distribution power.',
+      'BIDU': 'Baidu is China\'s leading search engine and a major AI company. It earns money mainly from advertising, cloud services, and AI products such as autonomous driving platforms. The company is shifting from traditional search ads toward AI-driven enterprise services to diversify revenue.',
+      'NVDA': 'NVIDIA designs GPUs used in gaming, data centers, and especially AI workloads. Its business model is built around selling high-performance chips and software ecosystems such as CUDA that create strong lock-in with developers. The biggest growth driver today is data-center GPUs used for AI training and inference.',
+      'TJX': 'TJX is a global off-price retailer operating T.J. Maxx, Marshalls, and HomeGoods. Its business model is buying branded inventory at steep discounts and selling it through a "treasure hunt" shopping experience. Constantly changing assortment and low prices attract high-frequency shoppers, driving strong cash flows.',
+      'PANW': 'Palo Alto Networks is a leading cybersecurity provider offering firewalls, cloud security, and threat-detection platforms. Its model blends hardware sales with high-margin recurring subscription revenue. Growth is driven by enterprises shifting workloads to the cloud and needing full-stack security solutions.',
+      'LOW': 'Lowe\'s is the second-largest home-improvement retailer in the U.S., competing directly with Home Depot. The company sells building materials, appliances, décor, and contractor services. It focuses heavily on serving "Pro" customers (contractors and builders), which are higher-spending and more loyal than retail consumers.',
+      'TGT': 'Target operates a national chain of general-merchandise retail stores in the U.S. with a focus on curated product selection, private labels, and a strong brand aesthetic. It generates revenue through in-store sales, e-commerce, and its profitable credit-card partnership. The company differentiates itself with stylish private brands and same-day fulfillment options like Drive Up and Shipt.',
+      'WMT': 'Walmart is the world\'s largest retailer, operating supermarkets, hypermarkets, and online platforms. Its business model is built around everyday low pricing, massive purchasing scale, and efficient logistics. Increasingly, Walmart earns higher-margin revenue from e-commerce, advertising, and membership programs.',
+      'INTU': 'Intuit makes financial and tax software such as TurboTax, QuickBooks, and Credit Karma. Its business model relies on subscription and usage-based services for individuals and small businesses. The company benefits from strong switching costs and deep integrations with banking and payroll systems.',
+      'NTES': 'NetEase is a major Chinese online gaming and entertainment company. It develops and operates PC and mobile games, and licenses content globally. Recurring in-game spending drives its revenue, supported by a pipeline of new titles and partnerships with global studios.',
+      'ROST': 'Ross is an off-price retailer selling discounted apparel and home goods through Ross Dress for Less and dd\'s Discounts. Like TJX, it buys excess inventory from brands at low cost and resells it cheaply to consumers. Its low-cost model, simple stores, and fast inventory turnover support strong profitability.',
+      'VEEV': 'Veeva provides cloud software for the global life-sciences industry. Its products help pharmaceutical companies manage clinical trials, sales teams, regulatory filings, and data compliance. With high switching costs and industry-specific design, Veeva enjoys long-term subscription contracts and low churn.',
+      'TCOM': 'Trip.com is one of Asia\'s largest online travel agencies, offering hotel bookings, flights, vacation packages, and travel services. It makes money through commissions, service fees, and advertising on its platform. The company benefits from China\'s travel demand, international expansion, and integration with global travel partners.',
+      'A': 'Agilent Technologies is a life sciences, diagnostics, and applied chemical markets company. It provides instruments, software, services, and consumables for laboratories. The company\'s business model relies on recurring revenue from consumables and services, combined with high-margin instrument sales. Its customers include pharmaceutical companies, academic institutions, and clinical laboratories.',
+      'SYM': 'Symbotic is a robotics and automation company that provides warehouse automation systems. Its technology uses AI-powered robots to optimize inventory management and fulfillment in distribution centers. The company generates revenue through system sales, software licensing, and ongoing maintenance contracts. Its customers are primarily large retailers and e-commerce companies seeking to improve warehouse efficiency.',
+      'KEYS': 'Keysight Technologies provides electronic design and test solutions for engineers and scientists. The company sells test equipment, software, and services used in the development of electronic products. Its business model combines hardware sales with recurring software subscriptions and support contracts. Keysight serves customers in communications, aerospace, defense, and semiconductor industries.',
+      'ZM': 'Zoom provides video-first unified communications platform for businesses and individuals. The company generates revenue through subscription plans for video conferencing, phone systems, and collaboration tools. Its freemium model drives user acquisition, while enterprise contracts provide recurring revenue. Zoom benefits from network effects and strong brand recognition in remote work solutions.',
+      'BABA': 'Alibaba is China\'s largest e-commerce and cloud computing company. It operates multiple platforms including Taobao, Tmall, and Alibaba Cloud. The company makes money through transaction fees, advertising, cloud services, and logistics. Its ecosystem approach creates strong network effects, with merchants, consumers, and service providers all interconnected on its platforms.',
+      'ADI': 'Analog Devices designs and manufactures analog, mixed-signal, and digital signal processing integrated circuits. The company serves customers in industrial, automotive, communications, and consumer markets. Its business model relies on high-margin semiconductor sales with long product lifecycles. ADI benefits from strong relationships with customers requiring precision analog solutions.',
+      'DELL': 'Dell Technologies is a global technology company that designs, develops, and sells computers, servers, storage, and networking equipment. The company operates through direct sales and channel partners, serving both consumers and enterprises. Its business model combines hardware sales with services, software, and financing. Dell benefits from scale, supply chain efficiency, and strong enterprise relationships.',
+      'ADSK': 'Autodesk provides software for architecture, engineering, construction, manufacturing, and media industries. The company has shifted from perpetual licenses to subscription-based revenue, creating predictable recurring income. Its products include AutoCAD, Revit, and Fusion 360. Autodesk benefits from high switching costs and deep integration into customer workflows.',
+      'WDAY': 'Workday provides cloud-based human capital management and financial management software for enterprises. The company operates on a subscription model with long-term contracts. Its platform helps organizations manage payroll, benefits, recruiting, and financial planning. Workday benefits from strong customer retention, upselling opportunities, and the complexity of enterprise HR and finance systems.',
+      'ZS': 'Zscaler provides cloud-based cybersecurity solutions, primarily focused on zero-trust network access. The company\'s platform secures user-to-application connections without traditional VPNs. Its business model is subscription-based with recurring revenue from enterprise customers. Zscaler benefits from the shift to cloud computing and remote work, which increases demand for secure access solutions.',
+      'HPQ': 'HP Inc. manufactures and sells personal computers, printers, and related supplies. The company operates through direct sales and retail channels. Its business model combines hardware sales with high-margin supplies like ink and toner. HP benefits from brand recognition, distribution scale, and the recurring nature of printer consumables.',
+      'DE': 'Deere & Company manufactures agricultural, construction, and forestry machinery. The company sells tractors, combines, excavators, and other heavy equipment. Its business model combines equipment sales with financing, parts, and services. Deere benefits from strong brand loyalty, dealer networks, and the capital-intensive nature of farming and construction industries.',
+      'CRDO': 'Credo Technology Group designs and sells high-speed connectivity solutions for data centers, networking equipment, and AI infrastructure. The company provides semiconductor solutions that enable high-bandwidth data transmission. Its business model relies on selling chips and intellectual property to equipment manufacturers. Credo benefits from the growing demand for faster data center connectivity and AI infrastructure.',
+      'MDB': 'MongoDB provides a general-purpose database platform that allows developers to build applications with flexible data models. The company operates on a subscription-based model with Atlas (cloud) and Enterprise (on-premises) offerings. MongoDB benefits from developer-friendly technology, strong community adoption, and the shift from relational to document databases in modern application development.',
+      'CRWD': 'CrowdStrike provides cloud-native endpoint security and threat intelligence services. The company\'s Falcon platform uses AI and behavioral analytics to detect and prevent cyberattacks. Its business model is subscription-based with recurring revenue from enterprise customers. CrowdStrike benefits from the shift to cloud security, strong threat detection capabilities, and network effects as more endpoints join its platform.',
+      'BNS': 'The Bank of Nova Scotia (Scotiabank) is one of Canada\'s largest banks with operations across North America, Latin America, and the Caribbean. The bank generates revenue through retail banking, commercial banking, wealth management, and capital markets. Its business model relies on interest income from loans and fees from banking services. Scotiabank benefits from geographic diversification and strong market positions in Canada and select international markets.',
+      'MRVL': 'Marvell Technology designs and sells semiconductor solutions for data infrastructure, including storage controllers, networking chips, and custom ASICs. The company serves data centers, enterprise storage, and networking markets. Its business model combines standard product sales with custom design services. Marvell benefits from the growth in data center infrastructure and its expertise in high-speed connectivity solutions.',
+      'PSTG': 'Pure Storage provides all-flash data storage solutions for enterprises. The company sells storage arrays, software, and cloud services that enable fast, efficient data storage. Its business model combines hardware sales with subscription-based software and services. Pure Storage benefits from the shift from disk to flash storage, strong performance characteristics, and a subscription model that provides recurring revenue.',
+      'CRM': 'Salesforce is the world\'s leading customer relationship management (CRM) platform. The company provides cloud-based software for sales, marketing, customer service, and analytics. Its business model is subscription-based with strong recurring revenue from enterprise customers. Salesforce benefits from high switching costs, a large ecosystem of third-party applications, and continuous product innovation.',
+      'RY': 'Royal Bank of Canada (RBC) is Canada\'s largest bank by market capitalization. The bank operates through personal and commercial banking, wealth management, capital markets, and insurance divisions. Its business model generates revenue from interest income on loans and fees from banking and investment services. RBC benefits from strong market share in Canada, diversified revenue streams, and a large customer base.',
+      'SNOW': 'Snowflake provides a cloud-based data platform that enables organizations to store, analyze, and share data across clouds. The company operates on a consumption-based pricing model where customers pay for compute and storage usage. Snowflake benefits from the separation of storage and compute, strong performance, and the ability to work across multiple cloud providers.',
+      'DLTR': 'Dollar Tree operates discount retail stores selling products at fixed price points, primarily $1.25. The company operates Dollar Tree and Family Dollar stores, offering a wide range of consumer goods. Its business model relies on high-volume, low-margin sales with efficient supply chain management. Dollar Tree benefits from value-conscious consumer demand, strong store economics, and a large store footprint.',
+      'TD': 'The Toronto-Dominion Bank (TD Bank) is one of Canada\'s largest banks with significant operations in the United States. The bank provides retail banking, commercial banking, wealth management, and capital markets services. Its business model generates revenue from interest income and fees. TD benefits from strong market positions in Canada and the U.S. Northeast, diversified revenue streams, and a large customer base.',
+      'BMO': 'Bank of Montreal is one of Canada\'s oldest and largest banks with operations in Canada and the United States. The bank provides personal and commercial banking, wealth management, and capital markets services. Its business model generates revenue from interest income on loans and fees from banking services. BMO benefits from strong market positions in Canada, U.S. expansion, and diversified business lines.',
+      'KR': 'The Kroger Co. operates one of the largest supermarket chains in the United States, selling groceries, fuel, and general merchandise through multiple store formats and digital channels. Its model uses scale purchasing, private-label brands, and loyalty programs to drive traffic and margin while expanding omnichannel fulfillment.',
+      'VSCO': 'Victoria\'s Secret & Co. runs a specialty retail and e‑commerce business focused on women\'s intimates, sleepwear, and beauty products under the Victoria\'s Secret and PINK brands. It monetizes strong brand recognition and marketing through mall stores and online channels, aiming for high-margin sales in lingerie and adjacent categories.',
+      'TOL': 'Toll Brothers is a luxury U.S. homebuilder focused on higher-income buyers across move‑up, active‑adult, and urban markets. It generates profits by controlling land pipelines and offering design upgrades, financing, and options around a build‑to‑order home model.',
+      'AZO': 'AutoZone is a leading retailer and distributor of automotive replacement parts and accessories for both do‑it‑yourself customers and professional repair shops. The company earns money through high‑turn inventory across a large store network, with margins supported by private‑label parts and commercial delivery programs.',
+      'FERG': 'Ferguson distributes plumbing, HVAC, and infrastructure products to professional contractors and trade customers. Its business model layers technical expertise, logistics, and project support on top of product distribution, embedding itself in contractor workflows and earning attractive service margins.',
+      'CASY': 'Casey\'s General Stores operates convenience stores across small and mid‑sized U.S. towns, differentiated by its in‑store kitchens and prepared foods such as pizza. Revenue comes from a mix of fuel, grocery, and higher‑margin foodservice, with local scale and private brands driving profitability.',
+      'ORCL': 'Oracle sells database software, enterprise applications, and cloud infrastructure that power mission‑critical workloads for large organizations. It monetizes long‑term customer relationships through licenses, support, and growing cloud subscriptions, benefiting from high switching costs and entrenched IT footprints.',
+      'ADBE': 'Adobe provides creative and digital experience software like Photoshop, Acrobat, and Experience Cloud to individuals, enterprises, and agencies. Its subscription‑first model produces recurring revenue and upsell opportunities as customers adopt more tools across content creation, document workflows, and marketing analytics.',
+      'SNPS': 'Synopsys develops electronic design automation software and semiconductor IP used to design advanced integrated circuits. It earns recurring license, maintenance, and royalty revenue as chipmakers embed its tools and IP deeply into their design flows, creating high switching costs.',
+      'AVGO': 'Broadcom designs semiconductors and infrastructure software for networking, data centers, broadband, and wireless markets. The company focuses on mission‑critical components sold under long‑term supply agreements, producing high margins and strong free cash flow.',
+      'COST': 'Costco operates membership‑only warehouse clubs that sell a curated assortment of branded and private‑label goods at very low markups. Most profit comes from recurring membership fees, while scale and efficiency allow it to keep product prices extremely competitive and drive high volumes.',
+      'CIEN': 'Ciena provides optical networking equipment, software, and services that enable high‑capacity communications networks for carriers, cloud providers, and enterprises. It makes money by selling hardware platforms and related software and support, benefiting from ongoing demand for bandwidth and network upgrades.',
+      'LULU': 'Lululemon designs premium athletic apparel and accessories for yoga, running, and training, sold primarily through its own stores and e‑commerce. Its vertically integrated model and community‑driven brand allow it to command premium pricing and strong gross margins.',
+      'LEN': 'Lennar is one of the largest U.S. homebuilders, developing communities and constructing single‑family homes across a range of price points. It earns returns by controlling land, managing construction efficiently, and bundling mortgage, title, and other services around each home sale.',
+      'GIS': 'General Mills is a global packaged‑foods company with brands in cereal, snacks, yogurt, meals, and pet food. It monetizes brand equity and shelf space by manufacturing at scale and distributing through grocery, mass, and club retailers worldwide, supported by steady marketing spend.',
+      'JBL': 'Jabil is an electronics manufacturing services provider that designs and builds products for customers in industries like technology, healthcare, and automotive. It operates on long‑term outsourcing relationships, earning thin but stable margins on high‑volume manufacturing plus value‑added design and supply‑chain services.',
+      'CTAS': 'Cintas provides uniform rental, facility services, and safety products to businesses across North America. Its route‑based, contract‑driven model generates recurring revenue as customers pay for ongoing uniform laundering, restroom supplies, and compliance services.',
+      'DRI': 'Darden Restaurants owns and operates full‑service restaurant chains such as Olive Garden and LongHorn Steakhouse. It generates cash by driving high guest volumes and standardized operations across its brands, using scale purchasing and disciplined cost control to protect restaurant‑level margins.',
+      'FDS': 'FactSet supplies financial data and analytics platforms used by asset managers, banks, and other investment professionals. The company runs a subscription model with high retention, monetizing deep datasets, analytics tools, and workflow integrations that become embedded in client processes.',
+      'BIRK': 'Birkenstock designs and sells footwear built around its signature contoured footbed, positioned at the intersection of comfort, health, and fashion. It earns revenue through a mix of wholesale and direct‑to‑consumer channels, leveraging brand heritage and collaborations to support premium pricing.',
+      'PAYX': 'Paychex provides payroll processing, HR outsourcing, and benefits administration for small and mid‑sized businesses. Its fee‑based, recurring revenue model is supported by sticky client relationships and cross‑selling of additional HR, retirement, and insurance services on top of core payroll.',
+      'HEI': 'HEICO Corporation designs and manufactures niche aircraft parts, electronic systems, and subsystems for aerospace and defense customers. It benefits from an aftermarket model selling FAA‑approved replacement components and specialty electronics, which generate recurring, high‑margin revenue tied to aircraft utilization.',
+      'HEI.A': 'HEICO Class A shares represent an alternate voting class in the same aerospace and defense business as HEI. Investors participate in the aftermarket components and specialty electronics model, where long product lives and regulatory approvals create durable revenue streams.',
+      'MU': 'Micron Technology manufactures DRAM and NAND memory used in servers, PCs, mobile devices, and automotive systems. The company operates in a cyclical, capital‑intensive industry, where technology leadership and scale help it manage through memory price swings.',
+      'ACN': 'Accenture is a global consulting and IT services firm that helps enterprises with strategy, digital transformation, and managed services. It earns revenue from large, often multi‑year projects and outsourcing contracts, with deep client relationships and industry specialization supporting repeat business.',
+      'NKE': 'Nike designs, markets, and sells athletic footwear, apparel, and equipment under the Nike and Jordan brands. The business leverages powerful branding and athlete endorsements across wholesale and fast‑growing direct‑to‑consumer channels to drive premium pricing and global scale.',
+      'FDX': 'FedEx operates global express delivery, ground shipping, and logistics services for consumers and businesses. Its integrated air‑and‑ground network generates revenue based on shipment volumes and pricing, with profitability tied to network efficiency and mix of higher‑margin express services.',
+      'CCL': 'Carnival Corporation & plc is a leading global cruise operator with multiple brands serving different customer segments and regions. It monetizes cruise vacations through ticket revenue and high‑margin onboard spending such as excursions, casinos, food, and beverages, while leveraging fleet scale to manage costs.',
+      'DJCO': 'Daily Journal Corporation is a diversified holding company with interests in legal publishing and software, alongside a portfolio of long-term equity investments.',
+      'EBF': 'Ennis Inc is a commercial printing and business forms company serving enterprises with branded documents, labels, and transactional print products.',
+      'SCS': 'Steelcase Inc is a global office furniture and workplace solutions company, best known for designing desks, seating, and hybrid-work environments for corporate and institutional clients.'
+    };
+
+    function buildTimeBadge(time) {
+      if (!time || time === '-') return '-';
+      const key = time.toLowerCase();
+      const timeClass = key === 'bmo'
+        ? 'bmo'
+        : key === 'amc'
+          ? 'amc'
+          : (key === 'tns' || key === 'tas' ? 'tns' : 'tns');
+      return `<span class="time-badge ${timeClass}">${time}</span>`;
+    }
+
+    function renderEarningsTables() {
+      const wrappers = document.querySelectorAll('.earnings-table-wrapper[data-day-table]');
+      wrappers.forEach(wrapper => {
+        const dateKey = wrapper.dataset.dayTable;
+        const data = EARNINGS_DATA[dateKey];
+
+        if (!data) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">No data available.</p>`;
+          return;
+        }
+
+        const notableData = NOTABLE_EARNINGS_NEXT_WEEK[dateKey];
+        
+        if (notableData) {
+          const notableHtml = notableData.days.map(day => {
+            if (day.companies && day.companies.length) {
+              return `
+                <div class="notable-day-group">
+                  <div class="notable-day-label">${day.label}</div>
+                  <div class="notable-companies-row">
+                    ${day.companies.map(company => `
+                      <div class="notable-company-card">
+                        <span class="notable-symbol">${company.symbol}</span>
+                        <span class="notable-name">${company.name}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `;
+            }
+            const message = day.message || 'No notable earnings yet.';
+            return `
+              <div class="notable-day-group">
+                <div class="notable-day-label">${day.label}</div>
+                <p style="text-align:center; color:#6b7280; margin:0;">${message}</p>
+              </div>
+            `;
+          }).join('');
+          
+          wrapper.innerHTML = `
+            <div class="notable-earnings-bottom" style="margin-top: 0;">
+              <h3 class="notable-title">
+                <i class="fas fa-star"></i> Notable Earnings Next Week
+              </h3>
+              <div class="notable-grid">
+                ${notableHtml}
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        if (data.message) {
+          wrapper.innerHTML = `<p style="text-align: center; color: #6b7280; padding: 40px 20px;">${data.message}</p>`;
+          return;
+        }
+
+        const rows = (data.rows || []).map(([symbol, company, event, time, eps, cap]) => {
+          const description = COMPANY_DESCRIPTIONS[symbol] || '';
+          if (description) {
+            return `
+          <tr>
+            <td class="symbol">${symbol}</td>
+            <td class="company company-with-tooltip">
+              ${company}
+              <span class="company-tooltip">${description}</span>
+            </td>
+            <td>${event}</td>
+            <td>${buildTimeBadge(time)}</td>
+            <td>${eps}</td>
+            <td>${cap}</td>
+          </tr>
+        `;
+          }
+          return `
+          <tr>
+            <td class="symbol">${symbol}</td>
+            <td class="company">${company}</td>
+            <td>${event}</td>
+            <td>${buildTimeBadge(time)}</td>
+            <td>${eps}</td>
+            <td>${cap}</td>
+          </tr>
+        `;
+        }).join('');
+
+        wrapper.innerHTML = `
+          <table class="earnings-table">
+            <thead>
+              <tr>
+                ${TABLE_HEADERS.map(label => `<th>${label}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        `;
+      });
+      
+      // Add mouse tracking for tooltips
+      document.querySelectorAll('.company-with-tooltip').forEach(element => {
+        const tooltip = element.querySelector('.company-tooltip');
+        if (!tooltip) return;
+        
+        element.addEventListener('mouseenter', () => {
+          tooltip.style.opacity = '1';
+          tooltip.style.visibility = 'visible';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          tooltip.style.visibility = 'hidden';
+        });
+        
+        element.addEventListener('mousemove', (e) => {
+          const offset = 15;
+          tooltip.style.left = (e.clientX + offset) + 'px';
+          tooltip.style.top = (e.clientY + offset) + 'px';
+          tooltip.style.transform = 'none';
+        });
+      });
+    }
+
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+      }
+    }
+    
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.remove('active');
+      }
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (mobileMenu && mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Tools dropdown functionality
+    function initToolsDropdown() {
+      const toolsDropdown = document.getElementById('toolsDropdown');
+      const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
+      const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
+
+      if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
+        let hideTimeout;
+        const showMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.add('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'true');
+        };
+        const hideMenu = () => {
+          clearTimeout(hideTimeout);
+          toolsDropdownMenu.classList.remove('active');
+          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
+        };
+        
+        // Hover functionality with relaxed hide delay
+        toolsDropdown.addEventListener('mouseenter', showMenu);
+        toolsDropdown.addEventListener('mouseleave', () => hideTimeout = setTimeout(hideMenu, 700));
+
+        // Click/touch functionality
+        toolsDropdownBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isOpen = toolsDropdownMenu.classList.contains('active');
+          if (isOpen) hideMenu(); else showMenu();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+          if (!toolsDropdown.contains(event.target)) hideMenu();
+        });
+
+        // Keyboard navigation
+        toolsDropdownBtn.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            const isOpen = toolsDropdownMenu.classList.contains('active');
+            if (isOpen) hideMenu(); else showMenu();
+          }
+        });
+      }
+    }
+
+    // Earnings Calendar Interactive Navigation
+    function initEarningsCalendar() {
+      const weekDays = Array.from(document.querySelectorAll('.week-day'));
+      const weekDaysContainer = document.querySelector('.week-days');
+      const prevBtn = document.querySelector('.week-nav-btn.prev');
+      const nextBtn = document.querySelector('.week-nav-btn.next');
+      const allContents = Array.from(document.querySelectorAll('.earnings-day-content'));
+      const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+      const assignDateIfMissing = (day) => {
+        if (day.dataset.date) return day.dataset.date;
+        const label = day.querySelector('.day-label')?.textContent || '';
+        const normalized = label.replace(',', '').trim();
+        if (!normalized) return null;
+        const parsed = new Date(`${normalized} 2025`);
+        if (!isNaN(parsed)) {
+          day.dataset.date = parsed.toISOString().split('T')[0];
+          return day.dataset.date;
+        }
+        return null;
+      };
+
+      const updateNavState = () => {
+        if (!prevBtn || !nextBtn) return;
+        const activeIndex = weekDays.findIndex(day => day.classList.contains('active'));
+        prevBtn.disabled = activeIndex <= 0;
+        nextBtn.disabled = activeIndex >= weekDays.length - 1;
+      };
+
+      const showDay = (day, shouldScroll = true) => {
+        if (!day) return;
+        const activeDate = assignDateIfMissing(day);
+        weekDays.forEach(d => d.classList.remove('active'));
+        day.classList.add('active');
+
+        allContents.forEach(content => content.classList.remove('active'));
+        const targetId = `${day.getAttribute('data-day')}-earnings`;
+        const targetContent = document.getElementById(targetId);
+        if (targetContent) {
+          targetContent.classList.add('active');
+        }
+
+        if (shouldScroll) {
+          const behavior = weekDaysContainer?.dataset.instant === 'true' ? 'auto' : 'smooth';
+          setTimeout(() => {
+            day.scrollIntoView({ behavior, inline: 'start', block: 'nearest' });
+          }, 50);
+        }
+
+        updateNavState();
+      };
+
+      const todayIso = new Date().toISOString().split('T')[0];
+      let activated = false;
+      let closestDay = null;
+      let closestDiff = Infinity;
+
+      weekDays.forEach(day => {
+        const dateAttr = assignDateIfMissing(day);
+        if (!activated && dateAttr === todayIso) {
+          showDay(day);
+          activated = true;
+        }
+        
+        // Also track the closest date to today
+        if (dateAttr) {
+          const dayDate = new Date(dateAttr);
+          const todayDate = new Date(todayIso);
+          const diff = Math.abs(dayDate - todayDate);
+          if (diff < closestDiff) {
+            closestDiff = diff;
+            closestDay = day;
+          }
+        }
+      });
+
+      // If today's date not found, use the closest date
+      if (!activated) {
+        if (closestDay) {
+          showDay(closestDay);
+          activated = true;
+        } else {
+        const today = new Date();
+        const fallbackName = dayNames[today.getDay()];
+        const fallback = weekDays.find(day => day.getAttribute('data-day') === fallbackName);
+        if (fallback) {
+          showDay(fallback);
+          activated = true;
+        } else if (weekDays.length) {
+          showDay(weekDays[0]);
+          }
+        }
+      }
+
+      weekDays.forEach(day => {
+        day.addEventListener('click', () => showDay(day, true));
+      });
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          const currentIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (currentIndex > 0) {
+            showDay(weekDays[currentIndex - 1]);
+          }
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const currentIndex = weekDays.findIndex(day => day.classList.contains('active'));
+          if (currentIndex < weekDays.length - 1) {
+            showDay(weekDays[currentIndex + 1]);
+          }
+        });
+      }
+
+      updateNavState();
+    }
+
+    // Logout functionality - Always show if we're on this page (guard ensures we're logged in)
+    async function initLogout() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        // Since the guard script at the top ensures we're logged in, always show the button
+        logoutBtn.style.display = 'inline-block';
+        logoutBtn.style.visibility = 'visible';
+        logoutBtn.style.opacity = '1';
+        
+        // Import and set up logout handler (only once)
+        if (!logoutBtn.dataset.listenerAttached) {
+          const { logout } = await import('../auth.js');
+          
+          logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+              logout();
+              window.location.href = '/login.html';
+            }
+          });
+          
+          logoutBtn.dataset.listenerAttached = 'true';
+        }
+      }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      initToolsDropdown();
+      renderEarningsTables();
+      initEarningsCalendar();
+      initLogout();
+    });
+
+  </script>
+
+  <style>
+    /* Hide Event and Time columns on all devices */
+    .earnings-table thead th:nth-child(3),
+    .earnings-table tbody td:nth-child(3) {
+      display: none;
+    }
+    
+    .earnings-table thead th:nth-child(4),
+    .earnings-table tbody td:nth-child(4) {
+      display: none;
+    }
+    
+    /* Notable Earnings Bottom Section */
+    .notable-earnings-bottom {
+      margin-top: 60px;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+    
+    .notable-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .notable-title i {
+      color: #f59e0b;
+      font-size: 1.3rem;
+    }
+    
+    .notable-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    
+    .notable-day-group {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 20px;
+    }
+    
+    .notable-day-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    
+    .notable-companies-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .notable-company-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: white;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .notable-company-card:hover {
+      background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(55, 65, 81, 0.2);
+    }
+    
+    .notable-symbol {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #2563eb;
+      min-width: 60px;
+      transition: color 0.3s ease;
+    }
+    
+    .notable-company-card:hover .notable-symbol {
+      color: white;
+    }
+    
+    .notable-name {
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .notable-company-card:hover .notable-name {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    /* Company Tooltip Styles */
+    .company-with-tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-block;
+    }
+    
+    /* Ensure tooltip container doesn't clip content */
+    .earnings-table-wrapper {
+      overflow: visible !important;
+    }
+    
+    .earnings-table {
+      overflow: visible !important;
+    }
+    
+    .earnings-day-content {
+      overflow: visible !important;
+    }
+    
+    .earnings-main {
+      overflow: visible !important;
+    }
+    
+    .earnings-layout {
+      overflow: visible !important;
+    }
+    
+    .earnings-table tbody td {
+      overflow: visible !important;
+      position: relative;
+    }
+    
+    .company-tooltip {
+      position: fixed;
+      padding: 18px 24px;
+      background: #1f2937;
+      color: #f9fafb;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      min-width: 400px;
+      max-width: 900px;
+      width: max-content;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      pointer-events: none;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .company-tooltip::after {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .company-tooltip {
+        max-width: calc(100vw - 40px);
+        min-width: 280px;
+        font-size: 0.95rem;
+        padding: 16px 18px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .company-tooltip {
+        min-width: 250px;
+        font-size: 0.9rem;
+        padding: 14px 16px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .notable-earnings-bottom {
+        margin-top: 40px;
+        padding: 25px 15px;
+      }
+      
+      .notable-title {
+        font-size: 1.2rem;
+      }
+      
+      .notable-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .company-tooltip {
+        max-width: 280px;
+        font-size: 0.8rem;
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</body>
+</html>
+
