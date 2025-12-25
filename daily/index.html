@@ -131,6 +131,16 @@
             </div>
           `;
         }
+
+        // Empty state (no latest + no entries)
+        if (!html) {
+          html = `
+            <div class="entries-list">
+              <h2>No entries yet</h2>
+              <div class="entry-excerpt">Daily Market Wrap-Up entries haven’t been published yet. Check back soon.</div>
+            </div>
+          `;
+        }
         
         contentDiv.innerHTML = html;
       } catch (error) {
