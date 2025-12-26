@@ -446,17 +446,7 @@
         <a href="../index.html#terms">Terms</a>
         <a href="../index.html#contact">Contact</a>
         <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        <div class="nav-dropdown" id="toolsDropdown">
-          <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" id="toolsDropdownBtn">Tools</button>
-          <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
-            <a href="../daily/index.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-newspaper"></i> Daily Market Wrap-Up</a>
-            <a href="earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
-            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
-            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
-            <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-microchip"></i> Company Analysis</a>
-            <a href="congress.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
-          </div>
-        </div>
+        <a href="index.html">Tools</a>
       </div>
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
       <div class="mobile-menu" id="mobileMenu">
@@ -466,17 +456,7 @@
         <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
         <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
         <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
-        <details class="mobile-menu-dropdown">
-          <summary>Tools</summary>
-          <div class="mobile-menu-dropdown-content">
-            <a href="../daily/index.html" onclick="closeMobileMenu()"><i class="fas fa-newspaper"></i> Daily Market Wrap-Up</a>
-            <a href="earnings.html" onclick="closeMobileMenu()"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
-            <a href="macro-calendar.html" onclick="closeMobileMenu()"><i class="fas fa-chart-line"></i> Macro Calendar</a>
-            <a href="hedge-fund.html" onclick="closeMobileMenu()"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
-        <a href="company-analysis.html" onclick="closeMobileMenu()"><i class="fas fa-microchip"></i> Company Analysis</a>
-            <a href="congress.html" onclick="closeMobileMenu()"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
-          </div>
-        </details>
+        <a href="index.html" onclick="closeMobileMenu()">Tools</a>
       </div>
     </div>
   </nav>
@@ -534,64 +514,6 @@
       }
     });
 
-    // Tools dropdown functionality
-    const toolsDropdown = document.getElementById('toolsDropdown');
-    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
-    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
-    let toolsDropdownHideTimeout;
-
-    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-      const showToolsDropdown = () => {
-        clearTimeout(toolsDropdownHideTimeout);
-        toolsDropdownMenu.classList.add('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-      };
-
-      const hideToolsDropdown = () => {
-        clearTimeout(toolsDropdownHideTimeout);
-        toolsDropdownMenu.classList.remove('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
-      };
-
-      // Hover functionality with slower hide
-      toolsDropdown.addEventListener('mouseenter', showToolsDropdown);
-      toolsDropdown.addEventListener('mouseleave', () => {
-        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 700);
-      });
-
-      toolsDropdownMenu.addEventListener('mouseenter', () => {
-        clearTimeout(toolsDropdownHideTimeout);
-      });
-      toolsDropdownMenu.addEventListener('mouseleave', () => {
-        toolsDropdownHideTimeout = setTimeout(hideToolsDropdown, 700);
-      });
-
-      toolsDropdownBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (toolsDropdownMenu.classList.contains('active')) {
-          hideToolsDropdown();
-        } else {
-          showToolsDropdown();
-        }
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!toolsDropdown.contains(e.target)) {
-          hideToolsDropdown();
-        }
-      });
-
-      toolsDropdownBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          if (toolsDropdownMenu.classList.contains('active')) {
-            hideToolsDropdown();
-          } else {
-            showToolsDropdown();
-          }
-        }
-      });
-    }
 
     const funds = [
       {
