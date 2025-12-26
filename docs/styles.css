@@ -68,7 +68,7 @@
     --color-info: #3b82f6;
     
     /* Typography */
-    --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-primary: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
@@ -441,6 +441,28 @@ body {
     font-size: 0.85rem;
 }
 
+/* Mobile menu Tools button styling */
+.mobile-menu .nav-tools-btn {
+    border: 3px solid #2563eb !important;
+    border-radius: 8px;
+    padding: 10px 16px !important;
+    color: #2563eb !important;
+    font-weight: 600 !important;
+    background-color: rgba(37, 99, 235, 0.05);
+    margin-top: 10px;
+    text-align: center;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu .nav-tools-btn:hover,
+.mobile-menu .nav-tools-btn:focus {
+    background-color: rgba(37, 99, 235, 0.1) !important;
+    border-color: #1d4ed8 !important;
+    color: #1d4ed8 !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
 .nav-links a {
     text-decoration: none;
     color: var(--color-gray-500);
@@ -461,6 +483,49 @@ body {
 .nav-links a:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+}
+
+/* Tools button emphasis */
+.nav-tools-btn {
+    border: 3px solid #2563eb !important;
+    border-radius: 8px;
+    padding: 8px 16px !important;
+    color: #2563eb !important;
+    font-weight: 600 !important;
+    background-color: rgba(37, 99, 235, 0.05);
+    transition: all 0.3s ease;
+}
+
+.nav-tools-btn:hover,
+.nav-tools-btn:focus {
+    background-color: rgba(37, 99, 235, 0.1) !important;
+    border-color: #1d4ed8 !important;
+    color: #1d4ed8 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+/* Tools link button in "What We Offer" section */
+.tools-link-btn {
+    display: inline-block;
+    border: 3px solid #2563eb !important;
+    border-radius: 8px;
+    padding: 6px 14px !important;
+    color: #2563eb !important;
+    font-weight: 600 !important;
+    background-color: rgba(37, 99, 235, 0.05);
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+    margin: 0 2px;
+}
+
+.tools-link-btn:hover,
+.tools-link-btn:focus {
+    background-color: rgba(37, 99, 235, 0.1) !important;
+    border-color: #1d4ed8 !important;
+    color: #1d4ed8 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .logo-dd-image {
