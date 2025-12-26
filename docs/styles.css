@@ -529,9 +529,8 @@ body {
 }
 
 .logo-dd-image {
-    height: 2.5rem;
-    width: auto;
-    max-width: 5rem;
+    width: 120px !important;
+    height: 40px !important;
     object-fit: contain;
     display: block;
 }
@@ -813,6 +812,14 @@ body {
     color: #6b7280;
     max-width: 600px;
     margin: 0 auto;
+    white-space: nowrap;
+}
+
+/* Allow wrapping on very small screens */
+@media (max-width: 640px) {
+    .section-header p {
+        white-space: normal;
+    }
 }
 
 .features-grid {
