@@ -92,7 +92,12 @@
       justify-content: space-between;
       padding: 0 28px;
     }
-    .nav-logo img { width: 118px; height: auto; border-radius: 12px; }
+    .nav-logo img { 
+      width: 120px !important;
+      height: 40px !important;
+      border-radius: 12px;
+      object-fit: contain;
+    }
     .nav-links {
       display: flex;
       align-items: center;
@@ -713,7 +718,7 @@
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <div class="nav-logo">
-        <a href="../index.html"><img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes"></a>
+        <a href="../index.html"><img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40"></a>
       </div>
       <div class="nav-links" role="menubar">
         <a href="../index.html#features">Why Us</a>
