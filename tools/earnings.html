@@ -265,64 +265,26 @@
       </div>
       <div class="nav-links" role="menubar">
         <a href="../index.html#features">Why Us</a>
-        <a href="../index.html#how-it-works">How it Works</a>
+        <a href="../index.html#how-it-works">What We Offer</a>
         <a href="../index.html#pricing">Pricing</a>
         <a href="../index.html#test">Test</a>
         <a href="../index.html#terms">Terms</a>
         <a href="../index.html#contact">Contact</a>
         <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         
-                    <!-- Tools Dropdown -->
-                    <div class="nav-dropdown" id="toolsDropdown">
-          <button class="nav-dropdown-btn" 
-                  aria-haspopup="true" 
-                  aria-expanded="false" 
-                                id="toolsDropdownBtn">
-                            Tools
-          </button>
-                        <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
-            <a href="../daily/index.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-newspaper"></i> Daily Market Wrap-Up</a>
-            <a href="earnings.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-calendar-alt"></i> Earnings Calendar</a>
-            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-chart-line"></i> Macro Calendar</a>
-            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-briefcase"></i> Hedge Fund Positioning</a>
-            <a href="company-analysis.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-microchip"></i> Company Analysis</a>
-            <a href="congress.html" class="nav-dropdown-item" role="menuitem"><i class="fas fa-landmark"></i> Congress Trade Monitor</a>
-          </div>
-        </div>
+                    <a href="index.html">Tools</a>
       </div>
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
       </button>
       <div class="mobile-menu" id="mobileMenu">
         <a href="../index.html#features" onclick="closeMobileMenu()">Why Us</a>
-        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">What We Offer</a>
         <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
         <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
         <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
         <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
-        <details class="mobile-menu-dropdown">
-                         <summary>Tools</summary>
-          <div class="mobile-menu-dropdown-content">
-            <a href="../daily/index.html" onclick="closeMobileMenu()">
-              <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
-            </a>
-            <a href="earnings.html" onclick="closeMobileMenu()">
-              <i class="fas fa-calendar-alt"></i> Earnings Calendar
-            </a>
-            <a href="macro-calendar.html" onclick="closeMobileMenu()">
-              <i class="fas fa-chart-line"></i> Macro Calendar
-            </a>
-            <a href="hedge-fund.html" onclick="closeMobileMenu()">
-              <i class="fas fa-briefcase"></i> Hedge Fund Positioning
-            </a>
-            <a href="company-analysis.html" onclick="closeMobileMenu()">
-              <i class="fas fa-microchip"></i> Company Analysis
-            </a>
-            <a href="congress.html" onclick="closeMobileMenu()">
-              <i class="fas fa-landmark"></i> Congress Trade Monitor
-            </a>
-          </div>
-        </details>
+        <a href="index.html" onclick="closeMobileMenu()">Tools</a>
       </div>
     </div>
   </nav>
@@ -1417,51 +1379,6 @@
       }
     });
 
-    // Tools dropdown functionality
-    function initToolsDropdown() {
-      const toolsDropdown = document.getElementById('toolsDropdown');
-      const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
-      const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
-
-      if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-        let hideTimeout;
-        const showMenu = () => {
-          clearTimeout(hideTimeout);
-          toolsDropdownMenu.classList.add('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-        };
-        const hideMenu = () => {
-          clearTimeout(hideTimeout);
-          toolsDropdownMenu.classList.remove('active');
-          toolsDropdownBtn.setAttribute('aria-expanded', 'false');
-        };
-        
-        // Hover functionality with relaxed hide delay
-        toolsDropdown.addEventListener('mouseenter', showMenu);
-        toolsDropdown.addEventListener('mouseleave', () => hideTimeout = setTimeout(hideMenu, 700));
-
-        // Click/touch functionality
-        toolsDropdownBtn.addEventListener('click', (event) => {
-          event.stopPropagation();
-          const isOpen = toolsDropdownMenu.classList.contains('active');
-          if (isOpen) hideMenu(); else showMenu();
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (event) => {
-          if (!toolsDropdown.contains(event.target)) hideMenu();
-        });
-
-        // Keyboard navigation
-        toolsDropdownBtn.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            const isOpen = toolsDropdownMenu.classList.contains('active');
-            if (isOpen) hideMenu(); else showMenu();
-          }
-        });
-      }
-    }
 
     // Earnings Calendar Interactive Navigation
     function initEarningsCalendar() {
@@ -1610,7 +1527,6 @@
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
-      initToolsDropdown();
       renderEarningsTables();
       initEarningsCalendar();
       initLogout();

@@ -6,8 +6,8 @@
   <title>Premium Tools - Daily Dividend</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../styles.css?v=17">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../DDlogo.png">
   <style>
     * {
       margin: 0;
@@ -16,7 +16,7 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #ffffff 100%);
       min-height: 100vh;
       color: #1f2937;
@@ -53,64 +53,62 @@
       z-index: 0;
     }
 
-    /* Navbar - matching site style */
+    /* Navbar uses styles.css */
     .navbar {
       position: fixed;
       top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+      width: 100%;
       z-index: 1000;
-      padding: 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
-    .nav-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 16px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    /* Mobile menu styles */
+    .mobile-menu-btn { display: none; }
+    .mobile-menu { display: none; }
+    
+    @media (max-width: 768px) {
+      .nav-container { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center;
+        height: auto; 
+        padding: 15px 20px; 
+        gap: 0;
+      }
+      .nav-links { display: none; }
+      .mobile-menu-btn { 
+        display: block; 
+        background: none; 
+        border: none; 
+        font-size: 24px; 
+        color: #333; 
+        cursor: pointer;
+        padding: 5px;
+        order: 2;
+      }
+      .nav-logo { order: 1; }
+      .mobile-menu { 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: white; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .mobile-menu.active { display: flex; }
+      .mobile-menu a { 
+        text-decoration: none; 
+        color: #333; 
+        font-weight: 500; 
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .mobile-menu a:last-child { border-bottom: none; }
     }
 
-    .nav-logo img {
-      height: 40px;
-      width: auto;
-      display: block;
-    }
-
-    .logout-btn {
-      padding: 10px 20px;
-      background: #ffffff;
-      color: #ef4444;
-      border: 1.5px solid rgba(239, 68, 68, 0.2);
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logout-btn:hover {
-      background: #fef2f2;
-      border-color: rgba(239, 68, 68, 0.4);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
-    }
-
-    .logout-btn:active {
-      transform: translateY(0);
-    }
-
-    .logout-btn i {
-      font-size: 0.85rem;
-    }
 
     /* Main Content */
     .tools-wrapper {
@@ -153,7 +151,7 @@
 
     .tool-card {
       background: #ffffff;
-      border: 1px solid rgba(229, 231, 235, 0.8);
+      border: 3px solid #2563eb !important;
       border-radius: 24px;
       padding: 40px 32px;
       text-decoration: none;
@@ -164,7 +162,9 @@
       position: relative;
       overflow: hidden;
       animation: fadeInUp 0.6s ease-out backwards;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      box-shadow: 
+        0 8px 16px rgba(37, 99, 235, 0.15),
+        0 0 0 2px rgba(37, 99, 235, 0.1);
     }
 
     .tool-card:nth-child(1) { animation-delay: 0.1s; }
@@ -191,10 +191,11 @@
 
     .tool-card:hover {
       transform: translateY(-8px) scale(1.02);
-      border-color: rgba(37, 99, 235, 0.3);
+      border-color: #1d4ed8 !important;
+      border-width: 4px !important;
       box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(37, 99, 235, 0.1);
+        0 20px 40px rgba(37, 99, 235, 0.25),
+        0 0 0 3px rgba(37, 99, 235, 0.2);
     }
 
     .tool-card:active {
@@ -321,15 +322,6 @@
       .tool-card {
         padding: 32px 24px;
       }
-
-      .nav-container {
-        padding: 12px 20px;
-      }
-
-      .logout-btn {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-      }
     }
 
     @media (max-width: 480px) {
@@ -356,26 +348,35 @@
     }
   </script>
 
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <div class="nav-logo">
         <a href="../index.html">
-          <img src="../DDlogo.png?v=2" alt="Daily Dividend Logo">
+          <img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
         </a>
       </div>
-      <button id="logout-btn" class="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Log out
+      <div class="nav-links" role="menubar">
+        <a href="../index.html#features">Why Us</a>
+        <a href="../index.html#how-it-works">What We Offer</a>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#test">Test</a>
+        <a href="../index.html#terms">Terms</a>
+        <a href="../index.html#contact">Contact</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="index.html">Tools</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
       </button>
-      <script type="module">
-        import { logout } from '../auth.js';
-        const btn = document.getElementById('logout-btn');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            logout();
-            window.location.href = '/login.html';
-          });
-        }
-      </script>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html#features" onclick="closeMobileMenu()">Why Us</a>
+        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">What We Offer</a>
+        <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
+        <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
+        <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <a href="index.html" onclick="closeMobileMenu()">Tools</a>
+      </div>
     </div>
   </nav>
 
@@ -453,5 +454,72 @@
       </a>
     </div>
   </div>
+
+  <script type="module">
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+      }
+    }
+    
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenu) {
+        mobileMenu.classList.remove('active');
+      }
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      if (mobileMenu && mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Logout functionality
+    async function initLogout() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (!logoutBtn) return;
+
+      logoutBtn.style.display = 'inline-block';
+      logoutBtn.style.visibility = 'visible';
+      logoutBtn.style.opacity = '1';
+
+      try {
+        const { logout, isRemembered } = await import('../auth.js');
+        
+        if (isRemembered()) {
+          logoutBtn.style.display = 'inline-block';
+        } else {
+          logoutBtn.style.display = 'none';
+        }
+
+        logoutBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await logout();
+          window.location.href = '/login.html';
+        });
+      } catch (error) {
+        console.error('Error loading auth module:', error);
+        logoutBtn.style.display = 'none';
+      }
+    }
+
+    // Initialize on page load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLogout);
+    } else {
+      initLogout();
+    }
+
+    // Make functions globally available
+    window.toggleMobileMenu = toggleMobileMenu;
+    window.closeMobileMenu = closeMobileMenu;
+  </script>
 </body>
 </html>

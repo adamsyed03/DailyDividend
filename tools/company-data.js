@@ -260,6 +260,41 @@ const companiesData = {
       ],
     },
   },
+
+  LULU: {
+    header: {
+      name: 'Lululemon Athletica Inc. (LULU)',
+      pillIcon: 'fa-shirt',
+      pillLabel: 'Athletic apparel & footwear',
+      marketCap: '≈ $24.951B',
+    },
+    kpis: [
+      { label: 'REVENUE (QoQ)', value: '$2.6B' },
+      { label: 'NET INCOME (QoQ)', value: '$306.8M' },
+      { label: 'TRAILING P/E', value: '14.64×' },
+      { label: 'EPS (TTM)', value: '$14.34' },
+      { label: 'GROSS MARGIN', value: '55.6%' },
+      { label: 'REV GROWTH (YoY)', value: '+7%' },
+    ],
+    revenueMix: {
+      title: 'Revenue Mix',
+      subtitle: 'Product category contribution – Lululemon FY2024.',
+      data: [
+        { label: "Women's products", value: 5.7 },
+        { label: "Men's products", value: 2.4 },
+        { label: 'Other categories', value: 2.8 },
+      ],
+    },
+    regionalSplit: {
+      title: 'Regional Revenue Split',
+      subtitle: 'Geographic contribution – Lululemon FY2024.',
+      data: [
+        { label: 'Americas', value: 7.9 },
+        { label: 'China Mainland', value: 1.6 },
+        { label: 'Rest of World', value: 1.3 },
+      ],
+    },
+  },
 };
 
 // Extended narrative company profiles for AI / tooling usage

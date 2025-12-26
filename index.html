@@ -23,15 +23,15 @@
   <link rel="canonical" href="https://dailydividend.info">
 
   <!-- Fonts / Icons / Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="styles.css?v=16">
   
   <!-- Critical CSS for faster loading -->
   <style>
-    body { margin: 0; font-family: Inter, sans-serif; }
+    body { margin: 0; font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
     .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
     .hero { padding-top: 80px; }
     .phone-signup-modal, .waitlist-modal { display: none; }
@@ -87,25 +87,31 @@
       /* Additional spacing for hero content */
       .hero-content { margin-top: 20px; }
       
-      /* Mobile How it Works layout */
-      .steps {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
+      /* Mobile What We Offer layout */
+      .tools-list {
+        grid-template-columns: 1fr !important;
+        padding: 0 10px;
       }
-      .step {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        width: 100%;
+      .tool-item {
+        flex-direction: column !important;
+        text-align: center !important;
       }
-      .step-number {
-        margin-bottom: 10px;
+      .tool-content {
+        text-align: center !important;
       }
-      .step-content {
-        text-align: center;
+    }
+    
+    /* Tool item hover effects */
+    .tool-item:not(.coming-soon):hover {
+      background: #f3f4f6 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Tablet layout */
+    @media (max-width: 1024px) {
+      .tools-list {
+        grid-template-columns: repeat(2, 1fr) !important;
       }
     }
     
@@ -465,77 +471,26 @@
             </div>
         <div class="nav-links" role="menubar">
                      <a href="#features">Why Us</a>
-                    <a href="#how-it-works">How it Works</a>
+                    <a href="#how-it-works">What We Offer</a>
                     <a href="#pricing">Pricing</a>
                     <a href="#test">Test</a>
                     <a href="#terms">Terms</a>
                     <a href="#contact">Contact</a>
                     
-                    <!-- Tools Dropdown -->
-                    <div class="nav-dropdown" id="toolsDropdown">
-                        <button class="nav-dropdown-btn" 
-                                aria-haspopup="true" 
-                                aria-expanded="false" 
-                                id="toolsDropdownBtn">
-                            Tools
-                        </button>
-                        <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
-                            <a href="daily/index.html" class="nav-dropdown-item" role="menuitem">
-                                <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
-                            </a>
-                            <a href="earnings.html" class="nav-dropdown-item" role="menuitem">
-                                <i class="fas fa-calendar-alt"></i> Earnings Calendar
-                            </a>
-                            <a href="macro-calendar.html" class="nav-dropdown-item" role="menuitem">
-                                <i class="fas fa-chart-line"></i> Macro Calendar
-                            </a>
-                            <a href="hedge-fund.html" class="nav-dropdown-item" role="menuitem">
-                                <i class="fas fa-briefcase"></i> Hedge Fund Positioning
-                            </a>
-                            <a href="tools/company-analysis.html" class="nav-dropdown-item" role="menuitem">
-                                <i class="fas fa-microchip"></i> Company Analysis
-                            </a>
-                            <a href="tools/congress.html" class="nav-dropdown-item" role="menuitem">
-                                <i class="fas fa-landmark"></i> Congress Trade Monitor
-                            </a>
-                            <!-- Add more tools here in the future -->
-                        </div>
-                    </div>
+                    <a href="tools/index.html" class="nav-tools-btn">Tools</a>
                 </div>
                  <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                      <i class="fas fa-bars"></i>
                  </button>
                  <div class="mobile-menu" id="mobileMenu">
                      <a href="#features" onclick="closeMobileMenu()">Why Us</a>
-                     <a href="#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+                     <a href="#how-it-works" onclick="closeMobileMenu()">What We Offer</a>
                      <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
                      <a href="#test" onclick="closeMobileMenu()">Test</a>
                      <a href="#terms" onclick="closeMobileMenu()">Terms</a>
                      <a href="#contact" onclick="closeMobileMenu()">Contact</a>
-                     <details class="mobile-menu-dropdown">
-                         <summary>Tools</summary>
-                         <div class="mobile-menu-dropdown-content">
-                             <a href="daily/index.html" onclick="closeMobileMenu()">
-                                 <i class="fas fa-newspaper"></i> Daily Market Wrap-Up
-                             </a>
-                             <a href="earnings.html" onclick="closeMobileMenu()">
-                                 <i class="fas fa-calendar-alt"></i> Earnings Calendar
-                             </a>
-                             <a href="macro-calendar.html" onclick="closeMobileMenu()">
-                                 <i class="fas fa-chart-line"></i> Macro Calendar
-                             </a>
-                             <a href="hedge-fund.html" onclick="closeMobileMenu()">
-                                 <i class="fas fa-briefcase"></i> Hedge Fund Positioning
-                             </a>
-                             <a href="tools/company-analysis.html" onclick="closeMobileMenu()">
-                                 <i class="fas fa-microchip"></i> Company Analysis
-                             </a>
-                             <a href="tools/congress.html" onclick="closeMobileMenu()">
-                                 <i class="fas fa-landmark"></i> Congress Trade Monitor
-                             </a>
-                         </div>
-                     </details>
-                </div>
+                     <a href="tools/index.html" onclick="closeMobileMenu()" class="nav-tools-btn">Tools</a>
+                 </div>
         </div>
     </nav>
 
@@ -564,12 +519,122 @@
                         </button>
           </form>
                     <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
+                    <p style="margin-top: 12px; font-size: 1rem; font-weight: 500; color: #374151;">Join the community</p>
                 </div>
             </div>
 
       <!-- RIGHT VISUAL (WhatsApp mockup image) -->
             <div class="hero-visual">
                 <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
+            </div>
+        </div>
+    </section>
+
+  <!-- =========================
+       WHAT WE OFFER
+  ========================== -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>What We Offer</h2>
+        <p>Powerful <a href="tools/index.html" class="tools-link-btn">tools</a> to help you make informed investment decisions</p>
+            </div>
+            <div class="tools-list" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto;">
+                <!-- Column 1 -->
+                <div class="tool-item" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease;">
+                    <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="tool-content" style="flex: 1;">
+                        <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Daily Market Wrap-Up</h3>
+                        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Stay informed with daily market insights and analysis</p>
+                    </div>
+                </div>
+                <div class="tool-item" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease;">
+                    <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="tool-content" style="flex: 1;">
+                        <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Earnings Calendar</h3>
+                        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Track upcoming earnings announcements from major companies</p>
+                    </div>
+                </div>
+                <div class="tool-item" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease;">
+                    <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="tool-content" style="flex: 1;">
+                        <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Macro Calendar</h3>
+                        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Track high-impact macro economic events and data releases</p>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div class="tool-item" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease;">
+                    <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="tool-content" style="flex: 1;">
+                        <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Hedge Fund Positioning</h3>
+                        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Explore institutional portfolios and positioning dynamics</p>
+                    </div>
+                </div>
+                <div class="tool-item" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease;">
+                    <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="tool-content" style="flex: 1;">
+                        <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Company Analysis</h3>
+                        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Deep dives on companies with revenue, earnings, and financial ratios</p>
+                    </div>
+                </div>
+                <div class="tool-item" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease;">
+                    <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="tool-content" style="flex: 1;">
+                        <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Congress Trade Monitor</h3>
+                        <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Track congressional trading activity and disclosures</p>
+                    </div>
+                </div>
+                
+                <!-- Column 3 - Coming Soon (Blurred) -->
+                <div class="tool-item coming-soon" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease; position: relative; pointer-events: none; overflow: hidden;">
+                    <div style="filter: blur(8px); opacity: 0.3; width: 100%;">
+                        <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="tool-content" style="flex: 1;">
+                            <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Market Analytics</h3>
+                            <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Advanced market analysis and insights</p>
+                        </div>
+                    </div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(37, 99, 235, 0.95); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; z-index: 10; pointer-events: none; filter: blur(0); opacity: 1; white-space: nowrap;">Coming Soon</div>
+                </div>
+                <div class="tool-item coming-soon" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease; position: relative; pointer-events: none; overflow: hidden;">
+                    <div style="filter: blur(8px); opacity: 0.3; width: 100%;">
+                        <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="tool-content" style="flex: 1;">
+                            <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Crypto Tracker</h3>
+                            <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Track cryptocurrency markets and trends</p>
+                        </div>
+                    </div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(37, 99, 235, 0.95); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; z-index: 10; pointer-events: none; filter: blur(0); opacity: 1; white-space: nowrap;">Coming Soon</div>
+                </div>
+                <div class="tool-item coming-soon" style="display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 12px; background: #f9fafb; transition: all 0.2s ease; position: relative; pointer-events: none; overflow: hidden;">
+                    <div style="filter: blur(8px); opacity: 0.3; width: 100%;">
+                        <div class="tool-icon" style="font-size: 24px; color: #2563eb; min-width: 40px; text-align: center;">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="tool-content" style="flex: 1;">
+                            <h3 style="margin: 0 0 4px; font-size: 1.1rem; color: #111827;">Global Markets</h3>
+                            <p style="margin: 0; color: #6b7280; font-size: 0.95rem;">Comprehensive global market coverage</p>
+                        </div>
+                    </div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(37, 99, 235, 0.95); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; z-index: 10; pointer-events: none; filter: blur(0); opacity: 1; white-space: nowrap;">Coming Soon</div>
+                </div>
             </div>
         </div>
     </section>
@@ -586,46 +651,20 @@
 
       <div class="features-grid" role="list">
         <div class="feature-card" role="listitem">
-          <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
-                    <h3>Daily Briefings</h3>
-                    <p>Get curated Markets Brief delivered to your WhatsApp every morning. No more information overload.</p>
+          <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3>Industry-level Content</h3>
+                    <p>Our team is ex-industry, providing a very high bar for quality of content. Get insights from professionals who've been in the trenches.</p>
                     </div>
         <div class="feature-card" role="listitem">
-          <div class="feature-icon"><i class="fas fa-chart-pie"></i></div>
-                    <h3>Breaking News Alerts</h3>
-                    <p>Receive real time updates on the market's biggest moves - Global Macro shifts, Equities swings, Trade Talk breakthroughs and more. Every alert is handpicked, so you'll never get spammed.</p>
+          <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Digestibility</h3>
+                    <p>UX and UI are at the forefront of our business model. We make complex financial information easy to understand and act upon.</p>
                 </div>
         <div class="feature-card" role="listitem">
-          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Specialised Content</h3>
-                    <p>We only add crucial information with no fluff in our content and absolutely no advertisements. Quality over quantity, always.</p>
+          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Alternative Data</h3>
+                    <p>We are a new age finance data source that provides investors with a new lens to look into financial markets. Discover insights others miss.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-  <!-- =========================
-       HOW IT WORKS
-  ========================== -->
-    <section id="how-it-works" class="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <h2>How It Works</h2>
-        <p>Democratizing high finance</p>
-            </div>
-            <div class="steps">
-        <div class="step"><div class="step-number">1</div><div class="step-content">
-                        <h3>Sign Up</h3>
-          <p>Sign up in seconds with your phone number.</p>
-        </div></div>
-        <div class="step"><div class="step-number">2</div><div class="step-content">
-          <h3>Receive Premium Content</h3>
-          <p>Get daily Markets Brief packed with institutional-grade analysis, market insights, and educational content.</p>
-        </div></div>
-        <div class="step"><div class="step-number">3</div><div class="step-content">
-          <h3>Level Up</h3>
-          <p>User experience is at the forefront of our team's ambitions and therefore we make sure there is no step 3! Yes, you read that right!</p>
-        </div></div>
             </div>
         </div>
     </section>
@@ -686,56 +725,6 @@
           <button class="pricing-button coming-soon-button" onclick="openWaitlistModal()">
             <i class="fas fa-bell"></i> Join Waitlist
           </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-  <!-- =========================
-       SOCIAL PROOF
-  ========================== -->
-    <section class="social-proof" style="background-color: white !important; background: white !important;">
-        <div class="container">
-            <div class="section-header">
-                 <h2>Trusted by Leading Industry Experts</h2>
-                <p>Join our growing community of finance enthusiasts</p>
-            </div>
-            <div class="testimonials">
-                <div class="testimonial">
-          <div class="testimonial-content"><p>"Daily Dividend has completely changed how I stay informed about the markets. The WhatsApp format is so convenient!"</p></div>
-          <div class="testimonial-author"><div class="author-avatar">S</div><div class="author-info"><h4>Sarah Johnson</h4><span>Doctor</span></div></div>
-                </div>
-                <div class="testimonial">
-          <div class="testimonial-content"><p>"The educational content is fantastic. I've learned so much about personal finance in just a few weeks."</p></div>
-          <div class="testimonial-author"><div class="author-avatar">M</div><div class="author-info"><h4>Mike Chen</h4><span>Software Engineer</span></div></div>
-                </div>
-                <div class="testimonial">
-          <div class="testimonial-content"><p>"The Markets Brief is incredibly insightful. I get all the key market movements and analysis I need without any fluff or ads."</p></div>
-          <div class="testimonial-author"><div class="author-avatar">A</div><div class="author-info"><h4>Alex Rodriguez</h4><span>Small Business Owner</span></div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-  <!-- =========================
-       CTA
-  ========================== -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Financial Knowledge?</h2>
-                <p>Join thousands of users who are already staying ahead with Daily Dividend</p>
-                <div class="cta-form">
-                    <div class="input-group">
-                        <select id="countryCodeBottom" aria-label="Country code">
-                            <option value="+44">🇬🇧 +44</option>
-                            <option value="+91">🇮🇳 +91</option>
-                            <option value="+1">🇺🇸 +1</option>
-                            <option value="other">Other – enter full number below</option>
-                        </select>
-                        <input type="tel" id="phoneInputBottom" placeholder="Phone number" maxlength="15">
-                    </div>
-          <button class="cta-button" onclick="openPhoneModal()"><i class="fab fa-whatsapp"></i> Start Your Journey</button>
                 </div>
             </div>
         </div>
@@ -1087,63 +1076,6 @@
       }
     });
 
-    // Tools dropdown functionality
-    const toolsDropdown = document.getElementById('toolsDropdown');
-    const toolsDropdownBtn = document.getElementById('toolsDropdownBtn');
-    const toolsDropdownMenu = document.getElementById('toolsDropdownMenu');
-
-    if (toolsDropdown && toolsDropdownBtn && toolsDropdownMenu) {
-      let toolsHideTimeout;
-
-      const showToolsMenu = () => {
-        clearTimeout(toolsHideTimeout);
-        toolsDropdownMenu.classList.add('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', 'true');
-      };
-
-      const hideToolsMenu = () => {
-        clearTimeout(toolsHideTimeout);
-        toolsDropdownMenu.classList.remove('active');
-        toolsDropdownBtn.setAttribute('aria-expanded', 'false');
-      };
-
-      // Hover functionality (with relaxed hide delay)
-      toolsDropdown.addEventListener('mouseenter', showToolsMenu);
-      toolsDropdown.addEventListener('mouseleave', () => {
-        toolsHideTimeout = setTimeout(hideToolsMenu, 700);
-      });
-
-      // Click/touch functionality
-      toolsDropdownBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = toolsDropdownMenu.classList.contains('active');
-        if (isOpen) {
-          hideToolsMenu();
-        } else {
-          showToolsMenu();
-        }
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!toolsDropdown.contains(e.target)) {
-          hideToolsMenu();
-        }
-      });
-
-      // Keyboard navigation
-      toolsDropdownBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          const isOpen = toolsDropdownMenu.classList.contains('active');
-          if (isOpen) {
-            hideToolsMenu();
-          } else {
-            showToolsMenu();
-          }
-        }
-      });
-    }
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
