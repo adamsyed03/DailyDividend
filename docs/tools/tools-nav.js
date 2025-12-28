@@ -8,6 +8,7 @@ const TOOLS_NAV_ITEMS = [
   { href: "hedge-fund.html", icon: "fas fa-briefcase", label: "Hedge Fund Positioning" },
   { href: "company-analysis.html", icon: "fas fa-microchip", label: "Company Analysis" },
   { href: "congress.html", icon: "fas fa-landmark", label: "Congress Trade Monitor" },
+  { href: "insider-moves.html", icon: "fas fa-user-tie", label: "Insider Activity" },
 ];
 
 function renderToolsNav() {
