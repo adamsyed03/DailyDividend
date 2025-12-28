@@ -210,6 +210,7 @@
       letter-spacing: -0.04em;
       text-transform: uppercase;
       background: linear-gradient(135deg, #111827 0%, #374151 100%);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;
@@ -486,13 +487,49 @@
         font-weight: 600;
         padding: 10px 0;
       }
+
+      /* Page spacing */
+      .im-wrapper { padding: 24px 14px; }
+      .im-hero { padding: 44px 16px 28px; }
+      .im-hero p { font-size: 0.92rem; }
+
+      /* Company list */
+      .company-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+      .company-panel { padding: 18px 16px; }
+      .company-panel h2 { font-size: 1.05rem; }
+
+      /* Detail header */
+      .detail-header {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0;
+        margin-bottom: 16px;
+      }
+      .back-btn {
+        grid-column: auto;
+        justify-self: stretch;
+        justify-content: center;
+      }
+      #selectedCompanyName {
+        grid-column: auto;
+        font-size: 1.15rem;
+        line-height: 1.15;
+        word-break: break-word;
+      }
       
       .im-filters {
         flex-direction: column;
+        padding: 16px;
+        gap: 12px;
       }
       
       .im-filter-group {
         width: 100%;
+        min-width: 0;
       }
       
       .im-table-container {
@@ -500,12 +537,40 @@
       }
       
       .im-table {
-        min-width: 800px;
+        min-width: 560px;
       }
+
+      .im-table th,
+      .im-table td {
+        padding: 12px;
+      }
+      .im-table th { font-size: 0.8rem; }
+      .im-table td { font-size: 0.9rem; }
       
       .im-stats {
-        flex-direction: column;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
       }
+
+      .im-stat-card {
+        min-height: 72px;
+        padding: 10px 8px;
+      }
+      .im-stat-card h3 { font-size: 0.55rem; }
+      .im-stat-card .stat-value { font-size: 1.05rem; }
+      .im-stat-card .stat-percent { font-size: 0.62rem; }
+
+      .im-disclaimer {
+        margin-top: 28px;
+        padding: 16px 10px;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .im-stats { grid-template-columns: 1fr; }
+      .im-table { min-width: 520px; }
     }
   </style>
 </head>
@@ -640,7 +705,6 @@
               <tr>
                 <th>Date</th>
                 <th>Insider</th>
-                <th>Position</th>
                 <th>Transaction</th>
                 <th>Quantity</th>
               </tr>
@@ -901,7 +965,7 @@
       if (filteredTransactions.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" class="no-results">
+            <td colspan="4" class="no-results">
               <i class="fas fa-search"></i>
               <p>No transactions found matching your filters.</p>
             </td>
@@ -916,9 +980,6 @@
           <td>
             <div class="insider-name">${t.name}</div>
             <div class="insider-position">${t.position.split('—')[0].trim()}</div>
-          </td>
-          <td>
-            <div class="insider-position">${t.position.split('—')[1]?.trim() || t.position}</div>
           </td>
           <td>
             <span class="transaction-badge ${t.transactionType.toLowerCase()}">${t.transactionType}</span>
