@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "npx live-server --port=8000 --open=/index.html",
     "start": "npx live-server --port=8000",
-    "notion-sync": "node scripts/notion_sync.mjs"
+    "notion-sync": "node scripts/notion_sync.mjs",
+    "sec-form4-extract": "node scripts/sec_form4_extract.mjs --input data/sec_form4 --tickers NVDA,V,JPM,INTC,AMD"
   },
   "keywords": [],
   "author": "Daily Dividend",

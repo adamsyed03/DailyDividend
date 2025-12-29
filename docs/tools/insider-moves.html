@@ -776,6 +776,29 @@
     let filteredTransactions = [];
     let selectedCompany = null;
 
+    // Show these companies even if there are no transactions yet (so you can expand coverage over time).
+    const EXTRA_COMPANIES = [
+      'NVIDIA Corporation (NVDA)',
+      'Visa Inc. (V)',
+      'JPMorgan Chase & Co. (JPM)',
+      'Intel Corporation (INTC)',
+      'Advanced Micro Devices, Inc. (AMD)',
+    ];
+
+    function escapeHtmlAttr(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getTicker(companyName) {
+      const match = String(companyName).match(/\(([^)]+)\)\s*$/);
+      return match?.[1]?.trim()?.toUpperCase() || '';
+    }
+
     async function loadData() {
       try {
         const response = await fetch('../data/insider-moves.json');
@@ -796,32 +819,49 @@
 
     function renderCompanyGrid() {
       const grid = document.getElementById('companyGrid');
-      const companies = [...new Set(allTransactions.map(t => t.company))].sort();
-      
-      const icons = {
-        'Meta': 'fab fa-facebook',
-        'Alphabet': 'fab fa-google',
-        'Amazon': 'fab fa-amazon',
-        'Apple': 'fab fa-apple',
-        'Netflix': 'fas fa-play-circle'
+      const companies = [...new Set([...allTransactions.map(t => t.company), ...EXTRA_COMPANIES])]
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+
+      const iconsByTicker = {
+        META: 'fab fa-facebook',
+        GOOGL: 'fab fa-google',
+        GOOG: 'fab fa-google',
+        AMZN: 'fab fa-amazon',
+        AAPL: 'fab fa-apple',
+        NFLX: 'fas fa-play-circle',
+        NVDA: 'fas fa-microchip',
+        V: 'fab fa-cc-visa',
+        JPM: 'fas fa-university',
+        INTC: 'fas fa-microchip',
+        AMD: 'fas fa-microchip',
       };
 
       grid.innerHTML = companies.map(company => {
         const cleanName = company.replace(/ Inc\.| Corporation| Platforms,| COM/g, '').split('(')[0].trim();
-        const shortName = cleanName.split(' ')[0];
-        const icon = icons[shortName] || 'fas fa-building';
+        const ticker = getTicker(company);
+        const icon = iconsByTicker[ticker] || 'fas fa-building';
         const count = allTransactions.filter(t => t.company === company).length;
         
         return `
-          <div class="company-panel" onclick="selectCompany('${company}')">
+          <button type="button" class="company-panel" data-company="${escapeHtmlAttr(company)}">
             <div class="company-logo-box">
               <i class="${icon}"></i>
             </div>
             <h2>${cleanName}</h2>
             <div class="trade-count">${count} Recent Transactions</div>
-          </div>
+          </button>
         `;
       }).join('');
+
+      // Delegate clicks to avoid inline JS and handle special characters safely.
+      grid.onclick = (e) => {
+        const panel = e.target?.closest?.('.company-panel');
+        if (!panel) return;
+        const company = panel.getAttribute('data-company');
+        if (!company) return;
+        selectCompany(company);
+      };
     }
 
     function selectCompany(company) {
