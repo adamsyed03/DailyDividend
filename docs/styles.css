@@ -822,6 +822,35 @@ body {
     }
 }
 
+/* Tools list grid alignment */
+.tools-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.tool-item {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+    min-height: 100px;
+}
+
+.tool-item .tool-icon {
+    flex-shrink: 0;
+}
+
+.tool-item .tool-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.tool-item h3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
