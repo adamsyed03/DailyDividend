@@ -470,12 +470,10 @@
         <img src="DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
             </div>
         <div class="nav-links" role="menubar">
-                     <a href="#features">Why Us</a>
+                     <a href="#features">About Us</a>
                     <a href="#how-it-works">What We Offer</a>
                     <a href="#pricing">Pricing</a>
                     <a href="#test">Test</a>
-                    <a href="#terms">Terms</a>
-                    <a href="#contact">Contact</a>
                     
                     <a href="tools/index.html" class="nav-tools-btn">Tools</a>
                 </div>
@@ -483,12 +481,10 @@
                      <i class="fas fa-bars"></i>
                  </button>
                  <div class="mobile-menu" id="mobileMenu">
-                     <a href="#features" onclick="closeMobileMenu()">Why Us</a>
+                     <a href="#features" onclick="closeMobileMenu()">About Us</a>
                      <a href="#how-it-works" onclick="closeMobileMenu()">What We Offer</a>
                      <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
                      <a href="#test" onclick="closeMobileMenu()">Test</a>
-                     <a href="#terms" onclick="closeMobileMenu()">Terms</a>
-                     <a href="#contact" onclick="closeMobileMenu()">Contact</a>
                      <a href="tools/index.html" onclick="closeMobileMenu()" class="nav-tools-btn">Tools</a>
                 </div>
         </div>
@@ -1013,7 +1009,7 @@
               btn.innerHTML = btn.classList.contains('phone-signup-submit-btn') ? 
                 '<i class="fas fa-check"></i> Complete Signup' : 
                 '<i class="fas fa-bell"></i> Join Waitlist';
-              alert('Sign up successful! We will be in touch shortly!');
+              alert('Sign up successful! We will be in touch shortly! You can now log into the tools section using your phone number.');
               try { closePhoneSignupModal(); closeWaitlistModal(); } catch {}
             }
           }, 3000);
@@ -1029,7 +1025,7 @@
         const { status, reason } = ev.data;
       if (status === 'OK') {
         // Show success message
-        alert('Sign up successful! We will be in touch shortly!');
+        alert('Sign up successful! We will be in touch shortly! You can now log into the tools section using your phone number.');
         try { closePhoneSignupModal(); closeWaitlistModal(); } catch {}
         // Reset buttons
         document.querySelectorAll('.phone-signup-submit-btn,.waitlist-submit-btn').forEach(btn => {
