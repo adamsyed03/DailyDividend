@@ -13,8 +13,8 @@
   
   <!-- Access Control -->
   <script type="module">
-    import { isRemembered } from '../auth.js';
-    if (!isRemembered()) window.location.href = '../login.html';
+    import { isRemembered } from '/auth.js';
+    if (!isRemembered()) window.location.href = '/login.html';
   </script>
   
   <!-- Fonts / Icons / Styles -->
@@ -22,7 +22,7 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-  <link rel="stylesheet" href="../styles.css?v=17">
+  <link rel="stylesheet" href="styles.css?v=17">
   
   <!-- Critical CSS for faster loading -->
   <style>
@@ -246,17 +246,17 @@
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <div class="nav-logo">
-        <a href="../index.html">
-          <img src="../DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
+        <a href="index.html">
+          <img src="DDlogo.png?v=2" alt="Daily Dividend Logo - Markets within minutes" class="logo-dd-image" width="120" height="40">
         </a>
       </div>
       <div class="nav-links" role="menubar">
-        <a href="../index.html#features">Why Us</a>
-        <a href="../index.html#how-it-works">How it Works</a>
-        <a href="../index.html#pricing">Pricing</a>
-        <a href="../index.html#test">Test</a>
-        <a href="../index.html#terms">Terms</a>
-        <a href="../index.html#contact">Contact</a>
+        <a href="index.html#features">Why Us</a>
+        <a href="index.html#how-it-works">How it Works</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#test">Test</a>
+        <a href="index.html#terms">Terms</a>
+        <a href="index.html#contact">Contact</a>
         <a href="#" id="logoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</a>
         
                     <!-- Tools Dropdown -->
@@ -280,12 +280,12 @@
         <i class="fas fa-bars"></i>
       </button>
       <div class="mobile-menu" id="mobileMenu">
-        <a href="../index.html#features" onclick="closeMobileMenu()">Why Us</a>
-        <a href="../index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
-        <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
-        <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
-        <a href="../index.html#terms" onclick="closeMobileMenu()">Terms</a>
-        <a href="../index.html#contact" onclick="closeMobileMenu()">Contact</a>
+        <a href="index.html#features" onclick="closeMobileMenu()">Why Us</a>
+        <a href="index.html#how-it-works" onclick="closeMobileMenu()">How it Works</a>
+        <a href="index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="index.html#test" onclick="closeMobileMenu()">Test</a>
+        <a href="index.html#terms" onclick="closeMobileMenu()">Terms</a>
+        <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
         <details class="mobile-menu-dropdown">
                          <summary>Tools</summary>
           <div class="mobile-menu-dropdown-content">
