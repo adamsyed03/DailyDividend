@@ -156,99 +156,185 @@ function toIsoDate(yearNum, monthIndex, dayNum) {
 }
 
 /**
- * Parse "DAILY DIVIDEND | ..." headings/paragraph delimiters.
- *
- * Supports common variants:
- * - DAILY DIVIDEND | Tue, Dec 23 Title
- * - DAILY DIVIDEND | Tue Dec 23 Title
- * - DAILY DIVIDEND | Tuesday, December 23, 2025 Title
- * - DAILY DIVIDEND | 12/23/2025 Title
- *
- * Returns { date: 'YYYY-MM-DD', title: string } or null.
+ * Universal date parser - tries multiple strategies to extract a date from text
+ * Returns { date: 'YYYY-MM-DD', title: string } or null
  */
-function parseDailyDividendDelimiter(text) {
-  const raw = (text || '').trim();
-  const prefixMatch = raw.match(/^\s*DAILY\s+DIVIDEND\s*\|\s*(.+)$/i);
-  if (!prefixMatch) return null;
-
-  const remainder = prefixMatch[1].trim();
+function parseDateFromText(text) {
+  if (!text || typeof text !== 'string') return null;
+  
+  const raw = text.trim();
   const currentYear = new Date().getFullYear();
-
-  // Also allow ISO date anywhere after the prefix: "DAILY DIVIDEND | 2025-12-23 — Title"
+  const currentMonth = new Date().getMonth();
+  
+  // Strategy 1: Try JavaScript's Date constructor (handles many formats)
+  // This is very flexible and can parse many natural language dates
+  try {
+    const parsedDate = new Date(raw);
+    if (!isNaN(parsedDate.getTime()) && parsedDate.getFullYear() > 2000 && parsedDate.getFullYear() < 2100) {
+      const year = parsedDate.getFullYear();
+      const month = parsedDate.getMonth();
+      const day = parsedDate.getDate();
+      const iso = toIsoDate(year, month, day);
+      if (iso) {
+        // Extract title by removing the date part
+        const title = raw.replace(/^\s*(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*\d{1,2}[\/\-\s]+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[\/\-\s]+\d{1,4}[^\w]*/i, '').trim();
+        return { date: iso, title: title || 'Untitled' };
+      }
+    }
+  } catch (e) {
+    // Continue to other strategies
+  }
+  
+  // Strategy 2: Look for ISO date format (YYYY-MM-DD)
   {
-    const m = remainder.match(/^(\d{4})-(\d{2})-(\d{2})(?:\s*[—-]\s*(.*))?$/);
+    const m = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
     if (m) {
       const yearNum = parseInt(m[1], 10);
       const monthNum = parseInt(m[2], 10);
       const dayNum = parseInt(m[3], 10);
       const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
-      if (iso) return { date: iso, title: (m[4] || '').trim() };
+      if (iso) {
+        const title = raw.replace(/\d{4}-\d{2}-\d{2}\s*[—-]?\s*/, '').trim();
+        return { date: iso, title: title || 'Untitled' };
+      }
     }
   }
-
+  
+  // Strategy 3: Look for date patterns with month names
   const monthMap = {
-    jan: 0, january: 0,
-    feb: 1, february: 1,
-    mar: 2, march: 2,
-    apr: 3, april: 3,
-    may: 4,
-    jun: 5, june: 5,
-    jul: 6, july: 6,
-    aug: 7, august: 7,
-    sep: 8, sept: 8, september: 8,
-    oct: 9, october: 9,
-    nov: 10, november: 10,
-    dec: 11, december: 11,
+    jan: 0, january: 0, janv: 0,
+    feb: 1, february: 1, févr: 1,
+    mar: 2, march: 2, mars: 2,
+    apr: 3, april: 3, avril: 3,
+    may: 4, mai: 4,
+    jun: 5, june: 5, juin: 5,
+    jul: 6, july: 6, juillet: 6,
+    aug: 7, august: 7, août: 7,
+    sep: 8, sept: 8, september: 8, septembre: 8,
+    oct: 9, october: 9, octobre: 9,
+    nov: 10, november: 10, novembre: 10,
+    dec: 11, december: 11, décembre: 11,
   };
-
-  // Month-name format (optionally preceded by day-of-week, with flexible commas/periods)
-  // Examples:
-  // "Tue, Dec 23 Title"
-  // "Tue Dec 23 Title"
-  // "Tuesday, December 23, 2025 Title"
-  // "Thu, 1 Jan Title" (day before month format)
+  
+  // Try "Day Month" format (e.g., "Thu, 1 Jan", "1 Jan", "1st January")
   {
-    // Try "Day Month" format first (e.g., "Thu, 1 Jan")
-    const m1 = remainder.match(
-      /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?(?:,\s*(\d{4}))?\s*(.*)$/i
-    );
-    if (m1) {
-      const monthKey = m1[2].toLowerCase().replace('.', '');
-      const monthIndex = monthMap[monthKey];
-      const dayNum = parseInt(m1[1], 10);
-      const yearNum = m1[3] ? parseInt(m1[3], 10) : currentYear;
-      const iso = toIsoDate(yearNum, monthIndex, dayNum);
-      if (iso) return { date: iso, title: (m1[4] || '').trim() };
-    }
+    const patterns = [
+      /(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e|e)?|Jul(?:y|y)?|Aug(?:ust|ût)?|Sep(?:t|tember|tembre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s*(?:,\s*)?(\d{4})?/i,
+      /(\d{1,2})\s+(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e|e)?|Jul(?:y|y)?|Aug(?:ust|ût)?|Sep(?:t|tember|tembre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s*(?:,\s*)?(\d{4})?/i,
+    ];
     
-    // Try "Month Day" format (e.g., "Tue, Dec 23 Title")
-    const m2 = remainder.match(
-      /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?\s*(.*)$/i
-    );
-    if (m2) {
-      const monthKey = m2[1].toLowerCase().replace('.', '');
-      const monthIndex = monthMap[monthKey];
-      const dayNum = parseInt(m2[2], 10);
-      const yearNum = m2[3] ? parseInt(m2[3], 10) : currentYear;
-      const iso = toIsoDate(yearNum, monthIndex, dayNum);
-      if (iso) return { date: iso, title: (m2[4] || '').trim() };
+    for (const pattern of patterns) {
+      const m = raw.match(pattern);
+      if (m) {
+        const dayNum = parseInt(m[1], 10);
+        const monthKey = m[2].toLowerCase().replace(/\./g, '');
+        const monthIndex = monthMap[monthKey];
+        if (monthIndex !== undefined) {
+          const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+          const iso = toIsoDate(yearNum, monthIndex, dayNum);
+          if (iso) {
+            const title = raw.replace(pattern, '').trim();
+            return { date: iso, title: title || 'Untitled' };
+          }
+        }
+      }
     }
   }
-
-  // Numeric format (assume MM/DD[/YYYY] or MM-DD[-YYYY]), optionally preceded by day-of-week
-  // Example: "12/23/2025 Title"
+  
+  // Try "Month Day" format (e.g., "Dec 23", "December 23, 2025")
   {
-    const m = remainder.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\s*(.*)$/);
-    if (m) {
-      const monthNum = parseInt(m[1], 10);
-      const dayNum = parseInt(m[2], 10);
-      let yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
-      if (m[3] && m[3].length === 2) yearNum = 2000 + yearNum;
-      const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
-      if (iso) return { date: iso, title: (m[4] || '').trim() };
+    const patterns = [
+      /(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e|e)?|Jul(?:y|y)?|Aug(?:ust|ût)?|Sep(?:t|tember|tembre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?\s*(?:,\s*)?(\d{4})?/i,
+    ];
+    
+    for (const pattern of patterns) {
+      const m = raw.match(pattern);
+      if (m) {
+        const monthKey = m[1].toLowerCase().replace(/\./g, '');
+        const monthIndex = monthMap[monthKey];
+        if (monthIndex !== undefined) {
+          const dayNum = parseInt(m[2], 10);
+          const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+          const iso = toIsoDate(yearNum, monthIndex, dayNum);
+          if (iso) {
+            const title = raw.replace(pattern, '').trim();
+            return { date: iso, title: title || 'Untitled' };
+          }
+        }
+      }
     }
   }
+  
+  // Strategy 4: Numeric formats (MM/DD/YYYY, DD/MM/YYYY, etc.)
+  {
+    const patterns = [
+      /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/,
+      /(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/, // YYYY-MM-DD format
+    ];
+    
+    for (const pattern of patterns) {
+      const m = raw.match(pattern);
+      if (m) {
+        let yearNum, monthNum, dayNum;
+        if (m[1].length === 4) {
+          // YYYY-MM-DD format
+          yearNum = parseInt(m[1], 10);
+          monthNum = parseInt(m[2], 10);
+          dayNum = parseInt(m[3], 10);
+        } else {
+          // Try both MM/DD/YYYY and DD/MM/YYYY
+          const num1 = parseInt(m[1], 10);
+          const num2 = parseInt(m[2], 10);
+          const num3 = parseInt(m[3], 10);
+          
+          // Heuristic: if num1 > 12, it's likely DD/MM/YYYY
+          if (num1 > 12) {
+            dayNum = num1;
+            monthNum = num2;
+            yearNum = num3;
+          } else {
+            // Assume MM/DD/YYYY (US format)
+            monthNum = num1;
+            dayNum = num2;
+            yearNum = num3;
+          }
+          
+          if (yearNum < 100) yearNum = 2000 + yearNum;
+        }
+        
+        const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
+        if (iso) {
+          const title = raw.replace(pattern, '').trim();
+          return { date: iso, title: title || 'Untitled' };
+        }
+      }
+    }
+  }
+  
+  return null;
+}
 
+/**
+ * Parse "DAILY DIVIDEND | ..." headings/paragraph delimiters.
+ * Now uses universal date parser for maximum flexibility.
+ *
+ * Returns { date: 'YYYY-MM-DD', title: string } or null.
+ */
+function parseDailyDividendDelimiter(text) {
+  const raw = (text || '').trim();
+  
+  // Check for "DAILY DIVIDEND |" prefix
+  const prefixMatch = raw.match(/^\s*DAILY\s+DIVIDEND\s*\|\s*(.+)$/i);
+  if (prefixMatch) {
+    const remainder = prefixMatch[1].trim();
+    const result = parseDateFromText(remainder);
+    if (result) return result;
+  }
+  
+  // Also try parsing the entire text (in case format changed)
+  const result = parseDateFromText(raw);
+  if (result) return result;
+  
   return null;
 }
 
@@ -310,14 +396,24 @@ function parseEntries(blocks) {
   let listItems = [];
   let hasHeadingDelimiters = false;
   
+  if (!blocks || blocks.length === 0) {
+    console.warn('Warning: No blocks provided to parseEntries');
+    return entries;
+  }
+  
   // First pass: check if we have any heading delimiters we can parse
+  // Now more flexible - looks for any date-like pattern in headings
   for (const block of blocks) {
     if (block.type === 'heading_1' || block.type === 'heading_2' || block.type === 'heading_3') {
       const rich = block[block.type]?.rich_text || [];
       const text = extractPlainText(rich);
-      const isIso = /^\d{4}-\d{2}-\d{2}\s*—\s*.+$/.test(text);
-      const isDaily = /^\s*DAILY\s+DIVIDEND\s*\|/i.test(text) && !!parseDailyDividendDelimiter(text);
-      if (isIso || isDaily) {
+      // Check for ISO date format
+      const isIso = /^\d{4}-\d{2}-\d{2}\s*[—-]\s*.+$/.test(text);
+      // Check for DAILY DIVIDEND prefix
+      const isDaily = /^\s*DAILY\s+DIVIDEND\s*\|/i.test(text);
+      // Check if text contains any date-like pattern
+      const hasDate = parseDateFromText(text) !== null;
+      if (isIso || isDaily || hasDate) {
         hasHeadingDelimiters = true;
         break;
       }
@@ -331,34 +427,60 @@ function parseEntries(blocks) {
     let entryTitle = null;
     
     // Check if this is a heading delimiter (entry separator)
+    // Now more flexible - accepts any heading or paragraph with a date-like pattern
     if (type === 'heading_1' || type === 'heading_2' || type === 'heading_3') {
       const headingText = extractPlainText(block[type]?.rich_text || []);
       
       // Try format 1: YYYY-MM-DD — Title
-      const match1 = headingText.match(/^(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/);
+      const match1 = headingText.match(/^(\d{4}-\d{2}-\d{2})\s*[—-]\s*(.+)$/);
       if (match1) {
         isEntryDelimiter = true;
         entryDate = match1[1];
         entryTitle = match1[2];
       } else {
-        // Try format 2: DAILY DIVIDEND | ... (many variants)
-        const parsed = parseDailyDividendDelimiter(headingText);
-        if (parsed?.date) {
-          isEntryDelimiter = true;
-          entryDate = parsed.date;
-          entryTitle = parsed.title || 'Untitled';
+        // Try universal date parser (handles many formats)
+        try {
+          const parsed = parseDateFromText(headingText);
+          if (parsed?.date) {
+            isEntryDelimiter = true;
+            entryDate = parsed.date;
+            entryTitle = parsed.title || 'Untitled';
+          }
+        } catch (e) {
+          console.warn(`Warning: Error parsing heading delimiter "${headingText.substring(0, 50)}":`, e.message);
         }
       }
     } else if (type === 'paragraph') {
-      // Check paragraphs for "DAILY DIVIDEND |" delimiters
-      // This works both as fallback (when no heading delimiters) and as primary (when in paragraph format)
+      // Check paragraphs for date-like patterns
+      // More flexible - doesn't require "DAILY DIVIDEND |" prefix
       const paraText = extractPlainText(block.paragraph?.rich_text || []);
+      
+      // Check if it starts with "DAILY DIVIDEND |" (original format)
       if (/^\s*DAILY\s+DIVIDEND\s*\|/i.test(paraText)) {
-        const parsed = parseDailyDividendDelimiter(paraText);
-        if (parsed?.date) {
-          isEntryDelimiter = true;
-          entryDate = parsed.date;
-          entryTitle = parsed.title || 'Untitled';
+        try {
+          const parsed = parseDailyDividendDelimiter(paraText);
+          if (parsed?.date) {
+            isEntryDelimiter = true;
+            entryDate = parsed.date;
+            entryTitle = parsed.title || 'Untitled';
+          }
+        } catch (e) {
+          console.warn(`Warning: Error parsing paragraph delimiter "${paraText.substring(0, 50)}":`, e.message);
+        }
+      } else {
+        // Also check if paragraph contains a date pattern (more flexible)
+        // Only treat as delimiter if it's short and date-like (to avoid false positives)
+        if (paraText.length < 100) {
+          try {
+            const parsed = parseDateFromText(paraText);
+            if (parsed?.date) {
+              isEntryDelimiter = true;
+              entryDate = parsed.date;
+              entryTitle = parsed.title || 'Untitled';
+            }
+          } catch (e) {
+            // Silently continue - not every paragraph needs to be a delimiter
+          }
         }
       }
     }
