@@ -206,17 +206,32 @@ function parseDailyDividendDelimiter(text) {
   // "Tue, Dec 23 Title"
   // "Tue Dec 23 Title"
   // "Tuesday, December 23, 2025 Title"
+  // "Thu, 1 Jan Title" (day before month format)
   {
-    const m = remainder.match(
+    // Try "Day Month" format first (e.g., "Thu, 1 Jan")
+    const m1 = remainder.match(
+      /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?(?:,\s*(\d{4}))?\s*(.*)$/i
+    );
+    if (m1) {
+      const monthKey = m1[2].toLowerCase().replace('.', '');
+      const monthIndex = monthMap[monthKey];
+      const dayNum = parseInt(m1[1], 10);
+      const yearNum = m1[3] ? parseInt(m1[3], 10) : currentYear;
+      const iso = toIsoDate(yearNum, monthIndex, dayNum);
+      if (iso) return { date: iso, title: (m1[4] || '').trim() };
+    }
+    
+    // Try "Month Day" format (e.g., "Tue, Dec 23 Title")
+    const m2 = remainder.match(
       /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?\s*(.*)$/i
     );
-    if (m) {
-      const monthKey = m[1].toLowerCase().replace('.', '');
+    if (m2) {
+      const monthKey = m2[1].toLowerCase().replace('.', '');
       const monthIndex = monthMap[monthKey];
-      const dayNum = parseInt(m[2], 10);
-      const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+      const dayNum = parseInt(m2[2], 10);
+      const yearNum = m2[3] ? parseInt(m2[3], 10) : currentYear;
       const iso = toIsoDate(yearNum, monthIndex, dayNum);
-      if (iso) return { date: iso, title: (m[4] || '').trim() };
+      if (iso) return { date: iso, title: (m2[4] || '').trim() };
     }
   }
 
@@ -334,8 +349,9 @@ function parseEntries(blocks) {
           entryTitle = parsed.title || 'Untitled';
         }
       }
-    } else if (type === 'paragraph' && !hasHeadingDelimiters) {
-      // Fallback: treat paragraph lines starting with "DAILY DIVIDEND |" as delimiters
+    } else if (type === 'paragraph') {
+      // Check paragraphs for "DAILY DIVIDEND |" delimiters
+      // This works both as fallback (when no heading delimiters) and as primary (when in paragraph format)
       const paraText = extractPlainText(block.paragraph?.rich_text || []);
       if (/^\s*DAILY\s+DIVIDEND\s*\|/i.test(paraText)) {
         const parsed = parseDailyDividendDelimiter(paraText);
@@ -451,6 +467,23 @@ async function sync() {
     const entries = parseEntries(blocks);
     console.log(`Found ${entries.length} entries`);
     
+    // Debug: Show first few blocks to help diagnose format issues
+    if (entries.length === 0 && blocks.length > 0) {
+      console.log('\n=== DEBUG: First 5 blocks ===');
+      for (let i = 0; i < Math.min(5, blocks.length); i++) {
+        const block = blocks[i];
+        const type = block.type;
+        let text = '';
+        if (type === 'heading_1' || type === 'heading_2' || type === 'heading_3') {
+          text = extractPlainText(block[type]?.rich_text || []);
+        } else if (type === 'paragraph') {
+          text = extractPlainText(block.paragraph?.rich_text || []);
+        }
+        console.log(`${i + 1}. Type: ${type}, Text: "${text.substring(0, 100)}"`);
+      }
+      console.log('=== End Debug ===\n');
+    }
+    
     if (DRY_RUN) {
       console.log('\n=== DRY RUN MODE - Parsed Entries ===');
       if (entries.length === 0) {
@@ -468,8 +501,8 @@ async function sync() {
       console.error('No entries parsed from Notion. Check heading format or delimiter rules.');
       console.error('Expected formats:');
       console.error('  1. Heading 2: "YYYY-MM-DD — Title"');
-      console.error('  2. Heading 2: "DAILY DIVIDEND | Tue, Dec 23 Title"');
-      console.error('  3. Paragraph (if no H2): "DAILY DIVIDEND | Tue, Dec 23 Title"');
+      console.error('  2. Heading 2: "DAILY DIVIDEND | Tue, Dec 23 Title" or "DAILY DIVIDEND | Thu, 1 Jan Title"');
+      console.error('  3. Paragraph: "DAILY DIVIDEND | Tue, Dec 23 Title" or "DAILY DIVIDEND | Thu, 1 Jan Title"');
       process.exit(1);
     }
     
@@ -513,7 +546,11 @@ async function sync() {
     
     console.log('Sync completed successfully!');
   } catch (error) {
-    console.error('Error syncing from Notion:', error);
+    console.error('Error syncing from Notion:', error.message);
+    console.error('Stack:', error.stack);
+    if (error.response) {
+      console.error('Notion API Response:', JSON.stringify(error.response, null, 2));
+    }
     process.exit(1);
   }
 }
