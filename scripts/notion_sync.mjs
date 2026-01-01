@@ -457,7 +457,9 @@ function parseEntries(blocks) {
           if (parsed?.date) {
             isEntryDelimiter = true;
             entryDate = parsed.date;
-            entryTitle = parsed.title || 'Untitled';
+            // If the delimiter is just a date header like "Thu, 1 Jan", don't label it "Untitled".
+            // Use the original heading text as the fallback title so the page never shows "Untitled".
+            entryTitle = (parsed.title && parsed.title !== 'Untitled') ? parsed.title : headingText.trim();
           }
         } catch (e) {
           console.warn(`Warning: Error parsing heading delimiter "${headingText.substring(0, 50)}":`, e.message);
@@ -475,7 +477,8 @@ function parseEntries(blocks) {
           if (parsed?.date) {
             isEntryDelimiter = true;
             entryDate = parsed.date;
-            entryTitle = parsed.title || 'Untitled';
+            // Same fallback behavior as headings
+            entryTitle = (parsed.title && parsed.title !== 'Untitled') ? parsed.title : paraText.trim();
           }
         } catch (e) {
           console.warn(`Warning: Error parsing paragraph delimiter "${paraText.substring(0, 50)}":`, e.message);
@@ -489,7 +492,8 @@ function parseEntries(blocks) {
             if (parsed?.date) {
               isEntryDelimiter = true;
               entryDate = parsed.date;
-              entryTitle = parsed.title || 'Untitled';
+              // Same fallback behavior as headings
+              entryTitle = (parsed.title && parsed.title !== 'Untitled') ? parsed.title : paraText.trim();
             }
           } catch (e) {
             // Silently continue - not every paragraph needs to be a delimiter
