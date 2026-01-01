@@ -164,25 +164,28 @@ function parseDateFromText(text) {
   
   const raw = text.trim();
   const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth();
   
   // Strategy 1: Try JavaScript's Date constructor (handles many formats)
-  // This is very flexible and can parse many natural language dates
-  try {
-    const parsedDate = new Date(raw);
-    if (!isNaN(parsedDate.getTime()) && parsedDate.getFullYear() > 2000 && parsedDate.getFullYear() < 2100) {
-      const year = parsedDate.getFullYear();
-      const month = parsedDate.getMonth();
-      const day = parsedDate.getDate();
-      const iso = toIsoDate(year, month, day);
-      if (iso) {
-        // Extract title by removing the date part
-        const title = raw.replace(/^\s*(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*\d{1,2}[\/\-\s]+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[\/\-\s]+\d{1,4}[^\w]*/i, '').trim();
-        return { date: iso, title: title || 'Untitled' };
+  // IMPORTANT: only do this when the string includes an explicit year.
+  // Otherwise, engines can "invent" a year (e.g., "Thu, 1 Jan" -> 2001-01-01),
+  // which breaks file naming and the site.
+  if (/\b20\d{2}\b/.test(raw)) {
+    try {
+      const parsedDate = new Date(raw);
+      if (!Number.isNaN(parsedDate.getTime()) && parsedDate.getFullYear() > 2000 && parsedDate.getFullYear() < 2100) {
+        const year = parsedDate.getFullYear();
+        const month = parsedDate.getMonth();
+        const day = parsedDate.getDate();
+        const iso = toIsoDate(year, month, day);
+        if (iso) {
+          // Extract title by removing the date part
+          const title = raw.replace(/^\s*(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*\d{1,2}[\/\-\s]+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[\/\-\s]+\d{1,4}[^\w]*/i, '').trim();
+          return { date: iso, title: title || 'Untitled' };
+        }
       }
+    } catch (e) {
+      // Continue to other strategies
     }
-  } catch (e) {
-    // Continue to other strategies
   }
   
   // Strategy 2: Look for ISO date format (YYYY-MM-DD)
@@ -218,95 +221,68 @@ function parseDateFromText(text) {
   
   // Try "Day Month" format (e.g., "Thu, 1 Jan", "1 Jan", "1st January")
   {
-    const patterns = [
-      /(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e|e)?|Jul(?:y|y)?|Aug(?:ust|ût)?|Sep(?:t|tember|tembre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s*(?:,\s*)?(\d{4})?/i,
-      /(\d{1,2})\s+(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e|e)?|Jul(?:y|y)?|Aug(?:ust|ût)?|Sep(?:t|tember|tembre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s*(?:,\s*)?(\d{4})?/i,
-    ];
-    
-    for (const pattern of patterns) {
-      const m = raw.match(pattern);
-      if (m) {
-        const dayNum = parseInt(m[1], 10);
-        const monthKey = m[2].toLowerCase().replace(/\./g, '');
-        const monthIndex = monthMap[monthKey];
-        if (monthIndex !== undefined) {
-          const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
-          const iso = toIsoDate(yearNum, monthIndex, dayNum);
-          if (iso) {
-            const title = raw.replace(pattern, '').trim();
-            return { date: iso, title: title || 'Untitled' };
-          }
-        }
+    const m = raw.match(
+      /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember|embre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?(?:,\s*(\d{4}))?\s*(.*)$/i
+    );
+    if (m) {
+      const dayNum = parseInt(m[1], 10);
+      const monthKey = m[2].toLowerCase().replace(/\./g, '');
+      const monthIndex = monthMap[monthKey];
+      if (monthIndex !== undefined) {
+        const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+        const iso = toIsoDate(yearNum, monthIndex, dayNum);
+        if (iso) return { date: iso, title: (m[4] || '').trim() || 'Untitled' };
       }
     }
   }
   
   // Try "Month Day" format (e.g., "Dec 23", "December 23, 2025")
   {
-    const patterns = [
-      /(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e|e)?|Jul(?:y|y)?|Aug(?:ust|ût)?|Sep(?:t|tember|tembre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?\s*(?:,\s*)?(\d{4})?/i,
-    ];
-    
-    for (const pattern of patterns) {
-      const m = raw.match(pattern);
-      if (m) {
-        const monthKey = m[1].toLowerCase().replace(/\./g, '');
-        const monthIndex = monthMap[monthKey];
-        if (monthIndex !== undefined) {
-          const dayNum = parseInt(m[2], 10);
-          const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
-          const iso = toIsoDate(yearNum, monthIndex, dayNum);
-          if (iso) {
-            const title = raw.replace(pattern, '').trim();
-            return { date: iso, title: title || 'Untitled' };
-          }
-        }
+    const m = raw.match(
+      /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember|embre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?\s*(.*)$/i
+    );
+    if (m) {
+      const monthKey = m[1].toLowerCase().replace(/\./g, '');
+      const monthIndex = monthMap[monthKey];
+      if (monthIndex !== undefined) {
+        const dayNum = parseInt(m[2], 10);
+        const yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+        const iso = toIsoDate(yearNum, monthIndex, dayNum);
+        if (iso) return { date: iso, title: (m[4] || '').trim() || 'Untitled' };
       }
     }
   }
   
   // Strategy 4: Numeric formats (MM/DD/YYYY, DD/MM/YYYY, etc.)
   {
-    const patterns = [
-      /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/,
-      /(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/, // YYYY-MM-DD format
-    ];
-    
-    for (const pattern of patterns) {
-      const m = raw.match(pattern);
+    // YYYY-MM-DD (optionally with title)
+    {
+      const m = raw.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})\s*(.*)$/);
       if (m) {
-        let yearNum, monthNum, dayNum;
-        if (m[1].length === 4) {
-          // YYYY-MM-DD format
-          yearNum = parseInt(m[1], 10);
-          monthNum = parseInt(m[2], 10);
-          dayNum = parseInt(m[3], 10);
-        } else {
-          // Try both MM/DD/YYYY and DD/MM/YYYY
-          const num1 = parseInt(m[1], 10);
-          const num2 = parseInt(m[2], 10);
-          const num3 = parseInt(m[3], 10);
-          
-          // Heuristic: if num1 > 12, it's likely DD/MM/YYYY
-          if (num1 > 12) {
-            dayNum = num1;
-            monthNum = num2;
-            yearNum = num3;
-          } else {
-            // Assume MM/DD/YYYY (US format)
-            monthNum = num1;
-            dayNum = num2;
-            yearNum = num3;
-          }
-          
-          if (yearNum < 100) yearNum = 2000 + yearNum;
-        }
-        
+        const yearNum = parseInt(m[1], 10);
+        const monthNum = parseInt(m[2], 10);
+        const dayNum = parseInt(m[3], 10);
         const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
-        if (iso) {
-          const title = raw.replace(pattern, '').trim();
-          return { date: iso, title: title || 'Untitled' };
-        }
+        if (iso) return { date: iso, title: (m[4] || '').trim() || 'Untitled' };
+      }
+    }
+
+    // MM/DD/YYYY or DD/MM/YYYY (optionally with title)
+    {
+      const m = raw.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\s*(.*)$/);
+      if (m) {
+        const num1 = parseInt(m[1], 10);
+        const num2 = parseInt(m[2], 10);
+        let yearNum = m[3] ? parseInt(m[3], 10) : currentYear;
+        if (m[3] && m[3].length === 2) yearNum = 2000 + yearNum;
+
+        // Heuristic: if num1 > 12, it's likely DD/MM[/YYYY]
+        const isLikelyDMY = num1 > 12;
+        const dayNum = isLikelyDMY ? num1 : num2;
+        const monthNum = isLikelyDMY ? num2 : num1;
+
+        const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
+        if (iso) return { date: iso, title: (m[4] || '').trim() || 'Untitled' };
       }
     }
   }
@@ -395,6 +371,43 @@ function parseEntries(blocks) {
   let listType = null;
   let listItems = [];
   let hasHeadingDelimiters = false;
+  let didPromoteTitleFromContent = false;
+
+  function normalizeTitle(t) {
+    return String(t || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function isProbablyJustADateTitle(t) {
+    const s = normalizeTitle(t);
+    if (!s) return true;
+    if (s.toLowerCase() === 'untitled') return true;
+    // If the title itself parses as a date, it's likely just a date header (e.g., "Thu, 1 Jan")
+    try {
+      return !!parseDateFromText(s);
+    } catch {
+      return false;
+    }
+  }
+
+  function shouldPromoteTitleFromBlock(blockHeadingText) {
+    if (didPromoteTitleFromContent) return false;
+    if (!currentEntry) return false;
+    if (!isProbablyJustADateTitle(currentEntry.title)) return false;
+
+    const candidate = normalizeTitle(blockHeadingText);
+    if (!candidate) return false;
+
+    // Avoid promoting headings that are themselves date headers or generic page headers.
+    try {
+      if (parseDateFromText(candidate)?.date) return false;
+    } catch {}
+    if (candidate.toLowerCase() === 'daily market wrap-up') return false;
+
+    // Heuristic: requires some substance
+    if (candidate.length < 8) return false;
+
+    return true;
+  }
   
   if (!blocks || blocks.length === 0) {
     console.warn('Warning: No blocks provided to parseEntries');
@@ -509,6 +522,7 @@ function parseEntries(blocks) {
       currentBlocks = [];
       inList = false;
       listItems = [];
+      didPromoteTitleFromContent = false;
       
       // Include delimiter block in content if it's a paragraph (not H2)
       if (type === 'paragraph') {
@@ -520,6 +534,18 @@ function parseEntries(blocks) {
       // For H2 delimiters, skip including them in content
       continue;
     } else if (currentEntry) {
+      // If the Notion format uses a separate heading for the real "headline",
+      // promote the first non-date heading inside the entry to be the entry title.
+      if (type === 'heading_1' || type === 'heading_2' || type === 'heading_3') {
+        const headingText = extractPlainText(block[type]?.rich_text || []).trim();
+        if (shouldPromoteTitleFromBlock(headingText)) {
+          currentEntry.title = headingText;
+          didPromoteTitleFromContent = true;
+          // Do NOT include this heading in the body to avoid duplicating the headline.
+          continue;
+        }
+      }
+
       // Handle list items (group consecutive list items)
       if (type === 'bulleted_list_item' || type === 'numbered_list_item') {
         const newListType = type;
