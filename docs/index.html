@@ -521,7 +521,33 @@
 
       <!-- RIGHT VISUAL (WhatsApp mockup image) -->
             <div class="hero-visual">
-                <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
+                <!-- Left tool preview (Insider Trading) -->
+                <div class="hero-tool-preview left">
+                    <div class="hero-tool-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h4>Insider Activity</h4>
+                    <p>Track insider trading activity</p>
+                </div>
+                <!-- Phone mockup (Daily Market Wrap-Up) -->
+                <div class="phone-panel-wrapper">
+                    <div class="phone-image-wrapper" onclick="openPhoneImageViewer()" role="button" tabindex="0" aria-label="View Daily Dividend interface">
+                        <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
+                    </div>
+                    <!-- Daily Wrap Up label -->
+                    <div class="phone-tool-label">
+                        <h4>Daily Market<br>Wrap-Up</h4>
+                        <p>Stay informed with daily market insights and analysis</p>
+                    </div>
+                </div>
+                <!-- Right tool preview (Hedge Fund) -->
+                <div class="hero-tool-preview right">
+                    <div class="hero-tool-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h4>Hedge Fund Positioning</h4>
+                    <p>Explore institutional portfolios</p>
+                </div>
             </div>
         </div>
     </section>
@@ -882,6 +908,16 @@
     </div>
   </div>
 
+  <!-- Phone Image Viewer Modal -->
+  <div id="phoneImageViewerModal" class="phone-image-viewer-modal" onclick="closePhoneImageViewer()">
+    <div class="phone-image-viewer-content" onclick="event.stopPropagation()">
+      <button class="phone-image-viewer-close" onclick="closePhoneImageViewer()" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface - Full View">
+    </div>
+  </div>
+
   <!-- =========================================
        INLINE SCRIPT: submission + UX handling
        (Do NOT include your old script.js for forms)
@@ -989,6 +1025,29 @@
     }
     function openWaitlistModal(){ document.getElementById('waitlistModal').style.display='flex'; }
     function closeWaitlistModal(){ document.getElementById('waitlistModal').style.display='none'; document.getElementById('waitlistForm').reset(); }
+
+    // Phone Image Viewer Modal Functions
+    function openPhoneImageViewer() {
+      const modal = document.getElementById('phoneImageViewerModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePhoneImageViewer() {
+      const modal = document.getElementById('phoneImageViewerModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePhoneImageViewer();
+      }
+    });
 
     // Disable submit buttons and add timestamp
     function enhanceSubmission(formId, btnSelector) {
