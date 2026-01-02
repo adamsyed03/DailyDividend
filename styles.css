@@ -1690,27 +1690,42 @@ body {
         border-radius: 18px !important;
     }
 
-    /* Hero on phone: put signup (left) and phone mock (right) side-by-side */
+    /* Hero on phone: title spans full width, then signup (left) + phone mock (right) */
     .landing .hero-container {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+        grid-template-rows: auto auto;
         align-items: center;
         gap: 14px;
         text-align: left;
     }
 
+    /* Flatten hero-content so we can place its children in the grid */
     .landing .hero-content {
-        text-align: left;
+        display: contents;
     }
 
-    /* Force headline/subtitle left (some base rules can center them on mobile) */
     .landing .hero-title,
     .landing .hero-subtitle {
+        grid-column: 1 / -1;
         text-align: left !important;
     }
 
+    .landing .hero-subtitle {
+        margin-bottom: 8px;
+    }
+
     .landing .hero-cta {
+        grid-column: 1 / 2;
+        grid-row: 2;
         align-items: flex-start;
+    }
+
+    .landing .hero-visual {
+        grid-column: 2 / 3;
+        grid-row: 2;
+        justify-self: end;
+        align-self: center;
     }
 
     /* Make the CTA button smaller on phone */
@@ -1727,10 +1742,10 @@ body {
         font-size: 0.9rem;
     }
 
-    /* Keep the phone mock reasonably sized in the right column */
+    /* Phone mock: bigger and aligned right */
     .landing .hero-visual img {
-        width: min(58vw, 290px) !important;
-        margin: 0 0 0 auto !important;
+        width: min(52vw, 260px) !important;
+        margin: 0 !important;
     }
 
     /* Very small phones: fall back to stacked so nothing squishes */
@@ -1981,13 +1996,14 @@ body {
         flex: 0 0 92px !important;
         max-width: 92px !important;
         font-size: 0.88rem;
-        padding-right: 36px; /* room for chevron */
+        padding-left: 8px;
+        padding-right: 26px; /* room for chevron */
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
-        background-position: right 12px center;
+        background-position: right 8px center;
         background-size: 12px 8px;
     }
 
