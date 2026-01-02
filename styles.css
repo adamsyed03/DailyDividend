@@ -1797,6 +1797,36 @@ body {
         border-radius: 16px;
     }
 
+    /* Pricing: remove desktop “effects” that look bad on phone */
+    .landing .pricing-card.free {
+        transform: none !important;
+        border-width: 2px !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12) !important;
+    }
+
+    /* Hide 3rd tier on phones so 2-col grid doesn’t create an orphan row */
+    .landing .pricing-card.premium {
+        display: none !important;
+    }
+
+    .landing .pricing-header h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .landing .price {
+        margin-bottom: 14px;
+    }
+
+    .landing .amount {
+        font-size: 2rem;
+    }
+
+    .landing .pricing-features {
+        margin-bottom: 14px;
+    }
+
     .landing .pricing-features {
         margin-top: 10px;
     }
@@ -1812,6 +1842,42 @@ body {
 
     .landing .pricing-button {
         padding: 10px 12px;
+    }
+
+    /* Coming soon overlay: smaller + less “tacky” on mobile */
+    .landing .pricing-card.coming-soon-card {
+        opacity: 0.78;
+    }
+
+    .landing .lock-overlay {
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: none;
+    }
+
+    .landing .lock-icon {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        animation: none;
+    }
+
+    .landing .lock-text {
+        font-size: 0.95rem;
+        letter-spacing: 0;
+    }
+
+    .landing .coming-soon-sticker {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        animation: none;
+        box-shadow: 0 6px 14px rgba(107, 114, 128, 0.18);
+    }
+
+    .landing .coming-soon-sticker i {
+        font-size: 0.8rem;
+        animation: none;
     }
 
     /* Very small phones: keep 2 columns but tighten further */
