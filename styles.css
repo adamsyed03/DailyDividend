@@ -1578,9 +1578,9 @@ body {
     }
     
     .social-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.2rem;
+        width: 44px;
+        height: 44px;
+        font-size: 1.05rem;
     }
     
     .nav-links {
@@ -1590,6 +1590,42 @@ body {
     /* Hide desktop dropdown on mobile */
     .nav-dropdown {
         display: none;
+    }
+
+    /* Mobile polish: make icons + nav feel less oversized */
+    .navbar__container,
+    .nav-container {
+        padding: 0 16px;
+        height: 62px;
+    }
+
+    .logo-dd-image {
+        width: 96px !important;
+        height: 32px !important;
+    }
+
+    /* Font Awesome icons tend to look huge on mobile – normalize */
+    .nav-links i,
+    .nav-dropdown-item i,
+    .mobile-menu i,
+    .dd-btn i {
+        font-size: 0.95rem !important;
+        line-height: 1 !important;
+    }
+
+    /* Tools list icons on landing (inline-styled) */
+    .tool-icon {
+        font-size: 18px !important;
+        min-width: 28px !important;
+        padding-top: 1px !important;
+    }
+
+    /* Softer mobile Tools button */
+    .mobile-menu .nav-tools-btn {
+        border-width: 2px !important;
+        border-radius: 10px;
+        padding: 10px 14px !important;
+        box-shadow: none;
     }
     
     .hero-container {
@@ -1618,9 +1654,10 @@ body {
     
     /* Mobile Feature Icons */
     .feature-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        font-size: 1.25rem;
     }
     
     .steps {
