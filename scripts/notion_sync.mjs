@@ -11,6 +11,7 @@ const rootDir = join(__dirname, '..');
 
 const NOTION_TOKEN = process.env.NOTION_TOKEN;
 const NOTION_PAGE_ID = process.env.NOTION_PAGE_ID;
+const STRICT_SYNC = process.env.STRICT_SYNC === 'true';
 
 if (!NOTION_TOKEN || !NOTION_PAGE_ID) {
   console.error('Error: NOTION_TOKEN and NOTION_PAGE_ID must be set');
@@ -381,6 +382,7 @@ function parseEntries(blocks) {
   let listItems = [];
   let hasHeadingDelimiters = false;
   let didPromoteTitleFromContent = false;
+  let pendingTitleFromHeading = '';
 
   function normalizeTitle(t) {
     return String(t || '').replace(/\s+/g, ' ').trim();
@@ -417,6 +419,17 @@ function parseEntries(blocks) {
 
     return true;
   }
+
+  function setPendingTitleFromHeading(text) {
+    const candidate = normalizeTitle(text);
+    if (!candidate) return;
+    // Ignore headings that are clearly date-like
+    try {
+      if (parseDateFromText(candidate)?.date) return;
+    } catch {}
+    if (candidate.toLowerCase() === 'daily market wrap-up') return;
+    pendingTitleFromHeading = candidate;
+  }
   
   if (!blocks || blocks.length === 0) {
     console.warn('Warning: No blocks provided to parseEntries');
@@ -452,6 +465,12 @@ function parseEntries(blocks) {
     // Now more flexible - accepts any heading or paragraph with a date-like pattern
     if (type === 'heading_1' || type === 'heading_2' || type === 'heading_3') {
       const headingText = extractPlainText(block[type]?.rich_text || []);
+
+      // If we haven't started an entry yet, remember the latest heading as a potential title.
+      // This supports the format where the headline (H2) appears BEFORE the "DAILY DIVIDEND | ..." date line.
+      if (!currentEntry) {
+        setPendingTitleFromHeading(headingText);
+      }
       
       // Try format 1: YYYY-MM-DD — Title
       const match1 = headingText.match(/^(\d{4}-\d{2}-\d{2})\s*[—-]\s*(.+)$/);
@@ -486,8 +505,15 @@ function parseEntries(blocks) {
           if (parsed?.date) {
             isEntryDelimiter = true;
             entryDate = parsed.date;
-            // Same fallback behavior as headings
-            entryTitle = (parsed.title && parsed.title !== 'Untitled') ? parsed.title : paraText.trim();
+            // If this line is ONLY date (common), use the most recent heading above it as the title.
+            // Otherwise fall back to the paragraph.
+            if (parsed.title && parsed.title !== 'Untitled') {
+              entryTitle = parsed.title;
+            } else if (pendingTitleFromHeading) {
+              entryTitle = pendingTitleFromHeading;
+            } else {
+              entryTitle = paraText.trim();
+            }
           }
         } catch (e) {
           console.warn(`Warning: Error parsing paragraph delimiter "${paraText.substring(0, 50)}":`, e.message);
@@ -536,6 +562,7 @@ function parseEntries(blocks) {
       inList = false;
       listItems = [];
       didPromoteTitleFromContent = false;
+      pendingTitleFromHeading = '';
       
       // Include delimiter block in content if it's a paragraph (not H2)
       if (type === 'paragraph') {
@@ -659,12 +686,13 @@ async function sync() {
     }
     
     if (entries.length === 0) {
-      console.error('No entries parsed from Notion. Check heading format or delimiter rules.');
-      console.error('Expected formats:');
-      console.error('  1. Heading 2: "YYYY-MM-DD — Title"');
-      console.error('  2. Heading 2: "DAILY DIVIDEND | Tue, Dec 23 Title" or "DAILY DIVIDEND | Thu, 1 Jan Title"');
-      console.error('  3. Paragraph: "DAILY DIVIDEND | Tue, Dec 23 Title" or "DAILY DIVIDEND | Thu, 1 Jan Title"');
-      process.exit(1);
+      console.error('No entries parsed from Notion. This is usually a formatting/delimiter mismatch.');
+      console.error('The sync will skip updating files to avoid breaking the site.');
+      console.error('If you want the workflow to fail hard on this, set STRICT_SYNC=true.');
+      if (STRICT_SYNC) {
+        process.exit(1);
+      }
+      return;
     }
     
     // Sort entries by date (newest first)
@@ -712,7 +740,12 @@ async function sync() {
     if (error.response) {
       console.error('Notion API Response:', JSON.stringify(error.response, null, 2));
     }
-    process.exit(1);
+    console.error('The sync will skip updating files to avoid breaking the site.');
+    console.error('If you want the workflow to fail hard on this, set STRICT_SYNC=true.');
+    if (STRICT_SYNC) {
+      process.exit(1);
+    }
+    return;
   }
 }
 

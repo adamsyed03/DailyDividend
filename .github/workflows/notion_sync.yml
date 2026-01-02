@@ -36,6 +36,7 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          STRICT_SYNC: "false"
       
       - name: Copy files to docs for GitHub Pages
         run: |
