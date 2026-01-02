@@ -1718,6 +1718,93 @@ body {
         line-height: 1.35 !important;
     }
 
+    /* ---------- Landing page: side-by-side cards on mobile ---------- */
+    .landing .tools-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .landing .tool-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 12px !important;
+        gap: 8px !important;
+        min-height: 92px;
+    }
+
+    .landing .tool-content {
+        width: 100%;
+        text-align: left !important;
+    }
+
+    .landing .tool-item h3 {
+        font-size: 0.95rem !important;
+        margin: 0 !important;
+    }
+
+    .landing .tool-item p {
+        display: none !important;
+    }
+
+    /* Features ("Why Choose"): 2-column grid on mobile */
+    .landing .features-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px;
+    }
+
+    .landing .feature-card {
+        padding: 16px 14px;
+        border-radius: 16px;
+    }
+
+    .landing .feature-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        font-size: 1.05rem;
+    }
+
+    .landing .feature-card p {
+        display: none;
+    }
+
+    /* Pricing: 2 cards side-by-side on mobile */
+    .landing .pricing-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 0 6px;
+    }
+
+    .landing .pricing-card {
+        width: 100%;
+        padding: 16px 14px;
+        border-radius: 16px;
+    }
+
+    .landing .pricing-features {
+        margin-top: 10px;
+    }
+
+    .landing .pricing-features li {
+        font-size: 0.85rem;
+        line-height: 1.25;
+    }
+
+    .landing .pricing-button {
+        padding: 10px 12px;
+    }
+
+    /* Very small phones: keep 2 columns but tighten further */
+    @media (max-width: 380px) {
+        .landing .tools-list { gap: 8px !important; }
+        .landing .tool-item { padding: 10px !important; min-height: 86px; }
+        .landing .tool-item h3 { font-size: 0.88rem !important; }
+
+        .landing .pricing-card h3 { font-size: 1.1rem; }
+        .landing .pricing-features li { font-size: 0.82rem; }
+    }
+
     /* ---------- Landing page: make text smaller/easier to scan (ONLY mobile) ---------- */
     .landing {
         font-size: 15px;
