@@ -1690,62 +1690,51 @@ body {
         border-radius: 18px !important;
     }
 
-    /* Hero on phone: title spans full width, then signup (left) + phone mock (right) */
+    /* Hero on phone: put signup (left) and phone mock (right) side-by-side */
     .landing .hero-container {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-        grid-template-rows: auto auto;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
         align-items: center;
         gap: 14px;
         text-align: left;
+        justify-items: start;
     }
 
-    /* Flatten hero-content so we can place its children in the grid */
     .landing .hero-content {
-        display: contents;
-    }
-
-    .landing .hero-title,
-    .landing .hero-subtitle {
-        grid-column: 1 / -1;
-        text-align: left !important;
-    }
-
-    .landing .hero-subtitle {
-        margin-bottom: 8px;
+        text-align: left;
+        justify-self: start;
     }
 
     .landing .hero-cta {
-        grid-column: 1 / 2;
-        grid-row: 2;
         align-items: flex-start;
     }
 
-    .landing .hero-visual {
-        grid-column: 2 / 3;
-        grid-row: 2;
-        justify-self: end;
-        align-self: center;
+    /* Force hero text left on mobile (some global mobile rules center it) */
+    .landing .hero-title,
+    .landing .hero-subtitle {
+        text-align: left !important;
     }
 
     /* Make the CTA button smaller on phone */
     .landing .cta-button {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         padding: 10px 12px;
         border-radius: 12px;
         width: auto;
         display: inline-flex;
         gap: 8px;
+        white-space: nowrap;
+        max-width: 100%;
     }
 
     .landing .cta-button i {
         font-size: 0.9rem;
     }
 
-    /* Phone mock: bigger and aligned right */
+    /* Keep the phone mock reasonably sized in the right column */
     .landing .hero-visual img {
-        width: min(52vw, 260px) !important;
-        margin: 0 !important;
+        width: min(54vw, 260px) !important;
+        margin: 0 0 0 auto !important;
     }
 
     /* Very small phones: fall back to stacked so nothing squishes */
@@ -1989,26 +1978,28 @@ body {
 
     /* Make signup input + select more compact and add a clear dropdown chevron */
     .landing .input-group {
-        gap: 10px;
+        gap: 0;
+        display: grid;
+        grid-template-columns: 92px 1fr;
     }
 
     .landing #countryCode {
-        flex: 0 0 92px !important;
-        max-width: 92px !important;
-        font-size: 0.88rem;
-        padding-left: 8px;
-        padding-right: 26px; /* room for chevron */
+        font-size: 0.85rem;
+        padding: 0 34px 0 10px; /* room for chevron */
+        max-width: 92px;
+        min-width: 92px;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
-        background-position: right 8px center;
+        background-position: right 10px center;
         background-size: 12px 8px;
     }
 
     .landing #phoneInput {
         font-size: 0.95rem;
+        padding: 12px 14px;
         min-width: 0;
     }
 
