@@ -1717,6 +1717,80 @@ body {
         font-size: 0.9rem !important;
         line-height: 1.35 !important;
     }
+
+    /* ---------- Landing page: make text smaller/easier to scan (ONLY mobile) ---------- */
+    .landing {
+        font-size: 15px;
+        line-height: 1.35;
+    }
+
+    .landing .hero-title {
+        font-size: 1.9rem;
+    }
+
+    .landing .hero-subtitle {
+        font-size: 0.98rem;
+    }
+
+    .landing .cta-note {
+        font-size: 0.9rem;
+    }
+
+    .landing .section-header h2 {
+        font-size: 1.55rem;
+    }
+
+    .landing .section-header p {
+        font-size: 0.95rem;
+    }
+
+    /* Make signup input + select more compact and add a clear dropdown chevron */
+    .landing .input-group {
+        gap: 10px;
+    }
+
+    .landing #countryCode {
+        font-size: 0.95rem;
+        padding-right: 36px; /* room for chevron */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 12px 8px;
+    }
+
+    .landing #phoneInput {
+        font-size: 0.95rem;
+    }
+
+    .landing .cta-button {
+        font-size: 0.95rem;
+        padding: 12px 16px;
+    }
+
+    /* Smaller body copy across landing sections (mobile only) */
+    .landing p { font-size: 0.95rem; }
+    .landing h3 { font-size: 1.05rem; }
+
+    .landing .feature-card p {
+        font-size: 0.92rem;
+        line-height: 1.35;
+    }
+
+    .landing .pricing-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .landing .pricing-features li {
+        font-size: 0.92rem;
+    }
+
+    .landing .pricing-button {
+        font-size: 0.95rem;
+        padding: 12px 16px;
+    }
     
     .steps {
         grid-template-columns: 1fr;
