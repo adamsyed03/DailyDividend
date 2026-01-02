@@ -730,8 +730,103 @@ body {
         margin-bottom: 5px !important;
     }
     
+    /* Button wrapper for desktop - side by side layout */
+    .cta-button-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .login-link-text {
+        margin: 0 !important;
+        margin-left: 12px !important;
+    }
+    
+    .login-link-text a {
+        color: #000000 !important;
+        text-decoration: underline !important;
+        font-size: 0.85rem !important;
+    }
+    
     .cta-note {
         margin-bottom: 0 !important;
+    }
+    
+    /* Center country code selector text on desktop */
+    .landing #countryCode {
+        text-align: center !important;
+        padding: 15px 30px 15px 15px !important; /* Match desktop input padding */
+        line-height: 1.4 !important;
+    }
+    
+    /* Add dropdown arrow for desktop */
+    .landing .country-code-wrapper {
+        position: relative !important;
+    }
+    
+    .landing .country-code-wrapper::after {
+        content: '▼' !important;
+        position: absolute !important;
+        right: 10px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        pointer-events: none !important;
+        color: #374151 !important;
+        font-size: 11px !important;
+        line-height: 1 !important;
+        z-index: 1 !important;
+    }
+    
+    /* Make phone input wider on desktop so placeholder text is fully visible */
+    .landing .input-group {
+        min-width: 400px !important; /* Ensure enough width for "Phone number" text */
+    }
+    
+    /* Force all three elements to have identical height - reduced to match desired look */
+    .landing .input-group {
+        align-items: center !important;
+        display: flex !important;
+        height: 44px !important; /* Reduced from 48px */
+        background: white !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Match phone input height exactly */
+    .landing .input-group input,
+    .landing #phoneInput {
+        padding: 0 20px !important; /* Remove vertical padding, use height */
+        min-width: 250px !important;
+        height: 100% !important; /* Fill container height */
+        line-height: 44px !important; /* Center text vertically */
+        font-size: 1rem !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        background: transparent !important;
+    }
+    
+    /* Match country code selector height exactly */
+    .landing #countryCode {
+        padding: 0 30px 0 15px !important; /* Remove vertical padding */
+        line-height: 44px !important; /* Center text vertically */
+        font-size: 0.9rem !important;
+        box-sizing: border-box !important;
+        height: 100% !important; /* Fill container height */
+        border: none !important;
+        background-color: #f8fafc !important;
+    }
+    
+    /* Ensure button height matches exactly */
+    .landing .cta-button {
+        padding: 0 30px !important; /* Use horizontal padding only */
+        height: 44px !important; /* Explicit height matching input group */
+        line-height: 44px !important; /* Center text vertically */
+        font-size: 1rem !important;
+        box-sizing: border-box !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 12px !important;
     }
 }
 
@@ -1914,6 +2009,21 @@ body {
         margin: 0 auto;
     }
 
+    /* Button wrapper - stack vertically on mobile */
+    .cta-button-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+        gap: 12px !important;
+    }
+    
+    .login-link-text {
+        margin: 0 !important;
+        margin-left: 0 !important;
+        text-align: center !important;
+    }
+    
     /* Make the CTA button match input-group width exactly */
     .landing .cta-button {
         font-size: 0.8rem;
@@ -2365,7 +2475,7 @@ body {
     }
 
     .landing .cta-note {
-        font-size: 0.9rem;
+        display: none !important; /* Hide "No spam. Unsubscribe anytime. Free forever." on mobile */
     }
 
     .landing .section-header h2 {
@@ -2380,25 +2490,44 @@ body {
     .landing .input-group {
         gap: 0;
         display: grid;
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 105px 1fr; /* Updated to match country code width */
         width: auto;
         max-width: fit-content;
         margin: 0 auto;
     }
 
+    /* Country code wrapper for arrow */
+    .landing .country-code-wrapper {
+        position: relative !important;
+        display: inline-block !important;
+    }
+    
     .landing #countryCode {
         font-size: 0.85rem;
-        padding: 0 30px 0 10px; /* room for chevron + ensure +44 is fully visible */
-        max-width: 80px;
-        min-width: 80px;
-        width: 80px;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        background-size: 12px 8px;
+        padding: 12px 25px 12px 15px !important; /* Match phone input vertical padding (12px) for alignment */
+        max-width: 105px !important;
+        min-width: 105px !important;
+        width: 105px !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background-color: #f8fafc !important;
+        text-align: center !important; /* Center the text horizontally */
+        line-height: 1.4 !important; /* Better vertical centering */
+    }
+    
+    /* Add dropdown arrow using wrapper pseudo-element */
+    .landing .country-code-wrapper::after {
+        content: '▼' !important;
+        position: absolute !important;
+        right: 10px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        pointer-events: none !important;
+        color: #374151 !important;
+        font-size: 11px !important;
+        line-height: 1 !important;
+        z-index: 1 !important;
     }
 
     .landing #phoneInput {
