@@ -173,15 +173,18 @@ function parseDateFromText(text) {
   if (!text || typeof text !== 'string') return null;
   
   const raw = text.trim();
+  // Normalize common ordinal suffixes so formats like "Jan 2nd" or "2nd Jan" always parse.
+  // Keep it conservative: only strip st/nd/rd/th when directly after a 1-2 digit day.
+  const rawNorm = raw.replace(/(\d{1,2})(st|nd|rd|th)\b/gi, '$1');
   const currentYear = new Date().getFullYear();
   
   // Strategy 1: Try JavaScript's Date constructor (handles many formats)
   // IMPORTANT: only do this when the string includes an explicit year.
   // Otherwise, engines can "invent" a year (e.g., "Thu, 1 Jan" -> 2001-01-01),
   // which breaks file naming and the site.
-  if (/\b20\d{2}\b/.test(raw)) {
+  if (/\b20\d{2}\b/.test(rawNorm)) {
     try {
-      const parsedDate = new Date(raw);
+      const parsedDate = new Date(rawNorm);
       if (!Number.isNaN(parsedDate.getTime()) && parsedDate.getFullYear() > 2000 && parsedDate.getFullYear() < 2100) {
         const year = parsedDate.getFullYear();
         const month = parsedDate.getMonth();
@@ -189,7 +192,7 @@ function parseDateFromText(text) {
         const iso = toIsoDate(year, month, day);
         if (iso) {
           // Extract title by removing the date part
-          const title = raw.replace(/^\s*(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*\d{1,2}[\/\-\s]+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[\/\-\s]+\d{1,4}[^\w]*/i, '').trim();
+          const title = rawNorm.replace(/^\s*(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*\d{1,2}[\/\-\s]+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{1,2})[\/\-\s]+\d{1,4}[^\w]*/i, '').trim();
           return { date: iso, title: title || 'Untitled' };
         }
       }
@@ -200,14 +203,14 @@ function parseDateFromText(text) {
   
   // Strategy 2: Look for ISO date format (YYYY-MM-DD)
   {
-    const m = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
+    const m = rawNorm.match(/(\d{4})-(\d{2})-(\d{2})/);
     if (m) {
       const yearNum = parseInt(m[1], 10);
       const monthNum = parseInt(m[2], 10);
       const dayNum = parseInt(m[3], 10);
       const iso = toIsoDate(yearNum, monthNum - 1, dayNum);
       if (iso) {
-        const title = raw.replace(/\d{4}-\d{2}-\d{2}\s*[—-]?\s*/, '').trim();
+        const title = rawNorm.replace(/\d{4}-\d{2}-\d{2}\s*[—-]?\s*/, '').trim();
         return { date: iso, title: title || 'Untitled' };
       }
     }
@@ -231,7 +234,7 @@ function parseDateFromText(text) {
   
   // Try "Day Month" format (e.g., "Thu, 1 Jan", "1 Jan", "1st January")
   {
-    const m = raw.match(
+    const m = rawNorm.match(
       /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember|embre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?(?:,\s*(\d{4}))?\s*(.*)$/i
     );
     if (m) {
@@ -248,7 +251,7 @@ function parseDateFromText(text) {
   
   // Try "Month Day" format (e.g., "Dec 23", "December 23, 2025")
   {
-    const m = raw.match(
+    const m = rawNorm.match(
       /^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(Jan(?:uary|v)?|Feb(?:ruary|r)?|Mar(?:ch|s)?|Apr(?:il|il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember|embre)?|Oct(?:ober|obre)?|Nov(?:ember|embre)?|Dec(?:ember|embre)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,\s*(\d{4}))?\s*(.*)$/i
     );
     if (m) {
@@ -267,7 +270,7 @@ function parseDateFromText(text) {
   {
     // YYYY-MM-DD (optionally with title)
     {
-      const m = raw.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})\s*(.*)$/);
+      const m = rawNorm.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})\s*(.*)$/);
       if (m) {
         const yearNum = parseInt(m[1], 10);
         const monthNum = parseInt(m[2], 10);
@@ -279,7 +282,7 @@ function parseDateFromText(text) {
 
     // MM/DD/YYYY or DD/MM/YYYY (optionally with title)
     {
-      const m = raw.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\s*(.*)$/);
+      const m = rawNorm.match(/^(?:[A-Za-z]{3,9}[.,]?\s*)?,?\s*(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\s*(.*)$/);
       if (m) {
         const num1 = parseInt(m[1], 10);
         const num2 = parseInt(m[2], 10);
