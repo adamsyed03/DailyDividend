@@ -6,6 +6,10 @@ on:
     - cron: '*/5 * * * *'
   workflow_dispatch: # Allow manual trigger
 
+concurrency:
+  group: notion-daily-sync
+  cancel-in-progress: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -58,6 +62,10 @@ jobs:
           cp styles.css docs/ 2>/dev/null || true
           cp *.html docs/ 2>/dev/null || true
           cp DDlogo.png docs/ 2>/dev/null || true
+
+      - name: Validate generated JSON
+        run: |
+          node -e "const fs=require('fs'); const paths=[]; for (const p of ['data/daily','docs/data/daily']) { if (!fs.existsSync(p)) continue; for (const f of fs.readdirSync(p)) { if (!f.endsWith('.json')) continue; paths.push(p+'/'+f);} } let bad=0; for (const p of paths){ try{ JSON.parse(fs.readFileSync(p,'utf8')); } catch(e){ bad++; console.error('Invalid JSON:',p, e.message);} } if (bad) process.exit(1); console.log('JSON validated:', paths.length);"
       
       - name: Check for changes
         id: git-check
@@ -73,5 +81,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add data/daily/ docs/
           git commit -m "chore: update daily market wrap-up from Notion [skip ci]"
-          git push
+          # Rebase + retry to avoid races when scheduled jobs overlap
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push || (sleep 2 && git pull --rebase origin "${GITHUB_REF_NAME}" && git push)
 

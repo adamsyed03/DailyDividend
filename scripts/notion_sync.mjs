@@ -24,6 +24,15 @@ const DRY_RUN = process.env.DRY_RUN === 'true';
 // Ensure data directory exists
 await fs.mkdir(dataDir, { recursive: true });
 
+async function writeJsonFileAtomic(filePath, obj) {
+  const tmp = `${filePath}.tmp`;
+  const json = JSON.stringify(obj, null, 2);
+  await fs.writeFile(tmp, json, 'utf-8');
+  // Validate immediately so we never commit invalid JSON
+  JSON.parse(await fs.readFile(tmp, 'utf-8'));
+  await fs.rename(tmp, filePath);
+}
+
 /**
  * Escape HTML to prevent XSS
  */
@@ -671,7 +680,7 @@ async function sync() {
       };
       
       const filePath = join(dataDir, `${entry.date}.json`);
-      await fs.writeFile(filePath, JSON.stringify(entryData, null, 2), 'utf-8');
+      await writeJsonFileAtomic(filePath, entryData);
       console.log(`Wrote ${filePath}`);
     }
     
@@ -693,7 +702,7 @@ async function sync() {
     };
     
     const indexPath = join(dataDir, 'index.json');
-    await fs.writeFile(indexPath, JSON.stringify(indexData, null, 2), 'utf-8');
+    await writeJsonFileAtomic(indexPath, indexData);
     console.log(`Wrote ${indexPath}`);
     
     console.log('Sync completed successfully!');
