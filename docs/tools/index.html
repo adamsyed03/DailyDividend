@@ -109,6 +109,74 @@
       .mobile-menu a:last-child { border-bottom: none; }
     }
 
+    /* ---------- MOBILE ONLY: remove zoom hack + tighten cards ---------- */
+    @media (max-width: 768px) {
+      html { zoom: 1 !important; }
+      body {
+        transform: none !important;
+        width: auto !important;
+      }
+
+      .tools-wrapper {
+        padding: 92px 16px 48px;
+      }
+
+      .tools-header {
+        margin-bottom: 28px;
+      }
+
+      .tools-header h1 {
+        font-size: 2rem;
+        line-height: 1.1;
+      }
+
+      .tools-header p {
+        font-size: 1rem;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .tool-card {
+        border-width: 2px !important;
+        border-radius: 18px;
+        padding: 18px 16px;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.10);
+      }
+
+      .tool-icon-wrapper {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+      }
+
+      .tool-card i {
+        font-size: 1.25rem;
+      }
+
+      .tool-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+      }
+
+      .tool-card p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      .tool-card-arrow {
+        top: 18px;
+        right: 16px;
+        width: 26px;
+        height: 26px;
+        font-size: 0.85rem;
+      }
+    }
+
 
     /* Main Content */
     .tools-wrapper {
