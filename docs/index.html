@@ -908,16 +908,6 @@
     </div>
   </div>
 
-  <!-- Phone Image Viewer Modal -->
-  <div id="phoneImageViewerModal" class="phone-image-viewer-modal" onclick="closePhoneImageViewer()">
-    <div class="phone-image-viewer-content" onclick="event.stopPropagation()">
-      <button class="phone-image-viewer-close" onclick="closePhoneImageViewer()" aria-label="Close">
-        <i class="fas fa-times"></i>
-      </button>
-      <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface - Full View">
-    </div>
-  </div>
-
   <!-- =========================================
        INLINE SCRIPT: submission + UX handling
        (Do NOT include your old script.js for forms)
@@ -1026,29 +1016,6 @@
     function openWaitlistModal(){ document.getElementById('waitlistModal').style.display='flex'; }
     function closeWaitlistModal(){ document.getElementById('waitlistModal').style.display='none'; document.getElementById('waitlistForm').reset(); }
 
-    // Phone Image Viewer Modal Functions
-    function openPhoneImageViewer() {
-      const modal = document.getElementById('phoneImageViewerModal');
-      if (modal) {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function closePhoneImageViewer() {
-      const modal = document.getElementById('phoneImageViewerModal');
-      if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closePhoneImageViewer();
-      }
-    });
-
     // Disable submit buttons and add timestamp
     function enhanceSubmission(formId, btnSelector) {
       const form = document.getElementById(formId);
@@ -1135,6 +1102,29 @@
       wireForms();
       enhanceSubmission('phoneSignupForm', '.phone-signup-submit-btn');
       enhanceSubmission('waitlistForm', '.waitlist-submit-btn');
+    });
+
+    // Phone Image Viewer Modal Functions
+    function openPhoneImageViewer() {
+      const modal = document.getElementById('phoneImageViewerModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePhoneImageViewer() {
+      const modal = document.getElementById('phoneImageViewerModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePhoneImageViewer();
+      }
     });
   </script>
 </body>
