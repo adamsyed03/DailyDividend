@@ -1982,7 +1982,6 @@ body {
         display: none !important;
     }
 
-    /* Container for slider and absolute arrows */
     /* Prevent horizontal overflow on mobile */
     body, html {
         overflow-x: hidden !important;
@@ -2010,13 +2009,9 @@ body {
         gap: 0 !important;
         padding: 0 !important;
         width: 100% !important;
-<<<<<<< HEAD
         max-width: 100% !important; /* Don't exceed container */
-        margin: 0 !important; /* Margin moved to container */
-=======
         height: auto !important; /* Adapt to card heights */
         margin: 0 !important;
->>>>>>> c282d6606fa32bd98782006fa1e0e8e6fe42181a
         border-radius: 24px !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
         scrollbar-width: none;
@@ -2329,61 +2324,7 @@ body {
         padding: 0 !important;
     }
 
-    /* Container for slider and absolute arrows */
-    .landing .hero-mobile-slider-container {
-        position: relative !important;
-        width: 100% !important;
-        max-width: 380px !important; /* Center and enlarge panel */
-        margin: 20px auto !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    .landing .hero-mobile-slider {
-        display: flex !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
-        scroll-snap-type: x mandatory !important;
-        gap: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        border-radius: 24px !important;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
-        scrollbar-width: none;
-        position: relative !important;
-        z-index: 1 !important;
-    }
-
-    /* Slider Navigation Arrows */
-    .landing .slider-nav-btn {
-        position: absolute !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        width: 44px !important;
-        height: 44px !important;
-        border-radius: 50% !important;
-        background: white !important;
-        border: 1px solid rgba(0, 0, 0, 0.05) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 10 !important;
-        color: #2563eb !important;
-        font-size: 1.2rem !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-    }
-
-    .landing .slider-nav-btn.left {
-        left: -15px !important;
-    }
-
-    .landing .slider-nav-btn.right {
-        right: -15px !important;
-    }
+    /* Duplicate removed - using styles from line 1991 */
 
     .landing .mobile-tool-card {
         flex: 0 0 100% !important;
