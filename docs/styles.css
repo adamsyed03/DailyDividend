@@ -752,10 +752,10 @@ body {
         margin-bottom: 0 !important;
     }
     
-    /* Center country code selector text on desktop - match input field padding */
+    /* Center country code selector text on desktop */
     .landing #countryCode {
         text-align: center !important;
-        padding: 15px 30px 15px 15px !important; /* Match desktop input vertical padding (15px) */
+        padding: 15px 30px 15px 15px !important; /* Match desktop input padding */
         line-height: 1.4 !important;
     }
     
@@ -2152,7 +2152,6 @@ body {
         margin: 0 auto;
     }
 
-    /* Make the CTA button match input-group width exactly */
     /* Button wrapper - stack vertically on mobile */
     .cta-button-wrapper {
         display: flex !important;
@@ -2168,6 +2167,7 @@ body {
         text-align: center !important;
     }
     
+    /* Make the CTA button match input-group width exactly */
     .landing .cta-button {
         font-size: 0.8rem;
         padding: 8px 14px;
