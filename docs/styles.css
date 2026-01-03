@@ -837,6 +837,17 @@ body {
         display: none !important;
     }
     
+    /* Hide mobile slider and dots on desktop */
+    .landing .hero-mobile-slider,
+    .landing .slider-dots {
+        display: none !important;
+    }
+
+    /* Show desktop hero visual */
+    .landing .desktop-hero-visual {
+        display: block !important;
+    }
+
     /* Hide the phone-tool-label (Daily Market Wrap-Up text) on desktop */
     .landing .hero-visual .phone-tool-label {
         display: none !important;
@@ -1965,13 +1976,145 @@ body {
         margin-bottom: 22px;
     }
 
-    /* The hero mockup image is inline-scaled; override for mobile (make it BIG again) */
-    .landing .hero-visual img {
-        width: min(92vw, 380px) !important;
-        max-width: none !important;
+    /* Hero visual - Desktop vs Mobile */
+    .landing .desktop-hero-visual {
+        display: none !important;
+    }
+
+    /* Container for slider and absolute arrows */
+    .landing .hero-mobile-slider-container {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 400px !important; /* Increased panel size */
+        margin: 20px auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .landing .hero-mobile-slider {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        margin: 0 !important; /* Margin moved to container */
+        border-radius: 24px !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
+        scrollbar-width: none;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    /* Slider Navigation Arrows */
+    .landing .slider-nav-btn {
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: white !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 10 !important;
+        color: #2563eb !important;
+        font-size: 1.2rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .landing .slider-nav-btn:active {
+        transform: translateY(-50%) scale(0.9) !important;
+    }
+
+    .landing .slider-nav-btn.left {
+        left: -22px !important; /* Overlap the edge slightly */
+    }
+
+    .landing .slider-nav-btn.right {
+        right: -22px !important;
+    }
+
+    .landing .mobile-tool-card {
+        flex: 0 0 100% !important; /* Take full width of panel */
+        scroll-snap-align: center !important;
+        background: white !important;
+        border-radius: 24px !important;
+        padding: 30px 20px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        border: none !important;
+        cursor: pointer !important;
+        box-shadow: none !important; /* Shadow is on container now */
+    }
+
+    /* Slider dots container */
+    .landing .slider-dots {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        margin-top: 16px !important;
+    }
+
+    .landing .dot {
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 50% !important;
+        background: #d1d5db !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .landing .dot.active {
+        background: #2563eb !important;
+        width: 20px !important;
+        border-radius: 4px !important;
+    }
+
+    .landing .mobile-tool-card:active {
+        transform: scale(0.98);
+    }
+
+    .landing .mobile-tool-image-wrapper {
+        width: 100% !important;
+        height: 400px !important; /* Increased height to fit full screenshots */
+        background: #f8fafc !important;
+        border-radius: 16px !important;
+        margin-bottom: 20px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px !important; /* Small padding so image doesn't touch edges */
+    }
+
+    .landing .mobile-tool-image-wrapper img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important; /* Force entire image to fit in frame */
         transform: none !important;
-        margin: 14px auto 0 !important;
-        border-radius: 18px !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    .landing .mobile-tool-info h4 {
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+        color: #111827 !important;
+        margin: 0 0 6px 0 !important;
+    }
+
+    .landing .mobile-tool-info p {
+        font-size: 0.9rem !important;
+        color: #6b7280 !important;
+        margin: 0 !important;
+        line-height: 1.4 !important;
     }
 
     /* Hero on phone: stack signup then phone mock below */
@@ -2058,105 +2201,83 @@ body {
         display: none !important;
     }
 
-    /* Create 3 equal panels side by side: tool | phone | tool */
+    /* Hero visual - Desktop vs Mobile slider container */
     .landing .hero-visual {
         order: 2;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        align-items: stretch;
-        gap: 10px;
-        width: 100%;
-        margin-top: 8px;
-        padding: 0 6px;
-    }
-
-    /* Phone panel wrapper - styled exactly like other tool panels */
-    .landing .hero-visual .phone-panel-wrapper {
-        grid-column: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px 12px;
-        height: 100%;
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-radius: 16px;
-        border: 2px solid rgba(37, 99, 235, 0.1);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-    }
-
-    .landing .hero-visual .phone-panel-wrapper:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
-        border-color: rgba(37, 99, 235, 0.25);
-    }
-
-    /* Phone image container - styled like icon box, clickable on mobile */
-    .landing .hero-visual .phone-image-wrapper {
-        position: relative;
-        cursor: pointer !important;
-        width: 80px;
-        height: 80px;
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
-        transition: all 0.3s ease;
-        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-        border: 2px solid rgba(37, 99, 235, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 12px;
-        -webkit-tap-highlight-color: rgba(37, 99, 235, 0.2);
-        pointer-events: auto !important; /* Ensure clicks work on mobile */
-    }
-
-    .landing .hero-visual .phone-panel-wrapper:hover .phone-image-wrapper {
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
-    }
-
-    .landing .hero-visual .phone-image-wrapper:active {
-        transform: scale(1.05);
-    }
-
-    /* Click indicator for mobile */
-    .landing .hero-visual .phone-image-wrapper::before {
-        content: '👆';
-        position: absolute;
-        bottom: 4px;
-        right: 4px;
-        font-size: 0.7rem;
-        opacity: 0.7;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    /* Phone image - fits in icon box */
-    .landing .hero-visual .phone-image-wrapper img {
         width: 100% !important;
-        height: 100% !important;
-        object-fit: contain;
-        transform: none !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        display: block;
-        padding: 8px;
-        pointer-events: none; /* Prevent image from blocking clicks */
-    }
-    
-    /* Ensure phone wrapper is clickable on mobile */
-    .landing .hero-visual .phone-image-wrapper {
-        cursor: pointer;
-        -webkit-tap-highlight-color: rgba(37, 99, 235, 0.2);
+        margin-top: 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
     }
 
-    /* Daily Wrap Up label - same styling as other panels */
-    .landing .hero-visual .phone-tool-label {
-        text-align: center;
-        padding: 0;
+    /* Container for slider and absolute arrows */
+    .landing .hero-mobile-slider-container {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 380px !important; /* Center and enlarge panel */
+        margin: 20px auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .landing .hero-mobile-slider {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        border-radius: 24px !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
+        scrollbar-width: none;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    /* Slider Navigation Arrows */
+    .landing .slider-nav-btn {
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: white !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 10 !important;
+        color: #2563eb !important;
+        font-size: 1.2rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .landing .slider-nav-btn.left {
+        left: -15px !important;
+    }
+
+    .landing .slider-nav-btn.right {
+        right: -15px !important;
+    }
+
+    .landing .mobile-tool-card {
+        flex: 0 0 100% !important;
+        scroll-snap-align: center !important;
+        background: white !important;
+        border-radius: 24px !important;
+        padding: 30px 20px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        border: none !important;
     }
 
     .landing .hero-visual .phone-tool-label h4 {
@@ -2168,79 +2289,6 @@ body {
     }
 
     .landing .hero-visual .phone-tool-label p {
-        font-size: 0.75rem;
-        color: #6b7280;
-        margin: 0;
-        line-height: 1.4;
-    }
-
-    /* Tool panels on sides - show on mobile with enhanced styling */
-    .landing .hero-tool-preview {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px 12px;
-        height: 100%;
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-radius: 16px;
-        border: 2px solid rgba(37, 99, 235, 0.1);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-    }
-
-    .landing .hero-tool-preview:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
-        border-color: rgba(37, 99, 235, 0.25);
-    }
-
-    .landing .hero-tool-preview.left {
-        grid-column: 1;
-    }
-
-    .landing .hero-tool-preview.right {
-        grid-column: 3;
-    }
-
-    .landing .hero-tool-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 18px;
-        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-        border: 2px solid rgba(37, 99, 235, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 12px;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .landing .hero-tool-preview:hover .hero-tool-icon {
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
-    }
-
-    .landing .hero-tool-icon i {
-        font-size: 2.2rem;
-        background: linear-gradient(135deg, #2563eb 0%, #667eea 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-
-    .landing .hero-tool-preview h4 {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #111827;
-        margin: 0 0 8px;
-        line-height: 1.2;
-    }
-
-    .landing .hero-tool-preview p {
         font-size: 0.75rem;
         color: #6b7280;
         margin: 0;

@@ -526,34 +526,76 @@
                 </div>
             </div>
 
-      <!-- RIGHT VISUAL (WhatsApp mockup image) -->
+      <!-- RIGHT VISUAL (Desktop shows mockup, Mobile shows scrollable cards) -->
             <div class="hero-visual">
-                <!-- Left tool preview (Insider Trading) -->
-                <div class="hero-tool-preview left">
-                    <div class="hero-tool-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <h4>Insider Activity</h4>
-                    <p>Track insider trading activity</p>
+                <!-- Desktop Mockup (hidden on mobile) -->
+                <div class="desktop-hero-visual">
+                    <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
                 </div>
-                <!-- Phone mockup (Daily Market Wrap-Up) -->
-                <div class="phone-panel-wrapper">
-                    <div class="phone-image-wrapper" onclick="openPhoneImageViewer()" role="button" tabindex="0" aria-label="View Daily Dividend interface">
-                        <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
+
+                <!-- Mobile Slider Wrapper with Arrows -->
+                <div class="hero-mobile-slider-container">
+                    <button class="slider-nav-btn left" id="prevBtn" onclick="scrollSlider(-1)" aria-label="Previous tool">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+
+                    <div class="hero-mobile-slider" id="heroSlider">
+                        <!-- 1. Daily Market Wrap-Up (Phone Mockup) -->
+                        <div class="mobile-tool-card" onclick="window.location.href='daily/index.html'">
+                            <div class="mobile-tool-image-wrapper">
+                                <img src="phonemockup.png" alt="Daily Market Wrap-Up">
+                            </div>
+                            <div class="mobile-tool-info">
+                                <h4>Daily Market Wrap-Up</h4>
+                                <p>Daily insights delivered via WhatsApp</p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Insider Activity -->
+                        <div class="mobile-tool-card" onclick="window.location.href='tools/insider-moves.html'">
+                            <div class="mobile-tool-image-wrapper">
+                                <img src="insider_preview.jpg" alt="Insider Activity Tracker">
+                            </div>
+                            <div class="mobile-tool-info">
+                                <h4>Insider Activity</h4>
+                                <p>Track executive & director trades</p>
+                            </div>
+                        </div>
+
+                        <!-- 3. Congress Tracker -->
+                        <div class="mobile-tool-card" onclick="window.location.href='tools/congress.html'">
+                            <div class="mobile-tool-image-wrapper">
+                                <img src="congress_preview.jpg" alt="Congress Tracker">
+                            </div>
+                            <div class="mobile-tool-info">
+                                <h4>Congress Tracker</h4>
+                                <p>Monitor US politician stock trades</p>
+                            </div>
+                        </div>
+
+                        <!-- 4. Hedge Fund Positioning -->
+                        <div class="mobile-tool-card" onclick="window.location.href='tools/hedge-fund.html'">
+                            <div class="mobile-tool-image-wrapper">
+                                <img src="hedgefund_preview.jpg" alt="Hedge Fund Positioning">
+                            </div>
+                            <div class="mobile-tool-info">
+                                <h4>Hedge Fund Positioning</h4>
+                                <p>Explore institutional portfolios</p>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Daily Wrap Up label -->
-                    <div class="phone-tool-label">
-                        <h4>Daily Market<br>Wrap-Up</h4>
-                        <p>Stay informed with daily market insights and analysis</p>
-                    </div>
+
+                    <button class="slider-nav-btn right" id="nextBtn" onclick="scrollSlider(1)" aria-label="Next tool">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-                <!-- Right tool preview (Hedge Fund) -->
-                <div class="hero-tool-preview right">
-                    <div class="hero-tool-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <h4>Hedge Fund Positioning</h4>
-                    <p>Explore institutional portfolios</p>
+
+                <!-- Navigation Dots -->
+                <div class="slider-dots" id="sliderDots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
                 </div>
             </div>
         </div>
@@ -1119,6 +1161,48 @@
       wireForms();
       enhanceSubmission('phoneSignupForm', '.phone-signup-submit-btn');
       enhanceSubmission('waitlistForm', '.waitlist-submit-btn');
+
+      // Hero Slider Dot Synchronization + Click to Scroll
+      const slider = document.getElementById('heroSlider');
+      const dots = document.querySelectorAll('.slider-dots .dot');
+      
+      // Global scroll function for arrows
+      window.scrollSlider = (direction) => {
+        if (slider) {
+          const width = slider.offsetWidth;
+          slider.scrollBy({
+            left: direction * width,
+            behavior: 'smooth'
+          });
+        }
+      };
+
+      if (slider && dots.length > 0) {
+        // Sync dots on scroll
+        slider.addEventListener('scroll', () => {
+          const scrollLeft = slider.scrollLeft;
+          const width = slider.offsetWidth;
+          const index = Math.round(scrollLeft / width);
+          
+          dots.forEach((dot, i) => {
+            if (i === index) dot.classList.add('active');
+            else dot.classList.remove('active');
+          });
+        });
+
+        // Click dots to scroll
+        dots.forEach((dot, i) => {
+          dot.addEventListener('click', () => {
+            const width = slider.offsetWidth;
+            slider.scrollTo({
+              left: i * width,
+              behavior: 'smooth'
+            });
+          });
+          // Set cursor pointer for dots
+          dot.style.cursor = 'pointer';
+        });
+      }
     });
 
     // Phone Image Viewer Modal Functions
