@@ -2218,7 +2218,6 @@ body {
         border-radius: 4px !important;
     }
 
-    /* Hero on phone: stack signup then phone mock below */
     .landing .hero-container {
         display: grid;
         grid-template-columns: 1fr;
@@ -2379,21 +2378,6 @@ body {
         align-items: center !important;
         text-align: center !important;
         border: none !important;
-    }
-
-    .landing .hero-visual .phone-tool-label h4 {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #111827;
-        margin: 0 0 8px;
-        line-height: 1.2;
-    }
-
-    .landing .hero-visual .phone-tool-label p {
-        font-size: 0.75rem;
-        color: #6b7280;
-        margin: 0;
-        line-height: 1.4;
     }
 
     /* Tools overview: make it a clean single-column list */
