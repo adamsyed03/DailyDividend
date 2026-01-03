@@ -2040,81 +2040,182 @@ body {
         right: -22px !important;
     }
 
-    .landing .mobile-tool-card {
-        flex: 0 0 100% !important; /* Take full width of panel */
-        scroll-snap-align: center !important;
-        background: white !important;
+    .landing .hero-mobile-slider {
+        display: flex !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
+        scroll-snap-type: x mandatory !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important; /* Adapt to card heights */
+        margin: 0 !important;
         border-radius: 24px !important;
-        padding: 30px 20px !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
+        scrollbar-width: none;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    .landing .mobile-tool-card {
+        flex: 0 0 100% !important;
+        flex-shrink: 0 !important; /* Prevent collapsing on iOS */
+        scroll-snap-align: center !important;
+        background: transparent !important;
+        border-radius: 24px !important;
+        padding: 0 !important;
         display: flex !important;
         flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
+        position: relative !important;
         border: none !important;
-        cursor: pointer !important;
-        box-shadow: none !important; /* Shadow is on container now */
+        overflow: visible !important;
+        height: auto !important; /* Card size determined by image */
+        align-items: center !important;
     }
 
-    /* Slider dots container */
-    .landing .slider-dots {
-        display: flex !important;
-        justify-content: center !important;
-        gap: 8px !important;
-        margin-top: 16px !important;
-    }
-
-    .landing .dot {
-        width: 8px !important;
-        height: 8px !important;
-        border-radius: 50% !important;
-        background: #d1d5db !important;
-        transition: all 0.3s ease !important;
-    }
-
-    .landing .dot.active {
-        background: #2563eb !important;
-        width: 20px !important;
-        border-radius: 4px !important;
-    }
-
-    .landing .mobile-tool-card:active {
-        transform: scale(0.98);
-    }
-
-    .landing .mobile-tool-image-wrapper {
+    /* Title above the image - black text */
+    .landing .mobile-tool-info {
+        order: -1 !important; /* Place above image */
+        position: relative !important;
         width: 100% !important;
-        height: 400px !important; /* Increased height to fit full screenshots */
-        background: #f8fafc !important;
-        border-radius: 16px !important;
-        margin-bottom: 20px !important;
-        overflow: hidden !important;
+        padding: 0 20px 16px 20px !important;
+        background: transparent !important;
+        color: #000 !important;
+        text-align: center !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+    }
+
+    /* Image wrapper - natural size, image determines dimensions */
+    .landing .mobile-tool-image-wrapper {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important; /* Natural height based on image */
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 10px !important; /* Small padding so image doesn't touch edges */
+        border-radius: 24px !important;
+        overflow: visible !important; /* Allow scaled phone to show fully */
     }
 
+    /* Image determines card size - natural dimensions - scaled to 0.77x */
     .landing .mobile-tool-image-wrapper img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain !important; /* Force entire image to fit in frame */
+        width: 77% !important; /* 0.77x of original 100% */
+        height: auto !important; /* Natural aspect ratio */
+        object-fit: contain !important; /* Show full image */
+        object-position: center !important;
+        transform: none !important;
+        margin: 0 !important;
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    /* Phone mockup - scaled to 0.65x of current size (0.77x * 0.65 = 0.5x of original) */
+    .landing .mobile-tool-image-wrapper img.phone-mockup-zoom {
+        width: 125% !important; /* 0.65x of current 192.5% (192.5 * 0.65 = 125.125) */
+        height: auto !important;
+        max-width: none !important;
+        object-fit: contain !important;
+        object-position: center !important;
+        transform: none !important;
+        margin: 0 auto !important; /* Center horizontally */
+        display: block !important;
+    }
+
+    /* Insider activity image - BREAK OUT OF PANEL COMPLETELY */
+    .landing .hero-mobile-slider-container:has(.insider-card) {
+        max-width: none !important; /* Remove ALL width restrictions */
+        width: 100vw !important; /* Full viewport width */
+        margin: 20px 0 !important; /* Remove centering margin */
+        padding: 0 !important;
+    }
+
+    .landing .hero-mobile-slider:has(.insider-card) {
+        max-width: none !important;
+        width: 100vw !important; /* Full viewport width */
+        border-radius: 0 !important; /* Remove rounded corners */
+        box-shadow: none !important; /* Remove shadow */
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .landing .mobile-tool-card.insider-card {
+        flex: 0 0 100vw !important; /* Full viewport width */
+        width: 100vw !important;
+        min-width: 100vw !important;
+        max-width: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .landing .insider-card .mobile-tool-image-wrapper {
+        width: 100vw !important; /* Full viewport width */
+        max-width: none !important;
+        overflow: visible !important; /* Allow image to extend */
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .landing .insider-card .mobile-tool-image-wrapper img {
+        width: 77vw !important; /* 0.77x of original 100vw (100 * 0.77 = 77) */
+        height: auto !important;
+        max-width: none !important;
+        object-fit: contain !important;
+        object-position: center !important;
         transform: none !important;
         margin: 0 !important;
         display: block !important;
     }
 
     .landing .mobile-tool-info h4 {
-        font-size: 1.25rem !important;
+        font-size: 1.5rem !important;
         font-weight: 700 !important;
-        color: #111827 !important;
-        margin: 0 0 6px 0 !important;
+        color: #000 !important;
+        margin: 0 0 8px 0 !important;
+        text-shadow: none !important;
     }
 
     .landing .mobile-tool-info p {
-        font-size: 0.9rem !important;
-        color: #6b7280 !important;
+        font-size: 1rem !important;
+        color: #6b7280 !important; /* Gray for description */
         margin: 0 !important;
         line-height: 1.4 !important;
+        text-shadow: none !important;
+    }
+
+    /* Slider dots container - positioned at bottom of slider (aligns with visible card) */
+    .landing .slider-dots {
+        position: absolute !important;
+        bottom: 20px !important; /* At bottom of slider container */
+        left: 50% !important;
+        transform: translateX(-50%) translateZ(0) !important; /* Force top layer on iOS */
+        display: flex !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        z-index: 10 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        pointer-events: auto !important; /* Allow clicking */
+    }
+
+    .landing .dot {
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 50% !important;
+        background: rgba(0,0,0,0.3) !important; /* Dark dots for visibility on images */
+        transition: all 0.3s ease !important;
+    }
+
+    .landing .dot.active {
+        background: #000 !important; /* Black active dot */
+        width: 20px !important;
+        border-radius: 4px !important;
     }
 
     /* Hero on phone: stack signup then phone mock below */
