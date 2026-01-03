@@ -2005,12 +2005,18 @@ body {
     .landing .hero-mobile-slider {
         display: flex !important;
         overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
         scroll-snap-type: x mandatory !important;
         gap: 0 !important;
         padding: 0 !important;
         width: 100% !important;
+<<<<<<< HEAD
         max-width: 100% !important; /* Don't exceed container */
         margin: 0 !important; /* Margin moved to container */
+=======
+        height: auto !important; /* Adapt to card heights */
+        margin: 0 !important;
+>>>>>>> c282d6606fa32bd98782006fa1e0e8e6fe42181a
         border-radius: 24px !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
         scrollbar-width: none;
@@ -2050,23 +2056,6 @@ body {
 
     .landing .slider-nav-btn.right {
         right: 5px !important; /* Inside container padding */
-    }
-
-    .landing .hero-mobile-slider {
-        display: flex !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
-        scroll-snap-type: x mandatory !important;
-        gap: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: auto !important; /* Adapt to card heights */
-        margin: 0 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
-        scrollbar-width: none;
-        position: relative !important;
-        z-index: 1 !important;
     }
 
     .landing .mobile-tool-card {
@@ -2354,10 +2343,12 @@ body {
     .landing .hero-mobile-slider {
         display: flex !important;
         overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
         scroll-snap-type: x mandatory !important;
         gap: 0 !important;
         padding: 0 !important;
         width: 100% !important;
+        height: 100% !important;
         border-radius: 24px !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
         scrollbar-width: none;
