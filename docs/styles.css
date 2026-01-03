@@ -837,9 +837,10 @@ body {
         display: none !important;
     }
     
-    /* Hide mobile slider and dots on desktop */
+    /* Hide mobile slider, dots, and navigation arrows on desktop */
     .landing .hero-mobile-slider,
-    .landing .slider-dots {
+    .landing .slider-dots,
+    .landing .slider-nav-btn {
         display: none !important;
     }
 
@@ -1982,14 +1983,23 @@ body {
     }
 
     /* Container for slider and absolute arrows */
+    /* Prevent horizontal overflow on mobile */
+    body, html {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    /* Container for slider and absolute arrows */
     .landing .hero-mobile-slider-container {
         position: relative !important;
-        width: 100% !important;
-        max-width: 400px !important; /* Increased panel size */
+        width: calc(100vw - 32px) !important; /* Full width minus padding */
+        max-width: min(400px, calc(100vw - 32px)) !important; /* Don't exceed viewport */
         margin: 20px auto !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        padding: 0 54px !important; /* Space for arrows (44px + 10px padding) */
+        box-sizing: border-box !important;
     }
 
     .landing .hero-mobile-slider {
@@ -1999,12 +2009,14 @@ body {
         gap: 0 !important;
         padding: 0 !important;
         width: 100% !important;
+        max-width: 100% !important; /* Don't exceed container */
         margin: 0 !important; /* Margin moved to container */
         border-radius: 24px !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
         scrollbar-width: none;
         position: relative !important;
         z-index: 1 !important;
+        box-sizing: border-box !important;
     }
 
     /* Slider Navigation Arrows */
@@ -2033,11 +2045,11 @@ body {
     }
 
     .landing .slider-nav-btn.left {
-        left: -22px !important; /* Overlap the edge slightly */
+        left: 5px !important; /* Inside container padding */
     }
 
     .landing .slider-nav-btn.right {
-        right: -22px !important;
+        right: 5px !important; /* Inside container padding */
     }
 
     .landing .hero-mobile-slider {
@@ -2128,42 +2140,57 @@ body {
 
     /* Insider activity image - BREAK OUT OF PANEL COMPLETELY */
     .landing .hero-mobile-slider-container:has(.insider-card) {
-        max-width: none !important; /* Remove ALL width restrictions */
-        width: 100vw !important; /* Full viewport width */
-        margin: 20px 0 !important; /* Remove centering margin */
-        padding: 0 !important;
+        max-width: 100vw !important; /* Don't exceed viewport */
+        width: 100vw !important;
+        margin: 20px 0 !important;
+        padding: 0 10px !important; /* Space for arrows */
+        box-sizing: border-box !important;
     }
 
     .landing .hero-mobile-slider:has(.insider-card) {
-        max-width: none !important;
-        width: 100vw !important; /* Full viewport width */
-        border-radius: 0 !important; /* Remove rounded corners */
-        box-shadow: none !important; /* Remove shadow */
+        max-width: calc(100vw - 20px) !important; /* Account for container padding */
+        width: 100% !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
         margin: 0 !important;
         padding: 0 !important;
     }
 
     .landing .mobile-tool-card.insider-card {
-        flex: 0 0 100vw !important; /* Full viewport width */
-        width: 100vw !important;
-        min-width: 100vw !important;
-        max-width: none !important;
+        flex: 0 0 100% !important; /* Full width of slider */
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
         overflow: visible !important;
         margin: 0 !important;
         padding: 0 !important;
         border-radius: 0 !important;
+        box-sizing: border-box !important;
     }
 
     .landing .insider-card .mobile-tool-image-wrapper {
-        width: 100vw !important; /* Full viewport width */
-        max-width: none !important;
-        overflow: visible !important; /* Allow image to extend */
+        width: 100% !important; /* Full width of card */
+        max-width: 100% !important;
+        overflow: visible !important;
         margin: 0 !important;
         padding: 0 !important;
+        box-sizing: border-box !important;
     }
 
     .landing .insider-card .mobile-tool-image-wrapper img {
-        width: 77vw !important; /* 0.77x of original 100vw (100 * 0.77 = 77) */
+        width: 100% !important; /* Full width of wrapper */
+        height: auto !important;
+        max-width: 100% !important;
+        object-fit: contain !important;
+        object-position: center !important;
+        transform: none !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    /* Congress preview image - zoomed 1.3x */
+    .landing .mobile-tool-image-wrapper img[src="congress_preview.jpg"] {
+        width: 100% !important; /* 1.3x of current 77% (77 * 1.3 = 100.1) */
         height: auto !important;
         max-width: none !important;
         object-fit: contain !important;
