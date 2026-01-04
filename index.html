@@ -23,15 +23,25 @@
   <link rel="canonical" href="https://dailydividend.info">
 
   <!-- Fonts / Icons / Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600&family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="styles.css?v=16">
   
   <!-- Critical CSS for faster loading -->
   <style>
-    body { margin: 0; font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+    body { 
+      margin: 0; 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
     .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; }
     .hero { padding-top: 80px; }
     .phone-signup-modal, .waitlist-modal { display: none; }
@@ -477,8 +487,10 @@
                     
                     <a href="tools/index.html" class="nav-tools-btn">Tools</a>
                 </div>
-                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                     <i class="fas fa-bars"></i>
+                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                     <span></span>
+                     <span></span>
+                     <span></span>
                  </button>
                  <div class="mobile-menu" id="mobileMenu">
                      <a href="#features" onclick="closeMobileMenu()">About Us</a>
@@ -496,33 +508,35 @@
   <section class="hero" role="banner">
         <div class="hero-container">
             <div class="hero-content">
-        <h1 class="hero-title"><span class="gradient-text">Daily Dividend</span></h1>
-        <p class="hero-subtitle">Markets within minutes</p>
+        <!-- Desktop subtitle -->
+        <p class="hero-subtitle desktop-subtitle">Markets within minutes</p>
+        <!-- Mobile: Markets within minutes box (above title) -->
+        <p class="hero-markets-box mobile-markets-box"><span class="markets-emoji">📈</span> Markets within minutes</p>
+        <!-- Mobile: Daily Dividend title split into 2 lines -->
+        <h1 class="hero-title mobile-title">
+            <span class="gradient-text title-line-1">DAILY</span>
+            <span class="gradient-text title-line-2">DIVIDEND</span>
+        </h1>
+        <!-- Desktop: Daily Dividend title (single line) -->
+        <h1 class="hero-title desktop-title"><span class="gradient-text">Daily Dividend</span></h1>
+        <!-- Mobile subtitle (below title) -->
+        <p class="hero-subtitle mobile-subtitle">Become that smart finance friend with daily market wraps, hedge fund positioning, insider trackers and more</p>
 
                 <div class="hero-cta">
-          <form class="signup-form" role="form" aria-label="Sign up for Daily Dividend" onsubmit="return false;">
-                        <div class="input-group">
-              <div class="country-code-wrapper">
-                <select id="countryCode" name="countryCode" aria-label="Country code" required>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+91">🇮🇳 +91</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="other">Other – enter full number below</option>
-                </select>
-              </div>
-              <input type="tel" id="phoneInput" name="phoneNumber" placeholder="Phone number" maxlength="15" aria-label="Phone number" required>
-                        </div>
             <div class="cta-button-wrapper">
-              <button type="button" class="cta-button" onclick="openPhoneModal()" aria-label="Become that smart finance friend">
+              <!-- Desktop button -->
+              <button type="button" class="cta-button desktop-button" onclick="openPhoneModal()" aria-label="Become that smart finance friend">
                 <i class="fas fa-rocket" aria-hidden="true"></i> Become that smart finance friend
+              </button>
+              <!-- Mobile button -->
+              <button type="button" class="cta-button mobile-button" onclick="openPhoneModal()" aria-label="Get Access">
+                Get Access <i class="fas fa-arrow-right" aria-hidden="true"></i>
               </button>
                     <p class="login-link-text" style="margin: 0; margin-left: 12px;">
                 <a href="tools/index.html" style="color: #000000; text-decoration: underline; font-size: 0.85rem;">or log-in</a>
               </p>
             </div>
-          </form>
                     <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
-                    <p class="expert-note">Brought to you by accredited financial experts</p>
                 </div>
             </div>
 
@@ -536,57 +550,72 @@
                 <!-- Mobile Slider Wrapper with Arrows -->
                 <div class="hero-mobile-slider-container">
                     <button class="slider-nav-btn left" id="prevBtn" onclick="scrollSlider(-1)" aria-label="Previous tool">
-                        <i class="fas fa-chevron-left"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
 
                     <div class="hero-mobile-slider" id="heroSlider">
                         <!-- 1. Daily Market Wrap-Up (Phone Mockup) -->
-                        <div class="mobile-tool-card" onclick="window.location.href='daily/index.html'">
-                            <div class="mobile-tool-image-wrapper">
-                                <img src="phonemockup.png" alt="Daily Market Wrap-Up" class="phone-mockup-zoom">
-                            </div>
+                        <div class="mobile-tool-card phone-card" onclick="window.location.href='daily/index.html'">
                             <div class="mobile-tool-info">
                                 <h4>Daily Market Wrap-Up</h4>
                                 <p>Daily insights delivered via WhatsApp</p>
+                            </div>
+                            <div class="mobile-tool-image-wrapper">
+                                <img src="phonemockup.png" alt="Daily Market Wrap-Up" class="phone-mockup-zoom">
                             </div>
                         </div>
 
                         <!-- 2. Insider Activity -->
                         <div class="mobile-tool-card insider-card" onclick="window.location.href='tools/insider-moves.html'">
-                            <div class="mobile-tool-image-wrapper">
-                                <img src="insider_preview.jpg" alt="Insider Activity Tracker">
-                            </div>
                             <div class="mobile-tool-info">
                                 <h4>Insider Activity</h4>
                                 <p>Track executive & director trades</p>
                             </div>
+                            <div class="mobile-tool-image-wrapper monitor-frame-wrapper">
+                                <div class="monitor-frame">
+                                    <div class="monitor-screen">
+                                        <img src="insider_preview.jpg" alt="Insider Activity Tracker">
+                                    </div>
+                                    <div class="monitor-stand"></div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- 3. Congress Tracker -->
-                        <div class="mobile-tool-card" onclick="window.location.href='tools/congress.html'">
-                            <div class="mobile-tool-image-wrapper">
-                                <img src="congress_preview.jpg" alt="Congress Tracker">
+                        <!-- 3. Hedge Fund Positioning -->
+                        <div class="mobile-tool-card hedgefund-card" onclick="window.location.href='tools/hedge-fund.html'">
+                            <div class="mobile-tool-info">
+                                <h4>Hedge Fund Positioning</h4>
+                                <p>Explore institutional portfolios</p>
                             </div>
+                            <div class="mobile-tool-image-wrapper monitor-frame-wrapper">
+                                <div class="monitor-frame">
+                                    <div class="monitor-screen">
+                                        <img src="hedgefund_preview.jpg" alt="Hedge Fund Positioning">
+                                    </div>
+                                    <div class="monitor-stand"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Congress Tracker -->
+                        <div class="mobile-tool-card congress-card" onclick="window.location.href='tools/congress.html'">
                             <div class="mobile-tool-info">
                                 <h4>Congress Tracker</h4>
                                 <p>Monitor US politician stock trades</p>
                             </div>
-                        </div>
-
-                        <!-- 4. Hedge Fund Positioning -->
-                        <div class="mobile-tool-card" onclick="window.location.href='tools/hedge-fund.html'">
-                            <div class="mobile-tool-image-wrapper">
-                                <img src="hedgefund_preview.jpg" alt="Hedge Fund Positioning">
-                            </div>
-                            <div class="mobile-tool-info">
-                                <h4>Hedge Fund Positioning</h4>
-                                <p>Explore institutional portfolios</p>
+                            <div class="mobile-tool-image-wrapper monitor-frame-wrapper">
+                                <div class="monitor-frame">
+                                    <div class="monitor-screen">
+                                        <img src="congress_preview.jpg" alt="Congress Tracker">
+                                    </div>
+                                    <div class="monitor-stand"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <button class="slider-nav-btn right" id="nextBtn" onclick="scrollSlider(1)" aria-label="Next tool">
-                        <i class="fas fa-chevron-right"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
 
                     <!-- Navigation Dots moved inside container -->
@@ -1032,6 +1061,7 @@
     ];
 
     function populateCountryCodeSelects() {
+      // Phone input fields removed - function kept for compatibility
       const selects = [
         document.getElementById('countryCode'),
         document.getElementById('countryCodeBottom')
@@ -1056,16 +1086,8 @@
       if (f2) f2.action = GAS_URL;
     }
 
-    // Open/Close modals + populate phone
+    // Open/Close modals
     function openPhoneModal() {
-      const rawCc = (document.getElementById('countryCode')?.value || document.getElementById('countryCodeBottom')?.value || '').trim();
-      const pn = (document.getElementById('phoneInput')?.value || document.getElementById('phoneInputBottom')?.value || '').trim();
-
-      if (!pn) { alert('Please enter a valid phone number'); return; }
-
-      const cc = (!rawCc || rawCc === 'other') ? '' : rawCc;
-      const full = (cc + pn).replace(/\s+/g, '');
-      document.getElementById('signupPhoneDisplay').value = full;
       document.getElementById('phoneSignupModal').style.display = 'flex';
     }
     function closePhoneSignupModal() {

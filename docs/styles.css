@@ -68,7 +68,8 @@
     --color-info: #3b82f6;
     
     /* Typography */
-    --font-family-primary: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-family-headings: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
@@ -127,17 +128,42 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px; /* Base font size for rem calculations */
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 body {
     font-family: var(--font-family-primary);
     font-size: var(--font-size-base);
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.5;
     color: var(--color-gray-800);
     background-color: var(--color-white);
     overflow-x: hidden;
+    max-width: 100vw;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Heading Styles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-headings) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.2;
+}
+
+/* Ensure all headings use Montserrat with weight 500-600 */
+h1 { font-weight: 600 !important; }
+h2 { font-weight: 600 !important; }
+h3 { font-weight: 500 !important; }
+h4 { font-weight: 500 !important; }
+h5 { font-weight: 500 !important; }
+h6 { font-weight: 500 !important; }
+
+button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon-button {
+    font-family: var(--font-family-primary) !important;
+    font-weight: 500 !important;
 }
 
 /* ===========================================
@@ -580,9 +606,13 @@ body {
 
 .hero-title {
     font-size: 3.5rem;
-    font-weight: 700;
+    font-family: var(--font-family-headings) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
     line-height: 1.2;
     margin-bottom: 20px;
+    width: fit-content;
+    display: inline-block;
 }
 
 .gradient-text {
@@ -592,9 +622,15 @@ body {
 .hero-subtitle {
     font-size: 1.4rem;
     color: #6b7280;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     line-height: 1.6;
     font-style: italic;
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    margin-top: 0;
 }
 
 .hero-cta {
@@ -672,14 +708,50 @@ body {
     padding: 15px 30px;
     border-radius: 12px;
     font-size: 1rem;
-    font-weight: 600;
+    font-family: var(--font-family-primary);
+    font-weight: 500;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
     white-space: nowrap;
+    width: fit-content;
+    min-width: fit-content;
+}
+
+/* Make button width match title width */
+.hero-cta .cta-button {
+    width: fit-content;
+    min-width: fit-content;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-content .hero-title {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.hero-content .cta-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: fit-content;
+    margin: 0 auto;
+    gap: 12px;
+}
+
+.hero-content .cta-button {
+    width: fit-content;
+    min-width: fit-content;
 }
 
 .cta-button:hover {
@@ -833,6 +905,35 @@ body {
 
 /* Desktop view - hide tool previews and label, show phone image normally */
 @media (min-width: 769px) {
+    /* Show/hide desktop vs mobile content */
+    .landing .desktop-subtitle {
+        display: block !important;
+    }
+    
+    .landing .mobile-markets-box {
+        display: none !important;
+    }
+    
+    .landing .desktop-title {
+        display: block !important;
+    }
+    
+    .landing .mobile-title {
+        display: none !important;
+    }
+    
+    .landing .mobile-subtitle {
+        display: none !important;
+    }
+    
+    .landing .desktop-button {
+        display: inline-flex !important;
+    }
+    
+    .landing .mobile-button {
+        display: none !important;
+    }
+    
     .landing .hero-tool-preview {
         display: none !important;
     }
@@ -1086,7 +1187,9 @@ body {
 
 .section-header h2 {
     font-size: 2.5rem;
-    font-weight: 700;
+    font-family: var(--font-family-headings) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
     color: #1f2937;
     margin-bottom: 15px;
 }
@@ -1645,7 +1748,9 @@ body {
 
 .cta-content h2 {
     font-size: 2.5rem;
-    font-weight: 700;
+    font-family: var(--font-family-headings) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
     margin-bottom: 15px;
 }
 
@@ -1927,6 +2032,10 @@ body {
     
     .hero-title {
         font-size: 2.5rem;
+        width: fit-content;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .signup-form {
@@ -1975,6 +2084,12 @@ body {
     .hero-subtitle {
         font-size: 1.05rem;
         margin-bottom: 22px;
+        display: inline-block;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        margin-top: 0;
     }
 
     /* Hero visual - Desktop vs Mobile */
@@ -1990,221 +2105,457 @@ body {
     }
 
     /* Container for slider and absolute arrows */
+    /* Standardized Slider Container - REMOVED :has overrides and panels to ensure total consistency and maximum image size */
+    /* Standardized Slider Container - REMOVED :has overrides and panels to ensure total consistency and maximum image size */
     .landing .hero-mobile-slider-container {
         position: relative !important;
-        width: calc(100vw - 32px) !important; /* Full width minus padding */
-        max-width: min(400px, calc(100vw - 32px)) !important; /* Don't exceed viewport */
-        margin: 20px auto !important;
+        width: 100% !important;
+        max-width: 100vw !important; /* Full width for larger images */
+        margin: 10px auto !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 54px !important; /* Space for arrows (44px + 10px padding) */
+        padding: 0 !important; /* Remove side padding to give images more room */
         box-sizing: border-box !important;
+        overflow: visible !important;
     }
 
-    .landing .hero-mobile-slider {
-        display: flex !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
-        scroll-snap-type: x mandatory !important;
-        gap: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-<<<<<<< HEAD
-        max-width: 100% !important; /* Don't exceed container */
-        margin: 0 !important; /* Margin moved to container */
-=======
-        height: auto !important; /* Adapt to card heights */
-        margin: 0 !important;
->>>>>>> c282d6606fa32bd98782006fa1e0e8e6fe42181a
-        border-radius: 24px !important;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
-        scrollbar-width: none;
-        position: relative !important;
-        z-index: 1 !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Slider Navigation Arrows */
+    /* Slider Navigation Arrows - PREMIUM MINIMALIST DESIGN */
     .landing .slider-nav-btn {
         position: absolute !important;
-        top: 50% !important;
+        top: 55% !important;
         transform: translateY(-50%) !important;
         width: 44px !important;
         height: 44px !important;
         border-radius: 50% !important;
-        background: white !important;
+        background: rgba(255, 255, 255, 0.9) !important;
         border: 1px solid rgba(0, 0, 0, 0.05) !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        z-index: 10 !important;
-        color: #2563eb !important;
-        font-size: 1.2rem !important;
+        z-index: 100 !important;
+        color: #000000 !important; /* Professional black */
+        font-size: 1.1rem !important;
         cursor: pointer !important;
-        transition: all 0.2s ease !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(4px) !important; /* Modern blur effect */
     }
 
     .landing .slider-nav-btn:active {
         transform: translateY(-50%) scale(0.9) !important;
+        background: #ffffff !important;
     }
 
     .landing .slider-nav-btn.left {
-        left: 5px !important; /* Inside container padding */
+        left: 10px !important;
     }
 
     .landing .slider-nav-btn.right {
-        right: 5px !important; /* Inside container padding */
+        right: 10px !important;
+    }
+
+    /* CSS Hamburger Menu - REVOLUT STYLE */
+    .mobile-menu-btn {
+        width: 30px !important;
+        height: 20px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background-color: #000000 !important;
+        border-radius: 2px !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .landing .hero-mobile-slider {
+        display: flex !important;
+        align-items: stretch !important; /* Make all cards same height */
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        border-radius: 0 !important; /* REMOVED PANEL */
+        box-shadow: none !important; /* REMOVED PANEL SHADOW */
+        scrollbar-width: none;
+        position: relative !important;
+        z-index: 1 !important;
+        box-sizing: border-box !important;
+        background: transparent !important; /* REMOVED PANEL BACKGROUND */
     }
 
     .landing .mobile-tool-card {
-        flex: 0 0 100% !important;
-        flex-shrink: 0 !important; /* Prevent collapsing on iOS */
-        scroll-snap-align: center !important;
-        background: transparent !important;
-        border-radius: 24px !important;
-        padding: 0 !important;
+        flex: 0 0 100vw !important; /* Card occupies full viewport width */
+        width: 100vw !important;
+        min-width: 100vw !important;
+        scroll-snap-align: start !important;
         display: flex !important;
         flex-direction: column !important;
-        position: relative !important;
-        border: none !important;
-        overflow: visible !important;
-        height: auto !important; /* Card size determined by image */
         align-items: center !important;
-    }
-
-    /* Title above the image - black text */
-    .landing .mobile-tool-info {
-        order: -1 !important; /* Place above image */
-        position: relative !important;
-        width: 100% !important;
-        padding: 0 20px 16px 20px !important;
+        justify-content: flex-start !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important; /* ALLOW MONITOR EDGES TO SHOW - FIXED GLITCH */
         background: transparent !important;
-        color: #000 !important;
-        text-align: center !important;
-        z-index: 1 !important;
-        pointer-events: none !important;
+        box-sizing: border-box !important;
     }
 
-    /* Image wrapper - natural size, image determines dimensions */
-    .landing .mobile-tool-image-wrapper {
-        position: relative !important;
+    /* Standardized Title Section - LOCKS VERTICAL ALIGNMENT */
+    .landing .mobile-tool-info {
+        order: -1 !important;
         width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important; /* Natural height based on image */
-        margin: 0 !important;
-        padding: 0 !important;
-        z-index: 0 !important;
+        padding: 0 20px 15px 20px !important; /* Move higher up, closer to title */
+        min-height: 105px !important; /* Increased to account for larger images below */
+        max-height: 105px !important;
         display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
         align-items: center !important;
-        justify-content: center !important;
-        border-radius: 24px !important;
-        overflow: visible !important; /* Allow scaled phone to show fully */
-    }
-
-    /* Image determines card size - natural dimensions - scaled to 0.77x */
-    .landing .mobile-tool-image-wrapper img {
-        width: 77% !important; /* 0.77x of original 100% */
-        height: auto !important; /* Natural aspect ratio */
-        object-fit: contain !important; /* Show full image */
-        object-position: center !important;
-        transform: none !important;
-        margin: 0 !important;
-        display: block !important;
-        opacity: 1 !important;
-    }
-
-    /* Phone mockup - scaled to 0.65x of current size (0.77x * 0.65 = 0.5x of original) */
-    .landing .mobile-tool-image-wrapper img.phone-mockup-zoom {
-        width: 125% !important; /* 0.65x of current 192.5% (192.5 * 0.65 = 125.125) */
-        height: auto !important;
-        max-width: none !important;
-        object-fit: contain !important;
-        object-position: center !important;
-        transform: none !important;
-        margin: 0 auto !important; /* Center horizontally */
-        display: block !important;
-    }
-
-    /* Insider activity image - BREAK OUT OF PANEL COMPLETELY */
-    .landing .hero-mobile-slider-container:has(.insider-card) {
-        max-width: 100vw !important; /* Don't exceed viewport */
-        width: 100vw !important;
-        margin: 20px 0 !important;
-        padding: 0 10px !important; /* Space for arrows */
+        text-align: center !important;
         box-sizing: border-box !important;
+        margin: 0 !important;
     }
 
-    .landing .hero-mobile-slider:has(.insider-card) {
-        max-width: calc(100vw - 20px) !important; /* Account for container padding */
-        width: 100% !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
+    /* Specific overrides for all card types to ensure they match exactly */
+    .landing .phone-card .mobile-tool-info,
+    .landing .insider-card .mobile-tool-info,
+    .landing .hedgefund-card .mobile-tool-info,
+    .landing .congress-card .mobile-tool-info {
+        padding: 0 20px 15px 20px !important;
+        min-height: 105px !important;
+        max-height: 105px !important;
         margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    .landing .mobile-tool-card.insider-card {
-        flex: 0 0 100% !important; /* Full width of slider */
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border-radius: 0 !important;
-        box-sizing: border-box !important;
-    }
-
-    .landing .insider-card .mobile-tool-image-wrapper {
-        width: 100% !important; /* Full width of card */
-        max-width: 100% !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-sizing: border-box !important;
-    }
-
-    .landing .insider-card .mobile-tool-image-wrapper img {
-        width: 100% !important; /* Full width of wrapper */
-        height: auto !important;
-        max-width: 100% !important;
-        object-fit: contain !important;
-        object-position: center !important;
-        transform: none !important;
-        margin: 0 !important;
-        display: block !important;
-    }
-
-    /* Congress preview image - zoomed 1.3x */
-    .landing .mobile-tool-image-wrapper img[src="congress_preview.jpg"] {
-        width: 100% !important; /* 1.3x of current 77% (77 * 1.3 = 100.1) */
-        height: auto !important;
-        max-width: none !important;
-        object-fit: contain !important;
-        object-position: center !important;
-        transform: none !important;
-        margin: 0 !important;
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
     }
 
     .landing .mobile-tool-info h4 {
-        font-size: 1.5rem !important;
+        margin: 0 0 4px 0 !important;
+        font-size: 1.25rem !important; /* Slightly larger title */
+        line-height: 1.2 !important;
         font-weight: 700 !important;
-        color: #000 !important;
-        margin: 0 0 8px 0 !important;
-        text-shadow: none !important;
+        color: #ffffff !important; /* White text for dark theme */
+        padding: 0 !important;
     }
 
     .landing .mobile-tool-info p {
-        font-size: 1rem !important;
-        color: #6b7280 !important; /* Gray for description */
         margin: 0 !important;
+        font-size: 0.95rem !important; /* Slightly larger subtitle */
         line-height: 1.4 !important;
-        text-shadow: none !important;
+        color: rgba(255, 255, 255, 0.7) !important; /* Light gray for dark theme */
+        padding: 0 !important;
     }
 
+    /* Standardized monitor frames - larger size with no panels */
+    .landing .monitor-frame {
+        position: relative !important;
+        width: 94% !important; /* Occupy even more viewport width */
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        margin: 0 auto !important;
+        transform: scale(1.05) !important; /* Slight scale, but centered */
+        transform-origin: center top !important;
+    }
+
+    .landing .monitor-frame-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px 0 40px 0 !important; /* Standard padding */
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Standardize image wrappers for maximum visibility */
+    .landing .phone-card .mobile-tool-image-wrapper,
+    .landing .insider-card .mobile-tool-image-wrapper,
+    .landing .hedgefund-card .mobile-tool-image-wrapper,
+    .landing .congress-card .monitor-frame-wrapper {
+        padding: 10px 0 40px 0 !important;
+        width: 100% !important;
+    }
+
+    /* Phone image specific scaling */
+    .landing .phone-card .mobile-tool-image-wrapper img.phone-mockup-zoom {
+        width: 2000% !important; /* Significantly larger phone mockup */
+        margin-top: -100px !important; /* Move higher to compensate for extreme zoom */
+    }
+
+    /* DARK MODE - NIGHTWATCH STYLE (LANDING PAGE ONLY) */
+    .landing {
+        background: radial-gradient(1200px 700px at 50% 15%, rgba(37, 99, 235, 0.18) 0%, rgba(0, 0, 0, 0) 55%),
+                    radial-gradient(900px 600px at 80% 60%, rgba(16, 185, 129, 0.10) 0%, rgba(0, 0, 0, 0) 60%),
+                    #06080c !important; /* Cooler-than-black base */
+        color: #ffffff !important;
+    }
+
+    .landing .hero {
+        background: transparent !important;
+        color: #ffffff !important;
+    }
+
+    .landing .hero::before,
+    .landing .hero::after {
+        display: none !important; /* Remove gradient overlays */
+    }
+
+    .landing .hero-title,
+    .landing .mobile-title,
+    .landing .mobile-title .title-line-1,
+    .landing .mobile-title .title-line-2,
+    .landing h1,
+    .landing h2,
+    .landing h3,
+    .landing h4,
+    .landing h5,
+    .landing h6 {
+        color: #ffffff !important;
+    }
+
+    .landing .hero-subtitle,
+    .landing .mobile-subtitle,
+    .landing .mobile-markets-box,
+    .landing p,
+    .landing .mobile-tool-info p {
+        color: rgba(255, 255, 255, 0.8) !important; /* Light gray for secondary text */
+    }
+
+    .landing .mobile-markets-box {
+        /* Slightly stronger “faint white fill” */
+        background: rgba(255, 255, 255, 0.10) !important;
+        border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        color: rgba(255, 255, 255, 0.92) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+        backdrop-filter: blur(12px) !important;
+    }
+
+    .landing .mobile-tool-info h4 {
+        color: #ffffff !important;
+    }
+
+    .landing .mobile-tool-info p {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    .landing .cta-button,
+    .landing .mobile-button {
+        background: #2563eb !important; /* Blue button */
+        color: #ffffff !important;
+        border: none !important;
+    }
+
+    .landing .cta-button:hover,
+    .landing .mobile-button:hover {
+        background: #1d4ed8 !important;
+    }
+
+    .landing .navbar {
+        background: rgba(0, 0, 0, 0.9) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+
+    .landing .nav-logo img {
+        filter: invert(1) brightness(1.15) contrast(1.05) !important;
+    }
+
+    .landing .nav-links a,
+    .landing .nav-logo {
+        color: #ffffff !important;
+    }
+
+    .landing .mobile-menu-btn span {
+        background-color: #ffffff !important;
+    }
+
+    .landing .mobile-menu {
+        background: rgba(0, 0, 0, 0.95) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .landing .mobile-menu a {
+        color: #ffffff !important;
+        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* “or log-in” link under CTA */
+    .landing .login-link-text a {
+        color: #ffffff !important;
+        text-decoration-color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .landing .features,
+    .landing .pricing,
+    .landing .testimonials,
+    .landing .cta,
+    .landing footer {
+        background: transparent !important;
+        color: #ffffff !important;
+    }
+
+    .landing .feature-icon,
+    .landing .tool-icon,
+    .landing .nav-tools-btn i,
+    .landing .feature-icon i {
+        color: #ffffff !important;
+    }
+    
+    .landing .monitor-screen {
+        width: 100% !important;
+        background: #1a1a1a !important; /* Dark monitor bezel */
+        border-radius: 8px 8px 2px 2px !important; /* Rounded top corners */
+        padding: 8px !important; /* Bezel thickness */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    .landing .monitor-screen::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 12px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 4px !important;
+        height: 4px !important;
+        background: #4a4a4a !important; /* Power indicator */
+        border-radius: 50% !important;
+        z-index: 1 !important;
+    }
+    
+    .landing .monitor-screen img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        border-radius: 2px !important;
+        object-fit: contain !important;
+        object-position: center !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+    }
+    
+    /* Fix Congress Tracker monitor frame specifically */
+    .landing .congress-card .monitor-frame-wrapper {
+        padding: 0 15px 30px 15px !important; /* Match other monitor frames */
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .landing .congress-card .monitor-frame {
+        width: 100% !important;
+        max-width: 100% !important;
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        margin: 0 auto !important;
+    }
+    
+    .landing .congress-card .monitor-screen {
+        width: 100% !important;
+        background: #1a1a1a !important; /* Dark monitor bezel */
+        border-radius: 8px 8px 2px 2px !important; /* Rounded top corners */
+        padding: 8px !important; /* Bezel thickness */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    .landing .congress-card .monitor-screen::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 12px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 4px !important;
+        height: 4px !important;
+        background: #4a4a4a !important; /* Power indicator */
+        border-radius: 50% !important;
+        z-index: 1 !important;
+    }
+    
+    .landing .congress-card .monitor-screen img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        border-radius: 2px !important;
+        object-fit: contain !important;
+        object-position: center !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+    }
+    
+    .landing .congress-card .monitor-stand {
+        width: 120px !important;
+        height: 8px !important;
+        background: #2a2a2a !important; /* Dark stand */
+        border-radius: 0 0 4px 4px !important;
+        margin-top: -2px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .landing .congress-card .monitor-stand::after {
+        content: '' !important;
+        position: absolute !important;
+        bottom: -12px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 180px !important;
+        height: 4px !important;
+        background: #1a1a1a !important; /* Base plate */
+        border-radius: 2px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    .landing .monitor-stand {
+        width: 120px !important;
+        height: 8px !important;
+        background: #2a2a2a !important; /* Dark stand */
+        border-radius: 0 0 4px 4px !important;
+        margin-top: -2px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .landing .monitor-stand::after {
+        content: '' !important;
+        position: absolute !important;
+        bottom: -12px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 180px !important;
+        height: 4px !important;
+        background: #1a1a1a !important; /* Base plate */
+        border-radius: 2px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* Ensure phone mockup wrapper has consistent padding */
+    .landing .mobile-tool-image-wrapper:not(.monitor-frame-wrapper) {
+        padding: 0 15px 0 15px !important; /* Match monitor frame padding */
+    }
+
+    /* Insider activity image - BREAK OUT OF PANEL COMPLETELY */
     /* Slider dots container - positioned at bottom of slider (aligns with visible card) */
     .landing .slider-dots {
         position: absolute !important;
@@ -2235,14 +2586,26 @@ body {
     }
 
     .landing .hero-container {
-        display: grid;
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 12px;
         text-align: center;
+        max-width: 100%;
+        width: 100%;
+        padding: 0 16px;
+        box-sizing: border-box;
+        margin: 0 auto;
     }
 
     .landing .hero-content {
         text-align: center;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .landing .hero-cta {
@@ -2250,12 +2613,29 @@ body {
         display: flex;
         flex-direction: column;
         margin-bottom: 0;
+        width: fit-content;
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     /* Center hero text on mobile */
-    .landing .hero-title,
+    .landing .hero-title {
+        text-align: center !important;
+        width: fit-content !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
     .landing .hero-subtitle {
         text-align: center !important;
+        display: inline-block !important;
+        padding: 8px 16px !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 999px !important;
+        color: rgba(255, 255, 255, 0.86) !important;
+        backdrop-filter: blur(10px) !important;
     }
 
     /* Signup form - match width to hero title */
@@ -2273,7 +2653,8 @@ body {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        width: 100% !important;
+        width: fit-content !important;
+        max-width: fit-content !important;
         gap: 12px !important;
     }
     
@@ -2283,16 +2664,23 @@ body {
         text-align: center !important;
     }
     
-    /* Make the CTA button match input-group width exactly */
+    /* Make the CTA button match title width */
     .landing .cta-button {
         font-size: 0.8rem;
         padding: 8px 14px;
         border-radius: 12px;
-        width: 100%;
-        display: flex;
+        width: fit-content !important;
+        min-width: fit-content !important;
+        display: inline-flex;
         justify-content: center;
         gap: 6px;
         white-space: nowrap;
+    }
+    
+    .landing .hero-title {
+        width: fit-content !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
     .landing .cta-button i {
@@ -2385,17 +2773,23 @@ body {
         right: -15px !important;
     }
 
+    /* IMPORTANT: This block was re-introducing a WHITE "panel" behind the mobile slider.
+       Keep the slider immersive (no panel) so images stay large. */
     .landing .mobile-tool-card {
-        flex: 0 0 100% !important;
-        scroll-snap-align: center !important;
-        background: white !important;
-        border-radius: 24px !important;
-        padding: 30px 20px !important;
+        flex: 0 0 100vw !important;
+        width: 100vw !important;
+        min-width: 100vw !important;
+        scroll-snap-align: start !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
         border: none !important;
+        overflow: visible !important;
+        box-shadow: none !important;
     }
 
     /* Tools overview: make it a clean single-column list */
@@ -2615,10 +3009,203 @@ body {
     .landing {
         font-size: 16px;
         line-height: 1.45;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; /* Aave-style clean sans-serif font */
+        position: relative !important;
+    }
+    
+    /* Add subtle background pattern to hero section */
+    .landing .hero {
+        background: linear-gradient(135deg, #fafafa 0%, #ffffff 50%, #fafafa 100%) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        padding: 140px 0 80px 0 !important;
+    }
+    
+    .landing .hero::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(37, 211, 102, 0.04) 0%, transparent 50%) !important;
+        pointer-events: none !important;
+        z-index: 0 !important;
+    }
+    
+    .landing .hero-container {
+        position: relative !important;
+        z-index: 1 !important;
+        padding: 20px 0 !important;
+    }
+    
+    /* Add more spacing to hero content */
+    .landing .hero-content {
+        padding: 20px 0 !important;
+        margin-bottom: 20px !important;
+    }
+    
+    /* Add decorative divider line */
+    .landing .hero-content::after {
+        content: '' !important;
+        display: block !important;
+        width: 120px !important;
+        height: 1px !important;
+        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.15), transparent) !important;
+        margin: 32px auto 0 auto !important;
+    }
+    
+    /* Apply Aave-style font to all landing page elements */
+    .landing * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
 
     .landing .hero-title {
         font-size: 1.9rem;
+    }
+
+    /* Show/hide desktop vs mobile content */
+    .landing .desktop-subtitle {
+        display: none !important;
+    }
+    
+    .landing .desktop-title {
+        display: none !important;
+    }
+    
+    .landing .mobile-markets-box {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        font-size: 0.9rem !important;
+        color: #000000 !important; /* Black text - no purple */
+        margin: 0 auto 24px auto !important; /* Center horizontally, more spacing */
+        padding: 10px 18px !important; /* Slightly more padding */
+        background: #ffffff !important; /* Solid white background */
+        border: 1px solid rgba(0, 0, 0, 0.08) !important; /* Subtle border */
+        border-radius: 24px !important; /* Significantly rounded corners */
+        text-align: left !important;
+        font-weight: 500 !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Enhanced shadow */
+        width: fit-content !important;
+        max-width: 100% !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    }
+    
+    .landing .markets-emoji {
+        font-size: 1.2em !important;
+        display: inline-block !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Aave-style title */
+    .landing .mobile-title.aave-style-title {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        font-size: 2.5rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 24px !important;
+        gap: 8px !important;
+        font-family: 'Courier New', 'Courier', 'Monaco', 'Consolas', 'Lucida Console', monospace !important;
+    }
+    
+    .landing .mobile-title .title-prefix {
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        color: #1f2937 !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .landing .mobile-title .title-icon-wrapper {
+        position: relative !important;
+        display: inline-block !important;
+        margin: 8px 0 !important;
+    }
+    
+    .landing .mobile-title .new-badge {
+        position: absolute !important;
+        top: -8px !important;
+        left: -20px !important;
+        background: #a78bfa !important; /* Light purple */
+        color: #1f2937 !important;
+        font-size: 0.65rem !important;
+        font-weight: 600 !important;
+        padding: 2px 6px !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        white-space: nowrap !important;
+        z-index: 10 !important;
+    }
+    
+    .landing .mobile-title .title-icon {
+        display: inline-block !important;
+        font-size: 2rem !important;
+        background: #e9d5ff !important; /* Light purple background */
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 12px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 8px !important;
+    }
+    
+    .landing .mobile-title .title-main {
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        color: #1f2937 !important;
+        margin-top: 4px !important;
+    }
+    
+    .landing .mobile-subtitle.aave-style-subtitle {
+        display: block !important;
+        font-size: 1rem !important;
+        color: #6b7280 !important; /* Lighter grey like Aave */
+        margin-bottom: 32px !important;
+        line-height: 1.6 !important;
+        font-style: normal !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        text-align: center !important;
+        max-width: 600px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
+    .landing .desktop-button {
+        display: none !important;
+    }
+    
+    .landing .mobile-button.aave-style-button {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        font-weight: 600 !important;
+        text-transform: none !important; /* No uppercase */
+        letter-spacing: 0 !important;
+        background: #a78bfa !important; /* Light purple like Aave */
+        color: #ffffff !important;
+        border: none !important;
+        padding: 14px 28px !important;
+        border-radius: 12px !important;
+        font-size: 1rem !important;
+        box-shadow: 0 2px 8px rgba(167, 139, 250, 0.3) !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .landing .mobile-button.aave-style-button:hover {
+        background: #9333ea !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4) !important;
+    }
+    
+    .landing .mobile-button.aave-style-button i {
+        font-size: 0.9rem !important;
     }
 
     .landing .hero-subtitle {
@@ -3054,6 +3641,178 @@ body {
    Enhanced accessibility with focus states,
    screen reader support, and keyboard navigation.
 */
+
+/* ===========================================
+   LANDING PAGE (GLOBAL) — NIGHTWATCH DARK THEME
+   Applies to BOTH mobile + desktop (body has class="landing")
+   =========================================== */
+.landing {
+    /* Connected blue gradients (single “field”, not separate blobs) */
+    background:
+        radial-gradient(1100px 700px at 52% 18%, rgba(37, 99, 235, 0.26) 0%, rgba(37, 99, 235, 0.12) 28%, rgba(0, 0, 0, 0) 62%),
+        radial-gradient(900px 650px at 78% 55%, rgba(37, 99, 235, 0.18) 0%, rgba(37, 99, 235, 0.08) 34%, rgba(0, 0, 0, 0) 70%),
+        radial-gradient(900px 650px at 22% 60%, rgba(37, 99, 235, 0.14) 0%, rgba(37, 99, 235, 0.06) 36%, rgba(0, 0, 0, 0) 72%),
+        radial-gradient(900px 600px at 80% 65%, rgba(16, 185, 129, 0.08) 0%, rgba(0, 0, 0, 0) 68%),
+        linear-gradient(180deg, rgba(6, 8, 12, 0.98) 0%, #06080c 55%, #05070b 100%) !important;
+    color: #ffffff !important;
+}
+
+.landing .hero,
+.landing .features,
+.landing .pricing,
+.landing .testimonials,
+.landing .cta,
+.landing footer {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+.landing h1, .landing h2, .landing h3, .landing h4, .landing h5, .landing h6 {
+    color: #ffffff !important;
+}
+
+.landing p {
+    color: rgba(255, 255, 255, 0.82) !important;
+}
+
+.landing .navbar {
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(10px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.landing .nav-links a,
+.landing .nav-logo {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.landing .nav-links a:hover,
+.landing .nav-links a:focus {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.landing .nav-logo img {
+    filter: invert(1) brightness(1.15) contrast(1.05) !important;
+}
+
+/* Options button (hamburger) — force white */
+.landing .mobile-menu-btn span {
+    background-color: #ffffff !important;
+}
+
+@media (max-width: 768px) {
+    .landing .mobile-menu-btn {
+        display: flex !important;
+        width: 32px !important;
+        height: 22px !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        position: relative !important;
+        z-index: 2500 !important;
+    }
+    .landing .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        border-radius: 2px !important;
+        background-color: #ffffff !important;
+        opacity: 0.95 !important;
+    }
+}
+
+/* Blue “glow” behind the Daily Dividend title (mobile + desktop) */
+.landing .hero-title,
+.landing .hero-title .gradient-text {
+    text-shadow:
+        0 0 28px rgba(37, 99, 235, 0.55),
+        0 0 70px rgba(37, 99, 235, 0.28) !important;
+}
+
+/* Blue glow in the BACKGROUND, positioned higher around the title */
+.landing .hero-content {
+    position: relative !important;
+}
+.landing .hero-content::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -70px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: min(980px, 140vw) !important;
+    height: 420px !important;
+    background: radial-gradient(circle at 50% 45%,
+        rgba(37, 99, 235, 0.38) 0%,
+        rgba(37, 99, 235, 0.18) 32%,
+        rgba(37, 99, 235, 0.06) 52%,
+        rgba(0, 0, 0, 0) 72%) !important;
+    filter: blur(10px) !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+@media (max-width: 768px) {
+    .landing .hero-content::before {
+        top: -85px !important;
+        width: 140vw !important;
+        height: 380px !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Keep the “Markets within minutes” pill readable on dark */
+.landing .mobile-markets-box {
+    background: rgba(255, 255, 255, 0.10) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+/* CTA button (Get Access / desktop CTA) — match “Markets within minutes” glass pill */
+.landing .cta-button,
+.landing .mobile-button {
+    /* Slightly stronger white glass than the pill */
+    background: rgba(255, 255, 255, 0.16) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Ensure the right-arrow in the CTA button is visible and aligned */
+.landing .cta-button i,
+.landing .mobile-button i {
+    color: #ffffff !important;
+    margin-left: 10px !important;
+    font-size: 0.95em !important;
+    line-height: 1 !important;
+}
+
+.landing .cta-button:hover,
+.landing .mobile-button:hover {
+    background: rgba(255, 255, 255, 0.20) !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Keep pricing buttons Nightwatch blue */
+.landing .pricing-button {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+.landing .pricing-button:hover {
+    background: #1d4ed8 !important;
+}
+
+/* “or log-in” link under CTA */
+.landing .login-link-text a {
+    color: #ffffff !important;
+    text-decoration-color: rgba(255, 255, 255, 0.9) !important;
+}
 
 /* Smooth scrolling */
 html {
