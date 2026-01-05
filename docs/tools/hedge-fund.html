@@ -30,8 +30,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="../styles.css?v=17">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; font-family: Inter, sans-serif; background: #f3f4f6; color: #111827; }
+    body { 
+      margin: 0; 
+      font-family: 'Inter', sans-serif; 
+      line-height: 1.5;
+      background: #f3f4f6; 
+      color: #111827; 
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
     
     /* Ensure logout button is always visible when logged in */
     #logoutBtn {
@@ -331,9 +345,26 @@
       .hf-search input { width: 100%; max-width: none; font-size: 0.85rem; padding: 11px 14px; }
 
       .nav-links { display: none; }
-      .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; font-size: 1.4rem; color: #1f2937; cursor: pointer; padding: 6px 10px; border-radius: 10px; }
-      .mobile-menu-btn:hover,
-      .mobile-menu-btn:focus { background: rgba(229,231,235,0.7); outline: none; }
+      .mobile-menu-btn { 
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        width: 30px !important;
+        height: 20px !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        order: 2;
+      }
+      .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background-color: #000000 !important;
+        border-radius: 2px !important;
+        transition: all 0.3s ease !important;
+      }
       .mobile-menu {
         display: none;
         position: absolute;
@@ -446,7 +477,11 @@
         <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         <a href="index.html">Tools</a>
       </div>
-      <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+      </button>
       <div class="mobile-menu" id="mobileMenu">
         <a href="../index.html#features" onclick="closeMobileMenu()">About Us</a>
         <a href="../index.html#how-it-works" onclick="closeMobileMenu()">What We Offer</a>

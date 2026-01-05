@@ -295,6 +295,41 @@ const companiesData = {
       ],
     },
   },
+
+  UBER: {
+    header: {
+      name: 'Uber Technologies, Inc. (UBER)',
+      pillIcon: 'fa-car-side',
+      pillLabel: 'Transport, delivery & logistics technology',
+      marketCap: '≈ $169.461B',
+    },
+    kpis: [
+      { label: 'REVENUE (Q3 FY2025)', value: '$13.47B', sub: '+20% YoY' },
+      { label: 'GROSS BOOKINGS (Q3 FY2025)', value: '$49.7B', sub: '+21% YoY' },
+      { label: 'ADJ. EBITDA (Q3 FY2025)', value: '$2.26B', sub: '+33% YoY' },
+      { label: 'INCOME FROM OPS (Q3 FY2025)', value: '$1.1B', sub: '+5% YoY' },
+      { label: 'FREE CASH FLOW (Q3 FY2025)', value: '$2.2B' },
+      { label: 'MAPCs (Q3 FY2025)', value: '189M', sub: '+17% YoY' },
+    ],
+    revenueMix: {
+      title: 'Revenue by Segment',
+      subtitle: 'Revenue mix in USD billions – Uber Q3 FY2025.',
+      data: [
+        { label: 'Mobility', value: 7.68 },
+        { label: 'Delivery', value: 4.48 },
+        { label: 'Freight', value: 1.31 },
+      ],
+    },
+    bookingsMix: {
+      title: 'Gross Bookings by Segment',
+      subtitle: 'Gross bookings in USD billions – Uber Q3 FY2025.',
+      data: [
+        { label: 'Mobility', value: 25.11 },
+        { label: 'Delivery', value: 23.32 },
+        { label: 'Freight', value: 1.3 },
+      ],
+    },
+  },
 };
 
 // Extended narrative company profiles for AI / tooling usage
