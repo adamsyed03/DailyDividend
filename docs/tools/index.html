@@ -92,14 +92,24 @@
       }
       .nav-links { display: none; }
       .mobile-menu-btn { 
-        display: block; 
-        background: none; 
-        border: none; 
-        font-size: 24px; 
-        color: #333; 
-        cursor: pointer;
-        padding: 5px;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        width: 30px !important;
+        height: 20px !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        padding: 0 !important;
         order: 2;
+      }
+      .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background-color: #000000 !important;
+        border-radius: 2px !important;
+        transition: all 0.3s ease !important;
       }
       .nav-logo { order: 1; }
       .mobile-menu { 
@@ -630,4 +640,5 @@
     window.closeMobileMenu = closeMobileMenu;
   </script>
 </body>
+</html>
 </html>
