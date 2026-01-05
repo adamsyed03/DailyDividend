@@ -40,13 +40,17 @@
 
 /* Root Variables for Consistent Theming */
 :root {
-    /* Color Palette */
+    /* Default Light Theme Palette */
     --color-primary: #374151;
     --color-primary-dark: #1f2937;
     --color-primary-light: #6b7280;
-    --color-secondary: #25d366;
+    --color-secondary: #25d366; /* WhatsApp green */
     --color-secondary-dark: #20c55a;
     --color-accent: #2563eb;
+    
+    /* Backgrounds */
+    --color-bg-dark: #0f172a;
+    --color-bg-card: #ffffff;
     
     /* Neutral Colors */
     --color-white: #ffffff;
@@ -69,7 +73,7 @@
     
     /* Typography */
     --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    --font-family-headings: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-family-headings: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
@@ -801,13 +805,16 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         text-align: left !important;
         margin-left: 0 !important;
         margin-right: auto !important;
-        margin-top: -20px !important;
+        margin-top: 10px !important;
         margin-bottom: 0 !important;
         padding-left: 0 !important;
         position: relative !important;
         left: 0 !important;
         max-width: 500px !important;
         display: block !important;
+        font-size: 0.8rem !important;
+        color: #6b7280 !important;
+        font-style: italic !important;
     }
     
     .signup-form {
@@ -923,7 +930,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
     }
     
     .landing .mobile-markets-box {
-        display: none !important;
+        display: inline-flex !important;
     }
     
     .landing .desktop-title {
@@ -957,52 +964,21 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         display: none !important;
     }
 
-    /* Show desktop hero visual */
-    .landing .desktop-hero-visual {
-        display: block !important;
+    /* Desktop: phone mockup on the right */
+    .landing .hero-visual {
+        display: flex !important; /* RESTORED FOR PC */
+        order: 2 !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
     }
 
     /* Hide the phone-tool-label (Daily Market Wrap-Up text) on desktop */
     .landing .hero-visual .phone-tool-label {
         display: none !important;
-    }
-    
-    /* Show phone image normally on desktop */
-    .landing .hero-visual .phone-panel-wrapper {
-        display: block;
-    }
-    
-    .landing .hero-visual .phone-image-wrapper {
-        display: block;
-        width: auto;
-        height: auto;
-        cursor: pointer;
-        background: transparent;
-        padding: 0;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        margin: 0;
-    }
-    
-    .landing .hero-visual .phone-image-wrapper:hover {
-        transform: none;
-        box-shadow: none;
-    }
-    
-    .landing .hero-visual .phone-image-wrapper::after {
-        display: none;
-    }
-    
-    .landing .hero-visual .phone-image-wrapper img {
-        max-width: 150%;
-        height: auto;
-        border-radius: 20px;
-        transform: scale(1.275);
-        margin-top: 40px;
-        margin-left: -100px;
-        width: auto;
-        padding: 0;
     }
     
     /* Disable click on desktop */
@@ -1013,6 +989,127 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
     
     .landing .hero-visual .phone-image-wrapper img {
         pointer-events: none;
+    }
+}
+
+/* Markets within minutes pill above title */
+.hero-markets-box {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 24px !important;
+    font-size: 0.95rem !important;
+    color: #374151 !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    white-space: nowrap !important;
+    width: fit-content !important;
+    margin-bottom: 20px !important;
+}
+
+@media (min-width: 769px) {
+    .hero-markets-box {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-markets-box {
+        text-align: center;
+        margin: 0 auto 20px auto !important;
+    }
+}
+
+.hero-markets-box .markets-emoji {
+    font-size: 1.2em;
+}
+
+/* Desktop phone mockup under title */
+.landing .hero-phone-under {
+    display: none !important;
+}
+
+.landing .desktop-hero-visual {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .landing .hero-phone-under {
+        display: none !important; /* REMOVED STATIC DUPLICATE FROM MOBILE AS REQUESTED */
+    }
+}
+
+@media (min-width: 769px) {
+    .landing .hero-container {
+        display: grid !important;
+        grid-template-columns: 1fr 1.2fr !important; /* More space for the image */
+        gap: 60px !important;
+        align-items: center !important;
+        text-align: left !important;
+    }
+
+    .landing .hero-content {
+        max-width: 600px !important;
+        text-align: left !important;
+        align-items: flex-start !important;
+    }
+    
+    .landing .hero-title {
+        text-align: left !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        font-size: 4.5rem !important;
+        line-height: 1.1 !important;
+        margin-bottom: 24px !important;
+    }
+    
+    .landing .cta-button-wrapper {
+        justify-content: flex-start !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        flex-direction: row !important;
+        gap: 20px !important;
+    }
+
+    .landing .hero-visual {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    .landing .desktop-hero-visual {
+        display: block !important;
+        width: 100% !important;
+        max-width: 850px !important; /* x2 larger than previous 460px */
+        margin: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    .landing .phone-mockup-desktop {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        display: block !important;
+    }
+
+    .landing .hero-mobile-slider-container {
+        display: none !important;
     }
 }
 
@@ -2153,39 +2250,62 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         overflow: visible !important;
     }
 
-    /* Slider Navigation Arrows - PREMIUM DESIGN */
+    /* Slider Navigation Arrows - PREMIUM MINIMALIST DESIGN */
     .landing .slider-nav-btn {
         position: absolute !important;
-        top: 55% !important; /* Adjusted to be centered on the image area */
+        top: 55% !important;
         transform: translateY(-50%) !important;
-        width: 48px !important;
-        height: 48px !important;
+        width: 44px !important;
+        height: 44px !important;
         border-radius: 50% !important;
-        background: #ffffff !important;
-        border: none !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         z-index: 100 !important;
-        color: #2563eb !important; /* Website blue */
-        font-size: 1.4rem !important;
+        color: #000000 !important; /* Professional black */
+        font-size: 1.1rem !important;
         cursor: pointer !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        opacity: 0.9 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(4px) !important; /* Modern blur effect */
     }
 
     .landing .slider-nav-btn:active {
         transform: translateY(-50%) scale(0.9) !important;
-        opacity: 1 !important;
+        background: #ffffff !important;
     }
 
     .landing .slider-nav-btn.left {
-        left: 15px !important;
+        left: 10px !important;
     }
 
     .landing .slider-nav-btn.right {
-        right: 15px !important;
+        right: 10px !important;
+    }
+
+    /* CSS Hamburger Menu - REVOLUT STYLE */
+    .mobile-menu-btn {
+        width: 30px !important;
+        height: 20px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background-color: #ffffff !important; /* WHITE FOR DARK THEME */
+        border-radius: 2px !important;
+        transition: all 0.3s ease !important;
     }
 
     .landing .hero-mobile-slider {
@@ -2227,7 +2347,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
 
     /* Standardized Title Section - LOCKS VERTICAL ALIGNMENT */
     .landing .mobile-tool-info {
-        order: -1 !important;
+        order: 1 !important; /* TEXT AT TOP */
         width: 100% !important;
         padding: 0 20px 15px 20px !important; /* Move higher up, closer to title */
         min-height: 105px !important; /* Increased to account for larger images below */
@@ -2239,6 +2359,11 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         text-align: center !important;
         box-sizing: border-box !important;
         margin: 0 !important;
+    }
+
+    .landing .mobile-tool-image-wrapper {
+        order: 2 !important; /* IMAGE BELOW TEXT */
+        width: 100% !important;
     }
 
     /* Specific overrides for all card types to ensure they match exactly */
@@ -2260,7 +2385,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         font-size: 1.25rem !important; /* Slightly larger title */
         line-height: 1.2 !important;
         font-weight: 700 !important;
-        color: #ffffff !important; /* White text for dark theme */
+        color: #000 !important;
         padding: 0 !important;
     }
 
@@ -2268,7 +2393,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         margin: 0 !important;
         font-size: 0.95rem !important; /* Slightly larger subtitle */
         line-height: 1.4 !important;
-        color: rgba(255, 255, 255, 0.7) !important; /* Light gray for dark theme */
+        color: #6b7280 !important;
         padding: 0 !important;
     }
 
@@ -2305,8 +2430,11 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
 
     /* Phone image specific scaling */
     .landing .phone-card .mobile-tool-image-wrapper img.phone-mockup-zoom {
-        width: 235% !important; /* x1.75 larger than previous 135% (135 * 1.75 = 236) */
-        margin-top: -30px !important; /* Move higher to compensate for zoom */
+        width: 100% !important; /* Reset to 100% for mobile to prevent blocking text */
+        margin-top: 10px !important; /* Move down to be BELOW the text */
+        filter: drop-shadow(0 30px 60px rgba(0,0,0,0.25)) !important; /* More pronounced depth */
+        transform: scale(1.3); /* Make it significantly larger as requested, but without crazy zoom */
+        transform-origin: top center;
     }
     
     .landing .monitor-screen {
@@ -2611,23 +2739,19 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         padding: 0 !important;
     }
 
-    /* IMPORTANT: This block was re-introducing a WHITE "panel" behind the mobile slider.
-       Keep the slider immersive (no panel) so images stay large. */
+    /* Duplicate removed - using styles from line 1991 */
+
     .landing .mobile-tool-card {
-        flex: 0 0 100vw !important;
-        width: 100vw !important;
-        min-width: 100vw !important;
-        scroll-snap-align: start !important;
-        background: transparent !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
+        flex: 0 0 100% !important;
+        scroll-snap-align: center !important;
+        background: white !important;
+        border-radius: 24px !important;
+        padding: 30px 20px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
         border: none !important;
-        overflow: visible !important;
-        box-shadow: none !important;
     }
 
     /* Tools overview: make it a clean single-column list */
@@ -2849,8 +2973,10 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
     .landing {
         font-size: 16px;
         line-height: 1.45;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; /* Aave-style clean sans-serif font */
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
         position: relative !important;
+        background-color: #ffffff !important; /* BACK TO WHITE */
+        color: #000000 !important;
     }
     
     /* Add subtle background pattern to hero section */
@@ -2919,18 +3045,20 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         display: inline-flex !important;
         align-items: center !important;
         gap: 12px !important;
-        font-size: 0.9rem !important;
-        color: #000000 !important; /* Black text - no purple */
-        margin: 0 auto 24px auto !important; /* Center horizontally, more spacing */
-        padding: 10px 18px !important; /* Slightly more padding */
-        background: #ffffff !important; /* Solid white background */
-        border: 1px solid rgba(0, 0, 0, 0.08) !important; /* Subtle border */
-        border-radius: 24px !important; /* Significantly rounded corners */
+        font-size: 0.95rem !important;
+        color: #111827 !important;
+        margin: 0 auto 22px auto !important;
+        padding: 10px 18px !important;
+        background: rgba(255, 255, 255, 0.78) !important; /* faint white fill */
+        border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        border-radius: 999px !important;
         text-align: left !important;
-        font-weight: 500 !important;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Enhanced shadow */
+        font-weight: 600 !important;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08) !important;
         width: fit-content !important;
         max-width: 100% !important;
+        backdrop-filter: blur(6px) !important;
+        -webkit-backdrop-filter: blur(6px) !important;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
     
@@ -2942,19 +3070,20 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
     
     .landing .mobile-title {
         display: block !important;
-        font-size: 3.5rem !important;
-        line-height: 1.1 !important;
-        margin-bottom: 32px !important; /* More spacing */
+        font-size: 3.1rem !important;
+        line-height: 1.05 !important;
+        margin-bottom: 28px !important;
         margin-left: auto !important;
         margin-right: auto !important;
         width: fit-content !important;
-        text-align: left !important; /* Left align for irregular positioning */
+        text-align: center !important;
         position: relative !important;
-        /* Center the zigzag by compensating for the transforms */
-        left: 1px !important; /* Small adjustment to visually center */
-        transform: rotate(-1deg) !important; /* Tilt the entire title slightly counter-clockwise */
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; /* Aave-style clean sans-serif font */
-        padding: 0 10px !important; /* Add some horizontal padding */
+        left: 0 !important;
+        transform: none !important;
+        letter-spacing: -0.02em !important;
+        font-weight: 800 !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        padding: 0 10px !important;
     }
     
     .landing .mobile-title .title-line-1 {
@@ -2981,7 +3110,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
     .landing .mobile-subtitle {
         display: block !important;
         font-size: 1rem !important;
-        color: rgba(255, 255, 255, 0.8) !important; /* Light gray for dark theme */
+        color: #1f2937 !important;
         margin-bottom: 32px !important; /* More spacing */
         line-height: 1.6 !important; /* Better line height */
         font-style: normal !important;
@@ -3005,160 +3134,10 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         font-weight: 700 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.02em !important;
-        background: #2563eb !important; /* Nightwatch blue */
-        color: #ffffff !important;
-        border: none !important;
-        padding: 14px 28px !important;
-        border-radius: 8px !important;
-    }
-
-    /* DARK MODE - NIGHTWATCH STYLE (LANDING PAGE ONLY) */
-    /* Cooler-than-black base */
-    .landing {
-        background: radial-gradient(1200px 700px at 50% 15%, rgba(37, 99, 235, 0.18) 0%, rgba(0, 0, 0, 0) 55%),
-                    radial-gradient(900px 600px at 80% 60%, rgba(16, 185, 129, 0.10) 0%, rgba(0, 0, 0, 0) 60%),
-                    #06080c !important;
-        color: #ffffff !important;
-    }
-
-    .landing .hero {
-        background: transparent !important;
-    }
-
-    .landing .hero::before,
-    .landing .hero::after {
-        display: none !important; /* Remove gradient overlays */
-    }
-
-    .landing .hero-title,
-    .landing .mobile-title,
-    .landing .mobile-title .title-line-1,
-    .landing .mobile-title .title-line-2,
-    .landing h1,
-    .landing h2,
-    .landing h3,
-    .landing h4,
-    .landing h5,
-    .landing h6 {
-        color: #ffffff !important;
-    }
-
-    .landing .hero-subtitle,
-    .landing .mobile-subtitle,
-    .landing .mobile-markets-box,
-    .landing p,
-    .landing .mobile-tool-info p {
-        color: rgba(255, 255, 255, 0.8) !important; /* Light gray for secondary text */
-    }
-
-    .landing .mobile-markets-box {
-        /* Slightly stronger “faint white fill” */
-        background: rgba(255, 255, 255, 0.10) !important;
-        border: 1px solid rgba(255, 255, 255, 0.16) !important;
-        color: rgba(255, 255, 255, 0.92) !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
-        backdrop-filter: blur(12px) !important;
-    }
-
-    .landing .cta-button,
-    .landing .mobile-button {
-        background: #2563eb !important; /* Blue button */
-        color: #ffffff !important;
-        border: none !important;
-    }
-
-    .landing .cta-button:hover,
-    .landing .mobile-button:hover {
-        background: #1d4ed8 !important;
-    }
-
-    .landing .navbar {
-        background: rgba(0, 0, 0, 0.9) !important;
-        backdrop-filter: blur(10px) !important;
-    }
-
-    /* Make the DD logo visible on dark */
-    .landing .nav-logo img {
-        filter: invert(1) brightness(1.15) contrast(1.05) !important;
-    }
-
-    .landing .nav-links a,
-    .landing .nav-logo {
-        color: #ffffff !important;
-    }
-
-    .landing .mobile-menu-btn span {
-        background-color: #ffffff !important;
-    }
-
-    .landing .mobile-menu {
-        background: rgba(0, 0, 0, 0.95) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .landing .mobile-menu a {
-        color: #ffffff !important;
-        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    /* “or log-in” link under CTA */
-    .landing .login-link-text a {
-        color: #ffffff !important;
-        text-decoration-color: rgba(255, 255, 255, 0.9) !important;
-    }
-
-    .landing .section-header h2,
-    .landing .section-header p {
-        color: #ffffff !important;
-    }
-
-    .landing .feature-card {
-        background: #111111 !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .landing .feature-card h3,
-    .landing .feature-card p {
-        color: #ffffff !important;
-    }
-
-    .landing .pricing-card {
-        background: #111111 !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .landing .pricing-card h3,
-    .landing .pricing-card .amount,
-    .landing .pricing-card p {
-        color: #ffffff !important;
-    }
-
-    .landing .pricing-button {
-        background: #2563eb !important;
-        color: #ffffff !important;
-    }
-
-    /* Ensure section backgrounds don’t stay white */
-    .landing .features,
-    .landing .pricing,
-    .landing .testimonials,
-    .landing .cta,
-    .landing footer {
-        background: transparent !important;
-        color: #ffffff !important;
-    }
-
-    /* Icons: keep existing shapes, just make them white */
-    .landing .feature-icon,
-    .landing .tool-icon,
-    .landing .nav-tools-btn i,
-    .landing .feature-icon i {
-        color: #ffffff !important;
     }
 
     .landing .hero-subtitle {
         font-size: 0.98rem;
-        color: rgba(255, 255, 255, 0.8) !important;
     }
 
     .landing .cta-note {
@@ -3590,181 +3569,6 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
    Enhanced accessibility with focus states,
    screen reader support, and keyboard navigation.
 */
-
-/* ===========================================
-   LANDING PAGE (GLOBAL) — NIGHTWATCH DARK THEME
-   Applies to BOTH mobile + desktop (body has class="landing")
-   =========================================== */
-.landing {
-    /* Connected blue gradients (single “field”, not separate blobs) */
-    background:
-        radial-gradient(1100px 700px at 52% 18%, rgba(37, 99, 235, 0.26) 0%, rgba(37, 99, 235, 0.12) 28%, rgba(0, 0, 0, 0) 62%),
-        radial-gradient(900px 650px at 78% 55%, rgba(37, 99, 235, 0.18) 0%, rgba(37, 99, 235, 0.08) 34%, rgba(0, 0, 0, 0) 70%),
-        radial-gradient(900px 650px at 22% 60%, rgba(37, 99, 235, 0.14) 0%, rgba(37, 99, 235, 0.06) 36%, rgba(0, 0, 0, 0) 72%),
-        radial-gradient(900px 600px at 80% 65%, rgba(16, 185, 129, 0.08) 0%, rgba(0, 0, 0, 0) 68%),
-        linear-gradient(180deg, rgba(6, 8, 12, 0.98) 0%, #06080c 55%, #05070b 100%) !important;
-    color: #ffffff !important;
-}
-
-.landing .hero,
-.landing .features,
-.landing .pricing,
-.landing .testimonials,
-.landing .cta,
-.landing footer {
-    background: transparent !important;
-    color: #ffffff !important;
-}
-
-.landing h1, .landing h2, .landing h3, .landing h4, .landing h5, .landing h6 {
-    color: #ffffff !important;
-}
-
-.landing p {
-    color: rgba(255, 255, 255, 0.82) !important;
-}
-
-.landing .navbar {
-    background: rgba(0, 0, 0, 0.75) !important;
-    backdrop-filter: blur(10px) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.landing .nav-links a,
-.landing .nav-logo {
-    color: rgba(255, 255, 255, 0.92) !important;
-}
-
-/* Navbar links: keep hover/focus readable on dark */
-.landing .nav-links a:hover,
-.landing .nav-links a:focus {
-    color: #ffffff !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Make DD logo visible on dark */
-.landing .nav-logo img {
-    filter: invert(1) brightness(1.15) contrast(1.05) !important;
-}
-
-/* Options button (hamburger) — force white */
-.landing .mobile-menu-btn span {
-    background-color: #ffffff !important;
-}
-
-/* Ensure hamburger is visible + top-right on phone mode */
-@media (max-width: 768px) {
-    .landing .mobile-menu-btn {
-        display: flex !important;
-        width: 32px !important;
-        height: 22px !important;
-        flex-direction: column !important;
-        justify-content: space-between !important;
-        background: none !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        position: relative !important;
-        z-index: 2500 !important;
-    }
-    .landing .mobile-menu-btn span {
-        display: block !important;
-        width: 100% !important;
-        height: 2px !important;
-        border-radius: 2px !important;
-        background-color: #ffffff !important;
-        opacity: 0.95 !important;
-    }
-}
-
-/* Blue “glow” behind the Daily Dividend title (mobile + desktop) */
-.landing .hero-title,
-.landing .hero-title .gradient-text {
-    text-shadow:
-        0 0 28px rgba(37, 99, 235, 0.55),
-        0 0 70px rgba(37, 99, 235, 0.28) !important;
-}
-
-/* Blue glow in the BACKGROUND, positioned higher around the title */
-.landing .hero-content {
-    position: relative !important;
-}
-.landing .hero-content::before {
-    content: '' !important;
-    position: absolute !important;
-    top: -70px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: min(980px, 140vw) !important;
-    height: 420px !important;
-    background: radial-gradient(circle at 50% 45%,
-        rgba(37, 99, 235, 0.38) 0%,
-        rgba(37, 99, 235, 0.18) 32%,
-        rgba(37, 99, 235, 0.06) 52%,
-        rgba(0, 0, 0, 0) 72%) !important;
-    filter: blur(10px) !important;
-    pointer-events: none !important;
-    z-index: -1 !important;
-}
-
-@media (max-width: 768px) {
-    .landing .hero-content::before {
-        top: -85px !important;
-        width: 140vw !important;
-        height: 380px !important;
-        opacity: 1 !important;
-    }
-}
-
-/* Keep the “Markets within minutes” pill readable on dark */
-.landing .mobile-markets-box {
-    background: rgba(255, 255, 255, 0.10) !important;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    color: rgba(255, 255, 255, 0.92) !important;
-    backdrop-filter: blur(12px) !important;
-}
-
-/* CTA button (Get Access / desktop CTA) — match “Markets within minutes” glass pill */
-.landing .cta-button,
-.landing .mobile-button {
-    /* Slightly stronger white glass than the pill */
-    background: rgba(255, 255, 255, 0.16) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
-    color: #ffffff !important;
-    backdrop-filter: blur(12px) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
-}
-
-/* Ensure the right-arrow in the CTA button is visible and aligned */
-.landing .cta-button i,
-.landing .mobile-button i {
-    color: #ffffff !important;
-    margin-left: 10px !important;
-    font-size: 0.95em !important;
-    line-height: 1 !important;
-}
-
-.landing .cta-button:hover,
-.landing .mobile-button:hover {
-    background: rgba(255, 255, 255, 0.20) !important;
-    border-color: rgba(255, 255, 255, 0.28) !important;
-}
-
-/* Keep pricing buttons Nightwatch blue */
-.landing .pricing-button {
-    background: #2563eb !important;
-    color: #ffffff !important;
-    border: none !important;
-}
-.landing .pricing-button:hover {
-    background: #1d4ed8 !important;
-}
-
-/* “or log-in” link under CTA */
-.landing .login-link-text a {
-    color: #ffffff !important;
-    text-decoration-color: rgba(255, 255, 255, 0.9) !important;
-}
 
 /* Smooth scrolling */
 html {
@@ -4829,6 +4633,35 @@ input:valid {
 .hf-holding-bar span {
     display: block;
     height: 100%;
+    background: linear-gradient(90deg, #1d4ed8, #7c3aed);
+}
+
+.hf-holding-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--color-gray-600, #4b5563);
+}
+
+@media (max-width: 768px) {
+    .hf-fund-section {
+        margin: 60px auto 90px;
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 540px) {
+    .hf-kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .hf-holdings-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
     background: linear-gradient(90deg, #1d4ed8, #7c3aed);
 }
 

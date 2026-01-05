@@ -62,14 +62,24 @@
       }
       .nav-links { display: none; }
       .mobile-menu-btn { 
-        display: block; 
-        background: none; 
-        border: none; 
-        font-size: 24px; 
-        color: #333; 
-        cursor: pointer;
-        padding: 5px;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        width: 30px !important;
+        height: 20px !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        padding: 0 !important;
         order: 2;
+      }
+      .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background-color: #000000 !important;
+        border-radius: 2px !important;
+        transition: all 0.3s ease !important;
       }
       .nav-logo { order: 1; }
       .mobile-menu { 
@@ -486,7 +496,7 @@
                     <a href="#test">Test</a>
                     
                     <a href="tools/index.html" class="nav-tools-btn">Tools</a>
-                </div>
+                        </div>
                  <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                      <span></span>
                      <span></span>
@@ -508,45 +518,36 @@
   <section class="hero" role="banner">
         <div class="hero-container">
             <div class="hero-content">
-        <!-- Desktop subtitle -->
-        <p class="hero-subtitle desktop-subtitle">Markets within minutes</p>
-        <!-- Mobile: Markets within minutes box (above title) -->
-        <p class="hero-markets-box mobile-markets-box"><span class="markets-emoji">📈</span> Markets within minutes</p>
+        <!-- Tagline pill (above title) -->
+        <p class="hero-markets-box"><span class="markets-emoji">📈</span> Markets Within Minutes</p>
         <!-- Mobile: Daily Dividend title split into 2 lines -->
-        <h1 class="hero-title mobile-title">
-            <span class="gradient-text title-line-1">DAILY</span>
-            <span class="gradient-text title-line-2">DIVIDEND</span>
-        </h1>
+        <h1 class="hero-title mobile-title"><span class="gradient-text">DAILY DIVIDEND</span></h1>
         <!-- Desktop: Daily Dividend title (single line) -->
         <h1 class="hero-title desktop-title"><span class="gradient-text">Daily Dividend</span></h1>
-        <!-- Mobile subtitle (below title) -->
-        <p class="hero-subtitle mobile-subtitle">Become that smart finance friend with daily market wraps, hedge fund positioning, insider trackers and more</p>
-
-                <div class="hero-cta">
+        
+        <div class="hero-cta">
             <div class="cta-button-wrapper">
               <!-- Desktop button -->
-              <button type="button" class="cta-button desktop-button" onclick="openPhoneModal()" aria-label="Become that smart finance friend">
-                <i class="fas fa-rocket" aria-hidden="true"></i> Become that smart finance friend
-              </button>
+              <button type="button" class="cta-button desktop-button" onclick="openPhoneModal()" aria-label="Join the Community">
+                Join the Community <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
               <!-- Mobile button -->
-              <button type="button" class="cta-button mobile-button" onclick="openPhoneModal()" aria-label="Get Access">
-                Get Access <i class="fas fa-arrow-right" aria-hidden="true"></i>
+              <button type="button" class="cta-button mobile-button" onclick="openPhoneModal()" aria-label="Join the Community">
+                Join the Community <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
                     <p class="login-link-text" style="margin: 0; margin-left: 12px;">
                 <a href="tools/index.html" style="color: #000000; text-decoration: underline; font-size: 0.85rem;">or log-in</a>
               </p>
             </div>
-                    <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
                 </div>
             </div>
 
       <!-- RIGHT VISUAL (Desktop shows mockup, Mobile shows scrollable cards) -->
             <div class="hero-visual">
-                <!-- Desktop Mockup (hidden on mobile) -->
+                <!-- Desktop Mockup -->
                 <div class="desktop-hero-visual">
-                    <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" style="max-width: 150%; height: auto; border-radius: 20px; transform: scale(1.275); margin-top: 40px; margin-left: -100px;">
+                    <img src="phonemockup.png" alt="Daily Dividend WhatsApp Interface" class="phone-mockup-desktop">
                 </div>
-
                 <!-- Mobile Slider Wrapper with Arrows -->
                 <div class="hero-mobile-slider-container">
                     <button class="slider-nav-btn left" id="prevBtn" onclick="scrollSlider(-1)" aria-label="Previous tool">
@@ -1210,7 +1211,7 @@
             if (i === index) dot.classList.add('active');
             else dot.classList.remove('active');
           });
-        });
+      });
 
         // Click dots to scroll
         dots.forEach((dot, i) => {
@@ -1224,8 +1225,8 @@
           // Set cursor pointer for dots
           dot.style.cursor = 'pointer';
         });
-      }
-    });
+        }
+      });
 
     // Phone Image Viewer Modal Functions
     function openPhoneImageViewer() {
@@ -1241,8 +1242,8 @@
       if (modal) {
         modal.style.display = 'none';
         document.body.style.overflow = '';
-      }
-    }
+          }
+        }
 
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
@@ -1251,4 +1252,6 @@
     });
   </script>
 </body>
+</html>
+
 </html>

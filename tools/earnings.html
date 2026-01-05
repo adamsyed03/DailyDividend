@@ -138,14 +138,24 @@
       }
       .nav-links { display: none; }
       .mobile-menu-btn { 
-        display: block; 
-        background: none; 
-        border: none; 
-        font-size: 24px; 
-        color: #333; 
-        cursor: pointer;
-        padding: 5px;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        width: 30px !important;
+        height: 20px !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        padding: 0 !important;
         order: 2;
+      }
+      .mobile-menu-btn span {
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background-color: #000000 !important;
+        border-radius: 2px !important;
+        transition: all 0.3s ease !important;
       }
       .nav-logo { order: 1; }
       .mobile-menu { 
@@ -483,6 +493,72 @@
                             <div class="week-day" data-day="dec21" data-date="2025-12-21">
                                 <div class="day-label">Sun, Dec 21</div>
                             </div>
+                            <div class="week-day" data-day="dec22" data-date="2025-12-22">
+                                <div class="day-label">Mon, Dec 22</div>
+                            </div>
+                            <div class="week-day" data-day="dec23" data-date="2025-12-23">
+                                <div class="day-label">Tue, Dec 23</div>
+                            </div>
+                            <div class="week-day" data-day="dec24" data-date="2025-12-24">
+                                <div class="day-label">Wed, Dec 24</div>
+                            </div>
+                            <div class="week-day" data-day="dec25" data-date="2025-12-25">
+                                <div class="day-label">Thu, Dec 25</div>
+                            </div>
+                            <div class="week-day" data-day="dec26" data-date="2025-12-26">
+                                <div class="day-label">Fri, Dec 26</div>
+                            </div>
+                            <div class="week-day" data-day="dec27" data-date="2025-12-27">
+                                <div class="day-label">Sat, Dec 27</div>
+                            </div>
+                            <div class="week-day" data-day="dec28" data-date="2025-12-28">
+                                <div class="day-label">Sun, Dec 28</div>
+                            </div>
+                            <div class="week-day" data-day="dec29" data-date="2025-12-29">
+                                <div class="day-label">Mon, Dec 29</div>
+                            </div>
+                            <div class="week-day" data-day="dec30" data-date="2025-12-30">
+                                <div class="day-label">Tue, Dec 30</div>
+                            </div>
+                            <div class="week-day" data-day="dec31" data-date="2025-12-31">
+                                <div class="day-label">Wed, Dec 31</div>
+                            </div>
+                            <div class="week-day" data-day="jan1" data-date="2026-01-01">
+                                <div class="day-label">Thu, Jan 1</div>
+                            </div>
+                            <div class="week-day" data-day="jan2" data-date="2026-01-02">
+                                <div class="day-label">Fri, Jan 2</div>
+                            </div>
+                            <div class="week-day" data-day="jan3" data-date="2026-01-03">
+                                <div class="day-label">Sat, Jan 3</div>
+                            </div>
+                            <div class="week-day" data-day="jan4" data-date="2026-01-04">
+                                <div class="day-label">Sun, Jan 4</div>
+                            </div>
+                            <div class="week-day" data-day="jan5" data-date="2026-01-05">
+                                <div class="day-label">Mon, Jan 5</div>
+                            </div>
+                            <div class="week-day" data-day="jan6" data-date="2026-01-06">
+                                <div class="day-label">Tue, Jan 6</div>
+                            </div>
+                            <div class="week-day" data-day="jan7" data-date="2026-01-07">
+                                <div class="day-label">Wed, Jan 7</div>
+                            </div>
+                            <div class="week-day" data-day="jan8" data-date="2026-01-08">
+                                <div class="day-label">Thu, Jan 8</div>
+                            </div>
+                            <div class="week-day" data-day="jan9" data-date="2026-01-09">
+                                <div class="day-label">Fri, Jan 9</div>
+                            </div>
+                            <div class="week-day" data-day="jan10" data-date="2026-01-10">
+                                <div class="day-label">Sat, Jan 10</div>
+                            </div>
+                            <div class="week-day" data-day="jan11" data-date="2026-01-11">
+                                <div class="day-label">Sun, Jan 11</div>
+                            </div>
+                            <div class="week-day" data-day="jan12" data-date="2026-01-12">
+                                <div class="day-label">Mon, Jan 12</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -735,6 +811,116 @@
                     <!-- Earnings Table for Sunday Dec 21 -->
                     <div class="earnings-day-content" id="dec21-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2025-12-21"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 22 -->
+                    <div class="earnings-day-content" id="dec22-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-22"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 23 -->
+                    <div class="earnings-day-content" id="dec23-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-23"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 24 -->
+                    <div class="earnings-day-content" id="dec24-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-24"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Dec 25 -->
+                    <div class="earnings-day-content" id="dec25-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-25"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Dec 26 -->
+                    <div class="earnings-day-content" id="dec26-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-26"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Dec 27 -->
+                    <div class="earnings-day-content" id="dec27-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-27"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Dec 28 -->
+                    <div class="earnings-day-content" id="dec28-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-28"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Dec 29 -->
+                    <div class="earnings-day-content" id="dec29-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-29"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Dec 30 -->
+                    <div class="earnings-day-content" id="dec30-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-30"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Dec 31 -->
+                    <div class="earnings-day-content" id="dec31-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2025-12-31"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Jan 1 -->
+                    <div class="earnings-day-content" id="jan1-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-01"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Jan 2 -->
+                    <div class="earnings-day-content" id="jan2-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-02"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Jan 3 -->
+                    <div class="earnings-day-content" id="jan3-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-03"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Jan 4 -->
+                    <div class="earnings-day-content" id="jan4-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-04"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Jan 5 -->
+                    <div class="earnings-day-content" id="jan5-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-05"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Jan 6 -->
+                    <div class="earnings-day-content" id="jan6-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-06"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Jan 7 -->
+                    <div class="earnings-day-content" id="jan7-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-07"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Jan 8 -->
+                    <div class="earnings-day-content" id="jan8-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-08"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Jan 9 -->
+                    <div class="earnings-day-content" id="jan9-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-09"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Jan 10 -->
+                    <div class="earnings-day-content" id="jan10-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-10"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Jan 11 -->
+                    <div class="earnings-day-content" id="jan11-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-11"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Monday Jan 12 -->
+                    <div class="earnings-day-content" id="jan12-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-12"></div>
                     </div>
                 </div>
             </div>
@@ -1016,7 +1202,39 @@
         ]
       },
       '2025-12-20': { message: '' },
-      '2025-12-21': { message: '' }
+      '2025-12-21': { message: '' },
+      '2026-01-01': { message: 'No significant earnings due to New Year\'s Day.' },
+      '2026-01-02': { message: 'No significant earnings today.' },
+      '2026-01-03': { message: '' },
+      '2026-01-04': { message: '' },
+      '2026-01-05': { message: 'No significant earnings scheduled for today.' },
+      '2026-01-06': { message: 'No significant earnings scheduled for today.' },
+      '2026-01-07': {
+        rows: [
+          ['STZ', 'Constellation Brands, Inc.', 'Q3 2026 EA • Prev EPS 3.63', 'BMO', '$2.64', '$24.5B'],
+          ['JEF', 'Jefferies Financial Group Inc.', 'Q4 2025 EA • Prev EPS 1.01', 'BMO', '$0.94', '$13.09B']
+        ]
+      },
+      '2026-01-08': {
+        rows: [
+          ['RPM', 'RPM International Inc.', 'Q2 2026 EA • Prev EPS 1.88', 'BMO', '$1.41', '$113.31B'],
+          ['SNX', 'TD SYNNEX Corporation', 'Q5 2025 EA • Prev EPS 2.74', 'BMO', '$3.73', '$12.65B']
+        ]
+      },
+      '2025-12-22': { message: '' },
+      '2025-12-23': { message: '' },
+      '2025-12-24': { message: 'No significant earnings due to Christmas Eve.' },
+      '2025-12-25': { message: 'No significant earnings due to Christmas Day.' },
+      '2025-12-26': { message: '' },
+      '2025-12-27': { message: '' },
+      '2025-12-28': { message: '' },
+      '2025-12-29': { message: '' },
+      '2025-12-30': { message: '' },
+      '2025-12-31': { message: 'No significant earnings due to New Year\'s Eve.' },
+      '2026-01-09': { message: '' },
+      '2026-01-10': { message: '' },
+      '2026-01-11': { message: '' },
+      '2026-01-12': { message: '' }
     };
 
     const NOTABLE_BLOCKS = [
@@ -1168,7 +1386,11 @@
       'ACN': 'Accenture is a global consulting and IT services firm that helps enterprises with strategy, digital transformation, and managed services. It earns revenue from large, often multi‑year projects and outsourcing contracts, with deep client relationships and industry specialization supporting repeat business.',
       'NKE': 'Nike designs, markets, and sells athletic footwear, apparel, and equipment under the Nike and Jordan brands. The business leverages powerful branding and athlete endorsements across wholesale and fast‑growing direct‑to‑consumer channels to drive premium pricing and global scale.',
       'FDX': 'FedEx operates global express delivery, ground shipping, and logistics services for consumers and businesses. Its integrated air‑and‑ground network generates revenue based on shipment volumes and pricing, with profitability tied to network efficiency and mix of higher‑margin express services.',
-      'CCL': 'Carnival Corporation & plc is a leading global cruise operator with multiple brands serving different customer segments and regions. It monetizes cruise vacations through ticket revenue and high‑margin onboard spending such as excursions, casinos, food, and beverages, while leveraging fleet scale to manage costs.'
+      'CCL': 'Carnival Corporation & plc is a leading global cruise operator with multiple brands serving different customer segments and regions. It monetizes cruise vacations through ticket revenue and high‑margin onboard spending such as excursions, casinos, food, and beverages, while leveraging fleet scale to manage costs.',
+      'STZ': 'Constellation Brands is a global beer, wine, and spirits producer best known for Modelo and Corona, with earnings watched for U.S. consumer demand and pricing power trends.',
+      'JEF': 'Jefferies Financial Group is an investment bank and financial services firm whose results reflect capital markets activity, trading revenues, and deal-making momentum.',
+      'RPM': 'RPM International is a specialty chemicals and coatings manufacturer, with earnings offering insight into construction, industrial demand, and input cost pressures.',
+      'SNX': 'TD SYNNEX is a global IT distribution and solutions provider, with results tied to enterprise tech spending, cloud demand, and hardware refresh cycles.'
     };
 
     function buildTimeBadge(time) {
