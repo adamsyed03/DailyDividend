@@ -3023,8 +3023,8 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         margin: 32px auto 0 auto !important;
     }
     
-    /* Apply Aave-style font to all landing page elements */
-    .landing * {
+    /* Apply Aave-style font to all landing page elements except icons */
+    .landing *:not(i):not([class*="fa-"]) {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
 
