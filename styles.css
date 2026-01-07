@@ -1094,6 +1094,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         width: 100% !important;
         max-width: 850px !important; /* x2 larger than previous 460px */
         margin: 0 !important;
+        margin-top: 32px !important; /* Desktop-only: drop mockup to avoid navbar overlap */
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
@@ -1106,6 +1107,8 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
         border-radius: 0 !important;
         box-shadow: none !important;
         display: block !important;
+        transform: scale(1.4) !important;
+        transform-origin: center center !important;
     }
 
     .landing .hero-mobile-slider-container {

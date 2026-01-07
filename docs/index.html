@@ -950,7 +950,17 @@
         <div class="form-group"><label for="signupFirstName">First Name</label><input type="text" id="signupFirstName" name="first_name" required></div>
         <div class="form-group"><label for="signupLastName">Last Name</label><input type="text" id="signupLastName" name="last_name" required></div>
         <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
-        <div class="form-group"><label for="signupPhoneDisplay">Phone Number</label><input type="text" id="signupPhoneDisplay" name="phone" readonly class="readonly-field"></div>
+        <div class="form-group">
+          <label for="signupPhoneLocal">Phone Number</label>
+          <div class="input-group">
+            <span class="country-code-wrapper">
+              <select id="countryCode" aria-label="Country code"></select>
+            </span>
+            <input type="tel" id="signupPhoneLocal" name="phone_local" placeholder="Phone number" required>
+          </div>
+          <!-- This is the field sent to Google Apps Script -->
+          <input type="hidden" id="signupPhone" name="phone" value="">
+        </div>
         <input type="hidden" name="page" value="landing_page_signup">
         <input type="hidden" name="ts" id="ts_signup" value="">
         <div style="text-align: center; margin-top: 20px;">
@@ -975,7 +985,17 @@
         <div class="form-group"><label for="firstName">First Name</label><input type="text" id="firstName" name="first_name" required></div>
         <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" name="last_name" required></div>
         <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
-        <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required></div>
+        <div class="form-group">
+          <label for="waitlistPhoneLocal">Phone Number</label>
+          <div class="input-group">
+            <span class="country-code-wrapper">
+              <select id="countryCodeBottom" aria-label="Country code"></select>
+            </span>
+            <input type="tel" id="waitlistPhoneLocal" name="phone_local" placeholder="Phone number" required>
+          </div>
+          <!-- This is the field sent to Google Apps Script -->
+          <input type="hidden" id="waitlistPhone" name="phone" value="">
+        </div>
         <input type="hidden" name="page" value="waitlist">
         <input type="hidden" name="ts" id="ts_waitlist" value="">
         <div style="text-align: center; margin-top: 20px;">
@@ -1077,6 +1097,41 @@
           select.appendChild(opt);
         });
       });
+    }
+
+    function normalizePhoneDigits(str) {
+      return String(str || '').trim().replace(/[^\d+]/g, '');
+    }
+
+    function computeFullPhone(selectEl, localInputEl) {
+      const code = (selectEl?.value || '').trim();
+      const localRaw = normalizePhoneDigits(localInputEl?.value || '');
+      if (!localRaw) return '';
+      if (code === 'other') {
+        return localRaw;
+      }
+      // Remove a leading "+" from local part if user typed it
+      const local = localRaw.replace(/^\+/, '');
+      return `${code}${local}`;
+    }
+
+    function initPhoneComposite(selectId, localInputId, hiddenInputId) {
+      const selectEl = document.getElementById(selectId);
+      const localEl = document.getElementById(localInputId);
+      const hiddenEl = document.getElementById(hiddenInputId);
+      if (!selectEl || !localEl || !hiddenEl) return;
+
+      const sync = () => {
+        hiddenEl.value = computeFullPhone(selectEl, localEl);
+      };
+
+      // Keep hidden phone field up to date
+      selectEl.addEventListener('change', sync);
+      localEl.addEventListener('input', sync);
+      localEl.addEventListener('blur', sync);
+
+      // Initial sync
+      sync();
     }
 
     // Keep forms always pointing to correct URL
@@ -1181,6 +1236,8 @@
     // Init
     document.addEventListener('DOMContentLoaded', () => {
       populateCountryCodeSelects();
+      initPhoneComposite('countryCode', 'signupPhoneLocal', 'signupPhone');
+      initPhoneComposite('countryCodeBottom', 'waitlistPhoneLocal', 'waitlistPhone');
       wireForms();
       enhanceSubmission('phoneSignupForm', '.phone-signup-submit-btn');
       enhanceSubmission('waitlistForm', '.waitlist-submit-btn');

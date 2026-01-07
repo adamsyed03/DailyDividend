@@ -40,18 +40,6 @@
       letter-spacing: -0.02em;
     }
     
-    /* Scale everything down to 70% */
-    html {
-      zoom: 0.70;
-    }
-    
-    @supports not (zoom: 1) {
-      body {
-        transform: scale(0.70);
-        transform-origin: top center;
-        width: 142.9%;
-      }
-    }
 
     /* Subtle animated background pattern */
     body::before {
@@ -221,8 +209,13 @@
       position: relative;
       z-index: 1;
       padding: 120px 24px 80px;
-      max-width: 1400px;
+      width: 100%;
       margin: 0 auto;
+    }
+
+    .nav-container {
+      max-width: 100% !important;
+      padding: 0 40px !important;
     }
 
     .tools-header {
@@ -251,15 +244,15 @@
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 28px;
-      margin-top: 48px;
+      gap: 22px;
+      margin-top: 36px;
     }
 
     .tool-card {
       background: #ffffff;
       border: 3px solid #2563eb !important;
       border-radius: 24px;
-      padding: 40px 32px;
+      padding: 34px 28px;
       text-decoration: none;
       color: inherit;
       display: flex;
@@ -309,8 +302,8 @@
     }
 
     .tool-icon-wrapper {
-      width: 72px;
-      height: 72px;
+      width: 60px;
+      height: 60px;
       border-radius: 20px;
       display: flex;
       align-items: center;
@@ -331,7 +324,7 @@
     }
 
     .tool-card i {
-      font-size: 2rem;
+      font-size: 1.65rem;
       background: linear-gradient(135deg, #2563eb 0%, #667eea 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -446,6 +439,56 @@
       .tools-wrapper { padding-top: 68px !important; }
       .tool-card h3 { font-size: 0.88rem !important; }
       .tool-icon-wrapper { width: 34px !important; height: 34px !important; }
+    }
+
+    /* ---------- DESKTOP ONLY: compact cards so all tools fit without scrolling ---------- */
+    @media (min-width: 769px) {
+      .tools-wrapper {
+        padding: 83px 22px 36px;
+      }
+
+      .tools-header {
+        margin-bottom: 36px;
+      }
+
+      .tools-header h1 {
+        font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+        margin-bottom: 9px;
+      }
+
+      .tools-header p {
+        font-size: 0.92rem;
+      }
+
+      .tools-grid {
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .tool-card {
+        padding: 22px 18px;
+      }
+
+      .tool-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 13px;
+        border-radius: 16px;
+      }
+
+      .tool-card i {
+        font-size: 1.25rem;
+      }
+
+      .tool-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 9px;
+      }
+
+      .tool-card p {
+        font-size: 0.81rem;
+        line-height: 1.42;
+      }
     }
   </style>
 </head>

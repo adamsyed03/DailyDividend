@@ -745,6 +745,13 @@
       <aside class="ca-panel" aria-label="Company list">
         <h2 style="margin:0 0 18px;font-size:1.08rem;">Companies</h2>
         <div class="company-list">
+          <article class="company-card" role="button" tabindex="0" data-company="visa">
+            <h3>Visa Inc. (V)</h3>
+            <div class="company-meta">
+              <span><i class="fas fa-location-dot"></i> San Francisco, California</span>
+              <span><i class="fas fa-calendar"></i> Latest quarter Q3 FY2025</span>
+            </div>
+          </article>
           <article class="company-card active" role="button" tabindex="0" data-company="nvidia">
             <h3>NVIDIA Corporation</h3>
             <div class="company-meta">
@@ -819,6 +826,150 @@
       </aside>
 
       <div class="company-content-wrapper">
+        <!-- Visa Inc. Section -->
+        <section class="ca-panel company-section" id="visaDetail" aria-live="polite">
+          <div class="detail-header">
+            <h2 style="margin:0;font-size:1.8rem;">Visa Inc. (V)</h2>
+            <span class="detail-pill"><i class="fas fa-credit-card"></i> Global payments network</span>
+            <div class="detail-meta">
+              <span><i class="fas fa-location-dot"></i> San Francisco, California</span>
+              <span><i class="fas fa-dollar-sign"></i> Market cap ≈ $676.21B</span>
+            </div>
+            <p style="margin:6px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+              Visa Inc. operates one of the world’s largest digital payments networks, enabling secure electronic payments and money movement across more than 200 countries and territories. Visa connects consumers, merchants, financial institutions, governments, and fintech platforms through its global processing network, VisaNet, which supports authorisation, clearing, and settlement of transactions. Visa does not issue cards or extend credit. Instead, it generates revenue primarily from payment volume, cross-border transactions, and value-added services, making it a highly scalable, capital-light business with minimal credit risk exposure.
+            </p>
+          </div>
+
+          <article class="chart-card" style="margin-bottom:30px;">
+            <header>
+              <div>
+                <h3>Financial Snapshot</h3>
+                <p>Headline growth, profitability, and cash generation for FY2025 versus FY2024.</p>
+              </div>
+            </header>
+            <div class="snapshot-grid">
+              <div class="snapshot-card">
+                <h4><i class="fas fa-chart-line"></i> Headline Performance</h4>
+                <ul>
+                  <li>Net revenue FY2025: <strong>$40.0B</strong> (<strong>+11.4%</strong> YoY)</li>
+                  <li>Operating income FY2025: <strong>$24.0B</strong> (<strong>+12%</strong> YoY)</li>
+                  <li>Net income FY2025: <strong>$20.1B</strong> (<strong>+2%</strong> YoY)</li>
+                  <li>Diluted EPS FY2025: <strong>$9.60</strong> (<strong>+3%</strong> YoY)</li>
+                </ul>
+              </div>
+              <div class="snapshot-card">
+                <h4><i class="fas fa-percentage"></i> Profitability</h4>
+                <ul>
+                  <li>Operating margin FY2025: <strong>60.0%</strong> (vs 59.6% in FY2024)</li>
+                  <li>Net margin FY2025: <strong>50.1%</strong> (vs 54.9% in FY2024)</li>
+                  <li>Visa continues to deliver industry-leading margins, supported by pricing power and operating leverage.</li>
+                </ul>
+              </div>
+              <div class="snapshot-card">
+                <h4><i class="fas fa-trophy"></i> Competitive Positioning</h4>
+                <ul>
+                  <li><strong>Powerful network effects</strong> connecting consumers, merchants, and banks.</li>
+                  <li><strong>High pricing power</strong> and durable scale advantages.</li>
+                  <li><strong>Capital-light model</strong> with minimal balance-sheet risk.</li>
+                </ul>
+              </div>
+              <div class="snapshot-card">
+                <h4><i class="fas fa-gauge-high"></i> Balance Sheet & Cash</h4>
+                <ul>
+                  <li>Total liquid assets (FY2025): <strong>$20.4B</strong></li>
+                  <li>Long-term debt: <strong>$19.6B</strong></li>
+                  <li>Free cash flow FY2025: <strong>$21.2B</strong> (≈53% FCF margin)</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <div class="meta-main-layout">
+            <div class="meta-kpi-column" id="visaKpiColumn">
+            </div>
+
+            <div class="meta-content-column">
+              <div class="meta-charts-column">
+                <article class="chart-card chart-mix-card">
+                  <header>
+                    <div>
+                      <h3>Revenue Mix</h3>
+                      <p>Revenue by category – Visa FY2025 (USD billions).</p>
+                    </div>
+                  </header>
+                  <div class="chart-body" style="height: 220px;">
+                    <canvas id="visaRevenueMixChart" aria-label="Visa revenue breakdown pie chart" role="img"></canvas>
+                  </div>
+                </article>
+
+                <article class="chart-card chart-earnings">
+                  <header>
+                    <div>
+                      <h3>Revenue vs Earnings</h3>
+                      <p>Annual revenue and net income trend (FY23–FY25).</p>
+                    </div>
+                  </header>
+                  <div class="chart-body" style="height: 220px;">
+                    <canvas id="visaEarningsChart" aria-label="Visa revenue and earnings chart" role="img"></canvas>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="meta-bottom-row">
+            <div class="meta-insights-column">
+              <div class="insight-box">
+                <h4><i class="fas fa-shield-halved"></i> Risk Watchlist</h4>
+                <p>
+                  Ongoing regulatory and antitrust scrutiny of network fees remains a key risk. Revenue is sensitive to global travel and macro cycles, while competitive pressure from Mastercard, fintechs, and alternative payment rails continues to evolve.
+                </p>
+              </div>
+
+              <div class="insight-box">
+                <h4><i class="fas fa-rocket"></i> Growth Drivers</h4>
+                <p>
+                  Growth is driven by the global shift to digital payments, cross-border recovery, and expanding value-added services. Tokenization, AI-driven security, and expansion into commercial/B2B money movement offer long-term runways.
+                </p>
+              </div>
+            </div>
+
+            <div class="meta-analyst-column">
+              <div class="analyst-table-card">
+                <header>
+                  <h3>Analyst Recommendations</h3>
+                </header>
+                <table class="analyst-table">
+                  <thead>
+                    <tr>
+                      <th>Rating</th>
+                      <th>Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="rating-badge rating-buy">Buy</span></td>
+                      <td><strong>11</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="rating-badge rating-outperform">Outperform</span></td>
+                      <td><strong>25</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="rating-badge rating-hold">Hold</span></td>
+                      <td><strong>5</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="rating-badge rating-sell">Sell</span></td>
+                      <td><strong>0</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="ca-panel company-section active" id="companyDetail" aria-live="polite">
         <div class="detail-header">
           <h2 style="margin:0;font-size:1.8rem;">NVIDIA Corporation (NVDA)</h2>
@@ -2529,6 +2680,99 @@
       renderKpis('uberKpiColumn', uber.kpis);
     }
 
+    function initVisaCharts() {
+      const v = companiesData && companiesData.V;
+      if (!v) return;
+
+      createDonutChart('visaRevenueMixChart', v.revenueMix);
+      renderKpis('visaKpiColumn', v.kpis);
+
+      // Visa Revenue vs Earnings chart
+      const vQuarters = ['FY2023', 'FY2024', 'FY2025'];
+      const vRevenue = [32700, 35900, 40000]; // USD millions
+      const vNetIncome = [17300, 19700, 20100]; // USD millions
+
+      const vCtx = document.getElementById('visaEarningsChart');
+      if (vCtx) {
+        new Chart(vCtx, {
+          type: 'bar',
+          data: {
+            labels: vQuarters,
+            datasets: [
+              {
+                type: 'bar',
+                label: 'Revenue (USD millions)',
+                data: vRevenue,
+                backgroundColor: 'rgba(37, 99, 235, 0.85)',
+                borderRadius: 8,
+                borderWidth: 0,
+                order: 2,
+                yAxisID: 'y'
+              },
+              {
+                type: 'line',
+                label: 'Net Income (USD millions)',
+                data: vNetIncome,
+                borderColor: '#16a34a',
+                backgroundColor: '#16a34a',
+                tension: 0.32,
+                fill: false,
+                pointRadius: 5,
+                pointBackgroundColor: '#16a34a',
+                pointBorderColor: '#16a34a',
+                borderWidth: 3,
+                order: 1,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 240, easing: 'easeOutQuad' },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: 'rgba(30, 41, 59, 0.88)' }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => `${context.dataset.label}: $${(context.parsed.y / 1000).toFixed(2)}B`
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { color: 'rgba(71, 85, 105, 0.85)' },
+                grid: { display: false }
+              },
+              y: {
+                type: 'linear',
+                position: 'left',
+                ticks: {
+                  color: 'rgba(71, 85, 105, 0.85)',
+                  callback: (value) => `$${(value / 1000).toFixed(0)}B`
+                },
+                grid: { color: 'rgba(203, 213, 225, 0.45)' },
+                beginAtZero: true
+              },
+              y1: {
+                type: 'linear',
+                position: 'right',
+                ticks: {
+                  color: 'rgba(71, 85, 105, 0.85)',
+                  callback: (value) => `$${(value / 1000).toFixed(2)}B`
+                },
+                grid: { drawOnChartArea: false },
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      }
+    }
+
     function initCompanyCharts() {
       try {
         initMetaCharts();
@@ -2540,6 +2784,7 @@
         initAppleCharts();
         initLululemonCharts();
         initUberCharts();
+        initVisaCharts();
       } catch (err) {
         console.error('Error initialising company charts:', err);
       }
@@ -2828,7 +3073,8 @@
           amazon: 'amazonDetail',
           alphabet: 'alphabetDetail',
           netflix: 'netflixDetail',
-          lululemon: 'lululemonDetail'
+          lululemon: 'lululemonDetail',
+          visa: 'visaDetail'
         };
         const initialCompany = companyToSectionId[urlCompany] ? urlCompany : 'nvidia';
         const initialSectionId = companyToSectionId[initialCompany];
@@ -2884,6 +3130,8 @@
               switchCompany('lululemonDetail');
             } else if (companyId === 'uber') {
               switchCompany('uberDetail');
+            } else if (companyId === 'visa') {
+              switchCompany('visaDetail');
             }
           });
         });

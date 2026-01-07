@@ -312,8 +312,13 @@ function parseDateFromText(text) {
 function parseDailyDividendDelimiter(text) {
   const raw = (text || '').trim();
   
-  // Check for "DAILY DIVIDEND |" prefix
-  const prefixMatch = raw.match(/^\s*DAILY\s+DIVIDEND\s*\|\s*(.+)$/i);
+  // Check for known prefixes with a pipe delimiter:
+  // - "DAILY DIVIDEND | ..."
+  // - "Daily Market Wrap-Up | ..."
+  // Parse the text after the "|" as the date/title line.
+  const prefixMatch = raw.match(
+    /^\s*(?:DAILY\s+DIVIDEND|DAILY\s+MARKET\s+WRAP(?:\s*[-–—]?\s*UP)?)\s*\|\s*(.+)$/i
+  );
   if (prefixMatch) {
     const remainder = prefixMatch[1].trim();
     const result = parseDateFromText(remainder);
@@ -325,6 +330,32 @@ function parseDailyDividendDelimiter(text) {
   if (result) return result;
   
   return null;
+}
+
+/**
+ * Parse pipe-delimited headings like:
+ *  - "Daily Market Wrap-Up | Wed, 7 Jan"
+ *  - "DAILY DIVIDEND | Thu, 1 Jan"
+ *
+ * Only accepts recognized left-side prefixes to avoid false positives.
+ * Returns { date: 'YYYY-MM-DD', title: string } or null.
+ */
+function parsePipePrefixedDelimiter(text) {
+  const raw = (text || '').trim();
+  const m = raw.match(
+    /^\s*(DAILY\s+DIVIDEND|DAILY\s+MARKET\s+WRAP(?:\s*[-–—]?\s*UP)?)\s*\|\s*(.+)$/i
+  );
+  if (!m) return null;
+
+  const rhs = (m[2] || '').trim();
+  const parsed = parseDateFromText(rhs);
+  if (!parsed?.date) return null;
+
+  // Preserve original heading text as the title fallback when RHS is only a date-like string.
+  return {
+    date: parsed.date,
+    title: (parsed.title && parsed.title !== 'Untitled') ? parsed.title : raw,
+  };
 }
 
 /**
@@ -482,6 +513,21 @@ function parseEntries(blocks) {
         entryDate = match1[1];
         entryTitle = match1[2];
       } else {
+        // Try known pipe-prefixed formats like "Daily Market Wrap-Up | Wed, 7 Jan"
+        try {
+          const pipeParsed = parsePipePrefixedDelimiter(headingText);
+          if (pipeParsed?.date) {
+            isEntryDelimiter = true;
+            entryDate = pipeParsed.date;
+            entryTitle = pipeParsed.title;
+          }
+        } catch (e) {
+          // Continue to other strategies
+        }
+
+        if (isEntryDelimiter) {
+          // delimiter found by pipe parsing
+        } else {
         // Try universal date parser (handles many formats)
         try {
           const parsed = parseDateFromText(headingText);
@@ -495,15 +541,17 @@ function parseEntries(blocks) {
         } catch (e) {
           console.warn(`Warning: Error parsing heading delimiter "${headingText.substring(0, 50)}":`, e.message);
         }
+        }
       }
     } else if (type === 'paragraph') {
       // Check paragraphs for date-like patterns
       // More flexible - doesn't require "DAILY DIVIDEND |" prefix
       const paraText = extractPlainText(block.paragraph?.rich_text || []);
       
-      // Check if it starts with "DAILY DIVIDEND |" (original format)
-      if (/^\s*DAILY\s+DIVIDEND\s*\|/i.test(paraText)) {
+      // Check if it starts with "DAILY DIVIDEND |" or "Daily Market Wrap-Up |"
+      if (/^\s*(?:DAILY\s+DIVIDEND|DAILY\s+MARKET\s+WRAP(?:\s*[-–—]?\s*UP)?)\s*\|/i.test(paraText)) {
         try {
+          // Reuse the delimiter parser which supports both prefixes.
           const parsed = parseDailyDividendDelimiter(paraText);
           if (parsed?.date) {
             isEntryDelimiter = true;

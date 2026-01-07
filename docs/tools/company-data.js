@@ -330,11 +330,125 @@ const companiesData = {
       ],
     },
   },
+
+  V: {
+    header: {
+      name: 'Visa Inc. (V)',
+      pillIcon: 'fa-credit-card',
+      pillLabel: 'Global payments network',
+      marketCap: '≈ $676.21B',
+    },
+    kpis: [
+      { label: 'REVENUE FY25', value: '$40.0B' },
+      { label: 'NET INCOME FY25', value: '$20.1B' },
+      { label: 'OPERATING MARGIN FY25', value: '60.0%' },
+      { label: 'NET MARGIN FY25', value: '50.1%' },
+      { label: 'FREE CASH FLOW FY25', value: '$21.2B' },
+      { label: 'EPS FY25', value: '$9.60' },
+    ],
+    revenueMix: {
+      title: 'Revenue Mix',
+      subtitle: 'Revenue by category – Visa FY2025 (USD billions).',
+      data: [
+        { label: 'Service revenues', value: 18.2 },
+        { label: 'Data processing revenues', value: 15.0 },
+        { label: 'International transactions', value: 6.8 },
+      ],
+    },
+  },
 };
 
 // Extended narrative company profiles for AI / tooling usage
 // Apple profile in the same style as other large-cap tech (e.g., NVDA, META)
 const companyData = {
+  V: {
+    header: {
+      name: "Visa Inc. (V)",
+      pillIcon: "fa-credit-card",
+      pillLabel: "Global payments network",
+      marketCap: "≈ $676.21B",
+    },
+
+    overview: `
+Visa Inc. operates one of the world’s largest digital payments networks, enabling secure electronic payments and money movement across more than 200 countries and territories. Visa connects consumers, merchants, financial institutions, governments, and fintech platforms through its global processing network, VisaNet, which supports authorisation, clearing, and settlement of transactions. Visa does not issue cards or extend credit. Instead, it generates revenue primarily from payment volume, cross-border transactions, and value-added services, making it a highly scalable, capital-light business with minimal credit risk exposure.
+    `,
+
+    financials: {
+      netRevenueFY2025: "$40.0B (+11.4% YoY)",
+      operatingIncomeFY2025: "$24.0B (+12%)",
+      netIncomeFY2025: "$20.1B (+2%)",
+      dilutedEPSFY2025: "$9.60 (+3%)",
+      operatingMarginFY2025: "60.0%",
+      netMarginFY2025: "50.1%",
+    },
+
+    revenueBreakdown: {
+      byCategory: [
+        { category: "Service revenues", revenue: "$18.2B", growth: "+12%" },
+        { category: "Data processing revenues", revenue: "$15.0B", growth: "+11%" },
+        { category: "International transaction revenues", revenue: "$6.8B", growth: "+15%" },
+        { category: "Total", revenue: "$40.0B", growth: "+11%" },
+      ],
+    },
+
+    competitivePositioning: `
+• Network Effects: Visa benefits from powerful two-sided network effects connecting consumers, merchants, and financial institutions globally.
+• Pricing Power: High switching costs and scale support durable pricing leverage.
+• Capital-Light Model: Minimal balance-sheet risk and strong cash generation.
+• Technology & Security: Significant investment in AI-driven fraud prevention and tokenization.
+    `,
+
+    balanceSheet: `
+• Cash & equivalents: $17.1B
+• Investment securities: $3.3B
+• Total liquid assets: $20.4B
+• Long-term debt: $19.6B
+• Total assets: $100.0B | Total equity: $38.7B
+Visa maintains a strong balance sheet with net cash flexibility.
+    `,
+
+    cashFlowAndCapital: `
+• Operating cash flow: $22.5B
+• Capital expenditures: $1.3B
+• Free cash flow: $21.2B
+• Share repurchases: $15B+
+• Dividends paid: $4B
+Visa consistently returns a substantial portion of its cash flow to shareholders.
+    `,
+
+    trend: `
+| Year | Net Revenue ($B) | YoY | Net Income ($B) | YoY |
+|------|-----------------|-----|-----------------|-----|
+| 2025 | 40.0 | +11% | 20.1 | +2% |
+| 2024 | 35.9 | +10% | 19.7 | +14% |
+| 2023 | 32.7 | — | 17.3 | — |
+    `,
+
+    analystRecommendations: `
+| Rating | Count |
+|---------|--------|
+| Buy | 11 |
+| Outperform | 25 |
+| Hold | 5 |
+| Sell | 0 |
+    `,
+
+    riskWatchlist: `
+• Regulatory & Antitrust Risk: Ongoing scrutiny of network fees and market power.
+• Cross-Border Sensitivity: Revenue exposed to global travel and macro cycles.
+• Competitive Pressure: Competition from Mastercard, fintechs, and alternative payment rails.
+• Cybersecurity Risk: Operational resilience is mission-critical.
+    `,
+
+    growthDrivers: `
+• Global Shift to Digital Payments: Long runway as cash usage declines.
+• Cross-Border Recovery: Higher-margin international transaction growth.
+• Value-Added Services Expansion: Fraud prevention, analytics, and advisory services.
+• Tokenization & AI: Improved security and authorization rates.
+• Commercial & Money Movement: Expansion in B2B, real-time, and account-to-account payments.
+    `,
+  },
+
   AAPL: {
     header: {
       name: "Apple Inc. (AAPL)",
