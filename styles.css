@@ -2815,6 +2815,7 @@ button, .cta-button, .pricing-button, .pro-button, .premium-button, .coming-soon
     .landing .tool-item p {
         display: -webkit-box !important;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         font-size: 0.88rem !important;
