@@ -380,6 +380,41 @@ async function listChildBlocks(blockId) {
 }
 
 /**
+ * Fetch the Notion page title (the top-level title field).
+ * Note: Page titles are NOT included in children blocks, so we pull it separately.
+ */
+async function getPageTitle(pageId) {
+  try {
+    const page = await notion.pages.retrieve({ page_id: pageId });
+    const props = page?.properties || {};
+    const titlePropKey = Object.keys(props).find((k) => props[k]?.type === 'title');
+    const titleArr = titlePropKey ? (props[titlePropKey]?.title || []) : [];
+    const title = titleArr.map((t) => t?.plain_text || '').join('').trim();
+    return title || '';
+  } catch (e) {
+    console.warn('Warning: failed to fetch Notion page title:', e?.message || String(e));
+    return '';
+  }
+}
+
+/**
+ * Create a minimal synthetic Notion "heading_1" block from plain text.
+ * This helps the parser treat the page title like an entry delimiter when the title contains the date.
+ */
+function makeSyntheticHeadingBlock(text) {
+  const t = String(text || '').trim();
+  if (!t) return null;
+  return {
+    id: 'synthetic_page_title',
+    type: 'heading_1',
+    has_children: false,
+    heading_1: {
+      rich_text: [{ plain_text: t, annotations: {}, href: null }],
+    },
+  };
+}
+
+/**
  * Recursively fetch blocks so entries inside toggles/columns/synced blocks are included.
  * Avoids traversing sub-pages/databases (child_page/child_database).
  */
@@ -699,11 +734,17 @@ function generateExcerpt(html) {
 async function sync() {
   try {
     console.log('Fetching blocks from Notion...');
-    const blocks = await getAllBlocks(NOTION_PAGE_ID);
+    const [pageTitle, blocks] = await Promise.all([
+      getPageTitle(NOTION_PAGE_ID),
+      getAllBlocks(NOTION_PAGE_ID),
+    ]);
+
+    const syntheticTitleBlock = makeSyntheticHeadingBlock(pageTitle);
+    const allBlocks = syntheticTitleBlock ? [syntheticTitleBlock, ...blocks] : blocks;
     console.log(`Fetched ${blocks.length} blocks`);
     
     console.log('Parsing entries...');
-    const entries = parseEntries(blocks);
+    const entries = parseEntries(allBlocks);
     console.log(`Found ${entries.length} entries`);
     
     // Debug: Show first few blocks to help diagnose format issues
