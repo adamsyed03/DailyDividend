@@ -78,7 +78,10 @@ function renderRichText(richTextArray) {
       }
     }
     
-    return content;
+    // Notion paragraphs/headings often include intentional newlines.
+    // In HTML, raw "\n" collapses to whitespace, so we convert to <br> to preserve spacing.
+    // This keeps the website formatting much closer to the Notion page.
+    return content.replace(/\n/g, '<br>');
   }).join('');
 }
 
