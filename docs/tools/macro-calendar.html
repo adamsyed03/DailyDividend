@@ -653,6 +653,24 @@
                             <div class="week-day" data-date="2026-01-12">
                                 <div class="day-label">Mon, Jan 12</div>
                             </div>
+                            <div class="week-day" data-date="2026-01-13">
+                                <div class="day-label">Tue, Jan 13</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-14">
+                                <div class="day-label">Wed, Jan 14</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-15">
+                                <div class="day-label">Thu, Jan 15</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-16">
+                                <div class="day-label">Fri, Jan 16</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-17">
+                                <div class="day-label">Sat, Jan 17</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-18">
+                                <div class="day-label">Sun, Jan 18</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
@@ -871,6 +889,24 @@
                         <div class="earnings-day-content" data-day-content="2026-01-12">
                             <div class="earnings-table-wrapper" data-day-table="2026-01-12"></div>
                         </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-13">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-13"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-14">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-14"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-15">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-15"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-16">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-16"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-17">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-17"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-18">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-18"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1060,7 +1096,33 @@
       },
       '2026-01-10': { message: 'No significant events scheduled.' },
       '2026-01-11': { message: '' },
-      '2026-01-12': { message: '' }
+      '2026-01-12': { message: '' },
+      '2026-01-13': {
+        rows: [
+          { country: '🇺🇸', event: 'Core Inflation Rate YoY', forecast: '2.60%', previous: '3.00%', description: 'A lower core print would cool inflation fears and support rate-cut expectations.' },
+          { country: '🇺🇸', event: 'Inflation Rate YoY', forecast: '2.70%', previous: '3.00%', description: 'A softer headline reading would reinforce disinflation progress in the U.S. economy.' }
+        ]
+      },
+      '2026-01-14': {
+        rows: [
+          { country: '🇺🇸', event: 'Monthly Budget Statement', forecast: '$-250.0B', previous: '$-173B', description: 'A wider deficit highlights fiscal pressure and higher interest costs.' },
+          { country: '🇨🇳', event: 'Balance of Trade', forecast: '$111.68B', previous: '$105B', description: 'A larger surplus can reflect resilient exports alongside softer domestic demand.' },
+          { country: '🇺🇸', event: 'PPI YoY', forecast: '2.70%', previous: '2.70%', description: 'Flat producer inflation suggests pipeline pressures remain sticky rather than easing.' }
+        ]
+      },
+      '2026-01-15': {
+        rows: [
+          { country: '🇰🇷', event: 'Interest Rate Decision', forecast: '2.50%', previous: '2.50%', description: 'The central bank held rates steady, signaling caution amid slowing growth and persistent global uncertainty.' },
+          { country: '🇩🇪', event: 'Full Year GDP Growth', forecast: '-0.20%', previous: '-0.50%', description: 'Annual economic output change; the contraction was milder than feared, offering tentative relief for Europe’s largest economy.' }
+        ]
+      },
+      '2026-01-16': {
+        rows: [
+          { country: '🇩🇪', event: 'Inflation Rate YoY', forecast: '2.30%', previous: '1.80%', description: 'Higher inflation would reduce the case for further easing.' }
+        ]
+      },
+      '2026-01-17': { message: '' },
+      '2026-01-18': { message: '' }
     };
 
     const MACRO_EVENT_DESCRIPTIONS = {
@@ -1114,26 +1176,22 @@
           </table>`;
       });
       
-      // Add mouse tracking for tooltips
-      document.querySelectorAll('.event-with-tooltip').forEach(element => {
-        const tooltip = element.querySelector('.event-tooltip');
+      initMacroTooltips();
+    }
+
+    function initMacroTooltips() {
+      document.querySelectorAll('td.event-with-tooltip').forEach((cell) => {
+        const tooltip = cell.querySelector('.event-tooltip');
         if (!tooltip) return;
-        
-        element.addEventListener('mouseenter', () => {
+
+        cell.addEventListener('mouseenter', () => {
           tooltip.style.opacity = '1';
           tooltip.style.visibility = 'visible';
         });
-        
-        element.addEventListener('mouseleave', () => {
+
+        cell.addEventListener('mouseleave', () => {
           tooltip.style.opacity = '0';
           tooltip.style.visibility = 'hidden';
-        });
-        
-        element.addEventListener('mousemove', (e) => {
-          const offset = 15;
-          tooltip.style.left = (e.clientX + offset) + 'px';
-          tooltip.style.top = (e.clientY + offset) + 'px';
-          tooltip.style.transform = 'none';
         });
       });
     }
@@ -1189,10 +1247,9 @@
     .earnings-day-content.active { display: block; }
     
     /* Event Tooltip Styles */
-    .event-with-tooltip {
+    td.event-with-tooltip {
       position: relative;
       cursor: help;
-      display: inline-block;
     }
     
     .earnings-table-wrapper {
@@ -1209,20 +1266,22 @@
     
     .earnings-table tbody td {
       overflow: visible !important;
-      position: relative;
     }
     
     .event-tooltip {
       position: fixed;
-      padding: 18px 24px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 28px;
       background: #1f2937;
       color: #f9fafb;
       font-size: 1.05rem;
-      line-height: 1.7;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      min-width: 400px;
-      max-width: 900px;
+      line-height: 1.65;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      min-width: 320px;
+      max-width: 550px;
       width: max-content;
       z-index: 10000;
       opacity: 0;
@@ -1232,26 +1291,24 @@
       white-space: normal;
       word-wrap: break-word;
       overflow-wrap: break-word;
-    }
-    
-    .event-tooltip::after {
-      display: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
     
     @media (max-width: 768px) {
       .event-tooltip {
         max-width: calc(100vw - 40px);
         min-width: 280px;
-        font-size: 0.95rem;
-        padding: 16px 18px;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        padding: 16px 20px;
       }
     }
     
     @media (max-width: 480px) {
       .event-tooltip {
-        min-width: 250px;
-        font-size: 0.9rem;
-        padding: 14px 16px;
+        min-width: 240px;
+        font-size: 0.85rem;
+        padding: 12px 14px;
       }
     }
   </style>

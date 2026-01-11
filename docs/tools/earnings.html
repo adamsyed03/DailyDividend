@@ -559,6 +559,24 @@
                             <div class="week-day" data-day="jan12" data-date="2026-01-12">
                                 <div class="day-label">Mon, Jan 12</div>
                             </div>
+                            <div class="week-day" data-day="jan13" data-date="2026-01-13">
+                                <div class="day-label">Tue, Jan 13</div>
+                            </div>
+                            <div class="week-day" data-day="jan14" data-date="2026-01-14">
+                                <div class="day-label">Wed, Jan 14</div>
+                            </div>
+                            <div class="week-day" data-day="jan15" data-date="2026-01-15">
+                                <div class="day-label">Thu, Jan 15</div>
+                            </div>
+                            <div class="week-day" data-day="jan16" data-date="2026-01-16">
+                                <div class="day-label">Fri, Jan 16</div>
+                            </div>
+                            <div class="week-day" data-day="jan17" data-date="2026-01-17">
+                                <div class="day-label">Sat, Jan 17</div>
+                            </div>
+                            <div class="week-day" data-day="jan18" data-date="2026-01-18">
+                                <div class="day-label">Sun, Jan 18</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -922,6 +940,36 @@
                     <div class="earnings-day-content" id="jan12-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2026-01-12"></div>
                     </div>
+
+                    <!-- Earnings Table for Tuesday Jan 13 -->
+                    <div class="earnings-day-content" id="jan13-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-13"></div>
+                    </div>
+
+                    <!-- Earnings Table for Wednesday Jan 14 -->
+                    <div class="earnings-day-content" id="jan14-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-14"></div>
+                    </div>
+
+                    <!-- Earnings Table for Thursday Jan 15 -->
+                    <div class="earnings-day-content" id="jan15-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-15"></div>
+                    </div>
+
+                    <!-- Earnings Table for Friday Jan 16 -->
+                    <div class="earnings-day-content" id="jan16-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-16"></div>
+                    </div>
+
+                    <!-- Earnings Table for Saturday Jan 17 -->
+                    <div class="earnings-day-content" id="jan17-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-17"></div>
+                    </div>
+
+                    <!-- Earnings Table for Sunday Jan 18 -->
+                    <div class="earnings-day-content" id="jan18-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-18"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1234,7 +1282,43 @@
       '2026-01-09': { message: '' },
       '2026-01-10': { message: '' },
       '2026-01-11': { message: '' },
-      '2026-01-12': { message: '' }
+      '2026-01-12': {
+        rows: [
+          ['-', 'Wealthfront Corporation', 'Q3 EA • Prev EPS 0.69', '-', '-', '1.99B']
+        ]
+      },
+      '2026-01-13': {
+        rows: [
+          ['JPM', 'JP Morgan Chase and Co', 'Q4 2025 EA • Prev EPS 5.07', 'BMO', '5.00', '1.1T'],
+          ['BK', 'The Bank of New York Mellon Corp', 'Q4 2025 EA • Prev EPS 1.91', 'BMO', '1.98', '85.47B'],
+          ['DAL', 'Delta Air Lines, Inc.', 'Q4 2025 EA • Prev EPS 1.71', 'BMO', '1.58', '47.13B'],
+          ['CNXC', 'Concentrix Corporation', 'EA', 'AMC', '2.91', '2.73B'],
+          ['-', 'Phoenix Education Partners, Inc.', 'EA', '-', '1.30', '1.18B']
+        ]
+      },
+      '2026-01-14': {
+        rows: [
+          ['BAC', 'Bank of America Corporation', 'EA', 'BMO', '0.96', '599.99B'],
+          ['C', 'Citigroup Inc.', 'EA', 'BMO', '1.65', '305.98B'],
+          ['WFC', 'Wells Fargo & Company', 'EA', 'BMO', '1.66', '302.58B']
+        ]
+      },
+      '2026-01-15': {
+        rows: [
+          ['TSM', 'Taiwan Semiconductor Manufacturing', 'EA', 'BMO', '2.92', '1.66T'],
+          ['GS', 'The Goldman Sachs Group, Inc.', 'EA', 'BMO', '11.42', '356.93B'],
+          ['MS', 'Morgan Stanley', 'EA', 'BMO', '2.45', '324.6B'],
+          ['BLK', 'BlackRock, Inc.', 'EA', 'BMO', '112.64', '167.72B']
+        ]
+      },
+      '2026-01-16': { message: '' },
+      '2026-01-17': {
+        rows: [
+          ['HDB', 'HDFC Bank Limited', 'EA', 'BMO', '0.39', '107.79B'],
+          ['IBN', 'ICICI Bank Limited', 'EA', 'BMO', '0.38', '112.87B']
+        ]
+      },
+      '2026-01-18': { message: '' }
     };
 
     const NOTABLE_BLOCKS = [
@@ -1390,7 +1474,22 @@
       'STZ': 'Constellation Brands is a global beer, wine, and spirits producer best known for Modelo and Corona, with earnings watched for U.S. consumer demand and pricing power trends.',
       'JEF': 'Jefferies Financial Group is an investment bank and financial services firm whose results reflect capital markets activity, trading revenues, and deal-making momentum.',
       'RPM': 'RPM International is a specialty chemicals and coatings manufacturer, with earnings offering insight into construction, industrial demand, and input cost pressures.',
-      'SNX': 'TD SYNNEX is a global IT distribution and solutions provider, with results tied to enterprise tech spending, cloud demand, and hardware refresh cycles.'
+      'SNX': 'TD SYNNEX is a global IT distribution and solutions provider, with results tied to enterprise tech spending, cloud demand, and hardware refresh cycles.',
+      'JPM': 'The largest U.S. bank by assets, with leading franchises in consumer banking, investment banking, and asset management.',
+      'BK': 'A global custody and asset-servicing bank, providing clearing, settlement, and investment services to institutions.',
+      'DAL': 'A major U.S. airline with a premium-focused network, benefiting from business travel and international demand trends.',
+      'CNXC': 'A customer experience and business process outsourcing firm serving large global enterprises across tech and retail.',
+      'BAC': 'One of the largest U.S. banks, with significant exposure to consumer lending, wealth management, and capital markets.',
+      'C': 'A globally diversified bank with a strong international footprint in corporate banking and transaction services.',
+      'WFC': 'A U.S. consumer and commercial bank focused on retail banking, mortgages, and small business lending.',
+      'TSM': 'The world’s leading semiconductor foundry, central to global AI, smartphone, and advanced chip supply chains.',
+      'GS': 'A global investment bank and asset manager with strength in trading, advisory, and alternative investments.',
+      'MS': 'An investment bank with a large wealth management business, providing stability across market cycles.',
+      'BLK': 'The world’s largest asset manager, overseeing trillions across ETFs, mutual funds, and institutional portfolios.',
+      'HDB': 'India’s largest private-sector bank, known for strong retail lending growth and asset quality.',
+      'IBN': 'A major Indian private bank with broad exposure to retail, corporate lending, and digital banking services.',
+      'Wealthfront Corporation': 'Wealthfront is a private financial technology company offering automated investment and wealth management services.',
+      'Phoenix Education Partners, Inc.': 'An education services provider focused on workforce training and post-secondary programs, primarily in the U.S.'
     };
 
     function buildTimeBadge(time) {
@@ -1462,7 +1561,7 @@
         }
 
         const rows = (data.rows || []).map(([symbol, company, event, time, eps, cap]) => {
-          const description = COMPANY_DESCRIPTIONS[symbol] || '';
+          const description = COMPANY_DESCRIPTIONS[symbol] || COMPANY_DESCRIPTIONS[company] || '';
           if (description) {
             return `
           <tr>
@@ -1502,6 +1601,25 @@
             </tbody>
           </table>
         `;
+      });
+      
+      initEarningsTooltips();
+    }
+
+    function initEarningsTooltips() {
+      document.querySelectorAll('.company-with-tooltip').forEach((cell) => {
+        const tooltip = cell.querySelector('.company-tooltip');
+        if (!tooltip) return;
+
+        cell.addEventListener('mouseenter', () => {
+          tooltip.style.opacity = '1';
+          tooltip.style.visibility = 'visible';
+        });
+
+        cell.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          tooltip.style.visibility = 'hidden';
+        });
       });
     }
 
@@ -1860,95 +1978,55 @@
     }
     
     .company-tooltip {
-      position: absolute;
-      bottom: calc(100% + 8px);
+      position: fixed;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      padding: 18px 24px;
+      transform: translate(-50%, -50%);
+      padding: 20px 28px;
       background: #1f2937;
       color: #f9fafb;
       font-size: 1.05rem;
-      line-height: 1.7;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      min-width: 400px;
-      max-width: 900px;
+      line-height: 1.65;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      min-width: 320px;
+      max-width: 550px;
       width: max-content;
       z-index: 10000;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-      transform: translateX(-50%) translateY(-5px);
+      transition: opacity 0.2s ease, visibility 0.2s ease;
       pointer-events: none;
       white-space: normal;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
     
     .company-tooltip::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: #1f2937;
+      display: none;
     }
     
     .company-with-tooltip:hover .company-tooltip {
       opacity: 1;
       visibility: visible;
-      transform: translateX(-50%) translateY(0);
     }
     
-      /* Ensure tooltip doesn't overflow on small screens */
     @media (max-width: 768px) {
       .company-tooltip {
-        left: 0;
-        transform: translateX(0) translateY(-5px);
         max-width: calc(100vw - 40px);
         min-width: 280px;
-        font-size: 0.95rem;
-        padding: 16px 18px;
-      }
-      
-      .company-tooltip::after {
-        left: 30px;
-        transform: translateX(0);
-      }
-      
-      .company-with-tooltip:hover .company-tooltip {
-        transform: translateX(0) translateY(0);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        padding: 16px 20px;
       }
     }
     
     @media (max-width: 480px) {
       .company-tooltip {
-        min-width: 250px;
-        font-size: 0.9rem;
+        min-width: 240px;
+        font-size: 0.82rem;
         padding: 14px 16px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .notable-earnings-bottom {
-        margin-top: 40px;
-        padding: 25px 15px;
-      }
-      
-      .notable-title {
-        font-size: 1.2rem;
-      }
-      
-      .notable-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      
-      .company-tooltip {
-        max-width: 280px;
-        font-size: 0.8rem;
-        padding: 10px 12px;
       }
     }
   </style>
