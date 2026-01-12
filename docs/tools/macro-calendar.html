@@ -340,12 +340,6 @@
         font-size: 0.85rem !important;
       }
       
-      /* Hide Time and Currency columns on mobile */
-      .earnings-table thead th:nth-child(1),
-      .earnings-table tbody td:nth-child(1) {
-        display: none;
-      }
-      
       .earnings-main {
         padding: 15px 10px !important;
       }
@@ -1099,26 +1093,35 @@
       '2026-01-12': { message: '' },
       '2026-01-13': {
         rows: [
-          { country: '🇺🇸', event: 'Core Inflation Rate YoY', forecast: '2.60%', previous: '3.00%', description: 'A lower core print would cool inflation fears and support rate-cut expectations.' },
-          { country: '🇺🇸', event: 'Inflation Rate YoY', forecast: '2.70%', previous: '3.00%', description: 'A softer headline reading would reinforce disinflation progress in the U.S. economy.' }
+          { country: '🇺🇸', event: 'Inflation Rate YoY', forecast: '2.6%', previous: '2.7%', description: 'Measures the change in the price of goods and services purchased by consumers.' },
+          { country: '🇺🇸', event: 'Core Inflation Rate YoY', forecast: '2.7%', previous: '2.6%', description: 'Measures the change in the price of goods and services purchased by consumers, excluding food and energy.' },
+          { country: '🇨🇳', event: 'Vehicle Sales Growth YoY', forecast: '-', previous: '3.4%', description: 'Tracks the year-over-year change in the number of new vehicles sold in China.' }
         ]
       },
       '2026-01-14': {
         rows: [
-          { country: '🇺🇸', event: 'Monthly Budget Statement', forecast: '$-250.0B', previous: '$-173B', description: 'A wider deficit highlights fiscal pressure and higher interest costs.' },
-          { country: '🇨🇳', event: 'Balance of Trade', forecast: '$111.68B', previous: '$105B', description: 'A larger surplus can reflect resilient exports alongside softer domestic demand.' },
-          { country: '🇺🇸', event: 'PPI YoY', forecast: '2.70%', previous: '2.70%', description: 'Flat producer inflation suggests pipeline pressures remain sticky rather than easing.' }
+          { country: '🇨🇳', event: 'Trade Balance', forecast: '-', previous: '$111.68bn', description: 'The difference between the value of a country\'s exports and imports.' },
+          { country: '🇨🇳', event: 'Exports YoY', forecast: '3%', previous: '5.9%', description: 'Measures the year-over-year change in the value of goods exported from China.' },
+          { country: '🇺🇸', event: 'PPI', forecast: '-', previous: '149.77', description: 'The Producer Price Index (PPI) measures the average change over time in the selling prices received by domestic producers for their output.' },
+          { country: '🇯🇵', event: 'PPI YoY', forecast: '2.4%', previous: '2.7%', description: 'Measures the year-over-year change in the prices of goods sold by manufacturers in Japan.' }
         ]
       },
       '2026-01-15': {
         rows: [
-          { country: '🇰🇷', event: 'Interest Rate Decision', forecast: '2.50%', previous: '2.50%', description: 'The central bank held rates steady, signaling caution amid slowing growth and persistent global uncertainty.' },
-          { country: '🇩🇪', event: 'Full Year GDP Growth', forecast: '-0.20%', previous: '-0.50%', description: 'Annual economic output change; the contraction was milder than feared, offering tentative relief for Europe’s largest economy.' }
+          { country: '🇬🇧', event: 'GDP YoY', forecast: '0.8%', previous: '1.1%', description: 'The year-over-year change in the inflation-adjusted value of all goods and services produced by the economy.' },
+          { country: '🇬🇧', event: 'Trade Balance', forecast: '-', previous: '£-4.82bn', description: 'The difference between the value of imports and exports of goods and services.' },
+          { country: '🇬🇧', event: 'Manufacturing Production', forecast: '-0.8%', previous: '-0.8%', description: 'Measures the change in the total inflation-adjusted value of output produced by manufacturers.' },
+          { country: '🇫🇷', event: 'Inflation Rate YoY', forecast: '0.8%', previous: '0.9%', description: 'The year-over-year change in the price of goods and services purchased by consumers in France.' },
+          { country: '🇩🇪', event: 'GDP Growth Rate YoY', forecast: '0.2%', previous: '-0.2%', description: 'The year-over-year change in the inflation-adjusted value of all goods and services produced by the German economy.' },
+          { country: '🇪🇺', event: 'Trade Balance', forecast: '€15.2bn', previous: '€18.4bn', description: 'The difference between the value of goods and services exported from and imported into the Eurozone.' }
         ]
       },
       '2026-01-16': {
         rows: [
-          { country: '🇩🇪', event: 'Inflation Rate YoY', forecast: '2.30%', previous: '1.80%', description: 'Higher inflation would reduce the case for further easing.' }
+          { country: '🇩🇪', event: 'Inflation Rate YoY', forecast: '1.8%', previous: '2.3%', description: 'The year-over-year change in the price of goods and services purchased by consumers in Germany.' },
+          { country: '🇮🇳', event: 'Foreign Exchange Reserves', forecast: '-', previous: '$686.8bn', description: 'Assets held by the central bank in foreign currencies, used to back liabilities and influence monetary policy.' },
+          { country: '🇺🇸', event: 'Industrial Production YoY', forecast: '-', previous: '2.5%', description: 'Measures the change in the total inflation-adjusted value of output produced by manufacturers, mines, and utilities.' },
+          { country: '🇺🇸', event: 'Manufacturing Production YoY', forecast: '2.0%', previous: '1.9%', description: 'Measures the change in the total inflation-adjusted value of output produced by manufacturers.' }
         ]
       },
       '2026-01-17': { message: '' },
@@ -1138,6 +1141,24 @@
     };
 
     function renderMacroTables() {
+      const getCountryName = (flag) => {
+        const mapping = {
+          '🇺🇸': 'United States',
+          '🇬🇧': 'United Kingdom',
+          '🇯🇵': 'Japan',
+          '🇨🇦': 'Canada',
+          '🇷🇺': 'Russia',
+          '🇸🇬': 'Singapore',
+          '🇫🇷': 'France',
+          '🇩🇪': 'Germany',
+          '🇪🇺': 'Eurozone',
+          '🇮🇹': 'Italy',
+          '🇨🇳': 'China',
+          '🇰🇷': 'South Korea'
+        };
+        return mapping[flag] || flag;
+      };
+
       const wrappers = document.querySelectorAll('.earnings-table-wrapper[data-day-table]');
       wrappers.forEach(wrapper => {
         const dateKey = wrapper.dataset.dayTable;
@@ -1148,9 +1169,11 @@
           return;
         }
         const rows = (data.rows || []).map(row => {
-          const description = row.description || MACRO_EVENT_DESCRIPTIONS[row.event] || '';
+          let description = row.description || MACRO_EVENT_DESCRIPTIONS[row.event] || '';
           if (description) {
-          return `
+            const countryName = getCountryName(row.country);
+            description = `<strong style="color: #6366f1; font-size: 0.9rem;">${countryName} ${row.country}</strong><br>${description}`;
+            return `
           <tr>
             <td>${row.country}</td>
             <td class="event-with-tooltip">
