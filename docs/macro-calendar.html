@@ -320,12 +320,6 @@
         font-size: 0.85rem !important;
       }
       
-      /* Hide Time and Currency columns on mobile */
-      .earnings-table thead th:nth-child(1),
-      .earnings-table tbody td:nth-child(1) {
-        display: none;
-      }
-      
       .earnings-main {
         padding: 15px 10px !important;
       }
@@ -684,6 +678,24 @@
                             <div class="week-day" data-date="2026-01-12">
                                 <div class="day-label">Mon, Jan 12</div>
                             </div>
+                            <div class="week-day" data-date="2026-01-13">
+                                <div class="day-label">Tue, Jan 13</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-14">
+                                <div class="day-label">Wed, Jan 14</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-15">
+                                <div class="day-label">Thu, Jan 15</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-16">
+                                <div class="day-label">Fri, Jan 16</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-17">
+                                <div class="day-label">Sat, Jan 17</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-18">
+                                <div class="day-label">Sun, Jan 18</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
@@ -901,6 +913,24 @@
                         </div>
                         <div class="earnings-day-content" data-day-content="2026-01-12">
                             <div class="earnings-table-wrapper" data-day-table="2026-01-12"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-13">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-13"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-14">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-14"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-15">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-15"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-16">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-16"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-17">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-17"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-18">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-18"></div>
                         </div>
                     </div>
                 </div>
@@ -1394,7 +1424,41 @@
       },
       '2026-01-10': { message: 'No significant events scheduled.' },
       '2026-01-11': { message: '' },
-      '2026-01-12': { message: '' }
+      '2026-01-13': {
+        rows: [
+          { country: '🇺🇸', event: 'Inflation Rate YoY', forecast: '2.6%', previous: '2.7%', description: 'Measures the change in the price of goods and services purchased by consumers.' },
+          { country: '🇺🇸', event: 'Core Inflation Rate YoY', forecast: '2.7%', previous: '2.6%', description: 'Measures the change in the price of goods and services purchased by consumers, excluding food and energy.' },
+          { country: '🇨🇳', event: 'Vehicle Sales Growth YoY', forecast: '-', previous: '3.4%', description: 'Tracks the year-over-year change in the number of new vehicles sold in China.' }
+        ]
+      },
+      '2026-01-14': {
+        rows: [
+          { country: '🇨🇳', event: 'Trade Balance', forecast: '-', previous: '$111.68bn', description: 'The difference between the value of a country\'s exports and imports.' },
+          { country: '🇨🇳', event: 'Exports YoY', forecast: '3%', previous: '5.9%', description: 'Measures the year-over-year change in the value of goods exported from China.' },
+          { country: '🇺🇸', event: 'PPI', forecast: '-', previous: '149.77', description: 'The Producer Price Index (PPI) measures the average change over time in the selling prices received by domestic producers for their output.' },
+          { country: '🇯🇵', event: 'PPI YoY', forecast: '2.4%', previous: '2.7%', description: 'Measures the year-over-year change in the prices of goods sold by manufacturers in Japan.' }
+        ]
+      },
+      '2026-01-15': {
+        rows: [
+          { country: '🇬🇧', event: 'GDP YoY', forecast: '0.8%', previous: '1.1%', description: 'The year-over-year change in the inflation-adjusted value of all goods and services produced by the economy.' },
+          { country: '🇬🇧', event: 'Trade Balance', forecast: '-', previous: '£-4.82bn', description: 'The difference between the value of imports and exports of goods and services.' },
+          { country: '🇬🇧', event: 'Manufacturing Production', forecast: '-0.8%', previous: '-0.8%', description: 'Measures the change in the total inflation-adjusted value of output produced by manufacturers.' },
+          { country: '🇫🇷', event: 'Inflation Rate YoY', forecast: '0.8%', previous: '0.9%', description: 'The year-over-year change in the price of goods and services purchased by consumers in France.' },
+          { country: '🇩🇪', event: 'GDP Growth Rate YoY', forecast: '0.2%', previous: '-0.2%', description: 'The year-over-year change in the inflation-adjusted value of all goods and services produced by the German economy.' },
+          { country: '🇪🇺', event: 'Trade Balance', forecast: '€15.2bn', previous: '€18.4bn', description: 'The difference between the value of goods and services exported from and imported into the Eurozone.' }
+        ]
+      },
+      '2026-01-16': {
+        rows: [
+          { country: '🇩🇪', event: 'Inflation Rate YoY', forecast: '1.8%', previous: '2.3%', description: 'The year-over-year change in the price of goods and services purchased by consumers in Germany.' },
+          { country: '🇮🇳', event: 'Foreign Exchange Reserves', forecast: '-', previous: '$686.8bn', description: 'Assets held by the central bank in foreign currencies, used to back liabilities and influence monetary policy.' },
+          { country: '🇺🇸', event: 'Industrial Production YoY', forecast: '-', previous: '2.5%', description: 'Measures the change in the total inflation-adjusted value of output produced by manufacturers, mines, and utilities.' },
+          { country: '🇺🇸', event: 'Manufacturing Production YoY', forecast: '2.0%', previous: '1.9%', description: 'Measures the change in the total inflation-adjusted value of output produced by manufacturers.' }
+        ]
+      },
+      '2026-01-17': { message: '' },
+      '2026-01-18': { message: '' }
     };
 
     const MACRO_HEADERS = ['Country', 'Event', 'Forecast', 'Previous'];
@@ -1497,6 +1561,25 @@
     }
 
     function renderMacroTables() {
+      const getCountryName = (flag) => {
+        const mapping = {
+          '🇺🇸': 'United States',
+          '🇬🇧': 'United Kingdom',
+          '🇯🇵': 'Japan',
+          '🇨🇦': 'Canada',
+          '🇷🇺': 'Russia',
+          '🇸🇬': 'Singapore',
+          '🇫🇷': 'France',
+          '🇩🇪': 'Germany',
+          '🇪🇺': 'Eurozone',
+          '🇮🇹': 'Italy',
+          '🇨🇳': 'China',
+          '🇰🇷': 'South Korea',
+          '🇮🇳': 'India'
+        };
+        return mapping[flag] || flag;
+      };
+
       const wrappers = document.querySelectorAll('.earnings-table-wrapper[data-day-table]');
       wrappers.forEach(wrapper => {
         const dateKey = wrapper.dataset.dayTable;
@@ -1513,10 +1596,16 @@
         }
 
         const rowsHtml = (data.rows || []).map(row => {
-          const description = row.description || MACRO_EVENT_DESCRIPTIONS[row.event] || '';
+          let description = row.description || MACRO_EVENT_DESCRIPTIONS[row.event] || '';
+          if (description) {
+            const countryName = getCountryName(row.country);
+            description = `<strong style="color: #6366f1; font-size: 0.9rem;">${countryName} ${row.country}</strong><br>${description}`;
+          }
+          
           const eventCell = description 
             ? `<td class="event-with-tooltip">${row.event || '-'}<span class="event-tooltip">${description}</span></td>`
             : `<td>${row.event || '-'}</td>`;
+          
           return `
           <tr>
             <td>${row.country || '-'}</td>
@@ -1542,26 +1631,22 @@
         `;
       });
       
-      // Add mouse tracking for tooltips
-      document.querySelectorAll('.event-with-tooltip').forEach(element => {
-        const tooltip = element.querySelector('.event-tooltip');
+      initMacroTooltips();
+    }
+
+    function initMacroTooltips() {
+      document.querySelectorAll('td.event-with-tooltip').forEach((cell) => {
+        const tooltip = cell.querySelector('.event-tooltip');
         if (!tooltip) return;
-        
-        element.addEventListener('mouseenter', () => {
+
+        cell.addEventListener('mouseenter', () => {
           tooltip.style.opacity = '1';
           tooltip.style.visibility = 'visible';
         });
-        
-        element.addEventListener('mouseleave', () => {
+
+        cell.addEventListener('mouseleave', () => {
           tooltip.style.opacity = '0';
           tooltip.style.visibility = 'hidden';
-        });
-        
-        element.addEventListener('mousemove', (e) => {
-          const offset = 15;
-          tooltip.style.left = (e.clientX + offset) + 'px';
-          tooltip.style.top = (e.clientY + offset) + 'px';
-          tooltip.style.transform = 'none';
         });
       });
     }
@@ -1675,72 +1760,6 @@
       updateNavState();
     }
 
-    function initTooltipPositioning() {
-      document.querySelectorAll('.event-with-tooltip').forEach(element => {
-        const tooltip = element.querySelector('.event-tooltip');
-        if (!tooltip) return;
-        
-        element.addEventListener('mouseenter', (e) => {
-          // Make tooltip visible temporarily to measure it
-          tooltip.style.visibility = 'visible';
-          tooltip.style.opacity = '0';
-          
-          const rect = element.getBoundingClientRect();
-          const tooltipRect = tooltip.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
-          const scrollY = window.scrollY || window.pageYOffset;
-          
-          // Calculate position above the element (default)
-          let left = rect.left + (rect.width / 2);
-          let top = rect.top + scrollY - tooltipRect.height - 12;
-          let position = 'above';
-          
-          // Adjust if tooltip would go off the left edge
-          if (left - (tooltipRect.width / 2) < 10) {
-            left = tooltipRect.width / 2 + 10;
-          }
-          
-          // Adjust if tooltip would go off the right edge
-          if (left + (tooltipRect.width / 2) > viewportWidth - 10) {
-            left = viewportWidth - (tooltipRect.width / 2) - 10;
-          }
-          
-          // If tooltip would go off the top, show it below instead
-          if (rect.top - tooltipRect.height - 12 < 10) {
-            top = rect.bottom + scrollY + 12;
-            position = 'below';
-          }
-          
-          // Ensure tooltip doesn't go off the bottom
-          if (rect.bottom + scrollY + tooltipRect.height + 12 > viewportHeight + scrollY - 10) {
-            top = viewportHeight + scrollY - tooltipRect.height - 10;
-          }
-          
-          tooltip.style.left = left + 'px';
-          tooltip.style.top = top + 'px';
-          tooltip.style.transform = 'translateX(-50%)';
-          
-          // Update arrow position based on tooltip placement
-          if (position === 'below') {
-            tooltip.setAttribute('data-position', 'below');
-          } else {
-            tooltip.removeAttribute('data-position');
-          }
-          
-          // Now make it visible
-          tooltip.style.visibility = 'visible';
-          tooltip.style.opacity = '1';
-        });
-        
-        element.addEventListener('mouseleave', () => {
-          tooltip.style.visibility = 'hidden';
-          tooltip.style.opacity = '0';
-        });
-      });
-    }
-
-    // Logout functionality
     function initLogout() {
       const logoutBtn = document.getElementById('logoutBtn');
       if (logoutBtn && typeof auth !== 'undefined' && auth.isAuthenticated()) {
@@ -1758,8 +1777,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderMacroTables();
       initMacroCalendar();
-      // Re-initialize tooltips after tables are rendered
-      setTimeout(initTooltipPositioning, 100);
       initLogout();
     });
   </script>
@@ -1843,15 +1860,18 @@
     
     .event-tooltip {
       position: fixed;
-      padding: 18px 24px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 28px;
       background: #1f2937;
       color: #f9fafb;
       font-size: 1.05rem;
-      line-height: 1.7;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      min-width: 400px;
-      max-width: 900px;
+      line-height: 1.65;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      min-width: 320px;
+      max-width: 550px;
       width: max-content;
       z-index: 10000;
       opacity: 0;
@@ -1861,6 +1881,7 @@
       white-space: normal;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
     
     .event-tooltip::after {
@@ -1876,29 +1897,14 @@
       visibility: visible;
     }
     
-    /* Override default hover styles when JavaScript positioning is active */
-    .event-tooltip[style*="left"] {
-      position: fixed !important;
-    }
-    
     /* Ensure tooltip doesn't overflow on small screens */
     @media (max-width: 768px) {
       .event-tooltip {
-        left: 0;
-        transform: translateX(0) translateY(-5px);
         max-width: calc(100vw - 40px);
         min-width: 280px;
-        font-size: 0.95rem;
-        padding: 16px 18px;
-      }
-      
-      .event-tooltip::after {
-        left: 30px;
-        transform: translateX(0);
-      }
-      
-      .event-with-tooltip:hover .event-tooltip {
-        transform: translateX(0) translateY(0);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        padding: 16px 20px;
       }
     }
     
