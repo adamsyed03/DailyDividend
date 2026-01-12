@@ -1700,41 +1700,39 @@
       };
  
       const now = new Date();
-      const todayIso = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
-      let activated = false;
+      now.setHours(0, 0, 0, 0);
+      const todayTime = now.getTime();
+      
       let closestDay = null;
-      let closestDiff = Infinity;
+      let minDiff = Infinity;
 
-      // First, try to find today's exact date
+      // Scan all days to find the one with events closest to today
       weekDays.forEach(day => {
-        if (!activated && day.dataset.date === todayIso) {
-          showDay(day, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
-          activated = true;
-        }
-        
-        // Also track the closest date to today
-        if (day.dataset.date) {
-          const dayDate = new Date(day.dataset.date);
-          const todayDate = new Date(todayIso);
-          const diff = Math.abs(dayDate - todayDate);
-          if (diff < closestDiff) {
-            closestDiff = diff;
+        const dateStr = day.dataset.date;
+        const data = MACRO_EVENTS[dateStr];
+        // Check if day has actual events (rows)
+        if (data && data.rows && data.rows.length > 0) {
+          const dayDate = new Date(dateStr);
+          dayDate.setHours(0, 0, 0, 0);
+          const diff = Math.abs(dayDate.getTime() - todayTime);
+          
+          // Use this day if it's closer, or if it's equally close but today/in the future
+          if (diff < minDiff || (diff === minDiff && dayDate.getTime() >= todayTime)) {
+            minDiff = diff;
             closestDay = day;
           }
         }
       });
 
-      // If today's date not found, use the closest date
-      if (!activated) {
-        if (closestDay) {
-          showDay(closestDay, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
-          activated = true;
-        } else if (weekDays.length) {
-          // Fallback to first day if no dates found
-          showDay(weekDays[0], { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
-        }
+      if (closestDay) {
+        showDay(closestDay, { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
+      } else if (weekDays.length) {
+        // Fallback if no events found anywhere: show today or first day
+        const todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const todayDay = weekDays.find(d => d.dataset.date === todayIso);
+        showDay(todayDay || weekDays[0], { shouldScroll: true, alignStart: true, behaviorOverride: 'auto' });
       }
- 
+
       weekDays.forEach(day => {
         day.addEventListener('click', () => showDay(day, { shouldScroll: true }));
       });

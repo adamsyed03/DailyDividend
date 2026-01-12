@@ -1735,46 +1735,39 @@
         updateNavState();
       };
 
-      const todayIso = new Date().toISOString().split('T')[0];
-      let activated = false;
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      const todayTime = now.getTime();
+      
       let closestDay = null;
-      let closestDiff = Infinity;
+      let minDiff = Infinity;
 
+      // Scan all days to find the one with earnings closest to today
       weekDays.forEach(day => {
-        const dateAttr = assignDateIfMissing(day);
-        if (!activated && dateAttr === todayIso) {
-          showDay(day);
-          activated = true;
-        }
+        const dateStr = assignDateIfMissing(day);
+        const data = EARNINGS_DATA[dateStr];
         
-        // Also track the closest date to today
-        if (dateAttr) {
-          const dayDate = new Date(dateAttr);
-          const todayDate = new Date(todayIso);
-          const diff = Math.abs(dayDate - todayDate);
-          if (diff < closestDiff) {
-            closestDiff = diff;
+        // Check if day has actual earnings (rows)
+        if (data && data.rows && data.rows.length > 0) {
+          const dayDate = new Date(dateStr);
+          dayDate.setHours(0, 0, 0, 0);
+          const diff = Math.abs(dayDate.getTime() - todayTime);
+          
+          // Use this day if it's closer, or if it's equally close but today/in the future
+          if (diff < minDiff || (diff === minDiff && dayDate.getTime() >= todayTime)) {
+            minDiff = diff;
             closestDay = day;
           }
         }
       });
 
-      // If today's date not found, use the closest date
-      if (!activated) {
-        if (closestDay) {
-          showDay(closestDay);
-          activated = true;
-        } else {
-        const today = new Date();
-        const fallbackName = dayNames[today.getDay()];
-        const fallback = weekDays.find(day => day.getAttribute('data-day') === fallbackName);
-        if (fallback) {
-          showDay(fallback);
-          activated = true;
-        } else if (weekDays.length) {
-          showDay(weekDays[0]);
-          }
-        }
+      if (closestDay) {
+        showDay(closestDay);
+      } else if (weekDays.length) {
+        // Fallback to today if no earnings found anywhere
+        const todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const todayDay = weekDays.find(d => d.dataset.date === todayIso);
+        showDay(todayDay || weekDays[0]);
       }
 
       weekDays.forEach(day => {

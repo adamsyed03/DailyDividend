@@ -1231,9 +1231,38 @@
         if (target) target.classList.add('active');
         day.scrollIntoView({ behavior: 'smooth', inline: 'center' });
       };
+
       const today = new Date();
-      const todayIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-      showDay(weekDays.find(d => d.dataset.date === todayIso) || weekDays[weekDays.length - 1]);
+      today.setHours(0, 0, 0, 0);
+      const todayTime = today.getTime();
+      
+      let closestDay = null;
+      let minDiff = Infinity;
+
+      weekDays.forEach(day => {
+        const dateStr = day.dataset.date;
+        const data = MACRO_EVENTS[dateStr];
+        // Check if day has actual events (rows)
+        if (data && data.rows && data.rows.length > 0) {
+          const dayDate = new Date(dateStr);
+          dayDate.setHours(0, 0, 0, 0);
+          const diff = Math.abs(dayDate.getTime() - todayTime);
+          
+          // Use this day if it's closer, or if it's equally close but today/in the future
+          if (diff < minDiff || (diff === minDiff && dayDate.getTime() >= todayTime)) {
+            minDiff = diff;
+            closestDay = day;
+          }
+        }
+      });
+
+      // Fallback to today or last day if no events found anywhere
+      if (!closestDay) {
+        const todayIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        closestDay = weekDays.find(d => d.dataset.date === todayIso) || weekDays[weekDays.length - 1];
+      }
+
+      showDay(closestDay);
       weekDays.forEach(day => day.addEventListener('click', () => showDay(day)));
     }
 
