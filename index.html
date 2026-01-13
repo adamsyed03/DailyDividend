@@ -495,7 +495,7 @@
                     <a href="#pricing">Pricing</a>
                     <a href="#test">Test</a>
                     
-                    <a href="tools/index.html" class="nav-tools-btn">Tools</a>
+                    <a href="login.html" class="nav-tools-btn">Tools</a>
                         </div>
                  <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                      <span></span>
@@ -507,7 +507,7 @@
                      <a href="#how-it-works" onclick="closeMobileMenu()">What We Offer</a>
                      <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
                      <a href="#test" onclick="closeMobileMenu()">Test</a>
-                     <a href="tools/index.html" onclick="closeMobileMenu()" class="nav-tools-btn">Tools</a>
+                    <a href="login.html" onclick="closeMobileMenu()" class="nav-tools-btn">Tools</a>
                 </div>
         </div>
     </nav>
@@ -536,7 +536,7 @@
                 Join the Community <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
                     <p class="login-link-text" style="margin: 0; margin-left: 12px;">
-                <a href="tools/index.html" style="color: #000000; text-decoration: underline; font-size: 0.85rem;">or log-in</a>
+                <a href="login.html" style="color: #000000; text-decoration: underline; font-size: 0.85rem;">or log-in</a>
               </p>
             </div>
                 </div>
@@ -638,7 +638,7 @@
         <div class="container">
             <div class="section-header">
                 <h2>What We Offer</h2>
-        <p>Powerful <a href="tools/index.html" class="tools-link-btn">tools</a> to help you make informed investment decisions</p>
+                <p>Powerful <a href="login.html" class="tools-link-btn">tools</a> to help you make informed investment decisions</p>
             </div>
             <div class="tools-list" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto;">
                 <!-- Column 1 -->
@@ -1108,11 +1108,55 @@
       const localRaw = normalizePhoneDigits(localInputEl?.value || '');
       if (!localRaw) return '';
       if (code === 'other') {
-        return localRaw;
+        // Treat as full international number; ensure leading "+"
+        return localRaw.startsWith('+') ? localRaw : `+${localRaw.replace(/^\+/, '')}`;
       }
       // Remove a leading "+" from local part if user typed it
       const local = localRaw.replace(/^\+/, '');
       return `${code}${local}`;
+    }
+
+    function isValidEmailValue(value) {
+      const v = String(value || '').trim();
+      if (!v) return false;
+      // Simple, pragmatic email check (HTML validity still applies too)
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(v);
+    }
+
+    function isValidE164Phone(value) {
+      const v = String(value || '').trim();
+      // E.164 allows up to 15 digits after "+"
+      return /^\+\d{8,15}$/.test(v);
+    }
+
+    function syncAndValidateCompositePhone(selectId, localInputId, hiddenInputId) {
+      const selectEl = document.getElementById(selectId);
+      const localEl = document.getElementById(localInputId);
+      const hiddenEl = document.getElementById(hiddenInputId);
+      if (!selectEl || !localEl || !hiddenEl) return { ok: false, full: '' };
+
+      hiddenEl.value = computeFullPhone(selectEl, localEl);
+      const full = hiddenEl.value;
+      const ok = isValidE164Phone(full);
+
+      if (!ok) {
+        localEl.setCustomValidity('Enter a valid WhatsApp number in international format (e.g., +447449222602).');
+      } else {
+        localEl.setCustomValidity('');
+      }
+
+      return { ok, full };
+    }
+
+    function validateEmailInput(inputEl) {
+      if (!inputEl) return false;
+      const ok = inputEl.checkValidity() && isValidEmailValue(inputEl.value);
+      if (!ok) {
+        inputEl.setCustomValidity('Enter a valid email address (e.g., name@example.com).');
+      } else {
+        inputEl.setCustomValidity('');
+      }
+      return ok;
     }
 
     function initPhoneComposite(selectId, localInputId, hiddenInputId) {
@@ -1122,7 +1166,8 @@
       if (!selectEl || !localEl || !hiddenEl) return;
 
       const sync = () => {
-        hiddenEl.value = computeFullPhone(selectEl, localEl);
+        // Always keep in sync, and keep validity message current
+        syncAndValidateCompositePhone(selectId, localInputId, hiddenInputId);
       };
 
       // Keep hidden phone field up to date
@@ -1169,7 +1214,7 @@
           <h3>${title}</h3>
           <p>${subtext}</p>
           <p style="margin-top: 20px; font-weight: 500;">
-            Click <a href="tools/index.html" style="color: #6366f1; text-decoration: underline; font-weight: 700;">tools</a> to continue
+            Click <a href="login.html" style="color: #6366f1; text-decoration: underline; font-weight: 700;">tools</a> to continue
           </p>
         </div>
         <button class="phone-signup-modal__close" onclick="closeAllModals()"><i class="fas fa-times"></i></button>
@@ -1187,7 +1232,27 @@
     function enhanceSubmission(formId, btnSelector) {
       const form = document.getElementById(formId);
       if (!form) return;
-      form.addEventListener('submit', () => {
+      form.addEventListener('submit', (e) => {
+        // Enforce validation: signup/waitlist only proceed if phone + email are valid.
+        // Forms use `novalidate`, so we must explicitly validate.
+        const isSignup = formId === 'phoneSignupForm';
+        const emailEl = isSignup ? document.getElementById('signupEmail') : document.getElementById('email');
+        const phoneIds = isSignup
+          ? { selectId: 'countryCode', localId: 'signupPhoneLocal', hiddenId: 'signupPhone' }
+          : { selectId: 'countryCodeBottom', localId: 'waitlistPhoneLocal', hiddenId: 'waitlistPhone' };
+
+        const phoneOk = syncAndValidateCompositePhone(phoneIds.selectId, phoneIds.localId, phoneIds.hiddenId).ok;
+        const emailOk = validateEmailInput(emailEl);
+
+        // Also respect built-in required fields (first/last name etc.)
+        const baseOk = form.checkValidity();
+        if (!phoneOk || !emailOk || !baseOk) {
+          e.preventDefault();
+          e.stopPropagation();
+          form.reportValidity();
+          return;
+        }
+
         const ts = form.querySelector('input[name="ts"]');
         if (ts) ts.value = Date.now().toString();
         const btn = form.querySelector(btnSelector);
@@ -1267,6 +1332,11 @@
       populateCountryCodeSelects();
       initPhoneComposite('countryCode', 'signupPhoneLocal', 'signupPhone');
       initPhoneComposite('countryCodeBottom', 'waitlistPhoneLocal', 'waitlistPhone');
+      // Validate email fields as users type (helps prevent "false success")
+      const signupEmail = document.getElementById('signupEmail');
+      if (signupEmail) signupEmail.addEventListener('input', () => validateEmailInput(signupEmail));
+      const waitlistEmail = document.getElementById('email');
+      if (waitlistEmail) waitlistEmail.addEventListener('input', () => validateEmailInput(waitlistEmail));
       wireForms();
       enhanceSubmission('phoneSignupForm', '.phone-signup-submit-btn');
       enhanceSubmission('waitlistForm', '.waitlist-submit-btn');
