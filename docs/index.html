@@ -913,7 +913,7 @@
                 <div class="social-links">
                      <h4 style="color: black;">Follow Us</h4>
                     <div class="social-icons">
-             <a href="https://instagram.com/dailydividend_news" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+             <a href="https://www.instagram.com/dailydividend.official/" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
              <a href="https://linkedin.com/company/dailydividend" target="_blank" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
              <a href="https://wa.me/447449222602" target="_blank" class="social-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
                     </div>
@@ -951,7 +951,7 @@
         <div class="form-group"><label for="signupLastName">Last Name</label><input type="text" id="signupLastName" name="last_name" required></div>
         <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
         <div class="form-group">
-          <label for="signupPhoneLocal">Phone Number</label>
+          <label for="signupPhoneLocal">WhatsApp Number</label>
           <div class="input-group">
             <span class="country-code-wrapper">
               <select id="countryCode" aria-label="Country code"></select>
@@ -986,7 +986,7 @@
         <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" name="last_name" required></div>
         <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
         <div class="form-group">
-          <label for="waitlistPhoneLocal">Phone Number</label>
+          <label for="waitlistPhoneLocal">WhatsApp Number</label>
           <div class="input-group">
             <span class="country-code-wrapper">
               <select id="countryCodeBottom" aria-label="Country code"></select>
@@ -1153,6 +1153,36 @@
     function openWaitlistModal(){ document.getElementById('waitlistModal').style.display='flex'; }
     function closeWaitlistModal(){ document.getElementById('waitlistModal').style.display='none'; document.getElementById('waitlistForm').reset(); }
 
+    function showSuccessMessage(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      const content = modal.querySelector('.phone-signup-modal__content, .waitlist-modal__content');
+      if (!content) return;
+
+      const isWaitlist = modalId === 'waitlistModal';
+      const title = isWaitlist ? 'Welcome to the Waitlist!' : 'Welcome to Daily Dividend!';
+      const subtext = isWaitlist ? 'We will be in touch shortly!' : 'Sign up successful! We will be in touch shortly!';
+      
+      content.innerHTML = `
+        <div class="phone-signup-modal__header">
+          <div class="phone-signup-modal__icon"><i class="fas fa-check-circle" style="color: #10b981;"></i></div>
+          <h3>${title}</h3>
+          <p>${subtext}</p>
+          <p style="margin-top: 20px; font-weight: 500;">
+            Click <a href="tools/index.html" style="color: #6366f1; text-decoration: underline; font-weight: 700;">tools</a> to continue
+          </p>
+        </div>
+        <button class="phone-signup-modal__close" onclick="closeAllModals()"><i class="fas fa-times"></i></button>
+      `;
+    }
+
+    function closeAllModals() {
+      closePhoneSignupModal();
+      closeWaitlistModal();
+      // Reload page after a short delay to reset the modal contents for next time
+      setTimeout(() => { window.location.reload(); }, 500);
+    }
+
     // Disable submit buttons and add timestamp
     function enhanceSubmission(formId, btnSelector) {
       const form = document.getElementById(formId);
@@ -1172,8 +1202,7 @@
               btn.innerHTML = btn.classList.contains('phone-signup-submit-btn') ? 
                 '<i class="fas fa-check"></i> Complete Signup' : 
                 '<i class="fas fa-bell"></i> Join Waitlist';
-              alert('Sign up successful! We will be in touch shortly! You can now log into the tools section using your phone number.');
-              try { closePhoneSignupModal(); closeWaitlistModal(); } catch {}
+              showSuccessMessage(formId === 'phoneSignupForm' ? 'phoneSignupModal' : 'waitlistModal');
             }
           }, 3000);
         }
@@ -1188,8 +1217,8 @@
         const { status, reason } = ev.data;
       if (status === 'OK') {
         // Show success message
-        alert('Sign up successful! We will be in touch shortly! You can now log into the tools section using your phone number.');
-        try { closePhoneSignupModal(); closeWaitlistModal(); } catch {}
+        const activeModalId = document.getElementById('phoneSignupModal').style.display === 'flex' ? 'phoneSignupModal' : 'waitlistModal';
+        showSuccessMessage(activeModalId);
         // Reset buttons
         document.querySelectorAll('.phone-signup-submit-btn,.waitlist-submit-btn').forEach(btn => {
           btn.disabled = false; 

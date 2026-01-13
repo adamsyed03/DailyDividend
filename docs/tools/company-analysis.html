@@ -396,7 +396,7 @@
       display: grid;
       grid-template-columns: 65% 35%;
       gap: 24px;
-      align-items: stretch;
+      align-items: center; /* Centered vertically */
       width: 100%;
       box-sizing: border-box;
       margin-top: 8px;
@@ -418,18 +418,20 @@
     .meta-analyst-column {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      justify-content: flex-start; /* Don't stretch vertically */
     }
     .meta-analyst-column .analyst-table-card {
-      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      align-self: flex-start; /* Fit content width */
+      width: 100%;
+      max-width: 320px; /* Limit width */
+      margin: 0 auto; /* Center in column */
     }
     .analyst-table-card {
       background: var(--surface-soft);
       border-radius: 16px;
-      padding: 16px;
+      padding: 12px 16px;
       border: 1px solid rgba(148, 163, 184, 0.3);
       width: 100%;
       min-width: 0;
@@ -453,7 +455,7 @@
     }
     .analyst-table thead th {
       text-align: left;
-      padding: 12px 8px;
+      padding: 8px 8px;
       font-weight: 600;
       color: var(--text-secondary);
       font-size: 0.75rem;
@@ -462,7 +464,7 @@
       border-bottom: 2px solid rgba(226, 232, 240, 0.6);
     }
     .analyst-table tbody td {
-      padding: 12px 8px;
+      padding: 8px 8px;
       border-bottom: 1px solid rgba(241, 245, 249, 0.8);
       vertical-align: middle;
     }
@@ -499,6 +501,10 @@
     .rating-hold {
       background: rgba(250, 204, 21, 0.15);
       color: #ca8a04;
+    }
+    .rating-sell {
+      background: rgba(239, 68, 68, 0.15);
+      color: #dc2626;
     }
     .chart-column {
       display: flex;
@@ -745,6 +751,14 @@
       <aside class="ca-panel" aria-label="Company list">
         <h2 style="margin:0 0 18px;font-size:1.08rem;">Companies</h2>
         <div class="company-list">
+          <article class="company-card active" role="button" tabindex="0" data-company="jpm">
+            <h3>JPMorgan Chase & Co.</h3>
+            <div class="company-meta">
+              <span><i class="fas fa-location-dot"></i> New York, New York</span>
+              <span><i class="fas fa-calendar"></i> Latest quarter Q4 FY2025</span>
+            </div>
+          </article>
+
           <article class="company-card" role="button" tabindex="0" data-company="visa">
             <h3>Visa Inc. (V)</h3>
             <div class="company-meta">
@@ -752,7 +766,7 @@
               <span><i class="fas fa-calendar"></i> Latest quarter Q3 FY2025</span>
             </div>
           </article>
-          <article class="company-card active" role="button" tabindex="0" data-company="nvidia">
+          <article class="company-card" role="button" tabindex="0" data-company="nvidia">
             <h3>NVIDIA Corporation</h3>
             <div class="company-meta">
               <span><i class="fas fa-location-dot"></i> Santa Clara, California</span>
@@ -827,6 +841,151 @@
 
       <div class="company-content-wrapper">
         <!-- Visa Inc. Section -->
+        <section class="ca-panel company-section active" id="jpmDetail" aria-live="polite">
+          <div class="detail-header">
+            <h2 style="margin:0;font-size:1.8rem;">JPMorgan Chase & Co. (JPM)</h2>
+            <span class="detail-pill"><i class="fas fa-building-columns"></i> Global Banking & Financial Services</span>
+            <div class="detail-meta">
+              <span><i class="fas fa-dollar-sign"></i> Market cap ≈ $870B</span>
+            </div>
+            <p style="margin:6px 0 0;font-size:0.98rem;line-height:1.65;color:var(--text-secondary);">
+              JPMorgan Chase & Co. is the largest U.S. bank; diversified earnings across consumer, wholesale banking, markets, payments, and wealth; fortress balance sheet.
+            </p>
+          </div>
+
+          <article class="chart-card" style="margin-bottom:30px;">
+            <header>
+              <div>
+                <h3>Financial Snapshot</h3>
+                <p>Headline growth, profitability, and balance sheet strength for FY 2025.</p>
+              </div>
+            </header>
+            <div class="snapshot-grid">
+              <div class="snapshot-card">
+                <h4><i class="fas fa-percentage"></i> Profitability</h4>
+                <ul>
+                  <li>ROE (FY25): <strong>17%</strong></li>
+                  <li>ROTCE (FY25): <strong>20%</strong></li>
+                  <li>Net margin (FY25): <strong>~31%</strong></li>
+                  <li>Efficiency ratio (FY25): <strong>~52%</strong></li>
+                </ul>
+              </div>
+              <div class="snapshot-card">
+                <h4><i class="fas fa-chart-line"></i> Growth</h4>
+                <ul>
+                  <li>Revenue YoY (FY25): <strong>+3%</strong> to $185.6B</li>
+                  <li>Markets revenue YoY (FY25): <strong>+19%</strong> to $35.8B</li>
+                  <li>Net interest income YoY (FY25): <strong>+3%</strong> to $95.9B</li>
+                  <li>Avg Loans / Deposits (Q4): <strong>+9% / +6%</strong></li>
+                </ul>
+              </div>
+              <div class="snapshot-card">
+                <h4><i class="fas fa-trophy"></i> Competitive Positioning</h4>
+                <ul>
+                  <li><strong>#1 global investment bank</strong> by fees (~8.4% share).</li>
+                  <li><strong>Dominant payments franchise</strong>; record $5.1B Q4 revenue.</li>
+                  <li><strong>Prime brokerage strength</strong>; Equity Markets +40% in Q4.</li>
+                </ul>
+              </div>
+              <div class="snapshot-card">
+                <h4><i class="fas fa-gauge-high"></i> Balance Sheet & Cash</h4>
+                <ul>
+                  <li>CET1 ratio (Std., Q4): <strong>14.5%</strong> (Key risk metric)</li>
+                  <li>Standardized RWA (Q4): <strong>~$2.0T</strong></li>
+                  <li>Liquidity sources: <strong>~$1.5T</strong></li>
+                  <li>Total assets (Q4): <strong>~$4.4T</strong></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <div class="meta-main-layout">
+            <div class="meta-kpi-column" id="jpmKpiColumn">
+            </div>
+
+            <div class="meta-content-column">
+              <div class="meta-charts-column">
+                <article class="chart-card chart-mix-card">
+                  <header>
+                    <div>
+                      <h3>Net Revenue by Segment</h3>
+                      <p>Q4 2025</p>
+                    </div>
+                  </header>
+                  <div class="chart-body" style="height: 220px;">
+                    <canvas id="jpmRevenueMixChart" aria-label="JPM revenue by segment chart" role="img"></canvas>
+                  </div>
+                </article>
+
+                <article class="chart-card chart-earnings">
+                  <header>
+                    <div>
+                      <h3>Net Income by Segment</h3>
+                      <p>Q4 2025</p>
+                    </div>
+                  </header>
+                  <div class="chart-body" style="height: 220px;">
+                    <canvas id="jpmIncomeMixChart" aria-label="JPM income by segment chart" role="img"></canvas>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="meta-bottom-row">
+            <div class="meta-insights-column">
+              <div class="insight-box">
+                <h4><i class="fas fa-shield-halved"></i> Risk Watchlist</h4>
+                <ul>
+                  <li><strong>Credit risk:</strong> normalization in card + selective wholesale charge-offs.</li>
+                  <li><strong>Capital/RWA:</strong> RWA growth absorbs excess capital and can limit buybacks.</li>
+                  <li><strong>Regulatory:</strong> potential U.S. cap on credit card interest rates could hurt economics.</li>
+                </ul>
+              </div>
+
+              <div class="insight-box">
+                <h4><i class="fas fa-rocket"></i> Growth Drivers</h4>
+                <ul>
+                  <li><strong>Markets demand:</strong> Equity Markets +40% YoY; Markets +17% YoY in Q4.</li>
+                  <li><strong>Payments strength:</strong> Record Q4 Payments revenue of $5.1B.</li>
+                  <li><strong>Loan growth:</strong> Average loans +9% YoY in Q4; wholesale strength.</li>
+                  <li><strong>Acquisition:</strong> Apple Card franchise expansion (incl. $2.2B reserve).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="meta-analyst-column">
+              <div class="analyst-table-card">
+                <header>
+                  <h3>Analyst Recommendations</h3>
+                </header>
+                <table class="analyst-table">
+                  <thead>
+                    <tr>
+                      <th>Rating</th>
+                      <th>Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="rating-badge rating-buy">Bullish</span></td>
+                      <td><strong>15</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="rating-badge rating-hold">Neutral</span></td>
+                      <td><strong>8</strong></td>
+                    </tr>
+                    <tr>
+                      <td><span class="rating-badge rating-sell">Bearish</span></td>
+                      <td><strong>1</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="ca-panel company-section" id="visaDetail" aria-live="polite">
           <div class="detail-header">
             <h2 style="margin:0;font-size:1.8rem;">Visa Inc. (V)</h2>
@@ -970,7 +1129,7 @@
           </div>
         </section>
 
-        <section class="ca-panel company-section active" id="companyDetail" aria-live="polite">
+        <section class="ca-panel company-section" id="companyDetail" aria-live="polite">
         <div class="detail-header">
           <h2 style="margin:0;font-size:1.8rem;">NVIDIA Corporation (NVDA)</h2>
           <span class="detail-pill"><i class="fas fa-microchip"></i> AI Infrastructure</span>
@@ -2773,6 +2932,15 @@
       }
     }
 
+    function initJPMCharts() {
+      const jpm = companiesData && companiesData.JPM;
+      if (!jpm) return;
+
+      createDonutChart('jpmRevenueMixChart', jpm.revenueBySegment);
+      createDonutChart('jpmIncomeMixChart', jpm.incomeBySegment);
+      renderKpis('jpmKpiColumn', jpm.kpis);
+    }
+
     function initCompanyCharts() {
       try {
         initMetaCharts();
@@ -2785,6 +2953,7 @@
         initLululemonCharts();
         initUberCharts();
         initVisaCharts();
+        initJPMCharts();
       } catch (err) {
         console.error('Error initialising company charts:', err);
       }
@@ -3064,6 +3233,7 @@
         const params = new URLSearchParams(window.location.search);
         const urlCompany = params.get('company');
         const companyToSectionId = {
+          jpm: 'jpmDetail',
           nvidia: 'companyDetail',
           broadcom: 'broadcomDetail',
           apple: 'appleDetail',
@@ -3076,7 +3246,7 @@
           lululemon: 'lululemonDetail',
           visa: 'visaDetail'
         };
-        const initialCompany = companyToSectionId[urlCompany] ? urlCompany : 'nvidia';
+        const initialCompany = companyToSectionId[urlCompany] ? urlCompany : 'jpm';
         const initialSectionId = companyToSectionId[initialCompany];
 
         // Ensure only the initial company section is visible on load
@@ -3132,6 +3302,8 @@
               switchCompany('uberDetail');
             } else if (companyId === 'visa') {
               switchCompany('visaDetail');
+            } else if (companyId === 'jpm') {
+              switchCompany('jpmDetail');
             }
           });
         });

@@ -169,10 +169,20 @@ a {
   display: none;
   background: none;
   border: none;
-  padding: 6px 8px;
-  font-size: 1.3rem;
-  color: #111827;
+  padding: 10px;
   cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 25px;
+  height: 2.5px;
+  background-color: #111827;
+  border-radius: 2px;
+  transition: all 0.2s ease;
 }
 
 .mobile-menu {
@@ -751,8 +761,17 @@ main {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    padding: 0 16px;
+    height: 60px;
+  }
+
+  .mobile-menu {
+    top: 60px;
+  }
+
   .mobile-menu-btn {
-    display: block !important;
+    display: flex !important;
   }
 
   .nav-links {
@@ -794,32 +813,94 @@ main {
 
 @media (max-width: 640px) {
   .ct-hero {
-    padding: 96px 16px 56px;
+    padding: 100px 16px 40px;
+  }
+
+  .ct-hero h1 {
+    font-size: 1.85rem;
   }
 
   .ct-landing,
   .ct-wrapper {
-    margin: -40px auto 40px;
-    padding: 0 16px;
+    margin: -30px auto 40px;
+    padding: 0 12px;
   }
 
-  /* industry mix removed on mobile too */
+  .ct-panel {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .ct-landing-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ct-landing-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .ct-landing-card {
+    padding: 12px;
+  }
+
+  .ct-landing-name {
+    font-size: 0.95rem;
+  }
+
+  .ct-stat-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ct-stat-card {
+    padding: 8px 10px;
+  }
+
+  .ct-profile-title-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ct-profile-name {
+    font-size: 1.2rem;
+  }
 
   .ct-timeline-item {
-    padding: 9px 10px 11px 12px;
+    padding: 10px;
+    margin-bottom: 10px;
   }
 
-  .ct-company-info {
-    font-size: 0.8rem;
+  .ct-timeline-header {
+    flex-direction: column;
+    gap: 2px;
   }
 
-  .ct-table th,
-  .ct-table td {
-    padding: 6px 8px;
+  .ct-timeline-ticker {
+    font-size: 0.88rem;
   }
 
-  .ct-timeline {
-    padding-left: 18px;
+  .ct-timeline-company {
+    font-size: 0.78rem;
+  }
+
+  .ct-badges {
+    gap: 4px;
+  }
+
+  .ct-badge {
+    padding: 2px 6px;
+    font-size: 0.65rem;
+  }
+
+  .ct-amount {
+    font-size: 0.78rem;
+  }
+
+  .ct-notes {
+    font-size: 0.75rem;
   }
 }
 

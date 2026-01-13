@@ -356,11 +356,114 @@ const companiesData = {
       ],
     },
   },
+
+  JPM: {
+    header: {
+      name: 'JPMorgan Chase & Co. (JPM)',
+      pillIcon: 'fa-building-columns',
+      pillLabel: 'Global Banking & Financial Services',
+      marketCap: '≈ $870B',
+    },
+    kpis: [
+      { label: 'REVENUE (Q4)', value: '$46.8B' },
+      { label: 'ADJ EPS (Q4)', value: '$5.23', sub: 'Reported: $4.63' },
+      { label: 'NET INCOME (Q4)', value: '$13.0B', sub: 'Adj: $14.7B' },
+      { label: 'CET1 (Q4)', value: '14.5%', sub: 'Standardized' },
+      { label: 'FY25 REVENUE', value: '$185.6B' },
+      { label: 'FY25 NET INCOME', value: '$57.0B' },
+    ],
+    revenueBySegment: {
+      title: 'Net Revenue by Segment',
+      subtitle: 'Q4 2025',
+      data: [
+        { label: 'Consumer & Community Banking', value: 19.396 },
+        { label: 'Corporate & Investment Bank', value: 19.375 },
+        { label: 'Asset & Wealth Management', value: 6.516 },
+        { label: 'Corporate', value: 1.480 },
+      ],
+    },
+    incomeBySegment: {
+      title: 'Net Income by Segment',
+      subtitle: 'Q4 2025',
+      data: [
+        { label: 'Consumer & Community Banking', value: 3.642 },
+        { label: 'Corporate & Investment Bank', value: 7.268 },
+        { label: 'Asset & Wealth Management', value: 1.808 },
+        { label: 'Corporate', value: 0.307 },
+      ],
+    },
+  },
 };
 
 // Extended narrative company profiles for AI / tooling usage
 // Apple profile in the same style as other large-cap tech (e.g., NVDA, META)
 const companyData = {
+  JPM: {
+    header: {
+      name: "JPMorgan Chase & Co. (JPM)",
+      pillIcon: "fa-building-columns",
+      pillLabel: "Global Banking & Financial Services",
+      marketCap: "≈ $870B",
+    },
+    overview: `
+JPMorgan Chase & Co. is the largest U.S. bank, operating a highly diversified business model across consumer and community banking (CCB), corporate and investment banking (CIB), asset and wealth management (AWM), and commercial banking. The firm maintains a "fortress balance sheet" and generates earnings from a wide array of sources including net interest income, investment banking fees, market making, asset management, and payments services.
+    `,
+    financials: {
+      revenueFY2025: "$185.6B (+3% YoY)",
+      marketsRevenueFY2025: "$35.8B (+19% YoY)",
+      netInterestIncomeFY2025: "$95.9B (+3%)",
+      netIncomeFY2025: "$57.0B",
+      roeFY2025: "17%",
+      rotceFY2025: "20%",
+      netMarginFY2025: "~31%",
+      efficiencyRatioFY2025: "~52%",
+    },
+    profitability: `
+• ROE (FY25): 17%
+• ROTCE (FY25): 20%
+• Net margin (FY25): ~31%
+• Efficiency ratio (FY25): ~52%
+    `,
+    growth: `
+• Revenue YoY (FY25): +3% to $185.6B
+• Markets revenue YoY (FY25): +19% to $35.8B
+• Net interest income YoY (FY25): +3% to $95.9B
+• Average loans YoY (Q4): +9%
+• Average deposits YoY (Q4): +6%
+    `,
+    competitivePositioning: `
+• #1 global investment bank by fees; ~8.4% wallet share (FY25).
+• Dominant U.S. deposits & payments franchise; record Payments revenue $5.1B in Q4.
+• Prime brokerage strength: Equity Markets revenue +40% YoY in Q4.
+• Scale advantage across CCB/CIB/AWM and ability to deploy capital through cycle.
+    `,
+    balanceSheet: `
+• CET1 ratio (Std., Q4): 14.5% (Key banking risk metric)
+• Standardized RWA (Q4): ~$2.0T
+• Liquidity sources: ~$1.5T
+• Total assets (Q4): ~$4.4T
+• LCR (Firm): 111%
+    `,
+    riskWatchlist: `
+• Credit risk: normalization in card + selective wholesale charge-offs.
+• Capital/RWA: RWA growth absorbs excess capital and can limit buybacks.
+• Regulatory: potential U.S. cap on credit card interest rates could hurt economics.
+    `,
+    growthDrivers: `
+• Markets & client financing demand remains strong (Equity Markets +40% YoY).
+• Payments strength (Q4 Payments revenue record $5.1B).
+• Loan growth tailwind (avg loans +9% YoY in Q4).
+• Apple Card acquisition expands credit card franchise.
+    `,
+    analystRecommendations: `
+| Rating | Count |
+|---------|--------|
+| Bullish | 15 |
+| Neutral | 8 |
+| Bearish | 1 |
+    `,
+  },
+
   V: {
     header: {
       name: "Visa Inc. (V)",

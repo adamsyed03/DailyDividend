@@ -47,6 +47,7 @@
         <a href="../index.html#pricing" onclick="closeMobileMenu()">Pricing</a>
         <a href="../index.html#test" onclick="closeMobileMenu()">Test</a>
         <a href="index.html" onclick="closeMobileMenu()">Tools</a>
+        <a href="#" id="logoutBtnMobile" onclick="closeMobileMenu()"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </div>
     </div>
   </nav>
@@ -118,22 +119,35 @@
     // Logout functionality (mirrors other tools pages)
     async function initLogout() {
       const logoutBtn = document.getElementById('logoutBtn');
-      if (!logoutBtn) return;
+      const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+      if (!logoutBtn && !logoutBtnMobile) return;
 
-      logoutBtn.style.display = 'inline-block';
-      logoutBtn.style.visibility = 'visible';
-      logoutBtn.style.opacity = '1';
+      const { logout } = await import('../auth.js');
+      
+      const handleLogout = (e) => {
+        e.preventDefault();
+        if (confirm('Are you sure you want to logout?')) {
+          logout();
+          window.location.href = '/login.html';
+        }
+      };
 
-      if (!logoutBtn.dataset.listenerAttached) {
-        const { logout } = await import('../auth.js');
-        logoutBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (confirm('Are you sure you want to logout?')) {
-            logout();
-            window.location.href = '/login.html';
-          }
-        });
-        logoutBtn.dataset.listenerAttached = 'true';
+      if (logoutBtn) {
+        logoutBtn.style.display = 'inline-block';
+        logoutBtn.style.visibility = 'visible';
+        logoutBtn.style.opacity = '1';
+        if (!logoutBtn.dataset.listenerAttached) {
+          logoutBtn.addEventListener('click', handleLogout);
+          logoutBtn.dataset.listenerAttached = 'true';
+        }
+      }
+
+      if (logoutBtnMobile) {
+        logoutBtnMobile.style.display = 'block';
+        if (!logoutBtnMobile.dataset.listenerAttached) {
+          logoutBtnMobile.addEventListener('click', handleLogout);
+          logoutBtnMobile.dataset.listenerAttached = 'true';
+        }
       }
     }
 
