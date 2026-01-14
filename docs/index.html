@@ -949,7 +949,7 @@
       <form id="phoneSignupForm" method="GET" target="gas_iframe" action="https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec" novalidate>
         <div class="form-group"><label for="signupFirstName">First Name</label><input type="text" id="signupFirstName" name="first_name" required></div>
         <div class="form-group"><label for="signupLastName">Last Name</label><input type="text" id="signupLastName" name="last_name" required></div>
-        <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
+        <div class="form-group"><label for="signupEmail">Email Address</label><input type="email" id="signupEmail" name="email" required></div>
         <div class="form-group">
           <label for="signupPhoneLocal">WhatsApp Number</label>
           <div class="input-group">
@@ -984,7 +984,7 @@
       <form id="waitlistForm" method="GET" target="gas_iframe" action="https://script.google.com/macros/s/AKfycbwN8v9wQ-xvz7QPntjjSBOvFpBfbC5X0Z-41C9NR2RJvAx_WWBytmtdCEDuJyl28uLj/exec" novalidate>
         <div class="form-group"><label for="firstName">First Name</label><input type="text" id="firstName" name="first_name" required></div>
         <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" name="last_name" required></div>
-        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address with a domain extension (e.g., .com, .co.uk)" required></div>
+        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
         <div class="form-group">
           <label for="waitlistPhoneLocal">WhatsApp Number</label>
           <div class="input-group">
@@ -1105,8 +1105,13 @@
 
     function computeFullPhone(selectEl, localInputEl) {
       const code = (selectEl?.value || '').trim();
-      const localRaw = normalizePhoneDigits(localInputEl?.value || '');
+      let localRaw = normalizePhoneDigits(localInputEl?.value || '');
       if (!localRaw) return '';
+
+      // Allow common international prefix "00" and normalize it to "+"
+      if (localRaw.startsWith('+00')) localRaw = `+${localRaw.slice(3)}`;
+      else if (localRaw.startsWith('00')) localRaw = `+${localRaw.slice(2)}`;
+
       if (code === 'other') {
         // Treat as full international number; ensure leading "+"
         return localRaw.startsWith('+') ? localRaw : `+${localRaw.replace(/^\+/, '')}`;
@@ -1119,14 +1124,16 @@
     function isValidEmailValue(value) {
       const v = String(value || '').trim();
       if (!v) return false;
-      // Simple, pragmatic email check (HTML validity still applies too)
-      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(v);
+      // Intentionally loose: require only "local@domain" (no TLD/dot requirement)
+      return /^[^\s@]+@[^\s@]+$/i.test(v);
     }
 
     function isValidE164Phone(value) {
       const v = String(value || '').trim();
-      // E.164 allows up to 15 digits after "+"
-      return /^\+\d{8,15}$/.test(v);
+      // Intentionally loose: require a sensible digit count; allow any formatting.
+      // WhatsApp numbers are effectively phone numbers; E.164 max is 15 digits.
+      const digits = v.replace(/\D/g, '');
+      return digits.length >= 8 && digits.length <= 15;
     }
 
     function syncAndValidateCompositePhone(selectId, localInputId, hiddenInputId) {
@@ -1140,7 +1147,7 @@
       const ok = isValidE164Phone(full);
 
       if (!ok) {
-        localEl.setCustomValidity('Enter a valid WhatsApp number in international format (e.g., +447449222602).');
+        localEl.setCustomValidity('Enter a valid WhatsApp number (you can include spaces/dashes; just make sure it has enough digits).');
       } else {
         localEl.setCustomValidity('');
       }
@@ -1150,9 +1157,10 @@
 
     function validateEmailInput(inputEl) {
       if (!inputEl) return false;
-      const ok = inputEl.checkValidity() && isValidEmailValue(inputEl.value);
+      inputEl.value = String(inputEl.value || '').trim();
+      const ok = isValidEmailValue(inputEl.value);
       if (!ok) {
-        inputEl.setCustomValidity('Enter a valid email address (e.g., name@example.com).');
+        inputEl.setCustomValidity('Enter an email like name@domain (no extra formatting required).');
       } else {
         inputEl.setCustomValidity('');
       }
