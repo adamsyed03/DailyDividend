@@ -577,6 +577,27 @@
                             <div class="week-day" data-day="jan18" data-date="2026-01-18">
                                 <div class="day-label">Sun, Jan 18</div>
                             </div>
+                            <div class="week-day" data-day="jan19" data-date="2026-01-19">
+                                <div class="day-label">Mon, Jan 19</div>
+                            </div>
+                            <div class="week-day" data-day="jan20" data-date="2026-01-20">
+                                <div class="day-label">Tue, Jan 20</div>
+                            </div>
+                            <div class="week-day" data-day="jan21" data-date="2026-01-21">
+                                <div class="day-label">Wed, Jan 21</div>
+                            </div>
+                            <div class="week-day" data-day="jan22" data-date="2026-01-22">
+                                <div class="day-label">Thu, Jan 22</div>
+                            </div>
+                            <div class="week-day" data-day="jan23" data-date="2026-01-23">
+                                <div class="day-label">Fri, Jan 23</div>
+                            </div>
+                            <div class="week-day" data-day="jan24" data-date="2026-01-24">
+                                <div class="day-label">Sat, Jan 24</div>
+                            </div>
+                            <div class="week-day" data-day="jan25" data-date="2026-01-25">
+                                <div class="day-label">Sun, Jan 25</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -970,6 +991,41 @@
                     <div class="earnings-day-content" id="jan18-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2026-01-18"></div>
                     </div>
+                    
+                    <!-- Earnings Table for Monday Jan 19 -->
+                    <div class="earnings-day-content" id="jan19-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-19"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Tuesday Jan 20 -->
+                    <div class="earnings-day-content" id="jan20-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-20"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Wednesday Jan 21 -->
+                    <div class="earnings-day-content" id="jan21-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-21"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Thursday Jan 22 -->
+                    <div class="earnings-day-content" id="jan22-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-22"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Friday Jan 23 -->
+                    <div class="earnings-day-content" id="jan23-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-23"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Saturday Jan 24 -->
+                    <div class="earnings-day-content" id="jan24-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-24"></div>
+                    </div>
+                    
+                    <!-- Earnings Table for Sunday Jan 25 -->
+                    <div class="earnings-day-content" id="jan25-earnings">
+                        <div class="earnings-table-wrapper" data-day-table="2026-01-25"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1318,7 +1374,37 @@
           ['IBN', 'ICICI Bank Limited', 'EA', 'BMO', '0.38', '112.87B']
         ]
       },
-      '2026-01-18': { message: '' }
+      '2026-01-18': { message: '' },
+      '2026-01-19': { message: '' },
+      '2026-01-20': {
+        rows: [
+          ['NFLX', 'Netflix, Inc.', 'Q4 2025 Earnings Announcement', '-', '0.55', '$372.88B'],
+          ['IBKR', 'Interactive Brokers Group, Inc.', 'Q4 2025 Earnings Announcement', '-', '0.59', '$124.71B'],
+          ['MMM', '3M Company', 'Q4 2025 Earnings Announcement', '-', '1.8', '$89.38B'],
+          ['USB', 'U.S. Bancorp', 'Q4 2025 Earnings Announcement', '-', '1.19', '$84.66B'],
+          ['UAL', 'United Airlines Holdings, Inc.', 'Q4 2025 Earnings Announcement', '-', '2.94', '$36.74B']
+        ]
+      },
+      '2026-01-21': {
+        rows: [
+          ['JNJ', 'Johnson & Johnson', 'Q4 2025 Earnings Announcement', '-', '2.47', '$526.82B'],
+          ['SCHW', 'The Charles Schwab Corporation', 'Q4 2025 Earnings Announcement', '-', '1.39', '$188.46B'],
+          ['PLD', 'Prologis, Inc.', 'Q4 2025 Earnings Announcement', '-', '1.30', '$123.73B']
+        ]
+      },
+      '2026-01-22': {
+        rows: [
+          ['GE', 'GE Aerospace', 'Q4 2025 Earnings Announcement', '-', '1.43', '$344.77B'],
+          ['PG', 'The Procter & Gamble Company', 'Q4 2025 Earnings Announcement', '-', '1.86', '$338.27B'],
+          ['INTC', 'Intel Corporation', 'Q4 2025 Earnings Announcement', '-', '0.08', '$224B'],
+          ['ABT', 'Abbott Laboratories', 'Q4 2025 Earnings Announcement', '-', '1.5', '$211.92B'],
+          ['ISRG', 'Intuitive Surgical, Inc.', 'Q4 2025 Earnings Announcement', '-', '2.27', '$191.78B'],
+          ['COF', 'Capital One Financial Corporation', 'Q4 2025 Earnings Announcement', '-', '4.13', '$152.93B']
+        ]
+      },
+      '2026-01-23': { message: '' },
+      '2026-01-24': { message: '' },
+      '2026-01-25': { message: '' }
     };
 
     const NOTABLE_BLOCKS = [
@@ -1488,6 +1574,20 @@
       'BLK': 'The world’s largest asset manager, overseeing trillions across ETFs, mutual funds, and institutional portfolios.',
       'HDB': 'India’s largest private-sector bank, known for strong retail lending growth and asset quality.',
       'IBN': 'A major Indian private bank with broad exposure to retail, corporate lending, and digital banking services.',
+      'NFLX': 'Global streaming leader producing and distributing subscription-based film, television, and original content worldwide.',
+      'IBKR': 'Electronic brokerage firm offering low-cost trading, clearing, and market access across global asset classes.',
+      'MMM': 'Diversified industrial manufacturer supplying products across safety, healthcare, electronics, and consumer markets.',
+      'USB': 'Large U.S. bank serving consumer banking, payments, lending, and wealth management clients.',
+      'UAL': 'Major global airline operating domestic and international passenger and cargo transportation networks.',
+      'JNJ': 'Global healthcare company focused on pharmaceuticals, medical devices, and consumer health products.',
+      'SCHW': 'Brokerage and financial services firm providing investment, banking, and advisory solutions.',
+      'PLD': 'Industrial real estate investment trust specializing in logistics and warehouse properties.',
+      'GE': 'Aircraft engine and aerospace systems manufacturer serving commercial and defense aviation markets.',
+      'PG': 'Consumer staples company producing household, personal care, and hygiene brands worldwide.',
+      'INTC': 'Semiconductor manufacturer designing processors and computing technologies for PCs, servers, and data centers.',
+      'ABT': 'Healthcare company developing diagnostics, medical devices, nutrition products, and branded generics.',
+      'ISRG': 'Medical technology company specializing in robotic-assisted surgical systems and related instruments.',
+      'COF': 'Consumer-focused financial institution offering credit cards, banking, and lending services.',
       'Wealthfront Corporation': 'Wealthfront is a private financial technology company offering automated investment and wealth management services.',
       'Phoenix Education Partners, Inc.': 'An education services provider focused on workforce training and post-secondary programs, primarily in the U.S.'
     };
