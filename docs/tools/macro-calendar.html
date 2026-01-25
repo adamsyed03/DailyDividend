@@ -686,6 +686,27 @@
                             <div class="week-day" data-date="2026-01-25">
                                 <div class="day-label">Sun, Jan 25</div>
                             </div>
+                            <div class="week-day" data-date="2026-01-26">
+                                <div class="day-label">Mon, Jan 26</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-27">
+                                <div class="day-label">Tue, Jan 27</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-28">
+                                <div class="day-label">Wed, Jan 28</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-29">
+                                <div class="day-label">Thu, Jan 29</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-30">
+                                <div class="day-label">Fri, Jan 30</div>
+                            </div>
+                            <div class="week-day" data-date="2026-01-31">
+                                <div class="day-label">Sat, Jan 31</div>
+                            </div>
+                            <div class="week-day" data-date="2026-02-01">
+                                <div class="day-label">Sun, Feb 1</div>
+                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
                     </div>
@@ -943,6 +964,27 @@
                         <div class="earnings-day-content" data-day-content="2026-01-25">
                             <div class="earnings-table-wrapper" data-day-table="2026-01-25"></div>
                         </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-26">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-26"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-27">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-27"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-28">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-28"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-29">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-29"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-30">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-30"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-01-31">
+                            <div class="earnings-table-wrapper" data-day-table="2026-01-31"></div>
+                        </div>
+                        <div class="earnings-day-content" data-day-content="2026-02-01">
+                            <div class="earnings-table-wrapper" data-day-table="2026-02-01"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1170,45 +1212,88 @@
       '2026-01-18': { message: '' },
       '2026-01-19': {
         rows: [
-          { country: '🇨🇳', event: 'GDP Growth Rate', forecast: '5.40%', previous: '4.80%' },
-          { country: '🇨🇳', event: 'Unemployment Rate', forecast: '5.20%', previous: '5.10%' },
-          { country: '🇪🇺', event: 'Inflation Rate Data (YoY)', forecast: '2%', previous: '2.10%' }
+          { country: '🇨🇳', event: 'GDP Growth Rate', forecast: '5.40%', previous: '4.80%', description: 'Measures the year-over-year change in economic output, signaling overall growth momentum.' },
+          { country: '🇨🇳', event: 'Unemployment Rate', forecast: '5.20%', previous: '5.10%', description: 'Shows the share of the labor force unemployed and actively seeking work.' },
+          { country: '🇪🇺', event: 'Inflation Rate Data (YoY)', forecast: '2%', previous: '2.10%', description: 'Year-over-year change in consumer prices across the eurozone.' }
         ]
       },
       '2026-01-20': {
         rows: [
-          { country: '🇩🇪', event: 'PPI YoY', forecast: '-', previous: '0%' },
-          { country: '🇬🇧', event: 'Unemployment Rate', forecast: '5%', previous: '5.10%' },
-          { country: '🇪🇺', event: 'Current Account', forecast: '-', previous: '32bn' }
+          { country: '🇩🇪', event: 'PPI YoY', forecast: '-', previous: '0%', description: 'Year-over-year change in producer prices, indicating upstream inflation pressures.' },
+          { country: '🇬🇧', event: 'Unemployment Rate', forecast: '5%', previous: '5.10%', description: 'Shows the share of the labor force unemployed and actively seeking work.' },
+          { country: '🇪🇺', event: 'Current Account', forecast: '-', previous: '32bn', description: 'Measures the balance of trade in goods/services plus income and transfers.' }
         ]
       },
       '2026-01-21': {
         rows: [
-          { country: '🇬🇧', event: 'Inflation Rate (YoY)', forecast: '3.30%', previous: '3.20%' },
-          { country: '🇬🇧', event: 'Retail Price Index (YoY)', forecast: '4%', previous: '3.80%' },
-          { country: '🇮🇩', event: 'Central Bank Rate', forecast: '3.75%', previous: '3.75%' },
-          { country: '🇿🇦', event: 'Inflation Rate (YoY)', forecast: '3.50%', previous: '3.50%' },
-          { country: '🇯🇵', event: 'Balance of Trade', forecast: '357bn JPY', previous: '316.7bn JPY' }
+          { country: '🇬🇧', event: 'Inflation Rate (YoY)', forecast: '3.30%', previous: '3.20%', description: 'Year-over-year change in consumer prices, tracking inflation pressures.' },
+          { country: '🇬🇧', event: 'Retail Price Index (YoY)', forecast: '4%', previous: '3.80%', description: 'RPI measure of inflation, tracking price changes across a basket of goods.' },
+          { country: '🇮🇩', event: 'Central Bank Rate', forecast: '3.75%', previous: '3.75%', description: 'Policy interest rate set by the central bank to guide monetary conditions.' },
+          { country: '🇿🇦', event: 'Inflation Rate (YoY)', forecast: '3.50%', previous: '3.50%', description: 'Year-over-year change in consumer prices, tracking inflation pressures.' },
+          { country: '🇯🇵', event: 'Balance of Trade', forecast: '357bn JPY', previous: '316.7bn JPY', description: 'Difference between exports and imports, indicating external demand strength.' }
         ]
       },
       '2026-01-22': {
         rows: [
-          { country: '🇺🇸', event: 'GDP Growth Data (YoY)', forecast: '4.30%', previous: '3.80%' },
-          { country: '🇯🇵', event: 'Inflation Rate (YoY)', forecast: '2.70%', previous: '2.90%' }
+          { country: '🇺🇸', event: 'GDP Growth Data (YoY)', forecast: '4.30%', previous: '3.80%', description: 'Year-over-year change in economic output, signaling overall growth momentum.' },
+          { country: '🇯🇵', event: 'Inflation Rate (YoY)', forecast: '2.70%', previous: '2.90%', description: 'Year-over-year change in consumer prices, tracking inflation pressures.' }
         ]
       },
       '2026-01-23': {
         rows: [
-          { country: '🇯🇵', event: 'PMI Data', forecast: '51.5', previous: '51.1' },
-          { country: '🇮🇳', event: 'PMI Data', forecast: '57.5', previous: '57.8' },
-          { country: '🇩🇪', event: 'PMI Data', forecast: '52.2', previous: '51.3' },
-          { country: '🇪🇺', event: 'PMI Data', forecast: '52.3', previous: '51.5' },
-          { country: '🇬🇧', event: 'PMI Data', forecast: '51.7', previous: '51.4' },
-          { country: '🇺🇸', event: 'PMI Data', forecast: '52.8', previous: '52.7' }
+          { country: '🇯🇵', event: 'PMI Data', forecast: '51.5', previous: '51.1', description: 'Survey-based indicator of business activity; above 50 signals expansion.' },
+          { country: '🇮🇳', event: 'PMI Data', forecast: '57.5', previous: '57.8', description: 'Survey-based indicator of business activity; above 50 signals expansion.' },
+          { country: '🇩🇪', event: 'PMI Data', forecast: '52.2', previous: '51.3', description: 'Survey-based indicator of business activity; above 50 signals expansion.' },
+          { country: '🇪🇺', event: 'PMI Data', forecast: '52.3', previous: '51.5', description: 'Survey-based indicator of business activity; above 50 signals expansion.' },
+          { country: '🇬🇧', event: 'PMI Data', forecast: '51.7', previous: '51.4', description: 'Survey-based indicator of business activity; above 50 signals expansion.' },
+          { country: '🇺🇸', event: 'PMI Data', forecast: '52.8', previous: '52.7', description: 'Survey-based indicator of business activity; above 50 signals expansion.' }
         ]
       },
       '2026-01-24': { message: '' },
-      '2026-01-25': { message: '' }
+      '2026-01-25': { message: '' },
+      '2026-01-26': {
+        rows: [
+          { country: '🇪🇸', event: 'PPI YoY', forecast: '-2.00%', previous: '-2.50%', description: 'Measures annual changes in prices received by Spanish producers, indicating cost pressures at the factory level.' }
+        ]
+      },
+      '2026-01-27': {
+        rows: [
+          { country: '🇪🇸', event: 'Unemployment Rate', forecast: '10.00%', previous: '10.45%', description: 'Shows the percentage of Spain’s labour force that is unemployed and actively seeking work.' }
+        ]
+      },
+      '2026-01-28': {
+        rows: [
+          { country: '🇦🇺', event: 'Inflation Rate (YoY)', forecast: '3.60%', previous: '3.40%', description: 'Tracks annual changes in consumer prices, reflecting overall inflation in the Australian economy.' },
+          { country: '🇮🇳', event: 'Industrial Production YoY', forecast: '2.80%', previous: '6.70%', description: 'Measures annual output changes across India’s industrial sector, signalling overall economic activity.' },
+          { country: '🇮🇳', event: 'Manufacturing Production YoY', forecast: '3.20%', previous: '8%', description: 'Tracks year-on-year changes in manufacturing output, reflecting factory sector momentum.' },
+          { country: '🇨🇦', event: 'BoC Interest Rate Decision', forecast: '2.25%', previous: '2.25%', description: 'The Bank of Canada’s policy rate decision, guiding borrowing costs and monetary conditions.' }
+        ]
+      },
+      '2026-01-29': {
+        rows: [
+          { country: '🇷🇺', event: 'PPI YoY', forecast: '-1.00%', previous: '-1.10%', description: 'Measures annual producer price changes, reflecting inflation or deflation pressures in Russia’s supply chain.' },
+          { country: '🇺🇸', event: 'Fed IR Decision', forecast: '3.75%', previous: '3.75%', description: 'The Federal Reserve’s policy rate decision, influencing credit conditions, inflation, and economic growth.' },
+          { country: '🇸🇬', event: 'PPI YoY', forecast: '1.80%', previous: '2.20%', description: 'Tracks year-on-year producer price changes, indicating cost pressures in Singapore’s industrial sector.' }
+        ]
+      },
+      '2026-01-30': {
+        rows: [
+          { country: '🇰🇷', event: 'Manufacturing Production YoY', forecast: '-1.00%', previous: '-1.40%', description: 'Measures annual changes in factory output, signalling strength or weakness in Korea’s manufacturing sector.' },
+          { country: '🇯🇵', event: 'Unemployment Rate', forecast: '2.60%', previous: '2.60%', description: 'Shows the proportion of Japan’s labour force that is unemployed.' },
+          { country: '🇯🇵', event: 'Industrial Production YoY Prel', forecast: '-1.30%', previous: '-2.20%', description: 'Early estimate of annual changes in industrial output, indicating near-term economic momentum.' },
+          { country: '🇦🇺', event: 'PPI YoY', forecast: '3.30%', previous: '3.50%', description: 'Measures annual changes in producer prices, reflecting upstream inflation pressures.' },
+          { country: '🇫🇷', event: 'GDP Growth Rate YoY Prel', forecast: '1.10%', previous: '0.90%', description: 'Initial estimate of annual economic growth, measuring overall expansion of the French economy.' },
+          { country: '🇫🇷', event: 'PPI YoY', forecast: '-3.50%', previous: '-3.30%', description: 'Tracks annual producer price changes, indicating inflation trends at the production level.' },
+          { country: '🇪🇺', event: 'GDP Growth Rate YoY Flash', forecast: '1.50%', previous: '1.40%', description: 'Early estimate of annual economic growth across the eurozone.' },
+          { country: '🇺🇸', event: 'PPI YoY', forecast: '2.90%', previous: '3%', description: 'Measures annual changes in producer prices, signalling inflation pressures before consumer prices.' }
+        ]
+      },
+      '2026-01-31': {
+        rows: [
+          { country: '🇨🇳', event: 'NBS Manufacturing PMI', forecast: '50.4', previous: '50.1', description: 'Survey-based index measuring manufacturing activity, with readings above 50 indicating expansion.' }
+        ]
+      },
+      '2026-02-01': { message: '' }
     };
 
     const MACRO_EVENT_DESCRIPTIONS = {
