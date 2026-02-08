@@ -655,9 +655,6 @@
                             <div class="week-day" data-day="feb13" data-date="2026-02-13">
                                 <div class="day-label">Fri, Feb 13</div>
                             </div>
-                            <div class="week-day" data-day="feb14" data-date="2026-02-14">
-                                <div class="day-label">Sat, Feb 14</div>
-                            </div>
                         </div>
                         <button class="week-nav-btn next"><i class="fas fa-chevron-right"></i></button>
     </div>
@@ -1181,11 +1178,6 @@
                     <div class="earnings-day-content" id="feb13-earnings">
                         <div class="earnings-table-wrapper" data-day-table="2026-02-13"></div>
                     </div>
-                    
-                    <!-- Earnings Table for Saturday Feb 14 -->
-                    <div class="earnings-day-content" id="feb14-earnings">
-                        <div class="earnings-table-wrapper" data-day-table="2026-02-14"></div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1660,45 +1652,79 @@
         ]
       },
       '2026-02-07': { message: '' },
-      '2026-02-08': { message: '' },
+      '2026-02-08': {
+        rows: [
+          ['TM', 'Toyota Motor Corporation', 'Q4 2025 Earnings Announcement', '-', '3.18', '$297.35B'],
+          ['PM', 'Philip Morris International Inc.', 'Q4 2025 Earnings Announcement', '-', '1.7', '$276.91B']
+        ]
+      },
       '2026-02-09': {
         rows: [
           ['APO', 'Apollo Global Management, Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '2.04', '$77.21B'],
           ['BDX', 'Becton, Dickinson and Company', 'Q1 2026 Earnings Announcement', 'BMO', '2.81', '$59.84B'],
-          ['KO', 'The Coca-Cola Company', 'Q4 2025 Earnings Announcement', '-', '0.56', '$337.88B'],
-          ['AZN', 'AstraZeneca PLC', 'Q4 2025 Earnings Announcement', '-', '1.08', '$290.15B'],
-          ['GILD', 'Gilead Sciences, Inc.', 'Q4 2025 Earnings Announcement', '-', '1.83', '$185.34B'],
-          ['SPGI', 'S&P Global Inc.', 'Q4 2025 Earnings Announcement', '-', '4.33', '$137.91B'],
-          ['WELL', 'Welltower Inc.', 'Q4 2025 Earnings Announcement', '-', '0.59', '$131.13B']
+          ['ACGL', 'Arch Capital Group Ltd.', 'Q4 2025 Earnings Announcement', 'AMC', '2.57', '$37.68B'],
+          ['IX', 'ORIX Corporation', 'Q3 2026 Earnings Announcement', 'TNS', '0.67', '$35.72B']
         ]
       },
       '2026-02-10': {
         rows: [
-          ['CSCO', 'Cisco Systems, Inc.', 'Q4 2025 Earnings Announcement', '-', '1.02', '$325.41B'],
-          ['MCD', 'McDonald\'s Corporation', 'Q4 2025 Earnings Announcement', '-', '3.05', '$230.84B'],
-          ['TMUS', 'T-Mobile US, Inc.', 'Q4 2025 Earnings Announcement', '-', '2.07', '$227.18B'],
-          ['TTE', 'TotalEnergies SE', 'Q4 2025 Earnings Announcement', '-', '1.78', '$156.94B'],
-          ['SHOP', 'Shopify Inc.', 'Q4 2025 Earnings Announcement', '-', '0.51', '$145.18B'],
-          ['APP', 'AppLovin Corporation', 'Q4 2025 Earnings Announcement', '-', '2.95', '$128.92B']
+          ['KO', 'The Coca-Cola Company', 'Q4 2025 Earnings Announcement', 'BMO', '0.56', '$340.12B'],
+          ['AZN', 'AstraZeneca PLC', 'Q4 2025 Earnings Announcement', 'TNS', '2.1', '$299.25B'],
+          ['GILD', 'Gilead Sciences, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '1.83', '$189.22B'],
+          ['WELL', 'Welltower Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '0.59', '$134.47B'],
+          ['SPGI', 'S&P Global Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '4.33', '$134.11B'],
+          ['BP', 'BP p.l.c.', 'Q4 2025 Earnings Announcement', 'BMO', '0.6', '$100.55B'],
+          ['CVS', 'CVS Health Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '1', '$99.46B'],
+          ['DUK', 'Duke Energy Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '1.49', '$94.77B'],
+          ['BCS', 'Barclays PLC', 'Q4 2025 Earnings Announcement', 'BMO', '0.43', '$91.09B'],
+          ['MAR', 'Marriott International, Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '2.62', '$90.46B'],
+          ['SPOT', 'Spotify Technology S.A.', 'Q4 2025 Earnings Announcement', 'BMO', '2.77', '$87.01B'],
+          ['ECL', 'Ecolab Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '2.07', '$82.34B'],
+          ['WMB', 'The Williams Companies, Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '0.57', '$81.72B'],
+          ['HOOD', 'Robinhood Markets, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '0.64', '$74.47B'],
+          ['AMX', 'America Movil, S.A.B. de C.V.', 'Q4 2025 Earnings Announcement', 'AMC', '0.43', '$65.01B'],
+          ['NET', 'Cloudflare, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '0.27', '$60.67B'],
+          ['RACE', 'Ferrari N.V.', 'Q4 2025 Earnings Announcement', 'BMO', '2.2', '$59.63B']
         ]
       },
       '2026-02-11': {
         rows: [
-          ['AMAT', 'Applied Materials, Inc.', 'Q4 2025 Earnings Announcement', '-', '2.21', '$241.28B'],
-          ['ANET', 'Arista Networks, Inc.', 'Q4 2025 Earnings Announcement', '-', '0.78', '$182.03B'],
-          ['UL', 'Unilever PLC', 'Q4 2025 Earnings Announcement', '-', '1', '$158.07B'],
-          ['BUD', 'Anheuser-Busch InBev SA/NV', 'Q4 2025 Earnings Announcement', '-', '0.89', '$145.73B'],
-          ['BTI', 'British American Tobacco p.l.c.', 'Q4 2025 Earnings Announcement', '-', '-', '$134.43B'],
-          ['VRTX', 'Vertex Pharmaceuticals Incorporated', 'Q4 2025 Earnings Announcement', '-', '5.14', '$117.63B']
+          ['CSCO', 'Cisco Systems, Inc.', 'Q2 2026 Earnings Announcement', 'AMC', '1.02', '$335.13B'],
+          ['MCD', 'McDonald\'s Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '3.05', '$233.46B'],
+          ['TMUS', 'T-Mobile US, Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '2.06', '$222.15B'],
+          ['TTE', 'TotalEnergies SE', 'Q4 2025 Earnings Announcement', 'TNS', '1.78', '$158.18B'],
+          ['SHOP', 'Shopify Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '0.51', '$146.23B'],
+          ['APP', 'AppLovin Corporation', 'Q4 2025 Earnings Announcement', 'AMC', '2.95', '$137.57B'],
+          ['EQIX', 'Equinix, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '3.61', '$83.27B'],
+          ['NTES', 'NetEase, Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '14.12', '$79.06B'],
+          ['VRT', 'Vertiv Holdings Co', 'Q4 2025 Earnings Announcement', 'BMO', '1.3', '$74.78B'],
+          ['HLT', 'Hilton Worldwide Holdings Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '2.02', '$73.94B'],
+          ['MSI', 'Motorola Solutions, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '4.35', '$70.34B'],
+          ['MFC', 'Manulife Financial Corporation', 'Q4 2025 Earnings Announcement', 'AMC', '1.06', '$64.11B']
         ]
       },
-      '2026-02-12': { message: '' },
+      '2026-02-12': {
+        rows: [
+          ['AMAT', 'Applied Materials, Inc.', 'Q1 2026 Earnings Announcement', 'AMC', '2.21', '$255.98B'],
+          ['ANET', 'Arista Networks, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '0.76', '$173.14B'],
+          ['UL', 'Unilever PLC', 'H2 2025 Earnings Announcement', 'BMO', '0.88', '$157.7B'],
+          ['BUD', 'Anheuser-Busch InBev SA/NV', 'Q4 2025 Earnings Announcement', 'BMO', '0.88', '$147.33B'],
+          ['BTI', 'British American Tobacco p.l.c.', 'H2 2025 Earnings Announcement', 'TNS', '-', '$136.64B'],
+          ['VRTX', 'Vertex Pharmaceuticals Incorporated', 'Q4 2025 Earnings Announcement', 'AMC', '5.14', '$122.53B'],
+          ['BN', 'Brookfield Corporation', 'Q4 2025 Earnings Announcement', 'AMC', '0.29', '$101.6B'],
+          ['AEM', 'Agnico Eagle Mines Limited', 'Q4 2025 Earnings Announcement', 'AMC', '2.64', '$98.7B'],
+          ['HWM', 'Howmet Aerospace Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '0.97', '$89.82B'],
+          ['ABNB', 'Airbnb, Inc.', 'Q4 2025 Earnings Announcement', 'AMC', '0.66', '$74.8B']
+        ]
+      },
       '2026-02-13': {
         rows: [
-          ['ENB', 'Enbridge Inc.', 'Q4 2025 Earnings Announcement', '-', '0.78', '$110.22B']
+          ['ENB', 'Enbridge Inc.', 'Q4 2025 Earnings Announcement', 'BMO', '0.78', '$109.85B'],
+          ['NWG', 'NatWest Group plc', 'Q4 2025 Earnings Announcement', 'BMO', '0.39', '$72.57B'],
+          ['TRP', 'TC Energy Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '0.91', '$62.35B'],
+          ['CCJ', 'Cameco Corporation', 'Q4 2025 Earnings Announcement', 'BMO', '0.44', '$49.62B']
         ]
-      },
-      '2026-02-14': { message: '' }
+      }
     };
 
     const NOTABLE_BLOCKS = [
@@ -1938,25 +1964,53 @@
       'BMY': 'Pharmaceutical company focused on oncology, cardiovascular, and immunology therapies.',
       'ICE': 'Operator of financial exchanges and data services, including the NYSE.',
       'PM': 'Tobacco company transitioning toward smoke-free and reduced-risk nicotine products.',
-      'KO': 'Global beverage leader with a diversified portfolio of non-alcoholic drinks, leveraging a powerful brand and distribution network.',
-      'AZN': 'Global biopharmaceutical company focused on oncology, cardiovascular, renal, and respiratory therapies, with a strong late-stage pipeline.',
+      'KO': 'Global beverage leader with a diversified portfolio of non-alcoholic drinks, leveraging a powerful brand, extensive distribution network, and strong pricing power.',
+      'AZN': 'Global biopharmaceutical company focused on oncology, cardiovascular, renal, and respiratory therapies, with a strong late-stage pipeline and emerging-market exposure.',
       'GILD': 'Biopharmaceutical company specializing in antiviral and oncology treatments, with a core focus on HIV, hepatitis, and expanding cancer therapies.',
-      'SPGI': 'Provider of credit ratings, financial data, and analytics, benefiting from high recurring revenue and market transparency.',
+      'SPGI': 'Provider of credit ratings, financial data, and analytics, benefiting from high recurring revenue and structural demand for market transparency and risk assessment.',
       'WELL': 'Healthcare real estate investment trust focused on senior housing, medical offices, and post-acute care properties across the US, UK, and Canada.',
-      'APO': 'Alternative asset manager specializing in credit, private equity, and real asset strategies.',
-      'BDX': 'Global medical technology company providing devices, diagnostics, and life science solutions for healthcare systems.',
       'CSCO': 'Networking and cybersecurity technology company supplying enterprise hardware, software, and services, with growing recurring revenue from subscriptions.',
-      'MCD': 'Global quick-service restaurant operator with a highly franchised model, benefiting from scale and brand strength.',
-      'TMUS': 'Leading US wireless carrier with a strong 5G network, gaining market share through aggressive pricing and expansion.',
-      'TTE': 'Integrated energy company with exposure to oil, gas, renewables, and electricity, balancing cash flow with energy transition investments.',
+      'MCD': 'Global quick-service restaurant operator with a highly franchised model, benefiting from scale, brand strength, and consistent cash generation.',
+      'TMUS': 'Leading US wireless carrier with a strong 5G network, gaining market share through aggressive pricing and network expansion.',
+      'TTE': 'Integrated energy company with exposure to oil, gas, renewables, and electricity, balancing cash generation with energy transition investments.',
       'SHOP': 'E-commerce platform enabling merchants to build and scale online businesses, with revenue driven by subscriptions and merchant services.',
+      'APP': 'Mobile technology company providing app monetisation, user acquisition, and advertising software, with growing exposure to AI-driven ad optimisation.',
       'AMAT': 'Semiconductor equipment supplier critical to chip manufacturing processes, benefiting from long-term demand for advanced and high-performance chips.',
-      'ANET': 'Provider of high-performance cloud networking solutions, serving hyperscale data centers and enterprises with software-driven products.',
+      'ANET': 'Provider of high-performance cloud networking solutions, serving hyperscale data centers and enterprises with software-driven networking products.',
       'UL': 'Global consumer goods company with a broad portfolio of food, home care, and personal care brands, focused on emerging-market growth and cost efficiency.',
       'BUD': 'World’s largest brewer with a global portfolio of beer brands, generating strong cash flows through scale and brand dominance.',
-      'BTI': 'Global tobacco company with leading cigarette brands and growing exposure to reduced-risk products such as vaping and heated tobacco.',
-      'VRTX': 'Biotechnology company specializing in cystic fibrosis treatments, with high margins and a pipeline expanding into gene-editing and rare diseases.',
-      'ENB': 'North American energy infrastructure company operating pipelines and utilities, generating stable cash flows under long-term regulated contracts.',
+      'BTI': 'Global tobacco company with a leading cigarette brands and growing exposure to reduced-risk products such as vaping and heated tobacco.',
+      'VRTX': 'Biotechnology company specialising in cystic fibrosis treatments, with high margins and a pipeline expanding into gene-editing and rare diseases.',
+      'ENB': 'North American energy infrastructure company operating pipelines and utilities, generating stable cash flows under long-term, regulated contracts.',
+      'APO': 'Alternative asset manager focused on private equity, credit, and real assets for institutional clients.',
+      'BDX': 'Medical technology company providing devices, diagnostics, and laboratory solutions for healthcare systems.',
+      'ACGL': 'Global insurance and reinsurance group offering specialty property and casualty coverage.',
+      'IX': 'Diversified financial services company focused on leasing, asset management, and corporate finance.',
+      'BP': 'Integrated energy company engaged in oil, gas, and low-carbon energy projects worldwide.',
+      'CVS': 'Healthcare services company operating pharmacies, insurance, and retail clinics across the US.',
+      'DUK': 'Regulated utility providing electric and gas services across the US Southeast and Midwest.',
+      'BCS': 'Global banking group offering retail, corporate, and investment banking services.',
+      'MAR': 'Global hotel operator with brands spanning luxury, business, and leisure travel.',
+      'SPOT': 'Audio streaming platform providing music, podcasts, and creator tools globally.',
+      'ECL': 'Water, hygiene, and energy technologies company serving industrial and institutional customers.',
+      'WMB': 'Energy infrastructure company operating natural gas pipelines and related assets.',
+      'HOOD': 'Digital brokerage platform offering commission-free trading and financial services.',
+      'AMX': 'Latin American telecommunications company providing wireless and broadband services.',
+      'NET': 'Cloud security and performance company delivering content delivery and edge computing services.',
+      'RACE': 'Luxury automotive manufacturer known for high-performance sports cars.',
+      'EQIX': 'Global data center REIT enabling interconnection and cloud infrastructure services.',
+      'NTES': 'Chinese internet company focused on online games, music, and digital services.',
+      'VRT': 'Provider of data center infrastructure and thermal management solutions.',
+      'HLT': 'Global hotel company operating a portfolio of hospitality brands worldwide.',
+      'MSI': 'Mission-critical communications and security solutions provider for public safety and enterprises.',
+      'MFC': 'Financial services firm offering insurance, wealth management, and asset management.',
+      'BN': 'Global alternative asset manager with investments in infrastructure, real estate, and renewables.',
+      'AEM': 'Gold mining company with operations in Canada, Europe, and Australia.',
+      'HWM': 'Aerospace and industrial manufacturer producing engineered components and fastening systems.',
+      'ABNB': 'Online marketplace connecting travelers with short-term rentals and experiences.',
+      'NWG': 'UK banking group providing retail and commercial banking services.',
+      'TRP': 'Energy infrastructure company operating pipelines, storage, and power assets.',
+      'CCJ': 'Uranium producer supplying fuel for nuclear power generation.',
       'Wealthfront Corporation': 'Wealthfront is a private financial technology company offering automated investment and wealth management services.',
       'Phoenix Education Partners, Inc.': 'An education services provider focused on workforce training and post-secondary programs, primarily in the U.S.'
     };
