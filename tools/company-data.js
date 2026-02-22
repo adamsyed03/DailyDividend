@@ -227,36 +227,36 @@ const companiesData = {
       name: 'Apple Inc. (AAPL)',
       pillIcon: 'fa-mobile-screen-button',
       pillLabel: 'Consumer Technology & Services Ecosystem',
-      marketCap: '≈ $4.1T',
+      marketCap: '≈ $3.86T',
     },
     kpis: [
-      { label: 'REVENUE FY25', value: '$416.2B' },
-      { label: 'REVENUE GROWTH (YoY)', value: '+6.4%' },
-      { label: 'OPERATING MARGIN FY25', value: '32.0%' },
-      { label: 'NET MARGIN FY25', value: '26.9%' },
-      { label: 'NET INCOME FY25', value: '$112.0B' },
-      { label: 'FREE CASH FLOW FY25', value: '$98.8B' },
+      { label: 'REVENUE (Q1 FY26)', value: '$143.8B' },
+      { label: 'REVENUE GROWTH (YoY)', value: '+15.7%' },
+      { label: 'OPERATING MARGIN', value: '35.4%' },
+      { label: 'NET MARGIN', value: '29.3%' },
+      { label: 'NET INCOME (Q1)', value: '$42.1B' },
+      { label: 'OPERATING CASH FLOW (Q1)', value: '$53.9B' },
     ],
     revenueMix: {
       title: 'Revenue by Product',
-      subtitle: 'Apple net sales by major product and Services – FY2025 (USD billions).',
+      subtitle: 'Apple net sales by major product and Services – Q1 FY2026 (USD billions).',
       data: [
-        { label: 'iPhone', value: 209.6 },
-        { label: 'Mac', value: 33.7 },
-        { label: 'iPad', value: 28.0 },
-        { label: 'Wearables, Home & Accessories', value: 35.7 },
-        { label: 'Services', value: 109.2 },
+        { label: 'iPhone', value: 85.3 },
+        { label: 'Services', value: 30.0 },
+        { label: 'Mac', value: 8.4 },
+        { label: 'iPad', value: 8.6 },
+        { label: 'Wearables & Accessories', value: 11.5 },
       ],
     },
     regionalSplit: {
       title: 'Geographic Revenue Split',
-      subtitle: 'Net sales by region – Apple FY2025.',
+      subtitle: 'Net sales by region – Apple Q1 FY2026.',
       data: [
-        { label: 'Americas', value: 178.4 },
-        { label: 'Europe', value: 111.0 },
-        { label: 'Greater China', value: 64.4 },
-        { label: 'Japan', value: 28.7 },
-        { label: 'Rest of Asia Pacific', value: 33.7 },
+        { label: 'Americas', value: 58.5 },
+        { label: 'Europe', value: 38.1 },
+        { label: 'Greater China', value: 25.6 },
+        { label: 'Japan', value: 9.3 },
+        { label: 'Rest of Asia Pacific', value: 12.1 },
       ],
     },
   },
@@ -557,7 +557,7 @@ Visa consistently returns a substantial portion of its cash flow to shareholders
       name: "Apple Inc. (AAPL)",
       pillIcon: "fa-mobile-screen-button",
       pillLabel: "Consumer Technology & Services Ecosystem",
-      marketCap: "≈ $4.1T",
+      marketCap: "≈ $3.86T",
       headquarters: "Cupertino, California",
     },
 
@@ -566,33 +566,33 @@ Apple designs and markets a premium portfolio of consumer technology products �
     `,
 
     financials: {
-      revenueFY2025: "$416.2B (+6.4% YoY)",
-      operatingIncomeFY2025: "$133.1B (+8%)",
-      netIncomeFY2025: "$112.0B (+19.5%)",
-      epsFY2025: "$7.46 (+22.7%)",
-      grossMarginFY2025: "46.9%",
-      operatingMarginFY2025: "32.0%",
-      netMarginFY2025: "26.9%",
-      note: "Margin expansion driven by higher Services mix.",
+      revenueFY2025: "$143.8B (Q1 FY26, +15.7% YoY)",
+      operatingIncomeFY2025: "$50.9B (Q1 FY26)",
+      netIncomeFY2025: "$42.1B (Q1 FY26, +15.9% YoY)",
+      epsFY2025: "$2.8 (quarter)",
+      grossMarginFY2025: "48.1%",
+      operatingMarginFY2025: "35.4%",
+      netMarginFY2025: "29.3%",
+      note: "Margins remain structurally high; Trailing P/E ~30.0.",
     },
 
     revenueBreakdown: {
       byProduct: [
-        { category: "iPhone", revenue: "$209.6B", growth: "+4%" },
-        { category: "Mac", revenue: "$33.7B", growth: "+12%" },
-        { category: "iPad", revenue: "$28.0B", growth: "+5%" },
-        { category: "Wearables, Home & Accessories", revenue: "$35.7B", growth: "-4%" },
-        { category: "Services", revenue: "$109.2B", growth: "+14%" },
-        { category: "Total", revenue: "$416.2B", growth: "+6%" },
+        { category: "iPhone", revenue: "$85.3B (59.3%)", growth: "+23.3% YoY" },
+        { category: "Services", revenue: "$30.0B (20.9%)", growth: "+14.0% YoY" },
+        { category: "Mac", revenue: "$8.4B (5.8%)", growth: "−6.7% YoY" },
+        { category: "iPad", revenue: "$8.6B (6.0%)", growth: "+6.3% YoY" },
+        { category: "Wearables & Accessories", revenue: "$11.5B (8.0%)", growth: "−2.2% YoY" },
+        { category: "Total", revenue: "$143.8B", growth: "+15.7% YoY" },
       ],
 
       byGeography: [
-        { region: "Americas", revenue: "$178.4B", growth: "+7%" },
-        { region: "Europe", revenue: "$111.0B", growth: "+10%" },
-        { region: "Greater China", revenue: "$64.4B", growth: "-4%" },
-        { region: "Japan", revenue: "$28.7B", growth: "+15%" },
-        { region: "Rest of Asia Pacific", revenue: "$33.7B", growth: "+10%" },
-        { region: "Total", revenue: "$416.2B", growth: "+6%" },
+        { region: "Americas", revenue: "40.7%", growth: "" },
+        { region: "Europe", revenue: "26.5%", growth: "" },
+        { region: "Greater China", revenue: "17.8%", growth: "" },
+        { region: "Japan", revenue: "6.5%", growth: "" },
+        { region: "Rest of Asia Pacific", revenue: "8.4%", growth: "" },
+        { region: "Total", revenue: "100%", growth: "" },
       ],
     },
 
@@ -601,35 +601,30 @@ Apple designs and markets a premium portfolio of consumer technology products �
 • Services growth engine: Double-digit Services growth with high margins enhances profitability.
 • Premium brand & pricing power: Differentiated design supports high ASPs in iPhone and Mac.
 • Custom silicon advantage: Apple Silicon improves performance and efficiency across devices.
-• Geographic headwinds: Weakness in Greater China remains a pressure point.
-• Controlled retail & distribution: Direct retail footprint reinforces experience and margins.
+• Large installed base (2.5B+ active devices) supporting recurring revenue.
+• Leading position in premium smartphone segment.
     `,
 
     balanceSheet: `
-• Cash & equivalents: $35.9B
-• Marketable securities: $96.5B
-• Total cash & securities: $132.4B
-• Total debt: $98.7B → Net cash positive
-• Total assets: $359.2B | Liabilities: $285.5B | Equity: $73.7B
+• Cash & cash equivalents: $45.3B
+• Total marketable securities: $99.5B
+• Total assets: $379.3B
+• Total debt: $88.5B
+Apple maintains one of the strongest balance sheets globally, with substantial liquidity and consistent free cash flow.
     `,
 
     cashFlowAndCapital: `
-• Operating cash flow: $111.5B
-• CapEx: $12.7B
-• Free cash flow: $98.8B
-• Share repurchases: $90.7B
-• Dividends: $15.4B
-• Total capital returned: $106.1B
-Apple authorized an additional $100B buyback and raised its dividend in FY2025.
+• Operating cash flow (Q1 FY26): $53.9B
+• Share repurchases (quarter): $24.7B
+• Dividends paid (quarter): $3.9B
+Apple prioritises shareholder returns alongside innovation investment.
     `,
 
     trend: `
-| Year | Revenue ($B) | YoY | Net Income ($B) | YoY |
-|------|--------------|-----|------------------|-----|
-| 2025 | 416.2 | +6% | 112.0 | +19.5% |
-| 2024 | 391.0 | +2% | 93.7 | -3% |
-| 2023 | 383.3 | -3% | 97.0 | -3% |
-EPS growth has outpaced revenue due to margin expansion and substantial buybacks.
+| Period | Revenue ($B) | YoY | Net Income ($B) | YoY |
+|--------|--------------|-----|------------------|-----|
+| Q1 FY26 | 143.8 | +15.7% | 42.1 | +15.9% |
+Record total revenue and EPS; iPhone remains primary growth engine; strong operating leverage from ecosystem scale.
     `,
 
     analystRecommendations: `
