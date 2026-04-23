@@ -73,7 +73,20 @@
 
         <div class="field">
           <label for="phone">Phone</label>
-          <input id="phone" name="phone" type="tel" autocomplete="tel">
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:10px">
+            <select id="country" name="country" autocomplete="country">
+              <option value="GB" selected>UK +44</option>
+              <option value="US">US +1</option>
+              <option value="IN">IN +91</option>
+              <option value="AE">UAE +971</option>
+              <option value="AU">AU +61</option>
+              <option value="SG">SG +65</option>
+              <option value="IE">IE +353</option>
+              <option value="FR">FR +33</option>
+              <option value="DE">DE +49</option>
+            </select>
+            <input id="phone" name="phone" type="tel" autocomplete="tel-national">
+          </div>
         </div>
 
         <div class="field">
@@ -129,7 +142,8 @@
 
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
+      const country = document.getElementById('country').value;
+      const phone = document.getElementById('phone').value.trim().replace(/^[\\s(]*0+/, '').replace(/[^\\d]/g, '');
       const occupation = document.getElementById('occupation').value.trim();
       const profficiency = document.getElementById('profficiency').value;
 
@@ -146,7 +160,7 @@
       button.textContent = 'Signing up...';
 
       try {
-        const url = buildUrl({mode:'signup', name, email, phone, occupation, profficiency});
+        const url = buildUrl({mode:'signup', name, email, country, phone, occupation, profficiency});
         const response = await fetch(url, {method:'GET'});
         const data = await response.json();
 
@@ -156,6 +170,7 @@
 
         showMessage('Account created. You can now log in.', 'success');
         form.reset();
+        document.getElementById('country').value = 'GB';
         document.getElementById('profficiency').value = '3';
       } catch (error) {
         showMessage(error.message || 'Signup failed. Please try again.', 'error');

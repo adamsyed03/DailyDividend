@@ -712,8 +712,8 @@ body.article-open{overflow:hidden}
     <div class="ft-sig">Founded by <strong>Adam Syed</strong> &amp; <strong>Ruchi Gala</strong> · 2026</div>
   </div>
   <div class="ft-links">
-    <a href="#">Instagram</a>
-    <a href="#">WhatsApp</a>
+    <a href="https://www.instagram.com/dailydividend.official/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://www.whatsapp.com/channel/0029Vb7PFc33mFY5k9b4K13T?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGn5blnglThfLjStLxHVmsl-dVCORpT2fbydaYNftqXUKdRcp1J_tsgOTT-ZNM_aem_6GxNek0e6FYbgX6lTxc2Aw" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     <a href="#" id="ft-founders">Talk to us</a>
     <a href="#">Not investment advice</a>
   </div>
@@ -760,15 +760,15 @@ body.article-open{overflow:hidden}
         <label class="auth-label" for="auth-phone">Phone</label>
         <div class="auth-phone-row">
           <select class="auth-select" id="auth-country-code" aria-label="Country code">
-            <option value="+44" selected>UK +44</option>
-            <option value="+1">US +1</option>
-            <option value="+91">IN +91</option>
-            <option value="+971">UAE +971</option>
-            <option value="+61">AU +61</option>
-            <option value="+65">SG +65</option>
-            <option value="+353">IE +353</option>
-            <option value="+33">FR +33</option>
-            <option value="+49">DE +49</option>
+            <option value="GB" data-dial="+44" selected>UK +44</option>
+            <option value="US" data-dial="+1">US +1</option>
+            <option value="IN" data-dial="+91">IN +91</option>
+            <option value="AE" data-dial="+971">UAE +971</option>
+            <option value="AU" data-dial="+61">AU +61</option>
+            <option value="SG" data-dial="+65">SG +65</option>
+            <option value="IE" data-dial="+353">IE +353</option>
+            <option value="FR" data-dial="+33">FR +33</option>
+            <option value="DE" data-dial="+49">DE +49</option>
           </select>
           <input class="auth-input" id="auth-phone" type="tel" autocomplete="tel-national" placeholder="7123 456789">
         </div>
@@ -1277,7 +1277,8 @@ authForm.addEventListener('submit', async e => {
   const identifier = authIdentifier.value.trim();
   const name = authName.value.trim();
   const phoneRaw = authPhone.value.trim();
-  const phone = phoneRaw ? authCountryCode.value + phoneRaw.replace(/^[\s(]*0+/, '').replace(/[^\d]/g, '') : '';
+  const country = authCountryCode.value;
+  const phone = phoneRaw ? phoneRaw.replace(/^[\s(]*0+/, '').replace(/[^\d]/g, '') : '';
   const loginEmail = identifier.includes('@') ? identifier : '';
   const loginPhone = identifier && !identifier.includes('@') ? normalizePhone(identifier) : '';
   const occupation = authOccupation.value.trim();
@@ -1328,7 +1329,7 @@ authForm.addEventListener('submit', async e => {
   authError.classList.remove('show');
   try {
     const params = authMode === 'register'
-      ? {mode:'signup', name, email:identifier, phone, occupation, financeProficiency, proficiency:financeProficiency, profficiency:financeProficiency}
+      ? {mode:'signup', name, email:identifier, country, phone, occupation, financeProficiency, proficiency:financeProficiency, profficiency:financeProficiency}
       : {mode:'login', name, email:loginEmail, phone:loginPhone, identifier};
     const res = await fetch(buildAuthUrl(params), {method:'GET'});
     const data = await readAuthResponse(res);
