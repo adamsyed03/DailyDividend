@@ -120,11 +120,11 @@ h1.hero-h1 .accent-green::after{background:rgba(15,157,107,.22)}
 .lc-logo-slot img{width:100%;height:100%;object-fit:contain}
 .lc-logo-letter{width:64px;height:64px;border-radius:12px;background:var(--bg2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:34px;font-weight:700;color:var(--ink)}
 
-.lc-content{flex:1;min-height:188px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;z-index:2}
-.lc-slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(14px);transition:opacity .32s ease,transform .32s var(--fx);pointer-events:none}
+.lc-content{flex:1;min-height:208px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:visible;z-index:2}
+.lc-slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .32s ease,transform .32s var(--fx);pointer-events:none}
 .lc-slide.active{opacity:1;transform:translateY(0);pointer-events:auto}
 
-.lc-name{font-family:var(--serif);font-weight:800;font-size:46px;line-height:1;letter-spacing:-.015em;color:var(--ink);margin-bottom:16px}
+.lc-name{font-family:var(--serif);font-weight:800;font-size:46px;line-height:1.12;letter-spacing:-.015em;color:var(--ink);margin-bottom:12px;overflow:visible}
 .lc-fact{font-family:var(--serif);font-weight:400;font-size:20px;line-height:1.35;color:var(--ink2);letter-spacing:-.005em}
 .lc-fact .hl{font-weight:700;background:linear-gradient(180deg,transparent 62%,rgba(15,157,107,.22) 62%);padding:0 2px;color:var(--grn-ink)}
 
@@ -365,8 +365,8 @@ body.auth-locked footer{
 }
 .auth-bg{position:fixed;inset:0;background:rgba(250,250,247,.42);backdrop-filter:blur(2px);z-index:1100;opacity:0;pointer-events:none;transition:opacity .25s}
 .auth-bg.show{opacity:1;pointer-events:none}
-.auth-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.97);width:min(460px,92vw);max-height:calc(100vh - 32px);overflow:auto;background:#fff;border:1px solid var(--bd2);border-radius:var(--rl);padding:28px;z-index:1101;box-shadow:0 30px 80px rgba(10,10,10,.22);opacity:0;pointer-events:none;transition:all .28s var(--fx)}
-.auth-modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.auth-modal{position:fixed;top:16px;left:50%;transform:translateX(-50%) scale(.98);width:min(460px,92vw);max-height:calc(100vh - 32px);overflow:auto;background:#fff;border:1px solid var(--bd2);border-radius:var(--rl);padding:28px;z-index:1101;box-shadow:0 30px 80px rgba(10,10,10,.22);opacity:0;pointer-events:none;transition:opacity .28s var(--fx),transform .28s var(--fx)}
+.auth-modal.show{opacity:1;pointer-events:auto;transform:translateX(-50%) scale(1)}
 .auth-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:var(--bg2);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;color:var(--ink);z-index:2;transition:all .15s}
 .auth-close:hover{background:var(--ink);border-color:var(--ink);color:#fff;transform:rotate(90deg)}
 .auth-kicker{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grn-ink);margin-bottom:10px}
@@ -389,7 +389,6 @@ body.auth-locked footer{
 .auth-check{display:inline-flex;align-items:center;gap:8px}
 .auth-check input{accent-color:var(--grn)}
 .auth-submit{width:100%;justify-content:center;margin-bottom:12px}
-.auth-note{font-size:11px;color:var(--muted2);line-height:1.45;text-align:center}
 .auth-error{display:none;margin:-2px 0 12px;color:var(--red);font-size:12px;font-weight:600}
 .auth-error.show{display:block}
 
@@ -446,10 +445,10 @@ body.article-open{overflow:hidden}
   .nav-link{display:none}
   h1.hero-h1{font-size:42px}
   .hero-sub{font-size:16px}
-  .lc-name{font-size:38px}
+  .lc-name{font-size:38px;line-height:1.13}
   .lc-fact{font-size:17px}
-  .lc-content{min-height:176px}
-  .auth-modal{width:calc(100vw - 20px);max-height:calc(100vh - 20px);padding:24px 18px 20px}
+  .lc-content{min-height:190px}
+  .auth-modal{top:10px;width:calc(100vw - 20px);max-height:calc(100vh - 20px);padding:24px 18px 20px}
   .auth-close{top:10px;right:10px}
   .start-grid{grid-template-columns:1fr}
   .lib-grid{grid-template-columns:1fr}
@@ -802,7 +801,6 @@ body.article-open{overflow:hidden}
     <div class="auth-error" id="auth-error"></div>
     <button class="btn btn-primary auth-submit" type="submit" id="auth-submit">Log in</button>
   </form>
-  <p class="auth-note">Prototype auth for this static site. Your browser stores the unlock locally.</p>
 </div>
 
 <!-- FOUNDER FEEDBACK MODAL -->
@@ -1135,7 +1133,7 @@ document.getElementById('filters').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
@@ -1147,7 +1145,7 @@ document.getElementById('filters').addEventListener('click', e => {
 
 expandBtn.addEventListener('click', () => {
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   expanded = !expanded;
@@ -1209,7 +1207,21 @@ function buildAuthUrl(params) {
 
 function authSucceeded(data) {
   const status = String(data.status || data.result || data.message || '').toLowerCase();
-  return data.ok === true || data.success === true || status === 'ok' || status === 'success';
+  return data.ok === true || data.success === true || ['ok','success','found','valid','authorized','logged_in','login_success'].includes(status);
+}
+
+async function readAuthResponse(res) {
+  const text = await res.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {status:text.trim()};
+  }
+}
+
+function normalizePhone(value) {
+  return value.replace(/^[\s(]*0+/, '').replace(/[^\d+]/g, '');
 }
 
 function setAuthMode(mode) {
@@ -1251,7 +1263,7 @@ function requireLoginAndScroll(targetId) {
   if (isAuthLocked()) {
     const target = document.getElementById(targetId);
     if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
-    setTimeout(() => openAuthModal('register'), 360);
+    setTimeout(() => openAuthModal('login'), 360);
     return;
   }
   const target = document.getElementById(targetId);
@@ -1260,7 +1272,7 @@ function requireLoginAndScroll(targetId) {
 
 function requireLoginForAction(action) {
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return false;
   }
   action();
@@ -1294,6 +1306,8 @@ authForm.addEventListener('submit', async e => {
   const name = authName.value.trim();
   const phoneRaw = authPhone.value.trim();
   const phone = phoneRaw ? authCountryCode.value + phoneRaw.replace(/^[\s(]*0+/, '').replace(/[^\d]/g, '') : '';
+  const loginEmail = identifier.includes('@') ? identifier : '';
+  const loginPhone = identifier && !identifier.includes('@') ? normalizePhone(identifier) : '';
   const occupation = authOccupation.value.trim();
   const financeProficiency = Number(authFinance.value);
   if (!name) {
@@ -1343,11 +1357,11 @@ authForm.addEventListener('submit', async e => {
   try {
     const params = authMode === 'register'
       ? {mode:'signup', name, email:identifier, phone, occupation, financeProficiency, proficiency:financeProficiency, profficiency:financeProficiency}
-      : {mode:'login', name, identifier};
+      : {mode:'login', name, email:loginEmail, phone:loginPhone, identifier};
     const res = await fetch(buildAuthUrl(params), {method:'GET'});
-    const data = await res.json();
-    if (!res.ok || !authSucceeded(data)) throw new Error(data.error || data.reason || 'Something went wrong.');
-    unlockContent(data.user || {name, email:identifier, phone}, data.token || '');
+    const data = await readAuthResponse(res);
+    if (!res.ok || !authSucceeded(data)) throw new Error(data.error || data.reason || 'No account matched those details.');
+    unlockContent(data.user || {name, email:loginEmail || identifier, phone:loginPhone || phone}, data.token || '');
   } catch (err) {
     authError.textContent = err.message || 'Could not complete login.';
     authError.classList.add('show');
@@ -1370,7 +1384,7 @@ function handleAuthScrollGate() {
 
   if (nextZone === 'locked-content' && authScrollZone !== 'locked-content') {
     authScrollZone = 'locked-content';
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
 
@@ -1408,7 +1422,7 @@ function updateFCount() {
 
 function openFilterModal() {
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   tempRegions = new Set(activeRegions);
@@ -1574,7 +1588,7 @@ function goToCompany(name, isLive) {
   closeSearch();
   searchInput.value = '';
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   if (isLive && COMPANY_PAGES[name]) {
@@ -1603,7 +1617,7 @@ document.addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
     if (isAuthLocked()) {
-      openAuthModal('register');
+      openAuthModal('login');
       return;
     }
     searchInput.focus();
@@ -1633,7 +1647,7 @@ const COMPANY_PAGES = {
 function openCompany(el) {
   const company = el.dataset.company;
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   const page = COMPANY_PAGES[company];
@@ -1673,7 +1687,7 @@ articleBg.addEventListener('click', closeArticleModal);
 /* Surprise me */
 document.getElementById('surprise-btn').addEventListener('click', () => {
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   const target = library[Math.floor(Math.random() * library.length)];
@@ -1853,7 +1867,7 @@ document.addEventListener('keydown', e => {
 function smoothScroll(e, targetId) {
   e.preventDefault();
   if (isAuthLocked()) {
-    openAuthModal('register');
+    openAuthModal('login');
     return;
   }
   const element = document.getElementById(targetId);
