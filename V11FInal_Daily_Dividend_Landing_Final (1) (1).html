@@ -354,15 +354,6 @@ footer{border-top:1px solid var(--bd);padding:34px 0 48px;margin-top:0;backgroun
 .modal-success-h{font-family:var(--serif);font-weight:700;font-size:22px;margin-bottom:6px}
 .modal-success-p{font-size:14px;color:var(--muted);line-height:1.5;max-width:340px;margin:0 auto}
 
-/* Login gate */
-body.auth-locked .marquee,
-body.auth-locked section:not(.hero),
-body.auth-locked footer{
-  filter:blur(10px);
-  opacity:.42;
-  pointer-events:none;
-  user-select:none;
-}
 .auth-bg{position:fixed;inset:0;background:rgba(250,250,247,.42);backdrop-filter:blur(2px);z-index:1100;opacity:0;pointer-events:none;transition:opacity .25s}
 .auth-bg.show{opacity:1;pointer-events:none}
 .auth-modal{position:fixed;top:16px;left:50%;transform:translateX(-50%) scale(.98);width:min(460px,92vw);max-height:calc(100vh - 32px);overflow:auto;background:#fff;border:1px solid var(--bd2);border-radius:var(--rl);padding:28px;z-index:1101;box-shadow:0 30px 80px rgba(10,10,10,.22);opacity:0;pointer-events:none;transition:opacity .28s var(--fx),transform .28s var(--fx)}
@@ -467,7 +458,7 @@ body.article-open{overflow:hidden}
 ::selection{background:var(--ink);color:#fff}
 </style>
 </head>
-<body class="auth-locked">
+<body>
 
 <!-- NAV -->
 <div class="wrap">
@@ -494,7 +485,7 @@ body.article-open{overflow:hidden}
     <h1 class="hero-h1">The story behind <span class="accent accent-green">the stock.</span></h1>
     <p class="hero-sub">Understand what companies <strong>actually do</strong>. No finance degree. No jargon.</p>
     <div class="hero-ctas">
-      <button class="btn btn-primary" onclick="requireLoginAndScroll('start-here')">
+      <button class="btn btn-primary" onclick="scrollToSection('start-here')">
         Start exploring
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
@@ -697,7 +688,7 @@ body.article-open{overflow:hidden}
   <h2 class="cta-h">Stocks, but you'll <span class="mark">actually get them</span>.</h2>
   <p class="cta-sub">Two live. One new every week. Free.</p>
   <div class="cta-ctas">
-    <button class="btn btn-primary" onclick="requireLoginAndScroll('library')">
+    <button class="btn btn-primary" onclick="scrollToSection('library')">
       Open the library
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
@@ -965,14 +956,9 @@ function renderCard(i) {
   const newSlide = document.createElement('div');
   newSlide.className = 'lc-slide';
   newSlide.innerHTML = `<div class="lc-name">${c.name}</div><div class="lc-fact">${c.fact}</div>`;
-  const oldSlide = lcContent.querySelector('.lc-slide.active');
-  lcContent.appendChild(newSlide);
-
+  lcContent.replaceChildren(newSlide);
   requestAnimationFrame(() => {
     newSlide.classList.add('active');
-    if (oldSlide) {
-      oldSlide.remove();
-    }
   });
 
   const dots = lcDotsEl.children;
@@ -996,6 +982,11 @@ lcEl.addEventListener('touchend', e => {
 });
 renderCard(0);
 startLcTimer();
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;
+  renderCard(lcIdx);
+  startLcTimer();
+});
 
 /* Easter: Netflix live-spend counter */
 const pageStart = Date.now();
@@ -1132,10 +1123,6 @@ function renderLibrary() {
 document.getElementById('filters').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
-  if (isAuthLocked()) {
-    openAuthModal('login');
-    return;
-  }
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   chip.classList.add('active');
   currentFilter = chip.dataset.filter;
@@ -1144,10 +1131,6 @@ document.getElementById('filters').addEventListener('click', e => {
 });
 
 expandBtn.addEventListener('click', () => {
-  if (isAuthLocked()) {
-    openAuthModal('login');
-    return;
-  }
   expanded = !expanded;
   renderLibrary();
   if (!expanded) document.getElementById('library').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1194,7 +1177,7 @@ let authMode = 'login';
 let authScrollZone = 'hero';
 
 function isAuthLocked() {
-  return document.body.classList.contains('auth-locked');
+  return !localStorage.getItem(AUTH_KEY);
 }
 
 function buildAuthUrl(params) {
@@ -1254,27 +1237,16 @@ function closeAuthModal() {
 
 function unlockContent(user = {}, token = '') {
   localStorage.setItem(AUTH_KEY, JSON.stringify({email:user.email || '', phone:user.phone || '', name:user.name || '', token, at:Date.now()}));
-  document.body.classList.remove('auth-locked');
   closeAuthModal();
   showToast('Welcome in. The full library is unlocked.');
 }
 
-function requireLoginAndScroll(targetId) {
-  if (isAuthLocked()) {
-    const target = document.getElementById(targetId);
-    if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
-    setTimeout(() => openAuthModal('login'), 360);
-    return;
-  }
+function scrollToSection(targetId) {
   const target = document.getElementById(targetId);
   if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function requireLoginForAction(action) {
-  if (isAuthLocked()) {
-    openAuthModal('login');
-    return false;
-  }
+function runAction(action) {
   action();
   return true;
 }
@@ -1371,31 +1343,6 @@ authForm.addEventListener('submit', async e => {
   }
 });
 
-if (localStorage.getItem(AUTH_KEY)) {
-  document.body.classList.remove('auth-locked');
-}
-
-function handleAuthScrollGate() {
-  if (!isAuthLocked()) return;
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
-  const gatePoint = hero.offsetTop + hero.offsetHeight * .78;
-  const nextZone = window.scrollY > gatePoint ? 'locked-content' : 'hero';
-
-  if (nextZone === 'locked-content' && authScrollZone !== 'locked-content') {
-    authScrollZone = 'locked-content';
-    openAuthModal('login');
-    return;
-  }
-
-  if (nextZone === 'hero' && authScrollZone !== 'hero') {
-    authScrollZone = 'hero';
-    closeAuthModal();
-  }
-}
-
-window.addEventListener('scroll', handleAuthScrollGate, {passive:true});
-
 /* ================================
    FILTER MODAL
 ================================ */
@@ -1421,10 +1368,6 @@ function updateFCount() {
 }
 
 function openFilterModal() {
-  if (isAuthLocked()) {
-    openAuthModal('login');
-    return;
-  }
   tempRegions = new Set(activeRegions);
   tempSectors = new Set(activeSectors);
   document.querySelectorAll('#fmodal-regions .fmodal-opt').forEach(o => o.classList.toggle('active', tempRegions.has(o.dataset.region)));
@@ -1616,10 +1559,6 @@ function goToCompany(name, isLive) {
 document.addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
-    if (isAuthLocked()) {
-      openAuthModal('login');
-      return;
-    }
     searchInput.focus();
     searchInput.select();
     window.scrollTo({top: searchInput.getBoundingClientRect().top + window.scrollY - 200, behavior: 'smooth'});
@@ -1686,10 +1625,6 @@ articleBg.addEventListener('click', closeArticleModal);
 
 /* Surprise me */
 document.getElementById('surprise-btn').addEventListener('click', () => {
-  if (isAuthLocked()) {
-    openAuthModal('login');
-    return;
-  }
   const target = library[Math.floor(Math.random() * library.length)];
   document.getElementById('library').scrollIntoView({behavior:'smooth',block:'start'});
   currentFilter = 'all';
@@ -1731,9 +1666,9 @@ function openModal() {
 }
 function closeModal() { modal.classList.remove('show'); modalBg.classList.remove('show'); }
 
-document.getElementById('nav-founders').addEventListener('click', () => requireLoginForAction(openModal));
-document.getElementById('cta-founders').addEventListener('click', () => requireLoginForAction(openModal));
-document.getElementById('ft-founders').addEventListener('click', (e) => { e.preventDefault(); requireLoginForAction(openModal); });
+document.getElementById('nav-founders').addEventListener('click', openModal);
+document.getElementById('cta-founders').addEventListener('click', openModal);
+document.getElementById('ft-founders').addEventListener('click', (e) => { e.preventDefault(); openModal(); });
 document.getElementById('modal-close').addEventListener('click', closeModal);
 modalBg.addEventListener('click', closeModal);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeArticleModal(); closeModal(); closeFilterModal(); closeSearch(); } });
@@ -1866,10 +1801,6 @@ document.addEventListener('keydown', e => {
 
 function smoothScroll(e, targetId) {
   e.preventDefault();
-  if (isAuthLocked()) {
-    openAuthModal('login');
-    return;
-  }
   const element = document.getElementById(targetId);
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' });
