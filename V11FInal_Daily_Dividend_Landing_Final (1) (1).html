@@ -830,10 +830,10 @@ body.article-open{overflow:hidden}
     <div class="modal-field">
       <div class="modal-label">How should we reply? (optional)</div>
       <div class="contact-toggle">
-        <button class="contact-toggle-btn active" data-mode="email">Email</button>
+        <button class="contact-toggle-btn" data-mode="email">Email</button>
         <button class="contact-toggle-btn" data-mode="phone">Phone</button>
       </div>
-      <input type="email" class="modal-input" id="modal-contact" placeholder="you@wherever.com">
+      <input type="email" class="modal-input" id="modal-contact" placeholder="you@wherever.com" style="display:none">
     </div>
 
     <div class="modal-foot">
@@ -1655,7 +1655,7 @@ const modalMsg = document.getElementById('modal-msg');
 const modalContact = document.getElementById('modal-contact');
 const modalSubmit = document.getElementById('modal-submit');
 let selectedTopic = null;
-let contactMode = 'email';
+let contactMode = null;
 
 function openModal() {
   modal.classList.add('show');
@@ -1684,9 +1684,17 @@ document.getElementById('modal-quick').addEventListener('click', e => {
 // Email/phone toggle
 document.querySelectorAll('.contact-toggle-btn').forEach(btn => {
   btn.addEventListener('click', () => {
+    const isActive = btn.classList.contains('active');
     document.querySelectorAll('.contact-toggle-btn').forEach(b => b.classList.remove('active'));
+    if (isActive) {
+      contactMode = null;
+      modalContact.value = '';
+      modalContact.style.display = 'none';
+      return;
+    }
     btn.classList.add('active');
     contactMode = btn.dataset.mode;
+    modalContact.style.display = '';
     if (contactMode === 'email') {
       modalContact.type = 'email';
       modalContact.placeholder = 'you@wherever.com';
@@ -1695,30 +1703,71 @@ document.querySelectorAll('.contact-toggle-btn').forEach(btn => {
       modalContact.placeholder = '+44 7___ ______';
     }
     modalContact.value = '';
+    modalContact.focus();
   });
 });
 
 modalSubmit.addEventListener('click', () => {
-  const msg = modalMsg.value.trim();
-  if (!msg) {
+  const submitHtml = 'Send it <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const about = (selectedTopic || 'General feedback').trim();
+  const message = modalMsg.value.trim();
+  const contact = modalContact.value.trim();
+  const savedAuth = (() => {
+    try { return JSON.parse(localStorage.getItem(AUTH_KEY) || 'null') || {}; } catch { return {}; }
+  })();
+  let email = contactMode === 'email' ? contact : '';
+  let phone = contactMode === 'phone' ? contact.replace(/[^\d]/g, '') : '';
+
+  if (!email && !phone) {
+    email = savedAuth.email || '';
+    phone = savedAuth.phone || '';
+  }
+
+  if (!message) {
     modalMsg.style.borderColor = 'var(--red)';
     modalMsg.focus();
     setTimeout(() => modalMsg.style.borderColor = '', 2000);
     return;
   }
+
+  if (email && !email.includes('@')) {
+    modalContact.style.borderColor = 'var(--red)';
+    modalContact.focus();
+    setTimeout(() => modalContact.style.borderColor = '', 2000);
+    return;
+  }
+
   modalSubmit.disabled = true;
-  modalSubmit.innerHTML = 'Sending…';
-  setTimeout(() => {
-    modalViewForm.style.display = 'none';
-    modalViewSuccess.style.display = '';
-    modalSubmit.disabled = false;
-    modalSubmit.innerHTML = 'Send it <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    modalMsg.value = ''; modalContact.value = '';
-    document.querySelectorAll('.modal-quick-chip').forEach(c => c.classList.remove('active'));
-    selectedTopic = null;
-    triggerConfetti(30);
-    setTimeout(closeModal, 3200);
-  }, 700);
+  modalSubmit.innerHTML = 'Sending...';
+
+  const requestUrl = buildAuthUrl({ mode: 'contact', about, message, email, phone });
+  console.log('Founder contact request:', requestUrl);
+
+  fetch(requestUrl, { method: 'GET' })
+    .then(async (res) => {
+      const data = await readAuthResponse(res);
+      if (!res.ok || !authSucceeded(data)) {
+        throw new Error(data.reason || data.error || 'Could not send message.');
+      }
+      modalViewForm.style.display = 'none';
+      modalViewSuccess.style.display = '';
+      modalMsg.value = '';
+      modalContact.value = '';
+      modalContact.style.display = 'none';
+      contactMode = null;
+      document.querySelectorAll('.contact-toggle-btn').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.modal-quick-chip').forEach(c => c.classList.remove('active'));
+      selectedTopic = null;
+      triggerConfetti(30);
+      setTimeout(closeModal, 3200);
+    })
+    .catch((err) => {
+      showToast(err.message || 'Could not send message.');
+    })
+    .finally(() => {
+      modalSubmit.disabled = false;
+      modalSubmit.innerHTML = submitHtml;
+    });
 });
 
 /* ================================
@@ -1896,3 +1945,4 @@ setTimeout(() => showToast("👀 Psst. 6 easter eggs hidden here", 3600), 2200);
 </script>
 </body>
 </html>
+
