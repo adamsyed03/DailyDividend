@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix — Daily Dividend Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nf:#E50914;
+  --gold:#C8922A;
+  --grn:#15803d;
+  --grn-bg:#f0fdf4;
+  --red2:#b91c1c;
+  --red-bg:#fef2f2;
+  --ink:#111827;
+  --muted:#6b7280;
+  --bd:#e5e7eb;
+  --bg:#ffffff;
+  --bg2:#f9fafb;
+  --bg3:#f3f4f6;
+  --r:6px;
+}
+
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 0 1px var(--bd),0 20px 60px rgba(0,0,0,.08)}
+
+/* HERO */
+.hero{background:#0a0a0a;padding:2rem 1.75rem 0;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--nf)}
+.hero-meta{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 10px;text-transform:uppercase;border-radius:2px}
+.pill-red{background:var(--nf);color:#fff}
+.pill-ghost{border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.4)}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,7vw,4rem);color:#fff;letter-spacing:.04em;line-height:1}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-top:.4rem;padding-bottom:1.4rem}
+
+/* TABS */
+.tabs-bar{background:#111;border-bottom:1px solid #222;display:flex;overflow-x:auto;padding:0 1.75rem;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 1rem;cursor:pointer;white-space:nowrap;color:rgba(255,255,255,.3);background:transparent;border:none;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;position:relative;top:1px}
+.tab-btn.active{color:#fff;border-bottom-color:var(--nf)}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* CONTENT */
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.pane{padding:1.75rem 1.75rem 3rem}
+
+/* TYPE */
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--nf);font-weight:700;margin-bottom:.35rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2rem);color:var(--ink);margin-bottom:.9rem;line-height:1.2;font-weight:700}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:1.25rem;max-width:640px;line-height:1.65}
+.divl{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
+
+/* TOOLTIP */
+.tw{position:relative;display:inline}
+.term{border-bottom:2px dotted var(--gold);cursor:help}
+.tt{display:none;position:absolute;z-index:9999;background:#111;color:#fff;font-size:11px;line-height:1.5;padding:.65rem .9rem;border-radius:4px;width:210px;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111}
+.tw:hover .tt{display:block}
+
+/* ARROW NAV */
+.snav{display:inline-flex;align-items:center;gap:6px;margin-top:.65rem;cursor:pointer;font-size:12px;font-weight:600;color:var(--nf);letter-spacing:.03em;padding:.35rem 0;border-bottom:1px solid transparent;transition:border-color .15s}
+.snav:hover{border-color:var(--nf)}
+.snav:hover svg{transform:translateX(3px)}
+.snav svg{transition:transform .15s}
+
+/* HOOK -- no italic */
+.hook{background:var(--bg2);border-left:3px solid var(--nf);padding:1.1rem 1.25rem;margin-bottom:1.5rem}
+.hook p{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--ink)}
+
+/* DD NUMBERS dark */
+.ddnum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ddnum{background:#0d0d0d;padding:1.1rem 1rem;border-radius:var(--r)}
+.ddnum-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--nf);letter-spacing:.03em;line-height:1}
+.ddnum-lbl{font-size:11px;color:rgba(255,255,255,.42);margin-top:.35rem;line-height:1.4}
+
+/* PREVIEW CARDS */
+.preview-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.pc-head{background:var(--bg2);border-bottom:1px solid var(--bd);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pc-tab-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pc-arrow{color:var(--nf);flex-shrink:0}
+.pc-body{padding:.85rem 1rem}
+
+/* FLAGS */
+.flags-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flag-col{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.flag-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .75rem;border-bottom:2px solid}
+.flag-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg)}
+.flag-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.flag-item{display:flex;gap:.5rem;align-items:flex-start;padding:.5rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;line-height:1.45}
+.flag-item:last-child{border-bottom:none}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.fdot-g{background:var(--grn)}
+.fdot-r{background:var(--red2)}
+
+/* COMP TRIO */
+.comp-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ct{border:1px solid var(--bd);padding:.85rem .75rem;border-radius:var(--r);text-align:center}
+.ct-metric{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.ct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--nf);letter-spacing:.03em;line-height:1}
+.ct-compare{font-size:11px;color:var(--muted);line-height:1.4;margin-top:.3rem}
+
+/* OWNERSHIP MINI */
+.own-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.own-mini{border:1px solid var(--bd);padding:.85rem 1rem;border-radius:var(--r)}
+.own-mini-head{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.own-mini-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--bg3);font-size:13px}
+.own-mini-row:last-child{border-bottom:none}
+.own-up{color:var(--grn);font-weight:600;font-size:12px}
+.own-dn{color:var(--red2);font-weight:600;font-size:12px}
+.own-flat{color:var(--muted);font-size:12px}
+
+/* DD TAKE -- no italic */
+.dd-take{background:#faf8f2;border-left:3px solid var(--gold);padding:1.25rem 1.4rem;margin-top:1.5rem}
+.dd-take-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:.45rem}
+.dd-take-text{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2.5vw,1.05rem);line-height:1.8;color:#2a1f00}
+
+/* ========================
+   BUSINESS
+======================== */
+.rev-streams{display:flex;flex-direction:column;gap:12px;margin:.75rem 0}
+.rs{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.rs-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.1rem;border-bottom:1px solid var(--bd);background:var(--bg2)}
+.rs-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rs-icon-red{background:#fef2f2}
+.rs-icon-gold{background:#fef3c7}
+.rs-icon-dk{background:#1f2937}
+.rs-name{font-size:15px;font-weight:600;color:var(--ink)}
+.rs-size{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--nf);letter-spacing:.03em;line-height:1}
+.rs-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.rsb-green{background:var(--grn-bg);color:var(--grn)}
+.rsb-gold{background:#fef3c7;color:#92400e}
+.rsb-blue{background:#eff6ff;color:#1e40af}
+.rs-body{padding:1rem 1.1rem}
+.rs-desc{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:.85rem}
+.rs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rst{background:var(--bg2);padding:.65rem .75rem;border-radius:4px;border:1px solid var(--bd)}
+.rst-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.rst-val{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--ink);letter-spacing:.03em}
+.rst-note{font-size:11px;color:var(--grn);margin-top:1px;font-weight:500}
+
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.plan{padding:1.1rem 1rem;border-right:1px solid var(--bd)}
+.plan:last-child{border-right:none}
+.plan-dk{background:#0d0d0d}
+.plan-badge{font-size:9px;font-weight:700;letter-spacing:.1em;padding:2px 8px;text-transform:uppercase;display:inline-block;margin-bottom:.5rem;border-radius:2px}
+.pb-r{background:var(--nf);color:#fff}
+.pb-g{background:var(--gold);color:#fff}
+.pb-d{background:#333;color:#ccc}
+.plan-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:var(--ink)}
+.plan-name-w{color:#fff}
+.plan-price{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1.05}
+.pp-r{color:var(--nf)}.pp-w{color:#fff}.pp-g{color:var(--gold)}
+.plan-mo{font-size:11px;font-family:'DM Sans',sans-serif;color:var(--muted)}
+.plan-mo-w{color:rgba(255,255,255,.3)}
+.plan-insight{font-size:12px;line-height:1.55;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--bd)}
+.pi-r{color:var(--nf);border-top-color:rgba(229,9,20,.15)}
+.pi-dk{color:rgba(255,255,255,.4);border-top-color:rgba(255,255,255,.1)}
+.pi-g{color:var(--gold);border-top-color:rgba(200,146,42,.15)}
+
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.chart-lbl{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+
+.region-table{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.rt-row{display:grid;grid-template-columns:2fr 54px 1fr;align-items:center;gap:.75rem;padding:.75rem 1rem;border-bottom:1px solid var(--bd)}
+.rt-row:last-child{border-bottom:none}
+.rt-name{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500}
+.rt-pct{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;text-align:right;letter-spacing:.03em}
+.rt-bar-bg{height:4px;background:var(--bg3);border-radius:2px}
+.rt-bar-fill{height:4px;border-radius:2px}
+.rt-note{font-size:11px;color:var(--muted);line-height:1.35;margin-top:3px}
+
+.india-box{border:1px solid #e8c97a;border-left:3px solid var(--gold);padding:1rem 1.1rem;margin:.75rem 0;background:#fdf8ee;border-radius:0 var(--r) var(--r) 0}
+.india-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:.35rem}
+.india-text{font-size:13px;line-height:1.65;color:#5a4010}
+
+/* ========================
+   DD NUMBERS
+======================== */
+.wow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:.75rem 0}
+.wc{border:1px solid var(--bd);padding:1rem;border-radius:var(--r)}
+.wc-dk{background:#0d0d0d;border-color:#1f2937}
+.wc-lbl{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.wc-lbl-w{color:rgba(255,255,255,.38)}
+.wc-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.03em;line-height:1.05;margin-bottom:.3rem;color:var(--ink)}
+.wc-val-w{color:#fff}.wc-val-r{color:var(--nf)}.wc-val-g{color:#4ade80}
+.wc-why{font-size:12px;color:var(--muted);line-height:1.45}
+.wc-why-w{color:rgba(255,255,255,.45)}
+
+/* ========================
+   SIGNALS
+======================== */
+.signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.sig-head{font-size:10px;letter-spacing:.12em;font-weight:700;padding:.6rem 1rem;text-transform:uppercase;border-bottom:2px solid}
+.sig-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg);border-right:1px solid var(--bd)}
+.sig-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.sig-item{padding:.7rem 1rem;border-bottom:1px solid var(--bd);display:flex;gap:.55rem;align-items:flex-start}
+.sig-item:last-child{border-bottom:none}
+.sig-item-r{border-left:1px solid var(--bd)}
+.si-sym{font-size:14px;flex-shrink:0;font-weight:700;line-height:1.35}
+.si-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.si-b{font-size:12px;color:var(--muted);line-height:1.45}
+
+.wth-list{display:flex;flex-direction:column;gap:8px;margin:.75rem 0}
+.wth-item{border:1px solid var(--bd);padding:.9rem 1rem;display:flex;gap:.85rem;align-items:flex-start;border-radius:var(--r)}
+.wth-num{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);flex-shrink:0;line-height:1;min-width:28px}
+.wth-h{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.wth-b{font-size:13px;color:var(--muted);line-height:1.55}
+.wth-upside{font-size:12px;font-weight:600;color:var(--grn);margin-top:.35rem}
+
+/* ========================
+   INDUSTRY
+======================== */
+.metric-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.75rem 0}
+.mc-card{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.mc-metric{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:.65rem}
+.mc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar-row:last-of-type{margin-bottom:0}
+.mc-bar-name{font-size:12px;min-width:80px;color:var(--muted)}
+.mc-bar-name-nflx{color:var(--nf);font-weight:600}
+.mc-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:2px}
+.mc-bar-fill{height:5px;border-radius:2px}
+.mc-bar-val{font-size:12px;min-width:40px;text-align:right;font-weight:500;color:var(--muted)}
+.mc-bar-val-nflx{font-weight:700;color:var(--nf)}
+.mc-insight{font-size:12px;color:var(--grn);font-weight:500;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--bg3)}
+
+/* VALUATION */
+.val-cards{display:flex;flex-direction:column;gap:10px;margin:.75rem 0}
+.val-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.val-card-top{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)}
+.vct-cell{padding:.9rem 1rem;border-right:1px solid var(--bd);background:var(--bg2)}
+.vct-cell:last-child{border-right:none;background:#fff}
+.vct-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem}
+.vct-name{font-size:15px;font-weight:700;color:var(--ink)}
+.vct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.03em;line-height:1;color:var(--ink)}
+.vct-val-nflx{color:var(--nf)}
+.vct-sub{font-size:11px;color:var(--muted);margin-top:.15rem}
+.val-card-body{padding:.85rem 1rem;font-size:13px;color:var(--muted);line-height:1.65}
+.val-card-body strong{color:var(--ink)}
+.val-verdict{font-size:12px;font-weight:600;padding:.55rem 1rem;border-top:1px solid var(--bd)}
+.val-verdict-green{color:var(--grn);background:var(--grn-bg)}
+.val-verdict-amber{color:#92400e;background:#fef3c7}
+
+/* ========================
+   OWNERSHIP -- v1 layout restored
+======================== */
+.own-top-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:.75rem 0}
+.own-section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem}
+
+/* Shared table styles */
+.dd-table{width:100%;border-collapse:collapse}
+.dd-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.5rem .6rem;border-bottom:2px solid var(--bd);text-align:left;white-space:nowrap}
+.dd-table td{padding:.65rem .6rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.dd-table tr:last-child td{border-bottom:none}
+.td-name{font-weight:500}
+.td-stake{font-weight:600}
+.td-up{color:var(--grn);font-weight:600}
+.td-dn{color:var(--red2);font-weight:600}
+.td-flat{color:var(--muted)}
+.td-sold{color:var(--red2);font-weight:600}
+.td-muted{color:var(--muted)}
+
+.own-note{font-size:12px;color:var(--muted);margin-top:.65rem;line-height:1.55}
+.own-more{font-size:12px;color:var(--muted);margin-top:.4rem}
+
+/* PERSON CARDS */
+.person-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:.75rem 0}
+.pc{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.pc-init{width:38px;height:38px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:.65rem;border:1px solid var(--bd)}
+.pc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pc-role{font-size:12px;color:var(--muted);margin-bottom:.65rem}
+.pc-stat{font-size:12px;display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--bg3)}
+.pc-stat:last-of-type{border:none}
+.pc-sk{color:var(--muted)}
+.pc-sv{font-weight:600;color:var(--ink)}
+.pc-bio{font-size:12px;color:var(--muted);line-height:1.55;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--bd)}
+
+.disc{font-size:11px;color:var(--muted);padding-top:1rem;border-top:1px solid var(--bd);margin-top:2rem;line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .pane{padding:1.25rem 1rem 2.5rem}
+  .ddnum-grid,.comp-trio{grid-template-columns:repeat(3,1fr)}
+  .ddnum-val,.ct-val{font-size:1.6rem}
+  .flags-row,.own-two,.own-top-wrap{grid-template-columns:1fr}
+  .charts-2col,.metric-cards{grid-template-columns:1fr}
+  .plans-grid{grid-template-columns:1fr}
+  .plans-grid .plan{border-right:none;border-bottom:1px solid var(--bd)}
+  .plans-grid .plan:last-child{border-bottom:none}
+  .wow-grid{grid-template-columns:1fr 1fr 1fr}
+  .signals-grid{grid-template-columns:1fr}
+  .sig-item-r{border-left:none}
+  .sig-head-g{border-right:none}
+  .person-cards{grid-template-columns:1fr 1fr}
+  .val-card-top{grid-template-columns:1fr 1fr}
+  .val-card-top .vct-cell:last-child{display:none}
+  .rt-row{grid-template-columns:1.6fr 44px 1fr}
+  .rs-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <span class="pill pill-red">NFLX</span>
+    <span class="pill pill-ghost">Streaming / Entertainment</span>
+    <span class="pill pill-ghost">NASDAQ</span>
+    <span class="pill pill-ghost">FY2024 · Market cap $457B</span>
+  </div>
+  <div class="hero-name">Netflix, Inc.</div>
+  <div class="hero-sub">A Daily Dividend Deep Dive</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar" role="tablist">
+  <button class="tab-btn active" onclick="showTab('snapshot',this)">Snapshot</button>
+  <button class="tab-btn" onclick="showTab('business',this)">The Business</button>
+  <button class="tab-btn" onclick="showTab('ddnumbers',this)">DD Numbers</button>
+  <button class="tab-btn" onclick="showTab('signals',this)">The Signals</button>
+  <button class="tab-btn" onclick="showTab('industry',this)">The Industry</button>
+  <button class="tab-btn" onclick="showTab('ownership',this)">Ownership</button>
+</div>
+
+<!-- ============================
+     SNAPSHOT
+============================ -->
+<div id="pane-snapshot" class="tab-pane active">
+<div class="pane">
+
+  <div class="hook">
+    <p>Netflix has 301 million subscribers. That is more than the entire population of the United States. In 2011, one bad decision crashed the stock by 77% in four months. What happened next is one of the greatest business comebacks in corporate history.</p>
+  </div>
+
+  <div class="eyebrow">Three numbers worth stopping on</div>
+  <div class="ddnum-grid" style="margin:.5rem 0 .35rem">
+    <div class="ddnum"><div class="ddnum-val">700M</div><div class="ddnum-lbl">hours of content watched every single day</div></div>
+    <div class="ddnum"><div class="ddnum-val">$46M</div><div class="ddnum-lbl">spent on content every single day</div></div>
+    <div class="ddnum"><div class="ddnum-val">$6.9B</div><div class="ddnum-lbl">actual cash profit generated in 2024</div></div>
+  </div>
+  <div class="snav" onclick="showTab('ddnumbers',null)">See all DD numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <div class="divl"></div>
+
+  <!-- Business preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('business',null)">
+      <span class="pc-tab-label">The Business</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">How Netflix makes money</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--nf)">$33B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Subscriptions</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold)">$2B+</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Advertising</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#374151">$4B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Live Events</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:.75rem;line-height:1.6">People pay a monthly fee to watch everything. Netflix keeps the money whether you binge 10 hours or watch nothing. That is $39B in guaranteed income before they spend a dollar on content.</div>
+    </div>
+  </div>
+
+  <!-- Signals preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('signals',null)">
+      <span class="pc-tab-label">The Signals</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="flags-row">
+        <div class="flag-col">
+          <div class="flag-head flag-head-g">Green</div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Cracked down on password sharing and gained 19 million new paying customers</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>New cheaper ad-supported plan now has 40 million users and did not exist two years ago</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Profit margin jumped from 21% to 26% in a single year</span></div>
+        </div>
+        <div class="flag-col">
+          <div class="flag-head flag-head-r">Red</div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Asia accounts for 12% of revenue despite being home to 60% of the world's population</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Disney, Apple and Amazon are all fighting for the same viewers, so Netflix can never stop making new shows</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Nobody can predict which shows will be hits. They spend $46M a day and still get it wrong sometimes</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('industry',null)">
+      <span class="pc-tab-label">The Industry</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">Netflix vs the competition</div>
+      <div class="comp-trio">
+        <div class="ct"><div class="ct-metric">Monthly revenue per user</div><div class="ct-val">$17</div><div style="font-size:10px;color:var(--nf);font-weight:600">Netflix</div><div class="ct-compare">Disney+ $8 · Prime $4</div></div>
+        <div class="ct"><div class="ct-metric">Total subscribers</div><div class="ct-val">301M</div><div style="font-size:10px;color:var(--nf);font-weight:600">Netflix</div><div class="ct-compare">Disney+ 150M · Prime ~200M</div></div>
+        <div class="ct"><div class="ct-metric">Actual cash profit</div><div class="ct-val">$6.9B</div><div style="font-size:10px;color:var(--nf);font-weight:600">Netflix</div><div class="ct-compare">Disney+ breakeven · Others bundled</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('ownership',null)">
+      <span class="pc-tab-label">Ownership</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="own-two">
+        <div class="own-mini">
+          <div class="own-mini-head">Top shareholders</div>
+          <div class="own-mini-row"><span style="font-weight:500">Vanguard Group</span><span class="own-up">8.2% ↑</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">BlackRock</span><span class="own-up">6.9% ↑</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">State Street</span><span class="own-flat">3.8% →</span></div>
+        </div>
+        <div class="own-mini">
+          <div class="own-mini-head">What insiders are doing</div>
+          <div class="own-mini-row"><span style="font-weight:500">Sarandos (Co-CEO)</span><span class="own-dn">Sold $9.6M</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Peters (Co-CEO)</span><span class="own-dn">Sold $6.3M</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Hastings (Chair)</span><span class="own-dn">Sold $19.2M</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">Netflix spent a decade losing money to build the most valuable streaming library on earth. Now they are printing cash. The $39B in revenue is impressive. The $6.9B in actual cash profit is what changes the story. The next five years are not about American subscribers. They are about figuring out how to get a billion people in India and Southeast Asia to pay for something they currently access for under $2 a month. The ad-supported tier is the only credible bridge. If they build it right, this company looks very different in 2030.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     BUSINESS
+============================ -->
+<div id="pane-business" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Business</div>
+  <div class="sec-title">How Netflix makes money</div>
+  <div class="sec-sub">The idea is simple: pay a monthly fee and watch whatever you want. Netflix keeps that fee whether you watch 10 hours or nothing at all. That is $39B in income they know is coming before they spend a single dollar making shows. It flows in through three doors.</div>
+
+  <div class="rev-streams">
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-red">📺</div>
+        <div>
+          <div class="rs-name">Subscriptions</div>
+          <div class="rs-size">~$33B per year</div>
+        </div>
+        <div class="rs-badge rsb-green">Core engine</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">Most of Netflix's money comes from people paying a monthly fee to access the full library. Three price points, three different audiences.</div>
+        <div class="plans-grid">
+          <div class="plan">
+            <div class="plan-badge pb-r">Fastest growing</div>
+            <div class="plan-name">With Ads</div>
+            <div class="plan-price pp-r">$7<span class="plan-mo">/mo</span></div>
+            <div class="plan-insight pi-r">Full library, but with ad breaks. Netflix earns money from both the subscriber and the advertiser. Paid twice for the same viewer.</div>
+          </div>
+          <div class="plan plan-dk">
+            <div class="plan-badge pb-g">Most revenue</div>
+            <div class="plan-name plan-name-w">Standard</div>
+            <div class="plan-price pp-w">$15<span class="plan-mo plan-mo-w">/mo</span></div>
+            <div class="plan-insight pi-dk">No ads. The most popular plan. This is the reliable monthly income that funds every show Netflix makes.</div>
+          </div>
+          <div class="plan">
+            <div class="plan-badge pb-d">Pure margin</div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-price pp-g">$22<span class="plan-mo">/mo</span></div>
+            <div class="plan-insight pi-g">4K quality and four screens at once. Same shows as the $7 plan. That extra $15 is almost entirely profit.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-gold">📢</div>
+        <div>
+          <div class="rs-name">Advertising</div>
+          <div class="rs-size">$2B+ and growing fast</div>
+        </div>
+        <div class="rs-badge rsb-gold">New engine</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">In 2022 Netflix launched a cheaper plan that shows ads. People who cannot afford $15 a month can now access Netflix for $7 and watch ads instead. Netflix earns from both sides: the subscriber pays $7 and brands pay Netflix to show their ads to that viewer. Brands pay more to advertise on Netflix than almost anywhere else online because Netflix viewers are engaged, not just scrolling past. For every 1,000 people who see an ad, Netflix charges advertisers $30 to $60. For comparison, YouTube charges roughly $10. Netflix viewers are considered premium so brands pay more to reach them.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Ad plan users</div><div class="rst-val">40M+</div><div class="rst-note">Zero two years ago</div></div>
+          <div class="rst"><div class="rst-lbl">Ad rate vs YouTube</div><div class="rst-val">3 to 5x</div><div class="rst-note">Higher per viewer</div></div>
+          <div class="rst"><div class="rst-lbl">Revenue potential</div><div class="rst-val">$10B+</div><div class="rst-note">YouTube benchmark</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-dk">🏈</div>
+        <div>
+          <div class="rs-name">Live Events</div>
+          <div class="rs-size">~$4B, brand new</div>
+        </div>
+        <div class="rs-badge rsb-blue">New frontier</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">Netflix now shows live sports and boxing matches. They paid to broadcast NFL games on Christmas Day and moved WWE wrestling from cable TV to Netflix. Jake Paul vs Mike Tyson brought in 60 million households. This matters for two reasons. First, live events run ads, which means more advertising money. Second, live sport stops people from cancelling. If you know your favourite team plays on Netflix, you keep paying even in January when there are no new shows you want to watch.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Paul vs Tyson</div><div class="rst-val">60M</div><div class="rst-note">Households tuned in</div></div>
+          <div class="rst"><div class="rst-lbl">NFL game cost est.</div><div class="rst-val">$150M</div><div class="rst-note">Per game</div></div>
+          <div class="rst"><div class="rst-lbl">WWE Raw</div><div class="rst-val">2025</div><div class="rst-note">Moved from cable TV</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Revenue growth 2021 to 2024 ($B)</div>
+      <div style="position:relative;height:180px"><canvas id="revChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">How revenue breaks down</div>
+      <div style="position:relative;height:180px"><canvas id="revenueBreakdown"></canvas></div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Geography</div>
+  <div class="sec-title" style="font-size:1.35rem">Where the money comes from</div>
+  <div class="region-table">
+    <div class="rt-row"><div class="rt-name"><span>🇺🇸</span>US and Canada</div><div class="rt-pct" style="color:var(--nf)">44%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:100%;background:var(--nf)"></div></div><div class="rt-note" style="color:var(--grn)">Highest revenue per user (~$17/month). Funds everything else.</div></div></div>
+    <div class="rt-row"><div class="rt-name"><span>🌍</span>Europe, Middle East, Africa</div><div class="rt-pct" style="color:#777">31%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:70%;background:#9ca3af"></div></div><div class="rt-note">Growing steadily. Local shows like Money Heist and Dark are keeping people subscribed.</div></div></div>
+    <div class="rt-row"><div class="rt-name"><span>🌎</span>Latin America</div><div class="rt-pct" style="color:#aaa">13%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:30%;background:#d1d5db"></div></div><div class="rt-note">Stable. Spanish-language shows are a natural advantage in this market.</div></div></div>
+    <div class="rt-row"><div class="rt-name"><span>🌏</span>Asia Pacific</div><div class="rt-pct" style="color:var(--gold)">12%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:27%;background:var(--gold)"></div></div><div class="rt-note" style="color:var(--gold)">60% of the world's population. Smallest revenue per user. The unsolved puzzle.</div></div></div>
+  </div>
+  <div class="india-box">
+    <div class="india-title">The India problem and the India opportunity</div>
+    <div class="india-text">Netflix charges about $1.80 a month in India. In the US, the cheapest plan is $7. The gap is enormous. The ad-supported plan is the best chance Netflix has to close it. If brands want to reach Indian viewers and pay Netflix to show them ads, Netflix earns money even when the subscriber is paying almost nothing. Crack this and Asia Pacific goes from a footnote to the biggest growth story of the decade.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     DD NUMBERS
+============================ -->
+<div id="pane-ddnumbers" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">DD Numbers</div>
+  <div class="sec-title">The stats that tell the real story</div>
+  <div class="sec-sub">Not the dry income statement. The numbers behind the numbers. The ones that make you stop and re-read.</div>
+  <div class="wow-grid">
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Watched daily</div><div class="wc-val wc-val-w">700M hrs</div><div class="wc-why wc-why-w">That is 80,000 years of content consumed every single day</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Content per day</div><div class="wc-val wc-val-r">$46M</div><div class="wc-why wc-why-w">$17 billion divided by 365. More than most countries' entire annual film budget</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Spent per subscriber</div><div class="wc-val wc-val-w">$56/yr</div><div class="wc-why wc-why-w">Netflix spends this on every single subscriber whether they log in or not</div></div>
+    <div class="wc"><div class="wc-lbl">Squid Game Season 1</div><div class="wc-val">265M</div><div class="wc-why">Accounts watched it in 28 days. The budget was $21 million. No Hollywood blockbuster comes close to that return.</div></div>
+    <div class="wc"><div class="wc-lbl">New titles every year</div><div class="wc-val">600+</div><div class="wc-why">More than one new show or film released every single day of the year</div></div>
+    <div class="wc"><div class="wc-lbl">Ad plan users</div><div class="wc-val">40M+</div><div class="wc-why">Did not exist two years ago. Now bigger than most streaming services entirely.</div></div>
+    <div class="wc"><div class="wc-lbl">Korean shows on platform</div><div class="wc-val">100+</div><div class="wc-why">Korean content is now the second most-watched genre globally on Netflix. Nobody saw it coming.</div></div>
+    <div class="wc"><div class="wc-lbl">Countries making originals</div><div class="wc-val">50+</div><div class="wc-why">Nigeria, India, Turkey, Brazil. Local storytelling distributed to 190 countries. That is the real competitive edge.</div></div>
+    <div class="wc"><div class="wc-lbl" style="color:var(--grn)">Cash turnaround since 2019</div><div class="wc-val wc-val-g">+$10B</div><div class="wc-why">From losing $3.3B in cash per year to making $6.9B. The biggest financial turnaround in the company's history.</div></div>
+  </div>
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Subscriber growth, quarterly (millions)</div>
+      <div style="position:relative;height:200px"><canvas id="subChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Content spend by genre</div>
+      <div style="position:relative;height:200px"><canvas id="genreChart"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-top:1.25rem">
+    <div class="chart-lbl">Cash generated each year ($B) — the turning point</div>
+    <div style="position:relative;height:175px"><canvas id="fcfChart"></canvas></div>
+  </div>
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">The number that matters most is not $39B in revenue. It is $46M a day on content and the fact that a Korean show budgeted at $21M was watched by more people than most Hollywood blockbusters will ever reach. Netflix's edge is not money. It is the discovery that the best stories do not always come from the most expensive places.</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================
+     SIGNALS
+============================ -->
+<div id="pane-signals" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Signals</div>
+  <div class="sec-title">What the data is telling you</div>
+
+  <div class="signals-grid">
+    <div>
+      <div class="sig-head sig-head-g">Green flags</div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Password crackdown beat every estimate</div><div class="si-b">Netflix forced millions of people sharing accounts to start paying. They added 19 million new paying subscribers. Most analysts expected people to just cancel instead. They did not.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">The ad plan is quietly becoming massive</div><div class="si-b">40 million people now pay $7 a month and watch ads. Netflix earns from the subscriber and from the brand paying to show that ad. Two revenue streams from one viewer.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Making more money from the same subscribers</div><div class="si-b">Netflix's profit margin jumped from 21% to 26% in one year. The cost of making shows barely changed. Revenue grew. That gap goes straight to profit.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Local shows are the real competitive edge</div><div class="si-b">Squid Game, Money Heist, Dark. Cheap to make by Hollywood standards. Watched by hundreds of millions. Disney and Amazon cannot replicate a Korean cultural moment.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Live sport keeps subscribers from cancelling</div><div class="si-b">People used to cancel Netflix in January when there was nothing new to watch. WWE, NFL, and boxing matches now give them a reason to stay every month of the year.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sig-head sig-head-r">Red flags</div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Asia: enormous audience, tiny revenue</div><div class="si-b">60% of the world's population lives in Asia. Netflix makes only 12% of its revenue there. The monthly fee they can charge in India is around $1.80 versus $17 in the US. That gap has no easy fix.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Disney, Apple and Amazon force constant spending</div><div class="si-b">All three competitors are making their own shows. If Netflix stops releasing new content, subscribers leave for the competition. They spent $17 billion on content in 2024 and will spend more in 2025.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Nobody can predict which shows will work</div><div class="si-b">They spend $46 million every single day on content and still produce flops alongside the Squid Games. There is no formula. The biggest financial risk in the entire business is content that does not land.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">The ad business is still being built</div><div class="si-b">Netflix wants to compete with Google and Meta for advertising money. But they are still building the technology to measure and target ads properly while simultaneously trying to sell those ads. That is hard to do at speed.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">For the stock to double</div>
+  <div class="sec-title" style="font-size:1.5rem">What needs to happen</div>
+  <div class="wth-list">
+    <div class="wth-item">
+      <div class="wth-num">01</div>
+      <div>
+        <div class="wth-h">Crack the India and Asia problem through ads</div>
+        <div class="wth-b">Netflix earns about $1.80 per month from an Indian subscriber vs $17 in the US. If brands start paying Netflix to advertise to Asian viewers at scale, that gap closes. Even moving from $1.80 to $5 or $6 per user would add billions in annual revenue. This one move is worth more than adding 50 million new American subscribers.</div>
+        <div class="wth-upside">Potential add: $8 to $12 billion in annual revenue</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">02</div>
+      <div>
+        <div class="wth-h">The ad business scales to YouTube size</div>
+        <div class="wth-b">YouTube makes about $35 billion a year from advertising. Netflix charges brands more per viewer than YouTube does because Netflix viewers are more engaged. But Netflix only has 40 million people on its ad plan today. If that grows to 200 million, and they build the right ad technology, the math becomes extraordinary.</div>
+        <div class="wth-upside">Potential add: $10 billion or more in annual revenue</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">03</div>
+      <div>
+        <div class="wth-h">Profit margin keeps expanding without more spending</div>
+        <div class="wth-b">Making shows costs roughly the same whether Netflix has 250 million or 350 million subscribers. More subscribers means more revenue but not proportionally more cost. If revenue keeps growing at 15% a year while content spending stays flat, the profit grows even faster. Netflix's profit margin was 26% in 2024. At 35% on $50 billion in revenue, the earnings story looks completely different.</div>
+        <div class="wth-upside">Earnings per share could double without a single new subscriber</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">04</div>
+      <div>
+        <div class="wth-h">Win a major sports league and become the default screen</div>
+        <div class="wth-b">NFL, WWE, and boxing are the start. If Netflix wins the rights to show the Premier League, NBA, or Olympics, it becomes the one app every household needs. Live sport is the last thing that still forces people to pay for television. Owning it on streaming changes the entire market.</div>
+        <div class="wth-upside">Each major sports deal likely adds 5 to 15 million subscribers</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">05</div>
+      <div>
+        <div class="wth-h">The next Squid Game from India, Nigeria or Brazil</div>
+        <div class="wth-b">Squid Game cost $21 million and was watched by 265 million accounts in its first month. One show from a new market doing that adds an estimated 10 to 15 million subscribers globally at almost no extra cost. The content library is the pipeline. The model is proven. It just needs to happen again.</div>
+        <div class="wth-upside">Cultural moments add subscribers better than any marketing campaign</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     INDUSTRY
+============================ -->
+<div id="pane-industry" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Industry</div>
+  <div class="sec-title">Netflix vs the competition</div>
+  <div class="sec-sub">The numbers that actually matter in streaming and how Netflix compares to Disney+, Prime Video, and Apple TV+.</div>
+
+  <div class="metric-cards">
+    <div class="mc-card">
+      <div class="mc-metric"><span class="tw"><span class="term">Monthly revenue per user</span><span class="tt">How much each subscriber pays on average per month. Netflix earns more per person than any other streaming service.</span></span></div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-nflx">Netflix</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--nf)"></div></div><div class="mc-bar-val mc-bar-val-nflx">$17</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Apple TV+</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:53%;background:#9ca3af"></div></div><div class="mc-bar-val">$9</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Disney+</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:47%;background:#9ca3af"></div></div><div class="mc-bar-val">$8</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Prime Video</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:24%;background:#9ca3af"></div></div><div class="mc-bar-val">$4*</div></div>
+      <div class="mc-insight">Netflix charges more per subscriber than any competitor and still has the most subscribers.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric"><span class="tw"><span class="term">Monthly cancellation rate</span><span class="tt">The percentage of subscribers who cancel each month. Lower is better. If 5% cancel every month, you lose over half your subscribers in a year.</span></span></div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-nflx">Netflix</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:20%;background:var(--nf)"></div></div><div class="mc-bar-val mc-bar-val-nflx">~2%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Prime Video</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:15%;background:#9ca3af"></div></div><div class="mc-bar-val">~1.5%*</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Disney+</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:40%;background:#9ca3af"></div></div><div class="mc-bar-val">~4%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Apple TV+</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:50%;background:#9ca3af"></div></div><div class="mc-bar-val">~5%</div></div>
+      <div class="mc-insight">When Netflix cracked down on password sharing, analysts expected a wave of cancellations. The cancellation rate barely moved.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Total paying subscribers globally</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-nflx">Netflix</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--nf)"></div></div><div class="mc-bar-val mc-bar-val-nflx">301M</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Prime Video</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:66%;background:#9ca3af"></div></div><div class="mc-bar-val">~200M*</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Disney+</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:50%;background:#9ca3af"></div></div><div class="mc-bar-val">~150M</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Apple TV+</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:15%;background:#9ca3af"></div></div><div class="mc-bar-val">~45M</div></div>
+      <div class="mc-insight">More subscribers means a bigger content budget, which means better shows, which means more subscribers. The lead compounds over time.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Actual cash profit generated from streaming</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
+        <div style="background:var(--grn-bg);border:1px solid #bbf7d0;padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--grn)">$6.9B</div><div style="font-size:11px;color:var(--grn);font-weight:600">Netflix</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--muted)">~$0</div><div style="font-size:11px;color:var(--muted)">Disney+</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--muted);padding-top:.35rem">Bundled with Amazon Prime</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Prime Video</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--muted);padding-top:.35rem">Subsidised by iPhone sales</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Apple TV+</div></div>
+      </div>
+      <div class="mc-insight">Only Netflix generates meaningful standalone cash profit from streaming. The others are either loss-making or attached to a bigger business.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Valuation</div>
+  <div class="sec-title" style="font-size:1.5rem">Is Netflix expensive?</div>
+  <div class="sec-sub">Three ways investors measure whether a stock is cheap or expensive, and where Netflix stands on each one.</div>
+
+  <div class="val-cards">
+
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">P/E Ratio</div>
+          <div class="vct-sub">Share price divided by annual profit per share. Lower usually means cheaper.</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Netflix today</div>
+          <div class="vct-val vct-val-nflx">~45x</div>
+          <div class="vct-sub">You pay $45 for every $1 Netflix earns</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Netflix 5-year average</div>
+          <div class="vct-val">~60x</div>
+          <div class="vct-sub">What investors used to pay</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>vs peers:</strong> Disney trades at roughly 40x earnings but Disney+ is barely profitable. The S&amp;P 500 average is around 22x. Netflix at 45x looks high until you factor in that revenue is growing 15% a year. In 2021, Netflix traded above 200x earnings. At 45x today it is the cheapest it has been in years.</div>
+      <div class="val-verdict val-verdict-green">Trading well below its own historical average while the business is stronger than ever</div>
+    </div>
+
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">Price vs Cash Profit</div>
+          <div class="vct-sub">Share price divided by the actual cash the business generates each year. Cash is harder to fake than earnings.</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Netflix today</div>
+          <div class="vct-val vct-val-nflx">~55x</div>
+          <div class="vct-sub">You pay $55 for every $1 in cash generated</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Cash growth rate</div>
+          <div class="vct-val">50%+</div>
+          <div class="vct-sub">Year-over-year increase</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>Context:</strong> Netflix generated $6.9B in cash profit in 2024, up from $1.6B in 2022. A company whose cash profit is growing at 50% per year trading at 55x that cash profit is not particularly expensive. At current growth, the multiple compresses rapidly on its own.</div>
+      <div class="val-verdict val-verdict-green">Cash profit growing faster than the multiple. The premium shrinks automatically at current growth rates.</div>
+    </div>
+
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">EV / EBITDA</div>
+          <div class="vct-sub">Total company value divided by operating earnings. Used to compare companies regardless of debt levels.</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Netflix today</div>
+          <div class="vct-val vct-val-nflx">~30x</div>
+          <div class="vct-sub">Current</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Disney today</div>
+          <div class="vct-val">~14x</div>
+          <div class="vct-sub">For comparison</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>Context:</strong> Netflix trades at roughly double Disney on this measure. But Disney's streaming business only just turned profitable in 2024, is growing much slower, and the wider Disney business (theme parks, linear TV) is far more complex. The premium reflects that Netflix is a cleaner, faster-growing business.</div>
+      <div class="val-verdict val-verdict-amber">Premium versus Disney, but Disney is a very different and slower-growing business right now</div>
+    </div>
+
+  </div>
+  <div style="font-size:12px;color:var(--muted);background:var(--bg2);border:1px solid var(--bd);padding:.85rem 1rem;margin-top:.25rem;border-radius:var(--r)">The summary: Netflix's P/E was above 200x in 2021. At roughly 45x today it is the cheapest it has been in years, while revenue is growing at 15% and cash profit hit $6.9B. The market is still pricing in some risk. Whether that risk is justified is the investment question.</div>
+
+  <div class="disc">* Amazon Prime Video figures are estimates as Prime Video is bundled with Amazon Prime membership. For informational purposes only. Not investment advice.</div>
+
+</div>
+</div>
+
+<!-- ============================
+     OWNERSHIP
+============================ -->
+<div id="pane-ownership" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">Ownership</div>
+  <div class="sec-title">Who owns Netflix and what are they doing</div>
+
+  <div class="own-top-wrap">
+    <div>
+      <div class="own-section-label">Top institutional holders</div>
+      <table class="dd-table">
+        <thead>
+          <tr>
+            <th>Fund</th>
+            <th>Stake</th>
+            <th>Position</th>
+            <th>6mo change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Vanguard Group</td><td class="td-stake">8.2%</td><td>$37.5B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">BlackRock</td><td class="td-stake">6.9%</td><td>$31.5B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">State Street</td><td class="td-stake">3.8%</td><td>$17.3B</td><td class="td-flat">Unchanged</td></tr>
+          <tr><td class="td-name">Fidelity</td><td class="td-stake">2.1%</td><td>$9.6B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">T. Rowe Price</td><td class="td-stake">1.9%</td><td>$8.7B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">Pershing Square</td><td class="td-stake">~1.1%</td><td>~$5B</td><td class="td-up">Rebuilt</td></tr>
+          <tr><td class="td-name">Tiger Global</td><td class="td-stake">~0.8%</td><td>~$3.7B</td><td class="own-dn" style="font-size:13px">Trimmed</td></tr>
+          <tr><td class="td-name">Cap. Research Global</td><td class="td-stake">~0.7%</td><td>~$3.2B</td><td class="td-up">Increased</td></tr>
+        </tbody>
+      </table>
+      <div class="own-more">Pershing Square, Tiger Global + others — full data in SEC filings</div>
+    </div>
+
+    <div>
+      <div class="own-section-label">Insider transactions (last 6 months)</div>
+      <table class="dd-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Transaction</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Ted Sarandos</td><td class="td-muted">Co-CEO</td><td class="td-sold">Sold 12,500</td><td>~$9.6M</td></tr>
+          <tr><td class="td-name">Greg Peters</td><td class="td-muted">Co-CEO</td><td class="td-sold">Sold 8,200</td><td>~$6.3M</td></tr>
+          <tr><td class="td-name">Reed Hastings</td><td class="td-muted">Chairman</td><td class="td-sold">Sold 42,000</td><td>~$19.2M</td></tr>
+          <tr><td class="td-name">Spencer Neumann</td><td class="td-muted">CFO</td><td class="td-sold">Sold 5,100</td><td>~$3.9M</td></tr>
+          <tr><td class="td-name">Bela Bajaria</td><td class="td-muted">Content</td><td class="td-sold">Sold 3,800</td><td>~$2.9M</td></tr>
+          <tr><td class="td-name">S. Neumann + others</td><td></td><td colspan="2" style="color:var(--muted);font-style:italic;font-size:12px">Insider tier</td></tr>
+        </tbody>
+      </table>
+      <div class="own-note">Note: scheduled selling plans (10b5-1) are common among executives. These sales may be pre-planned and do not necessarily signal a bearish outlook.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">The People</div>
+  <div style="font-size:14px;color:var(--muted);margin-bottom:.85rem">The leadership team and what to know about each</div>
+
+  <div class="person-cards">
+    <div class="pc">
+      <div class="pc-init">TS</div>
+      <div class="pc-name">Ted Sarandos</div>
+      <div class="pc-role">Co-CEO</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Content / Studios</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Netflix since</span><span class="pc-sv">2000</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Building the content slate</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$50M+</span></div>
+      <div class="pc-bio">The architect of Netflix's original content strategy. Every major show from House of Cards to Squid Game ran through Sarandos.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">GP</div>
+      <div class="pc-name">Greg Peters</div>
+      <div class="pc-role">Co-CEO</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Product / Technology</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Netflix since</span><span class="pc-sv">2008</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Ad tier launch, product</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$30M+</span></div>
+      <div class="pc-bio">Led the ad-supported tier from concept to 40M users. Owns the product and tech roadmap. The person to watch on the advertising business.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">RH</div>
+      <div class="pc-name">Reed Hastings</div>
+      <div class="pc-role">Executive Chairman</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Tech / Entrepreneur</span></div>
+      <div class="pc-stat"><span class="pc-sk">Co-founded Netflix</span><span class="pc-sv">1997</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">No Rules Rules culture</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$4.5B</span></div>
+      <div class="pc-bio">Stepped back as CEO in 2023. His "No Rules Rules" management philosophy shaped Netflix's culture of radical transparency and high performance.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">SN</div>
+      <div class="pc-name">Spencer Neumann</div>
+      <div class="pc-role">CFO</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Finance / Activision</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Netflix since</span><span class="pc-sv">2019</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Cash flow discipline</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$15M+</span></div>
+      <div class="pc-bio">The person who turned Netflix from a cash-burning machine into a cash-generating one. Came from Activision Blizzard. Has consistently guided the company toward financial self-sufficiency.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">BB</div>
+      <div class="pc-name">Bela Bajaria</div>
+      <div class="pc-role">Chief Content Officer</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Content / NBCUniversal</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Netflix since</span><span class="pc-sv">2016</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Global originals strategy</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$20M+</span></div>
+      <div class="pc-bio">Championed local-language content in Korea, India, and Spain before it became obvious. Squid Game happened on her watch.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">AR</div>
+      <div class="pc-name">Amy Reinhard</div>
+      <div class="pc-role">President, Advertising</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Retail media / Walmart</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Netflix since</span><span class="pc-sv">2023</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Ad platform build-out</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">Not disclosed</span></div>
+      <div class="pc-bio">Hired from Walmart's advertising division to build Netflix's ad business from scratch. Her background in retail advertising is deliberate. Netflix wants brand relationships like Amazon has built, not the ones TV networks rely on.</div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Data sourced from public filings, SEC disclosures, and company reports. A Daily Dividend publication.</div>
+
+</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  if (btn && btn.classList && btn.classList.contains('tab-btn')) {
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+    });
+  }
+  renderCharts(id);
+}
+
+var rendered = {};
+function renderCharts(tab) {
+  if (rendered[tab]) return;
+  rendered[tab] = true;
+  const mc = '#9ca3af', gc = 'rgba(0,0,0,.05)';
+  if (tab === 'business') {
+    new Chart(document.getElementById('revChart'), {
+      type: 'bar',
+      data: { labels: ['2021','2022','2023','2024'], datasets: [{ data: [29.7,31.6,33.7,39], backgroundColor: '#E50914', borderRadius: 4 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:mc,font:{size:12}}},y:{grid:{color:gc},ticks:{color:mc,font:{size:12},callback:v=>'$'+v+'B'},border:{display:false}}} }
+    });
+    new Chart(document.getElementById('revenueBreakdown'), {
+      type: 'doughnut',
+      data: { labels: ['Subscriptions ~$33B','Advertising ~$2B+','Live and Other ~$4B'], datasets: [{ data:[85,5,10], backgroundColor:['#E50914','#C8922A','#374151'], borderWidth:0 }] },
+      options: { responsive:true, maintainAspectRatio:false, cutout:'58%', plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7280',font:{size:11},padding:10,boxWidth:10,boxHeight:10}}} }
+    });
+  }
+  if (tab === 'ddnumbers') {
+    new Chart(document.getElementById('subChart'), {
+      type: 'line',
+      data: { labels:['Q1 22','Q2 22','Q3 22','Q4 22','Q1 23','Q2 23','Q3 23','Q4 23','Q1 24','Q2 24','Q3 24','Q4 24'], datasets:[{data:[222,221,223,231,233,238,247,260,269,278,283,301],borderColor:'#E50914',borderWidth:2,pointBackgroundColor:'#E50914',pointRadius:2,fill:true,backgroundColor:'rgba(229,9,20,.06)',tension:.35}] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw+'M subscribers'}}}, scales:{x:{grid:{display:false},ticks:{color:mc,font:{size:10},maxTicksLimit:6}},y:{grid:{color:gc},ticks:{color:mc,font:{size:10},callback:v=>v+'M'},border:{display:false},min:210}} }
+    });
+    new Chart(document.getElementById('genreChart'), {
+      type: 'doughnut',
+      data: { labels:['Drama 34%','Comedy 18%','Action 17%','Documentary 11%','Reality 9%','Kids 7%','Other 4%'], datasets:[{data:[34,18,17,11,9,7,4],backgroundColor:['#E50914','#1f2937','#C8922A','#374151','#6b7280','#9ca3af','#d1d5db'],borderWidth:0}] },
+      options: { responsive:true, maintainAspectRatio:false, cutout:'55%', plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7280',font:{size:10},padding:6,boxWidth:8,boxHeight:8}}} }
+    });
+    new Chart(document.getElementById('fcfChart'), {
+      type: 'bar',
+      data: { labels:['2019','2020','2021','2022','2023','2024'], datasets:[{data:[-3.3,-0.15,-0.53,1.6,6.9,6.9],backgroundColor:['#b91c1c','#b91c1c','#b91c1c','#C8922A','#15803d','#15803d'],borderRadius:4}] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>(v.raw<0?'-$':'+$')+Math.abs(v.raw)+'B'}}}, scales:{x:{grid:{display:false},ticks:{color:mc,font:{size:12}}},y:{grid:{color:gc},ticks:{color:mc,font:{size:11},callback:v=>(v<0?'-$':'+$')+Math.abs(v)+'B'},border:{display:false}}} }
+    });
+  }
+}
+renderCharts('snapshot');
+</script>
+</body>
+</html>

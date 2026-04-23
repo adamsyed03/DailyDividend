@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visa — Daily Dividend Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --v:#1A1F71;
+  --vg:#F7B600;
+  --gold:#C8922A;
+  --grn:#15803d;
+  --grn-bg:#f0fdf4;
+  --red2:#b91c1c;
+  --red-bg:#fef2f2;
+  --ink:#111827;
+  --muted:#6b7280;
+  --bd:#e5e7eb;
+  --bg:#ffffff;
+  --bg2:#f9fafb;
+  --bg3:#f3f4f6;
+  --r:6px;
+}
+
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 0 1px var(--bd),0 20px 60px rgba(0,0,0,.08)}
+
+/* HERO */
+.hero{background:#0e1340;padding:2rem 1.75rem 0;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--vg)}
+.hero-meta{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 10px;text-transform:uppercase;border-radius:2px}
+.pill-v{background:var(--vg);color:#0e1340}
+.pill-ghost{border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.4)}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,7vw,4rem);color:#fff;letter-spacing:.04em;line-height:1}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-top:.4rem;padding-bottom:1.4rem}
+
+/* TABS */
+.tabs-bar{background:#0a0e30;border-bottom:1px solid #1e244a;display:flex;overflow-x:auto;padding:0 1.75rem;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 1rem;cursor:pointer;white-space:nowrap;color:rgba(255,255,255,.3);background:transparent;border:none;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;position:relative;top:1px}
+.tab-btn.active{color:#fff;border-bottom-color:var(--vg)}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* CONTENT */
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.pane{padding:1.75rem 1.75rem 3rem}
+
+/* TYPE */
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--v);font-weight:700;margin-bottom:.35rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2rem);color:var(--ink);margin-bottom:.9rem;line-height:1.2;font-weight:700}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:1.25rem;max-width:640px;line-height:1.65}
+.divl{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
+
+/* TOOLTIP */
+.tw{position:relative;display:inline}
+.term{border-bottom:2px dotted var(--gold);cursor:help}
+.tt{display:none;position:absolute;z-index:9999;background:#111;color:#fff;font-size:11px;line-height:1.5;padding:.65rem .9rem;border-radius:4px;width:210px;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111}
+.tw:hover .tt{display:block}
+
+/* ARROW NAV */
+.snav{display:inline-flex;align-items:center;gap:6px;margin-top:.65rem;cursor:pointer;font-size:12px;font-weight:600;color:var(--v);letter-spacing:.03em;padding:.35rem 0;border-bottom:1px solid transparent;transition:border-color .15s}
+.snav:hover{border-color:var(--v)}
+.snav:hover svg{transform:translateX(3px)}
+.snav svg{transition:transform .15s}
+
+/* HOOK */
+.hook{background:var(--bg2);border-left:3px solid var(--v);padding:1.1rem 1.25rem;margin-bottom:1.5rem}
+.hook p{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--ink)}
+
+/* DD NUMBERS dark */
+.ddnum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ddnum{background:#0e1340;padding:1.1rem 1rem;border-radius:var(--r)}
+.ddnum-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--vg);letter-spacing:.03em;line-height:1}
+.ddnum-lbl{font-size:11px;color:rgba(255,255,255,.42);margin-top:.35rem;line-height:1.4}
+
+/* PREVIEW CARDS */
+.preview-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.pc-head{background:var(--bg2);border-bottom:1px solid var(--bd);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pc-tab-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pc-arrow{color:var(--v);flex-shrink:0}
+.pc-body{padding:.85rem 1rem}
+
+/* FLAGS */
+.flags-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flag-col{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.flag-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .75rem;border-bottom:2px solid}
+.flag-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg)}
+.flag-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.flag-item{display:flex;gap:.5rem;align-items:flex-start;padding:.5rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;line-height:1.45}
+.flag-item:last-child{border-bottom:none}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.fdot-g{background:var(--grn)}
+.fdot-r{background:var(--red2)}
+
+/* COMP TRIO */
+.comp-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ct{border:1px solid var(--bd);padding:.85rem .75rem;border-radius:var(--r);text-align:center}
+.ct-metric{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.ct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--v);letter-spacing:.03em;line-height:1}
+.ct-compare{font-size:11px;color:var(--muted);line-height:1.4;margin-top:.3rem}
+
+/* OWNERSHIP MINI */
+.own-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.own-mini{border:1px solid var(--bd);padding:.85rem 1rem;border-radius:var(--r)}
+.own-mini-head{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.own-mini-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--bg3);font-size:13px}
+.own-mini-row:last-child{border-bottom:none}
+.own-up{color:var(--grn);font-weight:600;font-size:12px}
+.own-dn{color:var(--red2);font-weight:600;font-size:12px}
+.own-flat{color:var(--muted);font-size:12px}
+
+/* DD TAKE */
+.dd-take{background:#f5f6ff;border-left:3px solid var(--v);padding:1.25rem 1.4rem;margin-top:1.5rem}
+.dd-take-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--v);text-transform:uppercase;margin-bottom:.45rem}
+.dd-take-text{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2.5vw,1.05rem);line-height:1.8;color:#0a0e2a}
+
+/* ========================
+   BUSINESS
+======================== */
+.rev-streams{display:flex;flex-direction:column;gap:12px;margin:.75rem 0}
+.rs{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.rs-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.1rem;border-bottom:1px solid var(--bd);background:var(--bg2)}
+.rs-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rs-icon-v{background:#eef0fa}
+.rs-icon-gold{background:#fef3c7}
+.rs-icon-dk{background:#1f2937}
+.rs-name{font-size:15px;font-weight:600;color:var(--ink)}
+.rs-size{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--v);letter-spacing:.03em;line-height:1}
+.rs-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.rsb-blue{background:#eef0fa;color:var(--v)}
+.rsb-gold{background:#fef3c7;color:#92400e}
+.rsb-green{background:var(--grn-bg);color:var(--grn)}
+.rs-body{padding:1rem 1.1rem}
+.rs-desc{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:.85rem}
+.rs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rst{background:var(--bg2);padding:.65rem .75rem;border-radius:4px;border:1px solid var(--bd)}
+.rst-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.rst-val{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--ink);letter-spacing:.03em}
+.rst-note{font-size:11px;color:var(--grn);margin-top:1px;font-weight:500}
+
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.chart-lbl{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+
+.region-table{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.rt-row{display:grid;grid-template-columns:2fr 54px 1fr;align-items:center;gap:.75rem;padding:.75rem 1rem;border-bottom:1px solid var(--bd)}
+.rt-row:last-child{border-bottom:none}
+.rt-name{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500}
+.rt-pct{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;text-align:right;letter-spacing:.03em}
+.rt-bar-bg{height:4px;background:var(--bg3);border-radius:2px}
+.rt-bar-fill{height:4px;border-radius:2px}
+.rt-note{font-size:11px;color:var(--muted);line-height:1.35;margin-top:3px}
+
+.highlight-box{border:1px solid #c7cbe8;border-left:3px solid var(--v);padding:1rem 1.1rem;margin:.75rem 0;background:#f5f6ff;border-radius:0 var(--r) var(--r) 0}
+.highlight-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--v);font-weight:700;margin-bottom:.35rem}
+.highlight-text{font-size:13px;line-height:1.65;color:#0a0e2a}
+
+/* ========================
+   DD NUMBERS
+======================== */
+.wow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:.75rem 0}
+.wc{border:1px solid var(--bd);padding:1rem;border-radius:var(--r)}
+.wc-dk{background:#0e1340;border-color:#1e244a}
+.wc-lbl{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.wc-lbl-w{color:rgba(255,255,255,.38)}
+.wc-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.03em;line-height:1.05;margin-bottom:.3rem;color:var(--ink)}
+.wc-val-w{color:#fff}.wc-val-y{color:var(--vg)}.wc-val-g{color:#4ade80}
+.wc-why{font-size:12px;color:var(--muted);line-height:1.45}
+.wc-why-w{color:rgba(255,255,255,.45)}
+
+/* ========================
+   SIGNALS
+======================== */
+.signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.sig-head{font-size:10px;letter-spacing:.12em;font-weight:700;padding:.6rem 1rem;text-transform:uppercase;border-bottom:2px solid}
+.sig-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg);border-right:1px solid var(--bd)}
+.sig-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.sig-item{padding:.7rem 1rem;border-bottom:1px solid var(--bd);display:flex;gap:.55rem;align-items:flex-start}
+.sig-item:last-child{border-bottom:none}
+.sig-item-r{border-left:1px solid var(--bd)}
+.si-sym{font-size:14px;flex-shrink:0;font-weight:700;line-height:1.35}
+.si-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.si-b{font-size:12px;color:var(--muted);line-height:1.45}
+
+.wth-list{display:flex;flex-direction:column;gap:8px;margin:.75rem 0}
+.wth-item{border:1px solid var(--bd);padding:.9rem 1rem;display:flex;gap:.85rem;align-items:flex-start;border-radius:var(--r)}
+.wth-num{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--vg);flex-shrink:0;line-height:1;min-width:28px;background:#0e1340;text-align:center;padding:.1rem .4rem;border-radius:3px}
+.wth-h{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.wth-b{font-size:13px;color:var(--muted);line-height:1.55}
+.wth-upside{font-size:12px;font-weight:600;color:var(--grn);margin-top:.35rem}
+
+/* ========================
+   INDUSTRY
+======================== */
+.metric-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.75rem 0}
+.mc-card{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.mc-metric{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:.65rem}
+.mc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar-row:last-of-type{margin-bottom:0}
+.mc-bar-name{font-size:12px;min-width:80px;color:var(--muted)}
+.mc-bar-name-v{color:var(--v);font-weight:600}
+.mc-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:2px}
+.mc-bar-fill{height:5px;border-radius:2px}
+.mc-bar-val{font-size:12px;min-width:40px;text-align:right;font-weight:500;color:var(--muted)}
+.mc-bar-val-v{font-weight:700;color:var(--v)}
+.mc-insight{font-size:12px;color:var(--grn);font-weight:500;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--bg3)}
+
+/* VALUATION */
+.val-cards{display:flex;flex-direction:column;gap:10px;margin:.75rem 0}
+.val-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.val-card-top{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)}
+.vct-cell{padding:.9rem 1rem;border-right:1px solid var(--bd);background:var(--bg2)}
+.vct-cell:last-child{border-right:none;background:#fff}
+.vct-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem}
+.vct-name{font-size:15px;font-weight:700;color:var(--ink)}
+.vct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.03em;line-height:1;color:var(--ink)}
+.vct-val-v{color:var(--v)}
+.vct-sub{font-size:11px;color:var(--muted);margin-top:.15rem}
+.val-card-body{padding:.85rem 1rem;font-size:13px;color:var(--muted);line-height:1.65}
+.val-card-body strong{color:var(--ink)}
+.val-verdict{font-size:12px;font-weight:600;padding:.55rem 1rem;border-top:1px solid var(--bd)}
+.val-verdict-green{color:var(--grn);background:var(--grn-bg)}
+.val-verdict-amber{color:#92400e;background:#fef3c7}
+.val-verdict-blue{color:var(--v);background:#eef0fa}
+
+/* ========================
+   OWNERSHIP
+======================== */
+.own-top-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:.75rem 0}
+.own-section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem}
+.dd-table{width:100%;border-collapse:collapse}
+.dd-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.5rem .6rem;border-bottom:2px solid var(--bd);text-align:left;white-space:nowrap}
+.dd-table td{padding:.65rem .6rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.dd-table tr:last-child td{border-bottom:none}
+.td-name{font-weight:500}
+.td-stake{font-weight:600}
+.td-up{color:var(--grn);font-weight:600}
+.td-dn{color:var(--red2);font-weight:600}
+.td-flat{color:var(--muted)}
+.td-sold{color:var(--red2);font-weight:600}
+.td-muted{color:var(--muted)}
+.own-note{font-size:12px;color:var(--muted);margin-top:.65rem;line-height:1.55}
+.own-more{font-size:12px;color:var(--muted);margin-top:.4rem}
+
+/* PERSON CARDS */
+.person-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:.75rem 0}
+.pc{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.pc-init{width:38px;height:38px;border-radius:50%;background:#eef0fa;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--v);margin-bottom:.65rem;border:1px solid #c7cbe8}
+.pc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pc-role{font-size:12px;color:var(--muted);margin-bottom:.65rem}
+.pc-stat{font-size:12px;display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--bg3)}
+.pc-stat:last-of-type{border:none}
+.pc-sk{color:var(--muted)}
+.pc-sv{font-weight:600;color:var(--ink)}
+.pc-bio{font-size:12px;color:var(--muted);line-height:1.55;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--bd)}
+
+.disc{font-size:11px;color:var(--muted);padding-top:1rem;border-top:1px solid var(--bd);margin-top:2rem;line-height:1.6}
+
+@media(max-width:600px){
+  .pane{padding:1.25rem 1rem 2.5rem}
+  .ddnum-grid,.comp-trio{grid-template-columns:repeat(3,1fr)}
+  .flags-row,.own-two,.own-top-wrap{grid-template-columns:1fr}
+  .charts-2col,.metric-cards{grid-template-columns:1fr}
+  .wow-grid{grid-template-columns:1fr 1fr 1fr}
+  .signals-grid{grid-template-columns:1fr}
+  .sig-item-r{border-left:none}
+  .sig-head-g{border-right:none}
+  .person-cards{grid-template-columns:1fr 1fr}
+  .val-card-top{grid-template-columns:1fr 1fr}
+  .val-card-top .vct-cell:last-child{display:none}
+  .rt-row{grid-template-columns:1.6fr 44px 1fr}
+  .rs-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <span class="pill pill-v">V</span>
+    <span class="pill pill-ghost">Payments / Financial Infrastructure</span>
+    <span class="pill pill-ghost">NYSE</span>
+    <span class="pill pill-ghost">FY2024 · Market cap ~$560B</span>
+  </div>
+  <div class="hero-name">Visa, Inc.</div>
+  <div class="hero-sub">A Daily Dividend Deep Dive</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar" role="tablist">
+  <button class="tab-btn active" onclick="showTab('snapshot',this)">Snapshot</button>
+  <button class="tab-btn" onclick="showTab('business',this)">The Business</button>
+  <button class="tab-btn" onclick="showTab('ddnumbers',this)">DD Numbers</button>
+  <button class="tab-btn" onclick="showTab('signals',this)">The Signals</button>
+  <button class="tab-btn" onclick="showTab('industry',this)">The Industry</button>
+  <button class="tab-btn" onclick="showTab('ownership',this)">Ownership</button>
+</div>
+
+<!-- ============================
+     SNAPSHOT
+============================ -->
+<div id="pane-snapshot" class="tab-pane active">
+<div class="pane">
+
+  <div class="hook">
+    <p>Visa does not lend money. It does not take on any debt. Every time you tap your card, anywhere on earth, Visa earns a small fee and moves on. It does this 800 million times a day. That is the whole business.</p>
+  </div>
+
+  <div class="eyebrow">Three numbers worth stopping on</div>
+  <div class="ddnum-grid" style="margin:.5rem 0 .35rem">
+    <div class="ddnum"><div class="ddnum-val">$13.2T</div><div class="ddnum-lbl">in payments processed in FY2024 — more than the GDP of China</div></div>
+    <div class="ddnum"><div class="ddnum-val">67%</div><div class="ddnum-lbl">operating profit margin — one of the highest of any company on earth</div></div>
+    <div class="ddnum"><div class="ddnum-val">$0</div><div class="ddnum-lbl">in credit risk. Visa never lends a single dollar. The banks do that.</div></div>
+  </div>
+  <div class="snav" onclick="showTab('ddnumbers',null)">See all DD numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <div class="divl"></div>
+
+  <!-- Business preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('business',null)">
+      <span class="pc-tab-label">The Business</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">How Visa makes money</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--v)">$19.1B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Service fees</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--vg)">$11.3B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">International fees</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#374151">$5.5B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Other revenues</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:.75rem;line-height:1.6">Visa is a toll booth sitting in the middle of every card payment on earth. It charges a tiny fee every time money moves across its network. The fee is tiny. The volume is staggering.</div>
+    </div>
+  </div>
+
+  <!-- Signals preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('signals',null)">
+      <span class="pc-tab-label">The Signals</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="flags-row">
+        <div class="flag-col">
+          <div class="flag-head flag-head-g">Green</div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Cash is disappearing. Every time someone pays with a card instead of notes, Visa earns. That shift is still happening globally.</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Visa earns more when people travel internationally. Cross-border payments are the highest-margin thing it does.</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>The network is impossible to replicate. 4.6 billion cards, 130 million merchants, built over 60 years.</span></div>
+        </div>
+        <div class="flag-col">
+          <div class="flag-head flag-head-r">Red</div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>The US Department of Justice sued Visa in September 2024, alleging it has an illegal monopoly on debit card payments.</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Apple Pay, PayPal, and new real-time payment systems are slowly reducing the world's reliance on card rails.</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>China's UnionPay dominates the largest consumer market on earth, and Visa has very limited access to it.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('industry',null)">
+      <span class="pc-tab-label">The Industry</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">Visa vs the competition</div>
+      <div class="comp-trio">
+        <div class="ct"><div class="ct-metric">Revenue FY2024</div><div class="ct-val">$35.9B</div><div style="font-size:10px;color:var(--v);font-weight:600">Visa</div><div class="ct-compare">Mastercard $28.2B · Amex $66B</div></div>
+        <div class="ct"><div class="ct-metric">Operating margin</div><div class="ct-val">67%</div><div style="font-size:10px;color:var(--v);font-weight:600">Visa</div><div class="ct-compare">Mastercard 57% · Amex ~20%</div></div>
+        <div class="ct"><div class="ct-metric">Card market share</div><div class="ct-val">61%</div><div style="font-size:10px;color:var(--v);font-weight:600">Visa</div><div class="ct-compare">Mastercard 26% · Amex 11%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('ownership',null)">
+      <span class="pc-tab-label">Ownership</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="own-two">
+        <div class="own-mini">
+          <div class="own-mini-head">Top shareholders</div>
+          <div class="own-mini-row"><span style="font-weight:500">Vanguard Group</span><span class="own-up">9.1% ↑</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">BlackRock</span><span class="own-up">7.8% ↑</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">State Street</span><span class="own-flat">4.2% →</span></div>
+        </div>
+        <div class="own-mini">
+          <div class="own-mini-head">What insiders are doing</div>
+          <div class="own-mini-row"><span style="font-weight:500">McInerney (CEO)</span><span class="own-dn">Sold $4.1M</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Suh (CFO)</span><span class="own-dn">Sold $1.8M</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Cahill (Pres. Europe)</span><span class="own-dn">Sold $2.3M</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">Visa is the closest thing to a perfect business that exists. It sits in the middle of every payment, takes a small cut, and bears none of the risk. It does not care if you pay your credit card bill. It does not care if the economy slows. As long as money moves, Visa earns. The DOJ lawsuit is the most serious threat in years. But the real question is simpler: will people keep using cards? If yes, Visa wins. The next decade is about whether that question has the same answer in Mumbai, Jakarta, and Nairobi as it does in New York.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     BUSINESS
+============================ -->
+<div id="pane-business" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Business</div>
+  <div class="sec-title">How Visa makes money</div>
+  <div class="sec-sub">Visa is not a bank. It does not give you a credit card or hold your money. It is the road that money travels on. Every card transaction in the world needs to go through a network. Visa built the biggest one. And it charges a small toll every single time.</div>
+
+  <div class="rev-streams">
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-v">🏦</div>
+        <div>
+          <div class="rs-name">Service revenues</div>
+          <div class="rs-size">~$19.1B per year</div>
+        </div>
+        <div class="rs-badge rsb-blue">Core engine</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">When you tap your card at a coffee shop, a tiny fraction of a percent of that transaction goes to Visa. It is called a service fee. On its own it sounds like nothing. But Visa processes 800 million transactions a day, so the tiny fees add up to billions. Banks pay Visa to use its network because without it their cards would not work anywhere. Merchants accept Visa cards because their customers have them. It is a loop that is almost impossible to break.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Transactions FY2024</div><div class="rst-val">233B</div><div class="rst-note">800M per day</div></div>
+          <div class="rst"><div class="rst-lbl">Payment volume</div><div class="rst-val">$13.2T</div><div class="rst-note">More than China's GDP</div></div>
+          <div class="rst"><div class="rst-lbl">Cards in circulation</div><div class="rst-val">4.6B</div><div class="rst-note">More than half the world</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-gold">✈️</div>
+        <div>
+          <div class="rs-name">International transaction revenues</div>
+          <div class="rs-size">~$11.3B per year</div>
+        </div>
+        <div class="rs-badge rsb-gold">Highest margin</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">When you use your Visa card in a foreign country, or buy something online from a shop based overseas, Visa charges a higher fee. This is called a cross-border fee and it is the most profitable thing Visa does. Think about every holiday booking, every online purchase from a foreign website, every business trip. All of that flows through Visa's international network and generates a premium fee. When international travel recovers and grows, this section of Visa's income grows even faster than the rest.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Cross-border growth</div><div class="rst-val">+16%</div><div class="rst-note">FY2024 vs prior year</div></div>
+          <div class="rst"><div class="rst-lbl">Countries covered</div><div class="rst-val">200+</div><div class="rst-note">Global reach</div></div>
+          <div class="rst"><div class="rst-lbl">Currencies processed</div><div class="rst-val">160+</div><div class="rst-note">One network</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-dk">💡</div>
+        <div>
+          <div class="rs-name">Value-added services</div>
+          <div class="rs-size">~$5.5B and growing fast</div>
+        </div>
+        <div class="rs-badge rsb-green">New engine</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">Visa now sells extra services to banks and businesses on top of moving money. Fraud detection tools that alert you when your card is being used suspiciously. Consulting services that help banks understand their customers. Cybersecurity products that protect the payments system. These are not small additions. They are a completely new revenue stream that did not exist 10 years ago and is now growing at double-digit rates every year. The more Visa knows about payment patterns across its entire network, the more valuable these tools become.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Services revenue growth</div><div class="rst-val">+12%</div><div class="rst-note">Year on year CAGR</div></div>
+          <div class="rst"><div class="rst-lbl">Share of total revenue</div><div class="rst-val">~17%</div><div class="rst-note">Up from near zero</div></div>
+          <div class="rst"><div class="rst-lbl">Fraud blocked annually</div><div class="rst-val">$40B+</div><div class="rst-note">Via AI tools</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Revenue growth FY2021 to FY2024 ($B)</div>
+      <div style="position:relative;height:180px"><canvas id="revChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">How revenue breaks down (FY2024)</div>
+      <div style="position:relative;height:180px"><canvas id="revenueBreakdown"></canvas></div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Geography</div>
+  <div class="sec-title" style="font-size:1.35rem">Where the money comes from</div>
+  <div class="region-table">
+    <div class="rt-row"><div class="rt-name"><span>🇺🇸</span>United States</div><div class="rt-pct" style="color:var(--v)">44%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:100%;background:var(--v)"></div></div><div class="rt-note" style="color:var(--grn)">Home market. The most card-heavy consumer economy on earth.</div></div></div>
+    <div class="rt-row"><div class="rt-name"><span>🌍</span>Europe</div><div class="rt-pct" style="color:#777">25%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:57%;background:#9ca3af"></div></div><div class="rt-note">Strong card adoption. Cross-border travel within the EU drives premium fees.</div></div></div>
+    <div class="rt-row"><div class="rt-name"><span>🌏</span>Asia Pacific</div><div class="rt-pct" style="color:var(--vg)">18%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:41%;background:var(--vg)"></div></div><div class="rt-note" style="color:#92400e">Huge potential blocked by China's preference for UnionPay and AliPay.</div></div></div>
+    <div class="rt-row"><div class="rt-name"><span>🌎</span>Latin America and rest</div><div class="rt-pct" style="color:#aaa">13%</div><div><div class="rt-bar-bg"><div class="rt-bar-fill" style="width:30%;background:#d1d5db"></div></div><div class="rt-note">Fast-growing cash economies moving to digital. The next wave of Visa growth.</div></div></div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="highlight-title">The China problem and the India opportunity</div>
+    <div class="highlight-text">China is the largest consumer market on earth and Visa barely operates there. UnionPay handles 90%+ of domestic payments and the government has made it clear foreign card networks are not welcome. India is different. Digital payments are booming, government-built payment systems are growing, but international cards are gaining ground on premium purchases. Southeast Asia is even earlier in the journey. The long game here is enormous.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     DD NUMBERS
+============================ -->
+<div id="pane-ddnumbers" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">DD Numbers</div>
+  <div class="sec-title">The stats that tell the real story</div>
+  <div class="sec-sub">Not the income statement. The numbers that make you stop and re-read.</div>
+  <div class="wow-grid">
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Processed in FY2024</div><div class="wc-val wc-val-y">$13.2T</div><div class="wc-why wc-why-w">More than the entire GDP of China. All of it flowing through one network.</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Transactions per day</div><div class="wc-val wc-val-w">800M</div><div class="wc-why wc-why-w">9,300 transactions every second. Around the clock. Every single day.</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Operating margin</div><div class="wc-val wc-val-y">67%</div><div class="wc-why wc-why-w">Among the highest of any large company on earth. For every $100 Visa earns, $67 is profit before tax.</div></div>
+    <div class="wc"><div class="wc-lbl">Credit risk carried</div><div class="wc-val">$0</div><div class="wc-why">Visa never lends money. If you don't pay your credit card, that is the bank's problem, not Visa's.</div></div>
+    <div class="wc"><div class="wc-lbl">Cards in circulation</div><div class="wc-val">4.6B</div><div class="wc-why">More than one card for every two people alive. Banks and governments around the world issue them.</div></div>
+    <div class="wc"><div class="wc-lbl">Merchant locations</div><div class="wc-val">130M</div><div class="wc-why">Every one of those 130 million merchants joined because their customers have Visa cards. And customers keep Visa cards because 130 million merchants accept them.</div></div>
+    <div class="wc"><div class="wc-lbl">Cash share of global payments</div><div class="wc-val">~80%</div><div class="wc-why">Yes, 80% of the world's payments are still made in cash. Every point that drops, Visa's total payment volume grows.</div></div>
+    <div class="wc"><div class="wc-lbl">Speed of VisaNet</div><div class="wc-val">65K/sec</div><div class="wc-why">Maximum transactions per second the network can handle. It has never gone down in 50+ years of operation.</div></div>
+    <div class="wc"><div class="wc-lbl wc" style="color:var(--grn)">Share buybacks since 2010</div><div class="wc-val wc-val-g">$50B+</div><div class="wc-why">Visa has returned over $50 billion to shareholders through buybacks since going public. It buys back roughly 2% of its own shares every year.</div></div>
+  </div>
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Total payment volume FY2020 to FY2024 ($T)</div>
+      <div style="position:relative;height:200px"><canvas id="tpvChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Revenue by type (FY2024)</div>
+      <div style="position:relative;height:200px"><canvas id="revBreakChart"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-top:1.25rem">
+    <div class="chart-lbl">Net income growth FY2020 to FY2024 ($B)</div>
+    <div style="position:relative;height:175px"><canvas id="incomeChart"></canvas></div>
+  </div>
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">The number that defines Visa is not $35.9B in revenue. It is $0 in credit risk. Visa built a business that earns every time money moves and loses nothing when it goes wrong. That is extraordinarily rare. The only threat to this model is a world where money moves without cards. That world is not here yet. And the moment it starts to arrive, Visa will already be building the pipes for it.</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================
+     SIGNALS
+============================ -->
+<div id="pane-signals" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Signals</div>
+  <div class="sec-title">What the data is telling you</div>
+
+  <div class="signals-grid">
+    <div>
+      <div class="sig-head sig-head-g">Green flags</div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Cash is dying and Visa wins every funeral</div><div class="si-b">Roughly 80% of global payments are still made in cash. Every country that digitises its economy adds payment volume to Visa's network. India, Brazil, Nigeria, Indonesia. The shift is still in its early stages globally.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">International travel is the highest-margin product Visa has</div><div class="si-b">When you spend money abroad, Visa charges a higher fee than for a domestic purchase. The more people travel internationally, the faster this part of the business grows. Cross-border volume grew 16% in FY2024.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">The network is 60 years old and impossible to copy</div><div class="si-b">You cannot just build an alternative to Visa. You need every bank to issue your cards, every merchant to accept them, and every consumer to want them. It took 60 years to get here. No competitor is starting over.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">New businesses paying with cards, not just consumers</div><div class="si-b">B2B payments — companies paying suppliers, wages, and invoices — are a $125 trillion market that still runs mostly on slow bank transfers and paper cheques. Visa is moving into this space. It is an enormous untapped opportunity.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Buying back shares every single year, quietly making each one more valuable</div><div class="si-b">Visa spends billions every year buying back its own shares. Fewer shares in existence means each one you hold represents a bigger slice of the same business. They have done this consistently for 15 years.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sig-head sig-head-r">Red flags</div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">The US government is suing Visa for having a monopoly on debit payments</div><div class="si-b">In September 2024, the Department of Justice filed a lawsuit alleging Visa illegally controls over 60% of US debit card processing, blocking out competitors. A judge refused to dismiss the case in June 2025. This is ongoing and unresolved.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Apple, PayPal, and bank apps are building their own payment systems</div><div class="si-b">Apple Pay still runs on Visa rails in most countries. But Apple is experimenting with payment systems that bypass cards entirely. If major tech companies build direct bank-to-bank payment tools, a small number of Visa transactions slowly start disappearing.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">China is the biggest consumer market on earth, and Visa is barely there</div><div class="si-b">UnionPay, WeChat Pay, and AliPay dominate China. The government has made it difficult for foreign card networks to operate at scale domestically. That is 1.4 billion consumers Visa largely cannot reach.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Governments can cap the fees Visa charges — and some are trying to</div><div class="si-b">Merchants have complained for years that Visa's fees are too high. The EU has already capped certain fees. If regulators in the US or UK do the same thing, Visa's revenue per transaction drops. The DOJ lawsuit is partly about this exact issue.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">For the stock to double</div>
+  <div class="sec-title" style="font-size:1.5rem">What needs to happen</div>
+  <div class="wth-list">
+    <div class="wth-item">
+      <div class="wth-num">01</div>
+      <div>
+        <div class="wth-h">The B2B payments opportunity gets cracked</div>
+        <div class="wth-b">Businesses paying other businesses is a $125 trillion annual market. Most of it still happens via slow, expensive bank transfers. If Visa can move even a fraction of that onto its network, the payment volume grows enormously. Visa has been building products for exactly this purpose. Success here could add $10 to $20 trillion in annual payment volume.</div>
+        <div class="wth-upside">B2B is 10x bigger than consumer payments. Even 5% share would transform the revenue line.</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">02</div>
+      <div>
+        <div class="wth-h">Cash disappears faster in emerging markets than expected</div>
+        <div class="wth-b">India, Southeast Asia, and Africa are still mostly cash economies. If governments accelerate digital payment adoption through infrastructure and policy, the number of transactions on Visa's network grows rapidly. India alone has a billion potential new digital payers. Each one that taps a Visa card adds to the total.</div>
+        <div class="wth-upside">Each percentage point of cash replaced by cards adds hundreds of billions to Visa's total payment volume.</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">03</div>
+      <div>
+        <div class="wth-h">The DOJ lawsuit resolves without breaking the core business</div>
+        <div class="wth-b">The case is live and unresolved. If it settles with modest conditions, the uncertainty overhang on the stock clears. Investors who have been cautious because of the lawsuit would likely return. Visa has survived antitrust scrutiny before. Historical settlements in payments have been expensive but not existential.</div>
+        <div class="wth-upside">Removal of legal uncertainty alone could re-rate the stock meaningfully higher.</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">04</div>
+      <div>
+        <div class="wth-h">Value-added services become a second major revenue engine</div>
+        <div class="wth-b">Fraud tools, data analytics, and consulting are growing at 12% per year. Visa has data on 233 billion transactions a year. Nobody else has that. If they can turn that into a $15 to $20B business of its own, the stock trades on higher earnings at the same multiple and moves significantly higher.</div>
+        <div class="wth-upside">Services revenue at scale means Visa earns even when card volumes plateau.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     INDUSTRY
+============================ -->
+<div id="pane-industry" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Industry</div>
+  <div class="sec-title">Visa vs the competition</div>
+  <div class="sec-sub">The numbers that actually matter in payments, and how Visa compares to Mastercard, American Express, and PayPal.</div>
+
+  <div class="metric-cards">
+
+    <div class="mc-card">
+      <div class="mc-metric"><span class="tw"><span class="term">Operating margin</span><span class="tt">The percentage of revenue kept as operating profit. A 67% margin means for every $100 Visa earns, $67 is profit before tax. This is extraordinarily high for any large company.</span></span></div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-v">Visa</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--v)"></div></div><div class="mc-bar-val mc-bar-val-v">67%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Mastercard</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:85%;background:#9ca3af"></div></div><div class="mc-bar-val">57%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">PayPal</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:22%;background:#9ca3af"></div></div><div class="mc-bar-val">~15%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Amex</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:30%;background:#9ca3af"></div></div><div class="mc-bar-val">~20%</div></div>
+      <div class="mc-insight">Visa and Mastercard have the highest operating margins of any large company in the S&P 500. This is what a toll booth looks like in financial terms.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric"><span class="tw"><span class="term">Card purchase market share</span><span class="tt">Of all the money spent on cards globally, what percentage went through each network? Visa's 61% is dominant — nearly as big as all other networks combined.</span></span></div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-v">Visa</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--v)"></div></div><div class="mc-bar-val mc-bar-val-v">61%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Mastercard</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:42%;background:#9ca3af"></div></div><div class="mc-bar-val">26%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Amex</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:18%;background:#9ca3af"></div></div><div class="mc-bar-val">11%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Discover</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:3%;background:#9ca3af"></div></div><div class="mc-bar-val">2%</div></div>
+      <div class="mc-insight">61% of all money spent on cards globally goes through Visa's network. This is not a competitive market. It is a duopoly between Visa and Mastercard.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Annual revenue FY2024</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-v">Visa</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--v)"></div></div><div class="mc-bar-val mc-bar-val-v">$35.9B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Mastercard</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:79%;background:#9ca3af"></div></div><div class="mc-bar-val">$28.2B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">PayPal</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:80%;background:#9ca3af"></div></div><div class="mc-bar-val">~$31B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Amex</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:#9ca3af"></div></div><div class="mc-bar-val">$66B*</div></div>
+      <div class="mc-insight">Amex looks larger on revenue but a huge chunk is interest income from lending. Visa and Mastercard are purely network fees — completely different business models.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric"><span class="tw"><span class="term">Net profit margin</span><span class="tt">Of every dollar of revenue, what percentage ends up as pure profit? Visa's 55% means for every $100 it earns, $55 is profit after all costs and taxes.</span></span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.4rem">
+        <div style="background:var(--grn-bg);border:1px solid #bbf7d0;padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--grn)">55%</div><div style="font-size:11px;color:var(--grn);font-weight:600">Visa</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--muted)">45%</div><div style="font-size:11px;color:var(--muted)">Mastercard</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--muted)">~16%</div><div style="font-size:11px;color:var(--muted)">PayPal</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.7rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--muted)">~13%</div><div style="font-size:11px;color:var(--muted)">Amex</div></div>
+      </div>
+      <div class="mc-insight">Visa keeps more of every dollar it earns than almost any company of its size. This is what happens when you own the road instead of driving on it.</div>
+    </div>
+
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Valuation</div>
+  <div class="sec-title" style="font-size:1.5rem">Is Visa expensive?</div>
+  <div class="sec-sub">Three ways to look at what you are paying for Visa's business today, and whether it is justified.</div>
+
+  <div class="val-cards">
+
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">P/E Ratio</div>
+          <div class="vct-sub">Share price divided by profit per share. Lower usually means cheaper.</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Visa today</div>
+          <div class="vct-val vct-val-v">~28x</div>
+          <div class="vct-sub">You pay $28 for every $1 Visa earns</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Visa 5-year average</div>
+          <div class="vct-val">~35x</div>
+          <div class="vct-sub">Historical norm</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>vs peers:</strong> Mastercard trades at roughly 36x earnings. The S&amp;P 500 average is around 22x. Visa at 28x looks reasonable for a business with 67% operating margins and 10%+ annual revenue growth. The 10-year average is 34x — so right now Visa is trading below its own historical norm.</div>
+      <div class="val-verdict val-verdict-green">Trading below its own 5-year average while the business keeps growing</div>
+    </div>
+
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">Price vs Cash Profit</div>
+          <div class="vct-sub">Share price divided by the actual cash Visa generates each year. Cash is harder to fake than reported earnings.</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Visa today</div>
+          <div class="vct-val vct-val-v">~25x</div>
+          <div class="vct-sub">You pay $25 for every $1 in cash Visa generates</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Cash generated FY2024</div>
+          <div class="vct-val">$12.6B</div>
+          <div class="vct-sub">Free cash flow</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>Context:</strong> Visa generated $12.6 billion in actual cash profit in FY2024. That cash gets returned to shareholders through dividends and share buybacks. At 25x cash profit with 10%+ annual growth, this is not a stretched valuation for a business with no credit risk and a 60-year moat.</div>
+      <div class="val-verdict val-verdict-green">25x cash profit for a business this durable is not expensive by historical standards</div>
+    </div>
+
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">EV / EBITDA</div>
+          <div class="vct-sub">Total company value divided by operating profit. Used to compare companies fairly regardless of debt.</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Visa today</div>
+          <div class="vct-val vct-val-v">~20x</div>
+          <div class="vct-sub">Current</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Mastercard today</div>
+          <div class="vct-val">~24x</div>
+          <div class="vct-sub">For comparison</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>Context:</strong> Visa trades at a slight discount to Mastercard on this measure, despite having higher market share and higher margins. The DOJ lawsuit is the most likely reason. If that resolves without serious damage to the business, Visa re-rates closer to Mastercard's valuation.</div>
+      <div class="val-verdict val-verdict-blue">Modest discount to Mastercard, largely explained by ongoing DOJ litigation overhang</div>
+    </div>
+
+  </div>
+  <div style="font-size:12px;color:var(--muted);background:var(--bg2);border:1px solid var(--bd);padding:.85rem 1rem;margin-top:.25rem;border-radius:var(--r)">The summary: Visa's P/E of ~28x is below its own 10-year average of ~34x and below its closest peer Mastercard (~36x). The discount is almost entirely explained by the DOJ antitrust case filed in 2024. If that resolves without structural damage to the business, the market is likely mispricing this.</div>
+
+  <div class="disc">* Amex revenue includes interest income from its lending business, making direct comparison to pure payment networks like Visa and Mastercard misleading. For informational purposes only. Not investment advice.</div>
+
+</div>
+</div>
+
+<!-- ============================
+     OWNERSHIP
+============================ -->
+<div id="pane-ownership" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">Ownership</div>
+  <div class="sec-title">Who owns Visa and what are they doing</div>
+
+  <div class="own-top-wrap">
+    <div>
+      <div class="own-section-label">Top institutional holders</div>
+      <table class="dd-table">
+        <thead>
+          <tr>
+            <th>Fund</th>
+            <th>Stake</th>
+            <th>Position</th>
+            <th>6mo change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Vanguard Group</td><td class="td-stake">9.1%</td><td>$51.2B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">BlackRock</td><td class="td-stake">7.8%</td><td>$43.9B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">State Street</td><td class="td-stake">4.2%</td><td>$23.6B</td><td class="td-flat">Unchanged</td></tr>
+          <tr><td class="td-name">T. Rowe Price</td><td class="td-stake">2.4%</td><td>$13.5B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">Fidelity Investments</td><td class="td-stake">2.1%</td><td>$11.8B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">JP Morgan Asset Mgmt</td><td class="td-stake">~1.4%</td><td>~$7.9B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">Geode Capital Mgmt</td><td class="td-stake">~1.3%</td><td>~$7.3B</td><td class="td-flat">Unchanged</td></tr>
+          <tr><td class="td-name">Wellington Management</td><td class="td-stake">~1.1%</td><td>~$6.2B</td><td class="td-dn">Trimmed</td></tr>
+        </tbody>
+      </table>
+      <div class="own-more">Full institutional data available in SEC 13F filings</div>
+    </div>
+
+    <div>
+      <div class="own-section-label">Insider transactions (last 6 months)</div>
+      <table class="dd-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Transaction</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Ryan McInerney</td><td class="td-muted">CEO</td><td class="td-sold">Sold shares</td><td>~$4.1M</td></tr>
+          <tr><td class="td-name">Chris Suh</td><td class="td-muted">CFO</td><td class="td-sold">Sold shares</td><td>~$1.8M</td></tr>
+          <tr><td class="td-name">Antony Cahill</td><td class="td-muted">Pres, Europe</td><td class="td-sold">Sold shares</td><td>~$2.3M</td></tr>
+          <tr><td class="td-name">Chris Newkirk</td><td class="td-muted">New Flows</td><td class="td-sold">Sold shares</td><td>~$1.1M</td></tr>
+          <tr><td class="td-name">Oliver Jenkyn</td><td class="td-muted">Global Mkts</td><td class="td-sold">Sold shares</td><td>~$900K</td></tr>
+          <tr><td class="td-name">Senior leadership</td><td></td><td colspan="2" style="color:var(--muted);font-style:italic;font-size:12px">Multiple 10b5-1 plans active</td></tr>
+        </tbody>
+      </table>
+      <div class="own-note">Note: 10b5-1 scheduled selling plans are standard practice for executives at large companies. These are pre-arranged plans filed months in advance and do not indicate a view on the stock's future direction.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">The People</div>
+  <div style="font-size:14px;color:var(--muted);margin-bottom:.85rem">The leadership team and what to know about each</div>
+
+  <div class="person-cards">
+    <div class="pc">
+      <div class="pc-init">RM</div>
+      <div class="pc-name">Ryan McInerney</div>
+      <div class="pc-role">Chief Executive Officer</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Banking / JPMorgan Chase</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Visa since</span><span class="pc-sv">2013</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">New flows strategy</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$86M</span></div>
+      <div class="pc-bio">Became CEO in February 2023 after running Visa's global businesses as President for a decade. Previously ran JPMorgan Chase's consumer banking arm, a $14B revenue business with 75,000 employees. His priority is expanding Visa beyond consumer cards into B2B and new payment flows.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">CS</div>
+      <div class="pc-name">Chris Suh</div>
+      <div class="pc-role">Chief Financial Officer</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Finance / Microsoft</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Visa since</span><span class="pc-sv">2023</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Capital allocation discipline</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$12M</span></div>
+      <div class="pc-bio">Joined Visa from Microsoft in 2023 where he was CFO of Microsoft's Cloud and AI division. Oversees a balance sheet generating $12.6B in annual cash. The key decision-maker on how much gets returned to shareholders versus reinvested in new products.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">AC</div>
+      <div class="pc-name">Antony Cahill</div>
+      <div class="pc-role">President, Value-Added Services</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Payments / Visa veteran</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Visa since</span><span class="pc-sv">2007</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">European operations</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$18M</span></div>
+      <div class="pc-bio">One of Visa's longest-serving senior executives. Previously ran Visa Europe through its merger with the US entity. Now leads the value-added services division — the fastest-growing and highest-margin expansion area of the business.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">OJ</div>
+      <div class="pc-name">Oliver Jenkyn</div>
+      <div class="pc-role">President, Global Markets</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Payments / Visa veteran</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Visa since</span><span class="pc-sv">2009</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">North America strategy</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$22M</span></div>
+      <div class="pc-bio">Oversees all five of Visa's regional presidents and is responsible for growing consumer payment volume globally. Ran North America before taking the global role. This is the person most directly accountable for the DOJ response and the emerging markets growth story.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">CN</div>
+      <div class="pc-name">Chris Newkirk</div>
+      <div class="pc-role">President, New Payment Flows</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Strategy / Visa</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Visa since</span><span class="pc-sv">2015</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">B2B payments expansion</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$9M</span></div>
+      <div class="pc-bio">Leads the division hunting the $125 trillion B2B payments opportunity. Was Visa's Chief Strategy Officer before taking this role. The B2B bet is the most important growth initiative the company has for the next decade, and Newkirk is the person building it.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">AK</div>
+      <div class="pc-name">Al Kelly</div>
+      <div class="pc-role">Executive Chairman</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Tech / American Express</span></div>
+      <div class="pc-stat"><span class="pc-sk">CEO tenure</span><span class="pc-sv">2016 to 2023</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">International expansion</span></div>
+      <div class="pc-stat"><span class="pc-sk">Equity owned</span><span class="pc-sv">~$45M</span></div>
+      <div class="pc-bio">Led Visa as CEO from 2016 to 2023, overseeing the company's international expansion and acquisition of Visa Europe. Stepped into the Executive Chairman role when McInerney took over as CEO. Came from American Express before joining Visa.</div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Data sourced from public filings, SEC disclosures, and company reports. A Daily Dividend publication.</div>
+
+</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  if (btn && btn.classList && btn.classList.contains('tab-btn')) {
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+    });
+  }
+  renderCharts(id);
+}
+
+var rendered = {};
+function renderCharts(tab) {
+  if (rendered[tab]) return;
+  rendered[tab] = true;
+  const mc = '#9ca3af', gc = 'rgba(0,0,0,.05)';
+
+  if (tab === 'business') {
+    new Chart(document.getElementById('revChart'), {
+      type: 'bar',
+      data: { labels: ['FY2021','FY2022','FY2023','FY2024'], datasets: [{ data: [24.1,29.3,32.7,35.9], backgroundColor: '#1A1F71', borderRadius: 4 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:mc,font:{size:12}}},y:{grid:{color:gc},ticks:{color:mc,font:{size:12},callback:v=>'$'+v+'B'},border:{display:false}}} }
+    });
+    new Chart(document.getElementById('revenueBreakdown'), {
+      type: 'doughnut',
+      data: { labels: ['Service revenues ~$19.1B','International ~$11.3B','Data processing ~$9.7B','Other ~$5.5B'], datasets: [{ data:[48,28,24,15], backgroundColor:['#1A1F71','#F7B600','#4B5EA0','#9ca3af'], borderWidth:0 }] },
+      options: { responsive:true, maintainAspectRatio:false, cutout:'58%', plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7280',font:{size:10},padding:8,boxWidth:10,boxHeight:10}}} }
+    });
+  }
+
+  if (tab === 'ddnumbers') {
+    new Chart(document.getElementById('tpvChart'), {
+      type: 'line',
+      data: { labels: ['FY2020','FY2021','FY2022','FY2023','FY2024'], datasets: [{ data: [8.8,10.4,11.6,12.3,13.2], borderColor:'#1A1F71', borderWidth:2, pointBackgroundColor:'#1A1F71', pointRadius:3, fill:true, backgroundColor:'rgba(26,31,113,.06)', tension:.3 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>'$'+v+'T processed'}}}, scales:{x:{grid:{display:false},ticks:{color:mc,font:{size:11}}},y:{grid:{color:gc},ticks:{color:mc,font:{size:11},callback:v=>'$'+v+'T'},border:{display:false},min:7}} }
+    });
+    new Chart(document.getElementById('revBreakChart'), {
+      type: 'doughnut',
+      data: { labels: ['Service revenues','International transactions','Data processing','Other / services'], datasets: [{ data:[48,28,24,15], backgroundColor:['#1A1F71','#F7B600','#4B5EA0','#d1d5db'], borderWidth:0 }] },
+      options: { responsive:true, maintainAspectRatio:false, cutout:'55%', plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7280',font:{size:10},padding:6,boxWidth:8,boxHeight:8}}} }
+    });
+    new Chart(document.getElementById('incomeChart'), {
+      type: 'bar',
+      data: { labels: ['FY2020','FY2021','FY2022','FY2023','FY2024'], datasets: [{ data: [10.9,12.3,14.96,17.27,19.74], backgroundColor: ['#4B5EA0','#4B5EA0','#1A1F71','#1A1F71','#1A1F71'], borderRadius: 4 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>'$'+v+'B net income'}}}, scales:{x:{grid:{display:false},ticks:{color:mc,font:{size:11}}},y:{grid:{color:gc},ticks:{color:mc,font:{size:11},callback:v=>'$'+v+'B'},border:{display:false}}} }
+    });
+  }
+}
+renderCharts('snapshot');
+</script>
+</body>
+</html>

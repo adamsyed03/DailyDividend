@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Dividend - Tools</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#fafaf7;
+      --paper:#fff;
+      --ink:#0a0a0a;
+      --muted:#6b7280;
+      --bd:#e8e5dc;
+      --bd2:#d8d3c4;
+      --grn:#0f9d6b;
+      --grn-soft:#e6f7ef;
+      --serif:Georgia,"Times New Roman",serif;
+      --sans:Arial,"Helvetica Neue",sans-serif;
+    }
+    body{min-height:100vh;background:var(--bg);font-family:var(--sans);color:var(--ink);padding:28px}
+    .wrap{max-width:1000px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:36px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-mark{width:34px;height:34px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700}
+    .brand-name{font-weight:700;letter-spacing:-.01em}
+    button{border:1px solid var(--bd2);border-radius:999px;background:#fff;color:var(--ink);font:inherit;font-weight:700;padding:10px 16px;cursor:pointer}
+    button:hover{border-color:var(--ink)}
+    .hero{background:#fff;border:1px solid var(--bd2);border-radius:16px;padding:34px;box-shadow:0 20px 60px rgba(10,10,10,.08);margin-bottom:20px}
+    .kicker{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grn);margin-bottom:10px}
+    h1{font-family:var(--serif);font-size:40px;line-height:1.08;margin-bottom:10px}
+    .sub{font-size:16px;color:var(--muted);line-height:1.6;max-width:620px}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
+    .tool{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px}
+    .tool h2{font-family:var(--serif);font-size:22px;margin-bottom:6px}
+    .tool p{font-size:14px;color:var(--muted);line-height:1.5}
+    .user{margin-top:18px;font-size:13px;color:var(--muted)}
+    .user strong{color:var(--ink)}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">DD</div>
+        <div class="brand-name">Daily Dividend</div>
+      </div>
+      <button id="logout-button" type="button">Log out</button>
+    </header>
+
+    <section class="hero">
+      <div class="kicker">Member Tools</div>
+      <h1 id="welcome">Welcome.</h1>
+      <p class="sub">You are logged in. This is the protected tools area.</p>
+      <p class="user" id="user-summary"></p>
+    </section>
+
+    <section class="grid" aria-label="Tools">
+      <article class="tool">
+        <h2>Company Library</h2>
+        <p>Browse Daily Dividend deep dives and company explainers.</p>
+      </article>
+      <article class="tool">
+        <h2>Watchlist</h2>
+        <p>Track companies you want to understand next.</p>
+      </article>
+      <article class="tool">
+        <h2>Finance Basics</h2>
+        <p>Build confidence with simple finance concepts and examples.</p>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    const rawUser = localStorage.getItem('user');
+
+    if (!rawUser) {
+      window.location.href = 'login.html';
+    } else {
+      const user = JSON.parse(rawUser);
+      document.getElementById('welcome').textContent = 'Welcome, ' + (user.name || 'member') + '.';
+      document.getElementById('user-summary').innerHTML =
+        '<strong>Signed in as:</strong> ' +
+        [user.name, user.email, user.phone].filter(Boolean).join(' - ');
+    }
+
+    document.getElementById('logout-button').addEventListener('click', () => {
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

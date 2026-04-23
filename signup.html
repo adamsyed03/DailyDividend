@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Dividend - Login</title>
+  <title>Daily Dividend - Sign Up</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -21,17 +21,19 @@
       --sans:Arial,"Helvetica Neue",sans-serif;
     }
     body{min-height:100vh;background:var(--bg);font-family:var(--sans);color:var(--ink);display:grid;place-items:center;padding:24px}
-    .card{width:min(460px,100%);background:var(--paper);border:1px solid var(--bd2);border-radius:16px;padding:30px;box-shadow:0 24px 70px rgba(10,10,10,.12)}
+    .card{width:min(520px,100%);background:var(--paper);border:1px solid var(--bd2);border-radius:16px;padding:30px;box-shadow:0 24px 70px rgba(10,10,10,.12)}
     .brand{display:flex;align-items:center;gap:10px;margin-bottom:26px}
     .brand-mark{width:34px;height:34px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700}
     .brand-name{font-weight:700;letter-spacing:-.01em}
     .kicker{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grn);margin-bottom:10px}
     h1{font-family:var(--serif);font-size:34px;line-height:1.08;margin-bottom:8px}
     .sub{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:22px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+    .field.full{grid-column:1/-1}
     label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-    input{font:inherit;font-size:15px;border:1px solid var(--bd2);border-radius:10px;padding:13px 14px;background:#fff;color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
-    input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(15,157,107,.12)}
+    input,select{font:inherit;font-size:15px;border:1px solid var(--bd2);border-radius:10px;padding:13px 14px;background:#fff;color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
+    input:focus,select:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(15,157,107,.12)}
     .hint{font-size:12px;color:var(--muted);line-height:1.45;margin:-4px 0 16px}
     button{width:100%;border:0;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:700;padding:13px 18px;cursor:pointer;transition:transform .15s,background .15s}
     button:hover{background:var(--grn);transform:translateY(-1px)}
@@ -43,6 +45,7 @@
     .switch{margin-top:18px;text-align:center;font-size:14px;color:var(--muted)}
     .switch a{color:var(--ink);font-weight:700;text-decoration:none}
     .switch a:hover{text-decoration:underline}
+    @media(max-width:560px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -52,38 +55,56 @@
       <div class="brand-name">Daily Dividend</div>
     </div>
 
-    <div class="kicker">Member Login</div>
-    <h1>Welcome back.</h1>
-    <p class="sub">Log in with your name plus either your email or phone number.</p>
+    <div class="kicker">Create Account</div>
+    <h1>Join Daily Dividend.</h1>
+    <p class="sub">Tell us enough to personalize the tools. Email or phone is required, but you can provide both.</p>
 
-    <form id="login-form">
-      <div class="field">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" autocomplete="name" required>
+    <form id="signup-form">
+      <div class="grid">
+        <div class="field full">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel">
+        </div>
+
+        <div class="field">
+          <label for="occupation">Occupation</label>
+          <input id="occupation" name="occupation" type="text" autocomplete="organization-title" required>
+        </div>
+
+        <div class="field">
+          <label for="profficiency">Profficiency</label>
+          <select id="profficiency" name="profficiency" required>
+            <option value="1">1 - New to finance</option>
+            <option value="2">2 - Basic</option>
+            <option value="3" selected>3 - Comfortable</option>
+            <option value="4">4 - Advanced</option>
+            <option value="5">5 - Expert</option>
+          </select>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="email">Email optional</label>
-        <input id="email" name="email" type="email" autocomplete="email">
-      </div>
-
-      <div class="field">
-        <label for="phone">Phone optional</label>
-        <input id="phone" name="phone" type="tel" autocomplete="tel">
-      </div>
-
-      <p class="hint">Use either email or phone. You do not need both.</p>
-      <button id="login-button" type="submit">Login</button>
+      <p class="hint">At least one of email or phone is required.</p>
+      <button id="signup-button" type="submit">Sign Up</button>
       <div class="message" id="message" role="status"></div>
     </form>
 
-    <p class="switch">No account yet? <a href="signup.html">Sign up</a></p>
+    <p class="switch">Already have an account? <a href="login.html">Log in</a></p>
   </main>
 
   <script>
     const ENDPOINT = 'https://script.google.com/macros/s/AKfycbznyEIolr2pRcYL396HOI4sSJuL1cuDRtv8YU_NaVi5LP9m5L3UbnDGI6jJhpUm5GKz/exec';
-    const form = document.getElementById('login-form');
-    const button = document.getElementById('login-button');
+    const form = document.getElementById('signup-form');
+    const button = document.getElementById('signup-button');
     const message = document.getElementById('message');
 
     function buildUrl(params) {
@@ -109,9 +130,11 @@
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const phone = document.getElementById('phone').value.trim();
+      const occupation = document.getElementById('occupation').value.trim();
+      const profficiency = document.getElementById('profficiency').value;
 
-      if (!name) {
-        showMessage('Please enter your name.', 'error');
+      if (!name || !occupation) {
+        showMessage('Please enter your name and occupation.', 'error');
         return;
       }
       if (!email && !phone) {
@@ -120,28 +143,25 @@
       }
 
       button.disabled = true;
-      button.textContent = 'Logging in...';
+      button.textContent = 'Signing up...';
 
       try {
-        const url = buildUrl({mode:'login', name, email, phone});
+        const url = buildUrl({mode:'signup', name, email, phone, occupation, profficiency});
         const response = await fetch(url, {method:'GET'});
         const data = await response.json();
 
         if (!response.ok || !isSuccess(data)) {
-          throw new Error(data.error || data.reason || 'No account matched those details.');
+          throw new Error(data.error || data.reason || 'Could not create account.');
         }
 
-        const user = data.user || {name, email, phone};
-        localStorage.setItem('user', JSON.stringify(user));
-        showMessage('Login successful. Redirecting...', 'success');
-        setTimeout(() => {
-          window.location.href = 'tools.html';
-        }, 500);
+        showMessage('Account created. You can now log in.', 'success');
+        form.reset();
+        document.getElementById('profficiency').value = '3';
       } catch (error) {
-        showMessage(error.message || 'Login failed. Please try again.', 'error');
+        showMessage(error.message || 'Signup failed. Please try again.', 'error');
       } finally {
         button.disabled = false;
-        button.textContent = 'Login';
+        button.textContent = 'Sign Up';
       }
     });
   </script>

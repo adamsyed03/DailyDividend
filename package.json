@@ -1,18 +1,8 @@
 {
-  "name": "dailydividend",
-  "version": "1.0.0",
-  "description": "Daily Dividend - Markets within minutes",
   "scripts": {
-    "dev": "npx live-server --port=8000 --open=/index.html",
-    "start": "npx live-server --port=8000",
-    "notion-sync": "node scripts/notion_sync.mjs",
-    "sec-form4-extract": "node scripts/sec_form4_extract.mjs --input data/sec_form4 --tickers NVDA,V,JPM,INTC,AMD"
+    "dev": "node server.js"
   },
-  "keywords": [],
-  "author": "Daily Dividend",
-  "license": "ISC",
-  "dependencies": {
-    "@notionhq/client": "^2.2.15"
+  "devDependencies": {
+    "express": "^4.18.3"
   }
 }
-
