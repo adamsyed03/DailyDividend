@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="Site Pics/DD%20logo.png">
-<title>Daily Dividend — Stocks, but you'll actually get them</title>
+<title>Daily Dividend | Stocks, but you'll actually get them</title>
 <meta name="description" content="Finance without the jargon. The story behind the stock, in under 3 minutes.">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;500;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -46,6 +46,23 @@ body{font-family:var(--sans);color:var(--ink);font-size:16px;line-height:1.55;-w
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 img{max-width:100%;display:block}
+body.access-gated{overflow:hidden}
+.site-shell{transition:opacity .45s var(--fx),filter .45s var(--fx)}
+body.access-gated .site-shell{opacity:0;pointer-events:none;filter:blur(8px)}
+.access-screen{position:fixed;inset:0;background:var(--bg);z-index:3000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .45s var(--fx)}
+body.access-gated .access-screen{opacity:1;pointer-events:auto}
+.access-inner{width:min(760px,100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center}
+.access-copy{font-family:var(--mono);font-size:clamp(20px,3vw,34px);line-height:1.45;color:var(--ink);min-height:3.2em;max-width:760px}
+.access-cursor{display:inline-block;width:.62em;height:1.1em;transform:translateY(.16em);margin-left:2px;background:var(--ink);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.access-form{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.access-input{width:min(320px,78vw);font-family:var(--mono);font-size:14px;border:1px solid var(--bd2);border-radius:999px;padding:14px 18px;background:#fff;color:var(--ink);outline:none}
+.access-input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(15,157,107,.12)}
+.access-submit{font-size:14px;font-weight:600;padding:14px 20px;border-radius:999px;background:var(--ink);color:#fff;transition:all .18s var(--fx)}
+.access-submit:hover{background:var(--grn);transform:translateY(-1px)}
+.access-error{font-size:12px;color:var(--red);min-height:1.2em}
+.access-brand{position:fixed;right:24px;bottom:24px;width:42px;height:42px;opacity:.9;z-index:3001}
+.access-brand img{width:100%;height:100%;object-fit:contain}
 
 /* ========== NAV ========== */
 .nav{padding:22px 0 0;display:flex;align-items:center;justify-content:space-between}
@@ -459,7 +476,21 @@ body.article-open{overflow:hidden}
 ::selection{background:var(--ink);color:#fff}
 </style>
 </head>
-<body>
+<body class="access-gated">
+
+<div class="access-screen" id="access-screen" aria-modal="true" role="dialog" aria-labelledby="access-copy">
+  <div class="access-inner">
+    <div class="access-copy" id="access-copy" aria-live="polite"></div>
+    <form class="access-form" id="access-form">
+      <input class="access-input" id="access-input" type="password" autocomplete="off" placeholder="Beta access key">
+      <button class="access-submit" type="submit">Enter</button>
+    </form>
+    <div class="access-error" id="access-error"></div>
+  </div>
+  <div class="access-brand" aria-hidden="true"><img src="Site Pics/DD%20logo.png" alt=""></div>
+</div>
+
+<div class="site-shell">
 
 <!-- NAV -->
 <div class="wrap">
@@ -1983,7 +2014,78 @@ document.querySelectorAll('.sec, .cta, .search-sec').forEach(el => {
 
 setTimeout(() => showToast("👀 Psst. 6 easter eggs hidden here", 3600), 2200);
 
+const ACCESS_STORAGE_KEY = 'dd_beta_access_granted';
+const accessCopy = document.getElementById('access-copy');
+const accessForm = document.getElementById('access-form');
+const accessInput = document.getElementById('access-input');
+const accessError = document.getElementById('access-error');
+const accessLine = 'Oh, you found us. Enter your beta access key to enter into the website';
+const VALID_ACCESS_KEYS = new Set([
+  'Labubu',
+  'Nestle',
+  'Whoop',
+  'Amul',
+  'Uniqlo',
+  'Inflation',
+  'Nike',
+  'Apple',
+  'Visa',
+  'Netflix',
+  'Rolex',
+  'Zara',
+  'Sony',
+  'Uber',
+  'Lego',
+  'Meta',
+  'Amazon',
+  'Notion'
+]);
+
+function unlockAccess() {
+  sessionStorage.setItem(ACCESS_STORAGE_KEY, 'true');
+  document.body.classList.remove('access-gated');
+}
+
+function runAccessTypewriter() {
+  accessCopy.innerHTML = '';
+  let idx = 0;
+  const tick = () => {
+    accessCopy.innerHTML = accessLine.slice(0, idx) + '<span class="access-cursor"></span>';
+    if (idx < accessLine.length) {
+      idx += 1;
+      setTimeout(tick, idx < 16 ? 42 : 28);
+    }
+  };
+  tick();
+}
+
+if (sessionStorage.getItem(ACCESS_STORAGE_KEY) === 'true') {
+  unlockAccess();
+} else {
+  runAccessTypewriter();
+  setTimeout(() => accessInput.focus(), 700);
+}
+
+accessForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const submittedKey = accessInput.value.trim();
+  if (!submittedKey) {
+    accessError.textContent = 'Enter your beta access key.';
+    accessInput.focus();
+    return;
+  }
+  if (!VALID_ACCESS_KEYS.has(submittedKey)) {
+    accessError.textContent = 'That beta access key is not valid.';
+    accessInput.focus();
+    accessInput.select();
+    return;
+  }
+  accessError.textContent = '';
+  unlockAccess();
+});
 </script>
+</div>
 </body>
 </html>
+
 
