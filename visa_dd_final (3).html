@@ -287,7 +287,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-s
 }
 </style>
 </head>
-<body>
+<body data-company="Visa">
 <div class="shell">
 
 <!-- HERO -->
@@ -304,12 +304,12 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-s
 
 <!-- TABS -->
 <div class="tabs-bar" role="tablist">
-  <button class="tab-btn active" onclick="showTab('snapshot',this)">Snapshot</button>
-  <button class="tab-btn" onclick="showTab('business',this)">The Business</button>
-  <button class="tab-btn" onclick="showTab('ddnumbers',this)">DD Numbers</button>
-  <button class="tab-btn" onclick="showTab('signals',this)">The Signals</button>
-  <button class="tab-btn" onclick="showTab('industry',this)">The Industry</button>
-  <button class="tab-btn" onclick="showTab('ownership',this)">Ownership</button>
+  <button class="tab-btn active" onclick="showTab('snapshot',this)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="Snapshot" data-dd-param-section-slug="snapshot">Snapshot</button>
+  <button class="tab-btn" onclick="showTab('business',this)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="The Business" data-dd-param-section-slug="business">The Business</button>
+  <button class="tab-btn" onclick="showTab('ddnumbers',this)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="DD Numbers" data-dd-param-section-slug="dd_numbers">DD Numbers</button>
+  <button class="tab-btn" onclick="showTab('signals',this)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="The Signals" data-dd-param-section-slug="signals">The Signals</button>
+  <button class="tab-btn" onclick="showTab('industry',this)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="The Industry" data-dd-param-section-slug="industry">The Industry</button>
+  <button class="tab-btn" onclick="showTab('ownership',this)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="Ownership" data-dd-param-section-slug="ownership">Ownership</button>
 </div>
 
 <!-- ============================
@@ -328,13 +328,13 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-s
     <div class="ddnum"><div class="ddnum-val">67%</div><div class="ddnum-lbl">operating profit margin — one of the highest of any company on earth</div></div>
     <div class="ddnum"><div class="ddnum-val">$0</div><div class="ddnum-lbl">in credit risk. Visa never lends a single dollar. The banks do that.</div></div>
   </div>
-  <div class="snav" onclick="showTab('ddnumbers',null)">See all DD numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="snav" onclick="showTab('ddnumbers',null)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="DD Numbers" data-dd-param-section-slug="dd_numbers">See all DD numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
   <div class="divl"></div>
 
   <!-- Business preview -->
   <div class="preview-card">
-    <div class="pc-head" onclick="showTab('business',null)">
+    <div class="pc-head" onclick="showTab('business',null)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="The Business" data-dd-param-section-slug="business">
       <span class="pc-tab-label">The Business</span>
       <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
@@ -351,7 +351,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-s
 
   <!-- Signals preview -->
   <div class="preview-card">
-    <div class="pc-head" onclick="showTab('signals',null)">
+    <div class="pc-head" onclick="showTab('signals',null)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="The Signals" data-dd-param-section-slug="signals">
       <span class="pc-tab-label">The Signals</span>
       <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
@@ -375,7 +375,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-s
 
   <!-- Industry preview -->
   <div class="preview-card">
-    <div class="pc-head" onclick="showTab('industry',null)">
+    <div class="pc-head" onclick="showTab('industry',null)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="The Industry" data-dd-param-section-slug="industry">
       <span class="pc-tab-label">The Industry</span>
       <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
@@ -391,7 +391,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-s
 
   <!-- Ownership preview -->
   <div class="preview-card">
-    <div class="pc-head" onclick="showTab('ownership',null)">
+    <div class="pc-head" onclick="showTab('ownership',null)" data-dd-event="click_company_section" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-section-name="Ownership" data-dd-param-section-slug="ownership">
       <span class="pc-tab-label">Ownership</span>
       <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
@@ -973,5 +973,6 @@ function renderCharts(tab) {
 }
 renderCharts('snapshot');
 </script>
+<script src="js/analytics.js"></script>
 </body>
 </html>

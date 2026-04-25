@@ -511,7 +511,7 @@ body.article-open{overflow:hidden}
   <div class="nav-right">
     <a href="#library" class="nav-link" onclick="smoothScroll(event, 'library')">Library</a>
     <a href="#how" class="nav-link" onclick="smoothScroll(event, 'how')">How it works</a>
-    <button class="nav-cta" id="nav-founders">
+    <button class="nav-cta" id="nav-founders" data-dd-event="click_message_founders" data-dd-param-location="nav">
       <span class="wave">👋</span> Talk to founders
     </button>
   </div>
@@ -589,7 +589,7 @@ body.article-open{overflow:hidden}
   <h2 class="sec-title">Companies you know. Stories you <span class="mark">don't</span>.</h2>
   <p class="sec-sub">Pick one. 3 minutes. You'll never see it the same way again.</p>
   <div class="start-grid">
-    <div class="sc" data-company="Netflix" onclick="openCompany(this)">
+    <div class="sc" data-company="Netflix" onclick="openCompany(this)" data-dd-event="click_company" data-dd-param-company-name="Netflix" data-dd-param-company-slug="netflix" data-dd-param-location="start_grid">
       <div class="sc-top">
         <div class="sc-logo netflix"><img src="Site Pics/netflix%20logo.png" alt="Netflix"></div>
         <div class="sc-badge sc-badge-live">Live</div>
@@ -599,7 +599,7 @@ body.article-open{overflow:hidden}
       <div class="sc-fact">Burns <strong>$46M a day</strong> on shows. Here's why that math works.</div>
       <div class="sc-cta">Read now <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
-    <div class="sc" data-company="Visa" onclick="openCompany(this)">
+    <div class="sc" data-company="Visa" onclick="openCompany(this)" data-dd-event="click_company" data-dd-param-company-name="Visa" data-dd-param-company-slug="visa" data-dd-param-location="start_grid">
       <div class="sc-top">
         <div class="sc-logo visa"><img src="Site Pics/visalogo.png" alt="Visa"></div>
         <div class="sc-badge sc-badge-live">Live</div>
@@ -733,7 +733,7 @@ body.article-open{overflow:hidden}
       Open the library
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <button class="btn btn-secondary" id="cta-founders">
+    <button class="btn btn-secondary" id="cta-founders" data-dd-event="click_message_founders" data-dd-param-location="hero">
       <span class="wave">👋</span> Talk to founders
     </button>
   </div>
@@ -754,8 +754,8 @@ body.article-open{overflow:hidden}
   </div>
   <div class="ft-links">
     <a href="https://www.instagram.com/dailydividend.official/" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a href="https://www.whatsapp.com/channel/0029Vb7PFc33mFY5k9b4K13T?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGn5blnglThfLjStLxHVmsl-dVCORpT2fbydaYNftqXUKdRcp1J_tsgOTT-ZNM_aem_6GxNek0e6FYbgX6lTxc2Aw" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-    <a href="#" id="ft-founders">Talk to us</a>
+    <a href="https://www.whatsapp.com/channel/0029Vb7PFc33mFY5k9b4K13T?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGn5blnglThfLjStLxHVmsl-dVCORpT2fbydaYNftqXUKdRcp1J_tsgOTT-ZNM_aem_6GxNek0e6FYbgX6lTxc2Aw" target="_blank" rel="noopener noreferrer" data-dd-event="click_message_founders" data-dd-param-location="footer">WhatsApp</a>
+    <a href="#" id="ft-founders" data-dd-event="click_message_founders" data-dd-param-location="footer">Talk to us</a>
     <a href="#">Not investment advice</a>
   </div>
 </div>
@@ -910,15 +910,15 @@ body.article-open{overflow:hidden}
     <div class="modal-field">
       <div class="modal-label">How should we reply? (optional)</div>
       <div class="contact-toggle">
-        <button class="contact-toggle-btn" data-mode="email">Email</button>
-        <button class="contact-toggle-btn" data-mode="phone">Phone</button>
+      <button class="contact-toggle-btn" data-mode="email">Email</button>
+      <button class="contact-toggle-btn" data-mode="phone">Phone</button>
       </div>
       <input type="email" class="modal-input" id="modal-contact" placeholder="you@wherever.com" style="display:none">
     </div>
 
     <div class="modal-foot">
       <div class="modal-note">Goes straight to our inbox. We read everything. Actually.</div>
-      <button class="modal-submit" id="modal-submit">
+      <button class="modal-submit" id="modal-submit" data-dd-event="click_message_founders" data-dd-param-location="modal">
         Send it
         <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
@@ -1155,6 +1155,25 @@ let expanded = false;
 let activeRegions = new Set();
 let activeSectors = new Set();
 
+function bindDynamicAnalyticsClicks(root) {
+  if (!root || typeof window.ddTrack !== 'function') return;
+  root.querySelectorAll('[data-dd-event]').forEach(el => {
+    if (el.dataset.ddBound === 'true') return;
+    el.dataset.ddBound = 'true';
+    el.addEventListener('click', function () {
+      const eventName = el.getAttribute('data-dd-event');
+      if (!eventName) return;
+      const params = { page_path: window.location.pathname };
+      Array.from(el.attributes).forEach(attr => {
+        if (attr.name.startsWith('data-dd-param-')) {
+          const key = attr.name.replace('data-dd-param-', '').replace(/-/g, '_');
+          params[key] = attr.value;
+        }
+      });
+      window.ddTrack(eventName, params);
+    });
+  });
+}
 function getFiltered() {
   let out = library;
   if (currentFilter !== 'all') out = out.filter(c => c.tags.includes(currentFilter));
@@ -1166,7 +1185,7 @@ function getFiltered() {
 function renderLibrary() {
   const filtered = getFiltered();
   grid.innerHTML = filtered.length ? filtered.map((c, i) => `
-    <div class="co ${!expanded && i >= 6 ? 'co-hidden' : ''}" data-company="${c.name}" onclick="${c.live ? 'openCompany(this)' : 'notifyMe(this)'}">
+    <div class="co ${!expanded && i >= 6 ? 'co-hidden' : ''}" data-company="${c.name}" onclick="${c.live ? 'openCompany(this)' : 'notifyMe(this)'}" ${c.live ? `data-dd-event="click_company" data-dd-param-company-name="${c.name}" data-dd-param-company-slug="${c.name.toLowerCase()}" data-dd-param-location="library_grid"` : ''}>
       <div class="co-top">
         ${c.logoHtml || letterLogo(c.name)}
         ${c.live ? '<div class="sc-badge sc-badge-live">Live</div>' : (c.isNew ? '<div class="sc-badge sc-badge-soon">Next up</div>' : '')}
@@ -1198,6 +1217,7 @@ function renderLibrary() {
     tags.innerHTML = [...activeRegions].map(r => `<span class="lib-active-tag">${REGION_LABELS[r]}<span class="x" data-kind="region" data-val="${r}">✕</span></span>`).join('') +
                      [...activeSectors].map(s => `<span class="lib-active-tag">${SECTOR_LABELS[s]}<span class="x" data-kind="sector" data-val="${s}">✕</span></span>`).join('');
   }
+  bindDynamicAnalyticsClicks(grid);
 }
 
 document.getElementById('filters').addEventListener('click', e => {
@@ -1523,7 +1543,7 @@ function renderSearchResults(q) {
       const status = c.live ? '<span class="search-result-status status-live">Live</span>' :
                      (c.isNew ? '<span class="search-result-status status-soon">Next up</span>' :
                       '<span class="search-result-status status-soon">Coming soon</span>');
-      return `<div class="search-result" data-name="${c.name}" data-live="${!!c.live}">
+      return `<div class="search-result" data-name="${c.name}" data-live="${!!c.live}" ${c.live ? `data-dd-event="click_company" data-dd-param-company-name="${c.name}" data-dd-param-company-slug="${c.name.toLowerCase()}" data-dd-param-location="search_results"` : ''}>
         ${logoImg}
         <div class="search-result-body">
           <div class="search-result-name">${c.name}</div>
@@ -1540,7 +1560,7 @@ function renderSearchResults(q) {
       <div class="search-empty-sim">
         ${similar.map(c => {
           const logoImg = c.logoHtml ? c.logoHtml.replace(/co-logo/g, 'sim-logo') : `<div class="sim-logo">${c.name[0]}</div>`;
-          return `<div class="sim-card" data-name="${c.name}" data-live="${!!c.live}">${logoImg}<span class="sim-name">${c.name}</span></div>`;
+          return `<div class="sim-card" data-name="${c.name}" data-live="${!!c.live}" ${c.live ? `data-dd-event="click_company" data-dd-param-company-name="${c.name}" data-dd-param-company-slug="${c.name.toLowerCase()}" data-dd-param-location="search_results"` : ''}>${logoImg}<span class="sim-name">${c.name}</span></div>`;
         }).join('')}
       </div>` : '';
     searchResults.innerHTML = `
@@ -1583,12 +1603,18 @@ searchResults.addEventListener('click', (e) => {
   if (result) {
     const name = result.dataset.name;
     const isLive = result.dataset.live === 'true';
+    if (isLive && window.ddTrack) {
+      window.ddTrack('click_company', { page_path: window.location.pathname, company_name: name, company_slug: name.toLowerCase(), location: 'search_results' });
+    }
     goToCompany(name, isLive);
     return;
   }
   if (sim) {
     const name = sim.dataset.name;
     const isLive = sim.dataset.live === 'true';
+    if (isLive && window.ddTrack) {
+      window.ddTrack('click_company', { page_path: window.location.pathname, company_name: name, company_slug: name.toLowerCase(), location: 'search_results' });
+    }
     goToCompany(name, isLive);
     return;
   }
@@ -2094,8 +2120,10 @@ accessForm.addEventListener('submit', (e) => {
   unlockAccess();
 });
 </script>
+<script src="js/analytics.js"></script>
 </div>
 </body>
 </html>
+
 
 
