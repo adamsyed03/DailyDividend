@@ -2021,24 +2021,24 @@ const accessInput = document.getElementById('access-input');
 const accessError = document.getElementById('access-error');
 const accessLine = 'Oh, you found us. Enter your beta access key to enter into the website';
 const VALID_ACCESS_KEYS = new Set([
-  'Labubu',
-  'Nestle',
-  'Whoop',
-  'Amul',
-  'Uniqlo',
-  'Inflation',
-  'Nike',
-  'Apple',
-  'Visa',
-  'Netflix',
-  'Rolex',
-  'Zara',
-  'Sony',
-  'Uber',
-  'Lego',
-  'Meta',
-  'Amazon',
-  'Notion'
+  'labubu',
+  'nestle',
+  'whoop',
+  'amul',
+  'uniqlo',
+  'inflation',
+  'nike',
+  'apple',
+  'visa',
+  'netflix',
+  'rolex',
+  'zara',
+  'sony',
+  'uber',
+  'lego',
+  'meta',
+  'amazon',
+  'notion'
 ]);
 
 function unlockAccess() {
@@ -2069,13 +2069,14 @@ if (sessionStorage.getItem(ACCESS_STORAGE_KEY) === 'true') {
 accessForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const submittedKey = accessInput.value.trim();
+  const normalizedSubmittedKey = submittedKey.toLowerCase();
   if (!submittedKey) {
     accessError.textContent = 'Enter your beta access key.';
     accessInput.focus();
     return;
   }
-  if (!VALID_ACCESS_KEYS.has(submittedKey)) {
-    accessError.textContent = 'That beta access key is not valid.';
+  if (!VALID_ACCESS_KEYS.has(normalizedSubmittedKey)) {
+    accessError.textContent = 'hahah nice try';
     accessInput.focus();
     accessInput.select();
     return;
