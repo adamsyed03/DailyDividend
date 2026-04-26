@@ -78,18 +78,11 @@
     <p class="switch">No account yet? <a href="signup.html">Sign up</a></p>
   </main>
 
+  <script src="js/dd-backend.js"></script>
   <script>
-    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzacW67dhSwiZen8cUPtR0XmDo20BG5OnhsFFtxMc5OpH6Qlw-TMUufLxTIUFmDvx4/exec';
     const form = document.getElementById('login-form');
     const button = document.getElementById('login-button');
     const message = document.getElementById('message');
-
-    function buildUrl(params) {
-      const query = Object.keys(params)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-        .join('&');
-      return ENDPOINT + '?' + query;
-    }
 
     function showMessage(text, type) {
       message.textContent = text;
@@ -123,9 +116,7 @@
       button.textContent = 'Logging in...';
 
       try {
-        const url = buildUrl({mode:'login', name: loginName, email});
-        const response = await fetch(url, {method:'GET'});
-        const data = await response.json();
+        const { response, data } = await ddFetchJson({mode:'login', name: loginName, email}, 'Login request');
 
         if (!response.ok || !isSuccess(data)) {
           throw new Error(data.error || data.reason || 'No account matched those details.');

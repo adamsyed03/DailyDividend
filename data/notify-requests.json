@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ebfa7b80-a545-4547-a302-7d64f9977001",
+    "company": "Visa",
+    "email": "notify@example.com",
+    "createdAt": "2026-04-26T16:50:09.572Z"
+  },
+  {
+    "id": "50ad8f52-e2a7-48cd-bf1f-a471065f39dd",
+    "company": "McDonald's",
+    "email": "asdasd@gmail.com",
+    "createdAt": "2026-04-26T16:53:40.183Z"
+  },
+  {
+    "id": "b5acbe7c-57eb-477c-a592-9c4b4b028f8e",
+    "company": "Costco",
+    "email": "adam@gmail.com",
+    "createdAt": "2026-04-26T17:03:44.512Z"
+  },
+  {
+    "id": "c3bd8c2d-c2a9-4cdb-9074-2c86fb964b81",
+    "company": "Google",
+    "email": "adamksyed03@gmail.com",
+    "createdAt": "2026-04-26T17:07:40.581Z"
+  },
+  {
+    "id": "38a339db-43bc-4794-9e94-075adfb15eca",
+    "company": "McDonald's",
+    "email": "ada@gmail.com",
+    "createdAt": "2026-04-26T17:20:00.960Z"
+  },
+  {
+    "id": "ab74c6f4-375d-4a0a-bf9e-fd2e45595dfc",
+    "company": "Google",
+    "email": "adamksyed03@gmail.com",
+    "createdAt": "2026-04-26T17:25:30.602Z"
+  },
+  {
+    "id": "fd795448-7668-4c47-b96a-29f23252d134",
+    "company": "McDonald's",
+    "email": "adamksyed03@gmail.com",
+    "createdAt": "2026-04-26T17:25:39.316Z"
+  },
+  {
+    "id": "6790aa7b-7556-47ca-a785-195548ce84f9",
+    "company": "Starbucks",
+    "email": "adamksyed03@gmail.com",
+    "createdAt": "2026-04-26T20:18:54.652Z"
+  }
+]

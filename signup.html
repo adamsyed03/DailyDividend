@@ -163,18 +163,11 @@
     <p class="switch">Already have an account? <a href="login.html">Log in</a></p>
   </main>
 
+  <script src="js/dd-backend.js"></script>
   <script>
-    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzacW67dhSwiZen8cUPtR0XmDo20BG5OnhsFFtxMc5OpH6Qlw-TMUufLxTIUFmDvx4/exec';
     const form = document.getElementById('signup-form');
     const button = document.getElementById('signup-button');
     const message = document.getElementById('message');
-
-    function buildUrl(params) {
-      const query = Object.keys(params)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-        .join('&');
-      return ENDPOINT + '?' + query;
-    }
 
     function showMessage(text, type) {
       message.textContent = text;
@@ -209,9 +202,7 @@
       button.textContent = 'Signing up...';
 
       try {
-        const url = buildUrl({mode:'signup', name, email, country, phone, occupation, profficiency});
-        const response = await fetch(url, {method:'GET'});
-        const data = await response.json();
+        const { response, data } = await ddFetchJson({mode:'signup', name, email, country, phone, occupation, profficiency}, 'Signup request');
 
         if (!response.ok || !isSuccess(data)) {
           throw new Error(data.error || data.reason || 'Could not create account.');
@@ -219,7 +210,7 @@
 
         showMessage('Account created. You can now log in.', 'success');
         form.reset();
-        document.getElementById('country').value = 'GB';
+        document.getElementById('country').value = '44';
         document.getElementById('profficiency').value = '3';
       } catch (error) {
         showMessage(error.message || 'Signup failed. Please try again.', 'error');
