@@ -64,25 +64,13 @@
 
     <div class="kicker">Member Login</div>
     <h1>Welcome back.</h1>
-    <p class="sub">Log in with your name plus either your email or phone number.</p>
+    <p class="sub">Log in with your email.</p>
 
     <form id="login-form">
       <div class="field">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" autocomplete="name" required>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
       </div>
-
-      <div class="field">
-        <label for="email">Email optional</label>
-        <input id="email" name="email" type="email" autocomplete="email">
-      </div>
-
-      <div class="field">
-        <label for="phone">Phone optional</label>
-        <input id="phone" name="phone" type="tel" autocomplete="tel">
-      </div>
-
-      <p class="hint">Use either email or phone. You do not need both.</p>
       <button id="login-button" type="submit">Login</button>
       <div class="message" id="message" role="status"></div>
     </form>
@@ -116,16 +104,18 @@
     form.addEventListener('submit', async event => {
       event.preventDefault();
 
-      const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
+      const savedAuth = (() => {
+        try { return JSON.parse(localStorage.getItem('dailyDividendAuth') || localStorage.getItem('user') || 'null') || {}; } catch { return {}; }
+      })();
+      const loginName = savedAuth.name || email;
 
-      if (!name) {
-        showMessage('Please enter your name.', 'error');
+      if (!email) {
+        showMessage('Please enter your email address.', 'error');
         return;
       }
-      if (!email && !phone) {
-        showMessage('Please enter either your email or phone number.', 'error');
+      if (!email.includes('@')) {
+        showMessage('Please enter a valid email address.', 'error');
         return;
       }
 
@@ -133,7 +123,7 @@
       button.textContent = 'Logging in...';
 
       try {
-        const url = buildUrl({mode:'login', name, email, phone});
+        const url = buildUrl({mode:'login', name: loginName, email});
         const response = await fetch(url, {method:'GET'});
         const data = await response.json();
 
@@ -141,7 +131,7 @@
           throw new Error(data.error || data.reason || 'No account matched those details.');
         }
 
-        const user = data.user || {name, email, phone};
+        const user = data.user || {name: loginName, email};
         localStorage.setItem('user', JSON.stringify(user));
         showMessage('Login successful. Redirecting...', 'success');
         setTimeout(() => {

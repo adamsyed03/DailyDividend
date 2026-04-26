@@ -466,8 +466,24 @@ body.article-open{overflow:hidden}
   .lc-name{font-size:38px;line-height:1.13}
   .lc-fact{font-size:17px}
   .lc-content{min-height:190px}
-  .auth-modal{top:10px;width:calc(100vw - 20px);max-height:calc(100vh - 20px);padding:24px 18px 20px}
+  .auth-modal{top:8px;width:calc(100vw - 16px);max-height:calc(100vh - 16px);padding:16px 14px 14px;overflow:hidden}
   .auth-close{top:10px;right:10px}
+  .auth-kicker{font-size:9px;margin-bottom:6px}
+  .auth-title{font-size:22px;margin-bottom:4px}
+  .auth-sub{font-size:12px;line-height:1.38;margin-bottom:10px}
+  .auth-tabs{gap:4px;padding:3px;margin-bottom:10px}
+  .auth-tab{font-size:12px;padding:8px 8px}
+  .auth-field{gap:4px;margin-bottom:8px}
+  .auth-label{font-size:10px}
+  .auth-input,.auth-select{font-size:13px;padding:10px 11px;border-radius:9px}
+  .auth-grid{gap:8px}
+  .auth-phone-row{grid-template-columns:98px 1fr;gap:6px}
+  .auth-range-wrap{gap:8px}
+  .auth-range-value{width:30px;height:30px;font-size:13px}
+  .auth-row{margin:0 0 10px;font-size:11px;gap:8px}
+  .auth-check{gap:6px}
+  .auth-submit{margin-bottom:8px;padding:12px 14px}
+  .auth-error{margin:0 0 8px;font-size:11px}
   .start-grid{grid-template-columns:1fr}
   .lib-grid{grid-template-columns:1fr}
   .sec-title{font-size:30px}
@@ -782,7 +798,7 @@ body.article-open{overflow:hidden}
   </button>
   <div class="auth-kicker">Members preview</div>
   <h2 class="auth-title" id="auth-title">Unlock the full library.</h2>
-  <p class="auth-sub">Log in with your name and email or phone. New here? Register with email and phone to keep exploring.</p>
+  <p class="auth-sub">Log in with your email. New here? Register with email and phone to keep exploring.</p>
   <div class="auth-tabs" role="tablist" aria-label="Choose login or registration">
     <button class="auth-tab active" id="auth-login-tab" type="button" data-mode="login">Log in</button>
     <button class="auth-tab" id="auth-register-tab" type="button" data-mode="register">Register</button>
@@ -793,8 +809,8 @@ body.article-open{overflow:hidden}
       <input class="auth-input" id="auth-name" type="text" autocomplete="name" placeholder="Your name">
     </div>
     <div class="auth-field">
-      <label class="auth-label" for="auth-identifier" id="auth-identifier-label">Email or phone</label>
-      <input class="auth-input" id="auth-identifier" type="text" autocomplete="username" placeholder="you@wherever.com or +44 7...">
+      <label class="auth-label" for="auth-identifier" id="auth-identifier-label">Email</label>
+      <input class="auth-input" id="auth-identifier" type="email" autocomplete="email" placeholder="you@wherever.com">
     </div>
     <div class="auth-grid" id="auth-register-fields" style="display:none">
       <div class="auth-field auth-field-full">
@@ -1312,12 +1328,12 @@ function setAuthMode(mode) {
   document.querySelectorAll('.auth-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.mode === mode);
   });
-  authNameField.style.display = '';
+  authNameField.style.display = mode === 'register' ? '' : 'none';
   authRegisterFields.style.display = mode === 'register' ? 'grid' : 'none';
-  authIdentifierLabel.textContent = mode === 'register' ? 'Email' : 'Email or phone';
-  authIdentifier.type = mode === 'register' ? 'email' : 'text';
-  authIdentifier.placeholder = mode === 'register' ? 'you@wherever.com' : 'you@wherever.com or +44 7...';
-  authIdentifier.autocomplete = mode === 'register' ? 'email' : 'username';
+  authIdentifierLabel.textContent = 'Email';
+  authIdentifier.type = 'email';
+  authIdentifier.placeholder = 'you@wherever.com';
+  authIdentifier.autocomplete = 'email';
   authSubmit.textContent = mode === 'register' ? 'Create free account' : 'Log in';
   authError.classList.remove('show');
 }
@@ -1379,12 +1395,15 @@ authForm.addEventListener('submit', async e => {
   const phoneRaw = authPhone.value.trim();
   const country = authCountryCode.value;
   const phone = phoneRaw ? phoneRaw.replace(/^[\s(]*0+/, '').replace(/[^\d]/g, '') : '';
-  const loginEmail = identifier.includes('@') ? identifier : '';
-  const loginPhone = identifier && !identifier.includes('@') ? normalizePhone(identifier) : '';
+  const savedAuth = (() => {
+    try { return JSON.parse(localStorage.getItem(AUTH_KEY) || 'null') || {}; } catch { return {}; }
+  })();
+  const loginEmail = identifier;
+  const loginName = savedAuth.name || identifier;
   const occupation = authOccupation.value.trim();
   const financeProficiency = Number(authFinance.value);
-  if (!name) {
-    authError.textContent = authMode === 'register' ? 'Add your name to create an account.' : 'Add your name to log in.';
+  if (authMode === 'register' && !name) {
+    authError.textContent = 'Add your name to create an account.';
     authError.classList.add('show');
     authName.focus();
     return;
@@ -1420,7 +1439,12 @@ authForm.addEventListener('submit', async e => {
     return;
   }
   if (!identifier) {
-    authError.textContent = 'Use your email or phone number.';
+    authError.textContent = 'Use your email address.';
+    authError.classList.add('show');
+    return;
+  }
+  if (!identifier.includes('@')) {
+    authError.textContent = 'Use a valid email address.';
     authError.classList.add('show');
     return;
   }
@@ -1430,11 +1454,11 @@ authForm.addEventListener('submit', async e => {
   try {
     const params = authMode === 'register'
       ? {mode:'signup', name, email:identifier, country, phone, occupation, financeProficiency, proficiency:financeProficiency, profficiency:financeProficiency}
-      : {mode:'login', name, email:loginEmail, phone:loginPhone, identifier};
+      : {mode:'login', name:loginName, email:loginEmail, identifier};
     const res = await fetch(buildAuthUrl(params), {method:'GET'});
     const data = await readAuthResponse(res);
     if (!res.ok || !authSucceeded(data)) throw new Error(data.error || data.reason || 'No account matched those details.');
-    unlockContent(data.user || {name, email:loginEmail || identifier, phone:loginPhone || phone}, data.token || '');
+    unlockContent(data.user || {name:loginName, email:loginEmail}, data.token || '');
   } catch (err) {
     authError.textContent = err.message || 'Could not complete login.';
     authError.classList.add('show');
