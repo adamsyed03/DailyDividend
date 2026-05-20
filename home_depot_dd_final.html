@@ -1,0 +1,1032 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Depot — Daily Dividend Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --hd:#F96302;--hd2:#e05500;
+  --gold:#C8922A;
+  --grn:#15803d;--grn-bg:#f0fdf4;
+  --red2:#b91c1c;--red-bg:#fef2f2;
+  --ink:#111827;--muted:#6b7280;--bd:#e5e7eb;
+  --bg:#fff;--bg2:#f9fafb;--bg3:#f3f4f6;--r:6px;
+}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#fff;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 0 1px var(--bd),0 20px 60px rgba(0,0,0,.08)}
+
+/* HERO */
+.hero{background:#0d0700;padding:2rem 1.75rem 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--hd),var(--hd2))}
+.hero::after{content:'HD';font-family:'Bebas Neue',sans-serif;font-size:16rem;color:rgba(249,99,2,.06);position:absolute;right:-1rem;top:-2rem;line-height:1;pointer-events:none}
+.hero-meta{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap;position:relative;z-index:1}
+.pill{font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 10px;text-transform:uppercase;border-radius:2px}
+.pill-hd{background:var(--hd);color:#fff}
+.pill-ghost{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.38)}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,7vw,4rem);color:#fff;letter-spacing:.04em;line-height:1;position:relative;z-index:1}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-top:.4rem;padding-bottom:1.4rem;position:relative;z-index:1}
+
+/* TABS */
+.tabs-bar{background:#080400;border-bottom:1px solid #1a0d00;display:flex;overflow-x:auto;padding:0 1.75rem;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 1rem;cursor:pointer;white-space:nowrap;color:rgba(255,255,255,.3);background:transparent;border:none;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;position:relative;top:1px}
+.tab-btn.active{color:#fff;border-bottom-color:var(--hd)}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* PANES */
+.tab-pane{display:none}.tab-pane.active{display:block}
+.pane{padding:1.75rem 1.75rem 3rem}
+
+/* TYPE */
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hd);font-weight:700;margin-bottom:.35rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2rem);color:var(--ink);margin-bottom:.9rem;line-height:1.2;font-weight:700}
+.divl{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
+.src{font-size:11px;color:var(--muted);font-style:italic;margin-top:4px;margin-bottom:12px}
+
+/* TOOLTIPS */
+.tw{position:relative;display:inline}
+.term{border-bottom:2px dotted var(--gold);cursor:help}
+.tt{display:none;position:absolute;z-index:9999;background:#111;color:#fff;font-size:11px;line-height:1.5;padding:.6rem .85rem;border-radius:4px;width:210px;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111}
+.tw:hover .tt{display:block}
+
+/* SNAV */
+.snav{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;font-weight:600;color:var(--hd);margin-top:.5rem;border-bottom:1px solid transparent;transition:border-color .15s}
+.snav:hover{border-color:var(--hd)}
+.snav svg{transition:transform .15s}.snav:hover svg{transform:translateX(3px)}
+
+/* HOOK */
+.hook{background:var(--bg2);border-left:3px solid var(--hd);padding:1.1rem 1.25rem;margin-bottom:1.5rem}
+.hook p{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--ink)}
+
+/* HERO NUMS */
+.ddnum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ddnum{background:#0d0700;padding:1.1rem 1rem;border-radius:var(--r);border:1px solid #2a1200}
+.ddnum-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--hd);letter-spacing:.03em;line-height:1}
+.ddnum-lbl{font-size:11px;color:rgba(255,255,255,.38);margin-top:.35rem;line-height:1.4}
+
+/* PREVIEW CARDS */
+.preview-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.pc-head{background:var(--bg2);border-bottom:1px solid var(--bd);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pc-tab-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pc-arrow{color:var(--hd)}
+.pc-body{padding:.85rem 1rem}
+
+/* FLAGS */
+.flags-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flag-col{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.flag-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .75rem;border-bottom:2px solid}
+.flag-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg)}
+.flag-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.flag-item{display:flex;gap:.5rem;align-items:flex-start;padding:.5rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;line-height:1.45}
+.flag-item:last-child{border-bottom:none}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.fdot-g{background:var(--grn)}.fdot-r{background:var(--red2)}
+
+/* DD TAKE */
+.dd-take{background:#fff7ed;border-left:3px solid var(--hd);padding:1.25rem 1.4rem;margin-top:1.5rem}
+.dd-take-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--hd);text-transform:uppercase;margin-bottom:.45rem}
+.dd-take-text{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2.5vw,1.05rem);line-height:1.8;color:#1a0700}
+
+/* BUSINESS */
+.rs{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.rs-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.1rem;border-bottom:1px solid var(--bd);background:var(--bg2)}
+.rs-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.rs-name{font-size:15px;font-weight:600;color:var(--ink)}
+.rs-rev{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--hd);letter-spacing:.03em}
+.rs-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.rsb-hd{background:#fff0e0;color:#c84e00}
+.rsb-up{background:var(--grn-bg);color:var(--grn)}
+.rsb-mid{background:#f3f4f6;color:#374151}
+.rs-body{padding:1rem 1.1rem}
+.rs-desc{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:.85rem}
+.rs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rst{background:var(--bg2);padding:.65rem .75rem;border-radius:4px;border:1px solid var(--bd)}
+.rst-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.rst-val{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--ink);letter-spacing:.03em}
+.rst-note{font-size:11px;color:var(--grn);margin-top:1px;font-weight:500}
+.rst-dn{font-size:11px;color:var(--red2);margin-top:1px;font-weight:500}
+
+/* CHARTS */
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.chart-lbl{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+
+/* GEO */
+.geo-table{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.geo-row{display:grid;grid-template-columns:1.8fr 60px 1fr;align-items:center;gap:.75rem;padding:.65rem 1rem;border-bottom:1px solid var(--bd)}
+.geo-row:last-child{border-bottom:none}
+.geo-name{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px}
+.geo-pct{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;text-align:right;letter-spacing:.03em}
+.geo-bar-bg{height:4px;background:var(--bg3);border-radius:2px}
+.geo-bar-fill{height:4px;border-radius:2px}
+
+/* DD NUMBERS GRID */
+.wow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:.75rem 0}
+.wc{border:1px solid var(--bd);padding:1rem;border-radius:var(--r)}
+.wc-dk{background:#0d0700;border-color:#2a1200}
+.wc-lbl{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.wc-lbl-w{color:rgba(255,255,255,.35)}
+.wc-val{font-family:'Bebas Neue',sans-serif;font-size:1.75rem;letter-spacing:.03em;line-height:1.05;margin-bottom:.3rem;color:var(--ink)}
+.wc-val-w{color:#fff}.wc-val-hd{color:var(--hd)}.wc-val-g{color:#4ade80}.wc-val-gold{color:var(--gold)}
+.wc-why{font-size:12px;color:var(--muted);line-height:1.45}
+.wc-why-w{color:rgba(255,255,255,.4)}
+
+/* SIGNALS */
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.sig-head{font-size:10px;letter-spacing:.12em;font-weight:700;padding:.6rem 1rem;text-transform:uppercase;border-bottom:2px solid}
+.sig-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg);border-right:1px solid var(--bd)}
+.sig-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.sig-item{padding:.7rem 1rem;border-bottom:1px solid var(--bd);display:flex;gap:.55rem;align-items:flex-start}
+.sig-item:last-child{border-bottom:none}
+.sig-item-r{border-left:1px solid var(--bd)}
+.si-sym{font-size:14px;flex-shrink:0;font-weight:700;line-height:1.35}
+.si-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.si-b{font-size:12px;color:var(--muted);line-height:1.45}
+
+/* DOUBLING */
+.wth-list{display:flex;flex-direction:column;gap:8px;margin:.75rem 0}
+.wth-item{border:1px solid var(--bd);padding:.9rem 1rem;display:flex;gap:.85rem;align-items:flex-start;border-radius:var(--r)}
+.wth-num{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#fff;flex-shrink:0;line-height:1;min-width:28px;background:var(--hd);text-align:center;padding:.1rem .4rem;border-radius:3px}
+.wth-h{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.wth-b{font-size:13px;color:var(--muted);line-height:1.55}
+.wth-up{font-size:12px;font-weight:600;color:var(--grn);margin-top:.35rem}
+
+/* INDUSTRY */
+.mc-card{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.mc-metric{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:.65rem}
+.mc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar-name{font-size:12px;min-width:80px;color:var(--muted)}
+.mc-bar-name-hd{color:var(--hd);font-weight:600}
+.mc-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:2px}
+.mc-bar-fill{height:5px;border-radius:2px}
+.mc-bar-val{font-size:12px;min-width:44px;text-align:right;font-weight:500;color:var(--muted)}
+.mc-bar-val-hd{font-weight:700;color:var(--hd)}
+.mc-insight{font-size:12px;color:var(--grn);font-weight:500;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--bg3)}
+.metric-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.75rem 0}
+
+/* VALUATION */
+.val-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.val-top{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)}
+.vt-cell{padding:.9rem 1rem;border-right:1px solid var(--bd);background:var(--bg2)}
+.vt-cell:last-child{border-right:none;background:#fff}
+.vt-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem}
+.vt-name{font-size:14px;font-weight:700;color:var(--ink)}
+.vt-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.03em;line-height:1;color:var(--ink)}
+.vt-val-hd{color:var(--hd)}
+.vt-sub{font-size:11px;color:var(--muted);margin-top:.15rem}
+.val-body{padding:.85rem 1rem;font-size:13px;color:var(--muted);line-height:1.65}
+.val-body strong{color:var(--ink)}
+.val-verdict{font-size:12px;font-weight:600;padding:.55rem 1rem;border-top:1px solid var(--bd)}
+.vv-green{color:var(--grn);background:var(--grn-bg)}
+.vv-amber{color:#92400e;background:#fef3c7}
+
+/* OWNERSHIP */
+.own-top{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:.75rem 0}
+.own-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem}
+.dd-table{width:100%;border-collapse:collapse}
+.dd-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.5rem .6rem;border-bottom:2px solid var(--bd);text-align:left}
+.dd-table td{padding:.65rem .6rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.dd-table tr:last-child td{border-bottom:none}
+.td-bold{font-weight:600}
+
+.cap-card{background:#0d0700;border:1px solid #2a1200;border-radius:var(--r);padding:1.1rem;margin:.75rem 0}
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:.75rem}
+.cap-val{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--hd);letter-spacing:.03em;line-height:1;text-align:center}
+.cap-lbl{font-size:10px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.07em;margin-top:.2rem;line-height:1.3;text-align:center}
+
+.person-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:.75rem 0}
+.pc-person{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.pc-init{width:38px;height:38px;border-radius:50%;background:#fff0e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--hd);margin-bottom:.65rem;border:1px solid #fbd5b0}
+.pc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pc-role{font-size:12px;color:var(--muted);margin-bottom:.65rem}
+.pc-bio{font-size:12px;color:var(--muted);line-height:1.55;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--bd)}
+
+/* DDD */
+.ddd-explain{background:linear-gradient(135deg,#0d0700,#1a0e00);border:1px solid rgba(200,146,42,.3);border-left:3px solid var(--gold);padding:1.1rem 1.25rem;margin-bottom:1.5rem;border-radius:0 var(--r) var(--r) 0}
+.ddd-explain-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem}
+.ddd-explain-text{font-size:13px;color:rgba(255,255,255,.72);line-height:1.65}
+.ddd-insight{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem}
+.ddd-head{background:#0d0700;padding:.85rem 1.1rem;display:flex;align-items:center;gap:.75rem}
+.ddd-num{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--hd);line-height:1;min-width:28px}
+.ddd-title{font-size:14px;font-weight:600;color:#fff;line-height:1.3}
+.ddd-body{padding:1rem 1.1rem}
+.ddd-desc{font-size:13px;color:var(--ink);line-height:1.65;margin-bottom:.75rem}
+.ddd-inf{background:var(--grn-bg);border:1px solid #bbf7d0;border-left:3px solid var(--grn);padding:.85rem 1rem;border-radius:0 var(--r) var(--r) 0;margin-top:1rem}
+.ddd-inf-lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grn);font-weight:700;margin-bottom:.3rem}
+.ddd-inf-text{font-size:12px;color:#14532d;line-height:1.55}
+.ddd-stance{background:linear-gradient(135deg,#0d0700,#1a1400);border:1px solid rgba(200,146,42,.35);border-left:3px solid var(--gold);padding:1.25rem 1.4rem;margin-top:1.5rem;border-radius:0 var(--r) var(--r) 0}
+.ddd-stance-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:.35rem}
+.ddd-stance-dir{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:.45rem}
+.ddd-stance-text{font-family:'Playfair Display',serif;font-size:clamp(.9rem,2.5vw,1rem);line-height:1.75;color:rgba(255,255,255,.82)}
+
+.disc{font-size:11px;color:var(--muted);padding-top:1rem;border-top:1px solid var(--bd);margin-top:2rem;line-height:1.6}
+
+@media(max-width:600px){
+  .pane{padding:1.25rem 1rem 2.5rem}
+  .ddnum-grid,.charts-2col,.metric-cards,.own-top{grid-template-columns:1fr}
+  .flags-row,.sig-grid{grid-template-columns:1fr}
+  .sig-item-r{border-left:none}.sig-head-g{border-right:none}
+  .person-cards{grid-template-columns:1fr 1fr}
+  .wow-grid{grid-template-columns:1fr 1fr}
+  .rs-stats{grid-template-columns:1fr 1fr}
+  .cap-grid{grid-template-columns:1fr 1fr}
+  .val-top{grid-template-columns:1fr 1fr}.val-top .vt-cell:last-child{display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <span class="pill pill-hd">HD</span>
+    <span class="pill pill-ghost">NYSE</span>
+    <span class="pill pill-ghost">Home Improvement</span>
+    <span class="pill pill-ghost">Fiscal 2025 Â· Market cap ~$296B</span>
+  </div>
+  <div class="hero-name">The Home Depot, Inc.</div>
+  <div class="hero-sub">A Daily Dividend Deep Dive</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('snapshot',this)">Snapshot</button>
+  <button class="tab-btn" onclick="showTab('business',this)">The Business</button>
+  <button class="tab-btn" onclick="showTab('ddnumbers',this)">DD Numbers</button>
+  <button class="tab-btn" onclick="showTab('signals',this)">The Signals</button>
+  <button class="tab-btn" onclick="showTab('industry',this)">The Industry</button>
+  <button class="tab-btn" onclick="showTab('ownership',this)">Ownership</button>
+  <button class="tab-btn" onclick="showTab('ddd',this)">DDD Insights</button>
+</div>
+
+<!-- ======================== SNAPSHOT ======================== -->
+<div id="pane-snapshot" class="tab-pane active">
+<div class="pane">
+  <div class="hook">
+    <p>You are looking at a $296 billion company that has not meaningfully grown its sales at existing stores since 2022 -- and still prints $14 billion in profit every year. The Home Depot is the largest home improvement retailer on earth: 2,359 stores, 472,000 employees, and enough orange aprons to outfit a small country. But something has frozen it in place. The U.S. housing market stalled when mortgage rates went from 3% to 7% between 2022 and 2024. People who locked in a 3% mortgage are not moving. People who are not moving are not renovating. Today, as of May 15, 2026, Home Depot trades at a 52-week low, down 30% from its peak. And waiting is the question that defines the next five years: when housing finally thaws, how violently does three years of pent-up demand release?</p>
+  </div>
+
+  <div class="eyebrow">Three numbers worth stopping on</div>
+  <div class="ddnum-grid" style="margin:.5rem 0 .35rem">
+    <div class="ddnum"><div class="ddnum-val">1.6B visits</div><div class="ddnum-lbl">customer transactions in fiscal 2025 -- roughly five separate shopping trips for every adult in America</div></div>
+    <div class="ddnum"><div class="ddnum-val">156 quarters</div><div class="ddnum-lbl">of consecutive dividend payments -- 39 straight years through every crisis, not one missed</div></div>
+    <div class="ddnum"><div class="ddnum-val">$11.7B</div><div class="ddnum-lbl">in authorized share buybacks sitting unused -- paused to pay down SRS acquisition debt, waiting to deploy</div></div>
+  </div>
+  <p class="src">Sources: Home Depot Q4 2025 Earnings Release; Fiscal 2025 Annual Report</p>
+  <div class="snav" onclick="showTab('ddnumbers',null)">See all DD Numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <div class="divl"></div>
+
+  <!-- Business preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('business',null)">
+      <span class="pc-tab-label">The Business</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">Four ways Home Depot makes money</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.65rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--hd)">$164.7B</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Retail stores</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.65rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold)">$6.3B</div><div style="font-size:10px;color:var(--muted);margin-top:2px">SRS+GMS (new)</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.65rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--grn)">15.9%</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Online (+10.4%)</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.65rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--ink)">Pro</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Outgrowing consumer</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:.75rem;line-height:1.6">The retail stores are the engine. SRS Distribution -- 1,250+ locations serving roofers, landscapers, and contractors -- is the new growth bet. Online hit company-record conversion rates. The Pro contractor outgrew the consumer during a housing freeze.</div>
+    </div>
+  </div>
+
+  <!-- Signals preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('signals',null)">
+      <span class="pc-tab-label">The Signals</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="flags-row">
+        <div class="flag-col">
+          <div class="flag-head flag-head-g">Green</div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Same-store sales turned positive for the first time in three years.</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Online grew 10.4% and hit the highest conversion rates in company history.</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>New stores are beating pre-opening performance targets. 156 consecutive dividends.</span></div>
+        </div>
+        <div class="flag-col">
+          <div class="flag-head flag-head-r">Red</div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Housing market freeze is suppressing the highest-value renovation projects entirely outside management's control.</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Return on investment fell from 36.7% to 25.7% as SRS debt dilutes results. Buybacks suspended.</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Tariffs on imported goods threaten margins. Operating costs grew twice as fast as revenue in fiscal 2025.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('industry',null)">
+      <span class="pc-tab-label">The Industry</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="metric-cards" style="margin:0">
+        <div class="mc-card" style="padding:.75rem">
+          <div class="mc-metric">Same-store sales FY2025</div>
+          <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hd">Home Depot</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:70%;background:var(--hd)"></div></div><div class="mc-bar-val mc-bar-val-hd">+0.3%</div></div>
+          <div class="mc-bar-row"><div class="mc-bar-name">Lowe's</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:30%;background:#b91c1c"></div></div><div class="mc-bar-val" style="color:#b91c1c">~-1.0%</div></div>
+          <div class="mc-insight">Same headwind, different execution. The Pro bet is showing up in the numbers.</div>
+        </div>
+        <div class="mc-card" style="padding:.75rem">
+          <div class="mc-metric">Revenue FY2025</div>
+          <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hd">Home Depot</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--hd)"></div></div><div class="mc-bar-val mc-bar-val-hd">$164.7B</div></div>
+          <div class="mc-bar-row"><div class="mc-bar-name">Lowe's</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:50%;background:#9ca3af"></div></div><div class="mc-bar-val">~$83B</div></div>
+          <div class="mc-insight">Roughly 2x the size of Lowe's. Combined, both control only 30-35% of the $1T market.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('ownership',null)">
+      <span class="pc-tab-label">Ownership</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:.75rem"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem">Largest shareholders</div><div style="font-size:14px;font-weight:700">No controlling family</div><div style="font-size:12px;color:var(--muted)">Vanguard ~10%, BlackRock ~8%, State Street ~4%. All passive index funds.</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:.75rem"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem">Fiscal 2025 dividends paid</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--hd)">$9.2B</div><div style="font-size:12px;color:var(--muted)">156 consecutive quarterly payments. $9.32 annualized per share.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DDD preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('ddd',null)">
+      <span class="pc-tab-label">DDD Insights</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">Four data-driven inferences: why the housing freeze is a coiled spring, not a structural break; what the $18.25B SRS acquisition actually bought that the numbers cannot show yet; why today's 52-week low is a dividend yield signal worth understanding; and why 472,000 orange-apron associates are a competitive moat Amazon cannot replicate.</div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">Home Depot is not broken. Its stores are not failing, its customers are not leaving, and its $14 billion in annual earnings has not stopped. What has stopped is the housing market tailwind that drives its highest-value transactions -- and that freeze is already fully reflected in a stock down 30% from its peak. The thesis is simple: housing will eventually unlock. Every 1% increase in same-store sales is $1.65 billion in additional revenue at a company running a 12.7% operating margin. You own a business generating $14 billion in profit, paying a 3.1% covered dividend, building 15-20 new stores per year in growing markets, deploying AI tools that are measurably moving the needle, and holding $11.7 billion in buyback capacity waiting to turn on. All at 21x earnings during a trough. The dividend pays you to wait.</div>
+  </div>
+  <p class="src">Sources: Home Depot Fiscal 2025 Annual Report; Q4 2025 Earnings Release; 2026 Proxy Statement; Market data May 15, 2026</p>
+</div>
+</div>
+
+<!-- ======================== BUSINESS ======================== -->
+<div id="pane-business" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Business</div>
+  <div class="sec-title">One mission, four ways to execute it</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1.25rem;line-height:1.65">Home Depot's job is simple to state and hard to execute: operate stores where anyone who owns a building can buy what they need to fix, maintain, or renovate it. Every strategic decision for the last 45 years has been in service of that one mission.</p>
+
+  <!-- Retail stores -->
+  <div class="rs">
+    <div class="rs-header">
+      <div class="rs-icon" style="background:#fff0e0;font-size:18px">ðŸšï¸</div>
+      <div><div class="rs-name">The Retail Stores</div><div class="rs-rev">$164.7B total revenue</div></div>
+      <div class="rs-badge rsb-hd">The Orange Core</div>
+    </div>
+    <div class="rs-body">
+      <div class="rs-desc">Each of the 2,359 stores averages 104,000 square feet of indoor space plus 24,000 of outdoor garden -- about 45 average American homes' worth of floor space, stocked with 30,000+ products. In fiscal 2025, Home Depot handled 1.6 billion customer visits. The <span class="tw"><span class="term">average ticket</span><span class="tt">Average amount spent per customer visit. Home Depot's was $90.56 -- it rose even as fewer people came in.</span></span> rose 1.4% to $90.56 even as transaction count fell 1.0%, telling the real story: the casual DIY shopper stayed home while the professional contractor kept coming.</div>
+      <div class="rs-stats">
+        <div class="rst"><div class="rst-lbl">Total revenue FY25</div><div class="rst-val">$164.7B</div><div class="rst-note">+3.2% from fiscal 2024</div></div>
+        <div class="rst"><div class="rst-lbl">Same-store sales</div><div class="rst-val">+0.3%</div><div class="rst-note">First positive in 3 yrs</div></div>
+        <div class="rst"><div class="rst-lbl">Customer visits FY25</div><div class="rst-val">1.601B</div><div class="rst-dn">-2.2% from fiscal 2024</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pro -->
+  <div class="rs">
+    <div class="rs-header">
+      <div class="rs-icon" style="background:#e8f5e9;font-size:18px">ðŸ”¨</div>
+      <div><div class="rs-name">The Professional Contractor</div><div class="rs-rev">Growing faster than consumers</div></div>
+      <div class="rs-badge rsb-up">Outgrowing consumer in downturn</div>
+    </div>
+    <div class="rs-body">
+      <div class="rs-desc">The "Pro" -- any contractor, electrician, roofer, plumber, or property manager who builds or maintains buildings for a living -- is Home Depot's most valuable customer type. Pros buy in volume, come back weekly, and keep working even when mortgage rates rise because commercial maintenance and insurance repairs do not wait for housing market conditions. Home Depot offers <span class="tw"><span class="term">Pro Xtra</span><span class="tt">Home Depot's loyalty and rewards program for professional contractors. Members get purchase tracking, volume pricing, and dedicated sales support.</span></span> (a loyalty program for contractors), dedicated account representatives, extended trade credit, and priority stock access. The Pro strategic goal -- growing sales to managed Pro accounts -- was achieved in fiscal 2025.</div>
+    </div>
+  </div>
+
+  <!-- SRS -->
+  <div class="rs">
+    <div class="rs-header">
+      <div class="rs-icon" style="background:#f0f4ff;font-size:18px">ðŸ—ï¸</div>
+      <div><div class="rs-name">SRS Distribution + GMS</div><div class="rs-rev">~$6.3B added to fiscal 2025 revenue</div></div>
+      <div class="rs-badge rsb-mid">The $18.25B Bet</div>
+    </div>
+    <div class="rs-body">
+      <div class="rs-desc">In June 2024, Home Depot completed the largest acquisition in its history: SRS Distribution, a specialty professional distributor, for $18.25 billion. SRS is not a retail store -- it is a distribution network. Its customer is the roofing contractor who needs 500 specific shingles delivered to a job site before 7am. In September 2025, SRS acquired GMS (a distributor of wallboard, steel framing, and ceiling products) for approximately $2 billion, adding interior construction professionals. Together, SRS and GMS operate 1,250+ locations and address an estimated $85+ billion in specialty trade distribution spending that Home Depot could not previously access at all.</div>
+      <div class="rs-stats">
+        <div class="rst"><div class="rst-lbl">Incremental revenue FY25</div><div class="rst-val">~$6.3B</div><div class="rst-note">Added to group results</div></div>
+        <div class="rst"><div class="rst-lbl">Locations</div><div class="rst-val">1,250+</div><div class="rst-note">Distribution centers</div></div>
+        <div class="rst"><div class="rst-lbl">Acquisition cost</div><div class="rst-val">$18.25B</div><div class="rst-dn">SRS + $2B GMS</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Online -->
+  <div class="rs">
+    <div class="rs-header">
+      <div class="rs-icon" style="background:#e0f2fe;font-size:18px">ðŸ’»</div>
+      <div><div class="rs-name">Online + Magic Apron AI</div><div class="rs-rev">15.9% of total sales, +10.4% growth</div></div>
+      <div class="rs-badge rsb-up">Fastest growing</div>
+    </div>
+    <div class="rs-body">
+      <div class="rs-desc">Online sales were 15.9% of total revenue and grew 10.4% year-over-year. Home Depot built its own AI assistant called "Magic Apron" -- deployed across the website and app to help customers identify the right product, plan a project step-by-step, and check compatibility. Management explicitly connected Magic Apron to the highest <span class="tw"><span class="term">conversion rates</span><span class="tt">The percentage of website visitors who actually complete a purchase. Higher conversion = more of your website traffic turns into actual revenue.</span></span> in company history. More than half of online orders for stocked products now arrive same-day or next-day, using stores as fulfillment hubs.</div>
+    </div>
+  </div>
+
+  <p class="src">Source: Home Depot Fiscal 2025 Annual Report, MD&A and Business Overview sections.</p>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Revenue and profit trend FY2023--FY2025 ($B)</div>
+      <div style="position:relative;height:200px"><canvas id="revChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Same-store sales growth: three years of pressure</div>
+      <div style="position:relative;height:200px"><canvas id="compChart"></canvas></div>
+    </div>
+  </div>
+  <p class="src">Source: Home Depot Fiscal 2025 Annual Report, financial statements and MD&A.</p>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Geography and the Tariff Problem</div>
+  <div style="font-size:15px;font-weight:600;margin-bottom:.75rem">Mostly America -- but exposed to imported goods</div>
+  <div class="geo-table">
+    <div class="geo-row"><div class="geo-name"><span>ðŸ‡ºðŸ‡¸</span>United States</div><div class="geo-pct" style="color:var(--hd)">~90%</div><div><div class="geo-bar-bg"><div class="geo-bar-fill" style="width:100%;background:var(--hd)"></div></div><div style="font-size:11px;color:var(--muted);margin-top:3px">Dominant revenue source; all 50 states plus Puerto Rico, USVI, Guam</div></div></div>
+    <div class="geo-row"><div class="geo-name"><span>ðŸ‡¨ðŸ‡¦</span>Canada</div><div class="geo-pct" style="color:#9ca3af">~5%</div><div><div class="geo-bar-bg"><div class="geo-bar-fill" style="width:17%;background:#9ca3af"></div></div><div style="font-size:11px;color:var(--muted);margin-top:3px">Strong dollar in fiscal 2025 cut Canadian revenue by $307M in USD terms</div></div></div>
+    <div class="geo-row"><div class="geo-name"><span>ðŸ‡²ðŸ‡½</span>Mexico</div><div class="geo-pct" style="color:#9ca3af">~3%</div><div><div class="geo-bar-bg"><div class="geo-bar-fill" style="width:10%;background:#9ca3af"></div></div><div style="font-size:11px;color:var(--muted);margin-top:3px">Growing market; tariff exposure for goods manufactured in Mexico</div></div></div>
+    <div class="geo-row"><div class="geo-name"><span>ðŸŒ</span>Product sourcing (China + Asia)</div><div class="geo-pct" style="color:var(--red2)">Risk</div><div><div class="geo-bar-bg"><div class="geo-bar-fill" style="width:40%;background:#b91c1c"></div></div><div style="font-size:11px;color:var(--red2);margin-top:3px">Significant share of products sourced internationally -- tariff increases raise costs directly</div></div></div>
+  </div>
+  <p class="src">Source: Home Depot Fiscal 2025 Annual Report, Business Overview, Risk Factors, and MD&A geographic discussion.</p>
+</div>
+</div>
+
+<!-- ======================== DD NUMBERS ======================== -->
+<div id="pane-ddnumbers" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">DD Numbers</div>
+  <div class="sec-title">The numbers that tell the real story</div>
+
+  <div class="wow-grid">
+    <div class="wc wc-dk">
+      <div class="wc-lbl wc-lbl-w">Traffic per American adult</div>
+      <div class="wc-val wc-val-hd">5x</div>
+      <div class="wc-why wc-why-w">Every adult in the U.S. would need to visit Home Depot five times a year to account for its 1.6 billion annual transactions. This number is actually down 2.2% -- 35 million missing visits -- because the housing market froze. Those visits are not gone. They are waiting. <span style="color:rgba(255,255,255,.25);font-size:10px">Q4 2025 Earnings Release</span></div>
+    </div>
+
+    <div class="wc wc-dk">
+      <div class="wc-lbl wc-lbl-w">Dividend paid this year</div>
+      <div class="wc-val wc-val-w">$9.2B</div>
+      <div class="wc-why wc-why-w">More than the annual revenue of most American banks, paid to shareholders in a single year. And the $11.7B buyback authorization is still sitting unused, paused for debt reduction. When it turns on, shareholders get both. <span style="color:rgba(255,255,255,.25);font-size:10px">Annual Report 2025</span></div>
+    </div>
+
+    <div class="wc wc-dk">
+      <div class="wc-lbl wc-lbl-w">The real boss</div>
+      <div class="wc-val wc-val-gold">Mortgage rates</div>
+      <div class="wc-why wc-why-w">4 million U.S. home sales in 2023-2024 vs a normal 5-6 million. Homeowners locked at 3% won't move to a 6.5-7% mortgage. Same-store sales have been flat or negative for three years because of this one fact -- not because Home Depot is broken. <span style="color:rgba(255,255,255,.25);font-size:10px">Annual Report 2025</span></div>
+    </div>
+
+    <div class="wc">
+      <div class="wc-lbl">The dividend streak</div>
+      <div class="wc-val">156 quarters</div>
+      <div class="wc-why">39 straight years of quarterly dividends. Through the 2008 financial crisis, COVID, and three years of near-zero same-store growth. Never missed. At today's 52-week low of ~$297, the $9.32 annual dividend yields 3.13% -- the highest yield in years and a signal that the stock is at a relative discount.</div>
+    </div>
+
+    <div class="wc">
+      <div class="wc-lbl">The CEO-to-cashier gap</div>
+      <div class="wc-val">427:1</div>
+      <div class="wc-why">CEO Ted Decker earned $16.2 million in fiscal 2025. The median associate earned $37,881. Ratio: 427:1. The other number: $288.4 million in cash bonuses paid to frontline non-management workers in the same year -- because 100% of eligible stores hit their performance targets in both halves of fiscal 2025. Both numbers are Home Depot.</div>
+    </div>
+
+    <div class="wc">
+      <div class="wc-lbl">The SRS market it unlocked</div>
+      <div class="wc-val">$85B+</div>
+      <div class="wc-why">The estimated annual U.S. specialty trade distribution market that Home Depot could not serve before the $18.25B SRS acquisition. SRS's roofing contractor customer does not shop in a Home Depot store -- they need a completely different supply model. SRS is that model.</div>
+    </div>
+
+    <div class="wc">
+      <div class="wc-lbl">Return on investment: 3-yr trend</div>
+      <div class="wc-val">36.7% â†’ 25.7%</div>
+      <div class="wc-why">How much profit per dollar the company earns on its assets. Down from 36.7% (2023) to 25.7% (2025) -- almost entirely because the SRS acquisition added $22B+ in assets without immediate proportional profit. The retail stores held their <span class="tw"><span class="term">gross margin</span><span class="tt">The percentage of revenue left after paying for the products sold. Home Depot's stayed at 33.3% -- virtually unchanged -- showing the core store business did not deteriorate.</span></span> at 33.3%. This is acquisition math, not business deterioration.</div>
+    </div>
+
+    <div class="wc">
+      <div class="wc-lbl">New stores -- the compounding plan</div>
+      <div class="wc-val">15-20/yr</div>
+      <div class="wc-why">After completing 80 new stores by 2027, Home Depot plans to build 15-20 new stores every year "for the foreseeable future." Each store is 104,000 sq ft in a high-growth market, generating $40-60M annually at maturity. No housing recovery required -- just population growth in Sun Belt suburbs.</div>
+    </div>
+
+    <div class="wc">
+      <div class="wc-lbl">Magic Apron's impact</div>
+      <div class="wc-val">Record conversion</div>
+      <div class="wc-why">Home Depot's proprietary AI shopping assistant drove the highest online <span class="tw"><span class="term">conversion rates</span><span class="tt">Percentage of website visitors who actually buy something. Higher conversion means more of your website traffic turns into actual revenue.</span></span> in company history. Online grew 10.4% while most retailers saw digital growth stagnate. In a category where customers genuinely need guidance, AI that replicates in-store expertise is moving real dollars.</div>
+    </div>
+  </div>
+  <p class="src">Sources: Home Depot Fiscal 2025 Annual Report; Q4 2025 Earnings Release; 2026 Proxy Statement</p>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Return on investment -- three-year decline explained</div>
+      <div style="position:relative;height:210px"><canvas id="roicChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Online sales: steady climb to 15.9% of total revenue</div>
+      <div style="position:relative;height:210px"><canvas id="onlineChart"></canvas></div>
+    </div>
+  </div>
+  <p class="src">Source: Home Depot Fiscal 2025 Annual Report (ROIC reconciliation; MD&A online sales section).</p>
+</div>
+</div>
+
+<!-- ======================== SIGNALS ======================== -->
+<div id="pane-signals" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Signals</div>
+  <div class="sec-title">What the data is actually saying</div>
+
+  <div class="sig-grid">
+    <div>
+      <div class="sig-head sig-head-g">Green Flags</div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Same-store sales turned positive after three straight years of decline</div><div class="si-b">+0.3% in fiscal 2025 after -1.8% in fiscal 2024 and -3.1% in fiscal 2023. Q4 fiscal 2025 came in at +0.4% with no meaningful storm-related demand boost. Not growth -- but the end of contraction. Every recovery starts with stabilization. <span style="font-size:10px;color:var(--muted)">[Q4 2025 Earnings Release; Annual Report]</span></div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Online grew 10.4% and hit record conversion rates</div><div class="si-b">Online at 15.9% of total revenue, growing at double digits with the highest percentage of site visitors actually buying in company history. More than half of deliveries for stocked products arrive same-day or next-day. Magic Apron is measurably improving outcomes. <span style="font-size:10px;color:var(--muted)">[Annual Report, MD&A Sales section]</span></div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Pro contractors outgrew consumers during the housing downturn</div><div class="si-b">The Pro strategic goal -- growing sales to managed contractor accounts -- was achieved in fiscal 2025. Professional maintenance and commercial repair are less sensitive to mortgage rates than consumer renovation projects. This resilience during a consumer freeze is evidence the Pro strategy is working. <span style="font-size:10px;color:var(--muted)">[2026 Proxy Statement, Compensation section]</span></div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">New stores are beating pre-opening performance targets</div><div class="si-b">37 new stores opened in the last three years are all exceeding the sales and productivity projections set before they opened. Sited specifically in high-growth population areas, they are proof that demand for the format still exists and that management's site selection discipline is sound. <span style="font-size:10px;color:var(--muted)">[Annual Report, CEO shareholder letter]</span></div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">A 3.1% dividend yield at a 52-week low -- from a company that has never missed a payment in 39 years</div><div class="si-b">The $9.32 annual dividend is covered 1.53x by fiscal 2025 earnings. The yield is near multi-year highs purely because the stock has fallen while the dividend held. This is not a warning signal -- it is a yield opportunity from cyclical stock weakness. <span style="font-size:10px;color:var(--muted)">[Market data May 15, 2026; Q4 2025 Earnings Release]</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sig-head sig-head-r">Red Flags</div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">--</div>
+        <div><div class="si-h">Housing market freeze is suppressing Home Depot's most valuable transactions</div><div class="si-b">Big-ticket renovation projects -- kitchen remodels averaging $15,000-$25,000, full bathroom overhauls, whole-home flooring -- are tightly linked to home purchases. With home sales at 30-year lows, these projects are largely absent. Customer transaction counts fell 2.2% and have declined for multiple years. <span style="font-size:10px;color:var(--muted)">[Annual Report, CEO letter and MD&A]</span></div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">--</div>
+        <div><div class="si-h">SRS debt compressed the return on every dollar Home Depot owns</div><div class="si-b">The <span class="tw"><span class="term">return on invested capital</span><span class="tt">How much profit the company generates per dollar of assets -- stores, inventory, acquired companies. Fell from 36.7% to 25.7% because SRS added $22B+ in assets without immediate proportional profit.</span></span> fell from 36.7% to 25.7%. Share buybacks -- historically $5-7B/year -- are suspended. The business is less financially efficient while SRS ramps up. <span style="font-size:10px;color:var(--muted)">[Annual Report, ROIC table; Liquidity section]</span></div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">--</div>
+        <div><div class="si-h">Tariffs on imported goods are a direct margin threat with no clean escape</div><div class="si-b">Higher tariffs on products sourced from China and Southeast Asia raise Home Depot's cost of goods. It can absorb the cost (lower profits) or raise prices (fewer sales). Fiscal 2026 operating margin guidance of 12.4-12.6% is already lower than the 12.7% achieved in fiscal 2025 -- partly because tariff pressure is already baked in. <span style="font-size:10px;color:var(--muted)">[Annual Report, Risk Factors; Q4 2025 guidance]</span></div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">--</div>
+        <div><div class="si-h">Operating costs grew twice as fast as revenue in fiscal 2025</div><div class="si-b">Day-to-day operating costs rose 6.8% while revenue grew 3.2%. When costs grow faster than revenue, profit margins compress -- and that is what happened. SRS integration, higher payroll investments, and a one-time legal benefit in fiscal 2024 that made that year look better by comparison all contributed. Until revenue growth accelerates or cost growth slows, margins remain under pressure. <span style="font-size:10px;color:var(--muted)">[Annual Report, MD&A Operating Expenses section]</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">For the stock to double</div>
+  <div class="sec-title" style="font-size:1.5rem">What needs to happen</div>
+  <div class="wth-list">
+    <div class="wth-item">
+      <div class="wth-num">01</div>
+      <div>
+        <div class="wth-h">The housing market unlocks -- mortgage rates fall, home sales rebound</div>
+        <div class="wth-b">The most powerful catalyst is outside management's control: mortgage rates falling enough to unfreeze the millions of homeowners trapped by the lock-in effect. Three years of deferred kitchen remodels, bathroom upgrades, and flooring replacements are waiting. Home Depot is the only retailer nationally scaled to capture that release the moment it happens.</div>
+        <div class="wth-up">Upside: Every 1% increase in same-store sales adds ~$1.65B in revenue. A return to 3-5% growth -- normal in healthy housing years -- adds $5-8B annually without opening a single new store. [Annual Report, CEO letter]</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">02</div>
+      <div>
+        <div class="wth-h">SRS cross-selling with the retail network becomes measurable</div>
+        <div class="wth-b">SRS and Home Depot are in early-stage alignment: sharing customer lists, product catalogs, and logistics. The thesis -- a roofing contractor who buys from SRS also gets introduced to Home Depot Pro for other materials; a Home Depot contractor gets connected to SRS for specialty roofing -- is starting to generate incremental sales. This is still early-stage but management called it out specifically in the fiscal 2025 CEO letter.</div>
+        <div class="wth-up">Upside: If SRS reaches $20-25B in annual revenue by 2030, the $18.25B acquisition price will look like a bargain. Watch SRS revenue growth rate in fiscal 2026-2027 as the key metric. [Annual Report]</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">03</div>
+      <div>
+        <div class="wth-h">Buybacks resume -- $11.7 billion authorization is waiting</div>
+        <div class="wth-b">Management stated no buybacks in fiscal 2026 while reducing SRS debt. When debt reaches a comfortable level, the $11.7B remaining authorization activates. At historical rates of $5-7B per year, combined with $9B+ in dividends, total annual cash returned to shareholders approaches $15+ billion on a $296B market cap -- roughly 5% of the company's own value returned each year.</div>
+        <div class="wth-up">Upside: $6B/year in buybacks + $9.2B in dividends = $15.2B in annual returns on a $296B market cap. That is 5.1% of company value returned annually through cash distributions alone, before any price appreciation. [Annual Report, share repurchase data]</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">04</div>
+      <div>
+        <div class="wth-h">Online + Magic Apron scales to 20%+ of total sales</div>
+        <div class="wth-b">Online is at 15.9% and growing 10.4% year-over-year. Magic Apron is driving record conversion. If online reaches 20-25% of sales while using the existing store network for same-day fulfillment (avoiding separate warehouse costs), the business becomes more profitable per dollar of revenue over time -- because delivery from a store already in the neighborhood is cheaper than a dedicated e-commerce warehouse.</div>
+        <div class="wth-up">Upside: Online reaching 20% at $180B projected total revenue = ~$36B in digital sales vs ~$26B today. Digital growth at similar margins improves the overall profit structure over time. [Annual Report, digital strategy section]</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== INDUSTRY ======================== -->
+<div id="pane-industry" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Industry</div>
+  <div class="sec-title">$1 trillion market, 30% captured by two companies</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1.25rem;line-height:1.65">The U.S. home improvement market is roughly $1 trillion in annual spending, split between two national giants and a fragmented field of local and specialty competitors. It is directly tied to housing and consumer confidence -- one of the most cyclical categories in retail.</p>
+
+  <div class="metric-cards">
+    <div class="mc-card">
+      <div class="mc-metric">Same-store sales FY2025</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hd">Home Depot</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:70%;background:var(--hd)"></div></div><div class="mc-bar-val mc-bar-val-hd">+0.3%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Lowe's</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:15%;background:#b91c1c"></div></div><div class="mc-bar-val" style="color:#b91c1c">~-1.0%</div></div>
+      <div class="mc-insight">Same macro headwind. The Pro contractor focus is the deciding difference. Pros keep spending during housing freezes. Consumers don't.</div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-metric">Annual revenue FY2025</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hd">Home Depot</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--hd)"></div></div><div class="mc-bar-val mc-bar-val-hd">$164.7B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Lowe's</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:50%;background:#9ca3af"></div></div><div class="mc-bar-val">~$83B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Ace Hardware</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:5%;background:#9ca3af"></div></div><div class="mc-bar-val">~$9B</div></div>
+      <div class="mc-insight">Together HD and Lowe's hold only ~30-35% of the $1T market. The fragmented 65-70% is the growth opportunity.</div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-metric">Online as % of total sales</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hd">Home Depot</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--hd)"></div></div><div class="mc-bar-val mc-bar-val-hd">15.9%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Lowe's</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:82%;background:#9ca3af"></div></div><div class="mc-bar-val">~13%</div></div>
+      <div class="mc-insight">Home Depot's digital lead is growing. Magic Apron driving record conversion at a time when most retailers' online growth is slowing.</div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-metric">Gross margin (revenue kept after paying for products)</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hd">Home Depot</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--hd)"></div></div><div class="mc-bar-val mc-bar-val-hd">33.3%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Lowe's</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:97%;background:#9ca3af"></div></div><div class="mc-bar-val">~33%</div></div>
+      <div class="mc-insight">Nearly identical product margins -- the competitive differentiation is in operating efficiency, scale, and customer mix, not product pricing.</div>
+    </div>
+  </div>
+  <p class="src">Source: Home Depot Fiscal 2025 Annual Report. Lowe's figures are approximate estimates from public fiscal 2025 filings.</p>
+
+  <div class="divl"></div>
+  <div style="font-size:15px;font-weight:600;margin-bottom:.75rem">What these numbers tell you</div>
+  <p style="font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:.75rem"><strong>The Pro bet is the decision that matters:</strong> Both Home Depot and Lowe's face the same housing market headwind. But Home Depot's heavy investment in contractors through Pro Xtra, dedicated account managers, and the SRS acquisition is producing meaningfully better same-store results. Professional maintenance is recession-resilient. Consumer renovation is not. Home Depot chose to emphasize the resilient segment and the fiscal 2025 numbers show it working.</p>
+  <p style="font-size:14px;color:var(--ink);line-height:1.7"><strong>65-70% of the market remains fragmented:</strong> Home Depot and Lowe's together capture only about a third of spending in their own industry. Every year, independent hardware stores and regional distributors consolidate toward the national players. SRS is the most aggressive expression of this trend -- buying specialty distribution market share rather than waiting for organic growth. The long-term consolidation story benefits any company with national scale and a distribution network.</p>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Valuation</div>
+  <div class="sec-title" style="font-size:1.5rem">Is the stock cheap at a 52-week low?</div>
+
+  <div class="val-card">
+    <div class="val-top">
+      <div class="vt-cell"><div class="vt-lbl">What it measures</div><div class="vt-name"><span class="tw"><span class="term">Price-to-Earnings (P/E)</span><span class="tt">How many dollars investors pay for each dollar of annual profit. 21x P/E means you pay $21 for every $1 the company earns per year.</span></span></div><div class="vt-sub">Stock price / annual earnings per share</div></div>
+      <div class="vt-cell"><div class="vt-lbl">Home Depot today</div><div class="vt-val vt-val-hd">20.91x</div><div class="vt-sub">At $297.51, fiscal 2025 EPS $14.23</div></div>
+      <div class="vt-cell"><div class="vt-lbl">Context</div><div class="vt-val">~22-25x</div><div class="vt-sub">Home Depot's 10-year historical average P/E</div></div>
+    </div>
+    <div class="val-body"><strong>The story:</strong> 20.91x is at the low end of Home Depot's own historical range. The 52-week high of $426.75 implied ~30x. Today's price is 30% lower than that. A company with $14B in annual profit and a dominant market position doesn't trade at a 10-year historical low without a reason -- and the reason here (housing freeze) is cyclical, not structural.</div>
+    <div class="val-verdict vv-green">Cheap relative to Home Depot's own history. A return to 24-26x on $15-16 EPS in a recovery scenario implies $360-420+.</div>
+  </div>
+
+  <div class="val-card">
+    <div class="val-top">
+      <div class="vt-cell"><div class="vt-lbl">What it measures</div><div class="vt-name"><span class="tw"><span class="term">Dividend Yield</span><span class="tt">Annual dividend divided by stock price. Higher yield = more cash income per dollar invested. 3.1% means you receive $3.10 for every $100 invested annually.</span></span></div><div class="vt-sub">Annual dividend / stock price</div></div>
+      <div class="vt-cell"><div class="vt-lbl">Today's yield</div><div class="vt-val vt-val-hd">3.13%</div><div class="vt-sub">$9.32 annual dividend / $297.51</div></div>
+      <div class="vt-cell"><div class="vt-lbl">Coverage</div><div class="vt-val">1.53x</div><div class="vt-sub">$14.23 EPS / $9.32 dividend -- very safe</div></div>
+    </div>
+    <div class="val-body"><strong>The story:</strong> 3.13% is near the highest Home Depot has yielded in years -- purely because the stock fell while the dividend held. The dividend is covered 1.53x by fiscal 2025 earnings. Even if earnings fell 35%, it could still be funded. This is not a yield trap -- it is a yield opportunity from a company with 156 consecutive payments and no credible threat to the dividend.</div>
+    <div class="val-verdict vv-green">3.1% covered yield + 156 consecutive quarters = a compelling income signal at a cyclical price low.</div>
+  </div>
+
+  <div class="val-card">
+    <div class="val-top">
+      <div class="vt-cell"><div class="vt-lbl">What it measures</div><div class="vt-name"><span class="tw"><span class="term">Total company price vs earnings</span><span class="tt">Total cost to "buy" the whole company (market cap + all debts) divided by operating income. Accounts for the debt load -- important since Home Depot borrowed heavily for SRS.</span></span></div><div class="vt-sub">Total price (incl. debt) / operating income</div></div>
+      <div class="vt-cell"><div class="vt-lbl">Today</div><div class="vt-val vt-val-hd">~16.6x</div><div class="vt-sub">~$347B total / $20.9B operating income</div></div>
+      <div class="vt-cell"><div class="vt-lbl">Context</div><div class="vt-val">&gt;22x</div><div class="vt-sub">Implied at 52-week high -- 25% cheaper now</div></div>
+    </div>
+    <div class="val-body"><strong>The story:</strong> Adding Home Depot's ~$51B in long-term debt to the $296B market cap gives ~$347B total price. At $20.9B in operating income, that is ~16.6x -- the low end of what this company has historically traded at. The metric improves automatically as debt is paid down, which is the explicit priority for fiscal 2026.</div>
+    <div class="val-verdict vv-amber">16.6x is cheap relative to history. Improves mechanically as SRS debt is reduced. A return to 20x implies ~25% upside from today's price alone.</div>
+  </div>
+  <p class="src">For informational purposes only. Not investment advice. Market data May 15, 2026. Competitor figures are approximate estimates.</p>
+</div>
+</div>
+
+<!-- ======================== OWNERSHIP ======================== -->
+<div id="pane-ownership" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">Ownership</div>
+  <div class="sec-title">Who owns Home Depot and what are they doing</div>
+
+  <div class="own-top">
+    <div>
+      <div class="own-lbl">Shareholders</div>
+      <table class="dd-table">
+        <thead><tr><th>Shareholder</th><th>Stake</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="td-bold">Vanguard Group</td><td>~9-10%</td><td style="color:var(--muted)">Largest single holder. Passive index fund -- no strategic influence.</td></tr>
+          <tr><td class="td-bold">BlackRock</td><td>~7-8%</td><td style="color:var(--muted)">Passive index fund. No strategic influence.</td></tr>
+          <tr><td class="td-bold">State Street</td><td>~3-4%</td><td style="color:var(--muted)">Passive index fund. No strategic influence.</td></tr>
+          <tr><td class="td-bold">Executive officers + directors</td><td>&lt;1%</td><td style="color:var(--muted)">Modest insider ownership. No dominant controlling individual.</td></tr>
+          <tr><td class="td-bold">All institutional investors</td><td>~60-65%</td><td style="color:var(--muted)">No activist concentration. Broadly diversified institutional base.</td></tr>
+          <tr><td class="td-bold">Individual investors</td><td>~15-20%</td><td style="color:var(--muted)">Popular with dividend-income investors.</td></tr>
+        </tbody>
+      </table>
+      <p class="src">Source: Home Depot 2026 Proxy Statement, Beneficial Ownership section. Vanguard and BlackRock stakes approximate from public filings.</p>
+    </div>
+
+    <div>
+      <div class="own-lbl">Capital return programme</div>
+      <div class="cap-card">
+        <div style="font-size:11px;color:rgba(255,255,255,.38);letter-spacing:.1em;text-transform:uppercase;font-weight:600">Fiscal 2025 returns to shareholders</div>
+        <div class="cap-grid">
+          <div><div class="cap-val">$9.2B</div><div class="cap-lbl">Total dividends paid -- 156 consecutive quarterly payments</div></div>
+          <div><div class="cap-val">$9.32</div><div class="cap-lbl">Annual dividend per share ($2.33 quarterly, raised 1.3% Feb 2026)</div></div>
+          <div><div class="cap-val">$11.7B</div><div class="cap-lbl">Buyback authorization remaining -- paused, no buybacks planned fiscal 2026</div></div>
+        </div>
+      </div>
+      <p class="src">Source: Home Depot Fiscal 2025 Annual Report, Liquidity and Capital Resources; Q4 2025 Earnings Release, Dividend Declaration.</p>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">The people running Home Depot's recovery</div>
+  <div class="person-cards">
+    <div class="pc-person">
+      <div class="pc-init">TD</div>
+      <div class="pc-name">Ted Decker</div>
+      <div class="pc-role">Chair, President & CEO (since 2022)</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.3;margin-bottom:.4rem">Career Home Depot executive. Came up through merchandising and operations.</div>
+      <div class="pc-bio">Made the defining bet of his tenure: the $18.25B SRS acquisition. Total fiscal 2025 compensation: $16.2 million -- 91.3% was tied to hitting specific revenue, profit, and Pro growth targets. MIP payout was 95% of target, reflecting results that came in slightly below the most aggressive goals set at the start of fiscal 2025. <span style="color:var(--muted);font-size:10px">[2026 Proxy Statement, Summary Compensation Table]</span></div>
+    </div>
+    <div class="pc-person">
+      <div class="pc-init">RM</div>
+      <div class="pc-name">Richard McPhail</div>
+      <div class="pc-role">Chief Financial Officer</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.3;margin-bottom:.4rem">Joined Home Depot 2005. CFO since 2019.</div>
+      <div class="pc-bio">Designed the capital allocation strategy: debt reduction first, dividend always, buybacks when debt allows. Oversaw SRS financing. His fiscal 2026 guidance -- flat to +4% earnings growth while absorbing tariffs -- is intentionally conservative. When management guides conservatively and consistently hits it, credibility accumulates. <span style="color:var(--muted);font-size:10px">[2026 Proxy Statement]</span></div>
+    </div>
+    <div class="pc-person">
+      <div class="pc-init">AC</div>
+      <div class="pc-name">Ann-Marie Campbell</div>
+      <div class="pc-role">EVP, U.S. Stores & International</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.3;margin-bottom:.4rem">Started as an hourly associate. Rose through stores and supply chain leadership over decades.</div>
+      <div class="pc-bio">Campbell is operationally the most consequential executive after Decker -- she runs 2,359 stores. Her path from hourly associate to running the entire retail operation is not just a good story: it is evidence of the culture that makes Home Depot's associate expertise a genuine competitive advantage over digital-only competitors. <span style="color:var(--muted);font-size:10px">[2026 Proxy Statement, executive background]</span></div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Sources: The Home Depot Fiscal 2025 Annual Report (Form 10-K, fiscal year ended February 1, 2026); Q4 Fiscal 2025 Earnings Release (February 24, 2026); The Home Depot 2026 Proxy Statement (April 7, 2026). Market data as of May 15, 2026. A Daily Dividend publication.</div>
+</div>
+</div>
+
+<!-- ======================== DDD INSIGHTS ======================== -->
+<div id="pane-ddd" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">DDD Insights</div>
+  <div class="sec-title">Daily. Dividend. Data.</div>
+
+  <div class="ddd-explain">
+    <div class="ddd-explain-lbl">Why this tab exists</div>
+    <div class="ddd-explain-text">The six tabs above give you the facts about Home Depot. This tab asks what those facts mean -- what patterns they reveal, what they predict, and what investors may be missing. Data-grounded inferences built on verified numbers, not forecasts.</div>
+  </div>
+
+  <!-- INSIGHT 1 -->
+  <div class="ddd-insight">
+    <div class="ddd-head"><div class="ddd-num">01</div><div class="ddd-title">The Housing Freeze Is Not a Headwind -- It Is a Coiled Spring</div></div>
+    <div class="ddd-body">
+      <div class="ddd-desc">Three consecutive years of near-zero or negative same-store sales. Three years of declining customer transaction counts. Every analysis treats these as headwinds. There is another way to read the same data.</div>
+      <div class="ddd-desc">The average American home is over 40 years old. The kitchen not redone, the bathroom still with 2005 fixtures, the deck boards softening -- deferred projects do not disappear when homeowners delay them. They accumulate. When mortgage rates fall enough to restart housing mobility, that accumulated demand releases. Home Depot is not just a participant in that release. It is the only national retailer with 2,359 stores already positioned to capture it the moment it happens.</div>
+      <div class="chart-lbl" style="margin-top:.5rem">Same-store sales: current trough vs historical recovery pattern</div>
+      <div style="position:relative;height:220px;margin:1rem 0"><canvas id="dddChart1"></canvas></div>
+      <p class="src">Source: Home Depot Fiscal 2025 Annual Report, MD&A comparable sales trend; CEO letter; fiscal 2026 guidance.</p>
+      <div class="ddd-inf">
+        <div class="ddd-inf-lbl">Inference</div>
+        <div class="ddd-inf-text">The same-store sales chart running at +6%, +8%, +6% in 2021-2022 was not a fluke. It was the base state of this business when housing works normally. The +0.3% today is the same machine idling at near-minimum output because housing is frozen. At a 52-week low, the stock prices in the frozen state. It does not price in the thaw. Every 1% point of same-store growth recovery is $1.65 billion in incremental revenue.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT 2 -->
+  <div class="ddd-insight">
+    <div class="ddd-head"><div class="ddd-num">02</div><div class="ddd-title">SRS Was Not Just an Acquisition -- It Redefined the Market Home Depot Plays In</div></div>
+    <div class="ddd-body">
+      <div class="ddd-desc">The traditional analysis of SRS compares the $18.25B price to current earnings contribution, observes the compressed returns, and concludes the deal looks expensive. That framing misses what SRS actually is.</div>
+      <div class="ddd-desc">Before SRS, Home Depot served the general contractor who needs a broad mix of products across every category. After SRS, it also serves the specialty trade Pro -- the roofing contractor who needs 500 specific shingles delivered before sunrise, the interior contractor who needs consistent wallboard supply for a 50-unit apartment renovation. These customers were not going to start using Home Depot retail stores. They needed a dedicated distribution model. SRS is that model. GMS extended it further into commercial interior construction. Together they address an estimated $85+ billion in specialty trade distribution spending that simply did not exist in Home Depot's world before June 2024.</div>
+      <div class="chart-lbl" style="margin-top:.5rem">The SRS acquisition: short-term pain vs long-term market expansion</div>
+      <div style="position:relative;height:220px;margin:1rem 0"><canvas id="dddChart2"></canvas></div>
+      <p class="src">Source: Home Depot Fiscal 2025 Annual Report, SRS and GMS business descriptions; MD&A revenue contribution data.</p>
+      <div class="ddd-inf">
+        <div class="ddd-inf-lbl">Inference</div>
+        <div class="ddd-inf-text">The return on investment decline is a two-year math problem, not a strategic failure. The $22B+ added to the asset base will generate increasing returns as SRS revenue grows and integration costs fade. If SRS reaches $20-25B in annual revenue by 2030, the $18.25B price will look like one of the best acquisitions in retail history. The critical data point to watch: SRS revenue growth rate in fiscal 2026-2027.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT 3 -->
+  <div class="ddd-insight">
+    <div class="ddd-head"><div class="ddd-num">03</div><div class="ddd-title">The 52-Week Low Today Is a Dividend Signal, Not a Warning</div></div>
+    <div class="ddd-body">
+      <div class="ddd-desc">On May 15, 2026, Home Depot touched a 52-week low at $296.88. The same $9.32 dividend that yielded 2.2% at $426.75 now yields 3.13% -- because the stock fell while the dividend held and grew. The stock is down 30%; the dividend is up 1.3%.</div>
+      <div class="ddd-desc">When companies with multi-decade dividend growth histories yield above 3%, the historical pattern has been consistent: it marks cyclical undervaluation that rewards patient investors with both income and eventual price recovery. The dividend is covered 1.53x by fiscal 2025 earnings. The only scenario that threatens it requires a 35%+ earnings collapse -- which would require same-store sales declining 8-10% while costs stay flat. That is not in any credible base case.</div>
+      <div class="chart-lbl" style="margin-top:.5rem">Dividend safety check: how much earnings decline can the dividend absorb?</div>
+      <div style="position:relative;height:220px;margin:1rem 0"><canvas id="dddChart3"></canvas></div>
+      <p class="src">Source: Market data May 15, 2026; Home Depot Q4 2025 Earnings Release; Fiscal 2025 Annual Report.</p>
+      <div class="ddd-inf">
+        <div class="ddd-inf-lbl">Inference</div>
+        <div class="ddd-inf-text">The 3.13% yield at today's 52-week low is not a yield trap -- it is a yield opportunity. A yield trap is high because earnings are collapsing and the dividend is at risk. This is the opposite: the dividend is well-covered, the earnings are cyclically depressed (not structurally declining), and the stock has fallen because of macro conditions that are temporary. Investors who buy at 3%+ yield receive income while waiting for the housing recovery to unlock the stock's next leg.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT 4 -->
+  <div class="ddd-insight">
+    <div class="ddd-head"><div class="ddd-num">04</div><div class="ddd-title">472,000 Orange-Apron Associates Are a Competitive Moat Amazon Cannot Buy</div></div>
+    <div class="ddd-body">
+      <div class="ddd-desc">Home Depot employs 472,000 people. More than 90% of U.S. store leaders started as hourly associates. The company paid $288.4 million in Success Sharing bonuses to frontline non-management workers in fiscal 2025 -- cash bonuses for hitting store performance targets. 100% of eligible stores earned a bonus in both halves of the year.</div>
+      <div class="ddd-desc">This is not primarily a culture story. It is a competitive moat story. Home improvement is uniquely dependent on human expertise. Replacing a toilet requires someone who can explain installation. Buying lumber for a structural project requires someone who knows grades and load requirements. A first-time tiler needs patient step-by-step guidance. This expertise lives in Home Depot's people -- accumulated over years of tenure and reinforced by financial incentives tied to store performance. It cannot be replicated by a competitor opening a new store or by an algorithm that has never held a circular saw.</div>
+      <div class="chart-lbl" style="margin-top:.5rem">What Amazon can and cannot replicate in home improvement</div>
+      <div style="position:relative;height:220px;margin:1rem 0"><canvas id="dddChart4"></canvas></div>
+      <p class="src">Source: Home Depot Fiscal 2025 Annual Report, CEO letter; 2026 Proxy Statement, CEO Pay Ratio and Success Sharing sections.</p>
+      <div class="ddd-inf">
+        <div class="ddd-inf-lbl">Inference</div>
+        <div class="ddd-inf-text">Magic Apron succeeds precisely because it was built to replicate the orange-apron associate experience online -- not replace it. Home Depot's competitive advantage over Amazon is not price or assortment; Amazon can match both. It is the combination of expert in-person guidance, same-day delivery from a nearby store, and the ability to physically handle products before buying. A 2,359-store network of knowledgeable, financially invested associates is extraordinarily expensive to build from zero. That is what makes it a moat that quietly compounds year after year.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ddd-stance">
+    <div class="ddd-stance-lbl">The DDD Stance</div>
+    <div class="ddd-stance-dir">Directional view as of May 15, 2026: Constructive for the patient investor -- a 52-week low paying a 3.1% covered yield during a well-understood cyclical trough with structural reasons to reverse</div>
+    <div class="ddd-stance-text">Home Depot is not broken. Its stores are not failing, its customers are not leaving, and its $14 billion in annual earnings has not stopped. What has stopped is the housing tailwind -- and that freeze is already fully reflected in a stock down 30% from its peak. The downside is priced in. The upside from housing recovery is not. You own a company generating $14B in profit, paying a 3.1% covered dividend, building 15-20 new stores per year in growing markets, deploying AI tools measurably moving the sales needle, and holding $11.7 billion in buyback capacity waiting to deploy. All at 21x earnings during a trough. The question is not whether to be interested. The question is how long the wait is. And the dividend pays you to wait.</div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. All figures from The Home Depot Fiscal 2025 Annual Report (Form 10-K, fiscal year ended February 1, 2026), Q4 Fiscal 2025 Earnings Release (February 24, 2026), and The Home Depot 2026 Proxy Statement (April 7, 2026). Market data as of May 15, 2026. DDD Insights is inferential analysis only and does not constitute a forecast or investment recommendation. A Daily Dividend publication.</div>
+</div>
+</div>
+
+</div><!-- end shell -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  if (btn && btn.classList && btn.classList.contains('tab-btn')) {
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+    });
+  }
+  renderCharts(id);
+}
+
+const rendered = {};
+function renderCharts(tab) {
+  if (rendered[tab]) return;
+  rendered[tab] = true;
+  const mc = '#9ca3af', gc = 'rgba(0,0,0,.04)', hd = '#F96302', gold = '#C8922A';
+
+  if (tab === 'business') {
+    new Chart(document.getElementById('revChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2023', 'FY2024', 'FY2025'],
+        datasets: [
+          { label: 'Revenue ($B)', data: [152.7, 159.5, 164.7], backgroundColor: ['#d1d5db','#9ca3af', hd], borderRadius: 4, yAxisID: 'y' },
+          { label: 'Net income ($B)', data: [15.1, 14.8, 14.2], backgroundColor: 'rgba(249,99,2,.2)', borderColor: hd, borderWidth: 2, type: 'line', yAxisID: 'y2', tension: .3 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, labels: { color: mc, font: { size: 10 }, boxWidth: 10, padding: 8 } }, tooltip: { callbacks: { label: v => v.dataset.label + ': $' + v.raw + 'B' } } },
+        scales: {
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => '$' + v + 'B' }, border: { display: false }, min: 100 },
+          y2: { position: 'right', grid: { display: false }, ticks: { color: mc, font: { size: 10 }, callback: v => '$' + v + 'B' }, border: { display: false }, min: 10 },
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } }
+        }
+      }
+    });
+    new Chart(document.getElementById('compChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2023', 'FY2024', 'FY2025'],
+        datasets: [{ data: [-3.1, -1.8, 0.3], backgroundColor: ['#b91c1c','#b91c1c', hd], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => (v.raw > 0 ? '+' : '') + v.raw + '% same-store sales growth' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => v + '%' }, border: { display: false } }
+        }
+      }
+    });
+  }
+
+  if (tab === 'ddnumbers') {
+    new Chart(document.getElementById('roicChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2023', 'FY2024', 'FY2025'],
+        datasets: [{ data: [36.7, 31.3, 25.7], backgroundColor: ['#9ca3af','#9ca3af', hd], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => v.raw + '% return on every $1 invested' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => v + '%' }, border: { display: false }, min: 0, max: 45 }
+        }
+      }
+    });
+    new Chart(document.getElementById('onlineChart'), {
+      type: 'line',
+      data: {
+        labels: ['FY2022', 'FY2023', 'FY2024', 'FY2025'],
+        datasets: [{ data: [12.5, 14.0, 15.1, 15.9], borderColor: hd, borderWidth: 2.5, pointBackgroundColor: [mc,mc,mc,hd], pointRadius: 5, fill: true, backgroundColor: 'rgba(249,99,2,.07)', tension: .3 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => v.raw + '% of total sales from online' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => v + '%' }, border: { display: false }, min: 10, max: 20 }
+        }
+      }
+    });
+  }
+
+  if (tab === 'ddd') {
+    // DDD1: Same-store sales trough vs recovery potential
+    new Chart(document.getElementById('dddChart1'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025', 'Recovery\nscenario'],
+        datasets: [{ data: [6.1, 5.8, -3.1, -1.8, 0.3, 4.5], backgroundColor: ['#15803d','#15803d','#b91c1c','#b91c1c', hd, 'rgba(249,99,2,.4)'], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => (v.raw > 0 ? '+' : '') + v.raw + '% same-store sales growth' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 9 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => v + '%' }, border: { display: false } }
+        }
+      }
+    });
+
+    // DDD2: SRS acquisition -- assets added vs earnings contribution
+    new Chart(document.getElementById('dddChart2'), {
+      type: 'bar',
+      data: {
+        labels: ['SRS price paid', 'GMS paid', 'Assets added to\nbalance sheet', 'SRS+GMS revenue\nadded FY2025', 'Estimated revenue\nby 2030'],
+        datasets: [{ data: [18.25, 2.0, 22, 6.3, 22], backgroundColor: ['#b91c1c','#b91c1c','#9ca3af', hd, 'rgba(249,99,2,.4)'], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => '$' + v.raw + 'B' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 8 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => '$' + v + 'B' }, border: { display: false }, min: 0 }
+        }
+      }
+    });
+
+    // DDD3: Dividend safety -- earnings vs dividend
+    new Chart(document.getElementById('dddChart3'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2025 earnings\nper share', 'Annual dividend\nper share', 'Dividend still\ncovered at -20%\nearnings drop', 'Dividend still\ncovered at -30%\nearnings drop', 'Dividend\nuncovered\n(-35%+ drop)'],
+        datasets: [{ data: [14.23, 9.32, 11.38, 9.96, null], backgroundColor: [hd, gold, '#15803d', '#15803d', '#b91c1c'], borderRadius: 4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => '$' + v.raw + ' per share' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 8 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 10 }, callback: v => '$' + v }, border: { display: false }, min: 0, max: 17 }
+        }
+      }
+    });
+
+    // DDD4: Amazon vs Home Depot competitive comparison
+    new Chart(document.getElementById('dddChart4'), {
+      type: 'radar',
+      data: {
+        labels: ['Product range', 'Price', 'Speed', 'In-store\nexpertise', 'Same-day\nfrom nearby', 'Touch\nbefore buy', 'Professional\naccounts'],
+        datasets: [
+          { label: 'Home Depot', data: [85, 80, 90, 98, 95, 98, 92], borderColor: hd, backgroundColor: 'rgba(249,99,2,.15)', borderWidth: 2, pointBackgroundColor: hd },
+          { label: 'Amazon', data: [99, 95, 85, 20, 50, 0, 40], borderColor: '#6b7280', backgroundColor: 'rgba(107,114,128,.1)', borderWidth: 2, pointBackgroundColor: '#6b7280' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, labels: { color: mc, font: { size: 10 }, boxWidth: 10, padding: 8 } } },
+        scales: { r: { beginAtZero: true, max: 100, grid: { color: gc }, ticks: { display: false }, pointLabels: { color: mc, font: { size: 10 } } } }
+      }
+    });
+  }
+}
+renderCharts('snapshot');
+</script>
+</body>
+</html>

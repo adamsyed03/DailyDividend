@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hilton — Daily Dividend Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --hlt:#002C5F;
+  --hlt-accent:#C8922A;
+  --hlt-light:#e8eef6;
+  --gold:#C8922A;
+  --grn:#15803d;
+  --grn-bg:#f0fdf4;
+  --red2:#b91c1c;
+  --red-bg:#fef2f2;
+  --ink:#111827;
+  --muted:#6b7280;
+  --bd:#e5e7eb;
+  --bg:#ffffff;
+  --bg2:#f9fafb;
+  --bg3:#f3f4f6;
+  --r:6px;
+}
+
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#ffffff;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 0 1px var(--bd),0 20px 60px rgba(0,0,0,.08)}
+
+/* HERO */
+.hero{background:#001a38;padding:2rem 1.75rem 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--hlt-accent)}
+.hero::after{content:'';position:absolute;top:-80px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(200,146,42,.15) 0%,transparent 70%);pointer-events:none}
+.hero-meta{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 10px;text-transform:uppercase;border-radius:2px}
+.pill-navy{background:var(--hlt-accent);color:#fff}
+.pill-ghost{border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.4)}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,7vw,4rem);color:#fff;letter-spacing:.04em;line-height:1}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-top:.4rem;padding-bottom:1.4rem}
+
+/* TABS */
+.tabs-bar{background:#001228;border-bottom:1px solid #0a2040;display:flex;overflow-x:auto;padding:0 1.75rem;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 1rem;cursor:pointer;white-space:nowrap;color:rgba(255,255,255,.3);background:transparent;border:none;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;position:relative;top:1px}
+.tab-btn.active{color:#fff;border-bottom-color:var(--hlt-accent)}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* CONTENT */
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.pane{padding:1.75rem 1.75rem 3rem}
+
+/* TYPE */
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--hlt-accent);font-weight:700;margin-bottom:.35rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2rem);color:var(--ink);margin-bottom:.9rem;line-height:1.2;font-weight:700}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:1.25rem;max-width:640px;line-height:1.65}
+.divl{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
+
+/* TOOLTIP */
+.tw{position:relative;display:inline}
+.term{border-bottom:2px dotted var(--gold);cursor:help}
+.tt{display:none;position:absolute;z-index:9999;background:#111;color:#fff;font-size:11px;line-height:1.5;padding:.65rem .9rem;border-radius:4px;width:210px;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#111}
+.tw:hover .tt{display:block}
+
+/* ARROW NAV */
+.snav{display:inline-flex;align-items:center;gap:6px;margin-top:.65rem;cursor:pointer;font-size:12px;font-weight:600;color:var(--hlt-accent);letter-spacing:.03em;padding:.35rem 0;border-bottom:1px solid transparent;transition:border-color .15s}
+.snav:hover{border-color:var(--hlt-accent)}
+.snav:hover svg{transform:translateX(3px)}
+.snav svg{transition:transform .15s}
+
+/* HOOK */
+.hook{background:var(--bg2);border-left:3px solid var(--hlt-accent);padding:1.1rem 1.25rem;margin-bottom:1.5rem}
+.hook p{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--ink)}
+
+/* DD NUMBERS dark */
+.ddnum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ddnum{background:#001228;padding:1.1rem 1rem;border-radius:var(--r);border:1px solid #0a2040}
+.ddnum-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--hlt-accent);letter-spacing:.03em;line-height:1}
+.ddnum-lbl{font-size:11px;color:rgba(255,255,255,.42);margin-top:.35rem;line-height:1.4}
+
+/* PREVIEW CARDS */
+.preview-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.pc-head{background:var(--bg2);border-bottom:1px solid var(--bd);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pc-tab-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pc-arrow{color:var(--hlt-accent);flex-shrink:0}
+.pc-body{padding:.85rem 1rem}
+
+/* FLAGS */
+.flags-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flag-col{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.flag-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .75rem;border-bottom:2px solid}
+.flag-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg)}
+.flag-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.flag-item{display:flex;gap:.5rem;align-items:flex-start;padding:.5rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;line-height:1.45}
+.flag-item:last-child{border-bottom:none}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.fdot-g{background:var(--grn)}
+.fdot-r{background:var(--red2)}
+
+/* COMP TRIO */
+.comp-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ct{border:1px solid var(--bd);padding:.85rem .75rem;border-radius:var(--r);text-align:center}
+.ct-metric{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.ct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--hlt-accent);letter-spacing:.03em;line-height:1}
+.ct-compare{font-size:11px;color:var(--muted);line-height:1.4;margin-top:.3rem}
+
+/* OWNERSHIP MINI */
+.own-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.own-mini{border:1px solid var(--bd);padding:.85rem 1rem;border-radius:var(--r)}
+.own-mini-head{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.own-mini-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--bg3);font-size:13px}
+.own-mini-row:last-child{border-bottom:none}
+.own-up{color:var(--grn);font-weight:600;font-size:12px}
+.own-dn{color:var(--red2);font-weight:600;font-size:12px}
+.own-flat{color:var(--muted);font-size:12px}
+
+/* DD TAKE */
+.dd-take{background:#faf8f2;border-left:3px solid var(--gold);padding:1.25rem 1.4rem;margin-top:1.5rem}
+.dd-take-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:.45rem}
+.dd-take-text{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2.5vw,1.05rem);line-height:1.8;color:#2a1f00}
+
+/* BUSINESS */
+.rev-streams{display:flex;flex-direction:column;gap:12px;margin:.75rem 0}
+.rs{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.rs-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.1rem;border-bottom:1px solid var(--bd);background:var(--bg2)}
+.rs-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rs-icon-navy{background:var(--hlt-light)}
+.rs-icon-gold{background:#fef3c7}
+.rs-icon-dk{background:#001228}
+.rs-name{font-size:15px;font-weight:600;color:var(--ink)}
+.rs-size{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--hlt-accent);letter-spacing:.03em;line-height:1}
+.rs-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.rsb-green{background:var(--grn-bg);color:var(--grn)}
+.rsb-gold{background:#fef3c7;color:#92400e}
+.rsb-navy{background:var(--hlt-light);color:var(--hlt)}
+.rs-body{padding:1rem 1.1rem}
+.rs-desc{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:.85rem}
+.rs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rst{background:var(--bg2);padding:.65rem .75rem;border-radius:4px;border:1px solid var(--bd)}
+.rst-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.rst-val{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--ink);letter-spacing:.03em}
+.rst-note{font-size:11px;color:var(--grn);margin-top:1px;font-weight:500}
+
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.chart-lbl{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+
+/* REVENUE TABLE */
+.rev-table{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.rt-thead{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--bg2);border-bottom:2px solid var(--bd);padding:.6rem 1rem;gap:.5rem}
+.rt-th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.rt-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;align-items:center;gap:.5rem;padding:.75rem 1rem;border-bottom:1px solid var(--bd)}
+.rt-row:last-child{border-bottom:none}
+.rt-row-bold{background:var(--bg2);font-weight:700}
+.rt-cell{font-size:13px;color:var(--ink)}
+.rt-cell-muted{font-size:12px;color:var(--muted);font-style:italic}
+
+/* DD NUMBERS GRID */
+.wow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:.75rem 0}
+.wc{border:1px solid var(--bd);padding:1rem;border-radius:var(--r)}
+.wc-dk{background:#001228;border-color:#0a2040}
+.wc-lbl{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.wc-lbl-w{color:rgba(255,255,255,.38)}
+.wc-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.03em;line-height:1.05;margin-bottom:.3rem;color:var(--ink)}
+.wc-val-w{color:#fff}.wc-val-g{color:#4ade80}.wc-val-gold{color:var(--hlt-accent)}
+.wc-why{font-size:12px;color:var(--muted);line-height:1.45}
+.wc-why-w{color:rgba(255,255,255,.45)}
+
+/* SIGNALS */
+.signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.sig-head{font-size:10px;letter-spacing:.12em;font-weight:700;padding:.6rem 1rem;text-transform:uppercase;border-bottom:2px solid}
+.sig-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg);border-right:1px solid var(--bd)}
+.sig-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.sig-item{padding:.7rem 1rem;border-bottom:1px solid var(--bd);display:flex;gap:.55rem;align-items:flex-start}
+.sig-item:last-child{border-bottom:none}
+.sig-item-r{border-left:1px solid var(--bd)}
+.si-sym{font-size:14px;flex-shrink:0;font-weight:700;line-height:1.35}
+.si-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.si-b{font-size:12px;color:var(--muted);line-height:1.45}
+
+.wth-list{display:flex;flex-direction:column;gap:8px;margin:.75rem 0}
+.wth-item{border:1px solid var(--bd);padding:.9rem 1rem;display:flex;gap:.85rem;align-items:flex-start;border-radius:var(--r)}
+.wth-num{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);flex-shrink:0;line-height:1;min-width:28px}
+.wth-h{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.wth-b{font-size:13px;color:var(--muted);line-height:1.55}
+.wth-upside{font-size:12px;font-weight:600;color:var(--grn);margin-top:.35rem}
+
+/* INDUSTRY */
+.metric-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.75rem 0}
+.mc-card{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.mc-metric{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:.65rem}
+.mc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar-row:last-of-type{margin-bottom:0}
+.mc-bar-name{font-size:12px;min-width:72px;color:var(--muted)}
+.mc-bar-name-hlt{color:var(--hlt-accent);font-weight:600}
+.mc-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:2px}
+.mc-bar-fill{height:5px;border-radius:2px}
+.mc-bar-val{font-size:12px;min-width:40px;text-align:right;font-weight:500;color:var(--muted)}
+.mc-bar-val-hlt{font-weight:700;color:var(--hlt-accent)}
+.mc-insight{font-size:12px;color:var(--grn);font-weight:500;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--bg3)}
+
+/* VALUATION */
+.val-cards{display:flex;flex-direction:column;gap:10px;margin:.75rem 0}
+.val-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.val-card-top{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)}
+.vct-cell{padding:.9rem 1rem;border-right:1px solid var(--bd);background:var(--bg2)}
+.vct-cell:last-child{border-right:none;background:#fff}
+.vct-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem}
+.vct-name{font-size:15px;font-weight:700;color:var(--ink)}
+.vct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.03em;line-height:1;color:var(--ink)}
+.vct-val-hlt{color:var(--hlt-accent)}
+.vct-sub{font-size:11px;color:var(--muted);margin-top:.15rem}
+.val-card-body{padding:.85rem 1rem;font-size:13px;color:var(--muted);line-height:1.65}
+.val-card-body strong{color:var(--ink)}
+.val-verdict{font-size:12px;font-weight:600;padding:.55rem 1rem;border-top:1px solid var(--bd)}
+.val-verdict-green{color:var(--grn);background:var(--grn-bg)}
+.val-verdict-amber{color:#92400e;background:#fef3c7}
+
+/* COMP TABLE */
+.comp-table-wrap{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.comp-table{width:100%;border-collapse:collapse}
+.comp-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.55rem .75rem;border-bottom:2px solid var(--bd);text-align:left;background:var(--bg2);white-space:nowrap}
+.comp-table td{padding:.65rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table .hlt-row td{background:var(--hlt-light);font-weight:600}
+.td-hlt{color:var(--hlt-accent);font-weight:700}
+
+/* OWNERSHIP */
+.own-top-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:.75rem 0}
+.own-section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem}
+.dd-table{width:100%;border-collapse:collapse}
+.dd-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.5rem .6rem;border-bottom:2px solid var(--bd);text-align:left;white-space:nowrap}
+.dd-table td{padding:.65rem .6rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.dd-table tr:last-child td{border-bottom:none}
+.td-name{font-weight:500}
+.td-stake{font-weight:600}
+.td-up{color:var(--grn);font-weight:600}
+.td-dn{color:var(--red2);font-weight:600}
+.td-flat{color:var(--muted)}
+.td-muted{color:var(--muted)}
+.own-note{font-size:12px;color:var(--muted);margin-top:.65rem;line-height:1.55}
+.own-more{font-size:12px;color:var(--muted);margin-top:.4rem}
+
+/* PERSON CARDS */
+.person-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:.75rem 0}
+.pc{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.pc-init{width:38px;height:38px;border-radius:50%;background:var(--hlt-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--hlt);margin-bottom:.65rem;border:1px solid #b8c9df}
+.pc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pc-role{font-size:12px;color:var(--muted);margin-bottom:.65rem}
+.pc-stat{font-size:12px;display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--bg3)}
+.pc-stat:last-of-type{border:none}
+.pc-sk{color:var(--muted)}
+.pc-sv{font-weight:600;color:var(--ink)}
+.pc-bio{font-size:12px;color:var(--muted);line-height:1.55;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--bd)}
+
+/* CAPITAL RETURN */
+.return-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:.75rem 0}
+.rg-card{border:1px solid var(--bd);padding:1rem;border-radius:var(--r);text-align:center}
+.rg-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--hlt-accent);letter-spacing:.03em;line-height:1}
+.rg-lbl{font-size:11px;color:var(--muted);margin-top:.3rem;line-height:1.4}
+
+.disc{font-size:11px;color:var(--muted);padding-top:1rem;border-top:1px solid var(--bd);margin-top:2rem;line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .pane{padding:1.25rem 1rem 2.5rem}
+  .ddnum-grid,.comp-trio{grid-template-columns:repeat(3,1fr)}
+  .ddnum-val,.ct-val{font-size:1.6rem}
+  .flags-row,.own-two,.own-top-wrap{grid-template-columns:1fr}
+  .charts-2col,.metric-cards{grid-template-columns:1fr}
+  .wow-grid{grid-template-columns:1fr 1fr 1fr}
+  .signals-grid{grid-template-columns:1fr}
+  .sig-item-r{border-left:none}
+  .sig-head-g{border-right:none}
+  .person-cards{grid-template-columns:1fr 1fr}
+  .val-card-top{grid-template-columns:1fr 1fr}
+  .val-card-top .vct-cell:last-child{display:none}
+  .rt-thead,.rt-row{grid-template-columns:2fr 1fr 1fr}
+  .rt-thead .rt-th:last-child,.rt-row .rt-cell:last-child{display:none}
+  .own-top-wrap{grid-template-columns:1fr}
+  .return-grid{grid-template-columns:1fr 1fr}
+  .comp-table th:nth-child(n+4),.comp-table td:nth-child(n+4){display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-meta">
+    <span class="pill pill-navy">HLT</span>
+    <span class="pill pill-ghost">Hospitality Infrastructure</span>
+    <span class="pill pill-ghost">NYSE</span>
+    <span class="pill pill-ghost">FY2025 + Q1 2026, Market cap $72.10B</span>
+  </div>
+  <div class="hero-name">Hilton Worldwide Holdings</div>
+  <div class="hero-sub">A Daily Dividend Deep Dive &nbsp;·&nbsp; The Asset-Light Hospitality Machine</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar" role="tablist">
+  <button class="tab-btn active" onclick="showTab('snapshot',this)">Snapshot</button>
+  <button class="tab-btn" onclick="showTab('business',this)">The Business</button>
+  <button class="tab-btn" onclick="showTab('ddnumbers',this)">DD Numbers</button>
+  <button class="tab-btn" onclick="showTab('signals',this)">The Signals</button>
+  <button class="tab-btn" onclick="showTab('industry',this)">The Industry</button>
+  <button class="tab-btn" onclick="showTab('ownership',this)">Ownership</button>
+</div>
+
+<!-- ============================
+     SNAPSHOT
+============================ -->
+<div id="pane-snapshot" class="tab-pane active">
+<div class="pane">
+
+  <div class="hook">
+    <p>Most people think Hilton is in the real estate business. They are not. Hilton is a high-margin software and branding engine that happens to put pillows under heads. They pulled off the ultimate magic trick: they sold off their hotels but kept the names on the buildings. Today, Hilton owns almost zero bricks and mortar. Instead, they collect a royalty tax on over 1.2 million rooms globally. It is not a hotel company. It is a licensing powerhouse with a moat made of 180 million loyal travelers.</p>
+  </div>
+
+  <div class="eyebrow">Three numbers worth stopping on</div>
+  <div class="ddnum-grid" style="margin:.5rem 0 .35rem">
+    <div class="ddnum"><div class="ddnum-val">98%</div><div class="ddnum-lbl">Of rooms managed or franchised, not owned. The definition of asset-light.</div></div>
+    <div class="ddnum"><div class="ddnum-val">480K+</div><div class="ddnum-lbl">Rooms in the development pipeline, built entirely on other people's money</div></div>
+    <div class="ddnum"><div class="ddnum-val">$3.5B</div><div class="ddnum-lbl">Capital returned to shareholders via buybacks and dividends in FY2025</div></div>
+  </div>
+  <div class="snav" onclick="showTab('ddnumbers',null)">See all DD numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <div class="divl"></div>
+
+  <!-- Business preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('business',null)">
+      <span class="pc-tab-label">The Business</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">How Hilton makes money</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--hlt-accent)">$6.2B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Franchise Fees</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold)">$1.8B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Management Fees</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#374151">$3.4B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Other Services</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:.75rem;line-height:1.6">Hilton provides the tech, the booking engine, and the brand. The hotel owner provides the building. Total FY2025 revenue: $11.4B, up 10.6% year-over-year, with fee-based income compounding at a double-digit clip.</div>
+    </div>
+  </div>
+
+  <!-- Signals preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('signals',null)">
+      <span class="pc-tab-label">The Signals</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="flags-row">
+        <div class="flag-col">
+          <div class="flag-head flag-head-g">Green</div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>RevPAR at record highs, up 9.2% in Q1 2026 despite macro headwinds</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Spark brand hit 100 open hotels in record time, winning the budget traveler</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Group and Business travel has finally surpassed 2019 pre-pandemic levels</span></div>
+        </div>
+        <div class="flag-col">
+          <div class="flag-head flag-head-r">Red</div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>High interest rates slowing new construction starts for franchisee owners</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Labor costs in hospitality remain a stubborn headwind for the franchise network</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>China's bumpy economic recovery is a wildcard for Asia-Pacific RevPAR growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('industry',null)">
+      <span class="pc-tab-label">The Industry</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">Hilton vs the competition</div>
+      <div class="comp-trio">
+        <div class="ct"><div class="ct-metric">2025 RevPAR Growth</div><div class="ct-val">+9.2%</div><div style="font-size:10px;color:var(--hlt-accent);font-weight:600">Hilton</div><div class="ct-compare">Marriott +8.1%, Hyatt +7.5%</div></div>
+        <div class="ct"><div class="ct-metric">Loyalty Members</div><div class="ct-val">180M</div><div style="font-size:10px;color:var(--hlt-accent);font-weight:600">Hilton Honors</div><div class="ct-compare">Marriott Bonvoy 200M+</div></div>
+        <div class="ct"><div class="ct-metric">Pipeline Rooms</div><div class="ct-val">480K+</div><div style="font-size:10px;color:var(--hlt-accent);font-weight:600">Hilton</div><div class="ct-compare">40% of current footprint, zero capex</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('ownership',null)">
+      <span class="pc-tab-label">Ownership</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="own-two">
+        <div class="own-mini">
+          <div class="own-mini-head">Top shareholders</div>
+          <div class="own-mini-row"><span style="font-weight:500">Vanguard Group</span><span class="own-up">~9% ↑</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">BlackRock</span><span class="own-up">~7% ↑</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">State Street</span><span class="own-flat">~4% →</span></div>
+        </div>
+        <div class="own-mini">
+          <div class="own-mini-head">Capital return since 2021</div>
+          <div class="own-mini-row"><span style="font-weight:500">Total returned</span><span class="own-up">~$9B</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Buyback remaining</span><span class="own-up">$2.8B auth</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Share count reduced</span><span class="own-up">~25% since 2017</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">Hilton is proof that you do not need to own anything to control everything. They sold the buildings, kept the brand, and turned the resulting fee stream into one of the most capital-efficient businesses in the S&amp;P 500. Every new room opened by a franchisee is a permanent, maintenance-free revenue annuity for Hilton. With 480,000 rooms in the pipeline built entirely on other people's money, the compounding machine is just getting started.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     BUSINESS
+============================ -->
+<div id="pane-business" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Business</div>
+  <div class="sec-title">A masterclass in capital efficiency</div>
+  <div class="sec-sub">By offloading the heavy part of the business (real estate) to third-party owners, Hilton transformed into a fee-generation machine. No property taxes. No roof repairs. No mortgage. Just royalty income, compounding every quarter.</div>
+
+  <div class="rev-streams">
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-navy">🏨</div>
+        <div>
+          <div class="rs-name">Franchise &amp; Licensing Fees</div>
+          <div class="rs-size">$6.2B in FY2025</div>
+        </div>
+        <div class="rs-badge rsb-navy">Crown jewel</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">This is the crown jewel. Owners pay Hilton a percentage of their gross room revenue (typically 5 to 6%) just to use names like Hampton Inn or DoubleTree. Since Hilton has no cost of goods sold for these fees, the margins are astronomical. The owner takes all the risk. Hilton takes the royalty.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Fee rate</div><div class="rst-val">5 to 6%</div><div class="rst-note">Of gross room revenue</div></div>
+          <div class="rst"><div class="rst-lbl">Rooms covered</div><div class="rst-val">1.2M+</div><div class="rst-note">Globally, 98% franchised</div></div>
+          <div class="rst"><div class="rst-lbl">Margin profile</div><div class="rst-val">Near 100%</div><div class="rst-note">Zero COGS on fees</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-gold">🤝</div>
+        <div>
+          <div class="rs-name">Management Fees</div>
+          <div class="rs-size">$1.8B in FY2025</div>
+        </div>
+        <div class="rs-badge rsb-gold">Full-service premium</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">For larger, full-service hotels like the Waldorf Astoria and Conrad brands, Hilton actually runs the day-to-day operations on behalf of the owner. They collect a base fee plus an incentive fee if the hotel hits profit targets. This creates a direct alignment between Hilton's performance and the owner's returns.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Fee structure</div><div class="rst-val">Base + Incentive</div><div class="rst-note">Profit-linked upside</div></div>
+          <div class="rst"><div class="rst-lbl">Key brands</div><div class="rst-val">Waldorf, Conrad</div><div class="rst-note">Full-service luxury</div></div>
+          <div class="rst"><div class="rst-lbl">FY2025 growth</div><div class="rst-val">+11.7%</div><div class="rst-note">Year-over-year</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-dk">💳</div>
+        <div>
+          <div class="rs-name">Other Services &amp; Revenue</div>
+          <div class="rs-size">$3.4B in FY2025</div>
+        </div>
+        <div class="rs-badge rsb-green">Hidden profit center</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">This bucket includes the Hilton Honors co-branded credit card partnerships (a massive hidden profit center that most analysts undervalue), fees charged to owners for using Hilton's proprietary reservation system, and loyalty program revenue. The credit card partnership alone generates hundreds of millions in annual income that requires zero hotel rooms to exist.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Honors members</div><div class="rst-val">180M</div><div class="rst-note">60%+ of all bookings</div></div>
+          <div class="rst"><div class="rst-lbl">Direct booking rate</div><div class="rst-val">60%+</div><div class="rst-note">Bypasses Expedia/OTAs</div></div>
+          <div class="rst"><div class="rst-lbl">CC partnership</div><div class="rst-val">High margin</div><div class="rst-note">Zero rooms needed</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Revenue Growth</div>
+  <div class="sec-title" style="font-size:1.35rem">The fee machine, compounding</div>
+
+  <div class="rev-table">
+    <div class="rt-thead">
+      <div class="rt-th">Revenue Line</div>
+      <div class="rt-th">FY2023</div>
+      <div class="rt-th">FY2024</div>
+      <div class="rt-th">FY2025</div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-cell">Franchise Fees</div>
+      <div class="rt-cell">$5.12B</div>
+      <div class="rt-cell">$5.68B</div>
+      <div class="rt-cell" style="color:var(--hlt-accent);font-weight:600">$6.20B</div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-cell">Management Fees</div>
+      <div class="rt-cell">$1.45B</div>
+      <div class="rt-cell">$1.62B</div>
+      <div class="rt-cell" style="color:var(--hlt-accent);font-weight:600">$1.81B</div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-cell">Other / Reimbursable</div>
+      <div class="rt-cell">$2.68B</div>
+      <div class="rt-cell">$3.01B</div>
+      <div class="rt-cell" style="color:var(--hlt-accent);font-weight:600">$3.39B</div>
+    </div>
+    <div class="rt-row rt-row-bold">
+      <div class="rt-cell">Total Revenue</div>
+      <div class="rt-cell">$9.25B</div>
+      <div class="rt-cell">$10.31B</div>
+      <div class="rt-cell" style="color:var(--hlt-accent)">$11.40B</div>
+    </div>
+  </div>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Total revenue growth FY2023 to FY2025 ($B)</div>
+      <div style="position:relative;height:190px"><canvas id="revChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Revenue mix, FY2025</div>
+      <div style="position:relative;height:190px"><canvas id="mixChart"></canvas></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     DD NUMBERS
+============================ -->
+<div id="pane-ddnumbers" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">DD Numbers</div>
+  <div class="sec-title">Nine numbers that prove Hilton is the undisputed heavyweight champion of asset-light hospitality</div>
+  <div class="sec-sub">Not the dry income statement. The numbers behind the numbers. The ones that make you stop and re-read.</div>
+  <div class="wow-grid">
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">The Loyalty Moat</div><div class="wc-val wc-val-gold">180M</div><div class="wc-why wc-why-w">Hilton Honors members account for over 60% of all bookings, letting Hilton bypass Expedia and keep far more of every fee.</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">RevPAR Recovery</div><div class="wc-val wc-val-w">+9.2%</div><div class="wc-why wc-why-w">RevPAR growth in Q1 2026. Despite inflation, travelers are paying higher rates than ever before. The pricing power is real.</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">Asset-Light Alpha</div><div class="wc-val wc-val-gold">98%</div><div class="wc-why wc-why-w">Of the portfolio is managed or franchised. Hilton has virtually zero exposure to rising property taxes or building depreciation.</div></div>
+    <div class="wc"><div class="wc-lbl">The Pipeline Promise</div><div class="wc-val" style="color:var(--hlt-accent)">3,300+</div><div class="wc-why">Hotels currently in the development pipeline. Hilton is set to grow room count by 5 to 6% annually without spending a dime on construction.</div></div>
+    <div class="wc"><div class="wc-lbl">The Buyback Behemoth</div><div class="wc-val">~25%</div><div class="wc-why">Share count reduction since 2017. Hilton is aggressively cannibalizing its own stock to drive Earnings Per Share higher every quarter.</div></div>
+    <div class="wc"><div class="wc-lbl">Luxury Expansion</div><div class="wc-val" style="color:var(--grn)">NoMad</div><div class="wc-why">The 2024 Sydell Group (NoMad Hotels) acquisition and Graduate Hotels partnership move Hilton aggressively into high-rate lifestyle hotels.</div></div>
+    <div class="wc"><div class="wc-lbl">The Spark Effect</div><div class="wc-val">100</div><div class="wc-why">Open Spark brand hotels in record time. Targets the premium economy segment, proving Hilton can win at every price point, top to bottom.</div></div>
+    <div class="wc"><div class="wc-lbl">Net Unit Growth</div><div class="wc-val" style="color:var(--hlt-accent)">+5.8%</div><div class="wc-why">NUG in FY2025. While competitors struggle with scale, Hilton consistently opens more rooms than it closes, every single quarter.</div></div>
+    <div class="wc"><div class="wc-lbl" style="color:var(--grn)">FCF Conversion</div><div class="wc-val wc-val-g">~100%</div><div class="wc-why">Hilton converts roughly 100% of Adjusted Net Income into Free Cash Flow. No hotels to buy means every dollar of profit is spendable cash.</div></div>
+  </div>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Room pipeline growth (thousands of rooms)</div>
+      <div style="position:relative;height:200px"><canvas id="pipelineChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Hilton Honors membership growth (millions)</div>
+      <div style="position:relative;height:200px"><canvas id="honorsChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">The number that matters most is not $11.4B in revenue. It is the ~100% Free Cash Flow conversion rate. Because Hilton does not own the buildings, every dollar of profit is real, spendable cash. There is no depreciation hiding losses. No capex eating into margins. Just fee income flowing directly to shareholders through buybacks and dividends. That is the magic trick, hiding in plain sight on the balance sheet.</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================
+     SIGNALS
+============================ -->
+<div id="pane-signals" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Signals</div>
+  <div class="sec-title">What the data is actually telling you about the H-logo</div>
+
+  <div class="signals-grid">
+    <div>
+      <div class="sig-head sig-head-g">Green flags</div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Business and group travel has finally come back</div><div class="si-b">Group and Business travel has surpassed 2019 pre-pandemic levels. Hilton's focus on Small Meetings and business-centric brands like Hilton Garden Inn is paying off exactly as management planned.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Luxury is recession-proof at the top</div><div class="si-b">Waldorf Astoria and Conrad are seeing massive room rate growth. The wealthy traveler does not stop traveling when rates rise. These brands provide a safety net if the general economy softens.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Strategic brand gaps are being filled</div><div class="si-b">From LivSmart Studios (extended stay) to NoMad (lifestyle luxury), Hilton is launching brands to fill every possible niche. The goal: make it impossible for any traveler to stay outside their ecosystem.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Margin expansion from technology</div><div class="si-b">Digital Key, automated check-in, and AI-powered operations are reducing the need for expensive front-desk labor. Management expects another 50 to 100 basis points of margin expansion in 2026 from tech alone.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sig-head sig-head-r">Red flags</div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">High interest rates are choking the construction pipeline</div><div class="si-b">Hotel developers are finding it harder to get construction loans. If new hotels are not getting built, Hilton's future fee growth slows. The pipeline is the entire growth story. Anything that threatens it, threatens the thesis.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Labor friction damages brand equity</div><div class="si-b">While Hilton does not pay most hotel workers directly (owners do), if owners cannot find staff, hotel quality drops. Brand equity is the only thing Hilton truly owns. Anything that damages it is an existential risk.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">China remains a volatile wildcard</div><div class="si-b">International growth is a major part of the long-term thesis, but China's uneven economic recovery is an unpredictable drag on Asia-Pacific RevPAR. No easy fix, no clear timeline on resolution.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">AI travel planning could undercut loyalty</div><div class="si-b">Hilton's direct booking advantage is built on Honors loyalty points. If AI agents start choosing hotels on pure price rather than loyalty ecosystems, the 60% direct booking rate could erode, pushing traffic back to Expedia.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">For the stock to double</div>
+  <div class="sec-title" style="font-size:1.5rem">What needs to happen</div>
+  <div class="wth-list">
+    <div class="wth-item">
+      <div class="wth-num">01</div>
+      <div>
+        <div class="wth-h">Net Unit Growth accelerates to 7%+</div>
+        <div class="wth-b">If Hilton can accelerate pipeline conversions to 7% annual NUG, the compounding effect of new fee-generating rooms becomes undeniable. Each percentage point of NUG above 5% represents hundreds of millions in incremental annual fee income, every year, forever.</div>
+        <div class="wth-upside">Every 1% of additional NUG compounds permanently into the fee base</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">02</div>
+      <div>
+        <div class="wth-h">Hilton Honors hits 250 million members</div>
+        <div class="wth-b">Reaching 250 million Honors members would make Hilton the default choice for a quarter-billion travelers. At that scale, Airbnb and OTA threat becomes largely irrelevant. The direct booking moat becomes impenetrable and the credit card partnership economics become transformational.</div>
+        <div class="wth-upside">Direct bookings at scale eliminate OTA commission drag entirely</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">03</div>
+      <div>
+        <div class="wth-h">Interest rates fall and the construction dam breaks</div>
+        <div class="wth-b">There are 3,300+ hotels sitting in Hilton's pipeline waiting to open. The main bottleneck is developer financing. A meaningful drop in interest rates would unleash this backlog, accelerating room openings and fee income simultaneously with zero additional capex from Hilton.</div>
+        <div class="wth-upside">Rate cuts = pipeline acceleration = fee growth with zero investment from Hilton</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">04</div>
+      <div>
+        <div class="wth-h">S&amp;P 500 re-rating as a technology company</div>
+        <div class="wth-b">The market still prices Hilton as a hotel operator rather than a licensing and technology platform. If investors begin valuing the Honors platform, the reservation system, and the brand royalty business on software multiples rather than hospitality multiples, the re-rating alone could be significant.</div>
+        <div class="wth-upside">Multiple expansion without any earnings growth = immediate stock revaluation</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================
+     INDUSTRY
+============================ -->
+<div id="pane-industry" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Industry</div>
+  <div class="sec-title">Hilton vs the Hotel Big Three</div>
+  <div class="sec-sub">How Hilton compares to Marriott and Hyatt on the metrics that actually determine who wins the asset-light hospitality race.</div>
+
+  <div class="metric-cards">
+    <div class="mc-card">
+      <div class="mc-metric">2025 RevPAR Growth</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hlt">Hilton</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--hlt-accent)"></div></div><div class="mc-bar-val mc-bar-val-hlt">+9.2%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Marriott</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:88%;background:#9ca3af"></div></div><div class="mc-bar-val">+8.1%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Hyatt</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:81%;background:#9ca3af"></div></div><div class="mc-bar-val">+7.5%</div></div>
+      <div class="mc-insight">Hilton led the Big Three on RevPAR growth in 2025. The pricing power advantage is real and growing.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Loyalty Program Members</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hlt">Hilton</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:90%;background:var(--hlt-accent)"></div></div><div class="mc-bar-val mc-bar-val-hlt">180M</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Marriott</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:#9ca3af"></div></div><div class="mc-bar-val">200M+</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Hyatt</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:22%;background:#9ca3af"></div></div><div class="mc-bar-val">45M</div></div>
+      <div class="mc-insight">Marriott's Bonvoy edge is real, but Hilton Honors is growing faster. The 60%+ direct booking rate already matches Marriott's performance.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Asset-Light Model Purity</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hlt">Hilton</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:98%;background:var(--hlt-accent)"></div></div><div class="mc-bar-val mc-bar-val-hlt">98%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Marriott</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:99%;background:#9ca3af"></div></div><div class="mc-bar-val">~99%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Hyatt</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:80%;background:#9ca3af"></div></div><div class="mc-bar-val">~80%</div></div>
+      <div class="mc-insight">Hyatt still carries meaningful owned real estate on its balance sheet. Hilton and Marriott are the purer fee plays.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Total Rooms (Scale)</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-hlt">Hilton</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:75%;background:var(--hlt-accent)"></div></div><div class="mc-bar-val mc-bar-val-hlt">1.2M+</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Marriott</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:#9ca3af"></div></div><div class="mc-bar-val">1.6M+</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Hyatt</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:20%;background:#9ca3af"></div></div><div class="mc-bar-val">315K+</div></div>
+      <div class="mc-insight">Marriott's scale lead is real, but Hilton's 480K-room pipeline is the fastest-growing in the industry, set to close the gap.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Competitor Snapshot</div>
+  <div class="sec-title" style="font-size:1.5rem">The full picture</div>
+
+  <div class="comp-table-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Hilton (HLT)</th>
+          <th>Marriott (MAR)</th>
+          <th>Hyatt (H)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hlt-row">
+          <td>Model</td>
+          <td class="td-hlt">98% Asset-Light</td>
+          <td>~99% Asset-Light</td>
+          <td>~80% Asset-Light</td>
+        </tr>
+        <tr>
+          <td>Total Rooms</td>
+          <td class="td-hlt">1.2M+</td>
+          <td>1.6M+</td>
+          <td>315K+</td>
+        </tr>
+        <tr>
+          <td>Loyalty Members</td>
+          <td class="td-hlt">180M Honors</td>
+          <td>200M+ Bonvoy</td>
+          <td>45M World</td>
+        </tr>
+        <tr>
+          <td>2025 RevPAR Growth</td>
+          <td class="td-hlt">+9.2%</td>
+          <td>+8.1%</td>
+          <td>+7.5%</td>
+        </tr>
+        <tr>
+          <td>Development Pipeline</td>
+          <td class="td-hlt">480K+ rooms</td>
+          <td>~570K rooms</td>
+          <td>~110K rooms</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="val-cards">
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">P/E Ratio</div>
+          <div class="vct-sub">Share price divided by FY2026 forward earnings</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Hilton today</div>
+          <div class="vct-val vct-val-hlt">26.4x</div>
+          <div class="vct-sub">FY2026 forward earnings</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">The verdict</div>
+          <div class="vct-val">Premium</div>
+          <div class="vct-sub">Market avg ~22x</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>The case:</strong> Investors are paying a premium for the certainty of fee-based income. Unlike airlines or retailers, Hilton's revenue does not disappear in a recession. People still travel. Hotels still pay fees. The premium reflects that predictability. Quality at a reasonable price, not a bargain, but not expensive either.</div>
+      <div class="val-verdict val-verdict-green">Premium justified by fee-income predictability and the ~100% FCF conversion rate.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">EV / EBITDA</div>
+          <div class="vct-sub">Total enterprise value vs operating earnings</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Hilton today</div>
+          <div class="vct-val vct-val-hlt">~15.5x</div>
+          <div class="vct-sub">In line with historical average</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Takeaway</div>
+          <div class="vct-val">Fair value</div>
+          <div class="vct-sub">Not cheap, not expensive</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>Context:</strong> At roughly 15.5x EV/EBITDA, Hilton is trading in line with its own historical average. This is the classic "quality at a fair price" setup. The question is not whether Hilton is cheap, it is whether the fee-compounding model justifies holding at current multiples. The 480K-room pipeline suggests it does.</div>
+      <div class="val-verdict val-verdict-amber">Fair value, not a bargain. The upside comes from NUG compounding and margin expansion, not multiple re-rating.</div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Data sourced from Hilton 10-K FY2025, Q1 2026 Earnings Release (April 22, 2026), and public market data as of May 13, 2026. A Daily Dividend publication.</div>
+
+</div>
+</div>
+
+<!-- ============================
+     OWNERSHIP
+============================ -->
+<div id="pane-ownership" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">Ownership</div>
+  <div class="sec-title">Who owns Hilton and what are they doing</div>
+
+  <div class="own-top-wrap">
+    <div>
+      <div class="own-section-label">Top institutional holders</div>
+      <table class="dd-table">
+        <thead>
+          <tr>
+            <th>Fund</th>
+            <th>Stake</th>
+            <th>Position</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Vanguard Group</td><td class="td-stake">~9%</td><td>~$6.5B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">BlackRock</td><td class="td-stake">~7%</td><td>~$5.0B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">State Street</td><td class="td-stake">~4%</td><td>~$2.9B</td><td class="td-flat">Unchanged</td></tr>
+          <tr><td class="td-name">Fidelity Investments</td><td class="td-stake">~3%</td><td>~$2.2B</td><td class="td-up">Increased</td></tr>
+          <tr><td class="td-name">T. Rowe Price</td><td class="td-stake">~2%</td><td>~$1.4B</td><td class="td-flat">Stable</td></tr>
+          <tr><td class="td-name">Wellington Mgmt</td><td class="td-stake">~1.5%</td><td>~$1.1B</td><td class="td-up">Increased</td></tr>
+        </tbody>
+      </table>
+      <div class="own-more">Vanguard and BlackRock remain the dominant passive holders. Both increased positions as Hilton demonstrated consistent FCF generation.</div>
+    </div>
+
+    <div>
+      <div class="own-section-label">Capital return machine</div>
+      <div class="return-grid" style="margin-bottom:1rem">
+        <div class="rg-card"><div class="rg-val">~$9B</div><div class="rg-lbl">Returned to shareholders since 2021 recovery</div></div>
+        <div class="rg-card"><div class="rg-val">$2.8B</div><div class="rg-lbl">Buyback authorization remaining as of Q1 2026</div></div>
+        <div class="rg-card"><div class="rg-val">~25%</div><div class="rg-lbl">Share count reduction since 2017</div></div>
+      </div>
+      <div class="own-note">The buyback program is the primary driver of stock outperformance. Hilton's $0.15 quarterly dividend is modest, but the real return-of-capital story is the aggressive share repurchase program, reducing the float by roughly a quarter in under a decade.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">The People</div>
+  <div style="font-size:14px;color:var(--muted);margin-bottom:.85rem">The leadership team and what to know about each</div>
+
+  <div class="person-cards">
+    <div class="pc">
+      <div class="pc-init">CN</div>
+      <div class="pc-name">Christopher Nassetta</div>
+      <div class="pc-role">President &amp; CEO</div>
+      <div class="pc-stat"><span class="pc-sk">At Hilton since</span><span class="pc-sv">2007</span></div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Host Hotels / Real Estate</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Asset-light spin-off</span></div>
+      <div class="pc-stat"><span class="pc-sk">Industry rep</span><span class="pc-sv">Gold Standard CEO</span></div>
+      <div class="pc-bio">The architect of the asset-light transformation. Nassetta took Hilton private with Blackstone, then executed the spin-off of the real estate business that created the royalty machine investors own today. Widely considered the best operator in hospitality.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">KJ</div>
+      <div class="pc-name">Kevin Jacobs</div>
+      <div class="pc-role">CFO &amp; President, Global Development</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Finance / Hilton lifer</span></div>
+      <div class="pc-stat"><span class="pc-sk">At Hilton since</span><span class="pc-sv">2009</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Buyback strategy, capital allocation</span></div>
+      <div class="pc-stat"><span class="pc-sk">Key focus</span><span class="pc-sv">FCF deployment</span></div>
+      <div class="pc-bio">The man behind the capital allocation engine. His relentless focus on share buybacks has been the primary driver of stock outperformance over the past decade. Oversees both the money coming in and the pipeline going out.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">GK</div>
+      <div class="pc-name">Gilda Perez-Alvarado</div>
+      <div class="pc-role">President, Global Brands</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">JLL Hotels / Global Dev</span></div>
+      <div class="pc-stat"><span class="pc-sk">Focus</span><span class="pc-sv">Brand strategy &amp; portfolio</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Spark launch, LivSmart rollout</span></div>
+      <div class="pc-stat"><span class="pc-sk">Key mandate</span><span class="pc-sv">Fill every price tier</span></div>
+      <div class="pc-bio">Responsible for ensuring no traveler ever has a reason to leave the Hilton ecosystem. The Spark brand (budget) and LivSmart Studios (extended stay) are her mandate, filling the gaps that have historically driven guests toward Marriott or independents.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">MD</div>
+      <div class="pc-name">Matt Schuyler</div>
+      <div class="pc-role">Chief Brand Officer</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Capital One / Loyalty</span></div>
+      <div class="pc-stat"><span class="pc-sk">Focus</span><span class="pc-sv">Honors loyalty program</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Credit card partnership</span></div>
+      <div class="pc-stat"><span class="pc-sk">Key metric</span><span class="pc-sv">180M Honors members</span></div>
+      <div class="pc-bio">The steward of the 180-million member loyalty moat. The Hilton Honors co-branded credit card partnership, a massive hidden profit center that generates hundreds of millions annually, sits directly in his remit. Growing that number to 250M is the single biggest lever on the stock.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">CS</div>
+      <div class="pc-name">Chris Silcock</div>
+      <div class="pc-role">President, Americas</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Hilton lifer, Operations</span></div>
+      <div class="pc-stat"><span class="pc-sk">Focus</span><span class="pc-sv">Largest revenue region</span></div>
+      <div class="pc-stat"><span class="pc-sk">Key brands</span><span class="pc-sv">Hampton, Embassy Suites</span></div>
+      <div class="pc-stat"><span class="pc-sk">Mandate</span><span class="pc-sv">Group + Business travel</span></div>
+      <div class="pc-bio">Oversees Hilton's most important revenue geography. The return of Group and Business travel above 2019 levels is his signature achievement. The Small Meetings boom is converting his region from leisure-dependent to genuinely multi-cycle resilient.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">BA</div>
+      <div class="pc-name">Ben George</div>
+      <div class="pc-role">Chief Commercial Officer</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Revenue Management</span></div>
+      <div class="pc-stat"><span class="pc-sk">Focus</span><span class="pc-sv">RevPAR and pricing power</span></div>
+      <div class="pc-stat"><span class="pc-sk">Known for</span><span class="pc-sv">Direct booking strategy</span></div>
+      <div class="pc-stat"><span class="pc-sk">Key win</span><span class="pc-sv">60%+ direct bookings</span></div>
+      <div class="pc-bio">The person responsible for the 60%+ direct booking rate that lets Hilton bypass Expedia and OTAs at scale. Every percentage point of direct booking growth is pure margin improvement. His pricing and distribution strategy is the primary driver of RevPAR outperformance versus peers.</div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Data sourced from Hilton 10-K FY2025, Hilton Q1 2026 Earnings Release (April 22, 2026), SEC filings, and public market data as of May 13, 2026. A Daily Dividend publication.</div>
+
+</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  if (btn && btn.classList && btn.classList.contains('tab-btn')) {
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+    });
+  }
+  renderCharts(id);
+}
+
+var rendered = {};
+function renderCharts(tab) {
+  if (rendered[tab]) return;
+  rendered[tab] = true;
+  const mc = '#9ca3af', gc = 'rgba(0,0,0,.05)';
+
+  if (tab === 'business') {
+    new Chart(document.getElementById('revChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2023','FY2024','FY2025'],
+        datasets: [
+          { label: 'Franchise Fees', data: [5.12, 5.68, 6.20], backgroundColor: '#C8922A', borderRadius: 4 },
+          { label: 'Management Fees', data: [1.45, 1.62, 1.81], backgroundColor: '#002C5F', borderRadius: 4 },
+          { label: 'Other', data: [2.68, 3.01, 3.39], backgroundColor: '#9ca3af', borderRadius: 4 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'bottom', labels: { color: mc, font: { size: 11 }, padding: 10, boxWidth: 10, boxHeight: 10 } } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: mc, font: { size: 12 } } },
+          y: { stacked: true, grid: { color: gc }, ticks: { color: mc, font: { size: 12 }, callback: v => '$' + v + 'B' }, border: { display: false } }
+        }
+      }
+    });
+    new Chart(document.getElementById('mixChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Franchise Fees $6.2B', 'Management Fees $1.8B', 'Other $3.4B'],
+        datasets: [{ data: [54, 16, 30], backgroundColor: ['#C8922A', '#002C5F', '#9ca3af'], borderWidth: 0 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '58%',
+        plugins: { legend: { display: true, position: 'bottom', labels: { color: mc, font: { size: 11 }, padding: 10, boxWidth: 10, boxHeight: 10 } } }
+      }
+    });
+  }
+
+  if (tab === 'ddnumbers') {
+    new Chart(document.getElementById('pipelineChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2021','FY2022','FY2023','FY2024','FY2025'],
+        datasets: [{
+          data: [280, 330, 390, 440, 480],
+          backgroundColor: ['#e8eef6','#c5d4e8','#9cb3d4','#6a91bc','#C8922A'],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => v.raw + 'K rooms in pipeline' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 11 }, callback: v => v + 'K' }, border: { display: false } }
+        }
+      }
+    });
+    new Chart(document.getElementById('honorsChart'), {
+      type: 'line',
+      data: {
+        labels: ['2020','2021','2022','2023','2024','2025'],
+        datasets: [{
+          data: [112, 128, 140, 155, 165, 180],
+          borderColor: '#C8922A', borderWidth: 2.5,
+          pointBackgroundColor: '#C8922A', pointRadius: 4,
+          fill: true, backgroundColor: 'rgba(200,146,42,.08)', tension: .35
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => v.raw + 'M Honors members' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 11 }, callback: v => v + 'M' }, border: { display: false }, min: 100 }
+        }
+      }
+    });
+  }
+}
+renderCharts('snapshot');
+</script>
+</body>
+</html>

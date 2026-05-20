@@ -193,6 +193,8 @@ h1.hero-h1 .accent-green::after{background:rgba(15,157,107,.22)}
 .sc-logo img{max-width:100%;max-height:100%;object-fit:contain}
 .sc-logo.netflix{background:#000}
 .sc-logo.visa{background:#fff}
+.sc-logo.hilton{background:#0f2d5c;color:#fff;border-color:#0f2d5c}
+.sc-logo.home-depot{background:#F96302;color:#fff;border-color:#F96302}
 .sc-badge{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap}
 .sc-badge-live{color:var(--grn-ink);background:var(--grn-soft);display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(15,157,107,.22)}
 .sc-badge-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--grn);animation:livepulse 1.5s ease-in-out infinite}
@@ -229,6 +231,7 @@ h1.hero-h1 .accent-green::after{background:rgba(15,157,107,.22)}
 .search-result:hover,.search-result.active{background:var(--bg2)}
 .search-result-logo{width:32px;height:32px;border-radius:7px;background:var(--bg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;padding:5px;flex:none;font-family:var(--serif);font-weight:700;font-size:14px;overflow:hidden}
 .search-result-logo.netflix{background:#000}
+.search-result-logo.hilton{background:#0f2d5c;color:#fff;border-color:#0f2d5c}
 .search-result-logo img{max-width:100%;max-height:100%;object-fit:contain}
 .search-result-body{flex:1;text-align:left;min-width:0}
 .search-result-name{font-weight:600;font-size:14px;color:var(--ink)}
@@ -255,6 +258,7 @@ h1.hero-h1 .accent-green::after{background:rgba(15,157,107,.22)}
 .sim-logo{width:24px;height:24px;border-radius:5px;background:var(--bg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;padding:3px;flex:none;font-family:var(--serif);font-weight:700;font-size:11px;overflow:hidden}
 .sim-logo img{max-width:100%;max-height:100%;object-fit:contain}
 .sim-logo.netflix{background:#000}
+.sim-logo.hilton{background:#0f2d5c;color:#fff;border-color:#0f2d5c}
 .sim-name{font-size:12px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ========== LIBRARY ========== */
@@ -279,6 +283,7 @@ h1.hero-h1 .accent-green::after{background:rgba(15,157,107,.22)}
 .co-logo{width:38px;height:38px;border-radius:8px;background:var(--bg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;padding:6px;flex:none;font-family:var(--serif);font-weight:700;font-size:16px;color:var(--ink);overflow:hidden}
 .co-logo img{max-width:100%;max-height:100%;object-fit:contain}
 .co-logo.netflix{background:#000}
+.co-logo.hilton{background:#0f2d5c;color:#fff;border-color:#0f2d5c}
 .co-industry{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .co-name{font-family:var(--serif);font-weight:700;font-size:22px;line-height:1;letter-spacing:-.015em;margin-bottom:8px}
 .co-fact{font-size:13px;color:var(--muted);line-height:1.5;flex:1}
@@ -591,7 +596,7 @@ body.article-open{overflow:hidden}
       </button>
     </div>
     <div class="hero-meta">
-      <span class="hero-meta-item"><strong>2</strong> live deep dives</span>
+      <span class="hero-meta-item"><strong>4</strong> live deep dives</span>
       <span class="hero-meta-sep"></span>
       <span class="hero-meta-item"><strong>28</strong> coming soon</span>
       <span class="hero-meta-sep"></span>
@@ -664,6 +669,26 @@ body.article-open{overflow:hidden}
       <div class="sc-fact">A tiny cut, <strong>800 million times a day</strong>. Do the math.</div>
       <div class="sc-cta">Read now <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
+    <div class="sc" data-company="Hilton" onclick="openCompany(this)" data-dd-event="click_company" data-dd-param-company-name="Hilton" data-dd-param-company-slug="hilton" data-dd-param-location="start_grid">
+      <div class="sc-top">
+        <div class="sc-logo hilton">H</div>
+        <div class="sc-badge sc-badge-live">Live</div>
+      </div>
+      <div class="sc-industry">Hotels</div>
+      <div class="sc-name">Hilton</div>
+      <div class="sc-fact">Sold the buildings, <strong>kept the royalty stream</strong>. The hotel business without the hotels.</div>
+      <div class="sc-cta">Read now <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="sc" data-company="Home Depot" onclick="openCompany(this)" data-dd-event="click_company" data-dd-param-company-name="Home Depot" data-dd-param-company-slug="home-depot" data-dd-param-location="start_grid">
+      <div class="sc-top">
+        <div class="sc-logo home-depot">HD</div>
+        <div class="sc-badge sc-badge-live">Live</div>
+      </div>
+      <div class="sc-industry">Home improvement</div>
+      <div class="sc-name">Home Depot</div>
+      <div class="sc-fact">A housing freeze, <strong>$14B in profit</strong>, and a dividend that pays you to wait.</div>
+      <div class="sc-cta">Read now <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
     <div class="sc" data-company="Google" onclick="notifyMe(this)">
       <div class="sc-top">
         <div class="sc-logo" aria-label="Google logo">G</div>
@@ -721,7 +746,7 @@ body.article-open{overflow:hidden}
   <div class="lib">
     <div class="lib-head">
       <div class="lib-filters" id="filters">
-        <button class="chip active" data-filter="all">All <span class="chip-count">30</span></button>
+        <button class="chip active" data-filter="all">All <span class="chip-count">32</span></button>
         <button class="chip" data-filter="money-printers">💸 Money printers</button>
         <button class="chip" data-filter="tech-daily">📱 You use daily</button>
         <button class="chip" data-filter="brands">👟 Brands you love</button>
@@ -743,7 +768,7 @@ body.article-open{overflow:hidden}
 
     <div class="lib-expand-wrap">
       <button class="lib-expand" id="lib-expand">
-        Show all <span id="lib-count">30</span>
+        Show all <span id="lib-count">32</span>
         <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
@@ -782,7 +807,7 @@ body.article-open{overflow:hidden}
 <div class="wrap">
 <section class="cta">
   <h2 class="cta-h">Stocks, but you'll <span class="mark">actually get them</span>.</h2>
-  <p class="cta-sub">Two live. One new every week. Free.</p>
+  <p class="cta-sub">Four live. One new every week. Free.</p>
   <div class="cta-ctas">
     <button class="btn btn-primary" onclick="scrollToSection('library')">
       Open the library
@@ -1081,7 +1106,7 @@ body.article-open{overflow:hidden}
 
   <div class="fmodal-foot">
     <span class="fmodal-clear" id="fmodal-clear">Clear all</span>
-    <button class="fmodal-apply" id="fmodal-apply">Show <span id="fmodal-count">30</span> results</button>
+    <button class="fmodal-apply" id="fmodal-apply">Show <span id="fmodal-count">32</span> results</button>
   </div>
 </div>
 
@@ -1093,6 +1118,8 @@ body.article-open{overflow:hidden}
 const cards = [
   {name:'Netflix', industry:'Streaming', logo:'Site Pics/netflix%20logo.png', logoBg:'#000', fact:'Spends <span class="hl">$46M on content</span>. Every single day.', live:true},
   {name:'Visa', industry:'Payments', logo:'Site Pics/visalogo.png', fact:'Takes a tiny cut, <span class="hl">800 million times a day</span>. It adds up.', live:true},
+  {name:'Hilton', industry:'Hotels', fact:'Owns almost no hotels, but collects <span class="hl">fees on 1.2M+ rooms</span>.', live:true},
+  {name:'Home Depot', industry:'Home Improvement', fact:'A frozen housing market, a <span class="hl">3.1% covered dividend</span>, and $14B in profit.', live:true},
   {name:'Apple', industry:'Tech', fact:'More profit last quarter than the <span class="hl">UK film industry</span> made in ten years.', live:false},
   {name:"McDonald's", industry:'Fast Food', fact:'Plot twist. It\'s actually <span class="hl">a landlord</span>. The burgers are rent-payers.', live:false},
   {name:'Nike', industry:'Apparel', fact:'Doesn\'t make a single shoe. <span class="hl">Designs, brands, collects.</span> That\'s it.', live:false},
@@ -1215,6 +1242,8 @@ const imgLogo = (src, cls='') => `<div class="co-logo ${cls}"><img src="${src}" 
 
 // Region / sector taxonomy for modal filter
 const library = [
+  {name:'Home Depot', industry:'Home Improvement', fact:'A housing freeze, $14B in profit, and a covered dividend.', flag:'USA', region:'usa', sector:'retail', tags:['money-printers','underrated'], live:true},
+  {name:'Hilton', industry:'Hotels', fact:'Collects royalties on rooms it does not own.', flag:'USA', region:'usa', sector:'travel', tags:['money-printers','plot-twist'], live:true},
   {name:'Google', industry:'Search & Ads', fact:'Sells your attention 8.5B times a day.', flag:'🇺🇸', region:'usa', sector:'tech', tags:['money-printers','tech-daily'], isNew:true},
   {name:"McDonald's", industry:'Real estate (actually)', fact:'A landlord that also sells fries.', flag:'🇺🇸', region:'usa', sector:'retail', tags:['plot-twist']},
   {name:'Amazon', industry:'E-commerce', fact:'AWS quietly funds everything else.', flag:'🇺🇸', region:'usa', sector:'tech', tags:['tech-daily']},
@@ -1250,7 +1279,9 @@ const library = [
 
 const COMPANY_LOGOS = {
   Netflix: imgLogo('Site Pics/netflix%20logo.png', 'netflix'),
-  Visa: imgLogo('Site Pics/visalogo.png', 'visa')
+  Visa: imgLogo('Site Pics/visalogo.png', 'visa'),
+  Hilton: letterLogo('H', 'background:#0f2d5c;color:#fff;border-color:#0f2d5c'),
+  'Home Depot': letterLogo('HD', 'background:#F96302;color:#fff;border-color:#F96302;font-size:13px')
 };
 
 library.forEach(c => {
@@ -1694,7 +1725,7 @@ function renderSearchResults(q) {
 
 function suggestSimilar(q) {
   // Try to find likely sector
-  const SECTOR_KW = {tech:['tech','software','app','ai','cloud','chip','google','apple','meta','amazon'], finance:['bank','pay','card','fin','visa','hdfc'], auto:['car','auto','tesla','toyota','ford','motor'], media:['netflix','disney','spotify','film','movie','music'], retail:['retail','shop','store','food','coffee','burger'], luxury:['luxury','gucci','hermes','lvmh'], travel:['airline','flight','indigo','travel','hotel']};
+  const SECTOR_KW = {tech:['tech','software','app','ai','cloud','chip','google','apple','meta','amazon'], finance:['bank','pay','card','fin','visa','hdfc'], auto:['car','auto','tesla','toyota','ford','motor'], media:['netflix','disney','spotify','film','movie','music'], retail:['retail','shop','store','food','coffee','burger','home depot','homedepot','diy','hardware'], luxury:['luxury','gucci','hermes','lvmh'], travel:['airline','flight','indigo','travel','hotel']};
   let bestSector = null;
   for (const [s, kws] of Object.entries(SECTOR_KW)) {
     if (kws.some(k => q.includes(k))) { bestSector = s; break; }
@@ -1793,7 +1824,9 @@ function openCompany(el) { showToast(`Opening ${el.dataset.company}, the 3-minut
 
 const COMPANY_PAGES = {
   Netflix: 'netflix_dd_final%20(3).html',
-  Visa: 'visa_dd_final%20(3).html'
+  Visa: 'visa_dd_final%20(3).html',
+  Hilton: 'hilton_dd_final.html',
+  'Home Depot': 'home_depot_dd_final.html'
 };
 
 function openCompany(el) {
@@ -2299,6 +2332,9 @@ const VALID_ACCESS_KEYS = new Set([
   'apple',
   'visa',
   'netflix',
+  'hilton',
+  'home depot',
+  'homedepot',
   'rolex',
   'zara',
   'sony',
