@@ -52,7 +52,7 @@
       "change": -14.96,
       "changeDirection": "down",
       "date": "2026-06-18",
-      "lastUpdated": "2026-06-20T22:20:12.527Z"
+      "lastUpdated": "2026-06-20T23:22:38.959Z"
     },
     "DIS": {
       "ticker": "DIS",
@@ -63,7 +63,7 @@
       "change": -7.12,
       "changeDirection": "down",
       "date": "2026-06-18",
-      "lastUpdated": "2026-06-20T22:20:12.781Z"
+      "lastUpdated": "2026-06-20T23:22:39.204Z"
     },
     "SPOT": {
       "ticker": "SPOT",
@@ -74,7 +74,7 @@
       "change": null,
       "changeDirection": null,
       "date": "2026-06-18",
-      "lastUpdated": "2026-06-20T22:20:13.015Z"
+      "lastUpdated": "2026-06-20T23:22:39.449Z"
     }
   }
 }

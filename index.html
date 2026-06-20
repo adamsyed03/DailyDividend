@@ -6,6 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
 <style>
 /* TOKENS */
 :root{
@@ -1208,6 +1209,8 @@ function goTo(n){
  if(n==='you')renderShelf();
 }
 
+function twparse(el){if(typeof twemoji!=='undefined')twemoji.parse(el||document.body,{folder:'svg',ext:'.svg'});}
+
 /* TODAY */
 function renderToday(){
  const h=new Date().getHours();
@@ -1244,6 +1247,7 @@ ${otherCos.map(k=>{const co=CO[k];return `
  <div class="rcard-sc ${co.scDir}">${co.sc}</div>
  </div>
 </div>`}).join('')}`;
+ twparse(document.getElementById('todayScroll'));
 }
 async function openStack(slug,source='today'){
  curCo=slug;cardIdx=0;setTheme(slug);
@@ -1552,6 +1556,7 @@ ${rail(' New drops this week',newRail,[CS[3]],dbNew)}
 ${rail(' Brands you use daily',dailyRail,[CS[0]],dbDaily)}
 ${rail(' Plot twists',twistRail,CS.slice(4,6),dbTwist)}
 ${rail(' Underrated businesses',[],CS.slice(9,11),dbUnder)}`;
+ twparse(document.getElementById('lc'));
 }
 function rail(title,liveItems,csItems,dbItems){
  dbItems=dbItems||[];
@@ -1674,6 +1679,7 @@ ${personalityCard(personalityData)}
 ${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb||1;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'Bullish':c.vote==='bear'?'Bearish':'Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div><div class="sh-f" style="margin-top:8px;font-size:11px">You voted with ${c[c.vote==='bull'?'b':c.vote==='bear'?'bb':'n']}% of readers. ${c.when}.</div></div>`;}).join('')}
 <div class="sect-t" style="margin:22px 0 14px">Saved cards</div>
 ${allSaved.length===0?'<div class="empty">Nothing saved yet. Tap the bookmark on any card.</div>':`<div class="sg">${allSaved.map(s=>{const co=CO[s.co];if(!co)return '';const card=co.cards[s.idx]||co.cards[0];const txt=card.hl?card.hl.replace(/<[^>]+>/g,''):card.good?card.good.replace(/<[^>]+>/g,''):'Saved card';const bg=card.bg||'cream';return `<div class="sm bg-${bg}" onclick="openStack('${s.co}')"><div class="sm-tg">${co.n} - Card ${s.idx+1}</div><div class="sm-q">"${txt.slice(0,80)}${txt.length>80?'...':''}"</div><div class="sm-f"><span>${co.t}</span><span>Open &rarr;</span></div></div>`;}).join('')}</div>`}`;
+ twparse(document.getElementById('youScroll'));
 }
 const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
 shell.addEventListener('touchstart',e=>{
@@ -2130,6 +2136,7 @@ ${personalityCard(personalityData)}
   }).join('')||'<div class="empty">Save cards while reading.</div>'}
   </div>
 </div>`;
+  twparse(yc);
 }
 
 /* Desktop keyboard nav */
