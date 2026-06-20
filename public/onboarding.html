@@ -514,10 +514,12 @@
       return digits;
     }
     async function api(path, options = {}){
-      const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+      let response;
+      try{ response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options}); }
+      catch(netErr){ throw new Error('No connection to server. Check your network.'); }
       let data = {};
-      try{data = await response.json();}catch(error){}
-      if(!response.ok) throw new Error(data.error || 'Daily Dividend could not save that yet.');
+      try{data = await response.json();}catch(e){}
+      if(!response.ok) throw new Error(data.error || `Server error ${response.status}. Try again.`);
       return data;
     }
     function onboardingPayload(){

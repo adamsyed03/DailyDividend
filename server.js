@@ -1370,8 +1370,8 @@ app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html'))
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
 app.get('/signup.html', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
-app.get('/onboarding', (req, res) => res.sendFile(path.join(__dirname, 'public', 'onboarding.html')));
-app.get('/onboarding.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'onboarding.html')));
+app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/onboarding.html', (req, res) => { res.setHeader('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
 
 app.get('/desktop.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'dd_v6_desktop_revised (1).html'));
