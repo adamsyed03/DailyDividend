@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <script>
+    if (location.protocol === 'file:' || (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && location.port && location.port !== '3000')) location.replace('http://localhost:3000/onboarding.html');
+  </script>
   <title>Daily Dividend - Onboarding</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +49,8 @@
 
     #s-splash{align-items:center;justify-content:center;text-align:center;padding:40px 32px}
     .splash-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(46,138,96,.28),transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none}
-    .splash-mark{width:72px;height:72px;border-radius:20px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:32px;margin:0 auto 22px;opacity:0;transform:scale(.7) translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+    .splash-mark{width:72px;height:72px;border-radius:20px;background:var(--cream);display:grid;place-items:center;margin:0 auto 22px;opacity:0;transform:scale(.7) translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);box-shadow:0 16px 48px rgba(0,0,0,.4);overflow:hidden;padding:10px}
+    .splash-mark img,.payoff-mark img{display:block;width:100%;height:100%;object-fit:contain}
     .splash-mark.show{opacity:1;transform:scale(1) translateY(0)}
     .splash-name{font-family:var(--serif);font-weight:400;font-size:28px;letter-spacing:-.02em;opacity:0;transform:translateY(12px);transition:opacity .6s .35s var(--ease),transform .6s .35s var(--ease);margin-bottom:10px}
     .splash-name.show{opacity:1;transform:translateY(0)}
@@ -136,7 +140,7 @@
     .cc-opt-name{flex:1;font-size:15px;font-weight:600}
     .cc-opt-code{font-family:var(--mono);font-size:13px;color:var(--muted)}
     .payoff-inner{flex:1;padding:80px 28px 28px;display:flex;flex-direction:column;overflow-y:auto}
-    .payoff-mark{width:52px;height:52px;border-radius:14px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:23px;margin-bottom:24px}
+    .payoff-mark{width:52px;height:52px;border-radius:14px;background:var(--cream);display:grid;place-items:center;margin-bottom:24px;padding:8px;overflow:hidden}
     .payoff-card,.payoff-drop{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px 20px;margin-bottom:12px}
     .payoff-card-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.62);margin-bottom:10px}
     .payoff-chips{display:flex;flex-wrap:wrap;gap:7px}
@@ -154,7 +158,7 @@
       .screen{padding:0 56px;transform:translateX(26px)}
       .screen.exit{transform:translateX(-26px)}
       .screen::before{content:"Daily Dividend";position:absolute;top:34px;left:98px;z-index:30;font-family:var(--serif);font-size:18px;font-weight:600;color:rgba(245,241,232,.92)}
-      .screen::after{content:"DD";position:absolute;top:28px;left:56px;z-index:31;width:30px;height:30px;border-radius:8px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-size:13px;font-weight:700}
+      .screen::after{content:"";position:absolute;top:28px;left:56px;z-index:31;width:30px;height:30px;border-radius:8px;background:var(--cream) url('/api/brand-logo') center/22px 22px no-repeat}
       #s-markets::before,#s-sectors::before,#s-about::before{color:var(--ink)}
       #s-markets::after,#s-sectors::after,#s-about::after{background:var(--brand);color:var(--cream)}
       .prog-bar{height:4px}
@@ -227,7 +231,7 @@
     <div class="phone">
       <section class="screen active" id="s-splash">
         <div class="splash-glow"></div>
-        <div class="splash-mark" id="splashMark">DD</div>
+        <div class="splash-mark" id="splashMark"><img src="/api/brand-logo" alt="Daily Dividend logo"></div>
         <div class="splash-name" id="splashName">Daily Dividend</div>
         <div class="splash-tag" id="splashTag">Story behind the stock</div>
         <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started -></button>
@@ -371,7 +375,7 @@
 
       <section class="screen" id="s-payoff">
         <div class="payoff-inner">
-          <div class="payoff-mark">DD</div>
+        <div class="payoff-mark"><img src="/api/brand-logo" alt="Daily Dividend logo"></div>
           <div class="payoff-h">You're <em>in.</em></div>
           <div class="payoff-sub">Welcome to Daily Dividend. We built this for people who want to actually understand what they're reading about - not just the numbers, the story.</div>
           <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>

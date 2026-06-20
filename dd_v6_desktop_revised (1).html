@@ -3,6 +3,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <script>
+if(location.protocol==='file:'||(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&location.port&&location.port!=='3000')){location.replace('http://localhost:3000/desktop.html');}
 if(window.matchMedia('(max-width:899px)').matches){window.location.replace('/index.html'+window.location.search+window.location.hash);}
 else{fetch('/api/auth/session',{credentials:'same-origin'}).then(function(response){if(!response.ok)window.location.replace('/onboarding.html');}).catch(function(){window.location.replace('/onboarding.html');});}
 </script>
