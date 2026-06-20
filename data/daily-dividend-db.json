@@ -1,0 +1,80 @@
+{
+  "users": {
+    "63c5024a-c95a-4312-abcb-a53b9cc75526": {
+      "userId": "63c5024a-c95a-4312-abcb-a53b9cc75526",
+      "firstName": "adam",
+      "lastName": "syed",
+      "country": "serbia",
+      "phoneCode": "44",
+      "phoneNumber": "7403113011",
+      "profession": "unemployed",
+      "financeProficiency": 3,
+      "howHeard": "friend",
+      "createdAt": "2026-06-18T00:14:24.420Z",
+      "streak": 0,
+      "lastReadDate": null,
+      "savedCompanies": [],
+      "previousVotes": {},
+      "readHistory": [],
+      "email": "",
+      "name": "adam syed"
+    },
+    "a95adade-4a95-43ec-b11b-c660132d2088": {
+      "userId": "a95adade-4a95-43ec-b11b-c660132d2088",
+      "firstName": "",
+      "lastName": "",
+      "country": "",
+      "phoneCode": "",
+      "phoneNumber": "",
+      "profession": "",
+      "financeProficiency": null,
+      "howHeard": "",
+      "createdAt": "2026-06-18T22:31:02.192Z",
+      "streak": 0,
+      "lastReadDate": null,
+      "savedCompanies": [],
+      "previousVotes": {},
+      "readHistory": []
+    }
+  },
+  "votes": {},
+  "settings": {
+    "featuredCompany": "netflix"
+  },
+  "companies": {},
+  "prices": {
+    "NFLX": {
+      "ticker": "NFLX",
+      "name": "Netflix",
+      "currency": "USD",
+      "yearStartPrice": 90.99,
+      "price": 77.38,
+      "change": -14.96,
+      "changeDirection": "down",
+      "date": "2026-06-18",
+      "lastUpdated": "2026-06-20T22:20:12.527Z"
+    },
+    "DIS": {
+      "ticker": "DIS",
+      "name": "Disney",
+      "currency": "USD",
+      "yearStartPrice": 111.85,
+      "price": 103.89,
+      "change": -7.12,
+      "changeDirection": "down",
+      "date": "2026-06-18",
+      "lastUpdated": "2026-06-20T22:20:12.781Z"
+    },
+    "SPOT": {
+      "ticker": "SPOT",
+      "name": "Spotify",
+      "currency": "USD",
+      "yearStartPrice": null,
+      "price": 468.079987,
+      "change": null,
+      "changeDirection": null,
+      "date": "2026-06-18",
+      "lastUpdated": "2026-06-20T22:20:13.015Z"
+    }
+  }
+}

@@ -81,12 +81,12 @@
 
     <div class="kicker">Member Login</div>
     <h1>Welcome back.</h1>
-    <p class="sub">Log in with your email and password.</p>
+    <p class="sub">Log in with your email or username.</p>
 
     <form id="login-form">
       <div class="field">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="email">Email or username</label>
+        <input id="email" name="email" type="text" autocomplete="username" placeholder="you@email.com or @username" required>
       </div>
       <div class="field">
         <label for="password">Password</label>
@@ -118,11 +118,11 @@
     form.addEventListener('submit', async event => {
       event.preventDefault();
 
-      const email = document.getElementById('email').value.trim().toLowerCase();
+      const identifier = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value;
 
-      if (!email || !password) {
-        showMessage('Please enter your email and password.', 'error');
+      if (!identifier || !password) {
+        showMessage('Please enter your email or username and password.', 'error');
         return;
       }
 
@@ -130,7 +130,7 @@
       button.textContent = 'Logging in...';
 
       try {
-        const { response, data } = await ddFetchJson({mode:'login', email, password}, 'Login request');
+        const { response, data } = await ddFetchJson({mode:'login', email: identifier, password}, 'Login request');
 
         if (!response.ok || !isSuccess(data)) {
           throw new Error(data.error || data.reason || 'No account matched those details.');

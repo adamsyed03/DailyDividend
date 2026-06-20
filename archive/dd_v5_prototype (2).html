@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+<title>Daily Dividend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F5F1E8;--cream-2:#EFEADE;--paper:#FAF7F0;--ink:#0F0F0E;--ink-2:#2A2A28;--muted:#6B6B66;--mute-2:#A8A39A;--line:#D9D2C2;--navy:#0B1F3A;--green:#1F6B4A;--green-2:#2E8A60;--green-soft:#D6E7DC;--red:#B23A2E;--red-2:#D14A3D;--red-soft:#F2D9D3;--gold:#C49A3E;--gold-2:#E0B450;--gold-soft:#F2E5C2;--serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;--accent:#C49A3E;--accent-soft:rgba(196,154,62,0.2);--co-bg:linear-gradient(180deg,#0B1F3A,#06152A);--co-logo-bg:#E50914;--co-logo-color:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+.stage{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at top,rgba(255,255,255,0.04),transparent 60%),#141413}
+.phone{width:100%;max-width:400px;height:100%;max-height:860px;background:var(--cream);border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.5)}
+@media(max-width:480px){.stage{padding:0}.phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex}
+.statusbar{height:44px;flex-shrink:0}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(245,241,232,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+
+/* TODAY */
+.today-scroll{flex:1;overflow-y:auto;padding:8px 24px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 22px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px;letter-spacing:-0.02em}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.flame{animation:none}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 12px}
+.today-hero{background:var(--co-bg);color:var(--cream);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:26px;box-shadow:0 8px 30px rgba(11,31,58,0.25)}
+.today-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,var(--accent-soft),transparent 55%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;padding:5px 10px;background:rgba(245,241,232,0.15);border-radius:100px;margin-bottom:18px}
+.live-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:var(--mute-2);text-transform:uppercase;margin-bottom:8px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.12;letter-spacing:-0.02em;margin-bottom:20px}
+.hero-h em{font-style:italic;color:var(--accent);font-weight:300}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid rgba(245,241,232,0.15);font-family:var(--mono);font-size:11px;color:var(--mute-2)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.rcard:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.rl{display:flex;align-items:center;gap:12px;min-width:0}
+.rthumb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:17px;color:#fff;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+.rstatus{font-size:18px}
+
+/* STACK */
+#screen-stack{background:#000}
+.shell{position:absolute;inset:0;overflow:hidden}
+.prog{position:absolute;top:50px;left:16px;right:16px;display:flex;gap:4px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.22);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.9)}
+.prog.dark .tick{background:rgba(0,0,0,0.16)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.85)}
+.topbar{position:absolute;top:64px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.co-logo{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:8px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tbtn:hover{background:rgba(255,255,255,0.22)}
+.tbtn svg{width:15px;height:15px}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:var(--ink)}
+.track{position:absolute;inset:0}
+.card{position:absolute;inset:0;padding:105px 24px 96px;display:none;flex-direction:column;overflow:hidden}
+.card.active{display:flex;animation:cardIn 0.36s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+.card.bg-navy{background:linear-gradient(180deg,#0B1F3A,#06152A);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-green{background:linear-gradient(180deg,#1F6B4A,#144B33);color:var(--cream)}
+.card.bg-red{background:linear-gradient(180deg,#B23A2E,#7E2820);color:var(--cream)}
+.card.bg-gold{background:linear-gradient(180deg,#F2E5C2,#E6D199);color:var(--ink)}
+.card.bg-ink{background:linear-gradient(180deg,#1A1A18,#0A0A09);color:var(--cream)}
+.card.bg-cover{background:var(--co-bg);color:var(--cream)}
+.eb-c{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.55;margin-bottom:16px}
+.card.bg-navy .eb-c,.card.bg-ink .eb-c,.card.bg-cover .eb-c{color:var(--accent);opacity:1}
+.card.bg-green .eb-c{color:#B5E3C8;opacity:1}
+.card.bg-red .eb-c{color:#FCC9C2;opacity:1}
+.hl{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.12;letter-spacing:-0.02em;margin-bottom:14px}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-navy .hl em,.card.bg-ink .hl em,.card.bg-cover .hl em{color:var(--accent)}
+.card.bg-cream .hl em{color:var(--navy)}
+.card.bg-gold .hl em{color:var(--red)}
+.card.bg-green .hl em{color:#E5F5EB;font-weight:400}
+.card.bg-red .hl em{color:#FFE5E0;font-weight:400}
+.bd{font-family:var(--sans);font-size:14.5px;line-height:1.55;opacity:0.85}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+
+/* cover */
+.cv-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-bottom:20px}
+.cv-mark{width:60px;height:60px;border-radius:15px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:30px;box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.cv-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 10px;border-radius:100px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.78)}
+
+/* pie */
+.pie-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.pie{width:180px;height:180px;position:relative}
+.pie svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pie-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+.pie-c-n{font-family:var(--serif);font-weight:400;font-size:30px;letter-spacing:-0.02em;line-height:1}
+.pie-c-l{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-top:4px}
+.slice{cursor:pointer;transition:opacity 0.2s}
+.slice:not(.active){opacity:0.78}
+.pie-d{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;min-height:58px}
+.pie-d-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.pie-d-n{font-family:var(--serif);font-size:15px;font-weight:600}
+.pie-d-a{font-family:var(--mono);font-size:12px;font-weight:600}
+.pie-d-t{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.4}
+
+/* doors */
+.doors{display:flex;flex-direction:column;gap:10px}
+.door{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;border-left:3px solid}
+.dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.dn{font-family:var(--serif);font-size:15px;font-weight:600}
+.dn .ic{font-size:16px;margin-right:7px}
+.da{font-family:var(--mono);font-size:12px;font-weight:600;background:var(--cream-2);padding:3px 8px;border-radius:6px}
+.dt{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);line-height:1.4}
+
+/* rivals */
+.riv{display:flex;flex-direction:column;gap:10px}
+.r{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:11px 13px}
+.card.bg-cream .r{background:#fff;border-color:var(--line)}
+.r.hero{background:var(--accent-soft);border-color:var(--accent)}
+.rh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px}
+.rn{font-family:var(--serif);font-size:14.5px;font-weight:600}
+.rt{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,0.1);opacity:0.85}
+.card.bg-cream .rt{background:var(--cream-2)}
+.r.hero .rt{background:var(--accent);color:var(--ink);opacity:1}
+.rtx{font-family:var(--sans);font-size:12px;opacity:0.78;line-height:1.4}
+.card.bg-cream .rtx{color:var(--ink-2);opacity:0.9}
+
+/* hidden */
+.tw{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px;margin-bottom:14px}
+.tb{font-family:var(--serif);font-size:18px;font-weight:400;text-decoration:line-through;text-decoration-color:var(--red-2);text-decoration-thickness:2px;opacity:0.5;line-height:1.25;margin-bottom:10px;font-style:italic}
+.tg{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--accent);line-height:1.22;letter-spacing:-0.01em}
+
+/* accordion */
+.acc{display:flex;flex-direction:column;gap:8px}
+.ai{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;overflow:hidden;transition:all 0.25s;cursor:pointer}
+.ah{display:flex;align-items:center;gap:11px;padding:12px 13px}
+.aic{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;font-size:14px}
+.card.bg-green .aic{background:rgba(255,255,255,0.95);color:var(--green)}
+.card.bg-red .aic{background:rgba(255,255,255,0.95);color:var(--red)}
+.at{flex:1;font-family:var(--serif);font-size:14.5px;font-weight:500;line-height:1.25}
+.ach{font-family:var(--mono);font-size:12px;opacity:0.7;transition:transform 0.25s;flex-shrink:0}
+.ai.open .ach{transform:rotate(180deg)}
+.ab{max-height:0;overflow:hidden;transition:max-height 0.3s,padding 0.3s;padding:0 13px}
+.ai.open .ab{max-height:200px;padding:0 13px 13px}
+.abt{font-family:var(--sans);font-size:12.5px;line-height:1.5;opacity:0.95;padding-top:5px;border-top:1px solid rgba(255,255,255,0.18)}
+.abt strong{font-weight:600}
+
+/* ownership */
+.own{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.ow-row{display:flex;align-items:center;gap:10px}
+.ow-l{font-family:var(--sans);font-size:12px;width:96px;flex-shrink:0;opacity:0.85}
+.ow-tr{flex:1;height:24px;background:rgba(0,0,0,0.06);border-radius:7px;overflow:hidden}
+.card.bg-gold .ow-tr{background:rgba(0,0,0,0.08)}
+.ow-f{height:100%;border-radius:7px;display:flex;align-items:center;padding-left:10px;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.2s}
+
+/* take */
+.tk-w{position:relative}
+.tk-q{position:absolute;top:-26px;left:-6px;font-family:var(--serif);font-size:100px;color:var(--accent);opacity:0.18;font-weight:300;line-height:1;pointer-events:none}
+
+/* conviction */
+.cv{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.co-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);border-radius:14px;padding:14px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;align-items:center;gap:12px}
+.co-opt:hover{background:rgba(255,255,255,0.14)}
+.co-opt .ico{font-size:22px;flex-shrink:0;z-index:2}
+.co-opt .lbl{font-family:var(--serif);font-size:17px;font-weight:500;z-index:2}
+.co-opt .sub{font-family:var(--sans);font-size:11px;opacity:0.6;z-index:2;margin-left:auto}
+.cf{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 0.7s cubic-bezier(0.2,0.8,0.2,1);z-index:1}
+.co-opt.bull .cf{background:rgba(46,138,96,0.4)}
+.co-opt.neutral .cf{background:rgba(196,154,62,0.4)}
+.co-opt.bear .cf{background:rgba(209,74,61,0.4)}
+.cp{font-family:var(--mono);font-size:14px;font-weight:600;opacity:0;transition:opacity 0.4s 0.3s;z-index:2;margin-left:auto}
+.co-opt.revealed .sub{display:none}
+.co-opt.revealed .cp{opacity:1}
+.co-opt.you{border-color:var(--accent);border-width:2px}
+.cr{font-family:var(--sans);font-size:13px;text-align:center;margin-top:14px;opacity:0;transition:opacity 0.4s 0.5s;line-height:1.5}
+.cr.show{opacity:0.9}
+.cr strong{font-weight:600;opacity:1}
+
+/* next */
+.np{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px;cursor:pointer;transition:transform 0.18s}
+.np:hover{transform:translateX(4px)}
+.nthumb{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0}
+.nco{font-family:var(--serif);font-size:17px;font-weight:600}
+.ntag{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;opacity:0.65;text-transform:uppercase;margin-top:2px}
+.ea{display:flex;flex-direction:column;gap:9px}
+.btn-p{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:13px 18px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.btn-g{background:transparent;color:var(--cream);border:1px solid rgba(255,255,255,0.25);border-radius:100px;padding:12px 18px;font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+
+.tz{position:absolute;top:105px;bottom:96px;width:22%;z-index:5;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+.pills{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:20}
+.pill{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);padding:9px 15px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
+.pills.dark .pill{background:rgba(0,0,0,0.08);color:var(--ink);border-color:rgba(0,0,0,0.12)}
+
+/* drawer */
+.dw-bd{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dw-bd.open{opacity:1;pointer-events:auto}
+.dw{position:absolute;left:0;right:0;bottom:0;height:78%;background:var(--paper);border-radius:24px 24px 0 0;z-index:210;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,0.3)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:40px;height:4px;background:var(--mute-2);border-radius:4px;margin:10px auto 0;flex-shrink:0}
+.dw-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-eb{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.dw-t{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:-0.01em}
+.dw-x{background:rgba(0,0,0,0.06);border:0;width:30px;height:30px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.dw-b{overflow-y:auto;padding:18px 22px 40px}
+.d-sub{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;margin:0 0 8px;font-weight:600}
+.d-p{font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 10px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-call{background:var(--gold-soft);border-left:3px solid var(--gold);padding:13px 15px;border-radius:0 10px 10px 0;margin:6px 0 12px;font-family:var(--serif);font-size:14.5px;line-height:1.4;font-style:italic;color:var(--ink)}
+.d-st{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 0 12px}
+.d-s{background:#fff;border:1px solid var(--line);padding:11px 8px;border-radius:10px;text-align:center}
+.d-s-n{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-0.02em;line-height:1;color:var(--ink)}
+.d-s-l{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-top:6px;line-height:1.3}
+
+/* tldr */
+.tl-bd{position:absolute;inset:0;background:rgba(10,10,9,0.75);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.tl-bd.open{opacity:1;pointer-events:auto}
+.tl-c{background:var(--co-bg);border-radius:24px;width:100%;max-width:340px;padding:26px 24px;position:relative;transform:scale(0.94);transition:transform 0.3s;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.tl-bd.open .tl-c{transform:scale(1)}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tl-l{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.tl-co{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--cream)}
+.tl-co .s{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--mute-2);text-transform:uppercase;display:block;margin-top:1px}
+.tl-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--accent);text-transform:uppercase;margin-bottom:14px}
+.tl-pts{display:flex;flex-direction:column}
+.tl-p{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tl-p:last-child{border-bottom:0}
+.tl-n{font-family:var(--mono);font-size:10px;color:var(--accent);flex-shrink:0;padding-top:3px;width:16px}
+.tl-tx{font-family:var(--sans);font-size:13px;line-height:1.4;color:var(--cream)}
+.tl-tx strong{font-weight:700;color:var(--accent)}
+.tl-f{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.tl-br{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--cream)}
+.tl-br .dd{color:var(--accent)}
+.tl-u{font-family:var(--mono);font-size:9px;color:var(--mute-2);letter-spacing:0.1em}
+.tl-acts{display:flex;gap:8px;margin-top:14px}
+.tl-btn{flex:1;border:0;border-radius:100px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--accent);color:var(--ink)}
+.tl-btn.c{background:rgba(255,255,255,0.12);color:var(--cream)}
+.tl-hint{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--mute-2);text-transform:uppercase;margin-top:10px}
+
+/* LIBRARY */
+.lib-scroll{flex:1;overflow-y:auto;padding:0 0 100px}
+.lib-top{padding:8px 24px 12px}
+.lib-tr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;padding-top:6px}
+.lib-t{font-family:var(--serif);font-weight:400;font-size:26px;letter-spacing:-0.02em}
+.lib-st{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;text-align:right;line-height:1.5}
+.lib-st .big{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--ink);letter-spacing:-0.01em}
+.s-row{display:flex;gap:8px;margin-bottom:6px}
+.s-box{flex:1;background:#fff;border:1px solid var(--line);border-radius:100px;padding:11px 16px 11px 40px;font-family:var(--sans);font-size:13.5px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236B6B66' stroke-width='2' viewBox='0 0 24 24'><circle cx='11' cy='11' r='7'/><path d='m20 20-3.5-3.5'/></svg>");background-repeat:no-repeat;background-position:14px center;outline:none}
+.s-box:focus{border-color:var(--ink)}
+.sb{background:var(--ink);color:var(--cream);border:0;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1)}
+.sb:active{transform:rotate(360deg)}
+.lib-feat{margin:18px 24px 4px;background:var(--co-bg);color:var(--cream);border-radius:20px;padding:18px 20px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.12)}
+.lib-feat::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,var(--accent-soft),transparent 60%);pointer-events:none}
+.lib-feat-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.lib-feat-co{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-0.01em;margin-bottom:4px}
+.lib-feat-bl{font-family:var(--sans);font-size:12.5px;opacity:0.78;line-height:1.4}
+.rail{margin:22px 0 4px}
+.rh{padding:0 24px;display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.rail-t{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-0.01em}
+.rc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em}
+.rs{display:flex;gap:11px;padding:2px 24px 4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rs::-webkit-scrollbar{display:none}
+.rcd{flex-shrink:0;width:138px;height:172px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s}
+.rcd:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
+.rcd-th{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;margin-bottom:8px}
+.rcd-fl{position:absolute;top:13px;right:13px;font-size:14px}
+.rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
+.rcd-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
+.rcd-bl{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.3;margin-top:3px}
+.rcd.cs{background:var(--cream-2);border-style:dashed;opacity:0.65}
+.rcd.cs .rcd-th{background:var(--mute-2) !important}
+.cs-tag{position:absolute;top:13px;right:13px;font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.lib-fs{margin:32px 24px 0;padding:18px 0 8px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.lib-fs .big{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink);letter-spacing:-0.01em}
+.sr{padding:10px 24px 0;display:none}
+.sr.active{display:block}
+.sr-l{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.sr-e{text-align:center;padding:40px 20px;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:15px}
+.sr-e .sm{font-family:var(--sans);font-size:12px;font-style:normal;margin-top:6px;opacity:0.7}
+.lc{transition:opacity 0.2s}
+.lc.hidden{display:none}
+
+/* YOU */
+.you-scroll{flex:1;overflow-y:auto;padding:12px 24px 100px}
+.yg{font-family:var(--serif);font-weight:400;font-size:26px;letter-spacing:-0.01em;margin:6px 0 4px;line-height:1.15}
+.yg em{font-style:italic;color:var(--muted);font-weight:300}
+.ys{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:18px}
+.id-c{background:linear-gradient(135deg,#0F0F0E,#1A1A18 60%,#2A2A28);color:var(--cream);border-radius:22px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,0.2)}
+.id-c::before{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--gold-2),transparent 70%);opacity:0.18;pointer-events:none}
+.id-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--gold-2);text-transform:uppercase;margin-bottom:8px}
+.id-n{font-family:var(--serif);font-weight:400;font-size:32px;letter-spacing:-0.02em;line-height:1.1;margin-bottom:8px}
+.id-n em{font-style:italic;font-weight:300;color:var(--gold-2)}
+.id-b{font-family:var(--sans);font-size:13px;line-height:1.5;opacity:0.82}
+.id-r{position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.1);border:0;width:30px;height:30px;border-radius:50%;color:var(--cream);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:transform 0.5s}
+.id-r:hover{transform:rotate(180deg)}
+.sh{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-bottom:18px}
+.sh-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sh-l{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
+.sh-n{font-family:var(--serif);font-weight:300;font-size:46px;line-height:1;margin-top:4px}
+.sh-n .u{font-family:var(--sans);font-size:14px;opacity:0.55;margin-left:6px;font-weight:400}
+.sh-fl{font-size:32px}
+.sh-w{display:flex;gap:6px;align-items:flex-end}
+.sh-c{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.sh-d{width:100%;height:22px;border-radius:5px;background:var(--cream-2)}
+.sh-d.done{background:var(--gold-2)}
+.sh-d.today{background:var(--ink)}
+.sh-dl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase}
+.sh-c.today .sh-dl{color:var(--ink);font-weight:600}
+.sh-f{font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:12px;line-height:1.4}
+.sh-f strong{color:var(--ink);font-weight:600}
+.cc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.cc-r{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cc-co{font-family:var(--serif);font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.cc-co .th{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:11px;color:#fff}
+.cc-ch{font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:100px;letter-spacing:0.08em;display:inline-flex;align-items:center;gap:5px}
+.cc-ch.bull{background:var(--green-soft);color:var(--green)}
+.cc-ch.neutral{background:var(--gold-soft);color:#8c6a23}
+.cc-ch.bear{background:var(--red-soft);color:var(--red)}
+.cc-bars{display:flex;gap:3px;height:6px;border-radius:3px;overflow:hidden;background:var(--cream-2)}
+.cc-b{height:100%}
+.cc-b.bull{background:var(--green-2)}
+.cc-b.neutral{background:var(--gold-2)}
+.cc-b.bear{background:var(--red-2)}
+.cc-m{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+.cc-m .ym{color:var(--ink);font-weight:600}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sm{aspect-ratio:0.85;border-radius:14px;padding:13px 14px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s}
+.sm:hover{transform:translateY(-2px)}
+.sm.bg-navy{background:linear-gradient(160deg,#0B1F3A,#06152A);color:var(--cream)}
+.sm.bg-ink{background:linear-gradient(160deg,#1A1A18,#0A0A09);color:var(--cream)}
+.sm.bg-cream{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.sm.bg-gold{background:linear-gradient(160deg,#F2E5C2,#E6D199);color:var(--ink)}
+.sm.bg-green{background:linear-gradient(160deg,#1F6B4A,#144B33);color:var(--cream)}
+.sm-tg{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.7;margin-bottom:8px}
+.sm-q{font-family:var(--serif);font-size:14px;font-weight:500;line-height:1.25;letter-spacing:-0.01em;flex:1}
+.sm-f{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:8.5px;opacity:0.65;letter-spacing:0.1em;text-transform:uppercase}
+.empty{text-align:center;padding:30px 20px;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:14px}
+
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+.toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head><body>
+
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<section class="screen active" id="screen-today"><div class="statusbar"></div><div class="today-scroll" id="todayScroll"></div>
+<nav class="bottom-nav">
+<button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
+<button class="nav-item" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
+<button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+</nav></section>
+
+<section class="screen" id="screen-stack">
+<div class="shell" id="shell">
+<div class="prog" id="prog"></div>
+<div class="topbar" id="topbar">
+<div class="co"><div class="co-logo" id="cologo">N</div><div><div class="co-name" id="coname">Netflix</div><div class="co-sub" id="cosub">NFLX</div></div></div>
+<div class="tactions">
+<button class="tbtn" onclick="openTldr()" title="TL;DR">≡</button>
+<button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+<button class="tbtn" onclick="closeStack()">×</button>
+</div></div>
+<div class="tz l" onclick="prevCard()"></div>
+<div class="tz r" onclick="nextCard()"></div>
+<div class="track" id="track"></div>
+<div class="pills" id="pills"><div class="pill" onclick="openDrawer()">↑ Go deeper</div><div class="pill" onclick="openTldr()">≡ TL;DR</div></div>
+</div>
+<div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+<div class="dw" id="dw">
+<div class="dw-hn"></div>
+<div class="dw-h"><div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div><button class="dw-x" onclick="closeDrawer()">×</button></div>
+<div class="dw-b" id="dwB"></div>
+</div>
+<div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()"><div class="tl-c" id="tlC"></div></div>
+<div class="toast" id="toast">Saved</div>
+</section>
+
+<section class="screen" id="screen-library"><div class="statusbar"></div>
+<div class="lib-scroll">
+<div class="lib-top">
+<div class="lib-tr"><div class="lib-t">The library.</div><div class="lib-st"><span class="big">4</span><br>live</div></div>
+<div class="s-row"><input class="s-box" id="searchBox" placeholder="Search any company..." oninput="onSearch()"/><button class="sb" onclick="surpriseMe()" title="Surprise me">🎲</button></div>
+</div>
+<div class="sr" id="sr"></div>
+<div class="lc" id="lc"></div>
+<div class="lib-fs" id="libFs"><div><span class="big">4</span> live</div><div><span class="big">28</span> coming</div><div><span class="big">~90s</span> per read</div></div>
+</div>
+<nav class="bottom-nav">
+<button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
+<button class="nav-item active" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
+<button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+</nav></section>
+
+<section class="screen" id="screen-you"><div class="statusbar"></div><div class="you-scroll" id="youScroll"></div>
+<nav class="bottom-nav">
+<button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
+<button class="nav-item" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
+<button class="nav-item active" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+</nav></section>
+
+</div>
+<div class="hint">desktop preview · tap edges to swipe · ↑ deeper · ≡ TL;DR · 🔖 save</div>
+</div>
+
+<script>
+/* ════════ COMPANY DATA ════════ */
+const CO={
+netflix:{n:"Netflix",t:"NFLX",sec:"Streaming",fl:"🇺🇸",mc:"$380B",lb:"#E50914",lc:"#fff",ac:"#E50914",as:"rgba(229,9,20,0.2)",bg:"linear-gradient(180deg,#1A1A18,#0A0A09)",bl:"Burns $46M a day on shows. Still profits.",rails:["new","daily","twists"],nx:"disney",
+cards:[
+{type:"cover",chips:["NFLX · NASDAQ","Worth $380B"],hl:"Netflix burns <em>$46M</em> a day on shows. <em>And still makes money.</em>",bd:"The red app on your phone is worth about $380 billion on the stock market, bigger than Disney. 302 million people pay every month, more than the population of the United States. They just bought HBO too."},
+{type:"pie",bg:"cream",hl:"$45 billion a year. <em>Three doors.</em>",bd:"Every dollar comes through one of three doors. One is the whole business. The other two did not exist three years ago.",tot:"$45B",tl:"a year",sl:[
+{k:"subs",n:"📺 Subscriptions",p:85,a:"$38B",c:"#0B1F3A",x:"The whole business. Monthly fees from 302M people."},
+{k:"live",n:"🏈 Live sport",p:10,a:"$4B",c:"#1F6B4A",x:"NFL, WWE, boxing. Did not exist 3 years ago."},
+{k:"ads",n:"📢 Ads",p:5,a:"$2B",c:"#C49A3E",x:"Cheap plan with ads. Brands pay too. Netflix earns twice."}]},
+{type:"doors",bg:"cream",hl:"What you're <em>actually</em> paying for.",dr:[
+{i:"📺",n:"Subscriptions",a:"$38B",c:"#0B1F3A",x:"You pay monthly. They keep it whether you watch ten hours or zero."},
+{i:"🏈",n:"Live sport",a:"$4B",c:"#1F6B4A",x:"NFL on Christmas, WWE on Mondays. The reason you do not cancel in January."},
+{i:"📢",n:"Ads",a:"$2B",c:"#C49A3E",x:"Cheaper plan with ads. Brands pay. Netflix earns twice."}]},
+{type:"rivals",bg:"navy",hl:"The streaming race. <em>Netflix is winning.</em>",rv:[
+{n:"🔴 Netflix",t:"The champion",h:true,x:"Got there first. Earns $17 per user. The benchmark everyone else chases."},
+{n:"🏰 Disney+",t:"The giant catching up",x:"Has the better library. But launched cheap and cannot raise prices. Earns half of Netflix per user."},
+{n:"🎵 Spotify",t:"The cautionary tale",x:"600M users, almost no profit. Music labels take 70% of every dollar."}]},
+{type:"hidden",bg:"ink",bad:"Netflix wants every show to be a hit.",good:"Netflix wants every show to <strong>end on time.</strong>",bd:"When Netflix cancels Sense8 or 1899, shows fans loved across the world, it is not a mistake. It is the plan. Short shows are cheap. Long shows get expensive fast. That is how they spend $46M a day and still profit."},
+{type:"acc",bg:"green",ic:"↑",eb:"How it could double · 🟢",hl:"Three ways to a <em>$1 trillion</em> Netflix.",items:[
+{t:"The ad plan is a money printer",b:"0 to <strong>40M users</strong> in two years. Aiming for 200M. That alone could add $20B in revenue."},
+{t:"They just bought HBO",b:"Game of Thrones, Succession, The Last of Us. The <strong>biggest content deal</strong> in streaming history."},
+{t:"Live sport is the new battlefield",b:"WWE deal worth $5B over 10 years. NFL on Christmas was the <strong>biggest streamed sporting event</strong> ever."}]},
+{type:"acc",bg:"red",ic:"↓",eb:"What could break it · 🔴",hl:"Three things that could <em>sink it.</em>",items:[
+{t:"Asia will not crack",b:"$17 a month is ₹1,400 in India. Nobody pays that. JioHotstar has <strong>140M Indian users</strong>. Netflix has 12M."},
+{t:"The spending war never ends",b:"Apple loses $1B a year on TV+ and does not care. Netflix can <strong>never slow down</strong>."},
+{t:"Hits are still a coin flip",b:"Even at $46M a day, <strong>9 out of 10 shows</strong> flop. The next Squid Game might not exist."}]},
+{type:"own",bg:"gold",hl:"Nobody really <em>owns</em> Netflix.",bars:[
+{l:"The founder",p:1,d:"<1%",c:"rgba(0,0,0,0.5)"},
+{l:"Giant funds",p:70,d:"~70%",c:"#C49A3E"},
+{l:"Everyone else",p:30,d:"~30%",c:"#2E8A60"}],
+bd:"The man who built it owns less than 1%. The real owners are giant funds (Vanguard, BlackRock) that hold a slice of nearly every big company. Probably including a piece of your future pension."},
+{type:"take",bg:"cream",hl:"Netflix won the West. <em>The next decade is Asia.</em>",bd:"The hard part is done. They built the library. The West pays $17. They figured out how to profit. The real question now is whether a billion people in Asia paying $2 a month can ever become a real business."},
+{type:"conv",bg:"ink",hl:"Now you decide. <em>Netflix in 5 years?</em>",opts:[{k:"bull",p:68},{k:"neutral",p:22},{k:"bear",p:10}]},
+{type:"next",bg:"navy",hl:"That was Netflix.",bd:"Next, Disney. The opposite playbook. Disney's movies are actually advertisements for theme parks.",nx:"disney"}
+],
+deep:{
+cover:{t:"Bigger than you'd believe",e:"From the cover",h:`<div class="d-sub">A real number</div><div class="d-p">$380 billion is hard to picture. So: Netflix is worth more than Disney and McDonald's <strong>each</strong>. Roughly the size of Singapore's whole economy.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$380B</div><div class="d-s-l">Netflix</div></div><div class="d-s"><div class="d-s-n">$184B</div><div class="d-s-l">Disney</div></div><div class="d-s"><div class="d-s-n">$220B</div><div class="d-s-l">McDonald's</div></div></div><div class="d-call">A company that started mailing DVDs in red envelopes is now bigger than the company that invented the theme park.</div>`},
+pie:{t:"Why \"boring\" is the point",e:"From the money",h:`<div class="d-sub">The boring miracle</div><div class="d-p">85% of Netflix's money is subscriptions. That is not a weakness, it is the entire reason Netflix is valuable. Subscription revenue is <strong>predictable</strong>. They know the money is coming before they spend a rupee.</div><div class="d-call">Investors pay a premium for predictability. That boring 85% is exactly what makes the stock worth $380B.</div>`},
+doors:{t:"The \"you pay either way\" trick",e:"From the three doors",h:`<div class="d-sub">Why subscriptions win</div><div class="d-p">About <strong>40% of subscribers</strong> log in less than once a week. They all still pay. Netflix's costs are mostly fixed, so every extra subscriber is almost pure profit.</div><div class="d-call">That is the magic of subscriptions. You collect the money whether or not anyone shows up.</div>`},
+rivals:{t:"One number runs streaming",e:"From the streaming race",h:`<div class="d-sub">It is called ARPU</div><div class="d-p">Money per user, per month. Netflix earns <strong>$17</strong>. Disney+ earns $8. Spotify earns $5. Same kind of business, wildly different economics.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$17</div><div class="d-s-l">Netflix</div></div><div class="d-s"><div class="d-s-n">$8</div><div class="d-s-l">Disney+</div></div><div class="d-s"><div class="d-s-n">$5</div><div class="d-s-l">Spotify</div></div></div><div class="d-p">Disney launched cheap and trained users to expect cheap. Netflix climbed to $17 slowly, and people stayed.</div>`},
+hidden:{t:"The cancellation playbook",e:"From the hidden truth",h:`<div class="d-sub">They don't track ratings</div><div class="d-p">Netflix tracks how many people <em>finish</em> a show. A show critics love but few finish is, to Netflix, a flop.</div><div class="d-st"><div class="d-s"><div class="d-s-n">~70%</div><div class="d-s-l">get Season 2</div></div><div class="d-s"><div class="d-s-n">~20%</div><div class="d-s-l">get Season 3</div></div><div class="d-s"><div class="d-s-n">&lt;5%</div><div class="d-s-l">reach Season 5</div></div></div><div class="d-p">After Season 2, actor salaries triple. So shows are built to end. And the saved cash funds three new bets.</div>`},
+acc:{t:"The path to $1 trillion",e:"From how it could double",h:`<div class="d-sub">The ad-plan math</div><div class="d-p">40M users today. Netflix wants 200M. At about $5 each per month in ad money, that is <strong>+$12B a year</strong>, on top of fees.</div><div class="d-call">The ad plan was Netflix's biggest pivot since killing DVDs. It is how the next billion users become reachable.</div>`},
+acc2:{t:"The Asia wall",e:"From what could break it",h:`<div class="d-sub">Eight years of trying</div><div class="d-p">Netflix tried everything in India: cheap plans, local hits, huge marketing. Result: ~12M subscribers.</div><div class="d-st"><div class="d-s"><div class="d-s-n">12M</div><div class="d-s-l">Netflix India</div></div><div class="d-s"><div class="d-s-n">140M</div><div class="d-s-l">JioHotstar</div></div><div class="d-s"><div class="d-s-n">~10×</div><div class="d-s-l">the gap</div></div></div><div class="d-p">JioHotstar bundles IPL and comes basically free with a Jio SIM. <strong>You cannot out-price free.</strong></div>`},
+own:{t:"Who actually owns companies",e:"From who owns it",h:`<div class="d-sub">Founders own almost nothing</div><div class="d-p">The man who built Netflix owns under 1%. The rest is owned by <strong>index funds</strong>: giant pools of money (Vanguard, BlackRock) that hold a small slice of nearly every big company on earth.</div><div class="d-call">If you ever buy a mutual fund or have a pension, you probably already own a tiny piece of Netflix, Apple, and Amazon, without knowing it.</div>`},
+take:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we believe</div><div class="d-p">Netflix went from "the company DVDs killed" to "the company that killed DVDs" in eight years. Near-bankrupt in 2011. $13B in operating profit in 2025.</div><div class="d-call">The only company that can kill Netflix now is Netflix. It has earned the right to be boring.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:16px;">Not investment advice. We are storytellers, not advisors.</div>`},
+next:{t:"Why Disney is the opposite bet",e:"From what's next",h:`<div class="d-sub">Same industry, opposite playbook</div><div class="d-p">Netflix is 100% digital. Disney is 60% physical: parks, cruises, toys, hotels.</div><div class="d-call">A Disney film flops? They still make $1B on Star Wars hotel rooms. Netflix has no parachute when a show misses.</div>`}
+},
+tldr:["Worth <strong>$380B</strong>. Bigger than Disney. 302M paying users.","<strong>85%</strong> of money is subscriptions. Ads and live sport are the new doors.","Earns <strong>$17 per user</strong>. Double Disney+. The whole game.","Cancels shows <strong>on purpose</strong>. Short shows stay cheap.","Upside: the <strong>ad plan</strong>. Risk: <strong>Asia will not crack</strong>.","Founder owns <strong>&lt;1%</strong>. Giant funds own most of it."]},
+
+disney:{n:"Disney",t:"DIS",sec:"Entertainment",fl:"🇺🇸",mc:"$184B",lb:"#113CCF",lc:"#fff",ac:"#FFD24A",as:"rgba(255,210,74,0.2)",bg:"linear-gradient(180deg,#113CCF,#0A2480)",bl:"The movies are ads for the parks.",rails:["twists","daily"],nx:"reliance",
+cards:[
+{type:"cover",chips:["DIS · NYSE","Worth $184B"],hl:"Disney's movies aren't the business. <em>The theme parks are.</em>",bd:"Mickey Mouse is the most successful advertisement in human history. Every Marvel film, every Pixar release, every Star Wars sequel is a billboard for the place that actually prints money: 12 theme parks, 6 cruise ships, and $4 billion in toys last year alone."},
+{type:"pie",bg:"cream",hl:"$94 billion a year. <em>The trick is the profit.</em>",bd:"Disney makes money three ways. The biggest one might surprise you. Tap a slice.",tot:"$94B",tl:"a year",sl:[
+{k:"ent",n:"🎬 Entertainment",p:45,a:"$42B",c:"#113CCF",x:"Disney+, Hulu, movies, TV. Biggest revenue, smaller profit."},
+{k:"exp",n:"🎢 Experiences",p:38,a:"$36B",c:"#E0B450",x:"Parks, cruises, toys. Smallest revenue. Biggest profit. The real engine."},
+{k:"spo",n:"🏀 Sports (ESPN)",p:17,a:"$18B",c:"#1F6B4A",x:"America's biggest sports network. Cable households pay even if they never watch."}]},
+{type:"doors",bg:"cream",hl:"Three engines. <em>One does the work.</em>",dr:[
+{i:"🎢",n:"Parks & cruises",a:"$36B",c:"#E0B450",x:"A family of four spends about ₹5 lakh ($6,000) on a 5-day Disney World trip. Disney owns every part of it."},
+{i:"🎬",n:"Movies & streaming",a:"$42B",c:"#113CCF",x:"Disney+ has 132M subscribers. The library (Marvel, Star Wars, Pixar) feeds the parks."},
+{i:"🏀",n:"ESPN",a:"$18B",c:"#1F6B4A",x:"America's biggest sports channel. Earning from cable bundles even when nobody watches."}]},
+{type:"rivals",bg:"navy",hl:"Bigger than Netflix. <em>Worth less.</em> Why?",rv:[
+{n:"🏰 Disney",t:"The empire",h:true,x:"Older, bigger, more diversified. But cable is dying and streaming was bleeding billions until last year."},
+{n:"🔴 Netflix",t:"The upstart",x:"Half Disney's revenue, twice the stock value. Wall Street pays for the future, not the past."},
+{n:"📡 Comcast",t:"The pipe company",x:"Owns the cables that bring you Netflix. Also Universal parks. Bigger by revenue, trades at a discount."}]},
+{type:"hidden",bg:"ink",bad:"Disney is a movie studio.",good:"Disney is a real estate company that makes <strong>movies to fill its hotels.</strong>",bd:"The parks made $10 billion in profit last year. A record. That is more than all of Disney's movies and streaming combined. Stitch merch alone sold $4 billion. Disney does not make movies to make money on tickets. It makes movies so kids beg their parents to visit the place where the characters live."},
+{type:"acc",bg:"green",ic:"↑",eb:"How it could double · 🟢",hl:"Three ways Disney becomes a <em>$400B</em> company.",items:[
+{t:"Iger came back to clean up",b:"They retired CEO Bob Iger in 2020. The next guy nearly broke the company. They begged Iger to return in 2022. <strong>He's cutting costs and refocusing.</strong>"},
+{t:"Streaming finally pays",b:"Disney+ and Hulu were losing $1B a quarter. Now making $350M+ a quarter. <strong>The bleeding stopped.</strong>"},
+{t:"ESPN becomes a streaming app",b:"Disney is launching a standalone ESPN streaming service. If it works, <strong>ESPN becomes the Netflix of sports</strong>."}]},
+{type:"acc",bg:"red",ic:"↓",eb:"What could break it · 🔴",hl:"Three things that could <em>break Disney.</em>",items:[
+{t:"Cable is dying fast",b:"Every year, <strong>5 million American households</strong> cancel cable. ESPN earns big from cable. That money is disappearing."},
+{t:"The box office is shaky",b:"Disney's 2025 box office <strong>fell</strong>. No new Star Wars. No Marvel mega-hit. The story factory is sputtering."},
+{t:"The next CEO is unknown",b:"Iger is 73. He's leaving (again) in 2026. <strong>Whoever replaces him inherits all of this.</strong>"}]},
+{type:"own",bg:"gold",hl:"Walt's grandkids own <em>almost nothing.</em>",bars:[
+{l:"Disney family",p:1,d:"<1%",c:"rgba(0,0,0,0.5)"},
+{l:"Giant funds",p:25,d:"~25%",c:"#C49A3E"},
+{l:"Everyone else",p:75,d:"~75%",c:"#2E8A60"}],
+bd:"Walt died in 1966. His family owns less than 1% today. In 2024 an activist investor named Nelson Peltz tried to take board seats and force change. He lost. The real power sits with giant funds (Vanguard, BlackRock) holding about 25% combined."},
+{type:"take",bg:"cream",hl:"Disney owns the past. <em>The question is whether it owns the future.</em>",bd:"For 100 years the playbook worked: make a beloved story, sell it as a movie, then a park, then a toy, forever. But cable is dying, streaming is brutal, and parks cannot grow forever. The next decade tests whether Disney can rewire itself without breaking the magic."},
+{type:"conv",bg:"ink",hl:"Now you decide. <em>Disney in 5 years?</em>",opts:[{k:"bull",p:52},{k:"neutral",p:31},{k:"bear",p:17}]},
+{type:"next",bg:"navy",hl:"That was Disney.",bd:"Next, Reliance. The Indian giant you probably paid today without realising it.",nx:"reliance"}
+],
+deep:{
+cover:{t:"Bigger than countries",e:"From the cover",h:`<div class="d-sub">A real scale</div><div class="d-p">Disney owns 12 theme parks, 6 cruise ships, ESPN, ABC, Disney+, Hulu, Marvel, Pixar, Star Wars, and 80,000 acres of land in Florida alone. <strong>The Florida property is bigger than the city of San Francisco.</strong></div><div class="d-st"><div class="d-s"><div class="d-s-n">$94B</div><div class="d-s-l">Revenue</div></div><div class="d-s"><div class="d-s-n">$184B</div><div class="d-s-l">Stock value</div></div><div class="d-s"><div class="d-s-n">232K</div><div class="d-s-l">Employees</div></div></div><div class="d-call">A century ago two brothers drew a mouse. Today that mouse generates more annual revenue than the GDP of Croatia.</div>`},
+pie:{t:"Why three engines beat one",e:"From the money",h:`<div class="d-sub">Diversification works</div><div class="d-p">Netflix only sells streaming. Bad year for streaming, bad year for Netflix. Disney has three businesses that take turns covering for each other.</div><div class="d-call">When streaming was losing billions, the parks made $10B in profit and paid the bills.</div>`},
+doors:{t:"The Disney pricing trick",e:"From the engines",h:`<div class="d-sub">A $14 subscription, a ₹5 lakh trip</div><div class="d-p">Disney+ costs $14 a month. That feels cheap. But Disney's real money comes from the next step. The same family that paid for Disney+ ends up paying <strong>$6,000 for a Disney World trip</strong> a year later.</div><div class="d-call">The streaming service is a billboard. The point is to keep families inside the Disney world for life.</div>`},
+rivals:{t:"Bigger isn't more valuable",e:"From the empire vs upstart",h:`<div class="d-sub">Wall Street pays for the future</div><div class="d-p">Disney has more revenue than Netflix. But Netflix is worth twice as much in the stock market. Because the market pays for growth, not size.</div><div class="d-p">Netflix grows faster. Disney has more parts that can break (cable, slow box office). The market is betting on Netflix's future, not Disney's present.</div>`},
+hidden:{t:"The Disney World maths",e:"From the hidden truth",h:`<div class="d-sub">A family of four = $6,000</div><div class="d-p">Tickets, hotel, food, the Frozen merch the kid begged for. Disney owns the hotel. Disney owns the restaurant. Disney sells the toy.</div><div class="d-call">Every other entertainment company sells you a thing once. Disney sells you the thing, then the place to enjoy it, then the souvenir of the place.</div><div class="d-p">That's how parks make $10 billion in profit on $36 billion in revenue. <strong>28% margin. Insanely high.</strong></div>`},
+acc:{t:"The ESPN bet",e:"From how it could double",h:`<div class="d-sub">Disney's biggest gamble</div><div class="d-p">ESPN is the most-watched sports channel in America, but cable is dying. Disney is launching ESPN as a full standalone streaming app.</div><div class="d-call">If they pull it off, ESPN becomes the Netflix of sports. Global, app-based, billions in subscription money.</div><div class="d-p">If they do not, ESPN slowly bleeds out as cable shrinks. <strong>There is no middle outcome.</strong></div>`},
+acc2:{t:"The cable cliff",e:"From what could break it",h:`<div class="d-sub">A bullet a year</div><div class="d-p">Every American household that cancels cable is a small bullet for Disney. ESPN, ABC, FX, the Disney Channel: all paid by cable bundles.</div><div class="d-st"><div class="d-s"><div class="d-s-n">100M</div><div class="d-s-l">Cable in 2014</div></div><div class="d-s"><div class="d-s-n">&lt;70M</div><div class="d-s-l">Cable today</div></div><div class="d-s"><div class="d-s-n">-5M</div><div class="d-s-l">Lost per year</div></div></div><div class="d-p">Disney has to move ESPN to streaming faster than cable shrinks. <strong>If streaming is slower than the bleed, Disney has a real problem by 2030.</strong></div>`},
+own:{t:"Walt's family fades out",e:"From who owns it",h:`<div class="d-sub">A century later</div><div class="d-p">Walt died in 1966. His brother Roy died in 1971. The Disney family today owns less than 1%. <strong>Vanguard, BlackRock, State Street</strong> together own about 20% of Disney. They also own about 20% of Apple, Amazon, Microsoft.</div><div class="d-call">If you have any savings in a mutual fund or pension, you almost certainly already own a piece of Disney without knowing it.</div>`},
+take:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we believe</div><div class="d-p">Disney is the most diversified entertainment company on earth. A strength when one part is struggling, a weakness when everything is moving at once.</div><div class="d-call">The next 10 years come down to one question. Can ESPN move to streaming faster than cable falls apart?</div><div class="d-p">If yes, Disney is a $400B company. If no, it stays stuck around $200B while Netflix doubles past it.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:16px;">Not investment advice. We are storytellers, not advisors.</div>`},
+next:{t:"Why Reliance is different",e:"From what's next",h:`<div class="d-sub">India's everything-company</div><div class="d-p">Disney owns one industry deeply. Reliance owns six industries shallowly. Your phone bill, your IPL stream, your cola, your petrol, your groceries: <strong>all probably Reliance</strong>.</div><div class="d-call">Next door: the only family-controlled trillion-rupee giant in this library.</div>`}
+},
+tldr:["Worth <strong>$184B</strong>. Smaller than Netflix despite more revenue.","The parks made <strong>$10B in profit</strong>. More than all movies and streaming combined.","$94B revenue across <strong>three engines</strong>: parks, streaming, ESPN.","The movies are ads. <strong>The parks are the business.</strong>","Upside: <strong>Iger's turnaround</strong>. Risk: <strong>cable is dying fast</strong>.","Walt's family owns <strong>&lt;1%</strong>. Just like Netflix."]},
+
+reliance:{n:"Reliance",t:"RELIANCE",sec:"Conglomerate",fl:"🇮🇳",mc:"₹18.5L cr",lb:"#003E72",lc:"#fff",ac:"#00B5E2",as:"rgba(0,181,226,0.22)",bg:"linear-gradient(180deg,#003E72,#001F3A)",bl:"You paid Reliance today. Without knowing.",rails:["new","daily"],nx:"hdfc",
+cards:[
+{type:"cover",chips:["RELIANCE · NSE","₹18.5 lakh crore"],hl:"You probably paid Reliance today. <em>Without knowing.</em>",bd:"Your phone bill. Your IPL stream. The Campa Cola in your fridge. The petrol pump on the corner. The grocery store down the road. The Mumbai Indians IPL team. Reliance owns all of them. Market cap ₹18.5 lakh crore. India's most valuable company."},
+{type:"pie",bg:"cream",hl:"₹11.76 lakh crore a year. <em>Four giants.</em>",bd:"Reliance is not one company. It is four giants stitched together. Tap a slice.",tot:"₹11.76L cr",tl:"a year",sl:[
+{k:"o2c",n:"⛽ Oil & Chemicals",p:55,a:"₹6.5L cr",c:"#0B1F3A",x:"Refines crude into petrol, diesel, plastic. Funds everything else."},
+{k:"retail",n:"🛒 Retail",p:27,a:"₹3.2L cr",c:"#C49A3E",x:"20,160 stores. Reliance Smart, Trends, Digital, Ajio. India's largest retailer."},
+{k:"jio",n:"📱 Jio",p:13,a:"₹1.5L cr",c:"#00B5E2",x:"524 million subscribers. World's biggest mobile network outside China."},
+{k:"media",n:"📺 Media",p:5,a:"₹0.6L cr",c:"#1F6B4A",x:"JioStar. Owns IPL streaming rights. 550M monthly users."}]},
+{type:"doors",bg:"cream",hl:"Four giants. <em>One family.</em>",dr:[
+{i:"⛽",n:"Oil & Chemicals",a:"₹6.5L cr",c:"#0B1F3A",x:"Their Jamnagar refinery in Gujarat is the world's biggest. Built on a desert. Processes 1.4 million barrels a day."},
+{i:"🛒",n:"Retail",a:"₹3.2L cr",c:"#C49A3E",x:"20,160 stores across India. Growing 12% a year. Future Group collapsed competing with it."},
+{i:"📱",n:"Jio",a:"₹1.5L cr",c:"#00B5E2",x:"In 2016 Jio gave free 4G data for 6 months. Every competitor went bankrupt or merged."},
+{i:"📺",n:"JioStar",a:"₹0.6L cr",c:"#1F6B4A",x:"Set a world record for live-stream viewers during the T20 World Cup. 550M monthly users."}]},
+{type:"rivals",bg:"navy",hl:"Reliance does not have rivals. <em>It has prey.</em>",rv:[
+{n:"📱 Telecom (2016)",t:"Jio launched",h:true,x:"Vodafone India dying. Idea merged. Bharti Airtel barely holding on. Free data for six months killed the industry."},
+{n:"🛒 Retail (2020s)",t:"Reliance Retail exploded",x:"Reliance crossed 20,000 stores. Future Group (Big Bazaar) collapsed. Local shops squeezed."},
+{n:"🥤 Cola (2022)",t:"Campa relaunched",x:"Reliance bought Campa Cola for ₹22 crore. Now the 4th biggest cola in India. Coca-Cola is nervous."},
+{n:"🎬 Streaming (2024)",t:"JioStar formed",x:"Merged Star India with Disney's Indian arm. Now controls JioStar and the IPL rights."}]},
+{type:"hidden",bg:"ink",bad:"Reliance is an oil company.",good:"Reliance is a <strong>customer-collection machine.</strong>",bd:"Mukesh Ambani inherited a polyester business. His strategy: get the most Indian customers possible, then sell them everything. Jio captured 524M phones. Retail captures the grocery list. JioStar captures cricket. Campa Cola captures thirst. The endgame, every rupee an Indian family spends should land in a Reliance pocket."},
+{type:"acc",bg:"green",ic:"↑",eb:"How it could double · 🟢",hl:"Three ways to a <em>₹35 lakh crore</em> Reliance.",items:[
+{t:"The Jio IPO is coming",b:"When Jio lists separately, analysts estimate it alone could be worth <strong>₹8 to 10 lakh crore</strong>. The biggest IPO in Indian history."},
+{t:"The new-energy bet",b:"Reliance is spending <strong>₹75,000 crore</strong> on solar, batteries, green hydrogen at Jamnagar. If it works, it is a second Jio."},
+{t:"Retail keeps eating India",b:"As India's middle class grows from 400M to <strong>a billion by 2035</strong>, Reliance Retail is positioned to capture all of it."}]},
+{type:"acc",bg:"red",ic:"↓",eb:"What could break it · 🔴",hl:"Three things that could <em>break Reliance.</em>",items:[
+{t:"Too many bets at once",b:"Telecom, retail, oil, media, energy, FMCG. Even Ambani can only watch so many. <strong>One big mistake gets very expensive.</strong>"},
+{t:"Politics and regulation",b:"When one family controls this much of India, regulators get nervous. A government decision could change the rules overnight. <strong>Critics call it crony capitalism.</strong>"},
+{t:"The succession test",b:"Mukesh is 67. Akash runs Jio. Isha runs Retail. Anant runs Energy. <strong>The handover is the biggest unknown.</strong>"}]},
+{type:"own",bg:"gold",hl:"A family. <em>A dynasty.</em> A house.",bars:[
+{l:"Ambani family",p:50,d:"~50%",c:"#003E72"},
+{l:"Foreign funds",p:25,d:"~25%",c:"#C49A3E"},
+{l:"Indian funds",p:15,d:"~15%",c:"#2E8A60"},
+{l:"Retail",p:10,d:"~10%",c:"#A8A39A"}],
+bd:"Unlike Netflix or Disney, Reliance is genuinely controlled by one family. <strong>Mukesh</strong> (67) Chairman. <strong>Nita</strong> runs Mumbai Indians, the most valuable IPL team. <strong>Akash</strong> (33) runs Jio. <strong>Isha</strong> (33) runs Retail. <strong>Anant</strong> (29) runs new energy. His 2024 wedding cost an estimated $600M to $1 billion. They live in Antilia, a 27-floor private home in Mumbai worth $2B."},
+{type:"take",bg:"cream",hl:"Reliance is not a stock. <em>It is a bet on India itself.</em>",bd:"If India becomes a $10 trillion economy by 2035, Reliance owns a piece of every part of that growth. Phone bills. Groceries. Streaming. Petrol. Cricket. The trade-off, you are betting on one family running six industries at once, indefinitely. So far, they have never lost."},
+{type:"conv",bg:"ink",hl:"Now you decide. <em>Reliance in 5 years?</em>",opts:[{k:"bull",p:61},{k:"neutral",p:28},{k:"bear",p:11}]},
+{type:"next",bg:"navy",hl:"That was Reliance.",bd:"Next, HDFC Bank. The boring bank that just had its first scandal in 30 years.",nx:"hdfc"}
+],
+deep:{
+cover:{t:"You are surrounded by Reliance",e:"From the cover",h:`<div class="d-sub">An Indian family's day</div><div class="d-p">Wake up, check phone (Jio). Make tea, watch news (JioStar). Drive to work, petrol pump (Reliance). Lunch from Smart Bazaar (Retail). Cricket in evening (IPL on JioStar). Campa Cola with dinner (Reliance FMCG).</div><div class="d-call">If you live in India, you probably pay Reliance more than you pay the government in taxes.</div>`},
+pie:{t:"Four giants under one roof",e:"From the money",h:`<div class="d-sub">Why diversification works</div><div class="d-p">Oil prices crash? The retail business covers. Telecom slows? Energy still flows. JioStar is small but growing fast. <strong>Reliance never has a single bad year.</strong></div><div class="d-call">Most Indian companies bet everything on one industry. Reliance bets on India itself.</div>`},
+doors:{t:"Jamnagar built on a desert",e:"From the four giants",h:`<div class="d-sub">The world's largest refinery</div><div class="d-p">In 1999, Reliance commissioned the Jamnagar refinery on a coastal desert in Gujarat. Today it processes <strong>1.4 million barrels a day</strong>, more than entire countries like Argentina or Norway.</div><div class="d-call">The fishing village of Jamnagar is now called "the oil city of the world." It was built in 36 months.</div>`},
+rivals:{t:"The Reliance pattern",e:"From the pattern of entry",h:`<div class="d-sub">Five years to dominance</div><div class="d-p">Reliance enters a market. Subsidises customers. Wins them with free or near-free pricing. Competitors burn out trying to keep up. By year five, Reliance owns the category.</div><div class="d-p">Free Jio data destroyed Vodafone India. Reliance Retail squeezed Future Group out of business. Campa Cola is eating Coke's lunch in India. <strong>The pattern repeats.</strong></div>`},
+hidden:{t:"From polyester to everything",e:"From the hidden truth",h:`<div class="d-sub">Dhirubhai's bet, Mukesh's playbook</div><div class="d-p">Reliance started as a polyester company in 1966. Mukesh Ambani's insight: in India, scale is the only durable moat. Whoever has the most customers wins. Whoever has the most customers can sell them more things.</div><div class="d-call">Jio's free data was not a marketing campaign. It was the price of admission. 524 million Indians are now in the Reliance ecosystem for life.</div>`},
+acc:{t:"The Jio IPO",e:"From how it could double",h:`<div class="d-sub">India's biggest stock listing</div><div class="d-p">Mukesh has confirmed Jio Platforms will list separately. When it does, analysts estimate Jio alone is worth <strong>₹8 to 10 lakh crore</strong>, bigger than TCS.</div><div class="d-call">Existing Reliance shareholders would get Jio shares for free. That alone is a massive unlock.</div>`},
+acc2:{t:"The succession question",e:"From what could break it",h:`<div class="d-sub">A trillion-rupee handover</div><div class="d-p">Mukesh has split the empire among his three children. Akash gets Jio. Isha gets Retail. Anant gets New Energy. <strong>None of them have ever run a company independently.</strong></div><div class="d-call">The last time an Indian conglomerate split among siblings (Ambani vs Anil in 2005), the families ended up bitter rivals. This handover is the biggest unknown in Indian business.</div>`},
+own:{t:"Antilia and the IPL",e:"From who owns it",h:`<div class="d-sub">The Ambani world</div><div class="d-p">Antilia, the family home in Mumbai, has 27 floors, three helipads, a 168-car garage, and a permanent staff of 600.</div><div class="d-p">The family owns four T20 cricket franchises: Mumbai Indians (IPL), MI Cape Town, MI Emirates, MI New York. <strong>Mumbai Indians is consistently the most valuable IPL team.</strong></div><div class="d-call">Anant Ambani's 2024 wedding cost an estimated $600M to $1 billion. More than the market cap of most mid-cap Indian companies.</div>`},
+take:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">A bet on India</div><div class="d-p">Reliance is structurally positioned to capture Indian economic growth across every category. <strong>The risk is not the business, it is the family.</strong></div><div class="d-call">If the next generation executes, this is a generational compounder. If they fumble, Reliance becomes a slow-moving giant living off the parent's vision.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:16px;">Not investment advice. We are storytellers, not advisors.</div>`},
+next:{t:"Why HDFC is the opposite story",e:"From what's next",h:`<div class="d-sub">Family vs no family</div><div class="d-p">Reliance is one family controlling everything. HDFC Bank has no founder, no family, no patriarch. <strong>And it just got tested.</strong></div><div class="d-call">Next door: the bank that had never had a losing year in 30 years, until March 2026.</div>`}
+},
+tldr:["Worth <strong>₹18.5 lakh crore</strong>. India's most valuable company.","Four giants: <strong>oil, retail, Jio, media</strong>. All under one roof.","Owns the <strong>world's largest oil refinery</strong>. Built on a desert.","Pattern: enter, subsidise, win the category. <strong>It has worked four times.</strong>","Upside: <strong>Jio IPO</strong>. Risk: <strong>the succession to three children</strong>.","The Ambani family owns <strong>~50%</strong>. Unlike any other company here."]},
+
+hdfc:{n:"HDFC Bank",t:"HDFCBANK",sec:"Banking",fl:"🇮🇳",mc:"₹11.4L cr",lb:"#004C8F",lc:"#fff",ac:"#ED232A",as:"rgba(237,35,42,0.2)",bg:"linear-gradient(180deg,#004C8F,#002E59)",bl:"For 30 years, the gold standard. Then 2026.",rails:["new"],nx:"netflix",
+cards:[
+{type:"cover",chips:["HDFCBANK · NSE","₹11.4 lakh crore"],hl:"For 30 years, HDFC was the gold standard. <em>Then 2026 happened.</em>",bd:"HDFC Bank had never had a losing year in three decades. Investors paid a premium for its boring-is-best reputation. Then in March 2026 the Chairman resigned over ethics concerns. Three senior executives were fired for selling risky bonds to Indians in Dubai. The stock dropped 22%. India's most trusted bank is having its first real reputation test."},
+{type:"pie",bg:"cream",hl:"₹3 lakh crore a year. <em>Banks make money two ways.</em>",bd:"A bank takes deposits from you and lends them to someone else. The difference is the profit.",tot:"₹3L cr",tl:"a year",sl:[
+{k:"int",n:"💰 Interest",p:75,a:"~₹2.3L cr",c:"#004C8F",x:"You deposit money. They lend it at higher rates. The gap is the profit."},
+{k:"fee",n:"💳 Fees",p:25,a:"~₹0.7L cr",c:"#ED232A",x:"Every card swipe, every transfer. Small charges across 100M customers."}]},
+{type:"doors",bg:"cream",hl:"The boring magic of <em>lending money you don't have.</em>",dr:[
+{i:"💰",n:"Lending",a:"~₹2.3L cr",c:"#004C8F",x:"You deposit ₹100 at 3%. They lend it at 8.5%. HDFC keeps the 5.5% gap. Multiply by ₹31 lakh crore in deposits."},
+{i:"💳",n:"Fees",a:"~₹0.7L cr",c:"#ED232A",x:"Cards, transfers, accounts, forex. Small charges. 100M customers. Billions in fees."},
+{i:"🏦",n:"Subsidiaries",a:"Profit boost",c:"#1F6B4A",x:"HDB Financial Services and HDFC Mutual Fund earn billions on top. HDB is about to list separately."}]},
+{type:"rivals",bg:"navy",hl:"SBI is bigger. ICICI is hungrier. <em>HDFC was the safe one.</em>",rv:[
+{n:"🏛️ SBI",t:"The government's bank",x:"Largest by far. 22,000 branches. Slowest, most bureaucratic, ~2.1% bad loans."},
+{n:"🏦 ICICI",t:"The aggressive grower",x:"Tech-led. Profitable. Growing faster than HDFC right now. ~1.4% bad loans."},
+{n:"🟢 HDFC",t:"The premium, until 2026",h:true,x:"Cleanest balance sheet (1.15% bad loans). But facing its first real governance test."}]},
+{type:"hidden",bg:"ink",bad:"HDFC's premium valuation is for its discipline.",good:"HDFC's premium valuation was for its <strong>trust.</strong> And that trust just got tested.",bd:"For 30 years, HDFC charged a trust premium. Investors paid more for HDFC shares than any other Indian bank, because they believed it would never blow up. In March 2026 the Chairman resigned, citing ethics concerns. Three executives were fired for selling risky Credit Suisse bonds to wealthy Indians through HDFC's Dubai branch. Many customers lost everything. The brand cracked. The stock fell 22%."},
+{type:"acc",bg:"green",ic:"↑",eb:"How it could double · 🟢",hl:"Three ways HDFC <em>rebuilds and recovers.</em>",items:[
+{t:"The merger digestion ends",b:"In 2023 HDFC Bank merged with its parent home-loan company. The digestion is almost done. <strong>Growth returns when complete.</strong>"},
+{t:"The HDB IPO unlocks value",b:"HDB Financial Services, HDFC's subsidiary, is set to list separately. <strong>Could unlock huge value</strong> for shareholders."},
+{t:"Trust gets rebuilt",b:"If new leadership cleans up Dubai and there are no more scandals, the trust premium returns. <strong>Stocks recover faster than reputations</strong>, when the business is still strong."}]},
+{type:"acc",bg:"red",ic:"↓",eb:"What could keep it down · 🔴",hl:"Three things that could <em>keep HDFC down.</em>",items:[
+{t:"More scandals leak",b:"<strong>747 whistleblower complaints</strong> were filed inside HDFC between 2020 and 2025. If more come out, the trust premium is gone for years."},
+{t:"Margins stay squeezed",b:"To attract deposits, HDFC pays higher interest on fixed deposits. <strong>That eats profit until rates fall.</strong>"},
+{t:"India's economy slows",b:"Banks are bets on the country. If Indians stop taking home loans, car loans, starting businesses, <strong>HDFC grows slower</strong>."}]},
+{type:"own",bg:"gold",hl:"No founder. No family. <em>Just funds.</em>",bars:[
+{l:"Foreign funds",p:50,d:"~50%",c:"#004C8F"},
+{l:"Indian funds",p:30,d:"~30%",c:"#C49A3E"},
+{l:"Retail",p:20,d:"~20%",c:"#2E8A60"}],
+bd:"HDFC has no Ambani, no Tata, no controlling family. Half is owned by foreign institutions. The rest by Indian funds and 1.5 million small investors. <strong>That ownership is part of why this scandal matters: nobody is in charge of fixing the culture. It has to fix itself.</strong>"},
+{type:"take",bg:"cream",hl:"HDFC was India's most trusted bank. <em>Now it has to earn that trust back.</em>",bd:"The business is still strong. Bad loans are still the lowest in India. Deposits are still growing. Customers are still there. But for 30 years HDFC charged a premium for never making a mistake. That premium just took a real hit. A great bank with a bruise. Buyable, but no longer untouchable."},
+{type:"conv",bg:"ink",hl:"Now you decide. <em>HDFC Bank in 5 years?</em>",opts:[{k:"bull",p:54},{k:"neutral",p:32},{k:"bear",p:14}]},
+{type:"next",bg:"navy",hl:"That was HDFC Bank.",bd:"Next, back to Netflix. Same idea: a great company, an uncertain decade.",nx:"netflix"}
+],
+deep:{
+cover:{t:"The 30-year streak",e:"From the cover",h:`<div class="d-sub">A track record like no other</div><div class="d-p">From 1994 to 2024, HDFC Bank never reported an annual loss. Never. Through the 2008 financial crisis, demonetisation in 2016, the pandemic in 2020. Other Indian banks needed bailouts. <strong>HDFC just kept making money.</strong></div><div class="d-call">Then in March 2026, the Chairman quit over ethics. That streak does not measure trust. Trust took a hit anyway.</div>`},
+pie:{t:"How banks make rupees",e:"From the money",h:`<div class="d-sub">The interest spread</div><div class="d-p">Banks pay you about 3% on a savings account. They lend that money to someone else for 8.5% as a home loan. The <strong>5.5% gap</strong> is the bank's bread and butter.</div><div class="d-call">Multiply by ₹31 lakh crore in deposits. That is how HDFC made ₹74,671 crore last year.</div>`},
+doors:{t:"The deposit war",e:"From how a bank works",h:`<div class="d-sub">Why HDFC is paying more for FDs</div><div class="d-p">After the 2023 merger with HDFC Ltd (the home-loan company), HDFC Bank suddenly inherited millions of home loans but not their deposits. Without deposits, you cannot fund loans. So HDFC had to pay higher interest on fixed deposits to attract money fast.</div><div class="d-call">The higher you pay on deposits, the smaller your profit. This is why HDFC's margins have been squeezed for the last two years.</div>`},
+rivals:{t:"The clean balance sheet",e:"From Indian banking",h:`<div class="d-sub">Bad loans are the killer</div><div class="d-p">In banking, the most dangerous number is the percentage of loans that will never be paid back. SBI has about 2.1%. ICICI has about 1.4%. <strong>HDFC has just 1.15%.</strong></div><div class="d-call">Even with the scandal, HDFC's loan book is the cleanest of any major Indian bank. The underlying business has not changed.</div>`},
+hidden:{t:"What actually happened in Dubai",e:"From the hidden truth",h:`<div class="d-sub">The AT-1 bond mess</div><div class="d-p">Between 2018 and 2022, HDFC's Dubai branch sold high-risk Credit Suisse AT-1 bonds to wealthy Non-Resident Indian customers. These bonds were extremely complex and risky, but customers were told they were safe.</div><div class="d-call">In 2023, Credit Suisse collapsed. The Swiss regulator wrote down the AT-1 bonds to zero. Indian customers in Dubai lost everything they had invested.</div><div class="d-p">In 2025, Dubai's regulator banned HDFC's branch from taking new clients. In March 2026, HDFC fired three executives. <strong>The Chairman resigned days later, saying internal practices clashed with his ethics.</strong></div>`},
+acc:{t:"The HDB IPO",e:"From how it could double",h:`<div class="d-sub">A hidden gem listing</div><div class="d-p">HDB Financial Services is HDFC Bank's subsidiary that does mass-market loans. It is preparing to list separately. Its profit grew <strong>41% last quarter</strong>.</div><div class="d-call">When HDB lists, HDFC shareholders typically get a slice for free. That alone could add lakhs of crores to HDFC's value.</div>`},
+acc2:{t:"The whistleblower problem",e:"From what could keep it down",h:`<div class="d-sub">747 internal complaints</div><div class="d-p">Between 2020 and 2025, HDFC employees filed 747 internal whistleblower complaints about misappropriation, forgery, and improper practices. Many led to disciplinary action.</div><div class="d-call">The Dubai scandal may not be a one-off. If the next leak comes out tomorrow, the trust premium does not come back for years.</div>`},
+own:{t:"The bank no one runs",e:"From who owns it",h:`<div class="d-sub">Diffuse ownership has a cost</div><div class="d-p">HDFC's lack of a controlling family used to be celebrated. Professional management, no nepotism, decisions on merit. <strong>But there is a downside.</strong></div><div class="d-call">When something goes wrong, there is no single owner to step in and fix the culture. It has to come from the inside, slowly, through governance.</div>`},
+take:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">A bruise, not a wound</div><div class="d-p">The HDFC of 2025 is not the HDFC of 2024. But the underlying business is intact. 100M customers. ₹31 lakh crore in deposits. Cleanest balance sheet in India. <strong>1.15% bad loans</strong>.</div><div class="d-call">The next two years tell us whether HDFC remembers how to be boring, or whether the discipline that built it has quietly slipped.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:16px;">Not investment advice. We are storytellers, not advisors.</div>`},
+next:{t:"What we keep coming back to",e:"From what's next",h:`<div class="d-sub">The pattern across companies</div><div class="d-p">Every great company is one bad decade from being a textbook case. Netflix nearly died in 2011. Disney has cable bleeding out. Reliance has a succession to navigate. HDFC has a scandal to recover from.</div><div class="d-call">The best businesses are not the ones with no risks. They are the ones with risks you can see clearly.</div>`}
+},
+tldr:["Worth <strong>₹11.4 lakh crore</strong>. India's most valuable private bank.","<strong>30 years without a loss</strong>. Then March 2026 happened.","Chairman resigned over ethics. <strong>Stock fell 22%</strong>.","Underlying: <strong>cleanest loan book in India</strong> at 1.15% bad loans.","Upside: <strong>trust rebuild + HDB IPO</strong>. Risk: <strong>more scandals leak</strong>.","No founder, no family. <strong>That's part of the problem.</strong>"]}
+};
+
+/* ════════ COMING SOON RAIL DATA ════════ */
+const CS=[
+{n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
+{n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
+{n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:"🇮🇳"},
+{n:"Hilton",bl:"Sold the buildings. Kept the names.",lb:"#0B1F3A"},
+{n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:"🇮🇹"},
+{n:"Hermès",bl:"The 6-year Birkin waitlist is the product.",lb:"#000",fl:"🇫🇷"},
+{n:"Google",bl:"Sells your attention 8.5 billion times a day.",lb:"#4285F4"},
+{n:"Amazon",bl:"AWS quietly funds everything else.",lb:"#FF9900"},
+{n:"Costco",bl:"Profit comes from memberships, not products.",lb:"#E31837"},
+{n:"TCS",bl:"Runs the back office of Wall Street.",lb:"#1E3A8A",fl:"🇮🇳"},
+{n:"Asian Paints",bl:"Uses data science to sell paint. Yes, paint.",lb:"#D62828",fl:"🇮🇳"}
+];
+
+/* ════════ IDENTITIES ════════ */
+const IDS=[
+{tag:"Your reading personality",n:"The <em>Contrarian.</em>",b:"You vote against the crowd 67% of the time. You saved 4 cards about hidden risks before anyone else did. The market needs people like you."},
+{tag:"Your reading personality",n:"The <em>Long-term Thinker.</em>",b:"You save The Take cards more than any other type. You are not chasing what's hot. You are trying to understand what compounds."},
+{tag:"Your reading personality",n:"The <em>Pattern Hunter.</em>",b:"You finished 4 companies in 3 days. You notice the same playbook across them. The Reliance pattern showed up in your Netflix notes too."}
+];
+
+/* ════════ STATE ════════ */
+let curCo="netflix",cardIdx=0,idIdx=0;
+const saved={netflix:new Set([4,7]),hdfc:new Set([4])};
+const calls=[
+{co:"netflix",vote:"bull",b:68,n:22,bb:10,when:"Today"},
+{co:"hdfc",vote:"bear",b:54,n:32,bb:14,when:"Yesterday"}
+];
+
+/* ════════ THEME ════════ */
+function setTheme(co){const c=CO[co];document.documentElement.style.setProperty('--accent',c.ac);document.documentElement.style.setProperty('--accent-soft',c.as);document.documentElement.style.setProperty('--co-bg',c.bg);document.documentElement.style.setProperty('--co-logo-bg',c.lb);document.documentElement.style.setProperty('--co-logo-color',c.lc);}
+
+/* ════════ NAV ════════ */
+function goTo(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+n).classList.add('active');document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));if(n==='today')renderToday();if(n==='library')renderLib();if(n==='you')renderShelf();}
+
+/* ════════ TODAY ════════ */
+function renderToday(){
+const h=new Date().getHours();
+const g=h<6?"Up late?":h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+const c=CO[curCo];setTheme(curCo);
+const otherCos=Object.keys(CO).filter(k=>k!==curCo);
+document.getElementById('todayScroll').innerHTML=`
+<div class="today-head"><div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div><div class="streak"><span class="flame">🔥</span> 3 day streak</div></div>
+<div class="greeting">${g} <em>Today's drop is ready.</em></div>
+<div class="eb">This week</div>
+<div class="today-hero" onclick="openStack('${curCo}')">
+<div class="hero-tag"><span class="live-dot"></span>NEW · MONDAY</div>
+<div class="hero-co">${c.sec} · ${c.t}</div>
+<div class="hero-h">${stripCount(c.cards[0].hl)}</div>
+<div class="hero-meta"><span>11 cards · ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack('${curCo}')">Start →</button></div>
+</div>
+<div class="sect-t">Recently dropped</div><div class="sect-s">A new company every Monday.</div>
+${otherCos.map(k=>{const co=CO[k];return `<div class="rcard" onclick="openStack('${k}')"><div class="rl"><div class="rthumb" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div><div><div class="rname">${co.n}</div><div class="rsub">${co.bl}</div></div></div><div class="rstatus">${co.fl}</div></div>`}).join('')}
+`;
+}
+function stripCount(s){return s.replace(/<span class='count-num'[^>]*>([^<]*)<\/span>/g,(m,inner)=>inner);}
+
+/* ════════ STACK ════════ */
+function openStack(slug){curCo=slug;cardIdx=0;setTheme(slug);const c=CO[slug];document.getElementById('cologo').textContent=c.n[0];document.getElementById('cologo').style.background=c.lb;document.getElementById('cologo').style.color=c.lc;document.getElementById('coname').textContent=c.n;document.getElementById('cosub').textContent=c.t+" · "+c.sec;renderCards();buildProg();showCard(0);renderTldr();goTo('stack');}
+
+function renderCards(){
+const c=CO[curCo];const tr=document.getElementById('track');tr.innerHTML='';
+const keys=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
+c.cards.forEach((card,i)=>{const el=document.createElement('div');el.className='card bg-'+(card.bg||(card.type==='cover'?'cover':'cream'));el.dataset.deep=keys[i];el.innerHTML=renderCard(card,i);tr.appendChild(el);});
+}
+
+function renderCard(card,idx){
+const total=CO[curCo].cards.length;const co=CO[curCo];
+const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
+switch(card.type){
+case 'cover':return `<div class="eb-c">01 · The cover</div><div class="cv-wrap"><div class="cv-mark">${co.n[0]}</div><div class="cv-chips">${card.chips.map(x=>`<div class="cv-chip">${x}</div>`).join('')}</div></div><div class="hl">${card.hl}</div><div class="bd">${card.bd}</div>`;
+case 'pie':{
+const circ=251.33;let off=0;
+const slices=card.sl.map((s,i)=>{const len=(circ*s.p)/100;const h=`<circle class="slice ${i===0?'active':''}" data-sl="${s.k}" cx="50" cy="50" r="40" fill="none" stroke="${s.c}" stroke-width="20" stroke-dasharray="${len.toFixed(1)} ${circ}" stroke-dashoffset="${-off}" onclick="selSlice('${s.k}',${idx})"/>`;off+=len;return h;}).join('');
+const fs=card.sl[0];
+return `<div class="eb-c">${ebText}</div><div class="hl">${card.hl}</div><div class="bd" style="margin-bottom:18px;">${card.bd}</div><div class="pie-wrap"><div class="pie"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#EFEADE" stroke-width="20"/>${slices}</svg><div class="pie-c"><div class="pie-c-n">${card.tot}</div><div class="pie-c-l">${card.tl}</div></div></div><div class="pie-d" id="pieD-${idx}"><div class="pie-d-h"><div class="pie-d-n">${fs.n} · ${fs.p}%</div><div class="pie-d-a">${fs.a}</div></div><div class="pie-d-t">${fs.x}</div></div></div>`;
+}
+case 'doors':return `<div class="eb-c">${ebText}</div><div class="hl">${card.hl}</div><div class="doors">${card.dr.map(d=>`<div class="door" style="border-left-color:${d.c}"><div class="dh"><div class="dn"><span class="ic">${d.i}</span>${d.n}</div><div class="da">${d.a}</div></div><div class="dt">${d.x}</div></div>`).join('')}</div>`;
+case 'rivals':return `<div class="eb-c">${ebText}</div><div class="hl">${card.hl}</div><div class="riv">${card.rv.map(r=>`<div class="r ${r.h?'hero':''}"><div class="rh"><div class="rn">${r.n}</div><div class="rt">${r.t}</div></div><div class="rtx">${r.x}</div></div>`).join('')}</div>`;
+case 'hidden':return `<div class="eb-c">05 · The hidden truth · 🤫</div><div class="tw"><div class="tb">${card.bad}</div><div class="tg">${card.good}</div></div><div class="bd">${card.bd}</div>`;
+case 'acc':return `<div class="eb-c">${card.eb}</div><div class="hl">${card.hl}</div><div class="acc">${card.items.map(it=>`<div class="ai" onclick="toggleAcc(this)"><div class="ah"><div class="aic">${card.ic}</div><div class="at">${it.t}</div><div class="ach">▾</div></div><div class="ab"><div class="abt">${it.b}</div></div></div>`).join('')}</div>`;
+case 'own':return `<div class="eb-c">08 · Who owns it · 👀</div><div class="hl">${card.hl}</div><div class="own">${card.bars.map(b=>`<div class="ow-row"><div class="ow-l">${b.l}</div><div class="ow-tr"><div class="ow-f" data-w="${Math.max(b.p,6)}" style="background:${b.c}">${b.d}</div></div></div>`).join('')}</div><div class="bd">${card.bd}</div>`;
+case 'take':return `<div class="eb-c">09 · Our take</div><div class="tk-w"><div class="tk-q">"</div><div class="hl" style="position:relative">${card.hl}</div></div><div class="bd">${card.bd}</div>`;
+case 'conv':return `<div class="eb-c">10 · Your call · 🗳️</div><div class="hl">${card.hl}</div><div class="cv" id="cvO-${idx}">${card.opts.map(o=>`<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}',${idx})"><div class="cf"></div><span class="ico">${o.k==='bull'?'📈':o.k==='bear'?'📉':'😐'}</span><span class="lbl">${o.k.charAt(0).toUpperCase()+o.k.slice(1)}ish</span><span class="sub">${o.k==='bull'?'Going up':o.k==='bear'?'Going down':'Flat'}</span><span class="cp">${o.p}%</span></div>`).join('')}</div><div class="cr" id="cvR-${idx}"></div>`;
+case 'next':{const nxc=CO[card.nx];return `<div class="eb-c">11 · Done in ~90 seconds</div><div class="hl">${card.hl}</div><div class="bd" style="margin-bottom:16px;">${card.bd}</div><div class="np" onclick="openStack('${card.nx}')"><div class="nthumb" style="background:${nxc.lb};color:${nxc.lc}">${nxc.n[0]}</div><div><div class="nco">${nxc.n}</div><div class="ntag">${nxc.bl}</div></div><div style="opacity:.6;margin-left:auto">→</div></div><div class="ea"><button class="btn-p" onclick="openTldr()"><span>≡ See the TL;DR card</span><span>→</span></button><button class="btn-g" onclick="saveCo(event)"><span>★ Save ${CO[curCo].n} to your shelf</span><span></span></button><button class="btn-g" onclick="closeStack()" style="opacity:.7"><span>↓ Back to today</span><span></span></button></div>`;}
+}
+}
+
+/* ════════ STACK CONTROLS ════════ */
+function buildProg(){const w=document.getElementById('prog');w.innerHTML='';for(let i=0;i<CO[curCo].cards.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));}
+function updProg(){
+document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
+const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
+if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
+bp.style.display=(cardIdx===CO[curCo].cards.length-1)?'none':'flex';
+const sb=document.getElementById('saveBtn');saved[curCo]&&saved[curCo].has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
+}
+function showCard(i){if(i<0||i>=CO[curCo].cards.length)return;cardIdx=i;document.querySelectorAll('#track .card').forEach((c,k)=>c.classList.toggle('active',k===i));updProg();animateCard(i);}
+function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function closeStack(){closeDrawer();closeTldr();goTo('today');}
+function toggleSave(){if(!saved[curCo])saved[curCo]=new Set();const b=document.getElementById('saveBtn');if(saved[curCo].has(cardIdx)){saved[curCo].delete(cardIdx);b.classList.remove('saved');toast("Removed");}else{saved[curCo].add(cardIdx);b.classList.add('saved');toast("★ Card saved");}}
+function saveCo(e){if(e)e.stopPropagation();toast("★ Saved "+CO[curCo].n+" to your shelf");setTimeout(()=>goTo('you'),900);}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1500);}
+
+/* ════════ PIE / ACC / VOTE ════════ */
+function selSlice(k,idx){const c=CO[curCo].cards[idx];const s=c.sl.find(x=>x.k===k);document.querySelectorAll(`#track .card`)[idx].querySelectorAll('.slice').forEach(el=>el.classList.toggle('active',el.dataset.sl===k));document.getElementById(`pieD-${idx}`).innerHTML=`<div class="pie-d-h"><div class="pie-d-n">${s.n} · ${s.p}%</div><div class="pie-d-a">${s.a}</div></div><div class="pie-d-t">${s.x}</div>`;}
+function toggleAcc(el){el.classList.toggle('open');}
+function vote(el,type,idx){const wrap=document.getElementById('cvO-'+idx);if(wrap.classList.contains('voted'))return;wrap.classList.add('voted');el.classList.add('you');wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');const pct=o.querySelector('.cp').textContent;o.querySelector('.cf').style.width=pct;});const msgs={bull:"You're <strong>bullish</strong>, with the crowd. We'll check back in a few weeks.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');}
+
+/* ════════ NUMBER COUNT ANIMATION ════════ */
+function animateCard(idx){const card=document.querySelectorAll('#track .card')[idx];if(!card)return;card.querySelectorAll('[data-w]').forEach(el=>{const w=el.dataset.w;el.style.width='0';setTimeout(()=>{el.style.width=w+'%';},50);});}
+
+/* ════════ DRAWER ════════ */
+function openDrawer(){const card=CO[curCo].cards[cardIdx];const keys=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];const k=keys[cardIdx];const d=CO[curCo].deep[k];if(!d)return;document.getElementById('dwT').textContent=d.t;document.getElementById('dwEb').textContent=d.e;document.getElementById('dwB').innerHTML=d.h;document.getElementById('dwBd').classList.add('open');document.getElementById('dw').classList.add('open');}
+function closeDrawer(){document.getElementById('dwBd').classList.remove('open');document.getElementById('dw').classList.remove('open');}
+
+/* ════════ TLDR ════════ */
+function renderTldr(){const c=CO[curCo];document.getElementById('tlC').innerHTML=`<div class="tl-h"><div class="tl-l">${c.n[0]}</div><div class="tl-co">${c.n}<span class="s">${c.t} · ${c.sec}</span></div></div><div class="tl-tag">Everything, in 6 lines</div><div class="tl-pts">${c.tldr.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div><div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">dailydividend.info</div></div><div class="tl-acts"><button class="tl-btn s" onclick="toast('📸 Screenshot ready to share')">Share ↗</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div><div class="tl-hint">Screenshot · send to a friend</div>`;}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* ════════ LIBRARY ════════ */
+function renderLib(){
+const featured=CO[curCo];setTheme(curCo);
+const newRail=Object.values(CO);
+const dailyRail=Object.values(CO).filter(c=>c.rails.includes('daily'));
+const twistRail=Object.values(CO).filter(c=>c.rails.includes('twists'));
+const underRail=[CS[0],CS[3]];
+document.getElementById('lc').innerHTML=`
+<div class="lib-feat" onclick="openStack('${featured.n.toLowerCase().split(' ')[0]}')">
+<div class="lib-feat-tag">📰 STORY OF THE WEEK</div>
+<div class="lib-feat-co">${featured.n}</div>
+<div class="lib-feat-bl">${featured.bl}</div>
+</div>
+${rail('🆕 New drops this week',newRail,CS.slice(0,2))}
+${rail('📱 Brands you use daily',dailyRail,CS.slice(6,9))}
+${rail('🎬 Plot twists',twistRail,CS.slice(3,6))}
+${rail('🫥 Underrated businesses',underRail,CS.slice(9,11))}
+`;
+}
+function rail(title,liveItems,csItems){
+const count=liveItems.length+csItems.length;
+const cards=liveItems.map(c=>`<div class="rcd" onclick="openStack('${c.n.toLowerCase().split(' ')[0]}')"><div class="rcd-th" style="background:${c.lb};color:${c.lc||'#fff'}">${c.n[0]}</div>${c.fl?`<div class="rcd-fl">${c.fl}</div>`:'<div class="rcd-ld"></div>'}<div class="rcd-n">${c.n}</div><div class="rcd-bl">${c.bl}</div></div>`).join('') +
+csItems.map(c=>`<div class="rcd cs"><div class="rcd-th" style="background:${c.lb}">${c.n[0]}</div>${c.fl?`<div class="rcd-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div class="rcd-n">${c.n}</div><div class="rcd-bl">${c.bl}</div></div>`).join('');
+return `<div class="rail"><div class="rh"><div class="rail-t">${title}</div><div class="rc">${count}</div></div><div class="rs">${cards}</div></div>`;
+}
+function surpriseMe(){const keys=Object.keys(CO);openStack(keys[Math.floor(Math.random()*keys.length)]);}
+function onSearch(){const q=document.getElementById('searchBox').value.toLowerCase().trim();const sr=document.getElementById('sr'),lc=document.getElementById('lc'),fs=document.getElementById('libFs');if(!q){sr.classList.remove('active');lc.classList.remove('hidden');fs.style.display='flex';return;}const matches=[...Object.values(CO),...CS].filter(c=>c.n.toLowerCase().includes(q)||(c.bl&&c.bl.toLowerCase().includes(q)));sr.classList.add('active');lc.classList.add('hidden');fs.style.display='none';if(matches.length===0){sr.innerHTML=`<div class="sr-e">No matches for "${q}".<div class="sm">Tell us what you want to read next.</div></div>`;return;}sr.innerHTML=`<div class="sect-s" style="margin-top:8px">${matches.length} results</div><div class="sr-l">${matches.map(c=>{const live=CO[c.n.toLowerCase().split(' ')[0]];return `<div class="rcard" ${live?`onclick="openStack('${c.n.toLowerCase().split(' ')[0]}')"`:''} style="${live?'':'opacity:0.6'}"><div class="rl"><div class="rthumb" style="background:${c.lb};color:${c.lc||'#fff'}">${c.n[0]}</div><div><div class="rname">${c.n}</div><div class="rsub">${c.bl}</div></div></div><div class="rstatus">${live?'→':'Soon'}</div></div>`}).join('')}</div>`;}
+
+/* ════════ SHELF ════════ */
+function renderShelf(){
+setTheme('netflix');
+const id=IDS[idIdx];
+const allSaved=[];
+Object.entries(saved).forEach(([co,set])=>{set.forEach(i=>{allSaved.push({co,idx:i});});});
+document.getElementById('youScroll').innerHTML=`
+<div class="yg">Your shelf. <em>Your calls.</em></div>
+<div class="ys">Cards you saved. Bets you made.</div>
+<div class="id-c">
+<button class="id-r" onclick="rotateId()" title="Refresh">↻</button>
+<div class="id-tag">${id.tag}</div>
+<div class="id-n">${id.n}</div>
+<div class="id-b">${id.b}</div>
+</div>
+<div class="sh">
+<div class="sh-h"><div><div class="sh-l">Reading streak</div><div class="sh-n">3<span class="u">days</span></div></div><div class="sh-fl"><span class="flame">🔥</span></div></div>
+<div class="sh-w">
+${['M','T','W','T','F','S','S'].map((d,i)=>{const cls=i<3?'done':i===3?'today':'';return `<div class="sh-c ${i===3?'today':''}"><div class="sh-d ${cls}"></div><div class="sh-dl">${d}</div></div>`}).join('')}
+</div>
+<div class="sh-f">You read Mon, Tue, Wed. <strong>Today's drop is ready.</strong></div>
+</div>
+<div class="sect-t" style="margin-bottom:14px">Your calls</div>
+${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'📈 Bullish':c.vote==='bear'?'📉 Bearish':'😐 Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div><div class="sh-f" style="margin-top:8px;font-size:11px">You voted with ${c[c.vote==='bull'?'b':c.vote==='bear'?'bb':'n']}% of readers. ${c.when}.</div></div>`}).join('')}
+<div class="sect-t" style="margin:22px 0 14px">Saved cards</div>
+${allSaved.length===0?'<div class="empty">Nothing saved yet. Tap the bookmark on any card.</div>':`<div class="sg">${allSaved.map(s=>{const co=CO[s.co];const card=co.cards[s.idx];const txt=card.hl?card.hl.replace(/<[^>]+>/g,''):card.good?card.good.replace(/<[^>]+>/g,''):'Saved card';const bg=card.bg||'cream';return `<div class="sm bg-${bg}" onclick="openStack('${s.co}')"><div class="sm-tg">${co.n} · Card ${s.idx+1}</div><div class="sm-q">"${txt.slice(0,80)}${txt.length>80?'...':''}"</div><div class="sm-f"><span>${co.t}</span><span>Tap →</span></div></div>`}).join('')}</div>`}
+`;
+}
+function rotateId(){idIdx=(idIdx+1)%IDS.length;renderShelf();}
+
+/* ════════ GESTURES ════════ */
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;},{passive:true});
+shell.addEventListener('touchend',e=>{if(!trk)return;trk=false;const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);if(ax<30&&ay<30)return;if(stg&&stg.closest('.ai,.slice,button,.np,.co-opt')){if(ay>ax&&dy>60)closeStack();return;}if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}else{if(dx<-40)nextCard();else if(dx>40)prevCard();}});
+document.addEventListener('keydown',e=>{if(!document.getElementById('screen-stack').classList.contains('active'))return;if(e.key==='ArrowRight')nextCard();if(e.key==='ArrowLeft')prevCard();if(e.key==='ArrowUp')openDrawer();if(e.key==='ArrowDown'||e.key==='Escape'){if(document.getElementById('tlBd').classList.contains('open'))closeTldr();else if(document.getElementById('dw').classList.contains('open'))closeDrawer();else closeStack();}});
+
+/* ════════ INIT ════════ */
+renderToday();
+</script>
+</body></html>

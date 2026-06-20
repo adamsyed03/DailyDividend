@@ -1,0 +1,1154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Dividend Admin</title>
+  <style>
+    :root{
+      --bg:#f6f4ef;
+      --panel:#fff;
+      --ink:#171716;
+      --muted:#6f6b63;
+      --line:#ded8cc;
+      --green:#1f6b4a;
+      --red:#b23a2e;
+      --gold:#c49a3e;
+      --shadow:0 12px 30px rgba(25,22,16,.08);
+      --sans:Inter,Arial,Helvetica,sans-serif;
+      --serif:Georgia,"Times New Roman",serif;
+      --mono:"SFMono-Regular",Consolas,monospace;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.45}
+    button,input,select,textarea{font:inherit}
+    button{border:0;border-radius:8px;background:var(--ink);color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}
+    button.secondary{background:#ebe5d9;color:var(--ink)}
+    button.danger{background:var(--red)}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);padding:10px 11px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(31,107,74,.12)}
+    textarea{min-height:90px;resize:vertical}
+    label{display:block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .wrap{width:min(1260px,calc(100% - 32px));margin:0 auto;padding:28px 0 48px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .mark{width:38px;height:38px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700}
+    h1{font-family:var(--serif);font-size:30px;line-height:1.1;margin:0}
+    .sub{color:var(--muted);font-size:14px;margin-top:3px}
+    .login{min-height:100vh;display:grid;place-items:center;padding:20px}
+    .login-card{width:min(420px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;box-shadow:var(--shadow)}
+    .login-card h1{margin-bottom:8px}
+    .login-card form{display:grid;gap:12px;margin-top:20px}
+    .msg{display:none;border-radius:8px;padding:10px 12px;font-size:13px}
+    .msg.show{display:block}
+    .msg.error{background:#f7dfda;color:var(--red);border:1px solid #efc5bd}
+    .msg.ok{background:#e3f0e7;color:var(--green);border:1px solid #c7decf}
+    .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:18px}
+    .card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}
+    .card{padding:18px}
+    .k{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .v{font-family:var(--serif);font-size:34px;line-height:1}
+    .panel{padding:18px;margin-top:16px}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+    h2{font-family:var(--serif);font-size:22px;margin:0}
+    h3{font-family:var(--serif);font-size:16px;margin:0 0 12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:8px}
+    table{width:100%;border-collapse:collapse;min-width:1200px;background:#fff}
+    th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+    th{background:#f0ebe1;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+    tr:last-child td{border-bottom:0}
+    .mono{font-family:var(--mono);font-size:12px}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;background:#eee7db;padding:4px 8px;font-size:12px;font-weight:700}
+    .cell-main{font-weight:800}
+    .cell-sub{color:var(--muted);font-size:12px;margin-top:3px}
+    .cell-stack{display:grid;gap:4px}
+    .mini-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+    .mini-pill{display:inline-flex;border-radius:999px;background:#f0ebe1;color:var(--ink);padding:3px 7px;font-size:11px;font-weight:700}
+    .status-ok{color:var(--green);font-weight:800}
+    .status-miss{color:var(--red);font-weight:800}
+    .forms{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    .form-grid{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .company-list{display:grid;gap:10px}
+    .company-item{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff}
+    .company-item strong{display:block;margin-bottom:4px}
+    .company-item p{margin:0 0 8px;color:var(--muted);font-size:13px}
+    .dropzone{border:2px dashed var(--line);border-radius:10px;background:#fbfaf7;padding:24px;text-align:center;color:var(--muted);transition:border-color .15s,background .15s}
+    .dropzone.drag{border-color:var(--green);background:#edf7f0;color:var(--green)}
+    .file-name{font-family:var(--mono);font-size:12px;margin-top:8px;color:var(--ink)}
+    .empty{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:8px;padding:14px;font-size:13px}
+    .hidden{display:none!important}
+
+    /* ── Controls bar ─────────────────────────────── */
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
+    .ctrl-search{flex:1;min-width:200px;position:relative}
+    .ctrl-search input{padding-left:30px}
+    .ctrl-search::before{content:'⌕';position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none;z-index:1;line-height:1}
+    .ctrl-select{min-width:150px;width:auto}
+    .ctrl-count{font-size:13px;color:var(--muted);white-space:nowrap}
+
+    /* ── Status badges ────────────────────────────── */
+    .badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:800;letter-spacing:.04em}
+    .badge-green{background:#d6edd8;color:#165c39}
+    .badge-amber{background:#fdf1d0;color:#7a5f10}
+    .badge-gray{background:#e8e8e8;color:#555}
+
+    /* ── Delete button in activity items ──────────── */
+    .del-btn{background:0;border:1px solid #e0d9ce;border-radius:5px;color:var(--muted);font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
+    .del-btn:hover{background:#fce4e1;border-color:#e8b4ae;color:var(--red)}
+
+    /* ── Activity numbers in table ────────────────── */
+    .act-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .act-item{display:flex;flex-direction:column;gap:1px;min-width:30px}
+    .act-n{font-family:var(--serif);font-size:18px;line-height:1;font-weight:700}
+    .act-l{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+    .streak-highlight{color:var(--green)}
+    .email-cell{font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    /* ── Sortable headers ─────────────────────────── */
+    th.sortable{cursor:pointer;user-select:none;transition:color .1s}
+    th.sortable:hover{color:var(--ink)}
+    th.sortable.asc::after{content:' ↑';opacity:.65}
+    th.sortable.desc::after{content:' ↓';opacity:.65}
+
+    /* ── Modal ────────────────────────────────────── */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
+    .modal.show{display:flex}
+    .modal-content{background:var(--panel);border-radius:12px;max-width:min(90vw,680px);max-height:90vh;display:flex;flex-direction:column;position:relative;width:100%;overflow:hidden}
+    .modal-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px;border-bottom:1px solid var(--line);background:var(--panel)}
+    .modal-header h2{margin:0;font-family:var(--serif);font-size:22px}
+    .modal-close{background:0;border:0;width:32px;height:32px;border-radius:6px;cursor:pointer;display:grid;place-items:center;color:var(--muted);font-size:20px;padding:0}
+    .modal-close:hover{background:var(--bg)}
+    .modal-body{flex:1;overflow-y:auto;padding:20px;min-height:0}
+    .modal-actions{flex-shrink:0;display:flex;gap:8px;padding:16px 20px;border-top:1px solid var(--line);background:var(--bg)}
+    .modal-actions button{flex:1}
+
+    /* ── Modal tabs ───────────────────────────────── */
+    .tab-bar{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:20px}
+    .tab-btn{background:0;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:9px 18px;font:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:0;transition:color .15s}
+    .tab-btn:hover{color:var(--ink)}
+    .tab-btn.active{color:var(--green);border-bottom-color:var(--green)}
+    .tab-pane{display:none}
+    .tab-pane.active{display:block}
+
+    /* ── Overview grid in modal ───────────────────── */
+    .ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+    .ov-card{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center}
+    .ov-n{font-family:var(--serif);font-size:32px;line-height:1;font-weight:700}
+    .ov-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:5px}
+
+    /* ── Detail rows ──────────────────────────────── */
+    .detail-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+    .detail-section:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+    .detail-row{display:grid;grid-template-columns:140px 1fr;gap:12px;margin-bottom:10px;align-items:start}
+    .detail-row:last-child{margin-bottom:0}
+    .detail-row strong{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding-top:2px}
+    .detail-row span{word-break:break-word;font-size:14px}
+
+    /* ── Activity timeline ────────────────────────── */
+    .timeline{display:grid;gap:6px}
+    .tl-item{display:flex;align-items:center;gap:12px;padding:9px 12px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:13px}
+    .tl-co{font-weight:700;flex:1}
+    .tl-date{color:var(--muted);font-size:11px;white-space:nowrap}
+    .saves-list{display:grid;gap:6px}
+    .save-item{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px;font-weight:700}
+
+    /* ── Votes grid ───────────────────────────────── */
+    .votes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:6px}
+    .vote-card{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
+    .vote-card strong{display:block;font-size:11px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+    .vote-type{font-family:var(--serif);font-size:18px;font-weight:700}
+    .vote-type.bull{color:var(--green)}
+    .vote-type.neutral{color:#9c7c3d}
+    .vote-type.bear{color:var(--red)}
+
+    /* ── Votes table natural width ───────────────── */
+    .table-natural{min-width:auto}
+    .vote-row{cursor:pointer;transition:background .12s}
+    .vote-row:hover{background:#faf8f3}
+    .voters-row td{padding:10px 14px;background:#f8f6f0}
+    .voters-list{display:flex;flex-wrap:wrap;gap:8px}
+    .voter-chip{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;border:1px solid var(--line);background:#fff}
+    .voter-chip .vc-name{color:var(--ink)}
+    .voter-chip .vc-user{color:var(--muted);font-weight:400}
+    .voter-chip .vc-vote{border-radius:4px;padding:2px 6px;font-size:11px}
+    .vc-vote.bull{background:#d6edd8;color:#165c39}
+    .vc-vote.neutral{background:#fdf1d0;color:#7a5f10}
+    .vc-vote.bear{background:#fce4e1;color:var(--red)}
+    .vote-row-expanded{background:#f3f0e8}
+
+    /* ── Leaderboard rows ─────────────────────────── */
+    .lb-row{cursor:pointer;transition:background .12s}
+    .lb-row:hover{background:#faf8f3}
+
+    /* ── User rows ────────────────────────────────── */
+    .user-row{cursor:pointer;transition:background .12s}
+    .user-row:hover{background:#faf8f3}
+
+    /* ── Section empty states ─────────────────────── */
+    .act-empty{color:var(--muted);font-size:13px;padding:14px 0}
+
+    @media(max-width:1100px){
+      .grid{grid-template-columns:repeat(3,1fr)}
+      .forms{grid-template-columns:1fr}
+    }
+    @media(max-width:700px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .ov-grid{grid-template-columns:repeat(2,1fr)}
+      .detail-row{grid-template-columns:1fr;gap:3px}
+      .detail-row strong{display:inline;margin-right:4px}
+    }
+    @media(max-width:460px){
+      .wrap{width:calc(100% - 20px);padding-top:18px}
+      .top,.panel-head{align-items:flex-start;flex-direction:column}
+      .grid{grid-template-columns:1fr}
+      h1{font-size:26px}
+      .tab-btn{padding:9px 12px;font-size:12px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ Login ══════════════════════════════════════════════════════════ -->
+  <main id="loginView" class="login">
+    <section class="login-card">
+      <div class="brand">
+        <div class="mark">DD</div>
+        <div>
+          <h1>Admin login</h1>
+          <div class="sub">Enter the admin password to view app stats.</div>
+        </div>
+      </div>
+      <form id="loginForm">
+        <div>
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" autofocus>
+        </div>
+        <button id="loginButton" type="submit">Log in</button>
+        <div id="loginMessage" class="msg" role="status"></div>
+      </form>
+    </section>
+  </main>
+
+  <!-- ══ Dashboard ══════════════════════════════════════════════════════ -->
+  <main id="dashboardView" class="wrap hidden">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">DD</div>
+        <div>
+          <h1>Daily Dividend admin</h1>
+          <div class="sub">Operating dashboard &amp; user activity.</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="refreshPricesButton">Refresh stock prices</button>
+        <button class="secondary" id="refreshButton">Refresh</button>
+        <button class="secondary" id="exportButton">Export JSON</button>
+        <button class="danger" id="logoutButton">Log out</button>
+      </div>
+    </header>
+
+    <!-- Stats cards -->
+    <section class="grid" aria-label="Key stats">
+      <div class="card"><div class="k">Users</div><div class="v" id="statUsers">0</div></div>
+      <div class="card"><div class="k">Full signups</div><div class="v" id="statSignups">0</div></div>
+      <div class="card"><div class="k">Active streaks</div><div class="v" id="statStreaks">0</div></div>
+      <div class="card"><div class="k">Total reads</div><div class="v" id="statReads">0</div></div>
+      <div class="card"><div class="k">Saved items</div><div class="v" id="statSaves">0</div></div>
+      <div class="card"><div class="k">Votes</div><div class="v" id="statVotes">0</div></div>
+    </section>
+
+    <section class="panel" aria-label="Stock prices">
+      <div class="panel-head">
+        <div>
+          <h2>End-of-day stock prices</h2>
+          <div class="sub">Last updated: <span id="pricesLastUpdated">Never</span></div>
+        </div>
+        <div id="pricesMessage" class="msg" role="status"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Company</th><th>Ticker</th><th>Close</th><th>Market date</th><th>Cached at</th></tr></thead>
+          <tbody id="pricesBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Users table ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Users</h2>
+        <span class="pill" id="usersLabel">0 total</span>
+      </div>
+
+      <div class="controls">
+        <div class="ctrl-search">
+          <input id="userSearch" type="search" placeholder="Search name, email, or username…">
+        </div>
+        <select id="userFilter" class="ctrl-select">
+          <option value="">All users</option>
+          <option value="onboarded">✓ Onboarded</option>
+          <option value="partial">⚠ Partial (started, not done)</option>
+          <option value="empty">○ Empty (no profile data)</option>
+          <option value="active">Has active streak</option>
+          <option value="readers">Has reads</option>
+        </select>
+        <select id="userSort" class="ctrl-select">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="streak">By streak</option>
+          <option value="reads">By reads</option>
+          <option value="name">A → Z name</option>
+          <option value="lastActive">Last active</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Activity</th>
+              <th>Profile</th>
+              <th>Preferences</th>
+              <th>Source</th>
+              <th>Dates</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Company votes ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Company votes</h2>
+        <div class="sub">Click a row to see who voted</div>
+      </div>
+      <table class="table-natural" style="width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden">
+        <thead><tr><th>Company</th><th>Total voters</th><th>Bull</th><th>Neutral</th><th>Bear</th><th>Split</th></tr></thead>
+        <tbody id="votesBody"></tbody>
+      </table>
+    </section>
+
+    <!-- ── Streak leaderboard ── -->
+    <section class="panel">
+      <div class="panel-head"><h2>Streak leaderboard</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rank</th><th>User</th><th>Streak</th><th>Reads</th><th>Last read</th></tr></thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Company HTML files ── -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Company HTML files</h2>
+          <div class="sub">Drop a finished company/story HTML file here to store it in the database.</div>
+        </div>
+      </div>
+      <div class="forms">
+        <form id="companyForm" class="form-grid">
+          <div>
+            <label for="companyId">Company slug</label>
+            <input id="companyId" placeholder="netflix" required>
+          </div>
+          <div>
+            <label for="companyName">Company name</label>
+            <input id="companyName" placeholder="Netflix">
+          </div>
+          <div>
+            <label for="companyHook">Hook <span style="opacity:0.5;font-weight:400">(short tagline shown in library)</span></label>
+            <input id="companyHook" placeholder="Sold the buildings. Kept the names." maxlength="120">
+          </div>
+          <div>
+            <label for="companyCategory">Library category</label>
+            <select id="companyCategory" style="font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:9px 10px;background:#fff;color:var(--ink);width:100%;outline:none">
+              <option value="">— Select category —</option>
+              <option value="brands you use daily">Brands you use daily</option>
+              <option value="plot twists">Plot twists</option>
+              <option value="underrated businesses">Underrated businesses</option>
+            </select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label for="companyTicker">Stock ticker <span style="opacity:0.5;font-weight:400">(optional)</span></label>
+              <input id="companyTicker" placeholder="HLT" maxlength="12" style="text-transform:uppercase">
+            </div>
+            <div>
+              <label for="companyYSP">Jan 2 stock price <span style="opacity:0.5;font-weight:400">(for YTD %)</span></label>
+              <input id="companyYSP" type="number" step="0.01" min="0" placeholder="e.g. 214.50">
+            </div>
+          </div>
+          <div>
+            <label>HTML file</label>
+            <div class="dropzone" id="dropzone">
+              Drag an HTML file here, or click to choose one.
+              <div class="file-name" id="fileName">No file selected</div>
+            </div>
+            <input id="htmlFile" type="file" accept=".html,text/html" class="hidden">
+          </div>
+          <button type="submit">Save HTML file</button>
+          <div id="companyMessage" class="msg" role="status"></div>
+        </form>
+        <div>
+          <div class="company-list" id="companyList"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══ User detail modal ═══════════════════════════════════════════════ -->
+  <div id="userModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h2 id="modalUserName">User</h2>
+          <div class="sub" id="modalUserId"></div>
+        </div>
+        <button class="modal-close" id="modalCloseButton" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="activity">Activity</button>
+          <button class="tab-btn" data-tab="profile">Profile</button>
+        </div>
+
+        <!-- Overview tab -->
+        <div class="tab-pane active" id="tabOverview">
+          <div class="ov-grid">
+            <div class="ov-card">
+              <div class="ov-n" id="ovReads">0</div>
+              <div class="ov-l">Reads</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-n" id="ovSaves">0</div>
+              <div class="ov-l">Saves</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-n" id="ovVotes">0</div>
+              <div class="ov-l">Votes</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-n streak-highlight" id="ovStreak">0</div>
+              <div class="ov-l">Streak</div>
+            </div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-row"><strong>Email</strong><span id="ovEmail">-</span></div>
+            <div class="detail-row"><strong>Username</strong><span id="ovUsername">-</span></div>
+            <div class="detail-row"><strong>Status</strong><span id="ovStatus">-</span></div>
+            <div class="detail-row"><strong>How heard</strong><span id="ovHeard">-</span></div>
+            <div class="detail-row"><strong>Joined</strong><span id="ovJoined">-</span></div>
+            <div class="detail-row"><strong>Last active</strong><span id="ovLastActive">-</span></div>
+          </div>
+        </div>
+
+        <!-- Activity tab -->
+        <div class="tab-pane" id="tabActivity">
+          <div id="actVotesWrap">
+            <h3>Votes</h3>
+            <div id="actVotesGrid" class="votes-grid"></div>
+          </div>
+          <div id="actSavesWrap" style="margin-top:20px">
+            <h3>Saved companies</h3>
+            <div id="actSavesList" class="saves-list"></div>
+          </div>
+          <div id="actReadsWrap" style="margin-top:20px">
+            <h3>Read history <span id="actReadsCount" style="font-family:var(--sans);font-size:13px;font-weight:400;color:var(--muted)"></span></h3>
+            <div id="actReadsList" class="timeline"></div>
+          </div>
+          <div id="actEmpty" class="act-empty hidden">No activity recorded yet for this user.</div>
+        </div>
+
+        <!-- Profile tab -->
+        <div class="tab-pane" id="tabProfile">
+          <div class="detail-section">
+            <h3>Personal</h3>
+            <div class="detail-row"><strong>Full name</strong><span id="pfName">-</span></div>
+            <div class="detail-row"><strong>Phone</strong><span id="pfPhone">-</span></div>
+            <div class="detail-row"><strong>Country</strong><span id="pfCountry">-</span></div>
+            <div class="detail-row"><strong>Age range</strong><span id="pfAge">-</span></div>
+          </div>
+          <div class="detail-section">
+            <h3>Professional</h3>
+            <div class="detail-row"><strong>Profession</strong><span id="pfProfession">-</span></div>
+            <div class="detail-row"><strong>Investor level</strong><span id="pfLevel">-</span></div>
+            <div class="detail-row"><strong>Finance score</strong><span id="pfFinance">-</span></div>
+          </div>
+          <div class="detail-section" id="pfPrefsSection">
+            <h3>Preferences</h3>
+            <div class="detail-row"><strong>Markets</strong><span id="pfMarkets">-</span></div>
+            <div class="detail-row"><strong>Sectors</strong><span id="pfSectors">-</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" id="modalCloseActionButton">Close</button>
+        <button class="danger" id="modalDeleteButton">Delete user</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tokenKey = 'dailyDividendAdminToken';
+    let adminToken = localStorage.getItem(tokenKey) || '';
+    let latestData = null;
+    let latestUserDetail = null;
+    let pendingHtmlFile = null;
+    let activeSort = 'newest';
+
+    const $ = id => document.getElementById(id);
+    const escapeHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const shortId = id => id ? `${id.slice(0,8)}…${id.slice(-4)}` : '';
+
+    function showMessage(id, text, type = 'ok') {
+      const el = $(id);
+      el.textContent = text;
+      el.className = `msg show ${type}`;
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => { el.className = 'msg'; }, 3500);
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(adminToken ? { Authorization: `Bearer ${adminToken}` } : {}),
+          ...(options.headers || {})
+        }
+      });
+      let data = {};
+      try { data = await response.json(); } catch (_) {}
+      if (!response.ok) throw new Error(data.error || 'Request failed.');
+      return data;
+    }
+
+    function setView(loggedIn) {
+      $('loginView').classList.toggle('hidden', loggedIn);
+      $('dashboardView').classList.toggle('hidden', !loggedIn);
+    }
+
+    // ── Search / filter / sort ─────────────────────────────────────────
+
+    function getFilteredUsers() {
+      if (!latestData) return [];
+      let users = [...latestData.users];
+
+      const q = ($('userSearch').value || '').toLowerCase().trim();
+      if (q) {
+        users = users.filter(u =>
+          `${u.firstName} ${u.lastName}`.toLowerCase().includes(q) ||
+          (u.username || '').toLowerCase().includes(q) ||
+          (u.email || '').toLowerCase().includes(q)
+        );
+      }
+
+      const filter = $('userFilter').value;
+      if (filter === 'onboarded') users = users.filter(u => u.status === 'onboarded');
+      if (filter === 'partial')   users = users.filter(u => u.status === 'partial');
+      if (filter === 'empty')     users = users.filter(u => u.status === 'empty');
+      if (filter === 'active')    users = users.filter(u => (u.streak || 0) > 0);
+      if (filter === 'readers')   users = users.filter(u => (u.reads || 0) > 0);
+
+      activeSort = $('userSort').value;
+      users.sort((a, b) => {
+        if (activeSort === 'newest')     return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+        if (activeSort === 'oldest')     return String(a.createdAt || '').localeCompare(String(b.createdAt || ''));
+        if (activeSort === 'streak')     return (b.streak || 0) - (a.streak || 0);
+        if (activeSort === 'reads')      return (b.reads || 0) - (a.reads || 0);
+        if (activeSort === 'name')       return `${a.firstName}${a.lastName}`.localeCompare(`${b.firstName}${b.lastName}`);
+        if (activeSort === 'lastActive') return String(b.lastReadDate || '').localeCompare(String(a.lastReadDate || ''));
+        return 0;
+      });
+
+      return users;
+    }
+
+    function getMissingFields(u) {
+      const missing = [];
+      if (!u.firstName)  missing.push('first name');
+      if (!u.lastName)   missing.push('last name');
+      if (!u.username)   missing.push('username');
+      if (!u.email)      missing.push('email');
+      if (!u.profession) missing.push('profession');
+      if (!u.howHeard)   missing.push('how heard');
+      if (!u.ageRange)   missing.push('age range');
+      if (!u.investorLevel) missing.push('investor level');
+      if (!(u.marketPreferences && u.marketPreferences.length)) missing.push('market preferences');
+      if (!(u.sectorPreferences && u.sectorPreferences.length)) missing.push('sector preferences');
+      return missing;
+    }
+
+    function statusBadge(u) {
+      if (u.status === 'onboarded') return '<span class="badge badge-green">✓ Onboarded</span>';
+      const missing = getMissingFields(u);
+      const tip = missing.length ? `Missing: ${missing.join(', ')}` : '';
+      if (u.status === 'partial') return `<span class="badge badge-amber" title="${escapeHtml(tip)}">⚠ Partial</span>`;
+      return `<span class="badge badge-gray" title="${escapeHtml(tip)}">○ Empty</span>`;
+    }
+
+    function renderUsersTable() {
+      if (!latestData) return;
+      const users = getFilteredUsers();
+      const total = latestData.users.length;
+      $('usersLabel').textContent = users.length === total
+        ? `${total} total`
+        : `${users.length} of ${total}`;
+
+      $('usersBody').innerHTML = users.length
+        ? users.map(u => `
+          <tr class="user-row" onclick="openUserModal('${escapeHtml(u.userId)}')">
+            <td>
+              <div class="cell-stack">
+                <div class="cell-main">${escapeHtml(`${u.firstName || ''} ${u.lastName || ''}`.trim() || '—')}</div>
+                <div class="cell-sub">@${escapeHtml(u.username || 'no username')}</div>
+                <div style="margin-top:5px">${statusBadge(u)}</div>
+                <div class="mono" style="margin-top:4px" title="${escapeHtml(u.userId)}">${escapeHtml(shortId(u.userId))}</div>
+              </div>
+            </td>
+            <td>
+              <div class="cell-stack">
+                <div style="font-size:13px">${escapeHtml(u.email || '—')}</div>
+              </div>
+            </td>
+            <td>
+              <div class="act-row">
+                <div class="act-item">
+                  <span class="act-n ${(u.streak || 0) > 0 ? 'streak-highlight' : ''}">${u.streak || 0}</span>
+                  <span class="act-l">Streak</span>
+                </div>
+                <div class="act-item">
+                  <span class="act-n">${u.reads || 0}</span>
+                  <span class="act-l">Reads</span>
+                </div>
+                <div class="act-item">
+                  <span class="act-n">${u.saves || 0}</span>
+                  <span class="act-l">Saves</span>
+                </div>
+                <div class="act-item">
+                  <span class="act-n">${u.votes || 0}</span>
+                  <span class="act-l">Votes</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="cell-stack">
+                <div>${escapeHtml(u.profession || '—')}</div>
+                <div class="cell-sub">${escapeHtml(u.country || '—')}</div>
+                <div class="cell-sub">Age ${escapeHtml(u.ageRange || '?')} · ${escapeHtml(u.investorLevel || '?')}</div>
+              </div>
+            </td>
+            <td>
+              <div class="cell-stack">
+                ${renderPills(u.marketPreferences, 'Markets')}
+                ${renderPills(u.sectorPreferences, 'Sectors')}
+              </div>
+            </td>
+            <td>${escapeHtml(u.howHeard || '—')}</td>
+            <td>
+              <div class="cell-stack">
+                <div class="cell-sub">Joined ${escapeHtml(formatDateShort(u.createdAt))}</div>
+                <div class="cell-sub">Active ${u.lastReadDate ? escapeHtml(formatDateShort(u.lastReadDate)) : 'never'}</div>
+              </div>
+            </td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="7"><div class="empty">No users match your search or filters.</div></td></tr>`;
+    }
+
+    // ── Votes table with expandable voter rows ─────────────────────────
+
+    let expandedVoteCompany = null;
+    let currentVoteTotals  = [];
+
+    window.toggleVoters = function(companyId) {
+      expandedVoteCompany = expandedVoteCompany === companyId ? null : companyId;
+      renderVotesTable(currentVoteTotals);
+    };
+
+    function renderVotesTable(rows) {
+      currentVoteTotals = rows;
+      if (!rows.length) {
+        $('votesBody').innerHTML = `<tr><td colspan="6"><div class="empty">No votes yet.</div></td></tr>`;
+        return;
+      }
+      $('votesBody').innerHTML = rows.flatMap(row => {
+        const expanded = expandedVoteCompany === row.companyId;
+        const mainRow = `<tr class="vote-row ${expanded ? 'vote-row-expanded' : ''}" onclick="toggleVoters('${escapeHtml(row.companyId)}')">
+          <td><strong>${escapeHtml(row.companyId)}</strong> <span style="font-size:11px;color:var(--muted)">${expanded ? '▲' : '▼'}</span></td>
+          <td>${row.percentages.total}</td>
+          <td style="color:var(--green);font-weight:700">${row.counts.bull}</td>
+          <td style="color:#9c7c3d;font-weight:700">${row.counts.neutral}</td>
+          <td style="color:var(--red);font-weight:700">${row.counts.bear}</td>
+          <td style="font-size:13px;color:var(--muted)">Bull ${row.percentages.bull}% · Neutral ${row.percentages.neutral}% · Bear ${row.percentages.bear}%</td>
+        </tr>`;
+        if (!expanded) return [mainRow];
+        const voterHtml = (row.voters || []).length
+          ? (row.voters || []).map(v => `
+              <span class="voter-chip">
+                <span class="vc-name">${escapeHtml(v.name || v.username || 'Unknown')}</span>
+                ${v.username ? `<span class="vc-user">@${escapeHtml(v.username)}</span>` : ''}
+                <span class="vc-vote ${escapeHtml(v.vote)}">${escapeHtml(v.vote).toUpperCase()}</span>
+              </span>`).join('')
+          : '<span style="color:var(--muted);font-size:13px">No voters</span>';
+        const detailRow = `<tr class="voters-row"><td colspan="6"><div class="voters-list">${voterHtml}</div></td></tr>`;
+        return [mainRow, detailRow];
+      }).join('');
+    }
+
+    // ── Dashboard render ───────────────────────────────────────────────
+
+    function renderDashboard(data) {
+      $('statUsers').textContent  = data.stats.userCount;
+      $('statSignups').textContent = data.stats.signupCompleteCount || 0;
+      $('statStreaks').textContent = data.stats.activeStreakCount || 0;
+      $('statReads').textContent  = data.stats.totalReads;
+      $('statSaves').textContent  = data.stats.savedCompaniesCount;
+      $('statVotes').textContent  = data.stats.totalVotes;
+
+      const prices = Object.values(data.prices || {});
+      $('pricesLastUpdated').textContent = data.priceLastUpdated ? formatDate(data.priceLastUpdated) : 'Never';
+      $('pricesBody').innerHTML = prices.map(item => `
+        <tr>
+          <td><strong>${escapeHtml(item.name)}</strong></td>
+          <td class="mono">${escapeHtml(item.ticker)}</td>
+          <td>${Number(item.price) > 0 ? `${escapeHtml(item.currency)} ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}` : 'Not cached'}</td>
+          <td>${escapeHtml(item.date || '—')}</td>
+          <td>${item.lastUpdated ? escapeHtml(formatDate(item.lastUpdated)) : '—'}</td>
+        </tr>`).join('');
+
+      renderUsersTable();
+      renderVotesTable(data.voteTotals || []);
+
+      $('leaderboardBody').innerHTML = data.streakLeaderboard.length
+        ? data.streakLeaderboard.map((u, i) => `
+          <tr class="lb-row" onclick="openUserModal('${escapeHtml(u.userId)}')">
+            <td>${i + 1}</td>
+            <td>
+              <div class="cell-stack">
+                <div class="cell-main">${escapeHtml(`${u.firstName || ''} ${u.lastName || ''}`.trim() || '—')}</div>
+                <div class="cell-sub">@${escapeHtml(u.username || 'no username')}</div>
+                <div class="mono cell-sub" title="${escapeHtml(u.userId)}">${escapeHtml(shortId(u.userId))}</div>
+              </div>
+            </td>
+            <td><span class="streak-highlight" style="font-weight:800">${u.streak}</span></td>
+            <td>${u.reads}</td>
+            <td>${escapeHtml(u.lastReadDate || '—')}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="5"><div class="empty">No streaks yet.</div></td></tr>`;
+
+      const companies = Object.values(data.companies || {}).sort((a, b) => String(a.companyId).localeCompare(String(b.companyId)));
+      $('companyList').innerHTML = companies.length
+        ? companies.map(c => `
+          <article class="company-item">
+            <strong>${escapeHtml(c.name || c.companyId)} <span class="pill">${escapeHtml(c.fileName || 'HTML')}</span></strong>
+            ${c.hook ? `<p style="font-style:italic;color:var(--ink)">"${escapeHtml(c.hook)}"</p>` : ''}
+            ${c.category ? `<p><span class="pill" style="background:var(--green-soft);color:var(--green)">${escapeHtml(c.category)}</span></p>` : ''}
+            <p>${escapeHtml(c.size || 0)} bytes · Updated ${escapeHtml(formatDate(c.updatedAt))}</p>
+            <div class="actions">
+              <button class="secondary" type="button" onclick='editCompany(${JSON.stringify(c).replace(/'/g,"&#39;")})'>Edit</button>
+              <button class="danger" type="button" onclick="deleteCompany('${escapeHtml(c.companyId)}')">Delete</button>
+            </div>
+          </article>
+        `).join('')
+        : '<div class="empty">No HTML files saved yet.</div>';
+    }
+
+    // ── User detail modal ──────────────────────────────────────────────
+
+    function openUserModal(userId) {
+      loadUserDetail(userId);
+    }
+
+    function closeUserModal() {
+      $('userModal').classList.remove('show');
+      latestUserDetail = null;
+    }
+
+    async function loadUserDetail(userId) {
+      try {
+        latestUserDetail = await api(`/api/admin/user/${encodeURIComponent(userId)}`);
+        renderUserDetail(latestUserDetail);
+        $('userModal').classList.add('show');
+      } catch (err) {
+        alert('Failed to load user details: ' + err.message);
+      }
+    }
+
+    function renderUserDetail(data) {
+      const user  = data.user;
+      const votes = data.votes || {};
+      const saves = data.saves || [];
+      const reads = [...(data.reads || [])].sort((a, b) => String(b.readAt || '').localeCompare(String(a.readAt || '')));
+
+      // Header
+      $('modalUserName').textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
+      $('modalUserId').textContent   = shortId(user.userId);
+
+      // ── Overview tab ────────────────────────────
+      $('ovReads').textContent     = data.totalReads || 0;
+      $('ovSaves').textContent     = data.totalSaves || 0;
+      $('ovVotes').textContent     = data.totalVotes || 0;
+      $('ovStreak').textContent    = user.streak || 0;
+      $('ovEmail').textContent     = user.email || '—';
+      $('ovUsername').textContent  = user.username || '—';
+      const st = userStatusLabel(user);
+      $('ovStatus').innerHTML = st.html;
+      $('ovHeard').textContent     = user.howHeard || '—';
+      $('ovJoined').textContent    = formatDate(user.createdAt);
+      $('ovLastActive').textContent = user.lastReadDate ? formatDate(user.lastReadDate) : 'Never';
+
+      // ── Activity tab ─────────────────────────────
+      const hasVotes = Object.keys(votes).length > 0;
+      const hasSaves = saves.length > 0;
+      const hasReads = reads.length > 0;
+      const hasAny   = hasVotes || hasSaves || hasReads;
+
+      $('actEmpty').classList.toggle('hidden', hasAny);
+
+      const uid = user.userId;
+
+      if (hasVotes) {
+        $('actVotesWrap').style.display = 'block';
+        $('actVotesGrid').innerHTML = Object.entries(votes).map(([co, vote]) => `
+          <div class="vote-card">
+            <strong>${escapeHtml(co)}</strong>
+            <div class="vote-type ${escapeHtml(vote)}">${escapeHtml(vote).toUpperCase()}</div>
+            <button class="del-btn" style="margin-top:8px;width:100%" onclick="deleteUserVote('${escapeHtml(uid)}','${escapeHtml(co)}')">Remove</button>
+          </div>
+        `).join('');
+      } else {
+        $('actVotesWrap').style.display = 'none';
+      }
+
+      if (hasSaves) {
+        $('actSavesWrap').style.display = 'block';
+        $('actSavesList').innerHTML = saves.map(co => `
+          <div class="save-item" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span>${escapeHtml(co)}</span>
+            <button class="del-btn" onclick="deleteUserSave('${escapeHtml(uid)}','${escapeHtml(co)}')">×</button>
+          </div>
+        `).join('');
+      } else {
+        $('actSavesWrap').style.display = 'none';
+      }
+
+      if (hasReads) {
+        $('actReadsWrap').style.display = 'block';
+        $('actReadsCount').textContent  = `(${reads.length})`;
+        $('actReadsList').innerHTML = reads.map(r => `
+          <div class="tl-item">
+            <span class="tl-co">${escapeHtml(r.companyId)}</span>
+            <span class="tl-date">${escapeHtml(formatDate(r.readAt))}</span>
+            <button class="del-btn" onclick="deleteUserRead('${escapeHtml(uid)}','${escapeHtml(r.readAt || '')}')">×</button>
+          </div>
+        `).join('');
+      } else {
+        $('actReadsWrap').style.display = 'none';
+      }
+
+      // ── Profile tab ──────────────────────────────
+      $('pfName').textContent       = `${user.firstName || ''} ${user.lastName || ''}`.trim() || '—';
+      $('pfPhone').textContent      = formatPhone(user);
+      $('pfCountry').textContent    = user.country || '—';
+      $('pfAge').textContent        = user.ageRange || '—';
+      $('pfProfession').textContent = user.profession || '—';
+      $('pfLevel').textContent      = user.investorLevel || '—';
+      $('pfFinance').textContent    = user.financeProficiency != null ? String(user.financeProficiency) : '—';
+
+      const hasPrefs = (user.marketPreferences && user.marketPreferences.length) ||
+                       (user.sectorPreferences && user.sectorPreferences.length);
+      $('pfPrefsSection').style.display = hasPrefs ? 'block' : 'none';
+      if (hasPrefs) {
+        $('pfMarkets').innerHTML = renderPills(user.marketPreferences);
+        $('pfSectors').innerHTML = renderPills(user.sectorPreferences);
+      }
+
+      // Delete handler
+      $('modalDeleteButton').onclick = () => deleteUser(user.userId);
+
+      // Reset to Overview tab
+      switchTab('overview');
+    }
+
+    // ── Tab switching ──────────────────────────────────────────────────
+
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+      document.querySelectorAll('.tab-pane').forEach(p => {
+        const id = 'tab' + name.charAt(0).toUpperCase() + name.slice(1);
+        p.classList.toggle('active', p.id === id);
+      });
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // ── Helpers ───────────────────────────────────────────────────────
+
+    function userStatusLabel(user) {
+      if (user.onboardingCompleted) return { text: 'Onboarded', html: '<span class="badge badge-green">✓ Onboarded</span>' };
+      const hasPartial = user.firstName || user.lastName || user.email || user.username || user.profession;
+      if (hasPartial) return { text: 'Partial', html: '<span class="badge badge-amber">⚠ Partial — started, not complete</span>' };
+      return { text: 'Empty', html: '<span class="badge badge-gray">○ Empty — no profile data</span>' };
+    }
+
+    function formatPhone(user) {
+      const code = user.phoneCode ? `+${String(user.phoneCode).replace(/^\+/, '')}` : '';
+      return `${code} ${user.phoneNumber || ''}`.trim() || '—';
+    }
+
+    function renderPills(items, label) {
+      const values = Array.isArray(items) ? items.filter(Boolean) : [];
+      if (!values.length) return label ? `<div class="cell-sub">${escapeHtml(label)}: —</div>` : '';
+      return `${label ? `<div class="cell-sub">${escapeHtml(label)}</div>` : ''}<div class="mini-pills">${values.map(v => `<span class="mini-pill">${escapeHtml(v)}</span>`).join('')}</div>`;
+    }
+
+    function formatDate(value) {
+      if (!value) return '—';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleString();
+    }
+
+    function formatDateShort(value) {
+      if (!value) return '—';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleDateString();
+    }
+
+    // ── Modal close handlers ───────────────────────────────────────────
+
+    $('modalCloseButton').addEventListener('click', closeUserModal);
+    $('modalCloseActionButton').addEventListener('click', closeUserModal);
+    $('userModal').addEventListener('click', e => {
+      if (e.target === $('userModal')) closeUserModal();
+    });
+
+    // ── Controls (search / filter / sort) ─────────────────────────────
+
+    $('userSearch').addEventListener('input', renderUsersTable);
+    $('userFilter').addEventListener('change', renderUsersTable);
+    $('userSort').addEventListener('change', renderUsersTable);
+
+    // ── Company helpers ────────────────────────────────────────────────
+
+    window.editCompany = company => {
+      $('companyId').value  = company.companyId || '';
+      $('companyName').value = company.name || '';
+      $('companyHook').value = company.hook || '';
+      $('companyCategory').value = company.category || '';
+      $('companyTicker').value = company.ticker || '';
+      $('companyYSP').value = company.yearStartPrice != null ? company.yearStartPrice : '';
+      pendingHtmlFile = {
+        fileName: company.fileName || `${company.companyId}.html`,
+        html: company.html || '',
+        size: company.size || String(company.html || '').length
+      };
+      $('fileName').textContent = pendingHtmlFile.fileName;
+      window.scrollTo({ top: $('companyForm').offsetTop - 20, behavior: 'smooth' });
+    };
+
+    window.deleteCompany = async companyId => {
+      if (!confirm(`Delete ${companyId}?`)) return;
+      await api(`/api/admin/companies/${encodeURIComponent(companyId)}`, { method: 'DELETE' });
+      await loadDashboard();
+    };
+
+    // ── Data loading ───────────────────────────────────────────────────
+
+    async function loadDashboard() {
+      latestData = await api('/api/admin/summary');
+      renderDashboard(latestData);
+      setView(true);
+    }
+
+    async function deleteUser(userId) {
+      if (!confirm('Are you sure you want to delete this user? This cannot be undone.')) return;
+      try {
+        await api(`/api/admin/users/${encodeURIComponent(userId)}`, { method: 'DELETE' });
+        closeUserModal();
+        await loadDashboard();
+        showMessage('companyMessage', 'User deleted.', 'ok');
+      } catch (err) {
+        alert('Failed to delete user: ' + err.message);
+      }
+    }
+
+    // ── Login ──────────────────────────────────────────────────────────
+
+    $('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      $('loginButton').disabled = true;
+      try {
+        const data = await api('/api/admin/login', {
+          method: 'POST',
+          body: JSON.stringify({ password: $('password').value })
+        });
+        adminToken = data.token;
+        localStorage.setItem(tokenKey, adminToken);
+        $('password').value = '';
+        await loadDashboard();
+      } catch (err) {
+        showMessage('loginMessage', err.message, 'error');
+      } finally {
+        $('loginButton').disabled = false;
+      }
+    });
+
+    // ── File drop ──────────────────────────────────────────────────────
+
+    async function acceptHtmlFile(file) {
+      if (!file) return;
+      if (!file.name.toLowerCase().endsWith('.html') && file.type !== 'text/html') {
+        showMessage('companyMessage', 'Please choose an HTML file.', 'error');
+        return;
+      }
+      const html = await file.text();
+      pendingHtmlFile = { fileName: file.name, html, size: file.size };
+      $('fileName').textContent = `${file.name} (${file.size.toLocaleString()} bytes)`;
+      if (!$('companyId').value.trim()) {
+        $('companyId').value = file.name.replace(/\.html?$/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      }
+      if (!$('companyName').value.trim()) {
+        $('companyName').value = file.name.replace(/\.html?$/i, '').replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      }
+    }
+
+    const dropzone = $('dropzone');
+    dropzone.addEventListener('click', () => $('htmlFile').click());
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+    dropzone.addEventListener('drop', async e => {
+      e.preventDefault();
+      dropzone.classList.remove('drag');
+      await acceptHtmlFile(e.dataTransfer.files[0]);
+    });
+    $('htmlFile').addEventListener('change', async e => acceptHtmlFile(e.target.files[0]));
+
+    $('companyForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!pendingHtmlFile || !pendingHtmlFile.html) {
+        showMessage('companyMessage', 'Drop or choose an HTML file first.', 'error');
+        return;
+      }
+      const rawYSP = $('companyYSP').value.trim();
+      const body = {
+        companyId:      $('companyId').value.trim(),
+        name:           $('companyName').value.trim(),
+        hook:           $('companyHook').value.trim(),
+        category:       $('companyCategory').value,
+        ticker:         $('companyTicker').value.trim().toUpperCase() || null,
+        yearStartPrice: rawYSP !== '' ? parseFloat(rawYSP) || null : null,
+        fileName:       pendingHtmlFile.fileName,
+        html:           pendingHtmlFile.html,
+        size:           pendingHtmlFile.size
+      };
+      try {
+        await api('/api/admin/companies', { method: 'POST', body: JSON.stringify(body) });
+        $('companyForm').reset();
+        pendingHtmlFile = null;
+        $('fileName').textContent = 'No file selected';
+        await loadDashboard();
+        showMessage('companyMessage', 'HTML file saved.');
+      } catch (err) {
+        showMessage('companyMessage', err.message, 'error');
+      }
+    });
+
+    // ── Top-bar buttons ────────────────────────────────────────────────
+
+    $('refreshButton').addEventListener('click', () => loadDashboard().catch(err => alert(err.message)));
+
+    $('refreshPricesButton').addEventListener('click', async () => {
+      const button = $('refreshPricesButton');
+      button.disabled = true;
+      showMessage('pricesMessage', 'Refreshing prices…');
+      try {
+        const result = await api('/api/admin/refresh-prices', { method: 'POST' });
+        await loadDashboard();
+        showMessage('pricesMessage', result.message || 'Stock prices refreshed.', result.failed && result.failed.length ? 'error' : 'ok');
+      } catch (err) {
+        showMessage('pricesMessage', err.message, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    $('logoutButton').addEventListener('click', () => {
+      adminToken = '';
+      localStorage.removeItem(tokenKey);
+      setView(false);
+    });
+
+    $('exportButton').addEventListener('click', async () => {
+      const response = await fetch('/api/admin/export', {
+        headers: { Authorization: `Bearer ${adminToken}` }
+      });
+      if (!response.ok) { alert('Export failed. Please log in again.'); return; }
+      const blob = await response.blob();
+      const url  = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href     = url;
+      link.download = 'daily-dividend-export.json';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // ── Entry-level delete (called from inline onclick) ───────────────
+
+    window.deleteUserRead = async (userId, readAt) => {
+      if (!readAt || !confirm('Remove this read entry?')) return;
+      try {
+        await api(`/api/admin/user/${encodeURIComponent(userId)}/reads/${encodeURIComponent(readAt)}`, { method: 'DELETE' });
+        await loadUserDetail(userId);
+      } catch (err) { alert('Failed: ' + err.message); }
+    };
+
+    window.deleteUserSave = async (userId, companyId) => {
+      if (!confirm(`Remove "${companyId}" from saved companies?`)) return;
+      try {
+        await api(`/api/admin/user/${encodeURIComponent(userId)}/saves/${encodeURIComponent(companyId)}`, { method: 'DELETE' });
+        await loadUserDetail(userId);
+      } catch (err) { alert('Failed: ' + err.message); }
+    };
+
+    window.deleteUserVote = async (userId, companyId) => {
+      if (!confirm(`Remove vote for "${companyId}"?`)) return;
+      try {
+        await api(`/api/admin/user/${encodeURIComponent(userId)}/votes/${encodeURIComponent(companyId)}`, { method: 'DELETE' });
+        await loadUserDetail(userId);
+      } catch (err) { alert('Failed: ' + err.message); }
+    };
+
+    // ── Boot ───────────────────────────────────────────────────────────
+
+    if (adminToken) {
+      loadDashboard().catch(() => {
+        localStorage.removeItem(tokenKey);
+        adminToken = '';
+        setView(false);
+      });
+    } else {
+      setView(false);
+    }
+  </script>
+</body>
+</html>

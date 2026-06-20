@@ -1,8 +1,11 @@
 {
   "scripts": {
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "supabase:push": "node scripts/push-local-db-to-supabase.js",
+    "supabase:logos": "node scripts/setup-supabase-logos.js"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
     "express": "^4.18.3"
   }
 }

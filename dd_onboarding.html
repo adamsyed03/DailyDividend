@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <title>Daily Dividend - Onboarding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --cream:#F5F1E8;
+      --cream-2:#EFEADE;
+      --paper:#FAF7F0;
+      --ink:#0F0F0E;
+      --ink-2:#2A2A28;
+      --muted:#6B6B66;
+      --line:#D9D2C2;
+      --brand:#1A3D2B;
+      --brand-2:#2A5C3F;
+      --green:#2E8A60;
+      --serif:"Fraunces",Georgia,serif;
+      --sans:"Inter",-apple-system,system-ui,sans-serif;
+      --mono:"JetBrains Mono",ui-monospace,monospace;
+      --ease:cubic-bezier(.2,.8,.2,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;overflow:hidden}
+    body{font-family:var(--sans);background:#0f0f0e;color:var(--ink);-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}
+    button{cursor:pointer}
+
+    .stage{height:100vh;height:100dvh;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:#0f0f0e}
+    .phone{width:100%;height:100%;overflow:hidden;position:relative;background:transparent}
+    .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(34px);transition:opacity .36s var(--ease),transform .36s var(--ease)}
+    .screen.active{opacity:1;pointer-events:auto;transform:translateX(0)}
+    .screen.exit{opacity:0;transform:translateX(-34px)}
+    .prog-bar{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.12);z-index:20}
+    .prog-fill{height:100%;background:rgba(255,255,255,.72);transition:width .45s var(--ease)}
+    .back-btn{position:absolute;top:52px;left:20px;z-index:30;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#fff;font-weight:700}
+    .back-btn.dark{background:rgba(0,0,0,.07);color:var(--ink)}
+
+    #s-splash,#s-hook,#s-phone,#s-account,#s-payoff{background:linear-gradient(160deg,#0D2818 0%,#1A3D2B 52%,#081510 100%);color:var(--cream)}
+    #s-markets,#s-sectors,#s-about{background:var(--paper)}
+
+    #s-splash{align-items:center;justify-content:center;text-align:center;padding:40px 32px}
+    .splash-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(46,138,96,.28),transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none}
+    .splash-mark{width:72px;height:72px;border-radius:20px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:32px;margin:0 auto 22px;opacity:0;transform:scale(.7) translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+    .splash-mark.show{opacity:1;transform:scale(1) translateY(0)}
+    .splash-name{font-family:var(--serif);font-weight:400;font-size:28px;letter-spacing:-.02em;opacity:0;transform:translateY(12px);transition:opacity .6s .35s var(--ease),transform .6s .35s var(--ease);margin-bottom:10px}
+    .splash-name.show{opacity:1;transform:translateY(0)}
+    .splash-tag{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.72);opacity:0;transition:opacity .6s .7s;margin-bottom:56px}
+    .splash-tag.show{opacity:1}
+    .splash-cta{background:var(--cream);color:var(--brand);border:0;border-radius:999px;padding:15px 36px;font-size:15px;font-weight:700;opacity:0;transform:translateY(16px);transition:opacity .5s 1.1s,transform .5s 1.1s var(--ease)}
+    .splash-cta.show{opacity:1;transform:translateY(0)}
+    .splash-bottom{position:absolute;bottom:44px;left:0;right:0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.28);text-transform:uppercase;opacity:0;transition:opacity .5s 1.35s}
+    .splash-bottom.show{opacity:1}
+
+    #s-hook{justify-content:flex-end;padding:0 0 48px}
+    .hook-inner{padding:0 30px}
+    .hook-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px}
+    .hook-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 10px;text-align:center}
+    .hook-stat-n{font-family:var(--serif);font-size:22px;line-height:1}
+    .hook-stat-l{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,241,232,.46);margin-top:6px}
+    .hook-tag,.ph-tag,.q-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.68);margin-bottom:18px}
+    .hook-h,.ph-h,.acct-h,.payoff-h{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1;letter-spacing:-.025em;margin-bottom:14px}
+    .hook-h em,.ph-h em,.acct-h em,.payoff-h em{font-style:italic;color:#B5E3C8;font-weight:300}
+    .hook-sub,.ph-sub,.acct-sub,.payoff-sub{font-size:15px;line-height:1.58;color:rgba(245,241,232,.64);margin-bottom:34px}
+    .hook-sub strong{color:rgba(245,241,232,.92)}
+    .btn-full,.btn-full-dark,.btn-payoff{width:100%;border:0;border-radius:16px;padding:16px;font-size:15px;font-weight:700;letter-spacing:-.01em;transition:transform .15s,opacity .15s}
+    .btn-full:active,.btn-full-dark:active,.btn-payoff:active{transform:scale(.98)}
+    .btn-primary,.btn-full-dark,.btn-payoff{background:var(--cream);color:var(--brand)}
+    .btn-full:disabled,.btn-full-dark:disabled{opacity:.38;cursor:default}
+
+    .q-wrap{flex:1;padding:96px 28px 28px;display:flex;flex-direction:column}
+    .q-tag{color:var(--muted);margin-bottom:16px}
+    .q-h{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px}
+    .q-h em{font-style:italic;color:var(--brand);font-weight:300}
+    .q-sub{font-size:14px;color:var(--muted);line-height:1.45;margin-bottom:28px}
+    .q-foot,.ph-foot,.acct-foot,.payoff-foot{padding:20px 28px 40px}
+    .market-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:auto}
+    .market-btn,.level-btn,.age-btn,.sector-btn{background:#fff;border:1.5px solid var(--line);transition:border-color .16s,background .16s,transform .16s}
+    .market-btn{border-radius:16px;padding:16px 14px;display:flex;align-items:center;gap:12px;text-align:left;position:relative}
+    .market-btn.sel,.level-btn.sel,.age-btn.sel,.sector-btn.sel{border-color:var(--brand);background:rgba(26,61,43,.07)}
+    .mb-info{flex:1}
+    .mb-name{font-family:var(--serif);font-size:15px;font-weight:600}
+    .mb-sub{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+    .mb-check{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-family:var(--mono);font-size:7px;opacity:0;transform:scale(.7);transition:opacity .16s,transform .16s}
+    .market-btn.sel .mb-check{opacity:1;transform:scale(1)}
+    .sector-grid{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:auto}
+    .sector-btn{border-radius:999px;padding:11px 16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+    .about-block{margin-bottom:28px}
+    .about-label{font-family:var(--serif);font-size:18px;margin-bottom:12px}
+    .age-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .age-btn{border-radius:12px;padding:12px 8px;text-align:center}
+    .ab-n{font-family:var(--serif);font-size:15px;font-weight:600}
+    .level-grid{display:flex;flex-direction:column;gap:8px}
+    .level-btn{border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;text-align:left}
+    .lb-info{flex:1}
+    .lb-name{font-family:var(--serif);font-size:15px;font-weight:600}
+    .lb-sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .lb-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex-shrink:0}
+    .level-btn.sel .lb-dot{background:var(--brand);border-color:var(--brand)}
+
+    .phone-inner,.acct-inner{flex:1;padding:100px 28px 28px;display:flex;flex-direction:column}
+    .ph-row{display:flex;gap:10px;margin-bottom:14px}
+    .cc-sel,.ph-input{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.18);border-radius:14px;color:var(--cream)}
+    .cc-sel{min-width:76px;padding:14px 12px;font-family:var(--mono);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+    .cc-arrow{opacity:.55;margin-left:auto}
+    .ph-input{flex:1;padding:14px 16px;font-family:var(--mono);font-size:18px;font-weight:600;outline:none;min-width:0}
+    .ph-input::placeholder{color:rgba(245,241,232,.28);font-family:var(--sans);font-size:14px;font-weight:400}
+    .ph-or{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);text-align:center;margin:16px 0}
+    .ph-email{width:100%;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(245,241,232,.66);border-radius:14px;padding:14px 16px}
+    .ph-privacy,.flow-msg{font-size:11px;line-height:1.5;text-align:center;margin-top:16px;color:rgba(255,255,255,.28)}
+    .flow-msg{min-height:18px;color:#FCC9C2;opacity:0;transition:opacity .18s}
+    .flow-msg.show{opacity:1}
+    .acct-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:auto}
+    .acct-field{display:flex;flex-direction:column;gap:6px}
+    .acct-field label{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(181,227,200,.58)}
+    .acct-input{width:100%;border:1.5px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);border-radius:14px;color:var(--cream);padding:13px 15px;font-size:15px;outline:none}
+    .acct-input::placeholder{color:rgba(245,241,232,.28)}
+    .acct-input:focus{border-color:rgba(181,227,200,.62);background:rgba(46,138,96,.14)}
+    .cc-overlay{position:absolute;inset:0;background:rgba(0,0,0,.62);z-index:200;display:none;align-items:flex-end}
+    .cc-overlay.open{display:flex}
+    .cc-sheet{background:var(--paper);border-radius:24px 24px 0 0;width:100%;padding:10px 0 40px}
+    .cc-sheet-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:18px;font-weight:500}
+    .cc-opt{display:flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer}
+    .cc-opt:hover{background:var(--cream-2)}
+    .cc-opt-name{flex:1;font-size:15px;font-weight:600}
+    .cc-opt-code{font-family:var(--mono);font-size:13px;color:var(--muted)}
+    .payoff-inner{flex:1;padding:80px 28px 28px;display:flex;flex-direction:column;overflow-y:auto}
+    .payoff-mark{width:52px;height:52px;border-radius:14px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:23px;margin-bottom:24px}
+    .payoff-card,.payoff-drop{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px 20px;margin-bottom:12px}
+    .payoff-card-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.62);margin-bottom:10px}
+    .payoff-chips{display:flex;flex-wrap:wrap;gap:7px}
+    .payoff-chip{background:rgba(255,255,255,.1);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:rgba(245,241,232,.86)}
+    .payoff-drop{display:flex;align-items:center;gap:16px;margin-bottom:auto}
+    .payoff-drop-ic{width:42px;height:42px;border-radius:11px;background:rgba(46,138,96,.3);display:grid;place-items:center;font-family:var(--serif);font-weight:700}
+    .payoff-drop-t{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--cream);margin-bottom:3px}
+    .payoff-drop-s{font-size:12px;color:rgba(245,241,232,.5)}
+    .payoff-terms{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-top:4px}
+    .loading{opacity:.72;pointer-events:none}
+
+    @media(min-width:900px){
+      .stage{padding:0;background:radial-gradient(circle at 18% 18%,rgba(46,138,96,.24),transparent 34%),radial-gradient(circle at 82% 78%,rgba(245,241,232,.08),transparent 28%),#0f0f0e}
+      .phone{width:100%;height:100%;max-width:none;max-height:none;border-radius:0;box-shadow:none;background:transparent}
+      .screen{padding:0 56px;transform:translateX(26px)}
+      .screen.exit{transform:translateX(-26px)}
+      .screen::before{content:"Daily Dividend";position:absolute;top:34px;left:98px;z-index:30;font-family:var(--serif);font-size:18px;font-weight:600;color:rgba(245,241,232,.92)}
+      .screen::after{content:"DD";position:absolute;top:28px;left:56px;z-index:31;width:30px;height:30px;border-radius:8px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-size:13px;font-weight:700}
+      #s-markets::before,#s-sectors::before,#s-about::before{color:var(--ink)}
+      #s-markets::after,#s-sectors::after,#s-about::after{background:var(--brand);color:var(--cream)}
+      .prog-bar{height:4px}
+      .back-btn{top:92px;left:56px;width:40px;height:40px}
+      #s-splash{align-items:flex-start;text-align:left;padding:0 56px;justify-content:center}
+      .splash-glow{left:74%;top:48%;width:560px;height:560px;transform:translate(-50%,-50%)}
+      .splash-mark{margin:0 0 24px;width:86px;height:86px;border-radius:22px;font-size:38px}
+      .splash-name{font-size:clamp(56px,6vw,92px);line-height:.95;max-width:760px}
+      .splash-tag{font-size:12px;margin-bottom:42px}
+      .splash-cta{width:auto;min-width:210px;padding:17px 34px;font-size:16px}
+      .splash-bottom{left:56px;right:auto;text-align:left;bottom:38px}
+      #s-hook{justify-content:center;padding:0 56px}
+      .hook-inner{width:min(760px,54vw);padding:0}
+      .hook-stats{width:min(580px,100%);margin-bottom:36px}
+      .hook-stat{padding:18px 16px;border-radius:12px}
+      .hook-stat-n{font-size:34px}
+      .hook-h{font-size:clamp(48px,5vw,76px);line-height:1.02;max-width:780px}
+      .hook-sub{font-size:18px;max-width:700px;line-height:1.66}
+      .hook-inner .btn-full{width:auto;min-width:220px;padding:17px 30px;border-radius:999px}
+      .q-wrap{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:132px 0 24px;display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,1fr);grid-template-rows:auto auto auto 1fr;column-gap:72px;align-content:start}
+      .q-tag,.q-h,.q-sub{grid-column:1}
+      .market-grid,.sector-grid,.about-block{grid-column:2}
+      .q-tag{font-size:11px}
+      .q-h{font-size:clamp(44px,4.2vw,68px);line-height:1.02;margin-bottom:14px}
+      .q-sub{font-size:17px;max-width:420px}
+      .market-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0}
+      .market-btn{min-height:140px;align-items:flex-start;flex-direction:column;padding:22px;border-radius:14px}
+      .mb-name{font-size:22px}
+      .mb-sub{font-size:10px}
+      .mb-check{position:absolute;right:16px;top:16px}
+      .sector-grid{align-content:start;gap:12px;margin:0}
+      .sector-btn{font-size:16px;padding:14px 20px}
+      .about-block{margin-bottom:22px}
+      .about-label{font-size:24px}
+      .age-grid{gap:12px}
+      .age-btn{padding:18px 10px;border-radius:14px}
+      .ab-n{font-size:20px}
+      .level-grid{gap:12px}
+      .level-btn{padding:18px 20px;border-radius:14px}
+      .lb-name{font-size:20px}
+      .lb-sub{font-size:13px}
+      .q-foot{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:20px 0 48px;display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,1fr);column-gap:72px}
+      .q-foot .btn-full{grid-column:2;width:auto;min-width:240px;justify-self:start;border-radius:999px;padding:17px 32px}
+      .phone-inner,.acct-inner,.payoff-inner{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:132px 0 24px}
+      .phone-inner,.acct-inner{display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,620px);grid-auto-rows:min-content;column-gap:72px;align-content:start}
+      .ph-tag,.ph-h,.ph-sub{grid-column:1}
+      .ph-row,.ph-or,.ph-email,.ph-privacy,.flow-msg{grid-column:2}
+      .acct-tag,.acct-h,.acct-sub{grid-column:1}
+      .acct-grid{grid-column:2;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
+      .acct-field.full{grid-column:1/-1}
+      .acct-msg{grid-column:2}
+      .ph-h,.acct-h,.payoff-h{font-size:clamp(46px,4.8vw,76px);line-height:1.02}
+      .ph-sub,.acct-sub,.payoff-sub{font-size:18px;max-width:620px}
+      .ph-row{margin-top:36px}
+      .ph-foot,.acct-foot,.payoff-foot{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:20px 0 48px;display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,1fr);column-gap:72px}
+      .ph-foot .btn-full-dark,.acct-foot .btn-full-dark,.btn-payoff{grid-column:2;width:auto;min-width:240px;justify-self:start;border-radius:999px;padding:17px 32px}
+      .ph-privacy,.flow-msg,.acct-msg{text-align:left}
+      .payoff-inner{display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,620px);column-gap:72px;align-content:start;overflow:visible}
+      .payoff-mark,.payoff-h,.payoff-sub{grid-column:1}
+      .payoff-card,.payoff-drop{grid-column:2;max-width:620px}
+      .payoff-mark{width:64px;height:64px;border-radius:17px;font-size:28px}
+      .payoff-terms{text-align:left;grid-column:2}
+      .cc-sheet{width:min(560px,100%);margin:0 auto;border-radius:22px 22px 0 0}
+      .stage>div[style*="position:fixed"]{display:none!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="phone">
+      <section class="screen active" id="s-splash">
+        <div class="splash-glow"></div>
+        <div class="splash-mark" id="splashMark">DD</div>
+        <div class="splash-name" id="splashName">Daily Dividend</div>
+        <div class="splash-tag" id="splashTag">Story behind the stock</div>
+        <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started -></button>
+        <div class="splash-bottom" id="splashBottom">One company. Every Monday. The full story.</div>
+      </section>
+
+      <section class="screen" id="s-hook">
+        <div class="hook-inner">
+          <div class="hook-stats">
+            <div class="hook-stat"><div class="hook-stat-n">4</div><div class="hook-stat-l">Companies live</div></div>
+            <div class="hook-stat"><div class="hook-stat-n">~90s</div><div class="hook-stat-l">Per read</div></div>
+            <div class="hook-stat"><div class="hook-stat-n">Free</div><div class="hook-stat-l">Always</div></div>
+          </div>
+          <div class="hook-tag">Why Daily Dividend</div>
+          <div class="hook-h">Most people scroll past tickers they <em>don't understand.</em></div>
+          <div class="hook-sub">We fix that. One company a week. The real story - <strong>where the money comes from, who owns it, and what could go wrong</strong> - in the time it takes to drink a coffee.</div>
+          <button class="btn-full btn-primary" onclick="goTo('markets')">I'm in -></button>
+        </div>
+      </section>
+
+      <section class="screen" id="s-markets">
+        <div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div>
+        <button class="back-btn dark" onclick="goTo('hook')"><-</button>
+        <div class="q-wrap">
+          <div class="q-tag">01 of 03</div>
+          <div class="q-h">Which markets do you <em>follow?</em></div>
+          <div class="q-sub">Select all that apply - we'll personalize your stories.</div>
+          <div class="market-grid">
+            <button class="market-btn" data-m="us" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">US</span><span class="mb-sub">NYSE / NASDAQ</span></span><span class="mb-check">OK</span></button>
+            <button class="market-btn" data-m="india" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">India</span><span class="mb-sub">NSE / BSE</span></span><span class="mb-check">OK</span></button>
+            <button class="market-btn" data-m="uk" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">UK</span><span class="mb-sub">LSE / FTSE</span></span><span class="mb-check">OK</span></button>
+            <button class="market-btn" data-m="global" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">Global</span><span class="mb-sub">All markets</span></span><span class="mb-check">OK</span></button>
+          </div>
+        </div>
+        <div class="q-foot"><button class="btn-full btn-primary" id="mktNext" onclick="goTo('sectors')" disabled>Continue -></button></div>
+      </section>
+
+      <section class="screen" id="s-sectors">
+        <div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div>
+        <button class="back-btn dark" onclick="goTo('markets')"><-</button>
+        <div class="q-wrap">
+          <div class="q-tag">02 of 03</div>
+          <div class="q-h">What gets you <em>excited?</em></div>
+          <div class="q-sub">Pick your rabbit holes. Choose as many as you like.</div>
+          <div class="sector-grid">
+            <button class="sector-btn" data-s="tech" onclick="toggleSector(this)" type="button">Tech</button>
+            <button class="sector-btn" data-s="banking" onclick="toggleSector(this)" type="button">Banking</button>
+            <button class="sector-btn" data-s="consumer" onclick="toggleSector(this)" type="button">Consumer</button>
+            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button">Energy</button>
+            <button class="sector-btn" data-s="media" onclick="toggleSector(this)" type="button">Media</button>
+            <button class="sector-btn" data-s="healthcare" onclick="toggleSector(this)" type="button">Healthcare</button>
+            <button class="sector-btn" data-s="realestate" onclick="toggleSector(this)" type="button">Real Estate</button>
+            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button">Travel</button>
+            <button class="sector-btn" data-s="luxury" onclick="toggleSector(this)" type="button">Luxury</button>
+            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button">Sports</button>
+          </div>
+        </div>
+        <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue -></button></div>
+      </section>
+
+      <section class="screen" id="s-about">
+        <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
+        <button class="back-btn dark" onclick="goTo('sectors')"><-</button>
+        <div class="q-wrap">
+          <div class="q-tag">03 of 03</div>
+          <div class="q-h">A little about <em>you.</em></div>
+          <div class="q-sub">Two quick ones.</div>
+          <div class="about-block">
+            <div class="about-label">How old are you?</div>
+            <div class="age-grid">
+              <button class="age-btn" data-a="18-24" onclick="selAge(this)" type="button"><span class="ab-n">18-24</span></button>
+              <button class="age-btn" data-a="25-34" onclick="selAge(this)" type="button"><span class="ab-n">25-34</span></button>
+              <button class="age-btn" data-a="35-44" onclick="selAge(this)" type="button"><span class="ab-n">35-44</span></button>
+              <button class="age-btn" data-a="45+" onclick="selAge(this)" type="button"><span class="ab-n">45+</span></button>
+            </div>
+          </div>
+          <div class="about-block">
+            <div class="about-label">Where are you with investing?</div>
+            <div class="level-grid">
+              <button class="level-btn" data-l="curious" onclick="selLevel(this)" type="button"><span class="lb-info"><span class="lb-name">Just curious</span><span class="lb-sub">I want to understand, not necessarily invest</span></span><span class="lb-dot"></span></button>
+              <button class="level-btn" data-l="started" onclick="selLevel(this)" type="button"><span class="lb-info"><span class="lb-name">Getting started</span><span class="lb-sub">I've started but want to know more</span></span><span class="lb-dot"></span></button>
+              <button class="level-btn" data-l="active" onclick="selLevel(this)" type="button"><span class="lb-info"><span class="lb-name">Active investor</span><span class="lb-sub">I follow markets, I want the real story</span></span><span class="lb-dot"></span></button>
+            </div>
+          </div>
+        </div>
+        <div class="q-foot"><button class="btn-full btn-primary" id="abtNext" onclick="goTo('phone')" disabled>Continue -></button></div>
+      </section>
+
+      <section class="screen" id="s-phone">
+        <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+        <button class="back-btn" onclick="goTo('about')"><-</button>
+        <div class="phone-inner">
+          <div class="ph-tag">Almost there</div>
+          <div class="ph-h">Your number <em>to get in.</em></div>
+          <div class="ph-sub">No spam, no newsletters. Just your Monday story.</div>
+          <div class="ph-row">
+            <button class="cc-sel" id="ccSel" onclick="openCC()" type="button"><span id="ccCode">+91</span><span class="cc-arrow">v</span></button>
+            <input class="ph-input" id="phoneInput" type="tel" inputmode="numeric" placeholder="Phone number" oninput="onPhoneInput()">
+          </div>
+          <div class="ph-or">or</div>
+          <button class="ph-email" type="button" onclick="showError('Email onboarding is coming next. Use phone for this beta.')">Continue with email instead</button>
+          <div class="ph-privacy">We never sell your data. No cold calls. Ever.</div>
+          <div class="flow-msg" id="flowMsg" role="status"></div>
+        </div>
+        <div class="ph-foot"><button class="btn-full-dark" id="phoneNext" onclick="goToAccount()" disabled>Continue -></button></div>
+      </section>
+
+      <section class="screen" id="s-account">
+        <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+        <button class="back-btn" onclick="goTo('phone')"><-</button>
+        <div class="acct-inner">
+          <div class="acct-tag ph-tag">Last bit</div>
+          <div class="acct-h">Create your <em>account.</em></div>
+          <div class="acct-sub">This lets us save your profile and personalize the stories you see.</div>
+          <div class="acct-grid">
+            <div class="acct-field">
+              <label for="firstNameInput">First name</label>
+              <input class="acct-input" id="firstNameInput" autocomplete="given-name" oninput="checkAccount()" placeholder="First name">
+            </div>
+            <div class="acct-field">
+              <label for="lastNameInput">Last name</label>
+              <input class="acct-input" id="lastNameInput" autocomplete="family-name" oninput="checkAccount()" placeholder="Last name">
+            </div>
+            <div class="acct-field">
+              <label for="usernameInput">Username</label>
+              <input class="acct-input" id="usernameInput" autocomplete="username" oninput="checkAccount()" placeholder="Username">
+            </div>
+            <div class="acct-field">
+              <label for="passwordInput">Password</label>
+              <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Password">
+            </div>
+            <div class="acct-field">
+              <label for="professionInput">Profession</label>
+              <input class="acct-input" id="professionInput" autocomplete="organization-title" oninput="checkAccount()" placeholder="Student, founder, analyst...">
+            </div>
+            <div class="acct-field">
+              <label for="heardInput">How did you hear about us?</label>
+              <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="Friend, TikTok, LinkedIn...">
+            </div>
+            <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
+          </div>
+        </div>
+        <div class="acct-foot"><button class="btn-full-dark" id="accountNext" onclick="completeOnboarding()" disabled>Create account -></button></div>
+      </section>
+
+      <section class="screen" id="s-payoff">
+        <div class="payoff-inner">
+          <div class="payoff-mark">DD</div>
+          <div class="payoff-h">You're <em>in.</em></div>
+          <div class="payoff-sub">Welcome to Daily Dividend. We built this for people who want to actually understand what they're reading about - not just the numbers, the story.</div>
+          <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
+          <div class="payoff-card"><div class="payoff-card-label">Your interests</div><div class="payoff-chips" id="payoffSectors"></div></div>
+          <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix - The $46M a day question</div></div></div>
+        </div>
+        <div class="payoff-foot">
+          <button class="btn-payoff" onclick="goToApp()">Read my first story -></button>
+          <div class="payoff-terms">New company every Monday - Free forever</div>
+        </div>
+      </section>
+
+      <div class="cc-overlay" id="ccOverlay" onclick="closeCC(event)">
+        <div class="cc-sheet">
+          <div class="cc-sheet-h">Select country</div>
+          <div class="cc-opt" onclick="pickCC('+91','India')"><span class="cc-opt-name">India</span><span class="cc-opt-code">+91</span></div>
+          <div class="cc-opt" onclick="pickCC('+381','Serbia')"><span class="cc-opt-name">Serbia</span><span class="cc-opt-code">+381</span></div>
+          <div class="cc-opt" onclick="pickCC('+1','United States')"><span class="cc-opt-name">United States</span><span class="cc-opt-code">+1</span></div>
+          <div class="cc-opt" onclick="pickCC('+44','United Kingdom')"><span class="cc-opt-name">United Kingdom</span><span class="cc-opt-code">+44</span></div>
+          <div class="cc-opt" onclick="pickCC('+971','UAE')"><span class="cc-opt-name">UAE</span><span class="cc-opt-code">+971</span></div>
+          <div class="cc-opt" onclick="pickCC('+65','Singapore')"><span class="cc-opt-name">Singapore</span><span class="cc-opt-code">+65</span></div>
+          <div class="cc-opt" onclick="pickCC('+61','Australia')"><span class="cc-opt-name">Australia</span><span class="cc-opt-code">+61</span></div>
+          <div class="cc-opt" onclick="pickCC('+1','Canada')"><span class="cc-opt-name">Canada</span><span class="cc-opt-code">+1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedMarkets = new Set();
+    let selectedSectors = new Set();
+    let selectedAge = '';
+    let selectedLevel = '';
+    let phoneNum = '';
+    let dialCode = '+91';
+    let selectedCountryName = 'India';
+    let currentScreen = 'splash';
+
+    function goTo(name){
+      const cur = document.getElementById('s-' + currentScreen);
+      const nxt = document.getElementById('s-' + name);
+      if(!nxt || cur === nxt) return;
+      cur.classList.add('exit');
+      setTimeout(() => cur.classList.remove('active','exit'), 360);
+      nxt.classList.add('active');
+      currentScreen = name;
+      if(name === 'payoff') buildPayoff();
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('splashMark').classList.add('show');
+        setTimeout(() => document.getElementById('splashName').classList.add('show'), 260);
+        setTimeout(() => document.getElementById('splashTag').classList.add('show'), 520);
+        setTimeout(() => document.getElementById('splashCta').classList.add('show'), 900);
+        setTimeout(() => document.getElementById('splashBottom').classList.add('show'), 1120);
+      }, 160);
+    });
+
+    function toggleMarket(el){
+      const value = el.dataset.m;
+      selectedMarkets.has(value) ? selectedMarkets.delete(value) : selectedMarkets.add(value);
+      el.classList.toggle('sel');
+      document.getElementById('mktNext').disabled = selectedMarkets.size === 0;
+    }
+    function toggleSector(el){
+      const value = el.dataset.s;
+      selectedSectors.has(value) ? selectedSectors.delete(value) : selectedSectors.add(value);
+      el.classList.toggle('sel');
+      document.getElementById('secNext').disabled = selectedSectors.size === 0;
+    }
+    function selAge(el){
+      document.querySelectorAll('.age-btn').forEach(button => button.classList.remove('sel'));
+      el.classList.add('sel');
+      selectedAge = el.dataset.a;
+      checkAbout();
+    }
+    function selLevel(el){
+      document.querySelectorAll('.level-btn').forEach(button => button.classList.remove('sel'));
+      el.classList.add('sel');
+      selectedLevel = el.dataset.l;
+      checkAbout();
+    }
+    function checkAbout(){
+      document.getElementById('abtNext').disabled = !(selectedAge && selectedLevel);
+    }
+    function hasAnyPhoneDigits(value){
+      return /\d/.test(String(value || ''));
+    }
+    function onPhoneInput(){
+      phoneNum = document.getElementById('phoneInput').value.replace(/\D/g,'');
+      document.getElementById('phoneNext').disabled = !hasAnyPhoneDigits(phoneNum);
+    }
+    function goToAccount(){
+      if(!hasAnyPhoneDigits(phoneNum)){
+        showError('Enter a phone number.', 'flowMsg');
+        return;
+      }
+      goTo('account');
+      setTimeout(() => document.getElementById('firstNameInput').focus(), 420);
+    }
+    function fieldValue(id){
+      return document.getElementById(id).value.trim();
+    }
+    function accountDetails(){
+      return {
+        firstName: fieldValue('firstNameInput'),
+        lastName: fieldValue('lastNameInput'),
+        username: fieldValue('usernameInput'),
+        password: fieldValue('passwordInput'),
+        profession: fieldValue('professionInput'),
+        howHeard: fieldValue('heardInput')
+      };
+    }
+    function checkAccount(){
+      const details = accountDetails();
+      const complete = Object.values(details).every(Boolean);
+      document.getElementById('accountNext').disabled = !complete;
+      return complete;
+    }
+    function openCC(){document.getElementById('ccOverlay').classList.add('open');}
+    function closeCC(event){if(event.target === document.getElementById('ccOverlay')) document.getElementById('ccOverlay').classList.remove('open');}
+    function pickCC(code, name){
+      selectedCountryName = name || 'Unknown';
+      document.getElementById('ccCode').textContent = code;
+      dialCode = code;
+      document.getElementById('ccOverlay').classList.remove('open');
+      onPhoneInput();
+    }
+    function showError(message, id = 'flowMsg'){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.textContent = message;
+      el.classList.add('show');
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+    }
+    function cleanPhone(rawPhone, rawCode){
+      let digits = String(rawPhone || '').replace(/\D/g,'');
+      return digits;
+    }
+    async function api(path, options = {}){
+      const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+      let data = {};
+      try{data = await response.json();}catch(error){}
+      if(!response.ok) throw new Error(data.error || 'Daily Dividend could not save that yet.');
+      return data;
+    }
+    function onboardingPayload(){
+      const phoneCode = dialCode.replace(/\D/g,'');
+      return {
+        phoneCode,
+        phoneNumber: cleanPhone(phoneNum, phoneCode),
+        countryName: selectedCountryName,
+        ...accountDetails(),
+        marketPreferences: [...selectedMarkets],
+        sectorPreferences: [...selectedSectors],
+        ageRange: selectedAge,
+        investorLevel: selectedLevel,
+        onboardingCompleted: true
+      };
+    }
+    async function completeOnboarding(){
+      const payload = onboardingPayload();
+      if(!hasAnyPhoneDigits(payload.phoneNumber)){
+        showError('Enter a phone number.', 'flowMsg');
+        goTo('phone');
+        return false;
+      }
+      if(!checkAccount()){
+        showError('Fill out every account field.', 'acctMsg');
+        goTo('account');
+        return false;
+      }
+      const button = document.getElementById('accountNext');
+      button.disabled = true;
+      button.classList.add('loading');
+      button.textContent = 'Creating account...';
+      try{
+        const data = await api('/api/onboarding', {method:'POST', body:JSON.stringify(payload)});
+        const user = data.user || {};
+        if(user.userId){
+          localStorage.setItem('dailyDividendUserId', user.userId);
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('dailyDividendOnboarded', 'true');
+        }
+        goTo('payoff');
+        return true;
+      }catch(error){
+        showError(error.message, 'acctMsg');
+        return false;
+      }finally{
+        button.classList.remove('loading');
+        button.textContent = 'Create account ->';
+        checkAccount();
+      }
+    }
+    const marketLabels = {us:'US', india:'India', uk:'UK', global:'Global'};
+    const sectorLabels = {tech:'Tech', banking:'Banking', consumer:'Consumer', energy:'Energy', media:'Media', healthcare:'Healthcare', realestate:'Real Estate', travel:'Travel', luxury:'Luxury', sports:'Sports'};
+    function buildPayoff(){
+      document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
+      document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
+    }
+    function goToApp(){window.location.href = 'index.html';}
+  </script>
+</body>
+</html>

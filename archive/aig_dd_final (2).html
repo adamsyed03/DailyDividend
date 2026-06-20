@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIG — Daily Dividend Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --aig:#B31B1B;
+  --aig-dark:#7a1212;
+  --aig-navy:#0a1628;
+  --aig-light:#fdf0f0;
+  --gold:#C8922A;
+  --grn:#15803d;
+  --grn-bg:#f0fdf4;
+  --red2:#b91c1c;
+  --red-bg:#fef2f2;
+  --ink:#111827;
+  --muted:#6b7280;
+  --bd:#e5e7eb;
+  --bg:#ffffff;
+  --bg2:#f9fafb;
+  --bg3:#f3f4f6;
+  --r:6px;
+}
+
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#fff;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 0 1px var(--bd),0 20px 60px rgba(0,0,0,.08)}
+
+/* HERO */
+.hero{background:#0a1628;padding:2rem 1.75rem 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--aig) 0%,#e85555 50%,var(--aig) 100%)}
+.hero::after{content:'';position:absolute;top:-80px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(179,27,27,.18) 0%,transparent 68%);pointer-events:none}
+.hero-grid{position:absolute;bottom:0;left:0;right:0;height:100%;opacity:.03;background-image:repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 60px),repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 60px);pointer-events:none}
+.hero-meta{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 10px;text-transform:uppercase;border-radius:2px}
+.pill-red{background:var(--aig);color:#fff}
+.pill-ghost{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.38)}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,7vw,4rem);color:#fff;letter-spacing:.04em;line-height:1}
+.hero-sub{font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.14em;text-transform:uppercase;margin-top:.4rem;padding-bottom:1.4rem}
+
+/* TABS */
+.tabs-bar{background:#060e1c;border-bottom:1px solid #142035;display:flex;overflow-x:auto;padding:0 1.75rem;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.9rem 1rem;cursor:pointer;white-space:nowrap;color:rgba(255,255,255,.28);background:transparent;border:none;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;position:relative;top:1px}
+.tab-btn.active{color:#fff;border-bottom-color:var(--aig)}
+.tab-btn:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* CONTENT */
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.pane{padding:1.75rem 1.75rem 3rem}
+
+/* TYPE */
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--aig);font-weight:700;margin-bottom:.35rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2rem);color:var(--ink);margin-bottom:.9rem;line-height:1.2;font-weight:700}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:1.25rem;max-width:640px;line-height:1.65}
+.divl{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
+
+/* HOOK */
+.hook{background:#fdf0f0;border-left:3px solid var(--aig);padding:1.1rem 1.25rem;margin-bottom:1.5rem}
+.hook p{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--ink)}
+
+/* DD NUMBERS dark */
+.ddnum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ddnum{background:#0a1628;padding:1.1rem 1rem;border-radius:var(--r);border:1px solid #142035}
+.ddnum-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--aig);letter-spacing:.03em;line-height:1}
+.ddnum-lbl{font-size:11px;color:rgba(255,255,255,.38);margin-top:.35rem;line-height:1.4}
+
+/* ARROW NAV */
+.snav{display:inline-flex;align-items:center;gap:6px;margin-top:.65rem;cursor:pointer;font-size:12px;font-weight:600;color:var(--aig);letter-spacing:.03em;padding:.35rem 0;border-bottom:1px solid transparent;transition:border-color .15s}
+.snav:hover{border-color:var(--aig)}
+.snav:hover svg{transform:translateX(3px)}
+.snav svg{transition:transform .15s}
+
+/* PREVIEW CARDS */
+.preview-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.pc-head{background:var(--bg2);border-bottom:1px solid var(--bd);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pc-tab-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pc-arrow{color:var(--aig);flex-shrink:0}
+.pc-body{padding:.85rem 1rem}
+
+/* FLAGS */
+.flags-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flag-col{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.flag-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .75rem;border-bottom:2px solid}
+.flag-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg)}
+.flag-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.flag-item{display:flex;gap:.5rem;align-items:flex-start;padding:.5rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;line-height:1.45}
+.flag-item:last-child{border-bottom:none}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.fdot-g{background:var(--grn)}
+.fdot-r{background:var(--red2)}
+
+/* COMP TRIO */
+.comp-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ct{border:1px solid var(--bd);padding:.85rem .75rem;border-radius:var(--r);text-align:center}
+.ct-metric{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.ct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--aig);letter-spacing:.03em;line-height:1}
+.ct-compare{font-size:11px;color:var(--muted);line-height:1.4;margin-top:.3rem}
+
+/* OWNERSHIP MINI */
+.own-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.own-mini{border:1px solid var(--bd);padding:.85rem 1rem;border-radius:var(--r)}
+.own-mini-head{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.own-mini-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--bg3);font-size:13px}
+.own-mini-row:last-child{border-bottom:none}
+.own-up{color:var(--grn);font-weight:600;font-size:12px}
+.own-dn{color:var(--red2);font-weight:600;font-size:12px}
+.own-flat{color:var(--muted);font-size:12px}
+
+/* DD TAKE */
+.dd-take{background:#fdf8f0;border-left:3px solid var(--gold);padding:1.25rem 1.4rem;margin-top:1.5rem}
+.dd-take-lbl{font-size:10px;letter-spacing:.16em;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:.45rem}
+.dd-take-text{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2.5vw,1.05rem);line-height:1.8;color:#2a1f00}
+
+/* BUSINESS */
+.rev-streams{display:flex;flex-direction:column;gap:12px;margin:.75rem 0}
+.rs{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.rs-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.1rem;border-bottom:1px solid var(--bd);background:var(--bg2)}
+.rs-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rs-icon-red{background:#fdf0f0}
+.rs-icon-navy{background:#e8edf5}
+.rs-icon-dk{background:#0a1628}
+.rs-name{font-size:15px;font-weight:600;color:var(--ink)}
+.rs-size{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--aig);letter-spacing:.03em;line-height:1}
+.rs-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.rsb-green{background:var(--grn-bg);color:var(--grn)}
+.rsb-gold{background:#fef3c7;color:#92400e}
+.rsb-red{background:#fdf0f0;color:var(--aig-dark)}
+.rs-body{padding:1rem 1.1rem}
+.rs-desc{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:.85rem}
+.rs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rst{background:var(--bg2);padding:.65rem .75rem;border-radius:4px;border:1px solid var(--bd)}
+.rst-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.rst-val{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--ink);letter-spacing:.03em}
+.rst-note{font-size:11px;color:var(--grn);margin-top:1px;font-weight:500}
+
+.charts-2col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.chart-lbl{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-weight:500}
+
+/* TABLE */
+.rev-table{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.rt-thead{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;background:var(--bg2);border-bottom:2px solid var(--bd);padding:.6rem 1rem;gap:.5rem}
+.rt-th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.rt-row{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;align-items:center;gap:.5rem;padding:.75rem 1rem;border-bottom:1px solid var(--bd)}
+.rt-row:last-child{border-bottom:none}
+.rt-row-bold{background:var(--bg2);font-weight:700}
+.rt-cell{font-size:13px;color:var(--ink)}
+.rt-cell-muted{font-size:12px;color:var(--muted);font-style:italic}
+
+/* Q1 TABLE */
+.q1-table{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.q1-thead{display:grid;grid-template-columns:1.8fr 1fr 1fr 1.8fr;background:var(--bg2);border-bottom:2px solid var(--bd);padding:.6rem 1rem;gap:.5rem}
+.q1-th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.q1-row{display:grid;grid-template-columns:1.8fr 1fr 1fr 1.8fr;align-items:center;gap:.5rem;padding:.75rem 1rem;border-bottom:1px solid var(--bd)}
+.q1-row:last-child{border-bottom:none}
+.q1-cell{font-size:13px;color:var(--ink)}
+.q1-cell-g{color:var(--grn);font-weight:600}
+.q1-cell-m{font-size:12px;color:var(--muted)}
+
+/* DD NUMBERS GRID */
+.wow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:.75rem 0}
+.wc{border:1px solid var(--bd);padding:1rem;border-radius:var(--r)}
+.wc-dk{background:#0a1628;border-color:#142035}
+.wc-lbl{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.wc-lbl-w{color:rgba(255,255,255,.35)}
+.wc-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.03em;line-height:1.05;margin-bottom:.3rem;color:var(--ink)}
+.wc-val-w{color:#fff}.wc-val-g{color:#4ade80}.wc-val-red{color:var(--aig)}
+.wc-why{font-size:12px;color:var(--muted);line-height:1.45}
+.wc-why-w{color:rgba(255,255,255,.42)}
+
+/* SIGNALS */
+.signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.sig-head{font-size:10px;letter-spacing:.12em;font-weight:700;padding:.6rem 1rem;text-transform:uppercase;border-bottom:2px solid}
+.sig-head-g{color:var(--grn);border-color:var(--grn);background:var(--grn-bg);border-right:1px solid var(--bd)}
+.sig-head-r{color:var(--red2);border-color:var(--red2);background:var(--red-bg)}
+.sig-item{padding:.7rem 1rem;border-bottom:1px solid var(--bd);display:flex;gap:.55rem;align-items:flex-start}
+.sig-item:last-child{border-bottom:none}
+.sig-item-r{border-left:1px solid var(--bd)}
+.si-sym{font-size:14px;flex-shrink:0;font-weight:700;line-height:1.35}
+.si-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.si-b{font-size:12px;color:var(--muted);line-height:1.45}
+
+.wth-list{display:flex;flex-direction:column;gap:8px;margin:.75rem 0}
+.wth-item{border:1px solid var(--bd);padding:.9rem 1rem;display:flex;gap:.85rem;align-items:flex-start;border-radius:var(--r)}
+.wth-num{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);flex-shrink:0;line-height:1;min-width:28px}
+.wth-h{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.wth-b{font-size:13px;color:var(--muted);line-height:1.55}
+.wth-upside{font-size:12px;font-weight:600;color:var(--grn);margin-top:.35rem}
+
+/* INDUSTRY */
+.metric-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.75rem 0}
+.mc-card{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.mc-metric{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:.65rem}
+.mc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar-row:last-of-type{margin-bottom:0}
+.mc-bar-name{font-size:12px;min-width:72px;color:var(--muted)}
+.mc-bar-name-aig{color:var(--aig);font-weight:600}
+.mc-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:2px}
+.mc-bar-fill{height:5px;border-radius:2px}
+.mc-bar-val{font-size:12px;min-width:44px;text-align:right;font-weight:500;color:var(--muted)}
+.mc-bar-val-aig{font-weight:700;color:var(--aig)}
+.mc-insight{font-size:12px;color:var(--grn);font-weight:500;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--bg3)}
+.mc-insight-amber{font-size:12px;color:#92400e;font-weight:500;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--bg3)}
+
+/* VALUATION */
+.val-cards{display:flex;flex-direction:column;gap:10px;margin:.75rem 0}
+.val-card{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.val-card-top{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)}
+.vct-cell{padding:.9rem 1rem;border-right:1px solid var(--bd);background:var(--bg2)}
+.vct-cell:last-child{border-right:none;background:#fff}
+.vct-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem}
+.vct-name{font-size:15px;font-weight:700;color:var(--ink)}
+.vct-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.03em;line-height:1;color:var(--ink)}
+.vct-val-aig{color:var(--aig)}
+.vct-sub{font-size:11px;color:var(--muted);margin-top:.15rem}
+.val-card-body{padding:.85rem 1rem;font-size:13px;color:var(--muted);line-height:1.65}
+.val-card-body strong{color:var(--ink)}
+.val-verdict{font-size:12px;font-weight:600;padding:.55rem 1rem;border-top:1px solid var(--bd)}
+.val-verdict-green{color:var(--grn);background:var(--grn-bg)}
+.val-verdict-amber{color:#92400e;background:#fef3c7}
+
+/* COMP TABLE */
+.comp-table-wrap{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin:.75rem 0}
+.comp-table{width:100%;border-collapse:collapse}
+.comp-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.55rem .75rem;border-bottom:2px solid var(--bd);text-align:left;background:var(--bg2);white-space:nowrap}
+.comp-table td{padding:.65rem .75rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table .aig-row td{background:#fdf0f0;font-weight:600}
+.td-aig{color:var(--aig);font-weight:700}
+
+/* OWNERSHIP */
+.own-top-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:.75rem 0}
+.own-section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem}
+.dd-table{width:100%;border-collapse:collapse}
+.dd-table th{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.5rem .6rem;border-bottom:2px solid var(--bd);text-align:left;white-space:nowrap}
+.dd-table td{padding:.65rem .6rem;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.dd-table tr:last-child td{border-bottom:none}
+.td-name{font-weight:500}
+.td-up{color:var(--grn);font-weight:600}
+.td-flat{color:var(--muted)}
+.td-muted{color:var(--muted)}
+.own-note{font-size:12px;color:var(--muted);margin-top:.65rem;line-height:1.55}
+
+/* PERSON CARDS */
+.person-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:.75rem 0}
+.pc{border:1px solid var(--bd);padding:1.1rem;border-radius:var(--r)}
+.pc-init{width:38px;height:38px;border-radius:50%;background:#fdf0f0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--aig-dark);margin-bottom:.65rem;border:1px solid #f5c0c0}
+.pc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pc-role{font-size:12px;color:var(--muted);margin-bottom:.65rem}
+.pc-stat{font-size:12px;display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--bg3)}
+.pc-stat:last-of-type{border:none}
+.pc-sk{color:var(--muted)}
+.pc-sv{font-weight:600;color:var(--ink)}
+.pc-bio{font-size:12px;color:var(--muted);line-height:1.55;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--bd)}
+
+/* CAPITAL RETURN */
+.capital-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:.75rem 0}
+.cap-card{border:1px solid var(--bd);padding:1rem;border-radius:var(--r);text-align:center}
+.cap-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--aig);letter-spacing:.03em;line-height:1}
+.cap-lbl{font-size:11px;color:var(--muted);margin-top:.3rem;line-height:1.4}
+.cap-delta{font-size:11px;font-weight:600;margin-top:.35rem;color:var(--grn)}
+
+/* CASH FLOW VISUAL */
+.cash-flow{background:#0a1628;border-radius:var(--r);padding:1.25rem 1.5rem;margin:.75rem 0;border:1px solid #142035}
+.cf-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem;font-weight:600}
+.cf-row{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem}
+.cf-row:last-child{margin-bottom:0}
+.cf-arrow{font-size:18px;flex-shrink:0}
+.cf-label{font-size:13px;color:rgba(255,255,255,.6);flex:1}
+.cf-amount{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.03em}
+.cf-red{color:var(--aig)}
+.cf-green{color:#4ade80}
+.cf-blue{color:#60a5fa}
+.cf-divider{border-top:1px solid #142035;margin:.75rem 0}
+
+.disc{font-size:11px;color:var(--muted);padding-top:1rem;border-top:1px solid var(--bd);margin-top:2rem;line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .pane{padding:1.25rem 1rem 2.5rem}
+  .ddnum-grid,.comp-trio{grid-template-columns:repeat(3,1fr)}
+  .ddnum-val,.ct-val{font-size:1.6rem}
+  .flags-row,.own-two,.own-top-wrap{grid-template-columns:1fr}
+  .charts-2col,.metric-cards,.capital-grid{grid-template-columns:1fr}
+  .wow-grid{grid-template-columns:1fr 1fr 1fr}
+  .signals-grid{grid-template-columns:1fr}
+  .sig-item-r{border-left:none}
+  .sig-head-g{border-right:none}
+  .person-cards{grid-template-columns:1fr 1fr}
+  .val-card-top{grid-template-columns:1fr 1fr}
+  .val-card-top .vct-cell:last-child{display:none}
+  .rt-thead,.rt-row{grid-template-columns:2.2fr 1fr 1fr}
+  .rt-thead .rt-th:last-child,.rt-row .rt-cell:last-child{display:none}
+  .q1-thead,.q1-row{grid-template-columns:1.8fr 1fr 1fr}
+  .q1-thead .q1-th:last-child,.q1-row .q1-cell:last-child{display:none}
+  .own-top-wrap{grid-template-columns:1fr}
+  .comp-table th:nth-child(n+4),.comp-table td:nth-child(n+4){display:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-meta">
+    <span class="pill pill-red">AIG</span>
+    <span class="pill pill-ghost">Pure-Play Commercial Insurance</span>
+    <span class="pill pill-ghost">NYSE</span>
+    <span class="pill pill-ghost">FY2025 + Q1 2026, Market Cap $41.26B</span>
+  </div>
+  <div class="hero-name">American International Group</div>
+  <div class="hero-sub">A Daily Dividend Deep Dive &nbsp;·&nbsp; From Wall Street's Villain to a Cash-Compounding Machine</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar" role="tablist">
+  <button class="tab-btn active" onclick="showTab('snapshot',this)">Snapshot</button>
+  <button class="tab-btn" onclick="showTab('business',this)">The Business</button>
+  <button class="tab-btn" onclick="showTab('ddnumbers',this)">DD Numbers</button>
+  <button class="tab-btn" onclick="showTab('signals',this)">The Signals</button>
+  <button class="tab-btn" onclick="showTab('industry',this)">The Industry</button>
+  <button class="tab-btn" onclick="showTab('ownership',this)">Ownership</button>
+</div>
+
+<!-- ============================  SNAPSHOT  ============================ -->
+<div id="pane-snapshot" class="tab-pane active">
+<div class="pane">
+
+  <div class="hook">
+    <p>Back in 2008, AIG was Wall Street's ultimate horror movie. Packed with toxic financial bets, the company nearly dragged the entire global economy off a cliff before the U.S. government stepped in with a $182 billion life-support machine. For over a decade, investors treated the ticker like radioactive waste. Fast forward to 2026, and AIG has pulled off the ultimate corporate redemption arc. It sold off the side-hustles, spun out the life insurance arm, and rewrote how it prices risk. Today's AIG has abandoned the financial casino. What is left is a lean, mean, pure-play commercial insurance machine that is quietly printing cash.</p>
+  </div>
+
+  <div class="eyebrow">Three numbers worth stopping on</div>
+  <div class="ddnum-grid" style="margin:.5rem 0 .35rem">
+    <div class="ddnum"><div class="ddnum-val">$2.3B</div><div class="ddnum-lbl">Pure underwriting profit in FY2025, crossing the $2B mark for the first time since the crash</div></div>
+    <div class="ddnum"><div class="ddnum-val">$5.8B</div><div class="ddnum-lbl">Spent buying back its own stock in FY2025 alone, aggressively eating its own equity</div></div>
+    <div class="ddnum"><div class="ddnum-val">87.3%</div><div class="ddnum-lbl">Combined ratio in Q1 2026, anything under 100% means profit, this puts AIG in the Ivy League</div></div>
+  </div>
+  <div class="snav" onclick="showTab('ddnumbers',null)">See all DD numbers <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <div class="divl"></div>
+
+  <!-- Business preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('business',null)">
+      <span class="pc-tab-label">The Business</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">How AIG makes money</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--aig)">$17.4B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Global Commercial Insurance</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold)">$6.3B</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Global Personal Insurance</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--bd);padding:.75rem;border-radius:4px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#374151">4.61%</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Investment Yield on Cash Float</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:.75rem;line-height:1.6">AIG makes money the old-fashioned way: you pay a premium, they bet your factory does not burn down, and they pocket the difference. Adjusted EPS soared 43% to $7.09 in FY2025. The new mantra is clear: maximize underwriting profit, not just sheer size.</div>
+    </div>
+  </div>
+
+  <!-- Signals preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('signals',null)">
+      <span class="pc-tab-label">The Signals</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="flags-row">
+        <div class="flag-col">
+          <div class="flag-head flag-head-g">Green</div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Return on Equity finally cracked double digits at 11.1%, after a decade of burning shareholder value at 5 to 7%</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Q1 2026 profits rocketed 65% year-over-year, supercharged by higher investment yields and cleaner claims</span></div>
+          <div class="flag-item"><div class="fdot fdot-g"></div><span>Corebridge stake cut to 10.1%, unlocking nearly $20B in liquidity for shareholder returns</span></div>
+        </div>
+        <div class="flag-col">
+          <div class="flag-head flag-head-r">Red</div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Climate risk is an ever-present wildcard, one catastrophic storm season can vaporize a full year of progress</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Turnaround architect Peter Zaffino hands the CEO baton to Eric Andersen in June 2026</span></div>
+          <div class="flag-item"><div class="fdot fdot-r"></div><span>Commercial insurance pricing cycle may peak by late 2027, limiting future margin expansion</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('industry',null)">
+      <span class="pc-tab-label">The Industry</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div style="font-size:15px;font-weight:600;margin-bottom:.65rem">AIG vs the insurance elite</div>
+      <div class="comp-trio">
+        <div class="ct"><div class="ct-metric">Q1 2026 Combined Ratio</div><div class="ct-val">87.3%</div><div style="font-size:10px;color:var(--aig);font-weight:600">AIG</div><div class="ct-compare">Chubb ~85.5%, Travelers ~87.7%</div></div>
+        <div class="ct"><div class="ct-metric">Core ROE FY2025</div><div class="ct-val">11.1%</div><div style="font-size:10px;color:var(--aig);font-weight:600">AIG</div><div class="ct-compare">Chubb 13.5%, Travelers 12.8%</div></div>
+        <div class="ct"><div class="ct-metric">FY2025 Underwriting Profit</div><div class="ct-val">$2.3B</div><div style="font-size:10px;color:var(--aig);font-weight:600">AIG</div><div class="ct-compare">First time above $2B since the crash</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership preview -->
+  <div class="preview-card">
+    <div class="pc-head" onclick="showTab('ownership',null)">
+      <span class="pc-tab-label">Ownership</span>
+      <svg class="pc-arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="pc-body">
+      <div class="own-two">
+        <div class="own-mini">
+          <div class="own-mini-head">Capital return FY2025</div>
+          <div class="own-mini-row"><span style="font-weight:500">Share buybacks</span><span class="own-up">$5.8B</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Dividends paid</span><span class="own-up">$1.0B</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Total returned</span><span class="own-up">$6.8B</span></div>
+        </div>
+        <div class="own-mini">
+          <div class="own-mini-head">Institutional anchors</div>
+          <div class="own-mini-row"><span style="font-weight:500">Vanguard, BlackRock, State Street</span><span class="own-flat">20%+</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Value active managers</span><span class="own-up">Building stakes</span></div>
+          <div class="own-mini-row"><span style="font-weight:500">Debt-to-capital ratio</span><span class="own-up">17.7%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">AIG is no longer a toxic asset. It is a cash machine wearing a discount tag. For nearly twenty years, the stock traded at a massive penalty because the market could not forget 2008. But look at the actual data: profits are soaring, billions are flowing back to shareholders, and the combined ratio is competing with the best operators in the world. AIG has trimmed the corporate fat until there is nothing left but high-margin muscle. The only thing lagging now is the valuation multiple.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================  BUSINESS  ============================ -->
+<div id="pane-business" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Business</div>
+  <div class="sec-title">Blissfully simple. You pay the premium. They price the risk. They keep the difference.</div>
+  <div class="sec-sub">The modern AIG is a pure-play General Insurance operation. No complex retirement annuities. No exotic derivatives. No drama. By selling off its non-core empires, including Corebridge Financial and Validus Re, AIG has successfully removed every piece of noise from its balance sheet and left only the signal.</div>
+
+  <div class="rev-streams">
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-red">🏭</div>
+        <div>
+          <div class="rs-name">Global Commercial Insurance</div>
+          <div class="rs-size">$17.4B in Net Premiums Written, FY2025</div>
+        </div>
+        <div class="rs-badge rsb-red">The crown jewel</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">The undisputed engine of the business. AIG is a global heavyweight in protecting corporations against cyber attacks, catastrophic property damage, and massive liability lawsuits. They serve 90% of the Fortune 500 and this segment grew new business by 9% in FY2025 as commercial insurance prices rose globally. This is not a commodity business. It is a relationship business built over decades, and it is incredibly hard to replicate.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Fortune 500 coverage</div><div class="rst-val">90%</div><div class="rst-note">Irreplaceable relationships</div></div>
+          <div class="rst"><div class="rst-lbl">New business growth</div><div class="rst-val">+9%</div><div class="rst-note">FY2025 YoY</div></div>
+          <div class="rst"><div class="rst-lbl">Q1 2026 combined ratio</div><div class="rst-val">~85.5%</div><div class="rst-note">Ivy League underwriting</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-navy">🏠</div>
+        <div>
+          <div class="rs-name">Global Personal Insurance</div>
+          <div class="rs-size">$6.3B in Net Premiums Written, FY2025</div>
+        </div>
+        <div class="rs-badge rsb-gold">The comeback story</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">Personal property, travel, and health insurance for high-net-worth individuals. This segment was a persistent drag until a major operational overhaul in late 2025 cut out unnecessary expenses and flipped it from loss-maker to profit engine by Q1 2026. The turnaround in this unit is the most overlooked story in the AIG recovery. A $126M loss became a $169M profit in a single year. That kind of swing does not happen by accident.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Q1 2026 profit</div><div class="rst-val">$169M</div><div class="rst-note">Was a $126M loss in Q1 2025</div></div>
+          <div class="rst"><div class="rst-lbl">Q1 2026 combined ratio</div><div class="rst-val">89.4%</div><div class="rst-note">Structural fix confirmed</div></div>
+          <div class="rst"><div class="rst-lbl">Swing in 12 months</div><div class="rst-val">+$295M</div><div class="rst-note">Profit turnaround</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rs">
+      <div class="rs-header">
+        <div class="rs-icon rs-icon-dk">📈</div>
+        <div>
+          <div class="rs-name">Investment Float Income, The Silent Profit Engine</div>
+          <div class="rs-size">4.61% yield on a massive premium float</div>
+        </div>
+        <div class="rs-badge rsb-green">The secret weapon</div>
+      </div>
+      <div class="rs-body">
+        <div class="rs-desc">Insurance companies collect premiums today and pay claims later. In between, they invest that cash pile. AIG's premium float is enormous, and at a 4.61% investment yield, higher interest rates are a direct tailwind to profits. This is a revenue stream that requires zero additional underwriting. Every Fed decision that keeps rates elevated is another free profit boost for AIG, completely invisible to most investors who only look at the combined ratio.</div>
+        <div class="rs-stats">
+          <div class="rst"><div class="rst-lbl">Investment yield</div><div class="rst-val">4.61%</div><div class="rst-note">On reinvested cash</div></div>
+          <div class="rst"><div class="rst-lbl">Investment income boost</div><div class="rst-val">+17%</div><div class="rst-note">YoY from rate environment</div></div>
+          <div class="rst"><div class="rst-lbl">Zero underwriting effort</div><div class="rst-val">Pure float</div><div class="rst-note">Automatic compounding</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Financial Performance</div>
+  <div class="sec-title" style="font-size:1.35rem">From near-breakeven to record profits in three years</div>
+
+  <div class="rev-table">
+    <div class="rt-thead">
+      <div class="rt-th">Metric</div>
+      <div class="rt-th">FY2023</div>
+      <div class="rt-th">FY2024</div>
+      <div class="rt-th">FY2025</div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-cell">Net Premiums Written</div>
+      <div class="rt-cell">$25.7B</div>
+      <div class="rt-cell">$24.1B</div>
+      <div class="rt-cell" style="color:var(--aig);font-weight:600">$23.7B</div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-cell">Underwriting Income</div>
+      <div class="rt-cell">$2.0B</div>
+      <div class="rt-cell">$1.9B</div>
+      <div class="rt-cell" style="color:var(--grn);font-weight:600">$2.3B (+22%)</div>
+    </div>
+    <div class="rt-row">
+      <div class="rt-cell">Adj. After-Tax EPS</div>
+      <div class="rt-cell">$5.39</div>
+      <div class="rt-cell">$4.95</div>
+      <div class="rt-cell" style="color:var(--grn);font-weight:600">$7.09 (+43%)</div>
+    </div>
+    <div class="rt-row rt-row-bold">
+      <div class="rt-cell">Combined Ratio</div>
+      <div class="rt-cell">90.5%</div>
+      <div class="rt-cell">91.8%</div>
+      <div class="rt-cell" style="color:var(--aig)">90.1% (Best)</div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="margin-top:1.5rem">Q1 2026 Segment Breakdown</div>
+  <div class="sec-title" style="font-size:1.35rem">A profit surge that rewrites the narrative</div>
+
+  <div class="q1-table">
+    <div class="q1-thead">
+      <div class="q1-th">Segment</div>
+      <div class="q1-th">Q1 2026 Profit</div>
+      <div class="q1-th">Combined Ratio</div>
+      <div class="q1-th">The Story</div>
+    </div>
+    <div class="q1-row" style="background:#f0fdf4">
+      <div class="q1-cell" style="font-weight:600">North America Commercial</div>
+      <div class="q1-cell q1-cell-g">$337M</div>
+      <div class="q1-cell q1-cell-g">84.1%</div>
+      <div class="q1-cell q1-cell-m">Premiums jumped 37%, corporate clients are paying up</div>
+    </div>
+    <div class="q1-row">
+      <div class="q1-cell" style="font-weight:600">International Commercial</div>
+      <div class="q1-cell q1-cell-g">$278M</div>
+      <div class="q1-cell q1-cell-g">86.9%</div>
+      <div class="q1-cell q1-cell-m">Strong renewals and smart risk-sharing with reinsurance partners</div>
+    </div>
+    <div class="q1-row" style="background:#f0fdf4">
+      <div class="q1-cell" style="font-weight:600">Global Personal Insurance</div>
+      <div class="q1-cell q1-cell-g">$169M</div>
+      <div class="q1-cell q1-cell-g">89.4%</div>
+      <div class="q1-cell q1-cell-m">A massive comeback from a $126M loss in Q1 2025, structural fix confirmed</div>
+    </div>
+  </div>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Underwriting income FY2023 to FY2025 ($B)</div>
+      <div style="position:relative;height:190px"><canvas id="uwChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Adjusted after-tax EPS growth ($)</div>
+      <div style="position:relative;height:190px"><canvas id="epsChart"></canvas></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================  DD NUMBERS  ============================ -->
+<div id="pane-ddnumbers" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">DD Numbers</div>
+  <div class="sec-title">Nine metrics tracking AIG's journey from Wall Street's villain to a cash-compounding hero</div>
+  <div class="sec-sub">Not press release fluff. The actual numbers that prove the redemption arc is real and accelerating.</div>
+
+  <div class="wow-grid">
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">The Underwriting Jackpot</div><div class="wc-val wc-val-red">$2.3B</div><div class="wc-why wc-why-w">Pure underwriting profit in FY2025. First time above $2B since the 2008 crash. This is money made simply by pricing risk correctly, no magic, no leverage, no derivatives.</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">The Double-Digit Club</div><div class="wc-val wc-val-w">11.1%</div><div class="wc-why wc-why-w">Core Return on Equity in FY2025. After a decade of generating a miserable 5 to 7% ROE and essentially burning shareholder capital, crossing 10% proves the turnaround is the real deal.</div></div>
+    <div class="wc wc-dk"><div class="wc-lbl wc-lbl-w">The Q1 Rocket Launch</div><div class="wc-val wc-val-g">+65%</div><div class="wc-why wc-why-w">Explosion in Adjusted Pretax Income to $1.5B in Q1 2026 alone. Higher investment yields plus cleaner claims equals a profit stacking rate that is completely rewriting the earnings model.</div></div>
+    <div class="wc"><div class="wc-lbl">The Great Escape</div><div class="wc-val" style="color:var(--aig)">10.1%</div><div class="wc-why">Corebridge Financial stake remaining after years of sell-downs since 2021. By exiting the life insurance business, AIG unlocked nearly $20B in liquidity to fuel its shareholder reward machine.</div></div>
+    <div class="wc"><div class="wc-lbl">The Share-Eating Monster</div><div class="wc-val">$5.8B</div><div class="wc-why">Spent on share buybacks in FY2025 alone. Combined with $1B in dividends, AIG returned $6.8B to investors in twelve months, equal to wiping out over 14% of its starting market cap.</div></div>
+    <div class="wc"><div class="wc-lbl">The Gold Standard Ratio</div><div class="wc-val" style="color:var(--grn)">87.3%</div><div class="wc-why">Combined ratio in Q1 2026, down from a bloated 95.8% a year prior. AIG is now keeping vastly more profit from every dollar it collects in premiums. This is Ivy League underwriting efficiency.</div></div>
+    <div class="wc"><div class="wc-lbl">The Robot Assistant</div><div class="wc-val">370K+</div><div class="wc-why">Commercial insurance applications processed via AI by late 2025. Proprietary machine learning models help human underwriters sort through middle-market accounts 35% faster, turning data into a structural cost advantage.</div></div>
+    <div class="wc"><div class="wc-lbl">The Cold Hard Pay Raise</div><div class="wc-val" style="color:var(--aig)">+11%</div><div class="wc-why">Quarterly dividend bump approved for Q2 2026, raising the payout to $0.50 per share. AIG's fourth consecutive year of double-digit dividend hikes. Boring is very beautiful when it compounds like this.</div></div>
+    <div class="wc"><div class="wc-lbl">The Ultimate Clean Slate</div><div class="wc-val" style="color:var(--grn)">$22.7B</div><div class="wc-why">Profit generated for U.S. taxpayers on the $182B bailout, now fully repaid. AIG owes the government absolutely nothing. Every dollar on the balance sheet belongs entirely to the company and its owners.</div></div>
+  </div>
+
+  <div class="charts-2col">
+    <div>
+      <div class="chart-lbl">Capital returned to shareholders FY2023 to FY2025 ($B)</div>
+      <div style="position:relative;height:200px"><canvas id="capitalChart"></canvas></div>
+    </div>
+    <div>
+      <div class="chart-lbl">Combined ratio improvement (lower is better)</div>
+      <div style="position:relative;height:200px"><canvas id="ratioChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dd-take">
+    <div class="dd-take-lbl">The Daily Dividend Take</div>
+    <div class="dd-take-text">The number that matters most is not the $2.3B underwriting profit. It is the combined ratio dropping from 95.8% to 87.3% in a single year. In insurance, every single percentage point of combined ratio improvement flows almost entirely to the bottom line. That 8.5 point swing is not an accident. It is the result of a complete rewiring of how AIG prices, selects, and manages risk. And the gap to best-in-class at 85.5% tells you there is still room to run.</div>
+  </div>
+</div>
+</div>
+
+<!-- ============================  SIGNALS  ============================ -->
+<div id="pane-signals" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Signals</div>
+  <div class="sec-title">What the underwriting data is telling you about the world's greatest insurance comeback</div>
+
+  <div class="signals-grid">
+    <div>
+      <div class="sig-head sig-head-g">Green flags</div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Boring is beautiful and very profitable</div><div class="si-b">Despite selling off massive chunks of historical business, AIG replaced those lost revenues in record time by dramatically improving its basic Property and Casualty margins. When everyone else was chasing complexity, AIG was quietly mastering the fundamentals of pricing risk correctly.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Interest rates are a secret profit weapon</div><div class="si-b">AIG's massive premium float is being reinvested at a 4.61% yield, giving a 17% boost to investment income that requires zero additional underwriting effort. Every time the Fed holds rates, AIG earns more money in its sleep. It is a structural tailwind hiding in plain sight on the income statement.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">The AIG Next cost machine is working</div><div class="si-b">The AIG Next cost-cutting program has shaved off $500M in corporate bloat by closing duplicate offices and modernizing back-end software. This is not a one-time fix. It is a permanent structural reduction in the expense base that compounds every quarter.</div></div>
+      </div>
+      <div class="sig-item">
+        <div class="si-sym" style="color:var(--grn)">+</div>
+        <div><div class="si-h">Client retention is rock solid at 88%</div><div class="si-b">Even as AIG raised insurance prices to match inflation, it retained 88% of its commercial clients. That retention rate proves AIG's corporate relationships run deeper than price sensitivity. In commercial insurance, switching costs are enormous and real, and that is a moat most people completely miss.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sig-head sig-head-r">Red flags</div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Mother Nature does not care about turnarounds</div><div class="si-b">Even with the best AI software and reinsurance shields, severe weather events are highly volatile wildcards that can heavily damage a single quarter's earnings. One catastrophic hurricane season can erase an entire year of disciplined underwriting. This risk never goes away. It only gets managed, never eliminated.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">Passing the baton to a new CEO mid-momentum</div><div class="si-b">Turnaround mastermind Peter Zaffino steps away from the day-to-day CEO role in June 2026. Incoming CEO Eric Andersen is a seasoned insurance professional, but replacing the architect of a structural transformation at the exact moment profits are accelerating is always a governance risk that deserves close monitoring.</div></div>
+      </div>
+      <div class="sig-item sig-item-r">
+        <div class="si-sym" style="color:var(--red2)">–</div>
+        <div><div class="si-h">The pricing party could slow down by late 2027</div><div class="si-b">Commercial insurance prices have been rising for several consecutive years as the industry repaired from COVID-era losses. If the market cools off or competitors launch a price war, AIG's margin expansion could flatten out. The current combined ratio improvement is partly cyclical, not purely structural. Knowing the difference matters.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">For the stock to double</div>
+  <div class="sec-title" style="font-size:1.5rem">The four catalysts that would close the valuation gap to peers</div>
+  <div class="wth-list">
+    <div class="wth-item">
+      <div class="wth-num">01</div>
+      <div>
+        <div class="wth-h">ROE closes the gap to 14%+</div>
+        <div class="wth-b">If AIG uses its AI underwriting tools to keep structural expenses permanently below 29% of premiums, capital efficiencies will lift ROE to the premium competitor level. At 14% ROE, AIG deserves to trade at the same price-to-book multiple as Chubb and Travelers, which would imply a 30 to 40% re-rating from current levels before any earnings growth is even counted.</div>
+        <div class="wth-upside">Every 1% of ROE improvement above 11% drives a meaningful multiple re-rating vs. peers</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">02</div>
+      <div>
+        <div class="wth-h">The final Corebridge tranche cashes out</div>
+        <div class="wth-b">Selling off the remaining 10.1% stake in Corebridge Financial will trigger a multi-billion dollar cash windfall, paving the way for a special buyback program that could eliminate another meaningful percentage of the float in a single transaction. The remaining stake is money sitting on the table, and the market has not fully priced the eventual distribution.</div>
+        <div class="wth-upside">Final stake sale triggers a special buyback event that compresses the float in a single move</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">03</div>
+      <div>
+        <div class="wth-h">Personal Lines proves it is structurally fixed</div>
+        <div class="wth-b">The Q1 2026 swing in Global Personal Insurance from a $126M loss to a $169M profit is extraordinary. But one quarter does not prove structural repair. If the segment delivers consecutive profitable quarters through Q3 2026, the market will reclassify the entire division from liability to asset, unlocking a segment re-rating that has not been priced in at all.</div>
+        <div class="wth-upside">Consecutive profitable quarters in Personal turns a perceived drag into a genuine second growth engine</div>
+      </div>
+    </div>
+    <div class="wth-item">
+      <div class="wth-num">04</div>
+      <div>
+        <div class="wth-h">Wall Street finally lets go of 2008</div>
+        <div class="wth-b">AIG's tangible book value per share sits at $70.85. The stock trades remarkably close to that liquidation value, while industry peers regularly command 1.5x to 2.0x book. That entire discount is a psychological hangover from the bailout era, not a reflection of current fundamentals. As the market reprices AIG as a forward compounder rather than a turnaround story, the multiple expansion alone could be the biggest catalyst of all.</div>
+        <div class="wth-upside">A re-rating from book value to 1.5x book closes a valuation gap worth tens of billions in market cap</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================  INDUSTRY  ============================ -->
+<div id="pane-industry" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">The Industry</div>
+  <div class="sec-title">AIG vs the insurance elite: the underdog has officially arrived</div>
+  <div class="sec-sub">AIG is no longer a sprawling financial spiderweb. It is an enterprise-level commercial P&C specialist competing directly against Chubb and Travelers. The gap is closing fast.</div>
+
+  <div class="metric-cards">
+    <div class="mc-card">
+      <div class="mc-metric">Q1 2026 Combined Ratio (Lower Wins)</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-aig">AIG</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:87%;background:var(--aig)"></div></div><div class="mc-bar-val mc-bar-val-aig">87.3%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Chubb</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:85%;background:#9ca3af"></div></div><div class="mc-bar-val">~85.5%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Travelers</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:88%;background:#9ca3af"></div></div><div class="mc-bar-val">~87.7%</div></div>
+      <div class="mc-insight">AIG has nearly closed the combined ratio gap to the gold standard operators. From 95.8% a year ago to 87.3% today. The margin compression in one year is extraordinary.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Core Return on Equity FY2025</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-aig">AIG</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:79%;background:var(--aig)"></div></div><div class="mc-bar-val mc-bar-val-aig">11.1%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Chubb</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:96%;background:#9ca3af"></div></div><div class="mc-bar-val">13.5%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Travelers</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:91%;background:#9ca3af"></div></div><div class="mc-bar-val">12.8%</div></div>
+      <div class="mc-insight-amber">The ROE gap to Chubb is 2.4 percentage points. That gap is not structural. It is a cost problem that AI underwriting tools are systematically dismantling. The market is not yet pricing in a closure.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Client Retention Strength</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-aig">AIG</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:88%;background:var(--aig)"></div></div><div class="mc-bar-val mc-bar-val-aig">88%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Chubb</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:92%;background:#9ca3af"></div></div><div class="mc-bar-val">~92%</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Travelers</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:87%;background:#9ca3af"></div></div><div class="mc-bar-val">~87%</div></div>
+      <div class="mc-insight">An 88% retention rate despite aggressive price increases is proof of deep commercial relationships. Corporate clients stay with insurers who understand their risk complexity, not just whoever offers the cheapest quote.</div>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-metric">Capital Return Aggression FY2025</div>
+      <div class="mc-bar-row"><div class="mc-bar-name mc-bar-name-aig">AIG</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:100%;background:var(--aig)"></div></div><div class="mc-bar-val mc-bar-val-aig">$6.8B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Chubb</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:55%;background:#9ca3af"></div></div><div class="mc-bar-val">~$3.7B</div></div>
+      <div class="mc-bar-row"><div class="mc-bar-name">Travelers</div><div class="mc-bar-bg"><div class="mc-bar-fill" style="width:38%;background:#9ca3af"></div></div><div class="mc-bar-val">~$2.6B</div></div>
+      <div class="mc-insight">AIG is returning more capital to shareholders than any comparable peer in absolute terms. The Corebridge liquidation created a one-time window of extraordinary buyback capacity that is shrinking the float at an unprecedented pace.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">Competitor Snapshot</div>
+
+  <div class="comp-table-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>AIG (NYSE: AIG)</th>
+          <th>Chubb Limited (CB)</th>
+          <th>Travelers (TRV)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="aig-row">
+          <td>Core Focus</td>
+          <td class="td-aig">Pure-Play Global Commercial P&C</td>
+          <td>Premium Commercial &amp; Specialty</td>
+          <td>Balanced Commercial &amp; Personal</td>
+        </tr>
+        <tr>
+          <td>Q1 2026 Combined Ratio</td>
+          <td class="td-aig">87.3%</td>
+          <td>~85.5%</td>
+          <td>~87.7%</td>
+        </tr>
+        <tr>
+          <td>Core ROE FY2025</td>
+          <td class="td-aig">11.1%</td>
+          <td>13.5%</td>
+          <td>12.8%</td>
+        </tr>
+        <tr>
+          <td>Capital Returned FY2025</td>
+          <td class="td-aig">$6.8B</td>
+          <td>~$3.7B</td>
+          <td>~$2.6B</td>
+        </tr>
+        <tr>
+          <td>Status</td>
+          <td class="td-aig">Turnaround complete, re-rating pending</td>
+          <td>Mature, gold-standard operator</td>
+          <td>Mature, deep broker network</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="val-cards">
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">Price to Book</div>
+          <div class="vct-sub">Stock price versus tangible book value per share</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">AIG today</div>
+          <div class="vct-val vct-val-aig">~1.0x</div>
+          <div class="vct-sub">Tangible book value $70.85/share</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">Peer standard</div>
+          <div class="vct-val">1.5x to 2.0x</div>
+          <div class="vct-sub">Chubb and Travelers command</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>The case:</strong> The market is still pricing AIG like a turnaround story rather than a completed transformation. At roughly 1x tangible book, you are buying a world-class underwriting operation at liquidation value. When the re-rating happens, it does not require any earnings growth. It simply requires the market to stop applying a 2008 discount to a 2026 business.</div>
+      <div class="val-verdict val-verdict-green">Buying a premium commercial insurer at book value is the definition of asymmetric risk-reward. Peers trade at 1.5 to 2.0x.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-card-top">
+        <div class="vct-cell">
+          <div class="vct-lbl">Measure</div>
+          <div class="vct-name">Earnings Multiple</div>
+          <div class="vct-sub">Stock price versus FY2025 adjusted EPS of $7.09</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">AIG P/E today</div>
+          <div class="vct-val vct-val-aig">Compressed</div>
+          <div class="vct-sub">Priced like a utility</div>
+        </div>
+        <div class="vct-cell">
+          <div class="vct-lbl">The gap</div>
+          <div class="vct-val">Enormous</div>
+          <div class="vct-sub">Versus peer multiples</div>
+        </div>
+      </div>
+      <div class="val-card-body"><strong>Context:</strong> Trading at a highly compressed multiple relative to its $7.09 FY2025 EPS, the market is pricing AIG like a slow-moving utility while completely missing the explosive profit potential unlocked by its pure-play business structure. If EPS compounds at even 15% annually toward $12 to $15, the current share price looks extraordinarily cheap in hindsight.</div>
+      <div class="val-verdict val-verdict-amber">Utilities trade at utility multiples until the market sees the growth engine underneath. AIG's EPS is growing at 43%. That is not a utility.</div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Data sourced from AIG Inc. FY2025 10-K Annual Report, AIG Q1 2026 Earnings Release and Transcript (April 30, 2026), and public market data as of May 18, 2026. A Daily Dividend publication.</div>
+</div>
+</div>
+
+<!-- ============================  OWNERSHIP  ============================ -->
+<div id="pane-ownership" class="tab-pane">
+<div class="pane">
+  <div class="eyebrow">Ownership</div>
+  <div class="sec-title">Who is holding AIG and what is the cash return machine doing for them</div>
+
+  <div class="own-top-wrap">
+    <div>
+      <div class="own-section-label">Major institutional shareholders</div>
+      <table class="dd-table">
+        <thead>
+          <tr><th>Investor</th><th>Type</th><th>Approximate Stake</th><th>Signal</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-name">Vanguard Group</td><td class="td-muted">Passive index</td><td>~8%+</td><td class="td-flat">Structural anchor</td></tr>
+          <tr><td class="td-name">BlackRock</td><td class="td-muted">Passive index</td><td>~7%+</td><td class="td-flat">Structural anchor</td></tr>
+          <tr><td class="td-name">State Street</td><td class="td-muted">Passive index</td><td>~5%+</td><td class="td-flat">Structural anchor</td></tr>
+          <tr><td class="td-name">Value active funds</td><td class="td-muted">Active long-only</td><td>Growing</td><td class="td-up">Buyback-driven entry</td></tr>
+          <tr><td class="td-name">Dividend income funds</td><td class="td-muted">Active income</td><td>Building</td><td class="td-up">Fourth consecutive hike</td></tr>
+        </tbody>
+      </table>
+      <div class="own-note">Vanguard, BlackRock, and State Street collectively hold over 20% of AIG, providing a rock-solid passive foundation for the stock. The more meaningful recent signal is active value funds building stakes across FY2025 and early 2026, drawn in by the relentless buyback program that is mechanically improving per-share metrics every quarter.</div>
+    </div>
+
+    <div>
+      <div class="own-section-label">The capital return machine</div>
+      <div class="capital-grid" style="margin-bottom:1rem">
+        <div class="cap-card"><div class="cap-val">$5.8B</div><div class="cap-lbl">Share buybacks in FY2025 alone</div><div class="cap-delta">14%+ of float</div></div>
+        <div class="cap-card"><div class="cap-val">$1.0B</div><div class="cap-lbl">Dividends paid in FY2025</div><div class="cap-delta">+11% raise for Q2 2026</div></div>
+        <div class="cap-card"><div class="cap-val">17.7%</div><div class="cap-lbl">Debt-to-capital ratio, conservatively financed</div><div class="cap-delta">Self-sustaining</div></div>
+      </div>
+
+      <div class="cash-flow">
+        <div class="cf-title">Where the cash flows</div>
+        <div class="cf-row">
+          <div class="cf-arrow">📥</div>
+          <div class="cf-label">Incoming: Premium collections and Corebridge asset sales</div>
+          <div class="cf-amount cf-blue">+$23.7B</div>
+        </div>
+        <div class="cf-divider"></div>
+        <div class="cf-row">
+          <div class="cf-arrow">🔁</div>
+          <div class="cf-label">Share buybacks: Shrinking the float by over 14% in one year</div>
+          <div class="cf-amount cf-red">$5.8B</div>
+        </div>
+        <div class="cf-row">
+          <div class="cf-arrow">💰</div>
+          <div class="cf-label">Dividend hikes: Fourth consecutive double-digit increase</div>
+          <div class="cf-amount cf-green">$1.0B</div>
+        </div>
+      </div>
+
+      <div class="own-note" style="margin-top:.75rem">With a debt-to-capital ratio of just 17.7%, AIG's financial core is fully self-sustaining. The company does not need to borrow cash to run its business, leaving the entire runway clear to channel incoming capital directly back to investors. The buyback authorization still has significant capacity remaining.</div>
+    </div>
+  </div>
+
+  <div class="divl"></div>
+  <div class="eyebrow">The People</div>
+  <div style="font-size:14px;color:var(--muted);margin-bottom:.85rem">The leadership team and why this transition moment matters</div>
+
+  <div class="person-cards">
+    <div class="pc">
+      <div class="pc-init">PZ</div>
+      <div class="pc-name">Peter Zaffino</div>
+      <div class="pc-role">Outgoing CEO, Incoming Executive Chair</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Guy Carpenter / Marsh</span></div>
+      <div class="pc-stat"><span class="pc-sk">At AIG since</span><span class="pc-sv">2017</span></div>
+      <div class="pc-stat"><span class="pc-sk">Legacy</span><span class="pc-sv">The entire turnaround</span></div>
+      <div class="pc-stat"><span class="pc-sk">Transition</span><span class="pc-sv">June 1, 2026</span></div>
+      <div class="pc-bio">The architect of modern AIG. Zaffino took a broken, fragmented corporate giant and whipped it into pure-play shape. He brought back underwriting discipline, executed the complex Corebridge spin-off, and restored AIG's reputation on Wall Street from radioactive waste to must-own. His move to Executive Chair ensures the strategy does not get diluted by an incoming team eager to make its own mark.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">EA</div>
+      <div class="pc-name">Eric Andersen</div>
+      <div class="pc-role">Incoming President &amp; CEO (June 1, 2026)</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Aon / Insurance industry veteran</span></div>
+      <div class="pc-stat"><span class="pc-sk">Previous role</span><span class="pc-sv">President of Aon</span></div>
+      <div class="pc-stat"><span class="pc-sk">Expertise</span><span class="pc-sv">Commercial risk, global clients</span></div>
+      <div class="pc-stat"><span class="pc-sk">Phase</span><span class="pc-sv">Compounder, not turnaround</span></div>
+      <div class="pc-bio">Andersen's tenure marks the official evolution of AIG from a structural turnaround project into a long-term compounder focused on growing shareholder wealth year after year. He knows commercial risk inside and out from his years running Aon. The question is whether he maintains Zaffino's iron underwriting discipline or gets tempted by top-line growth at the expense of margin quality.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">SB</div>
+      <div class="pc-name">Shane Fitzsimons</div>
+      <div class="pc-role">Chief Financial Officer</div>
+      <div class="pc-stat"><span class="pc-sk">Background</span><span class="pc-sv">Insurance finance executive</span></div>
+      <div class="pc-stat"><span class="pc-sk">Focus</span><span class="pc-sv">Capital allocation, buybacks</span></div>
+      <div class="pc-stat"><span class="pc-sk">FY2025 delivery</span><span class="pc-sv">$6.8B returned</span></div>
+      <div class="pc-stat"><span class="pc-sk">EPS growth</span><span class="pc-sv">+43% to $7.09</span></div>
+      <div class="pc-bio">The financial engineer behind the relentless capital return program. The $5.8B buyback in FY2025 representing over 14% of the starting float is an extraordinary allocation decision. With the remaining Corebridge stake still to be monetized, the CFO holds the key to the next wave of per-share value creation through disciplined distribution of that windfall.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">VG</div>
+      <div class="pc-name">Vanguard, BlackRock, State Street</div>
+      <div class="pc-role">Passive Institutional Anchors (20%+ combined)</div>
+      <div class="pc-stat"><span class="pc-sk">Type</span><span class="pc-sv">Global index funds</span></div>
+      <div class="pc-stat"><span class="pc-sk">Behaviour</span><span class="pc-sv">Structural, non-active</span></div>
+      <div class="pc-stat"><span class="pc-sk">Signal</span><span class="pc-sv">Stability and liquidity</span></div>
+      <div class="pc-stat"><span class="pc-sk">S&P 500 weight</span><span class="pc-sv">Permanent inclusion</span></div>
+      <div class="pc-bio">The combined 20%+ passive anchor provides structural liquidity stability and prevents hostile position-building. Their presence is a function of S&P 500 index inclusion, not active conviction, but their scale means any meaningful upward re-rating in the stock creates a powerful mechanical buying wave as ETF assets under management grow and rebalance.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">VA</div>
+      <div class="pc-name">Value Active Managers</div>
+      <div class="pc-role">Growing Activist-Friendly Positions</div>
+      <div class="pc-stat"><span class="pc-sk">Thesis</span><span class="pc-sv">Book value discount</span></div>
+      <div class="pc-stat"><span class="pc-sk">Entry period</span><span class="pc-sv">FY2025 and early 2026</span></div>
+      <div class="pc-stat"><span class="pc-sk">Catalyst watching</span><span class="pc-sv">Corebridge final sale</span></div>
+      <div class="pc-stat"><span class="pc-sk">Signal</span><span class="pc-sv">Smart money is in</span></div>
+      <div class="pc-bio">Active value funds have heavily built out positions across FY2025 and early 2026, drawn by the combination of relentless buybacks, the book-value discount, and the Corebridge final distribution catalyst. When sophisticated value managers build positions in a company that is aggressively retiring its own stock, the per-share upside math becomes compelling even with moderate earnings growth.</div>
+    </div>
+    <div class="pc">
+      <div class="pc-init">AI</div>
+      <div class="pc-name">AIG Underwriting AI Team</div>
+      <div class="pc-role">The Invisible Competitive Advantage</div>
+      <div class="pc-stat"><span class="pc-sk">Applications processed</span><span class="pc-sv">370,000+ by late 2025</span></div>
+      <div class="pc-stat"><span class="pc-sk">Speed improvement</span><span class="pc-sv">35% faster processing</span></div>
+      <div class="pc-stat"><span class="pc-sk">Cost program</span><span class="pc-sv">AIG Next, $500M saved</span></div>
+      <div class="pc-stat"><span class="pc-sk">Impact</span><span class="pc-sv">Structural expense reduction</span></div>
+      <div class="pc-bio">The team deploying proprietary machine learning models across AIG's middle-market commercial book is the least-discussed source of competitive moat in the entire company. Processing 370,000 applications via AI while cutting human review time by 35% is not a headline. But it is the mechanism compressing the expense ratio toward 29%, and every basis point of that compression flows directly to underwriting profit forever.</div>
+    </div>
+  </div>
+
+  <div class="disc">For informational purposes only. Not investment advice. Data sourced from AIG Inc. FY2025 10-K Annual Report, AIG Q1 2026 Earnings Release and Transcript (April 30, 2026), and public market data as of May 18, 2026. A Daily Dividend publication.</div>
+
+</div>
+</div>
+
+</div><!-- /shell -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  if (btn && btn.classList && btn.classList.contains('tab-btn')) {
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+    });
+  }
+  renderCharts(id);
+}
+
+var rendered = {};
+function renderCharts(tab) {
+  if (rendered[tab]) return;
+  rendered[tab] = true;
+  const mc = '#9ca3af', gc = 'rgba(0,0,0,.05)', red = '#B31B1B';
+
+  if (tab === 'business') {
+    new Chart(document.getElementById('uwChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2023','FY2024','FY2025'],
+        datasets: [{
+          label: 'Underwriting Income',
+          data: [2.0, 1.9, 2.3],
+          backgroundColor: ['#e8a0a0','#e8a0a0', red],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 12 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 12 }, callback: v => '$' + v + 'B' }, border: { display: false }, min: 1.5 }
+        }
+      }
+    });
+    new Chart(document.getElementById('epsChart'), {
+      type: 'line',
+      data: {
+        labels: ['FY2023','FY2024','FY2025'],
+        datasets: [{
+          data: [5.39, 4.95, 7.09],
+          borderColor: red, borderWidth: 2.5,
+          pointBackgroundColor: [mc, '#f87171', red],
+          pointRadius: 5,
+          fill: true, backgroundColor: 'rgba(179,27,27,.07)', tension: .3
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 12 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 12 }, callback: v => '$' + v }, border: { display: false }, min: 4 }
+        }
+      }
+    });
+  }
+
+  if (tab === 'ddnumbers') {
+    new Chart(document.getElementById('capitalChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2023','FY2024','FY2025'],
+        datasets: [
+          { label: 'Share Buybacks', data: [3.8, 4.5, 5.8], backgroundColor: red, borderRadius: 4 },
+          { label: 'Dividends', data: [0.8, 0.9, 1.0], backgroundColor: '#C8922A', borderRadius: 4 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'bottom', labels: { color: mc, font: { size: 11 }, padding: 10, boxWidth: 10, boxHeight: 10 } } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { stacked: true, grid: { color: gc }, ticks: { color: mc, font: { size: 11 }, callback: v => '$' + v + 'B' }, border: { display: false } }
+        }
+      }
+    });
+    new Chart(document.getElementById('ratioChart'), {
+      type: 'line',
+      data: {
+        labels: ['Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'],
+        datasets: [
+          {
+            label: 'AIG',
+            data: [95.8, 93.2, 91.5, 90.1, 87.3],
+            borderColor: red, borderWidth: 2.5,
+            pointBackgroundColor: red, pointRadius: 4,
+            fill: false, tension: .3
+          },
+          {
+            label: 'Chubb (target)',
+            data: [85.5, 85.5, 85.5, 85.5, 85.5],
+            borderColor: '#9ca3af', borderWidth: 1.5,
+            borderDash: [5, 4],
+            pointRadius: 0,
+            fill: false, tension: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'bottom', labels: { color: mc, font: { size: 11 }, padding: 10, boxWidth: 10, boxHeight: 10 } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: mc, font: { size: 11 } } },
+          y: { grid: { color: gc }, ticks: { color: mc, font: { size: 11 }, callback: v => v + '%' }, border: { display: false }, min: 83, max: 98, reverse: false }
+        }
+      }
+    });
+  }
+}
+renderCharts('snapshot');
+</script>
+</body>
+</html>
