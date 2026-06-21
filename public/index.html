@@ -1033,7 +1033,7 @@ next:{t:"Why HDFC is the opposite story",e:"From what's next",h:`<div class="d-s
 tldr:["Worth <strong>Rs 18.5 lakh crore</strong>. India's most valuable company.","Four giants: <strong>oil, retail, Jio, media</strong>. All under one roof.","Owns the <strong>world's largest oil refinery</strong>. Built on a desert.","Pattern: enter, subsidise, win the category. <strong>It has worked four times.</strong>","Upside: <strong>Jio IPO</strong>. Risk: <strong>the succession to three children</strong>.","The Ambani family owns <strong>~50%</strong>. Unlike any other company here."]},
 
 hdfc:{id:"hdfc",domain:"hdfcbank.com",n:"HDFC Bank",t:"HDFCBANK",sec:"Banking",fl:"",mc:"Rs 11.4L cr",lb:"#004C8F",lc:"#fff",ac:"#ED232A",as:"rgba(237,35,42,0.2)",bg:"linear-gradient(180deg,#004C8F,#002E59)",bl:"For 30 years, the gold standard. Then 2026.",
-sp:"—",sc:"live price soon",scDir:"",
+sp:"NSE price coming soon",sc:"",scDir:"",
 ks:[{l:"Market cap",v:"Rs 11.4L cr"},{l:"Deposits",v:"Rs 31L cr"},{l:"Bad loans",v:"1.15%"}],
 vb:2134,sentiment:"neutral",
 ps:"If you have an HDFC savings account or credit card, you're part of the 100M customers who've kept this bank profitable for 30 years. That streak just got its first real test.",
@@ -1708,7 +1708,7 @@ document.addEventListener('keydown',e=>{
 });
 
 /* INIT */
-ensureSession().then(async()=>{localizeAudienceCopy(CO);await Promise.all([loadDbCompanies(),loadLivePrices()]);if(IS_DESKTOP){dtInit();}else{renderToday();}}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.href='login.html';});
+ensureSession().then(async()=>{localizeAudienceCopy(CO);await Promise.all([loadDbCompanies(),loadLivePrices()]);if(IS_DESKTOP){dtInit();}else{renderToday();}}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.href='onboarding.html';});
 
 /* ══════════════════════════════════════
    DESKTOP-ONLY CODE (IS_DESKTOP gate)
