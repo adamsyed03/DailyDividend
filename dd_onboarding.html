@@ -29,12 +29,12 @@
       --ease:cubic-bezier(.2,.8,.2,1);
     }
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-    html,body{height:100%;overflow:hidden}
+    html,body{height:100%;overflow:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
     body{font-family:var(--sans);background:#0f0f0e;color:var(--ink);-webkit-font-smoothing:antialiased}
     button,input{font:inherit}
     button{cursor:pointer}
 
-    .stage{height:100vh;height:100dvh;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:#0f0f0e}
+    .stage{height:100vh;height:100svh;height:100dvh;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:#0f0f0e}
     .phone{width:100%;height:100%;overflow:hidden;position:relative;background:transparent}
     .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(34px);transition:opacity .36s var(--ease),transform .36s var(--ease)}
     .screen.active{opacity:1;pointer-events:auto;transform:translateX(0)}
@@ -151,6 +151,67 @@
     .payoff-drop-s{font-size:12px;color:rgba(245,241,232,.5)}
     .payoff-terms{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-top:4px}
     .loading{opacity:.72;pointer-events:none}
+
+    @media(max-width:899px){
+      .screen{overflow:hidden}
+      .back-btn{top:max(18px,env(safe-area-inset-top));left:20px}
+      .q-wrap{min-height:0;padding:clamp(62px,11dvh,88px) 20px 6px}
+      .q-tag{margin-bottom:clamp(7px,1.5dvh,14px)}
+      .q-h{font-size:clamp(27px,4.4dvh,32px);margin-bottom:5px}
+      .q-sub{font-size:13px;margin-bottom:clamp(12px,2.4dvh,22px)}
+      .q-foot,.ph-foot,.acct-foot,.payoff-foot{flex:0 0 auto;padding:8px 20px max(12px,env(safe-area-inset-bottom))}
+      .btn-full,.btn-full-dark,.btn-payoff{min-height:46px;padding:12px 16px;border-radius:14px}
+
+      .market-grid{gap:8px}
+      .market-btn{padding:clamp(10px,1.8dvh,15px) 12px}
+      .sector-grid{align-content:flex-start;gap:7px}
+      .sector-btn{padding:clamp(8px,1.35dvh,11px) 14px;font-size:13px}
+
+      #s-about .q-wrap{padding-top:clamp(58px,9.5dvh,76px)}
+      #s-about .q-sub{margin-bottom:clamp(9px,1.7dvh,15px)}
+      #s-about .about-block{margin-bottom:clamp(10px,1.9dvh,18px)}
+      #s-about .about-label{font-size:clamp(16px,2.7dvh,18px);margin-bottom:7px}
+      #s-about .age-grid{gap:6px}
+      #s-about .age-btn{padding:clamp(8px,1.45dvh,11px) 4px}
+      #s-about .ab-n{font-size:14px;white-space:nowrap}
+      #s-about .level-grid{gap:6px}
+      #s-about .level-btn{min-height:0;padding:clamp(8px,1.45dvh,12px) 13px;gap:9px}
+      #s-about .lb-name{font-size:14px}
+      #s-about .lb-sub{font-size:10px;line-height:1.25;margin-top:1px}
+      #s-about .lb-dot{width:16px;height:16px}
+
+      .phone-inner,.acct-inner{min-height:0;padding:clamp(62px,10dvh,86px) 20px 6px}
+      .ph-tag,.acct-tag{margin-bottom:clamp(8px,1.5dvh,14px)}
+      .ph-h,.acct-h{font-size:clamp(28px,4.7dvh,34px);margin-bottom:8px}
+      .ph-sub,.acct-sub{font-size:13px;line-height:1.4;margin-bottom:clamp(12px,2.2dvh,22px)}
+      .ph-row{margin-bottom:8px}
+      .ph-or{margin:8px 0}
+      .ph-privacy,.flow-msg{margin-top:8px}
+      .acct-grid{gap:7px;min-height:0}
+      .acct-field{gap:3px}
+      .acct-input{padding:10px 12px;font-size:14px;border-radius:12px}
+
+      .payoff-inner{min-height:0;overflow:hidden;padding:clamp(48px,8dvh,68px) 20px 6px}
+      .payoff-mark{width:44px;height:44px;margin-bottom:12px}
+      .payoff-h{font-size:30px;margin-bottom:8px}
+      .payoff-sub{font-size:13px;line-height:1.4;margin-bottom:12px}
+      .payoff-card,.payoff-drop{padding:12px 14px;margin-bottom:8px}
+    }
+
+    @media(max-width:899px) and (max-height:680px){
+      .q-wrap{padding-top:54px}
+      .q-h{font-size:26px}
+      .q-sub{margin-bottom:9px}
+      #s-about .q-wrap{padding-top:50px}
+      #s-about .q-tag{margin-bottom:5px}
+      #s-about .q-h{font-size:25px}
+      #s-about .about-block{margin-bottom:8px}
+      #s-about .level-btn{padding:7px 12px}
+      .phone-inner,.acct-inner{padding-top:54px}
+      .acct-grid{gap:5px}
+      .acct-input{padding:8px 11px}
+      .q-foot,.ph-foot,.acct-foot,.payoff-foot{padding-top:5px}
+    }
 
     @media(min-width:900px){
       .stage{padding:0;background:radial-gradient(circle at 18% 18%,rgba(46,138,96,.24),transparent 34%),radial-gradient(circle at 82% 78%,rgba(245,241,232,.08),transparent 28%),#0f0f0e}
