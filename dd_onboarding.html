@@ -242,7 +242,7 @@
       <section class="screen" id="s-hook">
         <div class="hook-inner">
           <div class="hook-stats">
-            <div class="hook-stat"><div class="hook-stat-n">4</div><div class="hook-stat-l">Companies live</div></div>
+            <div class="hook-stat"><div class="hook-stat-n" id="liveCompanyCount">—</div><div class="hook-stat-l">Companies live</div></div>
             <div class="hook-stat"><div class="hook-stat-n">~90s</div><div class="hook-stat-l">Per read</div></div>
             <div class="hook-stat"><div class="hook-stat-n">Free</div><div class="hook-stat-l">Always</div></div>
           </div>
@@ -427,6 +427,9 @@
     }
 
     window.addEventListener('load', () => {
+      fetch('/api/catalog-stats').then(response => response.ok ? response.json() : null).then(data => {
+        document.getElementById('liveCompanyCount').textContent = data && Number.isInteger(data.liveCompanyCount) ? data.liveCompanyCount : '4';
+      }).catch(() => { document.getElementById('liveCompanyCount').textContent = '4'; });
       setTimeout(() => {
         document.getElementById('splashMark').classList.add('show');
         setTimeout(() => document.getElementById('splashName').classList.add('show'), 260);

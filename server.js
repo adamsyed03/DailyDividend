@@ -21,6 +21,7 @@ const PRICE_COMPANIES = Object.freeze({
   SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', yearStartPrice: null }
   // RELIANCE:NSE and HDFCBANK:NSE require Twelve Data Grow plan ($79/mo)
 });
+const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc']);
 const LOCAL_LOGO_FILES = Object.freeze({
   netflix: path.join(__dirname, 'Site Pics', 'netflix logo.png'),
   visa: path.join(__dirname, 'Site Pics', 'visalogo.png')
@@ -1133,6 +1134,19 @@ app.get('/api/companies', async (req, res, next) => {
     const db = await readDb();
     const companies = Object.values(db.companies).map(({ html, ...rest }) => rest);
     res.json({ companies });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/catalog-stats', async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const liveIds = new Set(BUILT_IN_LIVE_COMPANIES);
+    Object.values(db.companies || {}).forEach(company => {
+      if (company && company.companyId && company.html) liveIds.add(String(company.companyId).toLowerCase());
+    });
+    res.json({ liveCompanyCount: liveIds.size });
   } catch (error) {
     next(error);
   }
