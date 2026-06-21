@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <script>
-    if (location.protocol === 'file:' || (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && location.port && location.port !== '3000')) location.replace('http://localhost:3000/onboarding.html');
+    if (location.protocol === 'file:' || (/^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(location.hostname) && location.port && location.port !== '3000')) location.replace('http://localhost:3000/onboarding.html');
   </script>
   <title>Daily Dividend - Onboarding</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
   <style>
     :root{
       --cream:#F5F1E8;
@@ -57,6 +58,9 @@
     .splash-tag.show{opacity:1}
     .splash-cta{background:var(--cream);color:var(--brand);border:0;border-radius:999px;padding:15px 36px;font-size:15px;font-weight:700;opacity:0;transform:translateY(16px);transition:opacity .5s 1.1s,transform .5s 1.1s var(--ease)}
     .splash-cta.show{opacity:1;transform:translateY(0)}
+    .splash-login{margin-top:14px;color:rgba(255,255,255,.68);font-size:12px;text-decoration:none;opacity:0;transform:translateY(10px);transition:opacity .4s 1.2s,transform .4s 1.2s var(--ease)}
+    .splash-login.show{opacity:1;transform:translateY(0)}
+    .splash-login span{color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px}
     .splash-bottom{position:absolute;bottom:44px;left:0;right:0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.28);text-transform:uppercase;opacity:0;transition:opacity .5s 1.35s}
     .splash-bottom.show{opacity:1}
 
@@ -85,14 +89,17 @@
     .market-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:auto}
     .market-btn,.level-btn,.age-btn,.sector-btn{background:#fff;border:1.5px solid var(--line);transition:border-color .16s,background .16s,transform .16s}
     .market-btn{border-radius:16px;padding:16px 14px;display:flex;align-items:center;gap:12px;text-align:left;position:relative}
+    .sector-emoji{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji;line-height:1;flex-shrink:0;font-size:20px;width:22px;text-align:center}
+    .market-btn .sector-emoji{font-size:28px;width:32px}
     .market-btn.sel,.level-btn.sel,.age-btn.sel,.sector-btn.sel{border-color:var(--brand);background:rgba(26,61,43,.07)}
-    .mb-info{flex:1}
-    .mb-name{font-family:var(--serif);font-size:15px;font-weight:600}
-    .mb-sub{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+    .mb-info{flex:1;display:flex;flex-direction:column}
+    .mb-name{font-family:var(--serif);font-size:15px;font-weight:600;line-height:1.2}
+    .mb-sub{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:3px}
     .mb-check{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-family:var(--mono);font-size:7px;opacity:0;transform:scale(.7);transition:opacity .16s,transform .16s}
     .market-btn.sel .mb-check{opacity:1;transform:scale(1)}
     .sector-grid{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:auto}
-    .sector-btn{border-radius:999px;padding:11px 16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+    .sector-btn{border-radius:999px;padding:12px 17px;display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500}
+    .sector-emoji{font-size:20px;width:22px;text-align:center}
     .about-block{margin-bottom:28px}
     .about-label{font-family:var(--serif);font-size:18px;margin-bottom:12px}
     .age-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -228,6 +235,7 @@
         <div class="splash-name" id="splashName">Daily Dividend</div>
         <div class="splash-tag" id="splashTag">Story behind the stock</div>
         <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started -></button>
+        <a class="splash-login" id="splashLogin" href="login.html">Already a member? <span>Log in</span></a>
         <div class="splash-bottom" id="splashBottom">One company. Every Monday. The full story.</div>
       </section>
 
@@ -253,10 +261,10 @@
           <div class="q-h">Which markets do you <em>follow?</em></div>
           <div class="q-sub">Select all that apply - we'll personalize your stories.</div>
           <div class="market-grid">
-            <button class="market-btn" data-m="us" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">US</span><span class="mb-sub">NYSE / NASDAQ</span></span><span class="mb-check">OK</span></button>
-            <button class="market-btn" data-m="india" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">India</span><span class="mb-sub">NSE / BSE</span></span><span class="mb-check">OK</span></button>
-            <button class="market-btn" data-m="uk" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">UK</span><span class="mb-sub">LSE / FTSE</span></span><span class="mb-check">OK</span></button>
-            <button class="market-btn" data-m="global" onclick="toggleMarket(this)" type="button"><span class="mb-info"><span class="mb-name">Global</span><span class="mb-sub">All markets</span></span><span class="mb-check">OK</span></button>
+            <button class="market-btn" data-m="us" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇺🇸</span><span class="mb-info"><span class="mb-name">US</span><span class="mb-sub">NYSE · NASDAQ</span></span><span class="mb-check">✓</span></button>
+            <button class="market-btn" data-m="india" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇮🇳</span><span class="mb-info"><span class="mb-name">India</span><span class="mb-sub">NSE · BSE</span></span><span class="mb-check">✓</span></button>
+            <button class="market-btn" data-m="uk" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇬🇧</span><span class="mb-info"><span class="mb-name">UK</span><span class="mb-sub">LSE · FTSE</span></span><span class="mb-check">✓</span></button>
+            <button class="market-btn" data-m="global" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🌍</span><span class="mb-info"><span class="mb-name">Global</span><span class="mb-sub">All markets</span></span><span class="mb-check">✓</span></button>
           </div>
         </div>
         <div class="q-foot"><button class="btn-full btn-primary" id="mktNext" onclick="goTo('sectors')" disabled>Continue -></button></div>
@@ -270,16 +278,16 @@
           <div class="q-h">What gets you <em>excited?</em></div>
           <div class="q-sub">Pick your rabbit holes. Choose as many as you like.</div>
           <div class="sector-grid">
-            <button class="sector-btn" data-s="tech" onclick="toggleSector(this)" type="button">Tech</button>
-            <button class="sector-btn" data-s="banking" onclick="toggleSector(this)" type="button">Banking</button>
-            <button class="sector-btn" data-s="consumer" onclick="toggleSector(this)" type="button">Consumer</button>
-            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button">Energy</button>
-            <button class="sector-btn" data-s="media" onclick="toggleSector(this)" type="button">Media</button>
-            <button class="sector-btn" data-s="healthcare" onclick="toggleSector(this)" type="button">Healthcare</button>
-            <button class="sector-btn" data-s="realestate" onclick="toggleSector(this)" type="button">Real Estate</button>
-            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button">Travel</button>
-            <button class="sector-btn" data-s="luxury" onclick="toggleSector(this)" type="button">Luxury</button>
-            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button">Sports</button>
+            <button class="sector-btn" data-s="tech" onclick="toggleSector(this)" type="button"><span class="sector-emoji">📱</span>Tech</button>
+            <button class="sector-btn" data-s="banking" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏦</span>Banking</button>
+            <button class="sector-btn" data-s="consumer" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🛒</span>Consumer</button>
+            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button"><span class="sector-emoji">⛽</span>Energy</button>
+            <button class="sector-btn" data-s="media" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🎬</span>Media</button>
+            <button class="sector-btn" data-s="healthcare" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💊</span>Healthcare</button>
+            <button class="sector-btn" data-s="realestate" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏗️</span>Real Estate</button>
+            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button"><span class="sector-emoji">✈️</span>Travel</button>
+            <button class="sector-btn" data-s="luxury" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💎</span>Luxury</button>
+            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏏</span>Sports</button>
           </div>
         </div>
         <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue -></button></div>
@@ -318,15 +326,14 @@
         <button class="back-btn" onclick="goTo('about')"><-</button>
         <div class="phone-inner">
           <div class="ph-tag">Almost there</div>
-          <div class="ph-h">Your number <em>to get in.</em></div>
-          <div class="ph-sub">No spam, no newsletters. Just your Monday story.</div>
-          <div class="ph-row">
-            <button class="cc-sel" id="ccSel" onclick="openCC()" type="button"><span id="ccCode">+91</span><span class="cc-arrow">v</span></button>
-            <input class="ph-input" id="phoneInput" type="tel" inputmode="numeric" placeholder="Phone number" oninput="onPhoneInput()">
+          <div class="ph-h">Your email <em>to get in.</em></div>
+          <div class="ph-sub">Use this to securely log in and keep your shelf synced.</div>
+          <div class="ph-row" style="grid-template-columns:1fr">
+            <input class="ph-input" id="emailInput" type="email" autocomplete="email" placeholder="you@example.com" oninput="onEmailInput()">
           </div>
           <div class="ph-or">or</div>
-          <button class="ph-email" type="button" onclick="showError('Email onboarding is coming next. Use phone for this beta.')">Continue with email instead</button>
-          <div class="ph-privacy">We never sell your data. No cold calls. Ever.</div>
+          <button class="ph-email" type="button" onclick="showError('Phone-number signup is currently a beta feature. Please use email for now.')">Continue with phone number <span style="opacity:.55">(beta)</span></button>
+          <div class="ph-privacy">We never sell your data or send spam.</div>
           <div class="flow-msg" id="flowMsg" role="status"></div>
         </div>
         <div class="ph-foot"><button class="btn-full-dark" id="phoneNext" onclick="goToAccount()" disabled>Continue -></button></div>
@@ -340,21 +347,13 @@
           <div class="acct-h">Create your <em>account.</em></div>
           <div class="acct-sub">This lets us save your profile and personalize the stories you see.</div>
           <div class="acct-grid">
-            <div class="acct-field">
-              <label for="firstNameInput">First name</label>
-              <input class="acct-input" id="firstNameInput" autocomplete="given-name" oninput="checkAccount()" placeholder="First name">
-            </div>
-            <div class="acct-field">
-              <label for="lastNameInput">Last name</label>
-              <input class="acct-input" id="lastNameInput" autocomplete="family-name" oninput="checkAccount()" placeholder="Last name">
-            </div>
-            <div class="acct-field">
-              <label for="usernameInput">Username</label>
-              <input class="acct-input" id="usernameInput" autocomplete="username" oninput="checkAccount()" placeholder="Username">
+            <div class="acct-field full">
+              <label for="fullNameInput">Full name</label>
+              <input class="acct-input" id="fullNameInput" autocomplete="name" oninput="checkAccount()" placeholder="Your full name">
             </div>
             <div class="acct-field">
               <label for="passwordInput">Password</label>
-              <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Password">
+              <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Min. 8 characters">
             </div>
             <div class="acct-field">
               <label for="professionInput">Profession</label>
@@ -363,6 +362,10 @@
             <div class="acct-field">
               <label for="heardInput">How did you hear about us?</label>
               <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="Friend, TikTok, LinkedIn...">
+            </div>
+            <div class="acct-field">
+              <label for="countryInput">Country</label>
+              <input class="acct-input" id="countryInput" autocomplete="country-name" oninput="checkAccount()" placeholder="e.g. India, United States, UK...">
             </div>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
@@ -406,9 +409,10 @@
     let selectedSectors = new Set();
     let selectedAge = '';
     let selectedLevel = '';
+    let emailAddress = '';
     let phoneNum = '';
     let dialCode = '+91';
-    let selectedCountryName = 'India';
+    let selectedCountryName = '';
     let currentScreen = 'splash';
 
     function goTo(name){
@@ -428,6 +432,7 @@
         setTimeout(() => document.getElementById('splashName').classList.add('show'), 260);
         setTimeout(() => document.getElementById('splashTag').classList.add('show'), 520);
         setTimeout(() => document.getElementById('splashCta').classList.add('show'), 900);
+        setTimeout(() => document.getElementById('splashLogin').classList.add('show'), 1000);
         setTimeout(() => document.getElementById('splashBottom').classList.add('show'), 1120);
       }, 160);
     });
@@ -462,29 +467,28 @@
     function hasAnyPhoneDigits(value){
       return /\d/.test(String(value || ''));
     }
-    function onPhoneInput(){
-      phoneNum = document.getElementById('phoneInput').value.replace(/\D/g,'');
-      document.getElementById('phoneNext').disabled = !hasAnyPhoneDigits(phoneNum);
+    function onEmailInput(){
+      emailAddress = document.getElementById('emailInput').value.trim().toLowerCase();
+      document.getElementById('phoneNext').disabled = !/^\S+@\S+\.\S+$/.test(emailAddress);
     }
     function goToAccount(){
-      if(!hasAnyPhoneDigits(phoneNum)){
-        showError('Enter a phone number.', 'flowMsg');
+      if(!/^\S+@\S+\.\S+$/.test(emailAddress)){
+        showError('Enter a valid email address.', 'flowMsg');
         return;
       }
       goTo('account');
-      setTimeout(() => document.getElementById('firstNameInput').focus(), 420);
+      setTimeout(() => document.getElementById('fullNameInput').focus(), 420);
     }
     function fieldValue(id){
       return document.getElementById(id).value.trim();
     }
     function accountDetails(){
       return {
-        firstName: fieldValue('firstNameInput'),
-        lastName: fieldValue('lastNameInput'),
-        username: fieldValue('usernameInput'),
+        name: fieldValue('fullNameInput'),
         password: fieldValue('passwordInput'),
         profession: fieldValue('professionInput'),
-        howHeard: fieldValue('heardInput')
+        howHeard: fieldValue('heardInput'),
+        country: fieldValue('countryInput')
       };
     }
     function checkAccount(){
@@ -500,7 +504,6 @@
       document.getElementById('ccCode').textContent = code;
       dialCode = code;
       document.getElementById('ccOverlay').classList.remove('open');
-      onPhoneInput();
     }
     function showError(message, id = 'flowMsg'){
       const el = document.getElementById(id);
@@ -515,15 +518,18 @@
       return digits;
     }
     async function api(path, options = {}){
-      const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+      let response;
+      try{ response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options}); }
+      catch(netErr){ throw new Error('No connection to server. Check your network.'); }
       let data = {};
-      try{data = await response.json();}catch(error){}
-      if(!response.ok) throw new Error(data.error || 'Daily Dividend could not save that yet.');
+      try{data = await response.json();}catch(e){}
+      if(!response.ok) throw new Error(data.error || `Server error ${response.status}. Try again.`);
       return data;
     }
     function onboardingPayload(){
-      const phoneCode = dialCode.replace(/\D/g,'');
+      const phoneCode = phoneNum ? dialCode.replace(/\D/g,'') : '';
       return {
+        email: emailAddress,
         phoneCode,
         phoneNumber: cleanPhone(phoneNum, phoneCode),
         countryName: selectedCountryName,
@@ -537,8 +543,8 @@
     }
     async function completeOnboarding(){
       const payload = onboardingPayload();
-      if(!hasAnyPhoneDigits(payload.phoneNumber)){
-        showError('Enter a phone number.', 'flowMsg');
+      if(!payload.email){
+        showError('Enter a valid email address.', 'flowMsg');
         goTo('phone');
         return false;
       }
@@ -577,6 +583,7 @@
       document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
     }
     function goToApp(){window.location.href = 'index.html';}
+    twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
   </script>
 </body>
 </html>
