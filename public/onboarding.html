@@ -133,12 +133,18 @@
     .acct-input:focus{border-color:rgba(181,227,200,.62);background:rgba(46,138,96,.14)}
     .cc-overlay{position:absolute;inset:0;background:rgba(0,0,0,.62);z-index:200;display:none;align-items:flex-end}
     .cc-overlay.open{display:flex}
-    .cc-sheet{background:var(--paper);border-radius:24px 24px 0 0;width:100%;padding:10px 0 40px}
+    .cc-sheet{background:var(--paper);border-radius:24px 24px 0 0;width:100%;max-height:min(82dvh,680px);padding:10px 0 max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
     .cc-sheet-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:18px;font-weight:500}
-    .cc-opt{display:flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer}
+    .country-search-wrap{padding:12px 16px;border-bottom:1px solid var(--line)}
+    .country-search{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:13px;padding:12px 14px;color:var(--ink);font-size:16px;outline:none;-webkit-appearance:none}
+    .country-search:focus{border-color:var(--brand)}
+    .country-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:180px}
+    .cc-opt{width:100%;border:0;background:transparent;display:flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer;text-align:left;color:var(--ink)}
     .cc-opt:hover{background:var(--cream-2)}
     .cc-opt-name{flex:1;font-size:15px;font-weight:600}
     .cc-opt-code{font-family:var(--mono);font-size:13px;color:var(--muted)}
+    .country-empty{padding:28px 22px;text-align:center;color:var(--muted);font-size:14px}
+    #countryInput{cursor:pointer}
     .payoff-inner{flex:1;padding:80px 28px 28px;display:flex;flex-direction:column;overflow-y:auto}
     .payoff-mark{width:52px;height:52px;border-radius:14px;background:var(--cream);display:grid;place-items:center;margin-bottom:24px;padding:8px;overflow:hidden}
     .payoff-card,.payoff-drop{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px 20px;margin-bottom:12px}
@@ -426,8 +432,7 @@
             </div>
             <div class="acct-field">
               <label for="countryInput">Country</label>
-              <input class="acct-input" id="countryInput" list="countryOptions" autocomplete="country-name" oninput="checkAccount()" placeholder="Search for your country...">
-              <datalist id="countryOptions"></datalist>
+              <input class="acct-input" id="countryInput" autocomplete="country-name" readonly role="combobox" aria-haspopup="listbox" aria-expanded="false" onclick="openCountryPicker()" placeholder="Tap to choose your country...">
             </div>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
@@ -450,17 +455,11 @@
         </div>
       </section>
 
-      <div class="cc-overlay" id="ccOverlay" onclick="closeCC(event)">
-        <div class="cc-sheet">
-          <div class="cc-sheet-h">Select country</div>
-          <div class="cc-opt" onclick="pickCC('+91','India')"><span class="cc-opt-name">India</span><span class="cc-opt-code">+91</span></div>
-          <div class="cc-opt" onclick="pickCC('+381','Serbia')"><span class="cc-opt-name">Serbia</span><span class="cc-opt-code">+381</span></div>
-          <div class="cc-opt" onclick="pickCC('+1','United States')"><span class="cc-opt-name">United States</span><span class="cc-opt-code">+1</span></div>
-          <div class="cc-opt" onclick="pickCC('+44','United Kingdom')"><span class="cc-opt-name">United Kingdom</span><span class="cc-opt-code">+44</span></div>
-          <div class="cc-opt" onclick="pickCC('+971','UAE')"><span class="cc-opt-name">UAE</span><span class="cc-opt-code">+971</span></div>
-          <div class="cc-opt" onclick="pickCC('+65','Singapore')"><span class="cc-opt-name">Singapore</span><span class="cc-opt-code">+65</span></div>
-          <div class="cc-opt" onclick="pickCC('+61','Australia')"><span class="cc-opt-name">Australia</span><span class="cc-opt-code">+61</span></div>
-          <div class="cc-opt" onclick="pickCC('+1','Canada')"><span class="cc-opt-name">Canada</span><span class="cc-opt-code">+1</span></div>
+      <div class="cc-overlay" id="ccOverlay" onclick="closeCountryPicker(event)">
+        <div class="cc-sheet" role="dialog" aria-modal="true" aria-labelledby="countryPickerTitle" onclick="event.stopPropagation()">
+          <div class="cc-sheet-h" id="countryPickerTitle">Choose your country</div>
+          <div class="country-search-wrap"><input class="country-search" id="countrySearch" type="search" inputmode="search" autocomplete="off" placeholder="Search countries..." oninput="renderCountryOptions(this.value)"></div>
+          <div class="country-list" id="countryList" role="listbox"></div>
         </div>
       </div>
     </div>
@@ -503,7 +502,7 @@
     }
 
     window.addEventListener('load', () => {
-      document.getElementById('countryOptions').innerHTML = SIGNUP_COUNTRIES.map(country => `<option value="${country}"></option>`).join('');
+      renderCountryOptions('');
       fetch('/api/catalog-stats').then(response => response.ok ? response.json() : null).then(data => {
         document.getElementById('liveCompanyCount').textContent = data && Number.isInteger(data.liveCompanyCount) ? data.liveCompanyCount : '4';
       }).catch(() => { document.getElementById('liveCompanyCount').textContent = '4'; });
@@ -577,14 +576,40 @@
       document.getElementById('accountNext').disabled = !complete;
       return complete;
     }
-    function openCC(){document.getElementById('ccOverlay').classList.add('open');}
-    function closeCC(event){if(event.target === document.getElementById('ccOverlay')) document.getElementById('ccOverlay').classList.remove('open');}
-    function pickCC(code, name){
-      selectedCountryName = name || 'Unknown';
-      document.getElementById('ccCode').textContent = code;
-      dialCode = code;
-      document.getElementById('ccOverlay').classList.remove('open');
+    function renderCountryOptions(query = ''){
+      const normalized = String(query).trim().toLocaleLowerCase();
+      const matches = SIGNUP_COUNTRIES.filter(country => country.toLocaleLowerCase().includes(normalized));
+      document.getElementById('countryList').innerHTML = matches.length
+        ? matches.map(country => `<button class="cc-opt" type="button" role="option" data-country="${country}"><span class="cc-opt-name">${country}</span></button>`).join('')
+        : '<div class="country-empty">No matching country</div>';
     }
+    function openCountryPicker(){
+      const overlay = document.getElementById('ccOverlay');
+      const input = document.getElementById('countryInput');
+      const search = document.getElementById('countrySearch');
+      overlay.classList.add('open');
+      input.setAttribute('aria-expanded','true');
+      search.value = '';
+      renderCountryOptions('');
+      setTimeout(() => search.focus(), 80);
+    }
+    function closeCountryPicker(event){
+      if(event && event.target !== document.getElementById('ccOverlay')) return;
+      document.getElementById('ccOverlay').classList.remove('open');
+      document.getElementById('countryInput').setAttribute('aria-expanded','false');
+    }
+    function pickCountry(name){
+      selectedCountryName = name;
+      document.getElementById('countryInput').value = name;
+      document.getElementById('ccOverlay').classList.remove('open');
+      document.getElementById('countryInput').setAttribute('aria-expanded','false');
+      checkAccount();
+    }
+    document.getElementById('countryList').addEventListener('click', event => {
+      const option = event.target.closest('[data-country]');
+      if(option) pickCountry(option.dataset.country);
+    });
+    document.addEventListener('keydown', event => { if(event.key === 'Escape' && document.getElementById('ccOverlay').classList.contains('open')) closeCountryPicker({target:document.getElementById('ccOverlay')}); });
     function showError(message, id = 'flowMsg'){
       const el = document.getElementById(id);
       if(!el) return;
