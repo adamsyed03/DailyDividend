@@ -772,7 +772,6 @@ const CS=[
 {n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
 {n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:""},
-{n:"Hilton",bl:"Sold the buildings. Kept the names.",lb:"#0B1F3A"},
 {n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:""},
 {n:"Hermes",bl:"The 6-year Birkin waitlist is the product.",lb:"#000",fl:""},
 {n:"Google",bl:"Sells your attention 8.5 billion times a day.",lb:"#4285F4"},
@@ -1062,7 +1061,7 @@ function revealSavedVote(idx){
  const r=document.getElementById('cvR-'+idx);
  if(r){const msgs={bull:"You're <strong>bullish</strong>, with the crowd. We'll check back in a few weeks.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};r.innerHTML=msgs[voteType];r.classList.add('show');}
 }
-function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);}
+function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);else closeStack();}
 function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
 function closeStack(){closeDrawer();closeTldr();goTo('today');}
 async function toggleSave(){

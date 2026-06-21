@@ -113,7 +113,7 @@ body{font-family:var(--sans);color:var(--ink);background:#0f0f0e;-webkit-font-sm
 .tg-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;cursor:pointer;transition:transform 0.18s,box-shadow 0.18s;display:flex;flex-direction:column;gap:12px}
 .tg-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.07)}
 .tg-top{display:flex;align-items:center;justify-content:space-between}
-.tg-thumb{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:18px;color:#fff;flex-shrink:0}
+.tg-thumb{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:18px;color:#fff;flex-shrink:0;position:relative;overflow:hidden}
 .tg-flag{font-size:18px}
 .tg-name{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-0.01em}
 .tg-bl{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.4}
@@ -151,7 +151,11 @@ body{font-family:var(--sans);color:var(--ink);background:#0f0f0e;-webkit-font-sm
 .lib-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .lib-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s;min-height:148px}
 .lib-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.07)}
-.lib-card-th{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;color:#fff;margin-bottom:8px}
+.lib-card-th{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;color:#fff;margin-bottom:8px;position:relative;overflow:hidden}
+.r-co-logo,.cv-mark,.nthumb,.tl-l,.cth{position:relative;overflow:hidden}
+.logo-fallback{position:relative;z-index:1}
+.company-logo-img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:contain;background:#fff;padding:10%;border-radius:inherit}
+.company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
 .lib-card-fl{position:absolute;top:14px;right:14px;font-size:13px}
 .lib-card-ld{position:absolute;top:17px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
 .lib-card-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
@@ -846,7 +850,6 @@ const CS=[
 {n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
 {n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:"🇮🇳"},
-{n:"Hilton",bl:"Sold the buildings. Kept the names.",lb:"#0B1F3A"},
 {n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:"🇮🇹"},
 {n:"Hermès",bl:"The 6-year Birkin waitlist is the product.",lb:"#000",fl:"🇫🇷"},
 {n:"Google",bl:"Sells your attention 8.5 billion times a day.",lb:"#4285F4"},
@@ -870,6 +873,11 @@ const calls=[
 {co:"netflix",vote:"bull",b:68,n:22,bb:10,when:"Today"},
 {co:"hdfc",vote:"bear",b:54,n:32,bb:14,when:"Yesterday"}
 ];
+function desktopLogo(company,slug){
+  const id=slug||company.id||String(company.n||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const initial=String(company.n||'?').trim().charAt(0).toUpperCase();
+  return `<span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${id}" src="/api/logo/${id}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`;
+}
 const DEEP_KEYS=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
 
 /* ════════ THEME ════════ */
@@ -923,7 +931,7 @@ function renderToday(){
   document.getElementById('todayGrid').innerHTML=others.map(k=>{
     const co=CO[k];
     return `<div class="tg-card" onclick="openStack('${k}')">
-      <div class="tg-top"><div class="tg-thumb" style="background:${co.lb};color:${co.lc||'#fff'}">${co.n[0]}</div><div class="tg-flag">${co.fl||''}</div></div>
+      <div class="tg-top"><div class="tg-thumb" style="background:${co.lb};color:${co.lc||'#fff'}">${desktopLogo(co,k)}</div><div class="tg-flag">${co.fl||''}</div></div>
       <div class="tg-name">${co.n}</div>
       <div class="tg-bl">${co.bl}</div>
       <div class="tg-foot"><span class="tg-price">${co.sp}</span><span class="tg-ch ${co.scDir}">${co.sc}</span><span class="tg-arrow">Read →</span></div>
@@ -935,7 +943,7 @@ function renderToday(){
 function openStack(slug){
   curCo=slug;cardIdx=0;setTheme(slug);
   const c=CO[slug];
-  document.getElementById('cologo').textContent=c.n[0];
+  document.getElementById('cologo').innerHTML=desktopLogo(c,slug);
   document.getElementById('cologo').style.background=c.lb;
   document.getElementById('cologo').style.color=c.lc;
   document.getElementById('coname').textContent=c.n;
@@ -971,7 +979,7 @@ function renderCard(card,idx){
   case 'cover':return `
 <div class="eb-c">01 · The cover</div>
 <div class="cv-top">
-  <div class="cv-mark">${co.n[0]}</div>
+  <div class="cv-mark">${desktopLogo(co,curCo)}</div>
   <div class="cv-co-info">
     <div class="cv-name">${co.n}</div>
     <div class="cv-chips">${card.chips.map(x=>`<div class="cv-chip">${x}</div>`).join('')}</div>
@@ -1083,7 +1091,7 @@ ${co.ps?`<div class="cv-ps">${co.ps}</div>`:''}`;
 <div class="hl">${card.hl}</div>
 <div class="bd" style="margin-bottom:16px">${card.bd}</div>
 <div class="np" onclick="openStack('${card.nx}')">
-  <div class="nthumb" style="background:${nxc.lb};color:${nxc.lc}">${nxc.n[0]}</div>
+  <div class="nthumb" style="background:${nxc.lb};color:${nxc.lc}">${desktopLogo(nxc,card.nx)}</div>
   <div><div class="nco">${nxc.n}</div><div class="ntag">${nxc.bl}</div></div>
   <div style="opacity:.6;margin-left:auto">→</div>
 </div>
@@ -1120,7 +1128,7 @@ function showCard(i){
   setTimeout(()=>{const ac=cards[cardIdx];if(ac){ac.classList.add('entered');animateCard(i);}},30);
   updateRightPanel(i);
 }
-function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);}
+function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);else closeStack();}
 function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
 
 /* ════════ RIGHT PANEL (deep dive + TL;DR) ════════ */
@@ -1186,7 +1194,7 @@ function showToast(m){const t=document.getElementById('toast');t.textContent=m;t
 function openTldr(){
   const c=CO[curCo];
   document.getElementById('tlC').innerHTML=`
-<div class="tl-h"><div class="tl-l">${c.n[0]}</div><div class="tl-co">${c.n}<span class="s">${c.t} · ${c.sec}</span></div></div>
+<div class="tl-h"><div class="tl-l">${desktopLogo(c,curCo)}</div><div class="tl-co">${c.n}<span class="s">${c.t} · ${c.sec}</span></div></div>
 <div class="tl-tag">Everything, in ${c.tldr.length} lines</div>
 <div class="tl-pts">${c.tldr.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
 <div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
@@ -1213,8 +1221,8 @@ ${libSection('🫥 Underrated businesses',[],CS.slice(9,11))}`;
 }
 function libSection(title,liveItems,csItems){
   const cards=[
-    ...liveItems.map(c=>{const slug=c.n.toLowerCase().split(' ')[0];return`<div class="lib-card" onclick="openStack('${slug}')"><div class="lib-card-th" style="background:${c.lb};color:${c.lc||'#fff'}">${c.n[0]}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:'<div class="lib-card-ld"></div>'}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl}</div></div>`;}),
-    ...csItems.map(c=>`<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb}">${c.n[0]}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl}</div></div>`)
+    ...liveItems.map(c=>{const slug=c.n.toLowerCase().split(' ')[0];return`<div class="lib-card" onclick="openStack('${slug}')"><div class="lib-card-th" style="background:${c.lb};color:${c.lc||'#fff'}">${desktopLogo(c,slug)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:'<div class="lib-card-ld"></div>'}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl}</div></div>`;}),
+    ...csItems.map(c=>`<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb}">${desktopLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl}</div></div>`)
   ];
   return `<div class="lib-section"><div class="lib-section-h"><div class="lib-section-t">${title}</div><div class="lib-section-c">${cards.length}</div></div><div class="lib-grid">${cards.join('')}</div></div>`;
 }

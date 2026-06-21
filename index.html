@@ -83,7 +83,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcard-sc{font-family:var(--mono);font-size:10px;font-weight:600;margin-top:2px}
 .rcard-sc.up{color:var(--green)}
 .rcard-sc.down{color:var(--red)}
-.rthumb,.co-logo,.cv-mark,.nthumb,.tl-l,.rcd-th{position:relative;overflow:hidden}
+.rthumb,.co-logo,.cv-mark,.nthumb,.tl-l,.rcd-th,.tg-thumb,.lib-card-th,.r-co-logo,.cth{position:relative;overflow:hidden}
 .logo-fallback{position:relative;z-index:1}
 .company-logo-img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:contain;background:#fff;padding:14%;border-radius:inherit}
 
@@ -448,6 +448,31 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+@media(max-width:899px){
+  .stage,.phone{height:100svh;height:100dvh}
+  .card{padding:max(88px,calc(env(safe-area-inset-top) + 72px)) 20px max(68px,calc(env(safe-area-inset-bottom) + 56px));overflow:hidden;overscroll-behavior:none}
+  .eb-c{font-size:9px;margin-bottom:10px}
+  .hl{font-size:clamp(23px,3.8dvh,28px);line-height:1.08;margin-bottom:10px}
+  .bd{font-size:clamp(12px,1.9dvh,14px);line-height:1.42}
+  .cv-top{margin-bottom:10px}.cv-mark{width:48px;height:48px}.cv-name{font-size:18px}
+  .cv-stock{margin-bottom:9px}.cv-ks{margin-top:10px}.cv-k{padding:7px 5px}.cv-ps{margin-top:9px;padding:8px 10px;font-size:11.5px}
+  .pie-wrap{gap:9px}.pie{width:min(155px,23dvh);height:min(155px,23dvh)}.pie-d{padding:9px 11px;min-height:50px}
+  .doors,.riv{gap:7px}.door,.r{padding:9px 11px}.dt,.rtx{font-size:11.5px;line-height:1.32}
+  .tw{padding:13px;margin-bottom:9px}.tb{font-size:15px;margin-bottom:7px}.tg{font-size:18px}
+  .acc{gap:6px}.ah{padding:9px 10px}.aic{width:36px;height:36px;min-width:36px}.at{font-size:13px}
+  .own{gap:7px;margin-bottom:10px}.ow-tr{height:20px}
+  .cv-sent-row{margin-bottom:9px}.cv-opts{gap:6px}.co-opt{padding:9px 11px}.co-opt .ico{font-size:18px}.co-opt .lbl{font-size:14px}
+  .np{padding:10px 12px;margin-bottom:10px}.ea{gap:6px}.ea button{padding:10px 12px}
+}
+@media(max-width:899px) and (max-height:700px){
+  .card{padding-top:max(78px,calc(env(safe-area-inset-top) + 64px));padding-bottom:max(58px,calc(env(safe-area-inset-bottom) + 48px))}
+  .eb-c{margin-bottom:7px}.hl{font-size:22px;margin-bottom:7px}.bd{font-size:11.5px;line-height:1.32}
+  .cv-top{margin-bottom:7px}.cv-mark{width:42px;height:42px}.cv-stock{margin-bottom:6px}.cv-ks{margin-top:7px}.cv-ps{margin-top:6px}
+  .pie{width:min(138px,21dvh);height:min(138px,21dvh)}.pie-wrap{gap:6px}
+  .door,.r{padding:7px 9px}.doors,.riv,.acc,.cv-opts{gap:5px}
+  .co-opt{padding:7px 10px}.ah{padding:7px 9px}.aic{width:32px;height:32px;min-width:32px}
+}
+
 @media(min-width:900px){
 body{background:var(--ink);overflow:hidden}
 .stage{height:100vh;height:100dvh;padding:0;background:var(--ink)}
@@ -672,12 +697,12 @@ body{background:var(--ink);overflow:hidden}
 ════════════════════════════════════ */
 .reader-overlay{position:fixed;inset:0;z-index:500;background:rgba(10,10,9,0.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:32px}
 .reader-overlay.open{display:flex}
-.reader-shell{display:flex;gap:0;width:100%;max-width:940px;height:100%;max-height:800px;border-radius:28px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.6)}
+.reader-shell{display:flex;gap:0;width:100%;max-width:1120px;height:100%;max-height:820px;border-radius:28px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.6)}
 .reader-close{position:fixed;top:24px;right:28px;background:rgba(255,255,255,0.1);border:0;width:38px;height:38px;border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.18s;z-index:10}
 .reader-close:hover{background:rgba(255,255,255,0.2)}
 
 /* ── LEFT PANEL (CARD) ── */
-.reader-left{width:520px;flex-shrink:0;position:relative;background:#1A1918;overflow:hidden}
+.reader-left{width:clamp(500px,52vw,620px);flex-shrink:0;position:relative;background:#1A1918;overflow:hidden}
 .reader-prog{position:absolute;top:0;left:0;right:0;display:flex;gap:3px;z-index:30;padding:16px 16px 0}
 .r-tick{flex:1;height:2px;background:rgba(255,255,255,0.2);border-radius:2px}
 .r-tick.done,.r-tick.current{background:rgba(255,255,255,0.85)}
@@ -729,8 +754,14 @@ body{background:var(--ink);overflow:hidden}
 .rd-tldr-t strong{font-weight:700;color:var(--ink)}
 
 /* ── CARD INTERIOR ── */
-#dtShell .card{position:absolute;inset:0;padding:72px 22px 72px;display:none;flex-direction:column;overflow-y:auto}
+#dtShell .card{position:absolute;inset:0;padding:78px clamp(28px,3vw,40px) 68px;display:none;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 #dtShell .card.active{display:flex;animation:cardIn 0.32s cubic-bezier(0.2,0.85,0.25,1)}
+#dtShell .hl{font-size:clamp(25px,2.35vw,34px);line-height:1.08;overflow-wrap:anywhere}
+#dtShell .bd{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+#dtShell .dh,#dtShell .rh-row,#dtShell .pie-d-h{gap:10px;align-items:flex-start}
+#dtShell .dn,#dtShell .rn,#dtShell .pie-d-n,#dtShell .at{min-width:0;overflow-wrap:anywhere}
+#dtShell .da,#dtShell .rt,#dtShell .pie-d-a{flex:0 0 auto;max-width:44%;white-space:normal;text-align:right;overflow-wrap:anywhere}
+#dtShell .co-opt .lbl,#dtShell .co-opt .sub{min-width:0;overflow-wrap:anywhere}
 
 /* ════════════════════════════════════
    TLDR OVERLAY (DESKTOP)
@@ -1090,7 +1121,6 @@ const CS=[
 {id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
 {id:"zomato",domain:"zomato.com",n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:""},
-{id:"hilton",domain:"hilton.com",n:"Hilton",bl:"Sold the buildings. Kept the names.",lb:"#0B1F3A"},
 {id:"ferrari",domain:"ferrari.com",n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:""},
 {id:"hermes",domain:"hermes.com",n:"Hermes",bl:"The 6-year Birkin waitlist is the product.",lb:"#000",fl:""},
 {id:"google",domain:"google.com",n:"Google",bl:"Sells your attention 8.5 billion times a day.",lb:"#4285F4"},
@@ -1444,8 +1474,8 @@ function revealSavedVote(idx){
  const r=document.getElementById('cvR-'+idx);
  if(r){const msgs={bull:"You're <strong>bullish</strong>, with the crowd. We'll check back in a few weeks.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};r.innerHTML=msgs[voteType];r.classList.add('show');}
 }
-function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);}
-function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);else closeStack();}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);else closeStack();}
 function closeStack(){closeDrawer();closeTldr();goTo('today');}
 async function toggleSave(){
  if(!saved[curCo])saved[curCo]=new Set();
@@ -1488,6 +1518,10 @@ function toggleAcc(event,el){event.preventDefault();event.stopPropagation();el.c
 /* VOTE */
 function vote(el,type,idx){
  const wrap=document.getElementById('cvO-'+idx);
+ const previousVote=profileState.previousVotes&&profileState.previousVotes[curCo];
+ profileState.previousVotes=profileState.previousVotes||{};
+ profileState.previousVotes[curCo]=type;
+ syncCallsFromProfile();
  wrap.classList.add('voted');
  wrap.querySelectorAll('.co-opt').forEach(o=>o.classList.remove('you'));
  el.classList.add('you');
@@ -1500,7 +1534,7 @@ function vote(el,type,idx){
  const msgs={bull:"You're <strong>bullish</strong>, with the crowd. We'll check back in a few weeks.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};
  const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');
  })
- .catch(e=>showToast(e.message));
+ .catch(e=>{if(previousVote)profileState.previousVotes[curCo]=previousVote;else delete profileState.previousVotes[curCo];syncCallsFromProfile();showToast(e.message);});
 }
 function openDrawer(){
  const keys=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
@@ -1662,7 +1696,7 @@ async function loadPersonality(){
 }
 async function renderShelf(){
  setTheme('netflix');
- await loadPersonality();
+ await Promise.all([loadProfile(),loadPersonality()]);
  const allSaved=[];
  Object.entries(saved).forEach(([co,set])=>{set.forEach(i=>{allSaved.push({co,idx:i});});});
  const streak=profileState.streak||0;
@@ -1688,14 +1722,21 @@ shell.addEventListener('touchstart',e=>{
  if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
 },{passive:true});
+shell.addEventListener('touchmove',e=>{
+ if(!trk)return;
+ const t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+ if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy))e.preventDefault();
+},{passive:false});
 shell.addEventListener('touchend',e=>{
  if(!trk)return;trk=false;
  const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
  if(ax<30&&ay<30)return;
- if(stg&&stg.closest('.ai,.slice,button,.np,.co-opt'))return;
+ if(ax>ay)e.preventDefault();
+ if(stg&&stg.closest('input,textarea,select,a,.ai,.slice,.co-opt'))return;
  if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
- else{if(dx<-40)nextCard();else if(dx>40)prevCard();}
-});
+ else if(dx<-40){if(cardIdx===CO[curCo].cards.length-1)closeStack();else nextCard();}
+ else if(dx>40){if(cardIdx===0||cardIdx===CO[curCo].cards.length-1)closeStack();else prevCard();}
+},{passive:false});
 document.addEventListener('keydown',e=>{
  if(!document.getElementById('screen-stack').classList.contains('active'))return;
  if(e.key==='ArrowRight')nextCard();
@@ -1762,7 +1803,7 @@ function dtRenderToday(){
     grid.innerHTML=others.map(k=>{
       const co=CO[k];
       return `<div class="tg-card" onclick="openStack('${k}')">
-        <div class="tg-top"><div class="tg-thumb" style="background:${co.lb||'#333'};color:${co.lc||'#fff'}">${co.n[0]}</div><div class="tg-flag">${co.fl||''}</div></div>
+        <div class="tg-top"><div class="tg-thumb" style="background:${co.lb||'#333'};color:${co.lc||'#fff'}">${companyLogo(co)}</div><div class="tg-flag">${co.fl||''}</div></div>
         <div class="tg-name">${co.n}</div>
         <div class="tg-bl">${co.bl||''}</div>
         <div class="tg-foot"><span class="tg-price">${co.sp||'—'}</span><span class="tg-ch ${co.scDir||''}">${co.sc&&co.sc.includes('%')?co.sc+' ytd':co.sc||''}</span><span class="tg-arrow">Read →</span></div>
@@ -1774,7 +1815,7 @@ function dtRenderToday(){
 function dtOpenStack(slug){
   curCo=slug;dtCardIdx=0;setTheme(slug);
   const c=CO[slug];
-  const logo=document.getElementById('dtCologo');if(logo){logo.textContent=c.n[0];logo.style.background=c.lb||'#333';logo.style.color=c.lc||'#fff';}
+  const logo=document.getElementById('dtCologo');if(logo){logo.innerHTML=companyLogo(c);logo.style.background=c.lb||'#333';logo.style.color=c.lc||'#fff';}
   const nm=document.getElementById('dtConame');if(nm)nm.textContent=c.n;
   const sub=document.getElementById('dtCosub');if(sub)sub.textContent=(c.t||c.ticker||'')+' · '+(c.sec||'');
   dtRenderCards();dtBuildProg();dtShowCard(0);
@@ -1809,7 +1850,7 @@ function dtRenderCard(card,idx){
   case 'cover':return `
 <div class="eb-c">01 · The cover</div>
 <div class="cv-top">
-  <div class="cv-mark" style="background:${co.lb||'#333'};color:${co.lc||'#fff'}">${co.n[0]}</div>
+  <div class="cv-mark" style="background:${co.lb||'#333'};color:${co.lc||'#fff'}">${companyLogo(co)}</div>
   <div class="cv-co-info">
     <div class="cv-name">${co.n}</div>
     <div class="cv-chips">${(card.chips||[]).map(x=>`<div class="cv-chip">${x}</div>`).join('')}</div>
@@ -1921,7 +1962,7 @@ ${co.ps?`<div class="cv-ps">${co.ps}</div>`:''}`;
 <div class="hl">${card.hl}</div>
 <div class="bd" style="margin-bottom:16px">${card.bd}</div>
 ${nxc?`<div class="np" onclick="openStack('${card.nx}')">
-  <div class="nthumb" style="background:${nxc.lb};color:${nxc.lc||'#fff'}">${nxc.n[0]}</div>
+  <div class="nthumb" style="background:${nxc.lb};color:${nxc.lc||'#fff'}">${companyLogo(nxc)}</div>
   <div><div class="nco">${nxc.n}</div><div class="ntag">${nxc.bl||''}</div></div>
   <div style="opacity:.6;margin-left:auto">→</div>
 </div>`:''}
@@ -1961,7 +2002,7 @@ function dtShowCard(i){
   dtUpdateRightPanel(i);
 }
 
-function dtNextCard(){if(dtCardIdx<CO[curCo].cards.length-1)dtShowCard(dtCardIdx+1);}
+function dtNextCard(){if(dtCardIdx<CO[curCo].cards.length-1)dtShowCard(dtCardIdx+1);else dtCloseStack();}
 function dtPrevCard(){if(dtCardIdx>0)dtShowCard(dtCardIdx-1);}
 
 function dtUpdateRightPanel(idx){
@@ -2030,7 +2071,7 @@ function dtOpenTldr(){
   const c=CO[curCo];
   const tlC=document.getElementById('dtTlC');if(!tlC)return;
   tlC.innerHTML=`
-<div class="tl-h"><div class="tl-l" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${c.n[0]}</div><div class="tl-co">${c.n}<span class="s">${c.t||c.ticker||''} · ${c.sec||''}</span></div></div>
+<div class="tl-h"><div class="tl-l" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${companyLogo(c)}</div><div class="tl-co">${c.n}<span class="s">${c.t||c.ticker||''} · ${c.sec||''}</span></div></div>
 <div class="tl-tag">Everything, in ${(c.tldr||[]).length} lines</div>
 <div class="tl-pts">${(c.tldr||[]).map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
 <div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
@@ -2049,10 +2090,10 @@ function dtRenderLib(){
 
   function libCard(k){
     const c=CO[k];const slug=k;
-    return `<div class="lib-card" onclick="openStack('${slug}')"><div class="lib-card-th" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${c.n[0]}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:'<div class="lib-card-ld"></div>'}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
+    return `<div class="lib-card" onclick="openStack('${slug}')"><div class="lib-card-th" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${companyLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:'<div class="lib-card-ld"></div>'}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
   }
   function csCard(c){
-    return `<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${c.n[0]}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
+    return `<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${companyLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
   }
   function section(title, liveArr, csArr){
     const cards=[...liveArr.map(libCard),...(csArr||[]).map(csCard)];
@@ -2071,7 +2112,7 @@ function dtRenderLib(){
 
   function dbLibCard(c){
     const slug=c.companyId;
-    return `<div class="lib-card" onclick="openDbCompany('${slug}')"><div class="lib-card-th" style="background:#1A3D2B;color:#fff">${(c.name||'?')[0]}</div><div style="flex:1"></div><div class="lib-card-n">${c.name||slug}</div><div class="lib-card-bl">${c.hook||''}</div></div>`;
+    return `<div class="lib-card" onclick="openDbCompany('${slug}')"><div class="lib-card-th" style="background:#1A3D2B;color:#fff">${companyLogo({id:slug,n:c.name||slug})}</div><div style="flex:1"></div><div class="lib-card-n">${c.name||slug}</div><div class="lib-card-bl">${c.hook||''}</div></div>`;
   }
 
   lm.innerHTML=`
@@ -2100,9 +2141,9 @@ function dtOnSearch(){
   sr.classList.add('active');
   if(!matches.length){sr.innerHTML=`<div class="rd-empty">No matches for "${q}".</div>`;return;}
   sr.innerHTML=`<div class="lib-section-h"><div class="lib-section-t">${matches.length} result${matches.length!==1?'s':''}</div></div><div class="lib-sr-grid">${matches.map(c=>{
-    if(c._dbco)return`<div class="lib-card" onclick="openDbCompany('${c._dbco}')"><div class="lib-card-th" style="background:#1A3D2B;color:#fff">${(c.n||'?')[0]}</div><div style="flex:1"></div><div class="lib-card-n">${c.n||c._dbco}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
-    if(c._slug)return`<div class="lib-card" onclick="openStack('${c._slug}')"><div class="lib-card-th" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${(c.n||'?')[0]}</div><div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
-    return`<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${(c.n||'?')[0]}</div><div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
+    if(c._dbco)return`<div class="lib-card" onclick="openDbCompany('${c._dbco}')"><div class="lib-card-th" style="background:#1A3D2B;color:#fff">${companyLogo({id:c._dbco,n:c.n||c._dbco})}</div><div style="flex:1"></div><div class="lib-card-n">${c.n||c._dbco}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
+    if(c._slug)return`<div class="lib-card" onclick="openStack('${c._slug}')"><div class="lib-card-th" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${companyLogo(CO[c._slug])}</div><div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
+    return`<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${companyLogo(c)}</div><div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
   }).join('')}</div>`;
 }
 

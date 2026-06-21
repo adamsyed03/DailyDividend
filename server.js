@@ -28,7 +28,7 @@ const LOCAL_LOGO_FILES = Object.freeze({
 });
 const COMPANY_LOGO_DOMAINS = Object.freeze({
   netflix: 'netflix.com', disney: 'thewaltdisneycompany.com', reliance: 'ril.com', hdfc: 'hdfcbank.com',
-  spotify: 'spotify.com', visa: 'visa.com', zomato: 'zomato.com', hilton: 'hilton.com',
+  spotify: 'spotify.com', visa: 'visa.com', zomato: 'zomato.com',
   ferrari: 'ferrari.com', hermes: 'hermes.com', google: 'google.com', amazon: 'amazon.com',
   costco: 'costco.com', tcs: 'tcs.com', 'asian-paints': 'asianpaints.com'
 });
@@ -43,6 +43,28 @@ const supabase = SUPABASE_URL && SUPABASE_KEY
 const adminTokens = new Map();
 
 app.use(express.json({ limit: '8mb' }));
+
+const SERIALIZED_USER_MUTATIONS = new Set([
+  '/api/read', '/api/save', '/api/vote', '/api/deep-dive',
+  '/api/story-complete', '/api/search-used', '/api/next-company-click'
+]);
+let userMutationQueue = Promise.resolve();
+app.use(async (req, res, next) => {
+  if (!SERIALIZED_USER_MUTATIONS.has(req.path) || req.method === 'GET') return next();
+  let release;
+  const previous = userMutationQueue;
+  userMutationQueue = new Promise(resolve => { release = resolve; });
+  await previous;
+  let released = false;
+  const done = () => {
+    if (released) return;
+    released = true;
+    release();
+  };
+  res.once('finish', done);
+  res.once('close', done);
+  next();
+});
 
 function loadEnv() {
   const envFile = path.join(__dirname, '.env');
@@ -614,7 +636,7 @@ function voteTotals(db) {
 const COMPANY_SECTORS = {
   netflix: 'media', disney: 'media', spotify: 'media',
   reliance: 'energy', hdfc: 'banking',
-  hilton: 'travel', visa: 'finance', 'home-depot': 'consumer',
+  visa: 'finance', 'home-depot': 'consumer',
   google: 'tech', amazon: 'tech', ferrari: 'luxury', hermes: 'luxury',
   costco: 'consumer', tcs: 'tech', zomato: 'consumer', 'asian-paints': 'consumer'
 };

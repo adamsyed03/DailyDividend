@@ -426,7 +426,8 @@
             </div>
             <div class="acct-field">
               <label for="countryInput">Country</label>
-              <input class="acct-input" id="countryInput" autocomplete="country-name" oninput="checkAccount()" placeholder="e.g. India, United States, UK...">
+              <input class="acct-input" id="countryInput" list="countryOptions" autocomplete="country-name" oninput="checkAccount()" placeholder="Search for your country...">
+              <datalist id="countryOptions"></datalist>
             </div>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
@@ -475,6 +476,20 @@
     let dialCode = '+91';
     let selectedCountryName = '';
     let currentScreen = 'splash';
+    const SIGNUP_COUNTRIES = [
+      'Afghanistan','Algeria','Angola','Argentina','Australia','Austria','Azerbaijan','Bangladesh','Belarus','Belgium',
+      'Benin','Bolivia','Brazil','Bulgaria','Burkina Faso','Burundi','Cambodia','Cameroon','Canada','Chad',
+      'Chile','China','Colombia','Côte d’Ivoire','Cuba','Czechia','Democratic Republic of the Congo','Denmark','Dominican Republic','Ecuador',
+      'Egypt','El Salvador','Ethiopia','Finland','France','Germany','Ghana','Greece','Guatemala','Guinea',
+      'Haiti','Honduras','Hungary','India','Indonesia','Iran','Iraq','Israel','Italy','Japan',
+      'Jordan','Kazakhstan','Kenya','Kyrgyzstan','Laos','Lebanon','Liberia','Libya','Madagascar','Malawi',
+      'Malaysia','Mali','Mexico','Morocco','Mozambique','Myanmar','Nepal','Netherlands','Nicaragua','Niger',
+      'Nigeria','North Korea','Norway','Oman','Pakistan','Palestine','Papua New Guinea','Paraguay','Peru','Philippines',
+      'Poland','Portugal','Republic of the Congo','Romania','Russia','Rwanda','Saudi Arabia','Senegal','Serbia','Sierra Leone',
+      'Singapore','Slovakia','Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Sweden',
+      'Switzerland','Syria','Tajikistan','Tanzania','Thailand','Togo','Tunisia','Turkey','Turkmenistan','Uganda',
+      'Ukraine','United Arab Emirates','United Kingdom','United States','Uzbekistan','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe'
+    ];
 
     function goTo(name){
       const cur = document.getElementById('s-' + currentScreen);
@@ -488,6 +503,7 @@
     }
 
     window.addEventListener('load', () => {
+      document.getElementById('countryOptions').innerHTML = SIGNUP_COUNTRIES.map(country => `<option value="${country}"></option>`).join('');
       fetch('/api/catalog-stats').then(response => response.ok ? response.json() : null).then(data => {
         document.getElementById('liveCompanyCount').textContent = data && Number.isInteger(data.liveCompanyCount) ? data.liveCompanyCount : '4';
       }).catch(() => { document.getElementById('liveCompanyCount').textContent = '4'; });
@@ -557,7 +573,7 @@
     }
     function checkAccount(){
       const details = accountDetails();
-      const complete = Object.values(details).every(Boolean);
+      const complete = Object.values(details).every(Boolean) && SIGNUP_COUNTRIES.includes(details.country);
       document.getElementById('accountNext').disabled = !complete;
       return complete;
     }
