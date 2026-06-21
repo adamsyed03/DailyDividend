@@ -380,9 +380,12 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 
 /* YOU SCREEN */
 .you-scroll{flex:1;overflow-y:auto;padding:12px 24px 100px}
+.you-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:2px}
 .yg{font-family:var(--serif);font-weight:400;font-size:26px;letter-spacing:-0.01em;margin:6px 0 4px;line-height:1.15}
 .yg em{font-style:italic;color:var(--muted);font-weight:300}
 .ys{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:18px}
+.tour-replay-btn{background:rgba(46,138,96,.12);border:1px solid rgba(46,138,96,.28);color:#2E8A60;border-radius:100px;padding:8px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;margin-top:8px;transition:background .15s}
+.tour-replay-btn:hover{background:rgba(46,138,96,.22)}
 .id-c{background:linear-gradient(135deg,#1A3D2B,#0D2818 60%,#2A5C3F);color:var(--cream);border-radius:22px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,0.2)}
 .id-c::before{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(46,138,96,0.4),transparent 70%);pointer-events:none}
 .id-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:rgba(181,227,200,0.8);text-transform:uppercase;margin-bottom:8px}
@@ -450,7 +453,12 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 
 @media(max-width:899px){
   .stage,.phone{height:100svh;height:100dvh}
-  .card{padding:max(88px,calc(env(safe-area-inset-top) + 72px)) 20px max(68px,calc(env(safe-area-inset-bottom) + 56px));overflow:hidden;overscroll-behavior:none}
+  .topbar{gap:10px}
+  .co{min-width:0;max-width:calc(100% - 116px)}
+  .co>div:last-child{min-width:0}
+  .co-name,.co-sub{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tactions{flex-shrink:0}
+  .card{padding:max(112px,calc(env(safe-area-inset-top) + 96px)) 20px max(68px,calc(env(safe-area-inset-bottom) + 56px));overflow:hidden;overscroll-behavior:none}
   .eb-c{font-size:9px;margin-bottom:10px}
   .hl{font-size:clamp(23px,3.8dvh,28px);line-height:1.08;margin-bottom:10px}
   .bd{font-size:clamp(12px,1.9dvh,14px);line-height:1.42}
@@ -465,7 +473,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .np{padding:10px 12px;margin-bottom:10px}.ea{gap:6px}.ea button{padding:10px 12px}
 }
 @media(max-width:899px) and (max-height:700px){
-  .card{padding-top:max(78px,calc(env(safe-area-inset-top) + 64px));padding-bottom:max(58px,calc(env(safe-area-inset-bottom) + 48px))}
+  .card{padding-top:max(106px,calc(env(safe-area-inset-top) + 90px));padding-bottom:max(58px,calc(env(safe-area-inset-bottom) + 48px))}
   .eb-c{margin-bottom:7px}.hl{font-size:22px;margin-bottom:7px}.bd{font-size:11.5px;line-height:1.32}
   .cv-top{margin-bottom:7px}.cv-mark{width:42px;height:42px}.cv-stock{margin-bottom:6px}.cv-ks{margin-top:7px}.cv-ps{margin-top:6px}
   .pie{width:min(138px,21dvh);height:min(138px,21dvh)}.pie-wrap{gap:6px}
@@ -807,6 +815,24 @@ body{background:var(--ink);overflow:hidden}
   #dtShell .saved-sm{min-height:150px;padding:17px}
 }
 </style>
+<style id="tourStyle">
+#tourOverlay{position:fixed;inset:0;z-index:9820;cursor:pointer}
+#tourBg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none}
+#tourRing{position:fixed;border-radius:16px;box-shadow:0 0 0 3px rgba(181,227,200,.45),0 0 0 9000px rgba(0,0,0,.75);pointer-events:none;opacity:0;transition:left .36s cubic-bezier(.4,0,.2,1),top .36s cubic-bezier(.4,0,.2,1),width .36s cubic-bezier(.4,0,.2,1),height .36s cubic-bezier(.4,0,.2,1),border-radius .36s,opacity .2s}
+#tourCard{position:fixed;background:#0b1e12;border:1px solid rgba(181,227,200,.16);border-radius:20px;padding:22px 24px;width:min(300px,calc(100vw - 40px));box-sizing:border-box;box-shadow:0 24px 64px rgba(0,0,0,.55);cursor:default;transition:top .36s cubic-bezier(.4,0,.2,1),left .36s cubic-bezier(.4,0,.2,1)}
+#tourDots{display:flex;gap:5px;margin-bottom:16px}
+.t-dot{width:5px;height:5px;border-radius:50%;background:rgba(181,227,200,.2);transition:background .2s}
+.t-dot.on{background:#B5E3C8}
+#tourIcon{font-size:30px;margin-bottom:12px;line-height:1;display:none;font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji}
+#tourTitle{font-family:var(--serif,serif);font-size:22px;font-weight:400;letter-spacing:-.025em;color:#F5F1E8;margin-bottom:7px}
+#tourDesc{font-size:13px;line-height:1.58;color:rgba(245,241,232,.54);margin-bottom:18px}
+#tourFoot{display:flex;align-items:center;gap:10px}
+#tourNext{background:#2E8A60;color:#F5F1E8;border:0;border-radius:100px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;transition:opacity .15s}
+#tourNext:hover{opacity:.85}
+#tourHint{flex:1;font-size:10px;color:rgba(245,241,232,.22);font-family:var(--mono,monospace);letter-spacing:.04em}
+#tourSkip{background:none;border:0;padding:0;font:inherit;font-size:12px;color:rgba(245,241,232,.28);cursor:pointer;white-space:nowrap;flex-shrink:0}
+#tourSkip:hover{color:rgba(245,241,232,.6)}
+</style>
 </head><body>
 
 <div class="stage"><div class="phone">
@@ -1009,7 +1035,7 @@ next:{t:"Why Reliance is different",e:"From what's next",h:`<div class="d-sub">I
 tldr:["Worth <strong>$184B</strong>. Smaller than Netflix despite more revenue.","The parks made <strong>$10B in profit</strong>. More than all movies and streaming combined.","$94B revenue across <strong>three engines</strong>: parks, streaming, ESPN.","The movies are ads. <strong>The parks are the business.</strong>","Upside: <strong>Iger's turnaround</strong>. Risk: <strong>cable is dying fast</strong>.","Walt's family owns <strong>&lt;1%</strong>. Just like Netflix."]},
 
 reliance:{id:"reliance",domain:"ril.com",n:"Reliance",t:"RELIANCE",sec:"Conglomerate",fl:"",mc:"Rs 18.5L cr",lb:"#003E72",lc:"#fff",ac:"#00B5E2",as:"rgba(0,181,226,0.22)",bg:"linear-gradient(180deg,#003E72,#001F3A)",bl:"You paid Reliance today. Without knowing.",
-sp:"—",sc:"live price soon",scDir:"",
+sp:"-",sc:"price coming soon",scDir:"",
 ks:[{l:"Market cap",v:"Rs 18.5L cr"},{l:"Jio users",v:"524M"},{l:"Retail stores",v:"20,160"}],
 vb:3841,sentiment:"bull",
 ps:"Your Jio bill, your Smart Bazaar groceries, the Campa Cola in your fridge, the IPL on your screen - you probably paid Reliance four times today without realising it.",
@@ -1065,7 +1091,7 @@ next:{t:"Why HDFC is the opposite story",e:"From what's next",h:`<div class="d-s
 tldr:["Worth <strong>Rs 18.5 lakh crore</strong>. India's most valuable company.","Four giants: <strong>oil, retail, Jio, media</strong>. All under one roof.","Owns the <strong>world's largest oil refinery</strong>. Built on a desert.","Pattern: enter, subsidise, win the category. <strong>It has worked four times.</strong>","Upside: <strong>Jio IPO</strong>. Risk: <strong>the succession to three children</strong>.","The Ambani family owns <strong>~50%</strong>. Unlike any other company here."]},
 
 hdfc:{id:"hdfc",domain:"hdfcbank.com",n:"HDFC Bank",t:"HDFCBANK",sec:"Banking",fl:"",mc:"Rs 11.4L cr",lb:"#004C8F",lc:"#fff",ac:"#ED232A",as:"rgba(237,35,42,0.2)",bg:"linear-gradient(180deg,#004C8F,#002E59)",bl:"For 30 years, the gold standard. Then 2026.",
-sp:"NSE price coming soon",sc:"",scDir:"",
+sp:"-",sc:"price coming soon",scDir:"",
 ks:[{l:"Market cap",v:"Rs 11.4L cr"},{l:"Deposits",v:"Rs 31L cr"},{l:"Bad loans",v:"1.15%"}],
 vb:2134,sentiment:"neutral",
 ps:"If you have an HDFC savings account or credit card, you're part of the 100M customers who've kept this bank profitable for 30 years. That streak just got its first real test.",
@@ -1583,7 +1609,7 @@ function renderLib(){
  const dbUnder=dbCos.filter(c=>c.category==='underrated businesses');
  const dbNew=dbCos.filter(c=>!c.category);
  document.getElementById('lc').innerHTML=`
-<div class="lib-feat" onclick="openStack('${featured.n.toLowerCase().split(' ')[0]}')">
+<div class="lib-feat" id="tourLibEl" onclick="openStack('${featured.n.toLowerCase().split(' ')[0]}')">
  <div class="lib-feat-tag"> STORY OF THE WEEK</div>
  <div class="lib-feat-co">${featured.n}</div>
  <div class="lib-feat-bl">${featured.bl}</div>
@@ -1675,13 +1701,13 @@ function personalityCard(p){
  if(!p||!p.unlocked){
   const streak=profileState&&profileState.streak||0;
   const days=Math.max(0,4-streak);
-  return `<div class="id-c" style="opacity:.7">
+  return `<div class="id-c" id="tourPersonalityEl" style="opacity:.7">
 <div class="id-tag">Reading personality · Locked</div>
 <div class="id-n" style="font-size:22px">🔒 ${days} more day${days!==1?'s':''} to unlock</div>
 <div class="id-b">Build a 4-day reading streak to unlock your personality.</div>
 </div>`;
  }
- return `<div class="id-c">
+ return `<div class="id-c" id="tourPersonalityEl">
 <div class="id-tag">Your reading personality</div>
 <div class="id-n">${p.personality.replace('The ','The <em>').replace(/(\w+\.)$/,'$1</em>')}</div>
 <div class="id-bl" style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(181,227,200,.8);margin-bottom:8px">${p.tagline}</div>
@@ -1702,8 +1728,7 @@ async function renderShelf(){
  const streak=profileState.streak||0;
  const readDays=new Set((profileState.readHistory||[]).slice(-7).map(item=>new Date(item.date+'T00:00:00').getDay()));
  document.getElementById('youScroll').innerHTML=`
-<div class="yg">Your shelf. <em>Your calls.</em></div>
-<div class="ys">Cards you saved. Bets you made.</div>
+<div class="you-top-row"><div><div class="yg">Your shelf. <em>Your calls.</em></div><div class="ys">Cards you saved. Bets you made.</div></div><button class="tour-replay-btn" onclick="startTour()">▶ Tutorial</button></div>
 ${authPanel()}
 ${personalityCard(personalityData)}
 <div class="sh">
@@ -1711,8 +1736,10 @@ ${personalityCard(personalityData)}
  <div class="sh-w">${['M','T','W','T','F','S','S'].map((d,i)=>{const jsDay=(i+1)%7;const today=new Date().getDay()===jsDay;const cls=readDays.has(jsDay)?'done':today?'today':'';return `<div class="sh-c${today?' today':''}"><div class="sh-d ${cls}"></div><div class="sh-dl">${d}</div></div>`;}).join('')}</div>
  <div class="sh-f">${streak?`You are on a ${streak} day streak.`:'Read a company to start your streak.'} <strong>Today's drop is ready.</strong></div>
 </div>
+<div id="tourCallsEl">
 <div class="sect-t" style="margin-bottom:14px">Your calls</div>
 ${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb||1;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'📈 Bullish':c.vote==='bear'?'📉 Bearish':'😐 Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div><div class="sh-f" style="margin-top:8px;font-size:11px">You voted with ${c[c.vote==='bull'?'b':c.vote==='bear'?'bb':'n']}% of readers. ${c.when}.</div></div>`;}).join('')}
+</div>
 <div class="sect-t" style="margin:22px 0 14px">Saved cards</div>
 ${allSaved.length===0?'<div class="empty">Nothing saved yet. Tap the bookmark on any card.</div>':`<div class="sg">${allSaved.map(s=>{const co=CO[s.co];if(!co)return '';const card=co.cards[s.idx]||co.cards[0];const txt=card.hl?card.hl.replace(/<[^>]+>/g,''):card.good?card.good.replace(/<[^>]+>/g,''):'Saved card';const bg=card.bg||'cream';return `<div class="sm bg-${bg}" onclick="openStack('${s.co}')"><div class="sm-tg">${co.n} - Card ${s.idx+1}</div><div class="sm-q">"${txt.slice(0,80)}${txt.length>80?'...':''}"</div><div class="sm-f"><span>${co.t}</span><span>Open &rarr;</span></div></div>`;}).join('')}</div>`}`;
  twparse(document.getElementById('youScroll'));
@@ -1749,8 +1776,116 @@ document.addEventListener('keydown',e=>{
  }
 });
 
+/* ===== TOUR ===== */
+const TOUR_STEPS=[
+  {sel:'.today-hero,.today-hero-wrap',tab:'today',pad:10,title:'Cards',desc:'Your weekly company story - 11 cards, about 2 minutes. Tap it to start reading.',place:'below'},
+  {sel:null,tab:'today',icon:'🔖',title:'Saves',desc:"Inside each story, tap the bookmark on any card. Everything you've saved lives on your shelf.",place:'center'},
+  {sel:'#tourLibEl',tab:'library',pad:10,title:'Library',desc:"Every company we've ever covered, organised by theme - not just today's drop.",place:'below'},
+  {sel:'#tourPersonalityEl',tab:'you',pad:10,title:'Reading Personality',desc:'Read 4 days in a row to unlock a profile based on how you actually engage with companies.',place:'below'},
+  {sel:'#tourCallsEl',tab:'you',pad:8,title:'Calls',desc:'At the end of every story, vote bull, neutral, or bear. Your call stacks up against every other reader who finished the story.',place:'above'}
+];
+let tourIdx=0;
+function getVisibleEl(sel){
+  if(!sel)return null;
+  const all=document.querySelectorAll(sel);
+  for(const el of all){const r=el.getBoundingClientRect();if(r.width>0&&r.height>0)return el;}
+  return null;
+}
+function tourNavTo(tab){
+  if(typeof IS_DESKTOP!=='undefined'&&IS_DESKTOP&&typeof dtGoTo==='function')dtGoTo(tab);
+  else goTo(tab);
+}
+async function showTourStep(i,animate){
+  const step=TOUR_STEPS[i];
+  const ring=document.getElementById('tourRing');
+  const bg=document.getElementById('tourBg');
+  const card=document.getElementById('tourCard');
+  const icon=document.getElementById('tourIcon');
+  if(!ring)return;
+  document.getElementById('tourDots').innerHTML=TOUR_STEPS.map((_,j)=>`<div class="t-dot${j===i?' on':''}"></div>`).join('');
+  document.getElementById('tourTitle').textContent=step.title;
+  document.getElementById('tourDesc').textContent=step.desc;
+  document.getElementById('tourNext').textContent=i===TOUR_STEPS.length-1?'Start reading →':'Next →';
+  if(step.icon){icon.textContent=step.icon;icon.style.display='block';}else{icon.style.display='none';}
+  const prevTab=i>0?TOUR_STEPS[i-1].tab:step.tab;
+  const tabSwitch=animate&&!!step.tab&&step.tab!==prevTab;
+  if(tabSwitch){
+    ring.style.transition='opacity .18s';card.style.transition='opacity .18s';
+    ring.style.opacity='0';card.style.opacity='0';
+    await new Promise(r=>setTimeout(r,210));
+    tourNavTo(step.tab);
+  } else if(!animate){
+    ring.style.transition='none';card.style.transition='none';
+    if(step.tab){
+      tourNavTo(step.tab);
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    }
+  }
+  const vw=window.innerWidth,vh=window.innerHeight,cardW=Math.min(300,vw-40);
+  card.style.width=cardW+'px';
+  let el=null;
+  if(step.sel){
+    const deadline=Date.now()+4000;
+    while(Date.now()<deadline){el=getVisibleEl(step.sel);if(el)break;await new Promise(r=>setTimeout(r,80));}
+    if(el){el.scrollIntoView({block:'center',behavior:'instant'});await new Promise(r=>setTimeout(r,50));}
+  }
+  if(tabSwitch){ring.style.transition='none';card.style.transition='none';}
+  else if(animate&&el){
+    ring.style.transition='left .38s cubic-bezier(.4,0,.2,1),top .38s cubic-bezier(.4,0,.2,1),width .38s cubic-bezier(.4,0,.2,1),height .38s cubic-bezier(.4,0,.2,1),border-radius .38s';
+    card.style.transition='top .38s cubic-bezier(.4,0,.2,1),left .38s cubic-bezier(.4,0,.2,1)';
+  }
+  if(!el){
+    ring.style.opacity='0';bg.style.display='block';
+    card.style.left=Math.round((vw-cardW)/2)+'px';
+    requestAnimationFrame(()=>{
+      card.style.top=Math.max(16,Math.round((vh-card.offsetHeight)/2))+'px';
+      requestAnimationFrame(()=>{card.style.transition='opacity .24s';card.style.opacity='1';});
+    });
+  } else {
+    bg.style.display='none';
+    const pad=step.pad||8,r=el.getBoundingClientRect();
+    ring.style.left=(r.left-pad)+'px';ring.style.top=(r.top-pad)+'px';
+    ring.style.width=(r.width+pad*2)+'px';ring.style.height=(r.height+pad*2)+'px';
+    ring.style.borderRadius=window.getComputedStyle(el).borderRadius||'16px';
+    card.style.left=Math.max(16,Math.min(r.left,vw-cardW-16))+'px';
+    requestAnimationFrame(()=>{
+      const ch=card.offsetHeight;
+      let top=step.place==='above'?r.top-pad-12-ch:r.bottom+pad+12;
+      if(step.place==='above'&&top<16)top=r.bottom+pad+12;
+      if(step.place==='below'&&top+ch>vh-16)top=r.top-pad-12-ch;
+      card.style.top=Math.max(8,Math.min(top,vh-ch-8))+'px';
+      if(tabSwitch||!animate){
+        requestAnimationFrame(()=>{
+          ring.style.transition='opacity .24s';card.style.transition='opacity .24s';
+          ring.style.opacity='1';card.style.opacity='1';
+        });
+      } else {
+        ring.style.opacity='1';
+      }
+    });
+  }
+}
+function tourAdvance(){
+  if(tourIdx>=TOUR_STEPS.length-1){tourEnd();return;}
+  tourIdx++;showTourStep(tourIdx,true);
+}
+function tourEnd(){
+  const ov=document.getElementById('tourOverlay');
+  if(ov){ov.style.opacity='0';ov.style.transition='opacity .22s';setTimeout(()=>ov.remove(),240);}
+}
+function startTour(){
+  if(document.getElementById('tourOverlay'))return;
+  tourIdx=0;
+  const ov=document.createElement('div');
+  ov.id='tourOverlay';
+  ov.addEventListener('click',e=>{if(!e.target.closest('#tourCard'))tourAdvance();});
+  ov.innerHTML=`<div id="tourBg"></div><div id="tourRing"></div><div id="tourCard"><div id="tourDots"></div><div id="tourIcon"></div><div id="tourTitle"></div><div id="tourDesc"></div><div id="tourFoot"><button id="tourNext" onclick="tourAdvance()">Next →</button><span id="tourHint">tap anywhere</span><button id="tourSkip" onclick="event.stopPropagation();tourEnd()">Skip</button></div></div>`;
+  document.body.appendChild(ov);
+  setTimeout(()=>showTourStep(0,false),30);
+}
+
 /* INIT */
-ensureSession().then(()=>{localizeAudienceCopy(CO);document.documentElement.classList.remove('auth-pending');if(IS_DESKTOP){dtInit();}else{renderToday();}Promise.all([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){dtBuildTicker();dtRenderToday();}else{renderToday();}});}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.replace('onboarding.html');});
+ensureSession().then(()=>{localizeAudienceCopy(CO);document.documentElement.classList.remove('auth-pending');if(IS_DESKTOP){dtInit();}else{renderToday();}Promise.all([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){dtBuildTicker();dtRenderToday();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}});}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.replace('onboarding.html');});
 
 /* ══════════════════════════════════════
    DESKTOP-ONLY CODE (IS_DESKTOP gate)
@@ -2159,7 +2294,7 @@ ${personalityCard(personalityData)}
     <div class="streak-card-h"><div class="streak-label">Reading streak</div><div class="streak-emoji">🔥</div></div>
     <div class="streak-n">${profileState&&profileState.streak||0}<span class="u">days</span></div>
   </div>
-  <div style="margin-top:8px"><div class="you-sect-t">Your votes</div>
+  <div id="tourCallsEl" style="margin-top:8px"><div class="you-sect-t">Your votes</div>
   ${Object.keys(profileState&&profileState.previousVotes||{}).map(co=>{
     const v=profileState.previousVotes[co];const c=CO[co];if(!c)return'';
     return`<div class="cc-card"><div class="cc-r"><div class="cc-co-name">${c.n}</div><div class="cc-ch ${v}">${v}</div></div></div>`;

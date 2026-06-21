@@ -3,9 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-  <script>
-    if (location.protocol === 'file:' || (/^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(location.hostname) && location.port && location.port !== '3000')) location.replace('http://localhost:3000/onboarding.html');
-  </script>
   <title>Daily Dividend - Onboarding</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,12 +26,12 @@
       --ease:cubic-bezier(.2,.8,.2,1);
     }
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-    html,body{height:100%;overflow:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    html,body{height:100%;overflow:hidden}
     body{font-family:var(--sans);background:#0f0f0e;color:var(--ink);-webkit-font-smoothing:antialiased}
     button,input{font:inherit}
     button{cursor:pointer}
 
-    .stage{height:100vh;height:100svh;height:100dvh;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:#0f0f0e}
+    .stage{height:100vh;height:100dvh;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:#0f0f0e}
     .phone{width:100%;height:100%;overflow:hidden;position:relative;background:transparent}
     .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(34px);transition:opacity .36s var(--ease),transform .36s var(--ease)}
     .screen.active{opacity:1;pointer-events:auto;transform:translateX(0)}
@@ -49,8 +46,7 @@
 
     #s-splash{align-items:center;justify-content:center;text-align:center;padding:40px 32px}
     .splash-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(46,138,96,.28),transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none}
-    .splash-mark{width:72px;height:72px;border-radius:20px;background:var(--cream);display:grid;place-items:center;margin:0 auto 22px;opacity:0;transform:scale(.7) translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);box-shadow:0 16px 48px rgba(0,0,0,.4);overflow:hidden;padding:10px}
-    .splash-mark img,.payoff-mark img{display:block;width:100%;height:100%;object-fit:contain}
+    .splash-mark{width:72px;height:72px;border-radius:20px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:32px;margin:0 auto 22px;opacity:0;transform:scale(.7) translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);box-shadow:0 16px 48px rgba(0,0,0,.4)}
     .splash-mark.show{opacity:1;transform:scale(1) translateY(0)}
     .splash-name{font-family:var(--serif);font-weight:400;font-size:28px;letter-spacing:-.02em;opacity:0;transform:translateY(12px);transition:opacity .6s .35s var(--ease),transform .6s .35s var(--ease);margin-bottom:10px}
     .splash-name.show{opacity:1;transform:translateY(0)}
@@ -131,22 +127,28 @@
     .acct-input{width:100%;border:1.5px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);border-radius:14px;color:var(--cream);padding:13px 15px;font-size:15px;outline:none}
     .acct-input::placeholder{color:rgba(245,241,232,.28)}
     .acct-input:focus{border-color:rgba(181,227,200,.62);background:rgba(46,138,96,.14)}
-    .cc-overlay{position:absolute;inset:0;background:rgba(0,0,0,.62);z-index:200;display:none;align-items:flex-end}
-    .cc-overlay.open{display:flex}
-    .cc-sheet{background:var(--paper);border-radius:24px 24px 0 0;width:100%;max-height:min(82dvh,680px);padding:10px 0 max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
+    .cc-overlay,.cntry-overlay{position:absolute;inset:0;background:rgba(0,0,0,.62);z-index:200;display:none;align-items:flex-end}
+    .cc-overlay.open,.cntry-overlay.open{display:flex}
+    .cc-sheet{background:var(--paper);border-radius:24px 24px 0 0;width:100%;padding:10px 0 40px}
     .cc-sheet-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:18px;font-weight:500}
-    .country-search-wrap{padding:12px 16px;border-bottom:1px solid var(--line)}
-    .country-search{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:13px;padding:12px 14px;color:var(--ink);font-size:16px;outline:none;-webkit-appearance:none}
-    .country-search:focus{border-color:var(--brand)}
-    .country-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:180px}
-    .cc-opt{width:100%;border:0;background:transparent;display:flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer;text-align:left;color:var(--ink)}
+    .cc-opt{display:flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer}
     .cc-opt:hover{background:var(--cream-2)}
     .cc-opt-name{flex:1;font-size:15px;font-weight:600}
     .cc-opt-code{font-family:var(--mono);font-size:13px;color:var(--muted)}
-    .country-empty{padding:28px 22px;text-align:center;color:var(--muted);font-size:14px}
-    #countryInput{cursor:pointer}
+    .cntry-sheet{background:var(--paper);border-radius:24px 24px 0 0;width:100%;display:flex;flex-direction:column;max-height:74vh}
+    .cntry-sheet-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:18px;font-weight:500;flex-shrink:0}
+    .cntry-search-wrap{padding:10px 14px;border-bottom:1px solid var(--line);flex-shrink:0}
+    .cntry-search{width:100%;box-sizing:border-box;background:rgba(0,0,0,.06);border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;font-size:15px;color:var(--ink);font-family:inherit;outline:none}
+    .cntry-search:focus{border-color:var(--brand)}
+    .cntry-list{overflow-y:auto;flex:1;padding-bottom:env(safe-area-inset-bottom,16px);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+    .cntry-opt{display:block;width:100%;padding:14px 22px;cursor:pointer;font:inherit;font-size:15px;font-weight:500;text-align:left;color:var(--ink);background:transparent;border:0;border-bottom:1px solid rgba(0,0,0,.045);touch-action:manipulation}
+    .cntry-opt:hover,.cntry-opt:active{background:var(--cream-2)}
+    .cntry-empty{padding:24px 22px;font-size:14px;color:var(--muted);text-align:center}
+    .cntry-trigger{width:100%;box-sizing:border-box;text-align:left;border:1.5px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);border-radius:14px;color:var(--cream);padding:13px 15px;font-size:15px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .cntry-trigger.empty{color:rgba(245,241,232,.28)}
+    .cntry-trigger-arrow{font-size:11px;opacity:.5;flex-shrink:0}
     .payoff-inner{flex:1;padding:80px 28px 28px;display:flex;flex-direction:column;overflow-y:auto}
-    .payoff-mark{width:52px;height:52px;border-radius:14px;background:var(--cream);display:grid;place-items:center;margin-bottom:24px;padding:8px;overflow:hidden}
+    .payoff-mark{width:52px;height:52px;border-radius:14px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:23px;margin-bottom:24px}
     .payoff-card,.payoff-drop{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px 20px;margin-bottom:12px}
     .payoff-card-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.62);margin-bottom:10px}
     .payoff-chips{display:flex;flex-wrap:wrap;gap:7px}
@@ -156,68 +158,19 @@
     .payoff-drop-t{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--cream);margin-bottom:3px}
     .payoff-drop-s{font-size:12px;color:rgba(245,241,232,.5)}
     .payoff-terms{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-top:4px}
+    .feat-inner{flex:1;padding:72px 28px 24px;display:flex;flex-direction:column;overflow-y:auto}
+    .feat-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.68);margin-bottom:14px}
+    .feat-h{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;letter-spacing:-.025em;margin-bottom:6px;color:var(--cream)}
+    .feat-h em{font-style:italic;color:#B5E3C8;font-weight:300}
+    .feat-sub{font-size:14px;color:rgba(245,241,232,.5);margin-bottom:32px;line-height:1.5}
+    .feat-list{display:flex;flex-direction:column;gap:0;margin-bottom:auto}
+    .feat-item{display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+    .feat-item:last-child{border-bottom:none}
+    .feat-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji}
+    .feat-text{flex:1;padding-top:2px}
+    .feat-name{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--cream);margin-bottom:4px}
+    .feat-desc{font-size:13px;color:rgba(245,241,232,.52);line-height:1.45}
     .loading{opacity:.72;pointer-events:none}
-
-    @media(max-width:899px){
-      .screen{overflow:hidden}
-      .back-btn{top:max(18px,env(safe-area-inset-top));left:20px}
-      .q-wrap{min-height:0;padding:clamp(62px,11dvh,88px) 20px 6px}
-      .q-tag{margin-bottom:clamp(7px,1.5dvh,14px)}
-      .q-h{font-size:clamp(27px,4.4dvh,32px);margin-bottom:5px}
-      .q-sub{font-size:13px;margin-bottom:clamp(12px,2.4dvh,22px)}
-      .q-foot,.ph-foot,.acct-foot,.payoff-foot{flex:0 0 auto;padding:8px 20px max(12px,env(safe-area-inset-bottom))}
-      .btn-full,.btn-full-dark,.btn-payoff{min-height:46px;padding:12px 16px;border-radius:14px}
-
-      .market-grid{gap:8px}
-      .market-btn{padding:clamp(10px,1.8dvh,15px) 12px}
-      .sector-grid{align-content:flex-start;gap:7px}
-      .sector-btn{padding:clamp(8px,1.35dvh,11px) 14px;font-size:13px}
-
-      #s-about .q-wrap{padding-top:clamp(58px,9.5dvh,76px)}
-      #s-about .q-sub{margin-bottom:clamp(9px,1.7dvh,15px)}
-      #s-about .about-block{margin-bottom:clamp(10px,1.9dvh,18px)}
-      #s-about .about-label{font-size:clamp(16px,2.7dvh,18px);margin-bottom:7px}
-      #s-about .age-grid{gap:6px}
-      #s-about .age-btn{padding:clamp(8px,1.45dvh,11px) 4px}
-      #s-about .ab-n{font-size:14px;white-space:nowrap}
-      #s-about .level-grid{gap:6px}
-      #s-about .level-btn{min-height:0;padding:clamp(8px,1.45dvh,12px) 13px;gap:9px}
-      #s-about .lb-name{font-size:14px}
-      #s-about .lb-sub{font-size:10px;line-height:1.25;margin-top:1px}
-      #s-about .lb-dot{width:16px;height:16px}
-
-      .phone-inner,.acct-inner{min-height:0;padding:clamp(62px,10dvh,86px) 20px 6px}
-      .ph-tag,.acct-tag{margin-bottom:clamp(8px,1.5dvh,14px)}
-      .ph-h,.acct-h{font-size:clamp(28px,4.7dvh,34px);margin-bottom:8px}
-      .ph-sub,.acct-sub{font-size:13px;line-height:1.4;margin-bottom:clamp(12px,2.2dvh,22px)}
-      .ph-row{margin-bottom:8px}
-      .ph-or{margin:8px 0}
-      .ph-privacy,.flow-msg{margin-top:8px}
-      .acct-grid{gap:7px;min-height:0}
-      .acct-field{gap:3px}
-      .acct-input{padding:10px 12px;font-size:14px;border-radius:12px}
-
-      .payoff-inner{min-height:0;overflow:hidden;padding:clamp(48px,8dvh,68px) 20px 6px}
-      .payoff-mark{width:44px;height:44px;margin-bottom:12px}
-      .payoff-h{font-size:30px;margin-bottom:8px}
-      .payoff-sub{font-size:13px;line-height:1.4;margin-bottom:12px}
-      .payoff-card,.payoff-drop{padding:12px 14px;margin-bottom:8px}
-    }
-
-    @media(max-width:899px) and (max-height:680px){
-      .q-wrap{padding-top:54px}
-      .q-h{font-size:26px}
-      .q-sub{margin-bottom:9px}
-      #s-about .q-wrap{padding-top:50px}
-      #s-about .q-tag{margin-bottom:5px}
-      #s-about .q-h{font-size:25px}
-      #s-about .about-block{margin-bottom:8px}
-      #s-about .level-btn{padding:7px 12px}
-      .phone-inner,.acct-inner{padding-top:54px}
-      .acct-grid{gap:5px}
-      .acct-input{padding:8px 11px}
-      .q-foot,.ph-foot,.acct-foot,.payoff-foot{padding-top:5px}
-    }
 
     @media(min-width:900px){
       .stage{padding:0;background:radial-gradient(circle at 18% 18%,rgba(46,138,96,.24),transparent 34%),radial-gradient(circle at 82% 78%,rgba(245,241,232,.08),transparent 28%),#0f0f0e}
@@ -225,7 +178,7 @@
       .screen{padding:0 56px;transform:translateX(26px)}
       .screen.exit{transform:translateX(-26px)}
       .screen::before{content:"Daily Dividend";position:absolute;top:34px;left:98px;z-index:30;font-family:var(--serif);font-size:18px;font-weight:600;color:rgba(245,241,232,.92)}
-      .screen::after{content:"";position:absolute;top:28px;left:56px;z-index:31;width:30px;height:30px;border-radius:8px;background:var(--cream) url('/api/brand-logo') center/22px 22px no-repeat}
+      .screen::after{content:"DD";position:absolute;top:28px;left:56px;z-index:31;width:30px;height:30px;border-radius:8px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font-family:var(--serif);font-size:13px;font-weight:700}
       #s-markets::before,#s-sectors::before,#s-about::before{color:var(--ink)}
       #s-markets::after,#s-sectors::after,#s-about::after{background:var(--brand);color:var(--cream)}
       .prog-bar{height:4px}
@@ -269,7 +222,10 @@
       .lb-sub{font-size:13px}
       .q-foot{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:20px 0 48px;display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,1fr);column-gap:72px}
       .q-foot .btn-full{grid-column:2;width:auto;min-width:240px;justify-self:start;border-radius:999px;padding:17px 32px}
-      .phone-inner,.acct-inner,.payoff-inner{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:132px 0 24px}
+      .phone-inner,.acct-inner,.payoff-inner,.feat-inner{width:min(1120px,calc(100vw - 180px));margin:0 auto;padding:132px 0 24px}
+      .feat-list{max-width:560px}
+      .feat-item{padding:22px 0}
+      .feat-icon{width:52px;height:52px;font-size:24px}
       .phone-inner,.acct-inner{display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,620px);grid-auto-rows:min-content;column-gap:72px;align-content:start}
       .ph-tag,.ph-h,.ph-sub{grid-column:1}
       .ph-row,.ph-or,.ph-email,.ph-privacy,.flow-msg{grid-column:2}
@@ -288,7 +244,7 @@
       .payoff-card,.payoff-drop{grid-column:2;max-width:620px}
       .payoff-mark{width:64px;height:64px;border-radius:17px;font-size:28px}
       .payoff-terms{text-align:left;grid-column:2}
-      .cc-sheet{width:min(560px,100%);margin:0 auto;border-radius:22px 22px 0 0}
+      .cc-sheet,.cntry-sheet{width:min(560px,100%);margin:0 auto;border-radius:22px 22px 0 0}
       .stage>div[style*="position:fixed"]{display:none!important}
     }
   </style>
@@ -298,7 +254,7 @@
     <div class="phone">
       <section class="screen active" id="s-splash">
         <div class="splash-glow"></div>
-        <div class="splash-mark" id="splashMark"><img src="/api/brand-logo" alt="Daily Dividend logo"></div>
+        <div class="splash-mark" id="splashMark">DD</div>
         <div class="splash-name" id="splashName">Daily Dividend</div>
         <div class="splash-tag" id="splashTag">Story behind the stock</div>
         <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started -></button>
@@ -309,7 +265,7 @@
       <section class="screen" id="s-hook">
         <div class="hook-inner">
           <div class="hook-stats">
-            <div class="hook-stat"><div class="hook-stat-n" id="liveCompanyCount">—</div><div class="hook-stat-l">Companies live</div></div>
+            <div class="hook-stat"><div class="hook-stat-n">4</div><div class="hook-stat-l">Companies live</div></div>
             <div class="hook-stat"><div class="hook-stat-n">~90s</div><div class="hook-stat-l">Per read</div></div>
             <div class="hook-stat"><div class="hook-stat-n">Free</div><div class="hook-stat-l">Always</div></div>
           </div>
@@ -431,8 +387,9 @@
               <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="Friend, TikTok, LinkedIn...">
             </div>
             <div class="acct-field">
-              <label for="countryInput">Country</label>
-              <input class="acct-input" id="countryInput" autocomplete="country-name" readonly role="combobox" aria-haspopup="listbox" aria-expanded="false" onclick="openCountryPicker()" placeholder="Tap to choose your country...">
+              <label>Country</label>
+              <input type="hidden" id="countryInput">
+              <button type="button" class="cntry-trigger empty" id="cntryTrigger" onclick="openCountryDD()"><span id="cntryLabel">Select your country</span><span class="cntry-trigger-arrow">▼</span></button>
             </div>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
@@ -442,7 +399,7 @@
 
       <section class="screen" id="s-payoff">
         <div class="payoff-inner">
-        <div class="payoff-mark"><img src="/api/brand-logo" alt="Daily Dividend logo"></div>
+          <div class="payoff-mark">DD</div>
           <div class="payoff-h">You're <em>in.</em></div>
           <div class="payoff-sub">Welcome to Daily Dividend. We built this for people who want to actually understand what they're reading about - not just the numbers, the story.</div>
           <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
@@ -450,16 +407,32 @@
           <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix - The $46M a day question</div></div></div>
         </div>
         <div class="payoff-foot">
-          <button class="btn-payoff" onclick="goToApp()">Read my first story -></button>
+          <button class="btn-payoff" onclick="goToApp()">Let's go -></button>
           <div class="payoff-terms">New company every Monday - Free forever</div>
         </div>
       </section>
 
-      <div class="cc-overlay" id="ccOverlay" onclick="closeCountryPicker(event)">
-        <div class="cc-sheet" role="dialog" aria-modal="true" aria-labelledby="countryPickerTitle" onclick="event.stopPropagation()">
-          <div class="cc-sheet-h" id="countryPickerTitle">Choose your country</div>
-          <div class="country-search-wrap"><input class="country-search" id="countrySearch" type="search" inputmode="search" autocomplete="off" placeholder="Search countries..." oninput="renderCountryOptions(this.value)"></div>
-          <div class="country-list" id="countryList" role="listbox"></div>
+      <div class="cntry-overlay" id="cntryOverlay" onclick="closeCntryDD(event)">
+        <div class="cntry-sheet" onclick="event.stopPropagation()">
+          <div class="cntry-sheet-h">Select country</div>
+          <div class="cntry-search-wrap">
+            <input class="cntry-search" id="cntrySearch" type="search" placeholder="Search countries..." autocomplete="off" oninput="filterCountries(this.value)">
+          </div>
+          <div class="cntry-list" id="cntryList"></div>
+        </div>
+      </div>
+
+      <div class="cc-overlay" id="ccOverlay" onclick="closeCC(event)">
+        <div class="cc-sheet">
+          <div class="cc-sheet-h">Select country</div>
+          <div class="cc-opt" onclick="pickCC('+91','India')"><span class="cc-opt-name">India</span><span class="cc-opt-code">+91</span></div>
+          <div class="cc-opt" onclick="pickCC('+381','Serbia')"><span class="cc-opt-name">Serbia</span><span class="cc-opt-code">+381</span></div>
+          <div class="cc-opt" onclick="pickCC('+1','United States')"><span class="cc-opt-name">United States</span><span class="cc-opt-code">+1</span></div>
+          <div class="cc-opt" onclick="pickCC('+44','United Kingdom')"><span class="cc-opt-name">United Kingdom</span><span class="cc-opt-code">+44</span></div>
+          <div class="cc-opt" onclick="pickCC('+971','UAE')"><span class="cc-opt-name">UAE</span><span class="cc-opt-code">+971</span></div>
+          <div class="cc-opt" onclick="pickCC('+65','Singapore')"><span class="cc-opt-name">Singapore</span><span class="cc-opt-code">+65</span></div>
+          <div class="cc-opt" onclick="pickCC('+61','Australia')"><span class="cc-opt-name">Australia</span><span class="cc-opt-code">+61</span></div>
+          <div class="cc-opt" onclick="pickCC('+1','Canada')"><span class="cc-opt-name">Canada</span><span class="cc-opt-code">+1</span></div>
         </div>
       </div>
     </div>
@@ -475,20 +448,6 @@
     let dialCode = '+91';
     let selectedCountryName = '';
     let currentScreen = 'splash';
-    const SIGNUP_COUNTRIES = [
-      'Afghanistan','Algeria','Angola','Argentina','Australia','Austria','Azerbaijan','Bangladesh','Belarus','Belgium',
-      'Benin','Bolivia','Brazil','Bulgaria','Burkina Faso','Burundi','Cambodia','Cameroon','Canada','Chad',
-      'Chile','China','Colombia','Côte d’Ivoire','Cuba','Czechia','Democratic Republic of the Congo','Denmark','Dominican Republic','Ecuador',
-      'Egypt','El Salvador','Ethiopia','Finland','France','Germany','Ghana','Greece','Guatemala','Guinea',
-      'Haiti','Honduras','Hungary','India','Indonesia','Iran','Iraq','Israel','Italy','Japan',
-      'Jordan','Kazakhstan','Kenya','Kyrgyzstan','Laos','Lebanon','Liberia','Libya','Madagascar','Malawi',
-      'Malaysia','Mali','Mexico','Morocco','Mozambique','Myanmar','Nepal','Netherlands','Nicaragua','Niger',
-      'Nigeria','North Korea','Norway','Oman','Pakistan','Palestine','Papua New Guinea','Paraguay','Peru','Philippines',
-      'Poland','Portugal','Republic of the Congo','Romania','Russia','Rwanda','Saudi Arabia','Senegal','Serbia','Sierra Leone',
-      'Singapore','Slovakia','Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Sweden',
-      'Switzerland','Syria','Tajikistan','Tanzania','Thailand','Togo','Tunisia','Turkey','Turkmenistan','Uganda',
-      'Ukraine','United Arab Emirates','United Kingdom','United States','Uzbekistan','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe'
-    ];
 
     function goTo(name){
       const cur = document.getElementById('s-' + currentScreen);
@@ -502,10 +461,6 @@
     }
 
     window.addEventListener('load', () => {
-      renderCountryOptions('');
-      fetch('/api/catalog-stats').then(response => response.ok ? response.json() : null).then(data => {
-        document.getElementById('liveCompanyCount').textContent = data && Number.isInteger(data.liveCompanyCount) ? data.liveCompanyCount : '4';
-      }).catch(() => { document.getElementById('liveCompanyCount').textContent = '4'; });
       setTimeout(() => {
         document.getElementById('splashMark').classList.add('show');
         setTimeout(() => document.getElementById('splashName').classList.add('show'), 260);
@@ -572,44 +527,18 @@
     }
     function checkAccount(){
       const details = accountDetails();
-      const complete = Object.values(details).every(Boolean) && SIGNUP_COUNTRIES.includes(details.country);
+      const complete = Object.values(details).every(Boolean);
       document.getElementById('accountNext').disabled = !complete;
       return complete;
     }
-    function renderCountryOptions(query = ''){
-      const normalized = String(query).trim().toLocaleLowerCase();
-      const matches = SIGNUP_COUNTRIES.filter(country => country.toLocaleLowerCase().includes(normalized));
-      document.getElementById('countryList').innerHTML = matches.length
-        ? matches.map(country => `<button class="cc-opt" type="button" role="option" data-country="${country}"><span class="cc-opt-name">${country}</span></button>`).join('')
-        : '<div class="country-empty">No matching country</div>';
-    }
-    function openCountryPicker(){
-      const overlay = document.getElementById('ccOverlay');
-      const input = document.getElementById('countryInput');
-      const search = document.getElementById('countrySearch');
-      overlay.classList.add('open');
-      input.setAttribute('aria-expanded','true');
-      search.value = '';
-      renderCountryOptions('');
-      setTimeout(() => search.focus(), 80);
-    }
-    function closeCountryPicker(event){
-      if(event && event.target !== document.getElementById('ccOverlay')) return;
+    function openCC(){document.getElementById('ccOverlay').classList.add('open');}
+    function closeCC(event){if(event.target === document.getElementById('ccOverlay')) document.getElementById('ccOverlay').classList.remove('open');}
+    function pickCC(code, name){
+      selectedCountryName = name || 'Unknown';
+      document.getElementById('ccCode').textContent = code;
+      dialCode = code;
       document.getElementById('ccOverlay').classList.remove('open');
-      document.getElementById('countryInput').setAttribute('aria-expanded','false');
     }
-    function pickCountry(name){
-      selectedCountryName = name;
-      document.getElementById('countryInput').value = name;
-      document.getElementById('ccOverlay').classList.remove('open');
-      document.getElementById('countryInput').setAttribute('aria-expanded','false');
-      checkAccount();
-    }
-    document.getElementById('countryList').addEventListener('click', event => {
-      const option = event.target.closest('[data-country]');
-      if(option) pickCountry(option.dataset.country);
-    });
-    document.addEventListener('keydown', event => { if(event.key === 'Escape' && document.getElementById('ccOverlay').classList.contains('open')) closeCountryPicker({target:document.getElementById('ccOverlay')}); });
     function showError(message, id = 'flowMsg'){
       const el = document.getElementById(id);
       if(!el) return;
@@ -687,7 +616,71 @@
       document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
       document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
     }
-    function goToApp(){window.location.href = 'index.html';}
+    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='index.html';}
+
+    const COUNTRIES = [
+      'India','United States','United Kingdom','UAE','Singapore','Australia','Canada',
+      'Germany','France','Netherlands','Japan','South Korea','Brazil','South Africa',
+      'Nigeria','Kenya','Ghana','New Zealand','Ireland','Sweden','Norway','Denmark',
+      'Finland','Switzerland','Austria','Belgium','Portugal','Spain','Italy','Greece',
+      'Poland','Czech Republic','Hungary','Romania','Bulgaria','Croatia','Serbia',
+      'Ukraine','Russia','Turkey','Israel','Saudi Arabia','Qatar','Kuwait','Oman',
+      'Bahrain','Jordan','Lebanon','Iraq','Iran','Egypt','Morocco','Tunisia','Libya',
+      'Algeria','Ethiopia','Tanzania','Uganda','Rwanda','Senegal','Ivory Coast',
+      'Cameroon','Mozambique','Zambia','Zimbabwe','Afghanistan','Albania','Angola',
+      'Argentina','Armenia','Azerbaijan','Bangladesh','Bolivia','Bosnia','Cambodia',
+      'Chile','China','Colombia','Costa Rica','Cuba','Ecuador','El Salvador',
+      'Estonia','Georgia','Guatemala','Honduras','Indonesia','Jamaica','Kazakhstan',
+      'Kyrgyzstan','Latvia','Lithuania','Luxembourg','Malaysia','Mexico','Myanmar',
+      'Nepal','Nicaragua','Pakistan','Palestine','Panama','Paraguay','Peru',
+      'Philippines','Slovakia','Slovenia','Somalia','Sri Lanka','Sudan','Syria',
+      'Taiwan','Tajikistan','Thailand','Tunisia','Turkmenistan','Uruguay',
+      'Uzbekistan','Venezuela','Vietnam','Yemen'
+    ];
+
+    function openCountryDD(){
+      document.getElementById('cntryOverlay').classList.add('open');
+      document.getElementById('cntrySearch').value = '';
+      renderCountryList('');
+      setTimeout(() => document.getElementById('cntrySearch').focus(), 120);
+    }
+    function closeCntryDD(event){
+      if(event.target === document.getElementById('cntryOverlay'))
+        document.getElementById('cntryOverlay').classList.remove('open');
+    }
+    function renderCountryList(q){
+      const list = document.getElementById('cntryList');
+      const query = q.trim().toLowerCase();
+      const filtered = query ? COUNTRIES.filter(c => c.toLowerCase().includes(query)) : COUNTRIES;
+      if(!filtered.length){
+        list.innerHTML = '<div class="cntry-empty">No countries found</div>';
+        return;
+      }
+      list.replaceChildren();
+      filtered.forEach(country => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'cntry-opt';
+        option.textContent = country;
+        option.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          selectCountry(country);
+        });
+        list.appendChild(option);
+      });
+    }
+    function filterCountries(q){ renderCountryList(q); }
+    function selectCountry(name){
+      selectedCountryName = name;
+      document.getElementById('countryInput').value = name;
+      const label = document.getElementById('cntryLabel');
+      label.textContent = name;
+      document.getElementById('cntryTrigger').classList.remove('empty');
+      document.getElementById('cntryOverlay').classList.remove('open');
+      checkAccount();
+    }
+
     twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
   </script>
 </body>
