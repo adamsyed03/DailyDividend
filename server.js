@@ -41,6 +41,11 @@ const supabase = SUPABASE_URL && SUPABASE_KEY
   ? createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } })
   : null;
 const adminTokens = new Map();
+const DB_CACHE_TTL_MS = 5000;
+let dbCache = null;
+let dbCacheExpiresAt = 0;
+let dbReadPromise = null;
+const logoMemoryCache = new Map();
 
 app.use(express.json({ limit: '8mb' }));
 
@@ -82,13 +87,21 @@ function loadEnv() {
 }
 
 async function sendSupabaseLogo(res, objectPath) {
+  const cached = logoMemoryCache.get(objectPath);
+  if (cached) {
+    res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+    res.type(cached.type).send(cached.logo);
+    return true;
+  }
   if (!supabase) return false;
   const { data, error } = await supabase.storage.from(SUPABASE_LOGO_BUCKET).download(objectPath);
   if (error || !data) return false;
   const logo = Buffer.from(await data.arrayBuffer());
   if (!logo.length || logo.length > 2 * 1024 * 1024) return false;
-  res.setHeader('Cache-Control', 'public, max-age=604800');
-  res.type(data.type || 'image/png').send(logo);
+  const type = data.type || 'image/png';
+  logoMemoryCache.set(objectPath, { logo, type });
+  res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+  res.type(type).send(logo);
   return true;
 }
 
@@ -160,44 +173,62 @@ function normalizeDb(parsed = {}) {
   };
 }
 
-async function readDb() {
+function cloneDb(db) {
+  return structuredClone(db);
+}
+
+async function loadDbFromStore() {
   if (supabase) {
     const { data, error } = await supabase
       .from('daily_dividend_state')
       .select('data')
       .eq('id', SUPABASE_STATE_ID)
       .maybeSingle();
-
     if (error) throw error;
     return normalizeDb(data && data.data ? data.data : emptyDb());
   }
-
   try {
-    const raw = await fs.readFile(DB_FILE, 'utf8');
-    const parsed = JSON.parse(raw);
-    return normalizeDb(parsed);
+    return normalizeDb(JSON.parse(await fs.readFile(DB_FILE, 'utf8')));
   } catch (error) {
     if (error.code === 'ENOENT') return emptyDb();
     throw error;
   }
 }
 
+async function readDb() {
+  if (dbCache && Date.now() < dbCacheExpiresAt) return cloneDb(dbCache);
+  if (!dbReadPromise) dbReadPromise = loadDbFromStore();
+  try {
+    const db = await dbReadPromise;
+    dbCache = normalizeDb(db);
+    dbCacheExpiresAt = Date.now() + DB_CACHE_TTL_MS;
+    return cloneDb(dbCache);
+  } finally {
+    dbReadPromise = null;
+  }
+}
+
 async function writeDb(db) {
+  const normalized = normalizeDb(db);
   if (supabase) {
     const { error } = await supabase
       .from('daily_dividend_state')
       .upsert({
         id: SUPABASE_STATE_ID,
-        data: normalizeDb(db),
+        data: normalized,
         updated_at: new Date().toISOString()
       });
 
     if (error) throw error;
+    dbCache = normalized;
+    dbCacheExpiresAt = Date.now() + DB_CACHE_TTL_MS;
     return;
   }
 
   await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(DB_FILE, JSON.stringify(db, null, 2));
+  await fs.writeFile(DB_FILE, JSON.stringify(normalized, null, 2));
+  dbCache = normalized;
+  dbCacheExpiresAt = Date.now() + DB_CACHE_TTL_MS;
 }
 
 async function mirrorPricesToLocalFile(prices) {
@@ -837,9 +868,12 @@ app.post('/api/login', async (req, res, next) => {
 app.get('/api/auth/session', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
+    const existed = Boolean(db.users[req.authUser.id]);
     const user = getUser(db, req.authUser.id);
-    user.email = req.authUser.email || user.email || '';
-    await writeDb(db);
+    const authEmail = req.authUser.email || user.email || '';
+    const changed = !existed || user.email !== authEmail;
+    user.email = authEmail;
+    if (changed) await writeDb(db);
     res.json({ ok: true, user: profile(user) });
   } catch (error) {
     next(error);
@@ -868,8 +902,9 @@ app.get('/api/user/:userId', requireUser, async (req, res, next) => {
     const userId = requireString(req.params.userId, 'userId', res);
     if (!userId) return;
     if (userId !== req.authUser.id) return res.status(403).json({ error: 'You cannot access another user profile.' });
+    const existed = Boolean(db.users[userId]);
     const user = getUser(db, userId);
-    await writeDb(db);
+    if (!existed) await writeDb(db);
     res.json(profile(user));
   } catch (error) {
     next(error);
@@ -1009,6 +1044,16 @@ app.post('/api/vote', requireUser, async (req, res, next) => {
       percentages: aggregateVotes(db, companyId),
       previousVotes: user.previousVotes
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/votes', async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const companyIds = new Set([...BUILT_IN_LIVE_COMPANIES, ...Object.keys(db.votes || {})]);
+    res.json({ votes: Object.fromEntries([...companyIds].map(companyId => [companyId, aggregateVotes(db, companyId)])) });
   } catch (error) {
     next(error);
   }
@@ -1400,14 +1445,14 @@ app.get('/admin', (req, res) => {
 });
 
 // Serve root-level HTML files explicitly so edits to root are always live
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+app.get('/index.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
 app.get('/signup.html', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
-app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
-app.get('/onboarding.html', (req, res) => { res.setHeader('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/onboarding.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
 
 app.get('/desktop.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'dd_v6_desktop_revised (1).html'));
@@ -1479,8 +1524,8 @@ app.get('/api/logo/:companyId', async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public'), {
   extensions: ['html'],
-  etag: false,
-  maxAge: 0
+  etag: true,
+  maxAge: '5m'
 }));
 
 app.use((req, res) => {

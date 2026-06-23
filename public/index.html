@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
 <style>
 /* TOKENS */
 :root{
@@ -677,6 +677,12 @@ body{background:var(--ink);overflow:hidden}
    YOU SCREEN — DESKTOP
 ════════════════════════════════════ */
 .you-content{max-width:960px;margin:0 auto;padding:36px 48px 60px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.you-head-row{grid-column:1/-1;display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+.you-head-copy{min-width:0}
+.you-head-row .you-h,.you-head-row .you-sub{margin:0}
+.you-head-row .you-sub{margin-top:7px}
+#dtYouContent>.auth-card,#dtYouContent>.id-c{grid-column:1/-1}
+#dtYouContent>.auth-card{margin:0}
 .you-left{display:flex;flex-direction:column;gap:18px}
 .you-right{display:flex;flex-direction:column;gap:18px}
 .you-h{font-family:var(--serif);font-weight:400;font-size:28px;letter-spacing:-0.02em;margin-bottom:4px;grid-column:1/-1}
@@ -1246,7 +1252,10 @@ function authPanel(){
 async function api(path,options={}){const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}
 async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();}
 async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();}
-async function loadVoteAggregates(){await Promise.all(Object.keys(CO).map(async co=>{try{voteAggregates[co]=await api(`/api/votes/${encodeURIComponent(co)}`);}catch(e){console.warn(e);}}));}
+async function loadVoteAggregates(){
+ try{const data=await api('/api/votes');Object.assign(voteAggregates,data.votes||{});}
+ catch(e){console.warn(e);}
+}
 async function signOut(){try{await api('/api/logout',{method:'POST'});}catch(e){}localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');localStorage.removeItem('dailyDividendOnboarded');showToast('Signed out');setTimeout(()=>window.location.href='onboarding.html',450);}
 function setTheme(co){
  const c=CO[co];
@@ -1894,12 +1903,12 @@ if (IS_DESKTOP) {
 
 const DEEP_KEYS=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
 let dtCardIdx=0;
-const dtSaved={};
 
 function dtGoTo(tab){
   document.querySelectorAll('#dtShell .screen').forEach(s=>s.classList.remove('active'));
   const s=document.getElementById('dt-screen-'+tab);if(s)s.classList.add('active');
   document.querySelectorAll('.sb-item,.bnm-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  const main=document.getElementById('dtMainArea');if(main)main.scrollTop=0;
   if(tab==='library')dtRenderLib();
   if(tab==='you')dtRenderShelf();
 }
@@ -2124,7 +2133,7 @@ function dtUpdProg(){
   const p=document.getElementById('dtProg');if(p)p.classList.toggle('dark',light);
   const tb=document.getElementById('dtTopbar');if(tb)tb.classList.toggle('dark',light);
   const sb=document.getElementById('dtSaveBtn');
-  if(sb){dtSaved[curCo]&&dtSaved[curCo].has(dtCardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');}
+  if(sb){saved[curCo]&&saved[curCo].has(dtCardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');}
 }
 
 function dtShowCard(i){
@@ -2177,24 +2186,50 @@ function dtSelSlice(k,idx){
   const pd=document.getElementById(`dtPieD-${idx}`);if(pd)pd.innerHTML=`<div class="pie-d-h"><div class="pie-d-n">${s.n} · ${s.p}%</div><div class="pie-d-a">${s.a}</div></div><div class="pie-d-t">${s.x}</div>`;
 }
 
-function dtVote(el,type,idx){
-  const wrap=document.getElementById('dtCvO-'+idx);if(!wrap||wrap.classList.contains('voted'))return;
-  wrap.classList.add('voted');el.classList.add('you');
-  wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+async function dtVote(el,type,idx){
+  const wrap=document.getElementById('dtCvO-'+idx);if(!wrap)return;
+  const previousVote=profileState.previousVotes&&profileState.previousVotes[curCo];
+  profileState.previousVotes=profileState.previousVotes||{};
+  profileState.previousVotes[curCo]=type;
+  syncCallsFromProfile();
+  wrap.classList.add('voted');
+  wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.remove('you');o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+  el.classList.add('you');
   const msgs={bull:"You're <strong>bullish</strong>, with the crowd.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};
   const r=document.getElementById('dtCvR-'+idx);if(r){r.innerHTML=msgs[type];r.classList.add('show');}
+  try{
+    const data=await api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:curCo,vote:type})});
+    voteAggregates[curCo]=data.percentages||voteAggregates[curCo];
+    profileState.previousVotes=data.previousVotes||profileState.previousVotes;
+    syncCallsFromProfile();
+  }catch(error){
+    if(previousVote)profileState.previousVotes[curCo]=previousVote;else delete profileState.previousVotes[curCo];
+    syncCallsFromProfile();dtShowToast(error.message);
+  }
 }
 
-function dtToggleSave(){
-  if(!dtSaved[curCo])dtSaved[curCo]=new Set();
+async function dtToggleSave(){
+  if(!saved[curCo])saved[curCo]=new Set();
   const b=document.getElementById('dtSaveBtn');
-  if(dtSaved[curCo].has(dtCardIdx)){dtSaved[curCo].delete(dtCardIdx);if(b)b.classList.remove('saved');dtShowToast("Removed");}
-  else{dtSaved[curCo].add(dtCardIdx);if(b)b.classList.add('saved');dtShowToast("★ Card saved");}
+  const key=saveKey(curCo,dtCardIdx);const wasSaved=saved[curCo].has(dtCardIdx);
+  if(wasSaved){saved[curCo].delete(dtCardIdx);if(b)b.classList.remove('saved');}
+  else{saved[curCo].add(dtCardIdx);if(b)b.classList.add('saved');}
+  try{
+    const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});
+    profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();dtShowToast(data.saved?'★ Card saved':'Removed');
+  }catch(error){
+    if(wasSaved)saved[curCo].add(dtCardIdx);else saved[curCo].delete(dtCardIdx);
+    if(b)b.classList.toggle('saved',wasSaved);dtShowToast(error.message);
+  }
 }
 
-function dtSaveCo(){
-  if(!dtSaved[curCo])dtSaved[curCo]=new Set();
-  dtSaved[curCo].add(0);dtShowToast("★ Saved to shelf");
+async function dtSaveCo(){
+  const key=saveKey(curCo,0);
+  try{
+    const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});
+    profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();dtUpdProg();
+    dtShowToast(data.saved?'★ Saved to shelf':'Removed from shelf');
+  }catch(error){dtShowToast(error.message);}
 }
 
 function dtShowToast(m){
@@ -2230,8 +2265,8 @@ function dtRenderLib(){
   function csCard(c){
     return `<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${companyLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
   }
-  function section(title, liveArr, csArr){
-    const cards=[...liveArr.map(libCard),...(csArr||[]).map(csCard)];
+  function section(title, liveArr, dbArr=[], csArr=[]){
+    const cards=[...liveArr.map(libCard),...dbArr.map(dbLibCard),...csArr.map(csCard)];
     if(!cards.length)return'';
     return `<div class="lib-section"><div class="lib-section-h"><div class="lib-section-t">${title}</div><div class="lib-section-c">${cards.length}</div></div><div class="lib-grid">${cards.join('')}</div></div>`;
   }
@@ -2241,9 +2276,11 @@ function dtRenderLib(){
   const newKeys=liveKeys.filter(k=>CO[k].rails&&CO[k].rails.includes('new'));
 
   // DB companies by category
-  const dbBrands=(dbCos||[]).filter(c=>c.category==='brands you use daily');
-  const dbTwists=(dbCos||[]).filter(c=>c.category==='plot twists');
-  const dbUnder=(dbCos||[]).filter(c=>c.category==='underrated businesses');
+  const desktopDbCos=(dbCos||[]).filter(c=>!CO[String(c.companyId||'').toLowerCase()]);
+  const dbBrands=desktopDbCos.filter(c=>c.category==='brands you use daily');
+  const dbTwists=desktopDbCos.filter(c=>c.category==='plot twists');
+  const dbUnder=desktopDbCos.filter(c=>c.category==='underrated businesses');
+  const dbNew=desktopDbCos.filter(c=>!c.category);
 
   function dbLibCard(c){
     const slug=c.companyId;
@@ -2257,13 +2294,10 @@ function dtRenderLib(){
     <button class="lib-feat-cta">Read now →</button>
   </div>
 </div>
-${section('🆕 New drops this week', newKeys, CS?[CS[3]]:[])}
-${section('📱 Brands you use daily', daily, [])}
-${dbBrands.length?`<div class="lib-section"><div class="lib-section-h"><div class="lib-section-t">📱 Brands you use daily</div><div class="lib-section-c">${dbBrands.length}</div></div><div class="lib-grid">${dbBrands.map(dbLibCard).join('')}</div></div>`:''}
-${section('🎬 Plot twists', twists, CS?CS.slice(4,6):[])}
-${dbTwists.length?`<div class="lib-section"><div class="lib-section-h"><div class="lib-section-t">🎬 Plot twists</div><div class="lib-section-c">${dbTwists.length}</div></div><div class="lib-grid">${dbTwists.map(dbLibCard).join('')}</div></div>`:''}
-${section('🫥 Underrated businesses', [], CS?CS.slice(9,11):[])}
-${dbUnder.length?`<div class="lib-section"><div class="lib-section-h"><div class="lib-section-t">🫥 Underrated businesses</div><div class="lib-section-c">${dbUnder.length}</div></div><div class="lib-grid">${dbUnder.map(dbLibCard).join('')}</div></div>`:''}`;
+${section('🆕 New drops this week',newKeys,dbNew,CS?[CS[3]]:[])}
+${section('📱 Brands you use daily',daily,dbBrands)}
+${section('🎬 Plot twists',twists,dbTwists,CS?CS.slice(4,6):[])}
+${section('🫥 Underrated businesses',[],dbUnder,CS?CS.slice(9,11):[])}`;
 }
 
 function dtSurpriseMe(){const keys=Object.keys(CO);openStack(keys[Math.floor(Math.random()*keys.length)]);}
@@ -2284,34 +2318,32 @@ function dtOnSearch(){
 
 async function dtRenderShelf(){
   const yc=document.getElementById('dtYouContent');if(!yc)return;
-  await loadPersonality();
+  await Promise.all([loadProfile(),loadPersonality()]);
+  const allSaved=[];
+  Object.entries(saved||{}).forEach(([co,set])=>{set.forEach(idx=>allSaved.push({co,idx}));});
+  const previousVotes=profileState.previousVotes||{};
+  const streak=profileState.streak||0;
   yc.innerHTML=`
-<div class="you-h">Your shelf.</div>
-<div class="you-sub">What you've saved and how you voted.</div>
+<div class="you-head-row"><div class="you-head-copy"><div class="you-h">Your shelf.</div><div class="you-sub">What you've saved and how you voted.</div></div><button class="tour-replay-btn" onclick="startTour()">▶ Tutorial</button></div>
+${authPanel()}
 ${personalityCard(personalityData)}
 <div class="you-left">
   <div class="streak-card">
     <div class="streak-card-h"><div class="streak-label">Reading streak</div><div class="streak-emoji">🔥</div></div>
-    <div class="streak-n">${profileState&&profileState.streak||0}<span class="u">days</span></div>
+    <div class="streak-n">${streak}<span class="u">days</span></div>
   </div>
-  <div id="tourCallsEl" style="margin-top:8px"><div class="you-sect-t">Your votes</div>
-  ${Object.keys(profileState&&profileState.previousVotes||{}).map(co=>{
-    const v=profileState.previousVotes[co];const c=CO[co];if(!c)return'';
-    return`<div class="cc-card"><div class="cc-r"><div class="cc-co-name">${c.n}</div><div class="cc-ch ${v}">${v}</div></div></div>`;
+  <div id="tourCallsEl" style="margin-top:8px"><div class="you-sect-t">Your calls</div>
+  ${Object.keys(previousVotes).map(co=>{
+    const v=previousVotes[co];const c=CO[co];if(!c)return'';
+    const label=v==='bull'?'📈 Bullish':v==='bear'?'📉 Bearish':'😐 Neutral';
+    return`<div class="cc-card"><div class="cc-r"><div class="cc-co-name"><div class="th" style="background:${c.lb};color:${c.lc}">${companyLogo(c)}</div>${c.n}</div><div class="cc-ch ${v}">${label}</div></div></div>`;
   }).join('')||'<div class="empty">No votes yet.</div>'}
   </div>
 </div>
 <div class="you-right">
   <div class="you-sect-t">Saved cards</div>
   <div class="saved-grid">
-  ${Object.keys(saved||{}).flatMap(co=>{
-    const cards=CO[co]&&CO[co].cards||[];
-    return[...(saved[co]||[])].map(idx=>{
-      const card=cards[idx];if(!card)return'';
-      const bg=card.bg||'cream';
-      return`<div class="saved-sm bg-${bg}" onclick="openStack('${co}')"><div class="sm-tg">${CO[co].n}</div><div class="sm-q">${(card.hl||'').replace(/<[^>]+>/g,'')}</div></div>`;
-    });
-  }).join('')||'<div class="empty">Save cards while reading.</div>'}
+  ${allSaved.map(({co,idx})=>{const company=CO[co];const card=company&&company.cards[idx];if(!company||!card)return'';const bg=card.bg||'cream';return`<div class="saved-sm bg-${bg}" onclick="openStack('${co}')"><div class="sm-tg">${company.n} · Card ${idx+1}</div><div class="sm-q">${(card.hl||card.good||'Saved card').replace(/<[^>]+>/g,'')}</div></div>`;}).join('')||'<div class="empty">Save cards while reading.</div>'}
   </div>
 </div>`;
   twparse(yc);
