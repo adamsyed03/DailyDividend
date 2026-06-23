@@ -106,9 +106,9 @@ async function sendSupabaseLogo(res, objectPath) {
 }
 
 function todayKey(date = new Date()) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
@@ -116,6 +116,48 @@ function daysBetween(a, b) {
   const start = Date.parse(`${a}T00:00:00.000Z`);
   const end = Date.parse(`${b}T00:00:00.000Z`);
   return Math.round((end - start) / 86400000);
+}
+
+function validDateKey(value) {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T00:00:00.000Z`));
+}
+
+function clientReadDate(value) {
+  if (!validDateKey(value)) return todayKey();
+  const today = todayKey();
+  const diff = daysBetween(today, value);
+  return Math.abs(diff) <= 1 ? value : today;
+}
+
+function uniqueReadDates(user) {
+  return [...new Set((Array.isArray(user.readHistory) ? user.readHistory : [])
+    .map(item => item && item.date)
+    .filter(validDateKey))].sort();
+}
+
+function calculateCurrentStreak(user, referenceDate = todayKey()) {
+  const dates = uniqueReadDates(user);
+  if (!dates.length) return { streak: 0, lastReadDate: null };
+  const dateSet = new Set(dates);
+  const lastReadDate = dates.at(-1);
+  const daysSinceLastRead = daysBetween(lastReadDate, referenceDate);
+  if (daysSinceLastRead > 1) return { streak: 0, lastReadDate };
+  let cursor = lastReadDate;
+  let streak = 0;
+  while (dateSet.has(cursor)) {
+    streak += 1;
+    const prev = new Date(`${cursor}T00:00:00.000Z`);
+    prev.setUTCDate(prev.getUTCDate() - 1);
+    cursor = todayKey(prev);
+  }
+  return { streak, lastReadDate };
+}
+
+function syncUserStreak(user, referenceDate = todayKey()) {
+  const current = calculateCurrentStreak(user, referenceDate);
+  user.streak = current.streak;
+  user.lastReadDate = current.lastReadDate;
+  return current;
 }
 
 function emptyDb() {
@@ -422,6 +464,7 @@ function getUser(db, userId) {
 }
 
 function profile(user) {
+  syncUserStreak(user);
   return {
     userId: user.userId,
     email: user.email || '',
@@ -806,12 +849,13 @@ function calculateReadingPersonality(user) {
 
 function userStatus(user) {
   if (user.onboardingCompleted) return 'onboarded';
-  const hasPartialData = user.firstName || user.lastName || user.email || user.username || user.profession;
+  const hasPartialData = user.firstName || user.lastName || user.email || user.profession;
   return hasPartialData ? 'partial' : 'empty';
 }
 
 function adminSummary(db) {
   const users = Object.values(db.users);
+  users.forEach(user => syncUserStreak(user));
   const userRows = users.map(user => ({
     userId: user.userId,
     name: userDisplayName(user),
@@ -846,7 +890,6 @@ function adminSummary(db) {
       signupCompleteCount: users.filter(user =>
         user.firstName &&
         user.lastName &&
-        user.username &&
         user.email &&
         user.profession &&
         user.howHeard &&
@@ -987,22 +1030,12 @@ app.post('/api/read', requireUser, async (req, res, next) => {
     const source = String(req.body.source || 'today'); // today | library | search | nextCompany
 
     const user = getUser(db, userId);
-    const today = todayKey();
-    const isNewRead = !Array.isArray(user.readHistory) || !user.readHistory.some(item => item.companyId === companyId && item.date === today);
-
-    if (!user.lastReadDate) {
-      user.streak = 1;
-    } else {
-      const diff = daysBetween(user.lastReadDate, today);
-      if (diff === 1) user.streak = (user.streak || 0) + 1;
-      else if (diff === 0) user.streak = user.streak || 1;
-      else user.streak = 1;
-    }
-    user.lastReadDate = today;
-
     if (!Array.isArray(user.readHistory)) user.readHistory = [];
+    const today = clientReadDate(req.body.readDate);
+    const isNewRead = !user.readHistory.some(item => item.companyId === companyId && item.date === today);
     if (isNewRead) {
       user.readHistory.push({ companyId, date: today, source, readAt: new Date().toISOString() });
+      syncUserStreak(user, today);
 
       // Personality scoring (only on first read of company per day)
       const sc = ensurePersonalityScores(user);
@@ -1033,6 +1066,8 @@ app.post('/api/read', requireUser, async (req, res, next) => {
       // Update cached personality label
       const p = calculateReadingPersonality(user);
       user.readingPersonality = p.unlocked ? p.personality : null;
+    } else {
+      syncUserStreak(user, today);
     }
 
     await writeDb(db);
@@ -1374,8 +1409,11 @@ app.delete('/api/admin/user/:userId/reads/:readAt', requireAdmin, async (req, re
     if (Array.isArray(user.readHistory)) {
       user.readHistory = user.readHistory.filter(r => r.readAt !== readAt);
     }
+    syncUserStreak(user);
+    const p = calculateReadingPersonality(user);
+    user.readingPersonality = p.unlocked ? p.personality : null;
     await writeDb(db);
-    res.json({ ok: true, totalReads: Array.isArray(user.readHistory) ? user.readHistory.length : 0 });
+    res.json({ ok: true, totalReads: Array.isArray(user.readHistory) ? user.readHistory.length : 0, streak: user.streak || 0 });
   } catch (error) {
     next(error);
   }

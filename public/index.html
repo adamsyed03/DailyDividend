@@ -531,6 +531,38 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .nf-dbt-pt{font-family:var(--sans);font-size:12px;line-height:1.45;color:rgba(255,255,255,0.9);display:flex;gap:9px;align-items:flex-start}
 .nf-dbt-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;background:rgba(255,255,255,0.45)}
 
+/* Disney V2 slide components */
+.card.bg-dkblue{background:linear-gradient(180deg,#0B1F3A,#06101f);color:var(--cream)}
+.card.bg-dkblue .hl,.card.bg-dkblue .bd{color:var(--cream)}
+.card.entered .dis-money-big,.card.entered .dis-rev-tiles,.card.entered .dis-stat-grid,.card.entered .dis-own-section{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) both}
+.dis-money-big{display:flex;align-items:flex-start;gap:12px;margin:10px 0 14px}
+.dis-money-num{font-family:var(--serif);font-size:62px;font-weight:300;letter-spacing:-.04em;color:var(--accent);line-height:1}
+.dis-money-meta{display:flex;flex-direction:column;gap:6px;padding-top:14px}
+.dis-money-chip{display:inline-flex;align-items:center;background:rgba(17,60,207,.1);color:var(--accent);font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border-radius:100px;border:1px solid rgba(17,60,207,.2)}
+.dis-money-sub{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.4}
+.dis-rev-tiles{display:flex;flex-direction:column;gap:8px}
+.dis-rev-tile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.dis-rev-tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;gap:10px}
+.dis-rev-tile-left{display:flex;align-items:center;gap:8px;min-width:0}
+.dis-rev-icon{font-size:17px;line-height:1}.dis-rev-name{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink)}
+.dis-rev-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.dis-rev-amt{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink)}
+.dis-rev-profit{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 7px;border-radius:100px}
+.dis-rev-profit.high{background:rgba(17,60,207,.12);color:#113CCF}.dis-rev-profit.mid{background:var(--gold-soft);color:#7a5f1a}.dis-rev-profit.low{background:var(--cream-2);color:var(--muted)}
+.dis-rev-desc{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.35}
+.dis-callout-note,.dis-model-loop,.dis-h5-callout,.dis-own-insight{border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:10px 13px;font-family:var(--sans);font-size:12px;color:var(--ink-2);line-height:1.45}
+.dis-callout-note,.dis-model-loop,.dis-own-insight{background:rgba(17,60,207,.08)}
+.dis-model-loop{display:flex;align-items:flex-start;gap:9px;margin-top:9px}.dis-model-loop-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.dis-stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px}
+.dis-stat-cell{border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:4px}
+.dis-stat-cell.red{background:rgba(178,58,46,.35);border:1px solid rgba(255,100,100,.2)}.dis-stat-cell.amber{background:rgba(196,154,62,.25);border:1px solid rgba(196,154,62,.25)}.dis-stat-cell.teal{background:rgba(46,138,96,.25);border:1px solid rgba(46,138,96,.25)}.dis-stat-cell.blue{background:rgba(17,60,207,.35);border:1px solid rgba(17,60,207,.3)}
+.dis-stat-year{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.65;color:var(--cream)}.dis-stat-arrow{font-size:18px;line-height:1}.dis-stat-val{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--cream);line-height:1;letter-spacing:-.02em}.dis-stat-lbl{font-family:var(--sans);font-size:10px;color:rgba(245,241,232,.65);line-height:1.3}
+.dis-h5-callout{background:rgba(255,255,255,.07);color:rgba(245,241,232,.86);border-color:rgba(255,255,255,.22);margin-top:10px}
+.dis-own-section{display:flex;flex-direction:column;gap:0}.dis-own-rows{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}.dis-own-row{display:flex;align-items:center;gap:10px}.dis-own-l{font-family:var(--sans);font-size:12px;width:116px;flex-shrink:0;opacity:.85;color:var(--ink)}.dis-own-track{flex:1;height:26px;background:rgba(0,0,0,.07);border-radius:8px;overflow:hidden}.dis-own-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding-left:9px;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1) .15s;white-space:nowrap;min-width:34px}.dis-own-fill.sm{font-size:9px}
+.dis-power-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:2px 0 8px}.dis-power-people{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}.dis-power-person{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}.dis-power-icon{width:34px;height:34px;border-radius:10px;background:#113CCF;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;flex-shrink:0}.dis-power-name{font-family:var(--serif);font-size:14px;font-weight:600}.dis-power-role{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:1px}.dis-power-note{font-family:var(--sans);font-size:10.5px;line-height:1.35;color:var(--muted);margin-top:4px}
+.dis-pullquote{background:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.95);border-radius:18px;padding:18px 18px 16px;box-shadow:0 6px 28px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.9);margin-bottom:12px;position:relative}.dis-pullquote-mark{font-family:var(--serif);font-size:52px;color:var(--accent);opacity:.18;line-height:1;position:absolute;top:6px;left:14px}.dis-pullquote-text{font-family:var(--serif);font-size:17px;font-weight:400;color:var(--ink);line-height:1.38;letter-spacing:-.01em;padding-left:6px;position:relative;z-index:1}.dis-pullquote-text em{font-style:italic;font-weight:300;color:#113CCF}
+.dis-chip-section{margin-bottom:10px}.dis-chip-section-label{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:6px}.dis-chip-section-label.works{color:#1F6B4A}.dis-chip-section-label.notyet{color:var(--red)}.dis-chip-row{display:flex;flex-wrap:wrap;gap:6px}.dis-chip{font-family:var(--sans);font-size:11.5px;font-weight:500;padding:6px 11px;border-radius:100px;line-height:1.2}.dis-chip.works{background:var(--green-soft);color:#1F6B4A;border:1px solid rgba(46,138,96,.2)}.dis-chip.notyet{background:var(--red-soft);color:var(--red);border:1px solid rgba(178,58,46,.2)}.dis-debate-callout{background:var(--ink);border-radius:12px;padding:12px 14px;font-family:var(--serif);font-size:13px;font-weight:400;color:var(--cream);line-height:1.45;font-style:italic}
+
 @media(max-width:899px){
   .stage,.phone{height:100svh;height:100dvh}
   .topbar{gap:10px}
@@ -608,9 +640,19 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .nf-dbt-lbl{font-size:8px;margin-bottom:6px}
   .nf-dbt-pts{gap:5px}
   .nf-dbt-pt{font-size:10px;line-height:1.28;gap:7px}
+  .dis-money-big{gap:9px;margin:6px 0 9px}.dis-money-num{font-size:clamp(40px,7dvh,54px)}.dis-money-meta{padding-top:7px}.dis-money-chip{font-size:7.5px;padding:4px 8px}.dis-money-sub{font-size:10px;line-height:1.25}
+  .dis-rev-tiles{gap:6px}.dis-rev-tile{padding:8px 10px;border-radius:10px}.dis-rev-name{font-size:12px}.dis-rev-desc{font-size:10px;line-height:1.24;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.dis-callout-note,.dis-model-loop,.dis-h5-callout,.dis-own-insight{font-size:10px;line-height:1.28;padding:8px 10px}
+  .dis-stat-grid{gap:6px}.dis-stat-cell{padding:9px 10px}.dis-stat-val{font-size:16px}.dis-stat-lbl{font-size:9px}
+  .dis-own-rows{gap:7px;margin-bottom:8px}.dis-own-l{width:86px;font-size:10px}.dis-own-track{height:21px}.dis-own-fill{font-size:9px;padding-left:7px}.dis-power-people{gap:6px;margin-bottom:8px}.dis-power-person{padding:8px}.dis-power-note{font-size:9.5px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .dis-pullquote{padding:13px 14px;border-radius:14px;margin-bottom:8px}.dis-pullquote-text{font-size:14px}.dis-chip{font-size:10px;padding:5px 8px}.dis-debate-callout{font-size:10.5px;line-height:1.3;padding:9px 11px}
 }
 @media(max-width:899px) and (max-height:700px){
-  .card{padding-top:max(102px,calc(env(safe-area-inset-top) + 86px));padding-bottom:max(68px,calc(env(safe-area-inset-bottom) + 56px));scroll-padding-bottom:max(68px,calc(env(safe-area-inset-bottom) + 56px))}
+  .topbar{top:max(42px,calc(env(safe-area-inset-top) + 34px));left:14px;right:14px}
+  .co-logo{width:40px;height:40px;border-radius:10px;font-size:18px}
+  .co-name{font-size:13px}.co-sub{font-size:8px;letter-spacing:.1em;max-width:130px}
+  .tbtn{width:40px;height:40px;font-size:12px}
+  .card{padding-top:max(126px,calc(env(safe-area-inset-top) + 112px));padding-bottom:max(76px,calc(env(safe-area-inset-bottom) + 64px));scroll-padding-top:max(126px,calc(env(safe-area-inset-top) + 112px));scroll-padding-bottom:max(86px,calc(env(safe-area-inset-bottom) + 74px));scrollbar-width:thin}
+  .card::-webkit-scrollbar{display:block;width:3px}.card::-webkit-scrollbar-thumb{background:rgba(15,15,14,.22);border-radius:999px}
   .eb-c{margin-bottom:7px}.hl{font-size:22px;margin-bottom:7px}.bd{font-size:11.5px;line-height:1.32}
   .cv-top{margin-bottom:7px}.cv-mark{width:42px;height:42px}.cv-stock{margin-bottom:6px}.cv-ks{margin-top:7px}.cv-ps{margin-top:6px}
   .pie{width:min(138px,21dvh);height:min(138px,21dvh)}.pie-wrap{gap:6px}
@@ -623,13 +665,18 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .nf-model-pills{margin-bottom:6px}.nf-model-pill{font-size:7px;padding:4px 8px}
   .nf-flow-step{padding:7px 9px}.nf-flow-step-t{font-size:12px}.nf-flow-step-s{font-size:9.5px;-webkit-line-clamp:1}.nf-flow-arrow{font-size:10px}
   .nf-bar-rows{gap:5px}.nf-rival-card{padding:7px 9px}.nf-bar-n{font-size:10.5px}.nf-bar-val{font-size:11px}.nf-bar-tag{font-size:9px;-webkit-line-clamp:1}.nf-kicker{display:none}
+  .pills{bottom:max(14px,calc(env(safe-area-inset-bottom) + 10px));gap:6px}.pill{font-size:9px;padding:8px 13px}
   .nf-mt-box{padding:8px 10px;margin-bottom:6px}.nf-myth{font-size:12px}.nf-truth{font-size:14.5px}.nf-season-chip{padding:8px 10px}.nf-season-lbl{font-size:11.5px}.nf-season-desc{font-size:9.5px}
   .nf-acc-list{gap:6px}.nf-acc-btn{padding:9px 10px}.nf-acc-icon{width:26px;height:26px}.nf-acc-title{font-size:12px}
   .nf-own-l{width:78px;font-size:9.5px}.nf-own-track{height:19px}.nf-fact-chip{font-size:7px;padding:3px 6px}
   .nf-dbt-q{font-size:10.5px;margin-bottom:5px}.nf-dbt-half{padding:8px 10px}.nf-dbt-pt{font-size:9.4px;line-height:1.22}.nf-dbt-pts{gap:4px}
+  .dis-money-big{margin:4px 0 6px}.dis-money-num{font-size:36px}.dis-callout-note{display:none}.dis-rev-desc{-webkit-line-clamp:1}.dis-model-loop{display:none}.dis-stat-cell{padding:8px 9px}.dis-own-insight{display:none}.dis-pullquote-text{font-size:12.5px}.dis-debate-callout{display:none}
 }
 @media(max-width:899px) and (max-height:620px){
-  .card{padding-top:max(88px,calc(env(safe-area-inset-top) + 74px));padding-bottom:max(62px,calc(env(safe-area-inset-bottom) + 50px));scroll-padding-bottom:max(62px,calc(env(safe-area-inset-bottom) + 50px))}
+  .topbar{top:max(34px,calc(env(safe-area-inset-top) + 28px))}
+  .co{max-width:calc(100% - 128px);gap:7px}.co-logo{width:36px;height:36px;border-radius:9px}.co-name{font-size:12px}.co-sub{font-size:7.5px;max-width:112px}
+  .tbtn{width:36px;height:36px}.tactions{gap:5px}
+  .card{padding-top:max(116px,calc(env(safe-area-inset-top) + 104px));padding-bottom:max(74px,calc(env(safe-area-inset-bottom) + 62px));scroll-padding-top:max(116px,calc(env(safe-area-inset-top) + 104px));scroll-padding-bottom:max(84px,calc(env(safe-area-inset-bottom) + 72px))}
   .hl{font-size:20px;line-height:1.04}.bd{font-size:10.5px;line-height:1.25}
   .nf-stat-boxes{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.nf-stat-box{padding:5px 4px}.nf-stat-val{font-size:12px}.nf-stat-lbl{font-size:6px}
   .nf-arpu-row{display:none}
@@ -639,6 +686,13 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .nf-acc-btn{padding:8px 9px}.nf-acc-title{font-size:11.5px}
   .nf-own-rows{gap:5px}.nf-fact-chips{display:none}
   .nf-dbt-q{display:none}.nf-dbt-pt{font-size:9px}.nf-dbt-pt:nth-child(3){display:none}
+  .dis-rev-tile:nth-child(3),.dis-power-person:nth-child(2),.dis-chip-section:nth-of-type(2){display:none}.dis-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:899px) and (max-height:580px){
+  .hl{font-size:19px;line-height:1.03;margin-bottom:6px}
+  .eb-c{font-size:8px;margin-bottom:6px}
+  .nf-rival-card{padding:6px 8px;border-radius:10px}.nf-bar-track{height:5px}
+  .pills{position:absolute;bottom:max(10px,calc(env(safe-area-inset-bottom) + 8px))}
 }
 
 @media(min-width:900px){
@@ -726,8 +780,32 @@ body{background:var(--ink);overflow:hidden}
 ════════════════════════════════════ */
 #dtShell .app-shell{display:flex;height:calc(100vh - 40px);overflow:hidden}
 
+/* ── SLEEK DESKTOP NAVBAR ── */
+.desktop-nav{position:absolute;top:0;left:0;right:0;height:40px;display:flex;align-items:center;justify-content:center;padding:0 56px;pointer-events:none;z-index:86}
+.dt-nav-brand{display:none}
+.dt-nav-mark{width:32px;height:32px;border-radius:10px;background:var(--brand);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;letter-spacing:-.03em;box-shadow:0 8px 22px rgba(26,61,43,.18)}
+.dt-nav-word{font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.dt-nav-sub{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:1px}
+.dt-nav-center{display:flex;align-items:center;gap:4px;padding:3px;background:rgba(245,241,232,.1);border:1px solid rgba(245,241,232,.12);border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:auto}
+.dt-nav-item{border:0;background:transparent;color:rgba(245,241,232,.48);height:30px;padding:0 13px;border-radius:999px;display:flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:-.01em;cursor:pointer;transition:background .16s,color .16s,box-shadow .16s,transform .16s}
+.dt-nav-item svg{width:16px;height:16px;stroke:currentColor}
+.dt-nav-item:hover{color:var(--cream);transform:translateY(-1px)}
+.dt-nav-item.active{background:var(--cream);color:var(--brand);box-shadow:0 8px 22px rgba(0,0,0,.18)}
+.dt-nav-right{position:absolute;right:56px;top:4px;display:flex;justify-content:flex-end;align-items:center;gap:10px;pointer-events:auto}
+.dt-nav-streak{display:inline-flex;align-items:center;gap:7px;background:#111110;color:rgba(245,241,232,.82);height:32px;border-radius:999px;padding:0 13px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;white-space:nowrap}
+.dt-nav-live{display:inline-flex;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(46,138,96,.12)}
+#dtShell.nav-light .ticker-bar{background:rgba(250,247,240,.94);border-bottom-color:rgba(15,15,14,.08)}
+#dtShell.nav-light .ticker-label{color:rgba(15,15,14,.32);border-right-color:rgba(15,15,14,.08)}
+#dtShell.nav-light .ti-name{color:rgba(15,15,14,.46)}
+#dtShell.nav-light .ti-price{color:rgba(15,15,14,.62)}
+#dtShell.nav-light .dt-nav-center{background:#EEE8DB;border-color:rgba(15,15,14,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.65)}
+#dtShell.nav-light .dt-nav-item{color:rgba(15,15,14,.48)}
+#dtShell.nav-light .dt-nav-item:hover{color:var(--ink)}
+#dtShell.nav-light .dt-nav-item.active{background:#fff;color:var(--brand);box-shadow:0 8px 22px rgba(15,15,14,.08)}
+@media(max-width:1100px){.desktop-nav{padding:0 42px}.dt-nav-right{right:42px}.dt-nav-item{padding:0 11px}.dt-nav-streak{font-size:0;padding:0 11px}.dt-nav-streak span:not(.dt-nav-live){display:none}}
+
 /* ── SIDEBAR ── */
-.sidebar{width:220px;flex-shrink:0;background:#111110;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:28px 0 32px;overflow:hidden}
+.sidebar{display:none}
 .sb-logo{display:flex;align-items:center;gap:10px;padding:0 20px;margin-bottom:36px}
 .sb-mark{width:34px;height:34px;border-radius:10px;background:var(--brand);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:16px;letter-spacing:-0.03em;flex-shrink:0}
 .sb-wordmark{font-family:var(--serif);font-weight:500;font-size:16px;color:rgba(255,255,255,0.85);letter-spacing:-0.02em;line-height:1.1}
@@ -871,6 +949,7 @@ body{background:var(--ink);overflow:hidden}
 ════════════════════════════════════ */
 .reader-overlay{position:fixed;inset:0;z-index:500;background:rgba(10,10,9,0.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:32px}
 .reader-overlay.open{display:flex}
+.reader-overlay.interactive-card .r-tz{pointer-events:none!important}
 .reader-shell{display:flex;gap:0;width:100%;max-width:1120px;height:100%;max-height:820px;border-radius:28px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.6)}
 .reader-close{position:fixed;top:24px;right:28px;background:rgba(255,255,255,0.1);border:0;width:38px;height:38px;border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.18s;z-index:10}
 .reader-close:hover{background:rgba(255,255,255,0.2)}
@@ -936,6 +1015,20 @@ body{background:var(--ink);overflow:hidden}
 #dtShell .dn,#dtShell .rn,#dtShell .pie-d-n,#dtShell .at{min-width:0;overflow-wrap:anywhere}
 #dtShell .da,#dtShell .rt,#dtShell .pie-d-a{flex:0 0 auto;max-width:44%;white-space:normal;text-align:right;overflow-wrap:anywhere}
 #dtShell .co-opt .lbl,#dtShell .co-opt .sub{min-width:0;overflow-wrap:anywhere}
+#dtShell .dis-own-section{gap:10px}
+#dtShell .dis-own-rows{gap:10px;margin-bottom:10px}
+#dtShell .dis-own-row{display:grid;grid-template-columns:138px minmax(0,1fr);align-items:center;gap:12px}
+#dtShell .dis-own-l{width:auto;font-size:12px;line-height:1.16}
+#dtShell .dis-own-l>div:first-child{font-size:13px!important;line-height:1.08}
+#dtShell .dis-own-l>div:nth-child(2){font-size:10px!important;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#dtShell .dis-own-track{height:31px;border-radius:10px}
+#dtShell .dis-own-fill{min-width:64px;padding:0 10px;justify-content:center;font-size:11px;border-radius:10px}
+#dtShell .dis-own-fill.sm{font-size:9px;min-width:58px}
+#dtShell .dis-power-label{margin:0 0 6px}
+#dtShell .dis-power-people{gap:8px;margin-bottom:8px}
+#dtShell .dis-power-person{padding:10px;border-radius:13px}
+#dtShell .dis-power-note{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#dtShell .dis-own-insight{font-size:12px;line-height:1.4;padding:10px 13px}
 
 /* ════════════════════════════════════
    TLDR OVERLAY (DESKTOP)
@@ -998,6 +1091,12 @@ body{background:var(--ink);overflow:hidden}
 #tourHint{flex:1;font-size:10px;color:rgba(245,241,232,.22);font-family:var(--mono,monospace);letter-spacing:.04em}
 #tourSkip{background:none;border:0;padding:0;font:inherit;font-size:12px;color:rgba(245,241,232,.28);cursor:pointer;white-space:nowrap;flex-shrink:0}
 #tourSkip:hover{color:rgba(245,241,232,.6)}
+#tourDesktopNav{display:none}
+@media(min-width:900px){
+  #tourDesktopNav{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:6px;background:rgba(11,30,18,.9);border:1px solid rgba(181,227,200,.14);border-radius:999px;padding:6px;box-shadow:0 18px 48px rgba(0,0,0,.34);cursor:default;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  #tourDesktopNav button{border:0;background:transparent;color:rgba(245,241,232,.48);font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 13px;border-radius:999px;cursor:pointer}
+  #tourDesktopNav button.active{background:rgba(181,227,200,.14);color:#F5F1E8}
+}
 </style>
 </head><body>
 
@@ -1343,6 +1442,39 @@ next:{t:"Why Disney is the opposite bet",e:"From what's next",h:`<div class="d-s
 tldr:["Netflix spent <strong>$47M a day</strong> making shows last year. Made <strong>$11 billion profit</strong> anyway.","<strong>325 million people</strong> pay every month. Whether they watch or not. That is the whole business.","Netflix earns <strong>$17.11</strong> from each US subscriber per month. Disney earns $7.74. Same industry, completely different economics.","When Netflix cancels your show after Season 2, it is not a failure. <strong>Three new shows cost less</strong> than one more expensive season where the cast now have agents.","The next big bet: ads. <strong>$1.5B last year</strong>, $3B target this year. Racing to close the gap with YouTube's $9B.","Biggest threat: Asia. <strong>JioHotstar hit 300M subscribers</strong> in under a year. One cricket tournament drew 652 million viewers."]
 });
 
+Object.assign(CO.disney,{
+bl:"The movies are ads for the parks.",
+ks:[{l:"Parks profit",v:"$10B"},{l:"Subscribers",v:"196M"},{l:"Zootopia 2",v:"$1.87B"}],
+ps:"A century ago two brothers drew a mouse. Today that mouse generates more revenue every year than the entire GDP of Croatia.",
+cards:[
+{type:"cover",chips:["DIS - NYSE","Parks, Streaming, ESPN"],hl:"Disney's movies aren't the business. <em>The theme parks are.</em>",bd:"Mickey Mouse is the most successful advertisement in human history. Every Marvel film, every Pixar sequel is a very expensive billboard for the place that actually prints money."},
+{type:"dis-money",bg:"cream",hl:"$94 billion a year. <em>The trick is knowing which number matters.</em>",bigNum:57,bigSuffix:"%",bigLabel:"of every profit dollar comes from parks",bigSub:"on just 38% of every revenue dollar",tiles:[{icon:"🎬",name:"Entertainment",amt:"$42B",profit:"43% of profit",profitCls:"mid",desc:"Movies, streaming, TV. Big revenue. Also the most expensive to run."},{icon:"🏰",name:"Parks and Cruises",amt:"$36B",profit:"57% of profit",profitCls:"high",desc:"38% of revenue in. 57% of profit out. The engine that keeps everything running."},{icon:"🏈",name:"ESPN and Sports",amt:"$19B",profit:"~15% of profit",profitCls:"low",desc:"Live sports rights are expensive. The streaming transition is still in progress."}],callout:"When streaming was losing $1B every quarter, the parks kept the lights on. Three businesses. One does the real work."},
+{type:"dis-model",bg:"cream",hl:"Three engines. <em>One story pays for all of them.</em>",pills:["Character","Film","Stream","Park","Merch"],steps:[{n:"01",pill:"Character",t:"A character is born",s:"Mickey, Elsa, Woody, Baby Yoda. Disney creates one major character every few years. That character is a 100-year asset."},{n:"02",pill:"Film",t:"Film earns the first billion",s:"Zootopia 2 made $1.87B at the box office. The audience is now emotionally attached."},{n:"03",pill:"Stream",t:"Streaming locks them in",s:"196M subscribers watch it at home. Disney earns a second time from the same story."},{n:"04",pill:"Park",t:"The park makes it real",s:"The character gets a land, a ride, a two-hour queue. Families pay $150 a ticket to feel inside the story."},{n:"05",pill:"Merch",t:"Merch lasts for decades",s:"Stitch starred in a 2002 film. Last year, families worldwide bought $4B of Stitch merchandise."}],loop:"The child who watches Toy Story at 4, visits the park at 7, takes their own kids at 35, and streams Toy Story 5 at 50 is a 50-year customer."},
+{type:"dis-rivals",bg:"cream",hl:"Bigger than Netflix. <em>Worth half as much.</em> Why?",rows:[{emoji:"🎬",n:"Netflix",val:"$360B",pct:100,tag:"One business. Streaming only. Wall Street rewards focus and simplicity above everything else."},{emoji:"🏰",n:"Disney",val:"$180B",pct:50,tag:"Parks, streaming, sports, movies, cruises. Five businesses. Wall Street calls it complexity.",h:true},{emoji:"🎡",n:"Comcast",val:"$100B",pct:28,tag:"Owns Universal. Epic Universe opened in Orlando in 2025. First real theme park rival Disney has faced in 50 years."},{emoji:"🎮",n:"Nintendo",val:"$67B",pct:19,tag:"Mario, Zelda, Pokemon. Characters that rival Disney in global recognition, especially across Asia."}],kicker:"Netflix is worth twice Disney despite having no theme parks, no cruise ships, no sports rights, and no hundred-year brand history. One word explains it: focus."},
+{type:"dis-hidden",bg:"dkblue",myth:"Disney's streaming is still losing money.",truth:"It went from losing $4B a year to making $1.3B. In just three years.",bd:"Bob Iger came back as CEO in 2022. He raised prices, cut shows nobody watched, bundled Disney Plus and Hulu together, and cracked down on password sharing.",stats:[{cls:"red",year:"FY 2022",arrow:"↓",val:"-$4.0B",lbl:"Losing badly"},{cls:"amber",year:"FY 2023",arrow:"↓",val:"-$2.5B",lbl:"Still losing"},{cls:"teal",year:"FY 2024",arrow:"→",val:"Break-even",lbl:"Turning around"},{cls:"blue",year:"FY 2025",arrow:"↑",val:"+$1.3B",lbl:"Now profitable"}],callout:"Netflix keeps <strong>31%</strong> of every streaming dollar as profit. Disney now keeps <strong>10%</strong>. Closing that gap, on 196M subscribers, is worth billions in new profit that does not exist yet in the numbers."},
+{type:"dis-bull",bg:"green",eb:"06 - How it could win",hl:"Three ways Disney becomes a <em>$400 billion</em> company.",panels:[{icon:"↑",title:"The streaming margin gap is the opportunity",body:"Netflix earns <strong>31% of every streaming dollar</strong> as profit. Disney now earns 10%. Closing that gap on 196M subscribers adds hundreds of millions in new profit."},{icon:"↑",title:"The first ever Super Bowl on Disney",body:"February 2027. Disney now owns NFL Network and RedZone too. The Super Bowl has over 100M viewers every year. For the first time ever, every dollar of that advertising is a Disney dollar."},{icon:"↑",title:"The cruise decade has barely started",body:"Disney goes from 8 ships to 13 by 2031. The Disney Adventure launched in Singapore in 2026 with halal menus and Shah Rukh Khan narrating the fireworks. A billion people in Asia Disney has never reached."}]},
+{type:"dis-bear",bg:"red",eb:"07 - What could break it",hl:"Three things that could <em>break Disney.</em>",panels:[{icon:"↓",title:"ESPN is an expensive bet they do not control",body:"The NFL sets the price of sports rights, not Disney. If fans do not follow ESPN from cable to streaming fast enough, Disney pays record prices for games it cannot fully monetise."},{icon:"↓",title:"Universal is building a rival park empire",body:"Epic Universe opened in Orlando in May 2025 with Harry Potter, Super Nintendo World, and How to Train Your Dragon, 15 minutes from Disney World. Fifty years of park dominance is over."},{icon:"↓",title:"Big debt, brand new CEO",body:"Disney carries <strong>$38.5 billion in debt</strong> and is spending heavily on parks and content. Josh D'Amaro is a brilliant parks executive. He has never run a public company before."}]},
+{type:"dis-own",bg:"gold",hl:"Walt's grandkids own <em>almost nothing.</em>",bars:[{l:"Index funds",l2:"Vanguard, BlackRock etc.",p:20,d:"~20%",c:"#1565C0"},{l:"All other shareholders",l2:"Pension funds, retail, others",p:79,d:"~79%",c:"#42A5F5"},{l:"Disney family",l2:"Walt's descendants",p:1,d:"less than 1%",c:"#B23A2E",sm:true}],people:[{init:"JD",name:"Josh D'Amaro",role:"CEO since March 2026",note:"28 years at Disney. Ran the parks for six years. The board picked the parks man. That tells you what the next decade is built on."},{init:"BI",name:"Bob Iger",role:"Senior Advisor, leaves Dec 31 2026",note:"Ran Disney for 15 years. Bought Pixar, Marvel, Lucasfilm and Fox. Launched Disney Plus. Turned a $4B streaming loss into profit."}],insight:"You almost certainly own a piece of Disney through any retirement or savings fund. Vanguard and BlackRock together control roughly 16% of the company."},
+{type:"dis-debate",bg:"cream",hl:"Disney owns the past. <em>Can it own the future?</em>",body:"Every generation grows up inside a Disney story. The question is whether Disney Plus becomes the place that generation lives daily, not just the place they visit on holiday."},
+{type:"conv",bg:"brand",hl:"Now you decide. <em>Disney in 5 years?</em>",opts:[{k:"bull",p:58},{k:"neutral",p:27},{k:"bear",p:15}]},
+{type:"next",bg:"brand",hl:"That was Disney.",bd:"Next, Reliance. The Indian giant you probably paid today without realising it. Your phone bill. Your IPL stream. The petrol pump on the corner. One family. One bet on India itself.",nx:"reliance"}
+],
+deep:{
+cover:{t:"Walt's unfinished city",e:"From the cover",h:`<div class="d-sub">The land nobody talks about</div><div class="d-p">Walt Disney died in 1966, before Disney World even opened. His unfinished Florida project became the highest-margin business in entertainment history. Disney World sits on <strong>25,000 acres</strong>, twice the size of Manhattan island. More than half of that land has never been built on.</div><div class="d-call">Disney has been sitting on a city-sized undeveloped reserve for 50 years. They are only now starting to fill it in. The magic trick was always real estate, not celluloid.</div>`},
+"dis-money":{t:"Why the parks man runs everything",e:"From the money",h:`<div class="d-sub">Revenue vs profit</div><div class="d-p">Entertainment looks like the dominant business because it earns the most revenue. But it also costs the most to run. The parks turn a far higher share of revenue into actual profit.</div><div class="d-call">That is why Disney's new CEO came from running the parks for six years, not from running the studio.</div>`},
+"dis-model":{t:"Lifetime value, Disney-style",e:"From the business model",h:`<div class="d-sub">The 50-year customer</div><div class="d-p">No other company on Earth does all five steps simultaneously: studio, streaming service, parks, cruises, merchandise, and a century of emotional memories parents want to recreate.</div><div class="d-call">The film is the beginning of the revenue cycle. For everyone else in Hollywood, it is the end.</div>`},
+"dis-rivals":{t:"Nintendo is the one to watch",e:"From the rivals",h:`<div class="d-sub">The next decade's wildcard</div><div class="d-p">Epic Universe opened in Orlando in May 2025 with Super Nintendo World, Harry Potter's Ministry of Magic, and How to Train Your Dragon, all 15 minutes from Disney World.</div><div class="d-call">For 50 years Disney had no real competition in theme parks. That era ended in 2025.</div>`},
+"dis-hidden":{t:"Four moves that did it",e:"From the hidden truth",h:`<div class="d-sub">The Iger playbook</div><div class="d-p">The turnaround worked because of four moves: price rises, a Disney Plus and Hulu bundle, a crackdown on password sharing, and cutting expensive content that was not earning its cost.</div><div class="d-call">That streaming profit now funds the parks expansion, the cruise fleet, and the ESPN transition.</div>`},
+"dis-bull":{t:"Why Singapore is not just a ship",e:"From the bull case",h:`<div class="d-sub">A billion new customers</div><div class="d-p">Disney built the Disney Adventure specifically for Asian families: halal menus, Shah Rukh Khan narrating the fireworks, and Singapore as the gateway to India, Indonesia, Malaysia, Thailand, and the Philippines.</div><div class="d-call">Disney is not squeezing more money from existing fans. It is finding entirely new ones.</div>`},
+"dis-bear":{t:"The debt multiplier",e:"From the bear case",h:`<div class="d-sub">Why a bad year hurts more now</div><div class="d-p">Disney has survived wars, a global pandemic, and failed CEO successions. But it has never attempted this much, this fast, all at once.</div><div class="d-call">$38.5B in debt means a bad year hurts more than it used to.</div>`},
+"dis-own":{t:"The three-year succession race",e:"From who owns it",h:`<div class="d-sub">How D'Amaro got the job</div><div class="d-p">Iger handed power to Bob Chapek in 2020. Chapek nearly broke the company in two years. The board fired him in 2022 and brought Iger back. This time the board chose the parks man.</div><div class="d-call">That decision explains the next decade.</div>`},
+"dis-debate":{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">Disney has the world's best intellectual property, a new CEO betting on experiences and technology compounding together, and a financial turnaround most investors still underestimate.</div><div class="d-call">History says Disney finds a way. History also said no one could compete with Disney parks, until Universal proved everyone wrong overnight.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not financial advisors.</div>`},
+conv:{t:"What the crowd is saying",e:"From the vote",h:`<div class="d-sub">Daily Dividend readers have voted</div><div class="d-p">The bull thesis: the parks flywheel keeps compounding, streaming is finally profitable, and Asia is an untapped market the size of a continent. The bear thesis: Netflix is simpler, faster, and three times more profitable per dollar.</div><div class="d-call">The most common neutral argument: wait for ESPN streaming data. Then decide.</div>`},
+next:{t:"The pattern across great companies",e:"From what's next",h:`<div class="d-sub">Every giant has its decade</div><div class="d-p">Every great company is one bad decade from being a cautionary tale. Netflix nearly died in 2011. Disney has a cable business bleeding out. Reliance has a succession to navigate.</div><div class="d-call">The best businesses are not the ones with no risks. They are the ones where you can see the risks clearly.</div>`}
+},
+tldr:["Parks made <strong>$10B in profit</strong> last year. More than movies, streaming, and sports combined.","Streaming went from <strong>losing $4B a year to making $1.3B.</strong> Three years. Most investors missed it.","Mickey, Stitch, Woody, Simba, Iron Man, Baby Yoda. Not characters. <strong>100-year revenue machines.</strong>","Board had 100 candidates and three years. Chose the <strong>parks man.</strong> That tells you what comes next.","First <strong>Super Bowl in Feb 2027.</strong> 13 cruise ships by 2031. SRK narrating Disney fireworks in Singapore.","<strong>$38.5B in debt.</strong> Universal next door. ESPN transition unproven. That is the real risk."]
+});
+
 const CS=[
 {id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
@@ -1368,6 +1500,12 @@ const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},disney:{bull
 let dbCos=[];
 let currentDbCo=null;
 const CO_TICKER_MAP={netflix:'NFLX',disney:'DIS'};
+function localReadDateKey(date=new Date()){
+ const year=date.getFullYear();
+ const month=String(date.getMonth()+1).padStart(2,'0');
+ const day=String(date.getDate()).padStart(2,'0');
+ return `${year}-${month}-${day}`;
+}
 
 function formatLivePrice(price,currency){
  if(currency==='INR')return `Rs ${price.toFixed(1)}`;
@@ -1518,7 +1656,7 @@ async function openStack(slug,source='today'){
  document.getElementById('cologo').style.color=c.lc;
  document.getElementById('coname').textContent=c.n;
  document.getElementById('cosub').textContent=c.t+' - '+c.sec;
- try{profileState=await api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source})});syncSavedFromProfile();syncCallsFromProfile();}
+ try{profileState=await api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})});syncSavedFromProfile();syncCallsFromProfile();}
  catch(e){showToast(e.message);}
  renderCards();buildProg();showCard(0);renderTldr();goTo('stack');
 }
@@ -1536,6 +1674,7 @@ function renderCards(){
 function deepKeyForCard(card,idx){
  const legacy=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
  if(card&&card.type&&card.type.startsWith('nf-'))return card.type;
+ if(card&&card.type&&card.type.startsWith('dis-'))return card.type;
  if(card&&card.type==='cover')return 'cover';
  if(card&&['conv','next'].includes(card.type))return card.type;
  return legacy[idx]||card.type;
@@ -1586,11 +1725,62 @@ function renderNetflixCard(card,idx){
  }
 }
 
+function renderDisneyCard(card,idx){
+ switch(card.type){
+ case 'dis-money':return `
+<div class="eb-c">02 - The money</div>
+<div class="hl">${card.hl}</div>
+<div class="dis-money-big"><div class="dis-money-num" data-countup="${card.bigNum}" data-suffix="${card.bigSuffix}">0%</div><div class="dis-money-meta"><div class="dis-money-chip">${card.bigLabel}</div><div class="dis-money-sub">${card.bigSub}</div></div></div>
+<div class="dis-rev-tiles">${card.tiles.map(t=>`<div class="dis-rev-tile"><div class="dis-rev-tile-top"><div class="dis-rev-tile-left"><span class="dis-rev-icon">${t.icon}</span><span class="dis-rev-name">${t.name}</span></div><div class="dis-rev-right"><span class="dis-rev-amt">${t.amt}</span><span class="dis-rev-profit ${t.profitCls}">${t.profit}</span></div></div><div class="dis-rev-desc">${t.desc}</div></div>`).join('')}</div>
+<div class="dis-callout-note">${card.callout}</div>`;
+ case 'dis-model':return `
+<div class="eb-c">03 - The model</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-model-pills">${card.pills.map(p=>`<div class="nf-model-pill">${p}</div>`).join('')}</div>
+<div class="nf-flow">${card.steps.map((s,i)=>`${i>0?'<div class="nf-flow-arrow">↓</div>':''}<div class="nf-flow-step"><div class="nf-flow-step-n">${s.n} · ${s.pill}</div><div class="nf-flow-step-t">${s.t}</div><div class="nf-flow-step-s">${s.s}</div></div>`).join('')}</div>
+<div class="dis-model-loop"><span class="dis-model-loop-icon">↺</span><span>${card.loop}</span></div>`;
+ case 'dis-rivals':return `
+<div class="eb-c">04 - The rivals</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-bar-rows">${card.rows.map(r=>`<div class="nf-rival-card${r.h?' hero':''}"><div class="nf-bar-row-head"><span class="nf-bar-n"><span class="nf-bar-emoji">${r.emoji}</span>${r.n}</span><span class="nf-bar-val">${r.val}</span></div><div class="nf-bar-tag">${r.tag}</div><div class="nf-bar-track"><div class="nf-bar-fill" data-w="${r.pct}" style="background:${r.h?'var(--accent)':'rgba(0,0,0,0.35)'}"></div></div></div>`).join('')}</div>
+<div class="nf-kicker">${card.kicker}</div>`;
+ case 'dis-hidden':return `
+<div class="eb-c">05 - The hidden truth</div>
+<div class="nf-mt-box"><div class="nf-myth">${card.myth}</div><div class="nf-truth">${card.truth}</div></div>
+<div class="bd" style="margin-bottom:12px;font-size:13px">${card.bd}</div>
+<div class="dis-stat-grid">${card.stats.map(s=>`<div class="dis-stat-cell ${s.cls}"><div class="dis-stat-year">${s.year}</div><div class="dis-stat-arrow">${s.arrow}</div><div class="dis-stat-val">${s.val}</div><div class="dis-stat-lbl">${s.lbl}</div></div>`).join('')}</div>
+<div class="dis-h5-callout">${card.callout}</div>`;
+ case 'dis-bull':
+ case 'dis-bear':return `
+<div class="eb-c">${card.eb}</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-acc-list">${card.panels.map(p=>`<div class="nf-acc-item"><button class="nf-acc-btn" onclick="togglePanel(event,this)"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${p.title}</div><div class="nf-acc-chevron">▾</div></button><div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div></div>`).join('')}</div>`;
+ case 'dis-own':return `
+<div class="eb-c">08 - Who owns it</div>
+<div class="hl">${card.hl}</div>
+<div class="dis-own-section">
+  <div class="dis-own-rows">${card.bars.map(b=>`<div class="dis-own-row"><div class="dis-own-l"><div style="font-weight:600;font-size:12px">${b.l}</div><div style="font-size:10px;opacity:.65;margin-top:1px">${b.l2}</div></div><div class="dis-own-track"><div class="dis-own-fill${b.sm?' sm':''}" data-w="${Math.max(b.p,2)}" style="background:${b.c}">${b.d}</div></div></div>`).join('')}</div>
+  <div class="dis-power-label">Who actually runs it</div>
+  <div class="dis-power-people">${card.people.map(p=>`<div class="dis-power-person"><div class="dis-power-icon">${p.init}</div><div class="dis-power-info"><div class="dis-power-name">${p.name}</div><div class="dis-power-role">${p.role}</div><div class="dis-power-note">${p.note}</div></div></div>`).join('')}</div>
+  <div class="dis-own-insight">${card.insight}</div>
+</div>`;
+ case 'dis-debate':return `
+<div class="eb-c">09 - The market debate</div>
+<div class="hl">${card.hl}</div>
+<div class="dis-pullquote"><div class="dis-pullquote-mark">"</div><div class="dis-pullquote-text">Netflix is a service you subscribe to. Disney is trying to become something you <em>belong</em> to. Nobody has ever built that at this scale.</div></div>
+<div class="dis-chip-section"><div class="dis-chip-section-label works">✓ Signs it is working</div><div class="dis-chip-row"><div class="dis-chip works">Streaming profitable</div><div class="dis-chip works">Singapore sold out</div><div class="dis-chip works">Parks: 2 record years</div></div></div>
+<div class="dis-chip-section"><div class="dis-chip-section-label notyet">✗ Not there yet</div><div class="dis-chip-row"><div class="dis-chip notyet">Netflix earns 3x more per subscriber</div><div class="dis-chip notyet">Epic Universe dented attendance</div><div class="dis-chip notyet">ESPN streaming unproven</div></div></div>
+<div class="dis-debate-callout">Disney is the only company on Earth with the IP, the parks, the streaming, and the characters to attempt this. The question is whether they pull it off before someone copies the blueprint.</div>`;
+ default:return '';
+ }
+}
+
 function renderCard(card,idx){
  const total=CO[curCo].cards.length;const co=CO[curCo];
  const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
  const agg=getAggregate(curCo);
  if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
+ if(card.type&&card.type.startsWith('dis-'))return renderDisneyCard(card,idx);
  switch(card.type){
 
  case 'cover':return `
@@ -1930,7 +2120,7 @@ function openDbCompany(companyId){
  document.getElementById('coOverlay').style.display='flex';
  updateCoOvSave();
  updateCoOvVoteBtns();
- api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId})})
+ api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId,source:'library',readDate:localReadDateKey()})})
   .then(data=>{profileState=data;syncSavedFromProfile();syncCallsFromProfile();updateCoOvSave();})
   .catch(e=>console.warn(e));
 }
@@ -2072,6 +2262,11 @@ function tourNavTo(tab){
   if(typeof IS_DESKTOP!=='undefined'&&IS_DESKTOP&&typeof dtGoTo==='function')dtGoTo(tab);
   else goTo(tab);
 }
+function tourJumpTo(tab){
+  const idx=TOUR_STEPS.findIndex(s=>s.tab===tab);
+  if(idx>=0){tourIdx=idx;showTourStep(idx,true);}
+  else tourNavTo(tab);
+}
 async function showTourStep(i,animate){
   const step=TOUR_STEPS[i];
   const ring=document.getElementById('tourRing');
@@ -2079,6 +2274,7 @@ async function showTourStep(i,animate){
   const card=document.getElementById('tourCard');
   const icon=document.getElementById('tourIcon');
   if(!ring)return;
+  document.querySelectorAll('#tourDesktopNav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===step.tab));
   document.getElementById('tourDots').innerHTML=TOUR_STEPS.map((_,j)=>`<div class="t-dot${j===i?' on':''}"></div>`).join('');
   document.getElementById('tourTitle').textContent=step.title;
   document.getElementById('tourDesc').textContent=step.desc;
@@ -2156,7 +2352,7 @@ function startTour(){
   const ov=document.createElement('div');
   ov.id='tourOverlay';
   ov.addEventListener('click',e=>{if(!e.target.closest('#tourCard'))tourAdvance();});
-  ov.innerHTML=`<div id="tourBg"></div><div id="tourRing"></div><div id="tourCard"><div id="tourDots"></div><div id="tourIcon"></div><div id="tourTitle"></div><div id="tourDesc"></div><div id="tourFoot"><button id="tourNext" onclick="tourAdvance()">Next →</button><span id="tourHint">tap anywhere</span><button id="tourSkip" onclick="event.stopPropagation();tourEnd()">Skip</button></div></div>`;
+  ov.innerHTML=`<div id="tourBg"></div><div id="tourRing"></div><div id="tourDesktopNav"><button data-tab="today" onclick="event.stopPropagation();tourJumpTo('today')">Today</button><button data-tab="library" onclick="event.stopPropagation();tourJumpTo('library')">Library</button><button data-tab="you" onclick="event.stopPropagation();tourJumpTo('you')">You</button></div><div id="tourCard"><div id="tourDots"></div><div id="tourIcon"></div><div id="tourTitle"></div><div id="tourDesc"></div><div id="tourFoot"><button id="tourNext" onclick="tourAdvance()">Next →</button><span id="tourHint">tap anywhere</span><button id="tourSkip" onclick="event.stopPropagation();tourEnd()">Skip</button></div></div>`;
   document.body.appendChild(ov);
   setTimeout(()=>showTourStep(0,false),30);
 }
@@ -2175,7 +2371,8 @@ let dtCardIdx=0;
 function dtGoTo(tab){
   document.querySelectorAll('#dtShell .screen').forEach(s=>s.classList.remove('active'));
   const s=document.getElementById('dt-screen-'+tab);if(s)s.classList.add('active');
-  document.querySelectorAll('.sb-item,.bnm-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.sb-item,.bnm-item,.dt-nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  const shell=document.getElementById('dtShell');if(shell)shell.classList.toggle('nav-light',tab!=='today');
   const main=document.getElementById('dtMainArea');if(main)main.scrollTop=0;
   if(tab==='library')dtRenderLib();
   if(tab==='you')dtRenderShelf();
@@ -2224,12 +2421,18 @@ function dtRenderToday(){
   }
 }
 
-function dtOpenStack(slug){
+async function dtOpenStack(slug,source='today'){
   curCo=slug;dtCardIdx=0;setTheme(slug);
   const c=CO[slug];
   const logo=document.getElementById('dtCologo');if(logo){logo.innerHTML=companyLogo(c);logo.style.background=c.lb||'#333';logo.style.color=c.lc||'#fff';}
   const nm=document.getElementById('dtConame');if(nm)nm.textContent=c.n;
   const sub=document.getElementById('dtCosub');if(sub)sub.textContent=(c.t||c.ticker||'')+' · '+(c.sec||'');
+  try{
+    profileState=await api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})});
+    syncSavedFromProfile();syncCallsFromProfile();
+    const sn=document.getElementById('dtStreakNum');if(sn)sn.textContent=profileState.streak||0;
+    const ns=document.getElementById('dtNavStreakNum');if(ns)ns.textContent=profileState.streak||0;
+  }catch(e){dtShowToast(e.message||'Daily Dividend could not save that yet');}
   dtRenderCards();dtBuildProg();dtShowCard(0);
   const ov=document.getElementById('dtReaderOverlay');if(ov)ov.classList.add('open');
   document.body.style.overflow='hidden';
@@ -2259,6 +2462,7 @@ function dtRenderCard(card,idx){
   const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
   const scDisp=co.sc&&co.sc.includes('%')?co.sc+' ytd':co.sc||'';
   if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
+  if(card.type&&card.type.startsWith('dis-'))return renderDisneyCard(card,idx);
   switch(card.type){
   case 'cover':return `
 <div class="eb-c">01 · The cover</div>
@@ -2349,6 +2553,7 @@ ${co.ps?`<div class="cv-ps">${co.ps}</div>`:''}`;
 <div class="bd">${card.bd}</div>`;
 
   case 'conv':{
+    const agg=getAggregate(curCo);
     const sent=co.sentiment||'neutral';
     const sentLabel=sent==='bull'?'📈 Bullish crowd':sent==='bear'?'📉 Bearish crowd':'😐 Mixed crowd';
     return `
@@ -2356,7 +2561,7 @@ ${co.ps?`<div class="cv-ps">${co.ps}</div>`:''}`;
 <div class="hl">${card.hl}</div>
 <div class="cv-sent-row">
   <div class="cv-sent ${sent}">${sentLabel}</div>
-  <div class="cv-vb"><span class="vb-num">${(co.vb||0).toLocaleString()}</span> voted today</div>
+  <div class="cv-vb"><span class="vb-num">${(agg.total||co.vb||0).toLocaleString()}</span> voted today</div>
 </div>
 <div class="cv-opts" id="dtCvO-${idx}">${(card.opts||[]).map(o=>`
   <div class="co-opt ${o.k}" onclick="dtVote(this,'${o.k}',${idx})">
@@ -2364,7 +2569,7 @@ ${co.ps?`<div class="cv-ps">${co.ps}</div>`:''}`;
     <span class="ico">${o.k==='bull'?'📈':o.k==='bear'?'📉':'😐'}</span>
     <span class="lbl">${o.k.charAt(0).toUpperCase()+o.k.slice(1)}ish</span>
     <span class="sub">${o.k==='bull'?'Going up':o.k==='bear'?'Going down':'Flat'}</span>
-    <span class="cp">${o.p||0}%</span>
+    <span class="cp">${agg[o.k] ?? o.p ?? 0}%</span>
   </div>`).join('')}</div>
 <div class="cr" id="dtCvR-${idx}"></div>`;}
 
@@ -2408,11 +2613,17 @@ function dtUpdProg(){
 function dtShowCard(i){
   if(i<0||i>=CO[curCo].cards.length)return;
   dtCardIdx=i;
+  const activeType=CO[curCo].cards[i]&&CO[curCo].cards[i].type;
+  const interactiveTypes=new Set(['conv','next','acc','nf-bull','nf-bear','dis-bull','dis-bear']);
+  const ov=document.getElementById('dtReaderOverlay');if(ov)ov.classList.toggle('interactive-card',interactiveTypes.has(activeType));
   const cards=document.querySelectorAll('#dtTrack .card');
   cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
   dtUpdProg();
-  setTimeout(()=>{const ac=cards[dtCardIdx];if(ac){ac.classList.add('entered');dtAnimateCard(i);}},30);
+  setTimeout(()=>{const ac=cards[dtCardIdx];if(ac){ac.classList.add('entered');dtAnimateCard(i);dtRevealSavedVote(i);}},30);
   dtUpdateRightPanel(i);
+  if(i===CO[curCo].cards.length-1){
+    api('/api/story-complete',{method:'POST',body:JSON.stringify({userId,companyId:curCo})}).catch(()=>{});
+  }
 }
 
 function dtNextCard(){if(dtCardIdx<CO[curCo].cards.length-1)dtShowCard(dtCardIdx+1);else dtCloseStack();}
@@ -2478,9 +2689,33 @@ async function dtVote(el,type,idx){
     voteAggregates[curCo]=data.percentages||voteAggregates[curCo];
     profileState.previousVotes=data.previousVotes||profileState.previousVotes;
     syncCallsFromProfile();
+    dtRevealSavedVote(idx);
   }catch(error){
     if(previousVote)profileState.previousVotes[curCo]=previousVote;else delete profileState.previousVotes[curCo];
     syncCallsFromProfile();dtShowToast(error.message);
+    dtRevealSavedVote(idx);
+  }
+}
+
+function dtRevealSavedVote(idx){
+  const wrap=document.getElementById('dtCvO-'+idx);if(!wrap)return;
+  const vote=profileState.previousVotes&&profileState.previousVotes[curCo];
+  const agg=getAggregate(curCo);
+  wrap.classList.toggle('voted',!!vote);
+  wrap.querySelectorAll('.co-opt').forEach(opt=>{
+    const key=[...opt.classList].find(c=>['bull','neutral','bear'].includes(c));
+    const fallbackPct=Number((opt.querySelector('.cp')?.textContent||'0').replace('%',''))||0;
+    const pct=agg[key] ?? fallbackPct;
+    const fill=opt.querySelector('.cf');if(fill)fill.style.width=vote?pct+'%':'0%';
+    const cp=opt.querySelector('.cp');if(cp)cp.textContent=pct+'%';
+    opt.classList.toggle('revealed',!!vote);
+    opt.classList.toggle('you',vote===key);
+  });
+  const r=document.getElementById('dtCvR-'+idx);
+  if(r){
+    const msgs={bull:"You're <strong>bullish</strong>, with the crowd.",neutral:"You're <strong>neutral</strong>. Wait and see.",bear:"You're <strong>bearish</strong>. Bold call."};
+    r.innerHTML=vote?msgs[vote]||'':'';
+    r.classList.toggle('show',!!vote);
   }
 }
 
@@ -2635,8 +2870,8 @@ document.addEventListener('keydown',e=>{
 
 /* Override openStack for desktop */
 const _mbOpenStack=openStack;
-window.openStack=function(slug){
-  if(IS_DESKTOP){dtOpenStack(slug);}else{_mbOpenStack(slug);}
+window.openStack=function(slug,source='today'){
+  if(IS_DESKTOP){dtOpenStack(slug,source);}else{_mbOpenStack(slug,source);}
 };
 
 /* Desktop init */
@@ -2650,6 +2885,21 @@ function dtInit(){
   }
 }
 
+Object.assign(window,{
+  dtGoTo,
+  dtOpenStack,
+  dtCloseStack,
+  dtNextCard,
+  dtPrevCard,
+  dtVote,
+  dtToggleSave,
+  dtSaveCo,
+  dtOpenTldr,
+  dtCloseTldr,
+  dtSurpriseMe,
+  dtOnSearch
+});
+
 } /* end if(IS_DESKTOP) */
 </script>
 
@@ -2661,6 +2911,27 @@ function dtInit(){
   <div class="ticker-label">Live</div>
   <div class="ticker-track" id="dtTickerTrack"></div>
 </div>
+
+<nav class="desktop-nav" aria-label="Daily Dividend desktop navigation">
+  <div class="dt-nav-brand">
+    <div class="dt-nav-mark">DD</div>
+    <div><div class="dt-nav-word">Daily Dividend</div><div class="dt-nav-sub">Story behind the stock</div></div>
+  </div>
+  <div class="dt-nav-center">
+    <button class="dt-nav-item active" data-tab="today" onclick="dtGoTo('today')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today
+    </button>
+    <button class="dt-nav-item" data-tab="library" onclick="dtGoTo('library')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library
+    </button>
+    <button class="dt-nav-item" data-tab="you" onclick="dtGoTo('you')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You
+    </button>
+  </div>
+  <div class="dt-nav-right">
+    <div class="dt-nav-streak"><span class="dt-nav-live"></span><span><span id="dtNavStreakNum">0</span> day streak</span></div>
+  </div>
+</nav>
 
 <div class="app-shell">
 
