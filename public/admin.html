@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -81,25 +81,25 @@
     .empty{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:8px;padding:14px;font-size:13px}
     .hidden{display:none!important}
 
-    /* â”€â”€ Controls bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Controls bar ------------------------------- */
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
     .ctrl-search{flex:1;min-width:200px;position:relative}
     .ctrl-search input{padding-left:30px}
-    .ctrl-search::before{content:'âŒ•';position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none;z-index:1;line-height:1}
+    .ctrl-search::before{content:'⌕';position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none;z-index:1;line-height:1}
     .ctrl-select{min-width:150px;width:auto}
     .ctrl-count{font-size:13px;color:var(--muted);white-space:nowrap}
 
-    /* â”€â”€ Status badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Status badges ------------------------------ */
     .badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:800;letter-spacing:.04em}
     .badge-green{background:#d6edd8;color:#165c39}
     .badge-amber{background:#fdf1d0;color:#7a5f10}
     .badge-gray{background:#e8e8e8;color:#555}
 
-    /* â”€â”€ Delete button in activity items â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Delete button in activity items ------------ */
     .del-btn{background:0;border:1px solid #e0d9ce;border-radius:5px;color:var(--muted);font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
     .del-btn:hover{background:#fce4e1;border-color:#e8b4ae;color:var(--red)}
 
-    /* â”€â”€ Activity numbers in table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Activity numbers in table ------------------ */
     .act-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .act-item{display:flex;flex-direction:column;gap:1px;min-width:30px}
     .act-n{font-family:var(--serif);font-size:18px;line-height:1;font-weight:700}
@@ -107,13 +107,13 @@
     .streak-highlight{color:var(--green)}
     .email-cell{font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-    /* â”€â”€ Sortable headers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Sortable headers --------------------------- */
     th.sortable{cursor:pointer;user-select:none;transition:color .1s}
     th.sortable:hover{color:var(--ink)}
-    th.sortable.asc::after{content:' â†‘';opacity:.65}
-    th.sortable.desc::after{content:' â†“';opacity:.65}
+    th.sortable.asc::after{content:' ↑';opacity:.65}
+    th.sortable.desc::after{content:' ↓';opacity:.65}
 
-    /* â”€â”€ Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Modal -------------------------------------- */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
     .modal.show{display:flex}
     .modal-content{background:var(--panel);border-radius:12px;max-width:min(90vw,680px);max-height:90vh;display:flex;flex-direction:column;position:relative;width:100%;overflow:hidden}
@@ -125,7 +125,7 @@
     .modal-actions{flex-shrink:0;display:flex;gap:8px;padding:16px 20px;border-top:1px solid var(--line);background:var(--bg)}
     .modal-actions button{flex:1}
 
-    /* â”€â”€ Modal tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Modal tabs --------------------------------- */
     .tab-bar{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:20px}
     .tab-btn{background:0;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:9px 18px;font:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:0;transition:color .15s}
     .tab-btn:hover{color:var(--ink)}
@@ -133,13 +133,13 @@
     .tab-pane{display:none}
     .tab-pane.active{display:block}
 
-    /* â”€â”€ Overview grid in modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Overview grid in modal --------------------- */
     .ov-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
     .ov-card{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center}
     .ov-n{font-family:var(--serif);font-size:32px;line-height:1;font-weight:700}
     .ov-l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:5px}
 
-    /* â”€â”€ Detail rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Detail rows -------------------------------- */
     .detail-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
     .detail-section:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
     .detail-row{display:grid;grid-template-columns:140px 1fr;gap:12px;margin-bottom:10px;align-items:start}
@@ -147,7 +147,7 @@
     .detail-row strong{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding-top:2px}
     .detail-row span{word-break:break-word;font-size:14px}
 
-    /* â”€â”€ Activity timeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Activity timeline -------------------------- */
     .timeline{display:grid;gap:6px}
     .tl-item{display:flex;align-items:center;gap:12px;padding:9px 12px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:13px}
     .tl-co{font-weight:700;flex:1}
@@ -155,7 +155,7 @@
     .saves-list{display:grid;gap:6px}
     .save-item{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px;font-weight:700}
 
-    /* â”€â”€ Votes grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Votes grid --------------------------------- */
     .votes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:6px}
     .vote-card{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
     .vote-card strong{display:block;font-size:11px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
@@ -164,7 +164,7 @@
     .vote-type.neutral{color:#9c7c3d}
     .vote-type.bear{color:var(--red)}
 
-    /* â”€â”€ Votes table natural width â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Votes table natural width ----------------- */
     .table-natural{min-width:auto}
     .vote-row{cursor:pointer;transition:background .12s}
     .vote-row:hover{background:#faf8f3}
@@ -179,15 +179,15 @@
     .vc-vote.bear{background:#fce4e1;color:var(--red)}
     .vote-row-expanded{background:#f3f0e8}
 
-    /* â”€â”€ Leaderboard rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Leaderboard rows --------------------------- */
     .lb-row{cursor:pointer;transition:background .12s}
     .lb-row:hover{background:#faf8f3}
 
-    /* â”€â”€ User rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- User rows ---------------------------------- */
     .user-row{cursor:pointer;transition:background .12s}
     .user-row:hover{background:#faf8f3}
 
-    /* â”€â”€ Section empty states â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* -- Section empty states ----------------------- */
     .act-empty{color:var(--muted);font-size:13px;padding:14px 0}
 
     @media(max-width:1100px){
@@ -211,7 +211,7 @@
 </head>
 <body>
 
-  <!-- â•â• Login â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- -- Login ---------------------------------------------------------- -->
   <main id="loginView" class="login">
     <section class="login-card">
       <div class="brand">
@@ -232,7 +232,7 @@
     </section>
   </main>
 
-  <!-- â•â• Dashboard â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- -- Dashboard ------------------------------------------------------ -->
   <main id="dashboardView" class="wrap hidden">
     <header class="top">
       <div class="brand">
@@ -276,7 +276,7 @@
       </div>
     </section>
 
-    <!-- â”€â”€ Users table â”€â”€ -->
+    <!-- -- Users table -- -->
     <section class="panel">
       <div class="panel-head">
         <h2>Users</h2>
@@ -285,13 +285,13 @@
 
       <div class="controls">
         <div class="ctrl-search">
-          <input id="userSearch" type="search" placeholder="Search name, email, or usernameâ€¦">
+          <input id="userSearch" type="search" placeholder="Search name or email...">
         </div>
         <select id="userFilter" class="ctrl-select">
           <option value="">All users</option>
-          <option value="onboarded">âœ“ Onboarded</option>
-          <option value="partial">âš  Partial (started, not done)</option>
-          <option value="empty">â—‹ Empty (no profile data)</option>
+          <option value="onboarded">✓ Onboarded</option>
+          <option value="partial">⚠ Partial (started, not done)</option>
+          <option value="empty">○ Empty (no profile data)</option>
           <option value="active">Has active streak</option>
           <option value="readers">Has reads</option>
         </select>
@@ -300,7 +300,7 @@
           <option value="oldest">Oldest first</option>
           <option value="streak">By streak</option>
           <option value="reads">By reads</option>
-          <option value="name">A â†’ Z name</option>
+          <option value="name">A → Z name</option>
           <option value="lastActive">Last active</option>
         </select>
       </div>
@@ -323,7 +323,7 @@
       </div>
     </section>
 
-    <!-- â”€â”€ Company votes â”€â”€ -->
+    <!-- -- Company votes -- -->
     <section class="panel">
       <div class="panel-head">
         <h2>Company votes</h2>
@@ -335,7 +335,7 @@
       </table>
     </section>
 
-    <!-- â”€â”€ Streak leaderboard â”€â”€ -->
+    <!-- -- Streak leaderboard -- -->
     <section class="panel">
       <div class="panel-head"><h2>Streak leaderboard</h2></div>
       <div class="table-wrap">
@@ -346,7 +346,7 @@
       </div>
     </section>
 
-    <!-- â”€â”€ Company HTML files â”€â”€ -->
+    <!-- -- Company HTML files -- -->
     <section class="panel">
       <div class="panel-head">
         <div>
@@ -371,7 +371,7 @@
           <div>
             <label for="companyCategory">Library category</label>
             <select id="companyCategory" style="font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:9px 10px;background:#fff;color:var(--ink);width:100%;outline:none">
-              <option value="">â€” Select category â€”</option>
+              <option value="">-- Select category --</option>
               <option value="brands you use daily">Brands you use daily</option>
               <option value="plot twists">Plot twists</option>
               <option value="underrated businesses">Underrated businesses</option>
@@ -405,7 +405,7 @@
     </section>
   </main>
 
-  <!-- â•â• User detail modal â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- -- User detail modal ----------------------------------------------- -->
   <div id="userModal" class="modal" role="dialog" aria-modal="true">
     <div class="modal-content">
       <div class="modal-header">
@@ -445,7 +445,6 @@
           </div>
           <div class="detail-section">
             <div class="detail-row"><strong>Email</strong><span id="ovEmail">-</span></div>
-            <div class="detail-row"><strong>Username</strong><span id="ovUsername">-</span></div>
             <div class="detail-row"><strong>Status</strong><span id="ovStatus">-</span></div>
             <div class="detail-row"><strong>How heard</strong><span id="ovHeard">-</span></div>
             <div class="detail-row"><strong>Joined</strong><span id="ovJoined">-</span></div>
@@ -510,7 +509,7 @@
 
     const $ = id => document.getElementById(id);
     const escapeHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const shortId = id => id ? `${id.slice(0,8)}â€¦${id.slice(-4)}` : '';
+    const shortId = id => id ? `${id.slice(0,8)}...${id.slice(-4)}` : '';
 
     function showMessage(id, text, type = 'ok') {
       const el = $(id);
@@ -540,7 +539,7 @@
       $('dashboardView').classList.toggle('hidden', !loggedIn);
     }
 
-    // â”€â”€ Search / filter / sort â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Search / filter / sort -----------------------------------------
 
     function getFilteredUsers() {
       if (!latestData) return [];
@@ -550,7 +549,6 @@
       if (q) {
         users = users.filter(u =>
           `${u.firstName} ${u.lastName}`.toLowerCase().includes(q) ||
-          (u.username || '').toLowerCase().includes(q) ||
           (u.email || '').toLowerCase().includes(q)
         );
       }
@@ -580,7 +578,6 @@
       const missing = [];
       if (!u.firstName)  missing.push('first name');
       if (!u.lastName)   missing.push('last name');
-      if (!u.username)   missing.push('username');
       if (!u.email)      missing.push('email');
       if (!u.profession) missing.push('profession');
       if (!u.howHeard)   missing.push('how heard');
@@ -592,11 +589,11 @@
     }
 
     function statusBadge(u) {
-      if (u.status === 'onboarded') return '<span class="badge badge-green">âœ“ Onboarded</span>';
+      if (u.status === 'onboarded') return '<span class="badge badge-green">✓ Onboarded</span>';
       const missing = getMissingFields(u);
       const tip = missing.length ? `Missing: ${missing.join(', ')}` : '';
-      if (u.status === 'partial') return `<span class="badge badge-amber" title="${escapeHtml(tip)}">âš  Partial</span>`;
-      return `<span class="badge badge-gray" title="${escapeHtml(tip)}">â—‹ Empty</span>`;
+      if (u.status === 'partial') return `<span class="badge badge-amber" title="${escapeHtml(tip)}">⚠ Partial</span>`;
+      return `<span class="badge badge-gray" title="${escapeHtml(tip)}">○ Empty</span>`;
     }
 
     function renderUsersTable() {
@@ -612,15 +609,14 @@
           <tr class="user-row" onclick="openUserModal('${escapeHtml(u.userId)}')">
             <td>
               <div class="cell-stack">
-                <div class="cell-main">${escapeHtml(`${u.firstName || ''} ${u.lastName || ''}`.trim() || 'â€”')}</div>
-                <div class="cell-sub">@${escapeHtml(u.username || 'no username')}</div>
+                <div class="cell-main">${escapeHtml(`${u.firstName || ''} ${u.lastName || ''}`.trim() || '-')}</div>
                 <div style="margin-top:5px">${statusBadge(u)}</div>
                 <div class="mono" style="margin-top:4px" title="${escapeHtml(u.userId)}">${escapeHtml(shortId(u.userId))}</div>
               </div>
             </td>
             <td>
               <div class="cell-stack">
-                <div style="font-size:13px">${escapeHtml(u.email || 'â€”')}</div>
+                <div style="font-size:13px">${escapeHtml(u.email || '-')}</div>
               </div>
             </td>
             <td>
@@ -645,9 +641,9 @@
             </td>
             <td>
               <div class="cell-stack">
-                <div>${escapeHtml(u.profession || 'â€”')}</div>
-                <div class="cell-sub">${escapeHtml(u.country || 'â€”')}</div>
-                <div class="cell-sub">Age ${escapeHtml(u.ageRange || '?')} Â· ${escapeHtml(u.investorLevel || '?')}</div>
+                <div>${escapeHtml(u.profession || '-')}</div>
+                <div class="cell-sub">${escapeHtml(u.country || '-')}</div>
+                <div class="cell-sub">Age ${escapeHtml(u.ageRange || '?')} - ${escapeHtml(u.investorLevel || '?')}</div>
               </div>
             </td>
             <td>
@@ -656,7 +652,7 @@
                 ${renderPills(u.sectorPreferences, 'Sectors')}
               </div>
             </td>
-            <td>${escapeHtml(u.howHeard || 'â€”')}</td>
+            <td>${escapeHtml(u.howHeard || '-')}</td>
             <td>
               <div class="cell-stack">
                 <div class="cell-sub">Joined ${escapeHtml(formatDateShort(u.createdAt))}</div>
@@ -668,7 +664,7 @@
         : `<tr><td colspan="7"><div class="empty">No users match your search or filters.</div></td></tr>`;
     }
 
-    // â”€â”€ Votes table with expandable voter rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Votes table with expandable voter rows -------------------------
 
     let expandedVoteCompany = null;
     let currentVoteTotals  = [];
@@ -687,19 +683,18 @@
       $('votesBody').innerHTML = rows.flatMap(row => {
         const expanded = expandedVoteCompany === row.companyId;
         const mainRow = `<tr class="vote-row ${expanded ? 'vote-row-expanded' : ''}" onclick="toggleVoters('${escapeHtml(row.companyId)}')">
-          <td><strong>${escapeHtml(row.companyId)}</strong> <span style="font-size:11px;color:var(--muted)">${expanded ? 'â–²' : 'â–¼'}</span></td>
+          <td><strong>${escapeHtml(row.companyId)}</strong> <span style="font-size:11px;color:var(--muted)">${expanded ? '▲' : '▼'}</span></td>
           <td>${row.percentages.total}</td>
           <td style="color:var(--green);font-weight:700">${row.counts.bull}</td>
           <td style="color:#9c7c3d;font-weight:700">${row.counts.neutral}</td>
           <td style="color:var(--red);font-weight:700">${row.counts.bear}</td>
-          <td style="font-size:13px;color:var(--muted)">Bull ${row.percentages.bull}% Â· Neutral ${row.percentages.neutral}% Â· Bear ${row.percentages.bear}%</td>
+          <td style="font-size:13px;color:var(--muted)">Bull ${row.percentages.bull}% - Neutral ${row.percentages.neutral}% - Bear ${row.percentages.bear}%</td>
         </tr>`;
         if (!expanded) return [mainRow];
         const voterHtml = (row.voters || []).length
           ? (row.voters || []).map(v => `
               <span class="voter-chip">
-                <span class="vc-name">${escapeHtml(v.name || v.username || 'Unknown')}</span>
-                ${v.username ? `<span class="vc-user">@${escapeHtml(v.username)}</span>` : ''}
+                <span class="vc-name">${escapeHtml(v.name || v.email || shortId(v.userId || '') || 'Unknown')}</span>
                 <span class="vc-vote ${escapeHtml(v.vote)}">${escapeHtml(v.vote).toUpperCase()}</span>
               </span>`).join('')
           : '<span style="color:var(--muted);font-size:13px">No voters</span>';
@@ -708,7 +703,7 @@
       }).join('');
     }
 
-    // â”€â”€ Dashboard render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Dashboard render -----------------------------------------------
 
     function renderDashboard(data) {
       $('statUsers').textContent  = data.stats.userCount;
@@ -725,8 +720,8 @@
           <td><strong>${escapeHtml(item.name)}</strong></td>
           <td class="mono">${escapeHtml(item.ticker)}</td>
           <td>${Number(item.price) > 0 ? `${escapeHtml(item.currency)} ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}` : 'Not cached'}</td>
-          <td>${escapeHtml(item.date || 'â€”')}</td>
-          <td>${item.lastUpdated ? escapeHtml(formatDate(item.lastUpdated)) : 'â€”'}</td>
+          <td>${escapeHtml(item.date || '-')}</td>
+          <td>${item.lastUpdated ? escapeHtml(formatDate(item.lastUpdated)) : '-'}</td>
         </tr>`).join('');
 
       renderUsersTable();
@@ -738,14 +733,13 @@
             <td>${i + 1}</td>
             <td>
               <div class="cell-stack">
-                <div class="cell-main">${escapeHtml(`${u.firstName || ''} ${u.lastName || ''}`.trim() || 'â€”')}</div>
-                <div class="cell-sub">@${escapeHtml(u.username || 'no username')}</div>
+                <div class="cell-main">${escapeHtml(`${u.firstName || ''} ${u.lastName || ''}`.trim() || '-')}</div>
                 <div class="mono cell-sub" title="${escapeHtml(u.userId)}">${escapeHtml(shortId(u.userId))}</div>
               </div>
             </td>
             <td><span class="streak-highlight" style="font-weight:800">${u.streak}</span></td>
             <td>${u.reads}</td>
-            <td>${escapeHtml(u.lastReadDate || 'â€”')}</td>
+            <td>${escapeHtml(u.lastReadDate || '-')}</td>
           </tr>
         `).join('')
         : `<tr><td colspan="5"><div class="empty">No streaks yet.</div></td></tr>`;
@@ -757,7 +751,7 @@
             <strong>${escapeHtml(c.name || c.companyId)} <span class="pill">${escapeHtml(c.fileName || 'HTML')}</span></strong>
             ${c.hook ? `<p style="font-style:italic;color:var(--ink)">"${escapeHtml(c.hook)}"</p>` : ''}
             ${c.category ? `<p><span class="pill" style="background:var(--green-soft);color:var(--green)">${escapeHtml(c.category)}</span></p>` : ''}
-            <p>${escapeHtml(c.size || 0)} bytes Â· Updated ${escapeHtml(formatDate(c.updatedAt))}</p>
+            <p>${escapeHtml(c.size || 0)} bytes - Updated ${escapeHtml(formatDate(c.updatedAt))}</p>
             <div class="actions">
               <button class="secondary" type="button" onclick='editCompany(${JSON.stringify(c).replace(/'/g,"&#39;")})'>Edit</button>
               <button class="danger" type="button" onclick="deleteCompany('${escapeHtml(c.companyId)}')">Delete</button>
@@ -767,7 +761,7 @@
         : '<div class="empty">No HTML files saved yet.</div>';
     }
 
-    // â”€â”€ User detail modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- User detail modal ----------------------------------------------
 
     function openUserModal(userId) {
       loadUserDetail(userId);
@@ -798,20 +792,19 @@
       $('modalUserName').textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
       $('modalUserId').textContent   = shortId(user.userId);
 
-      // â”€â”€ Overview tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Overview tab ----------------------------
       $('ovReads').textContent     = data.totalReads || 0;
       $('ovSaves').textContent     = data.totalSaves || 0;
       $('ovVotes').textContent     = data.totalVotes || 0;
       $('ovStreak').textContent    = user.streak || 0;
-      $('ovEmail').textContent     = user.email || 'â€”';
-      $('ovUsername').textContent  = user.username || 'â€”';
+      $('ovEmail').textContent     = user.email || '-';
       const st = userStatusLabel(user);
       $('ovStatus').innerHTML = st.html;
-      $('ovHeard').textContent     = user.howHeard || 'â€”';
+      $('ovHeard').textContent     = user.howHeard || '-';
       $('ovJoined').textContent    = formatDate(user.createdAt);
       $('ovLastActive').textContent = user.lastReadDate ? formatDate(user.lastReadDate) : 'Never';
 
-      // â”€â”€ Activity tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Activity tab -----------------------------
       const hasVotes = Object.keys(votes).length > 0;
       const hasSaves = saves.length > 0;
       const hasReads = reads.length > 0;
@@ -839,7 +832,7 @@
         $('actSavesList').innerHTML = saves.map(co => `
           <div class="save-item" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
             <span>${escapeHtml(co)}</span>
-            <button class="del-btn" onclick="deleteUserSave('${escapeHtml(uid)}','${escapeHtml(co)}')">Ã—</button>
+            <button class="del-btn" onclick="deleteUserSave('${escapeHtml(uid)}','${escapeHtml(co)}')">×</button>
           </div>
         `).join('');
       } else {
@@ -853,21 +846,21 @@
           <div class="tl-item">
             <span class="tl-co">${escapeHtml(r.companyId)}</span>
             <span class="tl-date">${escapeHtml(formatDate(r.readAt))}</span>
-            <button class="del-btn" onclick="deleteUserRead('${escapeHtml(uid)}','${escapeHtml(r.readAt || '')}')">Ã—</button>
+            <button class="del-btn" onclick="deleteUserRead('${escapeHtml(uid)}','${escapeHtml(r.readAt || '')}')">×</button>
           </div>
         `).join('');
       } else {
         $('actReadsWrap').style.display = 'none';
       }
 
-      // â”€â”€ Profile tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      $('pfName').textContent       = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'â€”';
+      // -- Profile tab ------------------------------
+      $('pfName').textContent       = `${user.firstName || ''} ${user.lastName || ''}`.trim() || '-';
       $('pfPhone').textContent      = formatPhone(user);
-      $('pfCountry').textContent    = user.country || 'â€”';
-      $('pfAge').textContent        = user.ageRange || 'â€”';
-      $('pfProfession').textContent = user.profession || 'â€”';
-      $('pfLevel').textContent      = user.investorLevel || 'â€”';
-      $('pfFinance').textContent    = user.financeProficiency != null ? String(user.financeProficiency) : 'â€”';
+      $('pfCountry').textContent    = user.country || '-';
+      $('pfAge').textContent        = user.ageRange || '-';
+      $('pfProfession').textContent = user.profession || '-';
+      $('pfLevel').textContent      = user.investorLevel || '-';
+      $('pfFinance').textContent    = user.financeProficiency != null ? String(user.financeProficiency) : '-';
 
       const hasPrefs = (user.marketPreferences && user.marketPreferences.length) ||
                        (user.sectorPreferences && user.sectorPreferences.length);
@@ -884,7 +877,7 @@
       switchTab('overview');
     }
 
-    // â”€â”€ Tab switching â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Tab switching --------------------------------------------------
 
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
@@ -898,41 +891,41 @@
       btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Helpers -------------------------------------------------------
 
     function userStatusLabel(user) {
-      if (user.onboardingCompleted) return { text: 'Onboarded', html: '<span class="badge badge-green">âœ“ Onboarded</span>' };
-      const hasPartial = user.firstName || user.lastName || user.email || user.username || user.profession;
-      if (hasPartial) return { text: 'Partial', html: '<span class="badge badge-amber">âš  Partial â€” started, not complete</span>' };
-      return { text: 'Empty', html: '<span class="badge badge-gray">â—‹ Empty â€” no profile data</span>' };
+      if (user.onboardingCompleted) return { text: 'Onboarded', html: '<span class="badge badge-green">✓ Onboarded</span>' };
+      const hasPartial = user.firstName || user.lastName || user.email || user.profession;
+      if (hasPartial) return { text: 'Partial', html: '<span class="badge badge-amber">⚠ Partial - started, not complete</span>' };
+      return { text: 'Empty', html: '<span class="badge badge-gray">○ Empty - no profile data</span>' };
     }
 
     function formatPhone(user) {
       const code = user.phoneCode ? `+${String(user.phoneCode).replace(/^\+/, '')}` : '';
-      return `${code} ${user.phoneNumber || ''}`.trim() || 'â€”';
+      return `${code} ${user.phoneNumber || ''}`.trim() || '-';
     }
 
     function renderPills(items, label) {
       const values = Array.isArray(items) ? items.filter(Boolean) : [];
-      if (!values.length) return label ? `<div class="cell-sub">${escapeHtml(label)}: â€”</div>` : '';
+      if (!values.length) return label ? `<div class="cell-sub">${escapeHtml(label)}${escapeHtml(label)}: -</div>` : '';
       return `${label ? `<div class="cell-sub">${escapeHtml(label)}</div>` : ''}<div class="mini-pills">${values.map(v => `<span class="mini-pill">${escapeHtml(v)}</span>`).join('')}</div>`;
     }
 
     function formatDate(value) {
-      if (!value) return 'â€”';
+      if (!value) return '-';
       const d = new Date(value);
       if (Number.isNaN(d.getTime())) return String(value);
       return d.toLocaleString();
     }
 
     function formatDateShort(value) {
-      if (!value) return 'â€”';
+      if (!value) return '-';
       const d = new Date(value);
       if (Number.isNaN(d.getTime())) return String(value);
       return d.toLocaleDateString();
     }
 
-    // â”€â”€ Modal close handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Modal close handlers -------------------------------------------
 
     $('modalCloseButton').addEventListener('click', closeUserModal);
     $('modalCloseActionButton').addEventListener('click', closeUserModal);
@@ -940,13 +933,13 @@
       if (e.target === $('userModal')) closeUserModal();
     });
 
-    // â”€â”€ Controls (search / filter / sort) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Controls (search / filter / sort) -----------------------------
 
     $('userSearch').addEventListener('input', renderUsersTable);
     $('userFilter').addEventListener('change', renderUsersTable);
     $('userSort').addEventListener('change', renderUsersTable);
 
-    // â”€â”€ Company helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Company helpers ------------------------------------------------
 
     window.editCompany = company => {
       $('companyId').value  = company.companyId || '';
@@ -970,7 +963,7 @@
       await loadDashboard();
     };
 
-    // â”€â”€ Data loading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Data loading ---------------------------------------------------
 
     async function loadDashboard() {
       latestData = await api('/api/admin/summary');
@@ -990,7 +983,7 @@
       }
     }
 
-    // â”€â”€ Login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Login ----------------------------------------------------------
 
     $('loginForm').addEventListener('submit', async e => {
       e.preventDefault();
@@ -1011,7 +1004,7 @@
       }
     });
 
-    // â”€â”€ File drop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- File drop ------------------------------------------------------
 
     async function acceptHtmlFile(file) {
       if (!file) return;
@@ -1071,7 +1064,7 @@
       }
     });
 
-    // â”€â”€ Top-bar buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Top-bar buttons ------------------------------------------------
 
     $('refreshButton').addEventListener('click', () => loadDashboard().catch(err => alert(err.message)));
 
@@ -1115,7 +1108,7 @@
       URL.revokeObjectURL(url);
     });
 
-    // â”€â”€ Entry-level delete (called from inline onclick) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Entry-level delete (called from inline onclick) ---------------
 
     window.deleteUserRead = async (userId, readAt) => {
       if (!readAt || !confirm('Remove this read entry?')) return;
@@ -1141,7 +1134,7 @@
       } catch (err) { alert('Failed: ' + err.message); }
     };
 
-    // â”€â”€ Boot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // -- Boot -----------------------------------------------------------
 
     if (adminToken) {
       loadDashboard().catch(() => {
