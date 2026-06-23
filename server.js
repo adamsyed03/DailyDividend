@@ -243,6 +243,16 @@ async function mirrorPricesToLocalFile(prices) {
   await fs.writeFile(DB_FILE, JSON.stringify(localDb, null, 2));
 }
 
+async function safeMirrorPricesToLocalFile(prices) {
+  try {
+    await mirrorPricesToLocalFile(prices);
+    return null;
+  } catch (error) {
+    console.warn('[prices] Local JSON mirror skipped:', error.message);
+    return error.message;
+  }
+}
+
 async function fetchTwelveDataEod(symbolKey) {
   const company = PRICE_COMPANIES[symbolKey];
   const url = new URL('https://api.twelvedata.com/eod');
@@ -264,6 +274,7 @@ async function fetchTwelveDataEod(symbolKey) {
 }
 
 async function doRefreshPrices(db) {
+  db.prices = normalizePrices(db.prices);
   const results = [];
   for (const symbolKey of Object.keys(PRICE_COMPANIES)) {
     try {
@@ -295,12 +306,68 @@ async function autoRefreshPrices() {
     const updated = results.filter(r => r.ok).length;
     if (updated) {
       await writeDb(db);
-      await mirrorPricesToLocalFile(db.prices);
+      await safeMirrorPricesToLocalFile(db.prices);
       console.log(`[prices] Auto-refreshed ${updated}/${results.length} at ${new Date().toISOString()}`);
     }
   } catch (error) {
     console.error('[prices] Auto-refresh error:', error.message);
   }
+}
+
+function timeZoneParts(date, timeZone) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23'
+  }).formatToParts(date);
+  return Object.fromEntries(parts.filter(part => part.type !== 'literal').map(part => [part.type, Number(part.value)]));
+}
+
+function timeZoneOffsetMs(date, timeZone) {
+  const parts = timeZoneParts(date, timeZone);
+  const asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+  return asUtc - date.getTime();
+}
+
+function zonedTimeToUtc({ year, month, day, hour, minute = 0, second = 0 }, timeZone) {
+  let utc = Date.UTC(year, month - 1, day, hour, minute, second);
+  for (let i = 0; i < 2; i += 1) {
+    utc = Date.UTC(year, month - 1, day, hour, minute, second) - timeZoneOffsetMs(new Date(utc), timeZone);
+  }
+  return new Date(utc);
+}
+
+function nextNewYorkPriceRefreshDate(now = new Date()) {
+  const timeZone = 'America/New_York';
+  const ny = timeZoneParts(now, timeZone);
+  const afterTodayRefresh = ny.hour > 17 || (ny.hour === 17 && (ny.minute > 0 || ny.second > 0));
+  const targetBase = afterTodayRefresh
+    ? new Date(Date.UTC(ny.year, ny.month - 1, ny.day + 1, 12, 0, 0))
+    : now;
+  const targetNy = timeZoneParts(targetBase, timeZone);
+  return zonedTimeToUtc({
+    year: targetNy.year,
+    month: targetNy.month,
+    day: targetNy.day,
+    hour: 17,
+    minute: 0,
+    second: 0
+  }, timeZone);
+}
+
+function scheduleDailyPriceRefresh() {
+  const nextRun = nextNewYorkPriceRefreshDate();
+  const delay = Math.max(1000, nextRun.getTime() - Date.now());
+  console.log(`[prices] Next automatic refresh scheduled for ${nextRun.toISOString()} (5:00 PM America/New_York)`);
+  setTimeout(async () => {
+    await autoRefreshPrices();
+    scheduleDailyPriceRefresh();
+  }, delay);
 }
 
 function makeUser(userId = crypto.randomUUID()) {
@@ -1125,9 +1192,10 @@ app.post('/api/admin/refresh-prices', requireAdmin, async (req, res, next) => {
 
     const results = await doRefreshPrices(db);
     const updated = results.filter(r => r.ok).length;
+    let mirrorWarning = null;
     if (updated) {
       await writeDb(db);
-      await mirrorPricesToLocalFile(db.prices);
+      mirrorWarning = await safeMirrorPricesToLocalFile(db.prices);
     }
     const failed = results.filter(r => !r.ok);
     const body = {
@@ -1135,6 +1203,7 @@ app.post('/api/admin/refresh-prices', requireAdmin, async (req, res, next) => {
         ? `Updated ${updated} of ${results.length} prices. Existing cached prices were kept for failures.`
         : `Updated all ${updated} stock prices.`,
       updated, failed, results,
+      mirrorWarning,
       prices: db.prices
     };
     if (!updated) return res.status(502).json({ ...body, error: 'Twelve Data did not return any usable prices.' });
@@ -1539,6 +1608,5 @@ app.use((error, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Daily Dividend running at http://localhost:${PORT}`);
-  autoRefreshPrices();
-  setInterval(autoRefreshPrices, 24 * 60 * 60 * 1000);
+  scheduleDailyPriceRefresh();
 });

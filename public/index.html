@@ -451,6 +451,86 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* Netflix V7 slide components */
+.nf-stat-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.nf-stat-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+.nf-stat-val{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-0.02em;line-height:1;margin-bottom:4px;color:var(--ink)}
+.nf-stat-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);line-height:1.3}
+.nf-arpu-row{display:flex;align-items:flex-start;gap:12px;margin:10px 0}
+.nf-arpu-big{font-family:var(--serif);font-size:58px;font-weight:300;letter-spacing:-0.04em;color:var(--accent);line-height:1;min-width:96px}
+.nf-arpu-meta{display:flex;flex-direction:column;gap:6px;padding-top:12px}
+.nf-arpu-chip{display:inline-flex;align-items:center;background:rgba(229,9,20,0.1);color:var(--accent);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 10px;border-radius:100px;border:1px solid rgba(229,9,20,0.2)}
+.nf-arpu-sub{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.4}
+.nf-tiles{display:flex;flex-direction:column;gap:8px}
+.nf-tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.nf-tile-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nf-tile-left{display:flex;align-items:center;gap:8px;min-width:0}
+.nf-tile-emoji{font-size:18px;line-height:1}
+.nf-tile-n{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink)}
+.nf-tile-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.nf-tile-pct{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.nf-tile-amt{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink)}
+.nf-tile-desc{font-family:var(--sans);font-size:11.5px;color:var(--ink-2);line-height:1.4;opacity:0.85}
+.nf-note-chip{display:inline-flex;align-items:center;background:var(--gold-soft);color:#7a5f1a;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 10px;border-radius:100px;margin-top:10px;border:1px solid rgba(196,154,62,0.25);line-height:1.35}
+.nf-model-pills{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.nf-model-pills::-webkit-scrollbar{display:none}
+.nf-model-pill{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 13px;border-radius:100px;border:1px solid var(--line);background:var(--cream-2);color:var(--muted);white-space:nowrap;flex-shrink:0}
+.nf-flow{display:flex;flex-direction:column;gap:0}
+.nf-flow-step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;opacity:0;transform:translateY(8px);transition:opacity 0.4s ease,transform 0.4s ease}
+.nf-flow-step.visible{opacity:1;transform:translateY(0)}
+.nf-flow-step-n{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:3px;font-weight:600}
+.nf-flow-step-t{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);line-height:1.25;letter-spacing:-0.01em}
+.nf-flow-step-s{font-family:var(--sans);font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+.nf-flow-arrow{text-align:center;padding:2px 0;font-size:16px;opacity:0;transition:opacity 0.3s;color:var(--muted)}
+.nf-flow-arrow.visible{opacity:1}
+.nf-bar-rows{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.nf-rival-card{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:16px;padding:13px 15px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 20px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.9)}
+.nf-rival-card.hero{background:rgba(229,9,20,0.06);border-color:rgba(229,9,20,0.3);box-shadow:0 4px 20px rgba(229,9,20,0.08),inset 0 1px 0 rgba(255,255,255,0.5)}
+.nf-bar-row-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px;gap:12px}
+.nf-bar-n{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink)}
+.nf-bar-val{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap}
+.nf-bar-tag{font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.35}
+.nf-bar-track{height:8px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden}
+.nf-bar-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.1s}
+.nf-kicker{background:var(--brand-soft);border-left:3px solid var(--brand);padding:10px 13px;border-radius:0 8px 8px 0;margin-top:12px;font-family:var(--sans);font-size:12px;color:var(--ink-2);line-height:1.45}
+.nf-mt-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;margin-bottom:12px}
+.nf-myth{font-family:var(--serif);font-size:15px;font-weight:400;text-decoration:line-through;text-decoration-color:rgba(255,100,100,0.6);text-decoration-thickness:2px;opacity:0.5;line-height:1.3;margin-bottom:8px;font-style:italic}
+.nf-truth{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--accent);line-height:1.22;letter-spacing:-0.01em}
+.nf-season-row{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.nf-season-chip{border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nf-season-chip.s1{background:rgba(229,9,20,0.4);border:1px solid rgba(229,9,20,0.55)}
+.nf-season-chip.s2{background:rgba(229,9,20,0.22);border:1px solid rgba(229,9,20,0.32)}
+.nf-season-chip.s3{background:rgba(229,9,20,0.1);border:1px solid rgba(229,9,20,0.18)}
+.nf-season-lbl{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--cream)}
+.nf-season-desc{font-family:var(--sans);font-size:12px;color:rgba(252,201,194,0.85);line-height:1.3;text-align:right;max-width:58%}
+.nf-acc-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.nf-acc-item{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:16px;overflow:hidden;position:relative;z-index:10}
+.nf-acc-btn{width:100%;border:0;background:none;padding:15px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;color:inherit}
+.nf-acc-icon{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.96);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;line-height:1}
+.card.bg-green .nf-acc-icon{color:#1F6B4A}
+.card.bg-red .nf-acc-icon{color:var(--red)}
+.nf-acc-title{flex:1;font-family:var(--serif);font-size:15px;font-weight:600;line-height:1.25;letter-spacing:-0.01em}
+.nf-acc-chevron{font-size:11px;opacity:0.5;transition:transform 0.25s;flex-shrink:0}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.nf-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+.nf-acc-text{font-family:var(--sans);font-size:12.5px;line-height:1.52;opacity:0.9;padding:8px 14px 14px 57px;border-top:1px solid rgba(255,255,255,0.12)}
+.nf-acc-text strong{font-weight:700;opacity:1}
+.nf-own-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.nf-own-row{display:flex;align-items:center;gap:10px}
+.nf-own-l{font-family:var(--sans);font-size:12px;width:100px;flex-shrink:0;opacity:0.85;color:var(--ink)}
+.nf-own-track{flex:1;height:26px;background:rgba(0,0,0,0.08);border-radius:8px;overflow:hidden}
+.nf-own-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding-left:9px;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;min-width:34px}
+.nf-fact-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.nf-fact-chip{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border-radius:100px;background:rgba(0,0,0,0.06);color:var(--ink-2);border:1px solid rgba(0,0,0,0.07)}
+.nf-dbt-q{font-family:var(--serif);font-size:13.5px;font-weight:400;line-height:1.38;color:var(--ink-2);font-style:italic;margin:0 0 10px;padding:0 4px}
+.nf-dbt-half{border-radius:16px;padding:14px 16px}
+.nf-dbt-half.bull{background:linear-gradient(145deg,#1F6B4A,#144B33);margin-bottom:8px}
+.nf-dbt-half.bear{background:linear-gradient(145deg,#B23A2E,#7E2820)}
+.nf-dbt-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.9);font-weight:600}
+.nf-dbt-pts{display:flex;flex-direction:column;gap:8px}
+.nf-dbt-pt{font-family:var(--sans);font-size:12px;line-height:1.45;color:rgba(255,255,255,0.9);display:flex;gap:9px;align-items:flex-start}
+.nf-dbt-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;background:rgba(255,255,255,0.45)}
+
 @media(max-width:899px){
   .stage,.phone{height:100svh;height:100dvh}
   .topbar{gap:10px}
@@ -471,6 +551,62 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .own{gap:7px;margin-bottom:10px}.ow-tr{height:20px}
   .cv-sent-row{margin-bottom:9px}.cv-opts{gap:6px}.co-opt{padding:9px 11px}.co-opt .ico{font-size:18px}.co-opt .lbl{font-size:14px}
   .np{padding:10px 12px;margin-bottom:10px}.ea{gap:6px}.ea button{padding:10px 12px}
+  .nf-stat-boxes{gap:6px;margin-bottom:9px}
+  .nf-stat-box{padding:8px 6px;border-radius:10px}
+  .nf-stat-val{font-size:clamp(14px,2.4dvh,17px)}
+  .nf-stat-lbl{font-size:7px;letter-spacing:.1em}
+  .nf-arpu-row{gap:9px;margin:6px 0 8px}
+  .nf-arpu-big{font-size:clamp(40px,7.2dvh,54px);min-width:72px}
+  .nf-arpu-meta{gap:4px;padding-top:7px}
+  .nf-arpu-chip{font-size:7.5px;padding:4px 8px}
+  .nf-arpu-sub{font-size:10px;line-height:1.25}
+  .nf-tiles{gap:6px}
+  .nf-tile{padding:8px 10px;border-radius:10px;gap:3px}
+  .nf-tile-emoji{font-size:15px}
+  .nf-tile-n{font-size:12px}
+  .nf-tile-pct{font-size:8px}
+  .nf-tile-amt{font-size:10px}
+  .nf-tile-desc{font-size:10px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .nf-note-chip{font-size:7.5px;padding:4px 8px;margin-top:7px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .nf-model-pills{gap:5px;margin-bottom:8px}
+  .nf-model-pill{font-size:7.5px;padding:5px 9px}
+  .nf-flow-step{padding:8px 10px;border-radius:10px}
+  .nf-flow-step-n{font-size:8px;margin-bottom:2px}
+  .nf-flow-step-t{font-size:13px;line-height:1.16}
+  .nf-flow-step-s{font-size:10px;line-height:1.22;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .nf-flow-arrow{font-size:12px;padding:0}
+  .nf-bar-rows{gap:6px;margin-top:5px}
+  .nf-rival-card{padding:8px 10px;border-radius:12px}
+  .nf-bar-row-head{margin-bottom:1px}
+  .nf-bar-n{font-size:11.5px}
+  .nf-bar-val{font-size:12px}
+  .nf-bar-tag{font-size:9.5px;line-height:1.22;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .nf-bar-track{height:6px}
+  .nf-kicker{font-size:10px;line-height:1.28;padding:8px 10px;margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .nf-mt-box{padding:10px 12px;border-radius:12px;margin-bottom:8px}
+  .nf-myth{font-size:13px;margin-bottom:5px}
+  .nf-truth{font-size:16px;line-height:1.16}
+  .nf-season-row{gap:6px;margin-top:8px}
+  .nf-season-chip{padding:9px 11px;border-radius:11px}
+  .nf-season-lbl{font-size:12.5px}
+  .nf-season-desc{font-size:10px;line-height:1.2;max-width:60%}
+  .nf-acc-list{gap:7px}
+  .nf-acc-btn{padding:10px 11px;gap:9px}
+  .nf-acc-icon{width:28px;height:28px;font-size:13px}
+  .nf-acc-title{font-size:13px;line-height:1.18}
+  .nf-acc-text{font-size:11px;line-height:1.35;padding:7px 11px 11px 48px}
+  .nf-own-rows{gap:7px;margin-bottom:8px}
+  .nf-own-row{gap:8px}
+  .nf-own-l{width:86px;font-size:10.5px}
+  .nf-own-track{height:21px}
+  .nf-own-fill{font-size:9.5px;padding-left:7px;min-width:30px}
+  .nf-fact-chips{gap:5px;margin-top:7px}
+  .nf-fact-chip{font-size:7.5px;padding:4px 7px}
+  .nf-dbt-q{font-size:11.5px;line-height:1.25;margin-bottom:7px}
+  .nf-dbt-half{padding:10px 11px;border-radius:12px}
+  .nf-dbt-lbl{font-size:8px;margin-bottom:6px}
+  .nf-dbt-pts{gap:5px}
+  .nf-dbt-pt{font-size:10px;line-height:1.28;gap:7px}
 }
 @media(max-width:899px) and (max-height:700px){
   .card{padding-top:max(106px,calc(env(safe-area-inset-top) + 90px));padding-bottom:max(58px,calc(env(safe-area-inset-bottom) + 48px))}
@@ -479,6 +615,29 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .pie{width:min(138px,21dvh);height:min(138px,21dvh)}.pie-wrap{gap:6px}
   .door,.r{padding:7px 9px}.doors,.riv,.acc,.cv-opts{gap:5px}
   .co-opt{padding:7px 10px}.ah{padding:7px 9px}.aic{width:32px;height:32px;min-width:32px}
+  .nf-stat-boxes{margin-bottom:6px}.nf-stat-box{padding:6px 5px}.nf-stat-val{font-size:13px}.nf-stat-lbl{font-size:6.5px}
+  .nf-arpu-row{margin:4px 0 6px}.nf-arpu-big{font-size:36px;min-width:62px}.nf-arpu-chip{font-size:7px;padding:3px 7px}.nf-arpu-sub{font-size:9px}
+  .nf-tiles{gap:5px}.nf-tile{padding:7px 9px}.nf-tile-emoji{font-size:13px}.nf-tile-n{font-size:11px}.nf-tile-desc{-webkit-line-clamp:1}
+  .nf-note-chip{display:none}
+  .nf-model-pills{margin-bottom:6px}.nf-model-pill{font-size:7px;padding:4px 8px}
+  .nf-flow-step{padding:7px 9px}.nf-flow-step-t{font-size:12px}.nf-flow-step-s{font-size:9.5px;-webkit-line-clamp:1}.nf-flow-arrow{font-size:10px}
+  .nf-bar-rows{gap:5px}.nf-rival-card{padding:7px 9px}.nf-bar-n{font-size:10.5px}.nf-bar-val{font-size:11px}.nf-bar-tag{font-size:9px;-webkit-line-clamp:1}.nf-kicker{display:none}
+  .nf-mt-box{padding:8px 10px;margin-bottom:6px}.nf-myth{font-size:12px}.nf-truth{font-size:14.5px}.nf-season-chip{padding:8px 10px}.nf-season-lbl{font-size:11.5px}.nf-season-desc{font-size:9.5px}
+  .nf-acc-list{gap:6px}.nf-acc-btn{padding:9px 10px}.nf-acc-icon{width:26px;height:26px}.nf-acc-title{font-size:12px}
+  .nf-own-l{width:78px;font-size:9.5px}.nf-own-track{height:19px}.nf-fact-chip{font-size:7px;padding:3px 6px}
+  .nf-dbt-q{font-size:10.5px;margin-bottom:5px}.nf-dbt-half{padding:8px 10px}.nf-dbt-pt{font-size:9.4px;line-height:1.22}.nf-dbt-pts{gap:4px}
+}
+@media(max-width:899px) and (max-height:620px){
+  .card{padding-top:max(96px,calc(env(safe-area-inset-top) + 82px));padding-bottom:max(52px,calc(env(safe-area-inset-bottom) + 42px))}
+  .hl{font-size:20px;line-height:1.04}.bd{font-size:10.5px;line-height:1.25}
+  .nf-stat-boxes{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.nf-stat-box{padding:5px 4px}.nf-stat-val{font-size:12px}.nf-stat-lbl{font-size:6px}
+  .nf-arpu-row{display:none}
+  .nf-tile{padding:6px 8px}.nf-tile-desc{display:none}
+  .nf-flow-step{padding:6px 8px}.nf-flow-step-s{display:none}
+  .nf-season-desc{display:none}.nf-season-chip{padding:7px 9px}
+  .nf-acc-btn{padding:8px 9px}.nf-acc-title{font-size:11.5px}
+  .nf-own-rows{gap:5px}.nf-fact-chips{display:none}
+  .nf-dbt-q{display:none}.nf-dbt-pt{font-size:9px}.nf-dbt-pt:nth-child(3){display:none}
 }
 
 @media(min-width:900px){
@@ -1149,6 +1308,40 @@ tldr:["Worth <strong>Rs 11.4 lakh crore</strong>. India's most valuable private 
 };
 
 /* COMING SOON */
+Object.assign(CO.netflix,{
+mc:"$45.2B",
+bl:"Burns $47M a day on shows. Still makes money.",
+ks:[{l:"Revenue",v:"$45.2B"},{l:"Subscribers",v:"325M"},{l:"Daily spend",v:"$47M"}],
+ps:"The DVD company everyone said would collapse when Disney entered streaming is now worth more than Disney.",
+cards:[
+{type:"cover",chips:["NFLX - NASDAQ","$45.2B Revenue"],hl:"Netflix burns $47M a day on shows. <em>And still makes money.</em>",bd:"$17 billion a year in content. More than eight times what every Bollywood and South Indian film combined earns in a year. 325 million people in 190 countries pay every single month."},
+{type:"nf-money",bg:"cream",hl:"$45 billion a year. <em>Almost all of it from one thing.</em>",stats:[{v:"$45.2B",l:"Annual Revenue"},{v:"$17.11",l:"US avg / User"},{v:"325M",l:"Subscribers"}],tiles:[{n:"Subscriptions",pct:"96%",amt:"~$43B",emoji:"💳",desc:"You pay monthly. Netflix earns whether you watch or not."},{n:"Advertising",pct:"3%",amt:"$1.5B+",emoji:"📺",desc:"Cheaper plan, see ads. Netflix earns twice: from you and the brand."},{n:"Live events",pct:"1%",amt:"Growing",emoji:"🏟️",desc:"NFL. WWE. Boxing. Stops you cancelling in the quiet months."}],note:"Three years ago ads barely existed. By end of 2026 Netflix expects $3B from them."},
+{type:"nf-model",bg:"cream",hl:"Netflix does not sell shows. <em>It sells prediction.</em>",steps:[{n:"01",pill:"Data",t:"Content creates data",s:"325M people. 190 countries. Every hour."},{n:"02",pill:"Algorithm",t:"Learns what you finish",s:"Every skip, every 2am rewatch teaches it something."},{n:"03",pill:"Prediction",t:"Finds your show in 90 seconds",s:"You stay. That is the moat."},{n:"04",pill:"Flywheel",t:"Revenue funds more content",s:"Repeat indefinitely."}]},
+{type:"nf-rivals",bg:"cream",hl:"Netflix earns $17 per customer. <em>The real threat is not Disney.</em>",rows:[{n:"Netflix",val:"$17.11/mo",pct:100,tag:"Got there first. Raised prices repeatedly. Most people stayed.",h:true},{n:"Disney+",val:"$7.74/mo",pct:45,tag:"Better library. Marvel, Star Wars, Pixar. Cannot undo the cheap 2019 launch price."},{n:"YouTube",val:"Free",pct:6,tag:"NFL. Full films. Scripted TV. Oscars from 2029. Named directly by Netflix's CEO as the real threat."},{n:"Spotify",val:"$5/mo",pct:29,tag:"600M users. Music labels take 70 cents of every dollar they earn."}],kicker:"YouTube is not just cat videos anymore. Netflix's share of US TV time hit an all-time high of 9% last December. YouTube is competing for the same gap with Google's money behind it."},
+{type:"nf-hidden",bg:"ink",myth:"Netflix cancels shows when they fail.",truth:"Netflix cancels shows when they are becoming too expensive to continue.",bd:"When Netflix kills a show fans loved, it is not a failure. It is a business decision. The cancellations made Netflix $11 billion in profit last year.",chips:[{label:"Season One",desc:"Unknown cast. Cheap to make.",cls:"s1"},{label:"Season Two",desc:"Cast discover they are stars.",cls:"s2"},{label:"Season Three",desc:"Three S1s cost less than this.",cls:"s3"}]},
+{type:"nf-bull",bg:"green",eb:"06 - How it could double",hl:"Three ways Netflix becomes a <em>$1 trillion</em> company.",panels:[{icon:"↑",title:"The ad business has barely started",body:"Netflix launched ads in 2022. Last year: <strong>$1.5 billion</strong>. This year's target: $3 billion. YouTube earns $9 billion from the same thing. Netflix just started. That gap is the opportunity from people already subscribed."},{icon:"↑",title:"The password crackdown already worked",body:"100 million people had been watching for free. Netflix said: pay or leave. Most paid. <strong>87 million new subscribers</strong> in under three years. Profit went from $1.6 billion to $11 billion. One decision."},{icon:"↑",title:"Sports fans never cancel",body:"WWE Raw. NFL on Christmas. Joshua vs Paul: <strong>33 million viewers</strong>. World Baseball Classic in Japan: 31.4 million viewers, biggest sign-up day in Japan's history. Sports fans do not cancel in the quiet months."}]},
+{type:"nf-bear",bg:"red",eb:"07 - What could sink it",hl:"Three things that could sink it.",panels:[{icon:"↓",title:"Asia has not cracked, and the competition is terrifying",body:"JioHotstar launched February 2025. By June 2025: <strong>300 million subscribers</strong>, close to Netflix's entire global total. Bundled free with Jio SIMs. The IPL cricket tournament drew 652 million viewers in 2025. Netflix's cheapest Indian plan: $1.80 a month."},{icon:"↓",title:"Every competitor has a safety net. Netflix does not.",body:"Apple TV+ loses $1B a year and does not care. It sells phones. Amazon loses on streaming. It sells everything else. <strong>Netflix is the only major streaming company where streaming is the whole business.</strong>"},{icon:"↓",title:"The next hit is never guaranteed",body:"Squid Game was an accident. At <strong>$47M a day</strong>, one bad quarter and growth stalls. Every quarter needs a new one."}]},
+{type:"nf-own",bg:"gold",hl:"Reed Hastings built Netflix. <em>He just left the building.</em>",bars:[{l:"Reed Hastings",p:1,d:"~1%",c:"rgba(0,0,0,0.4)"},{l:"Vanguard",p:9,d:"~8.6%",c:"#C49A3E"},{l:"BlackRock",p:7,d:"~7.3%",c:"#1A3D2B"},{l:"Everyone else",p:83,d:"~83%",c:"#2E8A60"}],chips:["Sarandos controls content","Peters controls tech and ads","No single person can change direction overnight"],bd:"Reed mailed DVDs in 1997. Bet the company on streaming in 2007. Stepped aside as CEO in 2022. Left the board in June 2026. Voluntarily. While Netflix was making $11 billion in profit. He built something that outlasted him."},
+{type:"nf-debate",bg:"cream",hl:"The one question moving Netflix's stock right now.",q:"Can Netflix build an ad business big enough to compete with YouTube?",bull:["Netflix viewers complete 3-4x more content than social video. Brands pay for that attention.","60%+ of new sign-ups choose the ad plan. Ad revenue doubled last year, targeting $3B.","YouTube earns $9B in TV ads. Closing even half that gap adds billions from people already subscribed."],bear:["YouTube spent 20 years building its ad business. Netflix started in 2022.","The cheaper ad plan means less revenue per subscriber right now.","The whole bet requires ad earnings to close the gap. Not proven yet."]},
+{type:"conv",bg:"ink",hl:"Now you decide. <em>Netflix in 5 years?</em>",opts:[{k:"bull",p:68},{k:"neutral",p:22},{k:"bear",p:10}]},
+{type:"next",bg:"brand",hl:"That was Netflix.",bd:"Next, Disney. The opposite playbook. Disney's movies are actually advertisements for theme parks.",nx:"disney"}
+],
+deep:{
+cover:{t:"The $47M day",e:"From the cover",h:`<div class="d-sub">After paying for everything</div><div class="d-p">After spending $47M every single day on shows, Netflix still made $11 billion in profit last year. Not revenue. The money left after paying for everything. 325 million people pay monthly whether they watch or not. 40% of subscribers log in less than once a week. All of them still pay. That is what makes this business so hard to compete with.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$47M</div><div class="d-s-l">Spent / day</div></div><div class="d-s"><div class="d-s-n">$11B</div><div class="d-s-l">Profit 2024</div></div><div class="d-s"><div class="d-s-n">40%</div><div class="d-s-l">Log in &lt;1x/wk</div></div></div><div class="d-call">All of them still pay. That is what makes this business so hard to compete with.</div>`},
+"nf-money":{t:"The subscription miracle",e:"From the money",h:`<div class="d-sub">96% from subscriptions sounds like a risk. It is not.</div><div class="d-p">Netflix knows in January exactly how much arrives in February. That certainty is why they can commit $47M a day on content years before any of it airs. When you watch 40 hours a month versus zero, their cost barely changes. The show was already made. Both pay the same fee.</div><div class="d-p">Over 60% of new sign-ups where ads are available choose the cheaper plan. 4,000 advertisers, up 70% in a year. The ad infrastructure is being built in real time.</div><div class="d-call">The ad business is not replacing subscriptions. It is sitting on top of them.</div>`},
+"nf-model":{t:"The 90-second window",e:"From the business model",h:`<div class="d-sub">Hulu has more shows. Amazon has more shows.</div><div class="d-p">Netflix wins by finding you the right one within 90 seconds of opening the app. That is not a content advantage. It is a data advantage. Every person who joins makes the recommendation slightly better for everyone else.</div><div class="d-p">That is why Netflix can raise prices every year and most people stay. The experience gets more personal. The flywheel spins faster.</div><div class="d-call">The more accurate the prediction, the less reason to leave. This is the moat.</div>`},
+"nf-rivals":{t:"The 2019 Disney decision",e:"From the streaming race",h:`<div class="d-sub">You cannot raise prices on the affordable option</div><div class="d-p">Disney launched at $6.99 in 2019 and trained subscribers to expect cheap. Netflix spent a decade building the feeling of value before raising prices. Most people stayed each time. You can raise prices on something people see as premium. You cannot easily raise them on something people see as the affordable option.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$17.11</div><div class="d-s-l">Netflix US</div></div><div class="d-s"><div class="d-s-n">$7.74</div><div class="d-s-l">Disney+</div></div><div class="d-s"><div class="d-s-n">9%</div><div class="d-s-l">Netflix TV share</div></div></div><div class="d-call">Disney is still paying for a 2019 decision. Netflix's share of US TV time hit an all-time high of 9% last December.</div>`},
+"nf-hidden":{t:"The cancellation playbook",e:"From the hidden truth",h:`<div class="d-sub">Netflix does not track ratings</div><div class="d-p">Netflix tracks how many people actually finish the show. A show critics love but 80% abandon is a flop internally. A show nobody reviews but everyone binges in a weekend is a hit.</div><div class="d-p">Stranger Things ran for eight years. Its final season in 2025 still drew 120 million views. That is the exception. Every cancellation funds three new Season 1 bets. Most of those fail too. But one becomes Squid Game.</div><div class="d-call">A Korean drama nobody predicted would become the most-watched show in Netflix history. Every cancellation funded that bet.</div>`},
+"nf-bull":{t:"The ad plan math",e:"From how it could double",h:`<div class="d-sub">The most important number to watch</div><div class="d-p">Netflix targets $3 billion in ad revenue for 2026 while YouTube earns $9 billion from the same advertisers. The gap is real but the direction matters more. Netflix launched its own ad technology in April 2025.</div><div class="d-p">The cheaper ad plan earns less per subscriber right now. But that gap is narrowing each quarter.</div><div class="d-call">When the ad earnings plus the subscription fee approaches what a full-price subscriber pays, the ad plan stops being a discount. It becomes a different version of the same thing.</div>`},
+"nf-bear":{t:"The India problem has a number",e:"From what could sink it",h:`<div class="d-sub">Nine Indian subscribers equal one US subscriber</div><div class="d-p">To replace one US subscriber's monthly payment, Netflix needs nine Indian subscribers who all stay subscribed. JioHotstar is not just cheaper. It has the IPL.</div><div class="d-st"><div class="d-s"><div class="d-s-n">652M</div><div class="d-s-l">IPL viewers 2025</div></div><div class="d-s"><div class="d-s-n">300M</div><div class="d-s-l">JioHotstar subs</div></div><div class="d-s"><div class="d-s-n">$1.80</div><div class="d-s-l">Netflix India plan</div></div></div><div class="d-call">Cricket is to India what the NFL is to the US, except India's population is four times larger. JioHotstar launched in February 2025 and is already approaching Netflix's global subscriber total.</div>`},
+"nf-own":{t:"Ted Sarandos is the real story",e:"From who owns it",h:`<div class="d-sub">The person who actually moves the stock</div><div class="d-p">Ted Sarandos decides which $200 million goes to which show. He greenlit Stranger Things, Squid Game, the WWE deal, and the World Baseball Classic. If he leaves, that is the news.</div><div class="d-p">Two people run Netflix now. Sarandos controls content. Greg Peters controls technology and the ad business. No one person owns enough to change direction overnight.</div><div class="d-call">That makes Netflix slower to pivot. But it also means no single decision can sink it.</div>`},
+"nf-debate":{t:"The ad gap is narrowing",e:"From the debate",h:`<div class="d-sub">The number to watch each quarter</div><div class="d-p">How close is the ad plan to earning what a full-price subscription earns. Right now there is a gap. Netflix earns both a subscription fee (around $8.99 in the US) and ad revenue from cheaper-plan subscribers. As the ad technology matures, the ad component grows.</div><div class="d-p">At some point, the two combined approach what a full-price subscriber pays. When that happens the ad plan stops being a discount. It becomes a different version of the same thing.</div><div class="d-call">Netflix CEO Greg Peters said in April 2026: that gap is narrowing. That is the whole bull thesis in one sentence.</div>`},
+conv:{t:"The conviction score",e:"From your call",h:`<div class="d-sub">Why votes matter</div><div class="d-p">68% of Daily Dividend readers are bullish on Netflix. That is more than Disney (52%) and HDFC Bank (54%). It reflects belief that the ad business works and the West growth story continues.</div><div class="d-call">The minority view (10% bearish) centers on Asia and the YouTube threat. If JioHotstar dominates Asia and YouTube takes TV time in the West, Netflix's ceiling is lower than the bull case suggests.</div>`},
+next:{t:"Why Disney is the opposite bet",e:"From what's next",h:`<div class="d-sub">Same industry, opposite playbook</div><div class="d-p">Netflix is 100% digital. Disney is 60% physical: parks, cruises, toys, hotels.</div><div class="d-call">A Disney film flops? They still earn on Star Wars hotel rooms. Netflix has no parachute when a show misses. Two companies in the same industry with completely different risk profiles.</div>`}
+},
+tldr:["Netflix spent <strong>$47M a day</strong> making shows last year. Made <strong>$11 billion profit</strong> anyway.","<strong>325 million people</strong> pay every month. Whether they watch or not. That is the whole business.","Netflix earns <strong>$17.11</strong> from each US subscriber per month. Disney earns $7.74. Same industry, completely different economics.","When Netflix cancels your show after Season 2, it is not a failure. <strong>Three new shows cost less</strong> than one more expensive season where the cast now have agents.","The next big bet: ads. <strong>$1.5B last year</strong>, $3B target this year. Racing to close the gap with YouTube's $9B.","Biggest threat: Asia. <strong>JioHotstar hit 300M subscribers</strong> in under a year. One cricket tournament drew 652 million viewers."]
+});
+
 const CS=[
 {id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
@@ -1330,20 +1523,73 @@ async function openStack(slug,source='today'){
 }
 function renderCards(){
  const c=CO[curCo];const tr=document.getElementById('track');tr.innerHTML='';
- const keys=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
  c.cards.forEach((card,i)=>{
  const el=document.createElement('div');
  el.className='card bg-'+(card.bg||(card.type==='cover'?'cover':'cream'));
- el.dataset.deep=keys[i];
+ el.dataset.deep=deepKeyForCard(card,i);
  el.innerHTML=renderCard(card,i);
  tr.appendChild(el);
  });
+}
+
+function deepKeyForCard(card,idx){
+ const legacy=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
+ if(card&&card.type&&card.type.startsWith('nf-'))return card.type;
+ if(card&&card.type==='cover')return 'cover';
+ if(card&&['conv','next'].includes(card.type))return card.type;
+ return legacy[idx]||card.type;
+}
+
+function renderNetflixCard(card,idx){
+ switch(card.type){
+ case 'nf-money':return `
+<div class="eb-c">02 - The money</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-stat-boxes">${card.stats.map(s=>`<div class="nf-stat-box"><div class="nf-stat-val">${s.v}</div><div class="nf-stat-lbl">${s.l}</div></div>`).join('')}</div>
+<div class="nf-arpu-row"><div class="nf-arpu-big" data-countup="17" data-prefix="$">$0</div><div class="nf-arpu-meta"><div class="nf-arpu-chip">avg per user / mo</div><div class="nf-arpu-sub">Blended across 190 countries</div></div></div>
+<div class="nf-tiles">${card.tiles.map(t=>`<div class="nf-tile"><div class="nf-tile-head"><div class="nf-tile-left"><span class="nf-tile-emoji">${t.emoji}</span><span class="nf-tile-n">${t.n}</span></div><div class="nf-tile-right"><span class="nf-tile-pct">${t.pct}</span><span class="nf-tile-amt">${t.amt}</span></div></div><div class="nf-tile-desc">${t.desc}</div></div>`).join('')}</div>
+<div class="nf-note-chip">${card.note}</div>`;
+ case 'nf-model':return `
+<div class="eb-c">03 - The model</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-model-pills">${card.steps.map(s=>`<div class="nf-model-pill">${s.pill}</div>`).join('')}</div>
+<div class="nf-flow">${card.steps.map((s,i)=>`${i>0?'<div class="nf-flow-arrow">↓</div>':''}<div class="nf-flow-step"><div class="nf-flow-step-n">${s.n}</div><div class="nf-flow-step-t">${s.t}</div><div class="nf-flow-step-s">${s.s}</div></div>`).join('')}</div>`;
+ case 'nf-rivals':return `
+<div class="eb-c">04 - The streaming race</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-bar-rows">${card.rows.map(r=>`<div class="nf-rival-card${r.h?' hero':''}"><div class="nf-bar-row-head"><span class="nf-bar-n">${r.n}</span><span class="nf-bar-val">${r.val}</span></div><div class="nf-bar-tag">${r.tag}</div><div class="nf-bar-track"><div class="nf-bar-fill" data-w="${r.pct}" style="background:${r.h?'var(--accent)':'rgba(0,0,0,0.35)'}"></div></div></div>`).join('')}</div>
+<div class="nf-kicker">${card.kicker}</div>`;
+ case 'nf-hidden':return `
+<div class="eb-c">05 - The hidden truth</div>
+<div class="nf-mt-box"><div class="nf-myth">${card.myth}</div><div class="nf-truth">${card.truth}</div></div>
+<div class="bd">${card.bd}</div>
+<div class="nf-season-row">${card.chips.map(c=>`<div class="nf-season-chip ${c.cls}"><div class="nf-season-lbl">${c.label}</div><div class="nf-season-desc">${c.desc}</div></div>`).join('')}</div>`;
+ case 'nf-bull':
+ case 'nf-bear':return `
+<div class="eb-c">${card.eb}</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-acc-list">${card.panels.map(p=>`<div class="nf-acc-item"><button class="nf-acc-btn" onclick="togglePanel(event,this)"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${p.title}</div><div class="nf-acc-chevron">▾</div></button><div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div></div>`).join('')}</div>`;
+ case 'nf-own':return `
+<div class="eb-c">08 - Who owns it</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-own-rows">${card.bars.map(b=>`<div class="nf-own-row"><div class="nf-own-l">${b.l}</div><div class="nf-own-track"><div class="nf-own-fill" data-w="${Math.max(b.p,5)}" style="background:${b.c}">${b.d}</div></div></div>`).join('')}</div>
+<div class="nf-fact-chips">${card.chips.map(c=>`<div class="nf-fact-chip">${c}</div>`).join('')}</div>
+<div class="bd" style="margin-top:12px">${card.bd}</div>`;
+ case 'nf-debate':return `
+<div class="eb-c">09 - The debate</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-dbt-q">"${card.q}"</div>
+<div class="nf-dbt-half bull"><div class="nf-dbt-lbl">🟢 Bull case</div><div class="nf-dbt-pts">${card.bull.map(p=>`<div class="nf-dbt-pt"><div class="nf-dbt-dot"></div><span>${p}</span></div>`).join('')}</div></div>
+<div class="nf-dbt-half bear"><div class="nf-dbt-lbl">🔴 Bear case</div><div class="nf-dbt-pts">${card.bear.map(p=>`<div class="nf-dbt-pt"><div class="nf-dbt-dot"></div><span>${p}</span></div>`).join('')}</div></div>`;
+ default:return '';
+ }
 }
 
 function renderCard(card,idx){
  const total=CO[curCo].cards.length;const co=CO[curCo];
  const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
  const agg=getAggregate(curCo);
+ if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
  switch(card.type){
 
  case 'cover':return `
@@ -1527,6 +1773,19 @@ async function saveCo(e){
  catch(error){showToast(error.message);}
 }
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
+function togglePanel(event,btn){
+ if(event){event.preventDefault();event.stopPropagation();}
+ const item=btn.closest('.nf-acc-item');if(!item)return;
+ const body=item.querySelector('.nf-acc-body');const isOpen=item.classList.contains('open');
+ const card=item.closest('.card');
+ if(card)card.querySelectorAll('.nf-acc-item.open').forEach(panel=>{panel.classList.remove('open');const panelBody=panel.querySelector('.nf-acc-body');if(panelBody)panelBody.style.maxHeight='0';});
+ if(!isOpen&&body){item.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+}
+function refreshOpenNetflixPanels(){
+ document.querySelectorAll('.nf-acc-item.open .nf-acc-body').forEach(body=>{body.style.maxHeight=body.scrollHeight+'px';});
+}
+window.addEventListener('resize',refreshOpenNetflixPanels,{passive:true});
+window.addEventListener('orientationchange',()=>setTimeout(refreshOpenNetflixPanels,120),{passive:true});
 function animateCard(idx){
  const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
  // bar fills (ownership card)
@@ -1538,6 +1797,13 @@ function animateCard(idx){
  c.style.transition='none';c.style.strokeDasharray=`0 251.33`;
  setTimeout(()=>{c.style.transition=`stroke-dasharray 0.75s cubic-bezier(0.2,0.8,0.2,1)`;c.style.strokeDasharray=`${len} 251.33`;},100+i*160);
  });
+ card.querySelectorAll('[data-countup]').forEach(el=>{
+ const target=parseFloat(el.dataset.countup||'0');const prefix=el.dataset.prefix||'';const suffix=el.dataset.suffix||'';const decimals=parseInt(el.dataset.decimals||'0',10);
+ const start=performance.now();const dur=900;
+ function tick(now){const t=Math.min((now-start)/dur,1);const eased=1-Math.pow(1-t,3);const value=target*eased;el.textContent=prefix+(decimals?value.toFixed(decimals):Math.floor(value))+suffix;if(t<1)requestAnimationFrame(tick);else el.textContent=prefix+(decimals?target.toFixed(decimals):target)+suffix;}
+ requestAnimationFrame(tick);
+ });
+ card.querySelectorAll('.nf-flow-step,.nf-flow-arrow').forEach((el,i)=>{el.classList.remove('visible');setTimeout(()=>el.classList.add('visible'),160+i*180);});
 }
 
 /* PIE INTERACTION */
@@ -1572,8 +1838,8 @@ function vote(el,type,idx){
  .catch(e=>{if(previousVote)profileState.previousVotes[curCo]=previousVote;else delete profileState.previousVotes[curCo];syncCallsFromProfile();showToast(e.message);});
 }
 function openDrawer(){
- const keys=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
- const k=keys[cardIdx];const d=CO[curCo].deep[k];if(!d)return;
+ const card=CO[curCo].cards[cardIdx];
+ const k=deepKeyForCard(card,cardIdx);const d=CO[curCo].deep[k];if(!d)return;
  document.getElementById('dwT').textContent=d.t;document.getElementById('dwEb').textContent=d.e;document.getElementById('dwB').innerHTML=d.h;
  document.getElementById('dwBd').classList.add('open');document.getElementById('dw').classList.add('open');
  api('/api/deep-dive',{method:'POST',body:JSON.stringify({userId,companyId:curCo})}).catch(()=>{});
@@ -1990,6 +2256,7 @@ function dtRenderCard(card,idx){
   const total=CO[curCo].cards.length;const co=CO[curCo];
   const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
   const scDisp=co.sc&&co.sc.includes('%')?co.sc+' ytd':co.sc||'';
+  if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
   switch(card.type){
   case 'cover':return `
 <div class="eb-c">01 · The cover</div>
@@ -2150,7 +2417,7 @@ function dtNextCard(){if(dtCardIdx<CO[curCo].cards.length-1)dtShowCard(dtCardIdx
 function dtPrevCard(){if(dtCardIdx>0)dtShowCard(dtCardIdx-1);}
 
 function dtUpdateRightPanel(idx){
-  const c=CO[curCo];const k=DEEP_KEYS[idx];const d=k&&c.deep?c.deep[k]:null;
+  const c=CO[curCo];const card=c.cards[idx];const k=deepKeyForCard(card,idx);const d=k&&c.deep?c.deep[k]:null;
   const rdTldr=document.getElementById('dtRdTldr');
   if(!d){
     const rf=document.getElementById('dtRdFrom');if(rf)rf.textContent='From the deep dive';
@@ -2178,6 +2445,13 @@ function dtAnimateCard(idx){
     c.style.transition='none';c.style.strokeDasharray=`0 251.33`;
     setTimeout(()=>{c.style.transition=`stroke-dasharray 0.75s cubic-bezier(0.2,0.8,0.2,1)`;c.style.strokeDasharray=`${len} 251.33`;},100+i*160);
   });
+  card.querySelectorAll('[data-countup]').forEach(el=>{
+    const target=parseFloat(el.dataset.countup||'0');const prefix=el.dataset.prefix||'';const suffix=el.dataset.suffix||'';const decimals=parseInt(el.dataset.decimals||'0',10);
+    const start=performance.now();const dur=900;
+    function tick(now){const t=Math.min((now-start)/dur,1);const eased=1-Math.pow(1-t,3);const value=target*eased;el.textContent=prefix+(decimals?value.toFixed(decimals):Math.floor(value))+suffix;if(t<1)requestAnimationFrame(tick);else el.textContent=prefix+(decimals?target.toFixed(decimals):target)+suffix;}
+    requestAnimationFrame(tick);
+  });
+  card.querySelectorAll('.nf-flow-step,.nf-flow-arrow').forEach((el,i)=>{el.classList.remove('visible');setTimeout(()=>el.classList.add('visible'),160+i*180);});
 }
 
 function dtSelSlice(k,idx){

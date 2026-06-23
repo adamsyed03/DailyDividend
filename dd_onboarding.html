@@ -39,7 +39,7 @@
     .screen.exit{opacity:0;transform:translateX(-34px)}
     .prog-bar{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.12);z-index:20}
     .prog-fill{height:100%;background:rgba(255,255,255,.72);transition:width .45s var(--ease)}
-    .back-btn{position:absolute;top:52px;left:20px;z-index:30;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#fff;font-weight:700}
+    .back-btn{position:absolute;top:52px;left:20px;z-index:30;width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#fff;font-family:var(--sans);font-size:20px;font-weight:600;line-height:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
     .back-btn.dark{background:rgba(0,0,0,.07);color:var(--ink)}
 
     #s-splash,#s-hook,#s-phone,#s-account,#s-payoff{background:linear-gradient(160deg,#0D2818 0%,#1A3D2B 52%,#081510 100%);color:var(--cream)}
@@ -73,6 +73,8 @@
     .hook-sub,.ph-sub,.acct-sub,.payoff-sub{font-size:15px;line-height:1.58;color:rgba(245,241,232,.64);margin-bottom:34px}
     .hook-sub strong{color:rgba(245,241,232,.92)}
     .btn-full,.btn-full-dark,.btn-payoff{width:100%;border:0;border-radius:16px;padding:16px;font-size:15px;font-weight:700;letter-spacing:-.01em;transition:transform .15s,opacity .15s}
+    .btn-arrow{display:inline-block;margin-left:6px;font-size:1.05em;line-height:0;transform:translateY(1px);transition:transform .16s var(--ease)}
+    .btn-full:not(:disabled):active .btn-arrow,.btn-full-dark:not(:disabled):active .btn-arrow,.btn-payoff:active .btn-arrow,.splash-cta:active .btn-arrow{transform:translate(3px,1px)}
     .btn-full:active,.btn-full-dark:active,.btn-payoff:active{transform:scale(.98)}
     .btn-primary,.btn-full-dark,.btn-payoff{background:var(--cream);color:var(--brand)}
     .btn-full:disabled,.btn-full-dark:disabled{opacity:.38;cursor:default}
@@ -279,7 +281,7 @@
         <div class="splash-mark" id="splashMark">DD</div>
         <div class="splash-name" id="splashName">Daily Dividend</div>
         <div class="splash-tag" id="splashTag">Story behind the stock</div>
-        <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started -></button>
+        <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started <span class="btn-arrow">→</span></button>
         <a class="splash-login" id="splashLogin" href="login.html">Already a member? <span>Log in</span></a>
         <div class="splash-bottom" id="splashBottom">One company. Every Monday. The full story.</div>
       </section>
@@ -294,13 +296,13 @@
           <div class="hook-tag">Why Daily Dividend</div>
           <div class="hook-h">Most people scroll past tickers they <em>don't understand.</em></div>
           <div class="hook-sub">We fix that. One company a week. The real story - <strong>where the money comes from, who owns it, and what could go wrong</strong> - in the time it takes to drink a coffee.</div>
-          <button class="btn-full btn-primary" onclick="goTo('markets')">I'm in -></button>
+          <button class="btn-full btn-primary" onclick="goTo('markets')">I'm in <span class="btn-arrow">→</span></button>
         </div>
       </section>
 
       <section class="screen" id="s-markets">
         <div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div>
-        <button class="back-btn dark" onclick="goTo('hook')"><-</button>
+        <button class="back-btn dark" onclick="goTo('hook')" aria-label="Back">←</button>
         <div class="q-wrap">
           <div class="q-tag">01 of 03</div>
           <div class="q-h">Which markets do you <em>follow?</em></div>
@@ -312,12 +314,12 @@
             <button class="market-btn" data-m="global" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🌍</span><span class="mb-info"><span class="mb-name">Global</span><span class="mb-sub">All markets</span></span><span class="mb-check">✓</span></button>
           </div>
         </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="mktNext" onclick="goTo('sectors')" disabled>Continue -></button></div>
+        <div class="q-foot"><button class="btn-full btn-primary" id="mktNext" onclick="goTo('sectors')" disabled>Continue <span class="btn-arrow">→</span></button></div>
       </section>
 
       <section class="screen" id="s-sectors">
         <div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div>
-        <button class="back-btn dark" onclick="goTo('markets')"><-</button>
+        <button class="back-btn dark" onclick="goTo('markets')" aria-label="Back">←</button>
         <div class="q-wrap">
           <div class="q-tag">02 of 03</div>
           <div class="q-h">What gets you <em>excited?</em></div>
@@ -335,12 +337,12 @@
             <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏏</span>Sports</button>
           </div>
         </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue -></button></div>
+        <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue <span class="btn-arrow">→</span></button></div>
       </section>
 
       <section class="screen" id="s-about">
         <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
-        <button class="back-btn dark" onclick="goTo('sectors')"><-</button>
+        <button class="back-btn dark" onclick="goTo('sectors')" aria-label="Back">←</button>
         <div class="q-wrap">
           <div class="q-tag">03 of 03</div>
           <div class="q-h">A little about <em>you.</em></div>
@@ -363,12 +365,12 @@
             </div>
           </div>
         </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="abtNext" onclick="goTo('phone')" disabled>Continue -></button></div>
+        <div class="q-foot"><button class="btn-full btn-primary" id="abtNext" onclick="goTo('phone')" disabled>Continue <span class="btn-arrow">→</span></button></div>
       </section>
 
       <section class="screen" id="s-phone">
         <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
-        <button class="back-btn" onclick="goTo('about')"><-</button>
+        <button class="back-btn" onclick="goTo('about')" aria-label="Back">←</button>
         <div class="phone-inner">
           <div class="ph-tag">Almost there</div>
           <div class="ph-h">Your email <em>to get in.</em></div>
@@ -381,12 +383,12 @@
           <div class="ph-privacy">We never sell your data or send spam.</div>
           <div class="flow-msg" id="flowMsg" role="status"></div>
         </div>
-        <div class="ph-foot"><button class="btn-full-dark" id="phoneNext" onclick="goToAccount()" disabled>Continue -></button></div>
+        <div class="ph-foot"><button class="btn-full-dark" id="phoneNext" onclick="goToAccount()" disabled>Continue <span class="btn-arrow">→</span></button></div>
       </section>
 
       <section class="screen" id="s-account">
         <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
-        <button class="back-btn" onclick="goTo('phone')"><-</button>
+        <button class="back-btn" onclick="goTo('phone')" aria-label="Back">←</button>
         <div class="acct-inner">
           <div class="acct-tag ph-tag">Last bit</div>
           <div class="acct-h">Create your <em>account.</em></div>
@@ -416,7 +418,7 @@
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
         </div>
-        <div class="acct-foot"><button class="btn-full-dark" id="accountNext" onclick="completeOnboarding()" disabled>Create account -></button></div>
+        <div class="acct-foot"><button class="btn-full-dark" id="accountNext" onclick="completeOnboarding()" disabled>Create account <span class="btn-arrow">→</span></button></div>
       </section>
 
       <section class="screen" id="s-payoff">
@@ -429,7 +431,7 @@
           <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix - The $46M a day question</div></div></div>
         </div>
         <div class="payoff-foot">
-          <button class="btn-payoff" onclick="goToApp()">Let's go -></button>
+          <button class="btn-payoff" onclick="goToApp()">Let's go <span class="btn-arrow">→</span></button>
           <div class="payoff-terms">New company every Monday - Free forever</div>
         </div>
       </section>
@@ -640,7 +642,7 @@
         return false;
       }finally{
         button.classList.remove('loading');
-        button.textContent = 'Create account ->';
+        button.innerHTML = 'Create account <span class="btn-arrow">→</span>';
         checkAccount();
       }
     }
