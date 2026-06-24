@@ -3,6 +3,7 @@ const fsSync = require('fs');
 const fs = require('fs/promises');
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const { createClient } = require('@supabase/supabase-js');
 
 loadEnv();
@@ -47,6 +48,7 @@ let dbCacheExpiresAt = 0;
 let dbReadPromise = null;
 const logoMemoryCache = new Map();
 
+app.use(compression());
 app.use(express.json({ limit: '8mb' }));
 
 const SERIALIZED_USER_MUTATIONS = new Set([
