@@ -363,6 +363,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcd-th .company-logo-img{padding:5%;object-fit:contain}
 .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
 .company-logo-img.logo-meta{background:#fff;padding:0;object-fit:contain;transform:scale(2.5);transform-origin:center}
+@media(max-width:899px){.company-logo-img.logo-meta{transform:none;padding:6%}}
 .rcd-fl{position:absolute;top:13px;right:13px;font-size:14px}
 .rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
 .rcd-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
@@ -1529,12 +1530,12 @@ next:{t:"The pattern across great companies",e:"From what's next",h:`<div class=
 tldr:["Parks made <strong>$10B in profit</strong> last year. More than movies, streaming, and sports combined.","Streaming went from <strong>losing $4B a year to making $1.3B.</strong> Three years. Most investors missed it.","Mickey, Stitch, Woody, Simba, Iron Man, Baby Yoda. Not characters. <strong>100-year revenue machines.</strong>","Board had 100 candidates and three years. Chose the <strong>parks man.</strong> That tells you what comes next.","First <strong>Super Bowl in Feb 2027.</strong> 13 cruise ships by 2031. SRK narrating Disney fireworks in Singapore.","<strong>$38.5B in debt.</strong> Universal next door. ESPN transition unproven. That is the real risk."]
 });
 
-Object.assign(CO,{meta:{id:"meta",domain:"meta.com",n:"Meta",t:"META",sec:"Social Media",fl:"🇺🇸",mc:"$1.43T",lb:"#0866FF",lc:"#fff",ac:"#0866FF",as:"rgba(8,102,255,0.18)",bg:"linear-gradient(180deg,#0D1B3E,#060C1A)",bl:"Half the world opens a Meta app. Every day.",
+Object.assign(CO,{meta:{id:"meta",domain:"meta.com",n:"Meta",t:"META",sec:"Social Media",fl:"",mc:"$1.43T",lb:"#0866FF",lc:"#fff",ac:"#0866FF",as:"rgba(8,102,255,0.18)",bg:"linear-gradient(180deg,#0D1B3E,#060C1A)",bl:"Half the world opens a Meta app. Every day.",
 sp:"-",sc:"",scDir:"",
 ks:[{l:"Daily users",v:"3.58B"},{l:"2025 Revenue",v:"$201B"},{l:"Op. margin",v:"41%"}],
 vb:14283,sentiment:"bull",
 ps:"The FTC spent five years trying to force Meta to break itself apart. A federal judge ruled against them. November 2025.",
-rails:["new"],nx:"netflix",
+rails:["new","daily"],nx:"netflix",
 cards:[
 {type:"cover",bg:"cover",chips:["META · NASDAQ","$201B Revenue"],hl:"3.58 billion people opened a Meta app <em>yesterday.</em>",bd:"Half the world's population. Every day. The most efficient attention machine ever built almost got broken up by the government. It won. Now it is betting $130 billion on AI.",ks:[{v:"3.58B",l:"Daily users"},{v:"$201B",l:"2025 Revenue"},{v:"41%",l:"Operating margin"}],ps:"The FTC spent five years trying to force Meta to break itself apart. A federal judge ruled against them. November 2025.",deep:"cover"},
 {type:"mt-money",bg:"cream",hl:"$201 billion a year. <em>98% from one source.</em>",stats:[{v:"$201B",l:"2025 Revenue"},{v:"$196B",l:"Advertising"},{v:"41%",l:"Op. margin"}],tiles:[{emoji:"📱",n:"Advertising",pct:"98%",amt:"$196B",desc:"Targeted ads across Facebook, Instagram, WhatsApp, Messenger. Every scroll trains the algorithm."},{emoji:"🥽",n:"Reality Labs",pct:"2%",amt:"$4.8B",desc:"Quest headsets, Ray-Ban AI glasses. Lost $19B in 2025. Still growing."},{emoji:"💬",n:"WhatsApp Business",pct:"",amt:"Emerging",desc:"Paid messaging to businesses. Approaching $2B annual run rate. Ad-free for 10 years. That is over."}],revs:[{yr:"2022",v:"$117B",pct:58,dir:"↓"},{yr:"2023",v:"$135B",pct:67,dir:"↑"},{yr:"2024",v:"$165B",pct:82,dir:"↑"},{yr:"2025",v:"$201B",pct:100,dir:"↑",current:true}],note:"$83B operating profit in 2025. That is more than the combined profit of Disney, Netflix, and Comcast.",deep:"mt-money"},
