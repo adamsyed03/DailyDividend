@@ -2246,11 +2246,13 @@ document.addEventListener('keydown',e=>{
 
 /* ===== TOUR ===== */
 const TOUR_STEPS=[
-  {sel:'.today-hero,.today-hero-wrap',tab:'today',pad:10,title:'Cards',desc:'Your weekly company story - 11 cards, about 2 minutes. Tap it to start reading.',place:'below'},
-  {sel:null,tab:'today',icon:'🔖',title:'Saves',desc:"Inside each story, tap the bookmark on any card. Everything you've saved lives on your shelf.",place:'center'},
-  {sel:'#tourLibEl',tab:'library',pad:10,title:'Library',desc:"Every company we've ever covered, organised by theme - not just today's drop.",place:'below'},
+  {sel:'.today-hero,.today-hero-wrap',tab:'today',pad:10,title:'Cards',desc:'Your weekly company story — 11 cards, about 2 minutes. Tap it to start reading.',place:'below'},
+  {sel:'#saveBtn,#dtSaveBtn',tab:'stack',pad:14,title:'Save cards',desc:"Tap the bookmark on any card to save it. Find everything you've saved on your shelf.",place:'below',
+   setup:async function(){if(!document.getElementById('screen-stack').classList.contains('active')){await openStack(curCo,'tour');await new Promise(r=>setTimeout(r,150));}}},
+  {sel:'#track .cv-opts,#dtTrack .cv-opts',tab:'stack',pad:10,title:'Your call',desc:'At the end of every story, vote bull, neutral, or bear. Your call stacks up against every other reader who finished.',place:'above',
+   setup:function(){const ci=CO[curCo].cards.findIndex(c=>c.type==='conv');if(ci>=0)showCard(ci);}},
+  {sel:'#tourLibEl',tab:'library',pad:10,title:'Library',desc:"Every company we've ever covered, organised by theme — not just today's drop.",place:'below'},
   {sel:'#tourPersonalityEl',tab:'you',pad:10,title:'Reading Personality',desc:'Read 4 days in a row to unlock a profile based on how you actually engage with companies.',place:'below'},
-  {sel:'#tourCallsEl',tab:'you',pad:8,title:'Calls',desc:'At the end of every story, vote bull, neutral, or bear. Your call stacks up against every other reader who finished the story.',place:'above'}
 ];
 let tourIdx=0;
 function getVisibleEl(sel){
@@ -2287,14 +2289,15 @@ async function showTourStep(i,animate){
     ring.style.transition='opacity .18s';card.style.transition='opacity .18s';
     ring.style.opacity='0';card.style.opacity='0';
     await new Promise(r=>setTimeout(r,210));
-    tourNavTo(step.tab);
+    if(step.tab!=='stack')tourNavTo(step.tab);
   } else if(!animate){
     ring.style.transition='none';card.style.transition='none';
-    if(step.tab){
+    if(step.tab&&step.tab!=='stack'){
       tourNavTo(step.tab);
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     }
   }
+  if(step.setup)await step.setup();
   const vw=window.innerWidth,vh=window.innerHeight,cardW=Math.min(300,vw-40);
   card.style.width=cardW+'px';
   let el=null;
