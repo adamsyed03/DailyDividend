@@ -2248,7 +2248,7 @@ document.addEventListener('keydown',e=>{
 const TOUR_STEPS=[
   {sel:'.today-hero,.today-hero-wrap',tab:'today',pad:10,title:'Cards',desc:'Your weekly company story — 11 cards, about 2 minutes. Tap it to start reading.',place:'below'},
   {sel:'#saveBtn,#dtSaveBtn',tab:'stack',pad:14,title:'Save cards',desc:"Tap the bookmark on any card to save it. Find everything you've saved on your shelf.",place:'below',
-   setup:async function(){if(!document.getElementById('screen-stack').classList.contains('active')){await openStack(curCo,'tour');await new Promise(r=>setTimeout(r,150));}}},
+   setup:function(){if(!document.getElementById('screen-stack').classList.contains('active')){const c=CO[curCo];setTheme(curCo);document.getElementById('cologo').innerHTML=companyLogo(c);document.getElementById('cologo').style.background=c.lb;document.getElementById('cologo').style.color=c.lc;document.getElementById('coname').textContent=c.n;document.getElementById('cosub').textContent=c.t+' - '+c.sec;renderCards();buildProg();showCard(0);renderTldr();goTo('stack');api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:curCo,source:'tour',readDate:localReadDateKey()})}).then(d=>{profileState=d;syncSavedFromProfile();syncCallsFromProfile();}).catch(()=>{});}}},
   {sel:'#track .cv-opts,#dtTrack .cv-opts',tab:'stack',pad:10,title:'Your call',desc:'At the end of every story, vote bull, neutral, or bear. Your call stacks up against every other reader who finished.',place:'above',
    setup:function(){const ci=CO[curCo].cards.findIndex(c=>c.type==='conv');if(ci>=0)showCard(ci);}},
   {sel:'#tourLibEl',tab:'library',pad:10,title:'Library',desc:"Every company we've ever covered, organised by theme — not just today's drop.",place:'below'},
@@ -2288,7 +2288,7 @@ async function showTourStep(i,animate){
   if(tabSwitch){
     ring.style.transition='opacity .18s';card.style.transition='opacity .18s';
     ring.style.opacity='0';card.style.opacity='0';
-    await new Promise(r=>setTimeout(r,210));
+    await new Promise(r=>setTimeout(r,step.tab==='stack'?80:210));
     if(step.tab!=='stack')tourNavTo(step.tab);
   } else if(!animate){
     ring.style.transition='none';card.style.transition='none';
