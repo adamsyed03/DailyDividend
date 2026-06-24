@@ -362,6 +362,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcd-th{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;align-self:center;font-family:var(--serif);font-weight:700;font-size:24px;color:#fff;margin-bottom:10px;box-shadow:0 4px 14px rgba(15,15,14,.08)}
 .rcd-th .company-logo-img{padding:5%;object-fit:contain}
 .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
+.company-logo-img.logo-meta{background:#fff;padding:0;object-fit:contain;transform:scale(2.5);transform-origin:center}
 .rcd-fl{position:absolute;top:13px;right:13px;font-size:14px}
 .rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
 .rcd-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
@@ -750,6 +751,58 @@ body{background:var(--ink);overflow:hidden}
 .co-vb.bull{color:#1F6B4A}.co-vb.bull:hover,.co-vb.bull.active{background:#1F6B4A;color:#fff;border-color:#1F6B4A}
 .co-vb.neutral{color:#7a5f1a}.co-vb.neutral:hover,.co-vb.neutral.active{background:#c49a3e;color:#fff;border-color:#c49a3e}
 .co-vb.bear{color:#b23a2e}.co-vb.bear:hover,.co-vb.bear.active{background:#b23a2e;color:#fff;border-color:#b23a2e}
+/* META SPECIFIC */
+.nf-own-name{font-family:var(--sans);font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.2}
+.nf-own-desc{font-family:var(--sans);font-size:10px;color:var(--muted);line-height:1.3;margin-top:1px}
+.mt-rev-row{display:flex;flex-direction:column;gap:6px;margin:10px 0 12px}
+.mt-rev-yr{display:flex;align-items:center;gap:10px}
+.mt-rev-yr-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);width:36px;flex-shrink:0}
+.mt-rev-yr-track{flex:1;height:20px;background:rgba(0,0,0,.06);border-radius:5px;overflow:hidden}
+.mt-rev-yr-val{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink);width:46px;text-align:right;flex-shrink:0}
+.mt-rev-yr-dir{font-family:var(--mono);font-size:11px;width:20px;text-align:center;flex-shrink:0}
+.mt-arpu-compare{display:flex;gap:8px;margin-top:12px}
+.mt-arpu-card{flex:1;border-radius:12px;padding:12px 10px;text-align:center;border:1px solid var(--line)}
+.mt-arpu-card.us{background:rgba(8,102,255,.06);border-color:rgba(8,102,255,.2)}
+.mt-arpu-card.global{background:#fff}
+.mt-arpu-val{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-.03em;line-height:1;color:var(--ink);margin-bottom:4px}
+.mt-arpu-card.us .mt-arpu-val{color:var(--accent)}
+.mt-arpu-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.3}
+.mt-timeline{display:flex;flex-direction:column;gap:0;margin-top:12px}
+.mt-tl-row{display:flex;gap:12px;position:relative}
+.mt-tl-row:not(:last-child)::before{content:"";position:absolute;left:15px;top:30px;bottom:-4px;width:1px;background:rgba(255,255,255,.15)}
+.mt-tl-dot{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:600;margin-top:2px}
+.mt-tl-dot.buy{background:rgba(8,102,255,.3);border:1px solid rgba(8,102,255,.5);color:var(--accent)}
+.mt-tl-dot.warn{background:rgba(196,154,62,.3);border:1px solid rgba(196,154,62,.5);color:var(--gold)}
+.mt-tl-dot.win{background:rgba(46,138,96,.3);border:1px solid rgba(46,138,96,.5);color:#7EC8A0}
+.mt-tl-content{padding:2px 0 16px}
+.mt-tl-year{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:2px}
+.mt-tl-title{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--cream);line-height:1.25}
+.mt-tl-sub{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.3}
+.mt-power-map{display:flex;gap:8px;margin-top:12px;margin-bottom:4px}
+.mt-pm-card{flex:1;background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:12px 10px}
+.mt-pm-avatar{width:34px;height:34px;border-radius:9px;background:var(--brand);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;margin-bottom:8px}
+.mt-pm-name{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink);line-height:1.2;margin-bottom:2px}
+.mt-pm-role{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.mt-pm-note{font-family:var(--sans);font-size:10.5px;color:var(--ink-2);line-height:1.35}
+.card.entered .mt-rev-row{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) .14s both}
+.card.entered .mt-timeline{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) .18s both}
+.card.entered .mt-power-map{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) .14s both}
+.card.entered .mt-arpu-compare{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) .18s both}
+@media(max-width:899px){
+  .mt-rev-yr-track{height:16px}.mt-rev-yr-val{font-size:10px;width:38px}.mt-rev-yr-lbl{font-size:8px;width:30px}
+  .mt-arpu-compare{gap:6px;margin-top:8px}.mt-arpu-card{padding:9px 8px}.mt-arpu-val{font-size:20px}.mt-arpu-lbl{font-size:7px}
+  .mt-timeline{margin-top:8px}.mt-tl-dot{width:26px;height:26px;font-size:8px}.mt-tl-title{font-size:12.5px}.mt-tl-sub{font-size:10px}.mt-tl-content{padding-bottom:12px}
+  .mt-power-map{gap:6px;margin-top:8px}.mt-pm-card{padding:10px 8px}.mt-pm-avatar{width:30px;height:30px;font-size:12px;margin-bottom:6px}.mt-pm-name{font-size:12px}.mt-pm-note{font-size:9.5px}
+  .mt-rev-row{gap:5px;margin:8px 0 10px}
+}
+@media(max-width:899px) and (max-height:700px){
+  .mt-rev-yr-track{height:14px}.mt-arpu-val{font-size:18px}.mt-tl-title{font-size:12px}.mt-pm-note{font-size:9px;line-height:1.25}
+}
+@media(max-width:899px) and (max-height:620px){
+  .mt-arpu-compare{display:none}
+  .mt-tl-sub{display:none}.mt-tl-content{padding-bottom:8px}
+  .mt-pm-note{display:none}
+}
 </style>
 <style>
 /* ── TOKENS ── */
@@ -826,8 +879,8 @@ body{background:var(--ink);overflow:hidden}
 #dtShell .sb-soon .sn-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
 /* ── MAIN AREA ── */
-#dtShell .main{flex:1;overflow-y:auto;background:var(--paper);display:flex;flex-direction:column}
-#dtShell .screen{display:none;flex-direction:column;min-height:100%}
+#dtShell .main{flex:1;min-height:0;overflow-y:auto;background:var(--paper);display:flex;flex-direction:column}
+#dtShell .screen{display:none;flex-direction:column;min-height:100%;flex-shrink:0}
 #dtShell .screen.active{display:flex}
 
 /* ════════════════════════════════════
@@ -1476,6 +1529,38 @@ next:{t:"The pattern across great companies",e:"From what's next",h:`<div class=
 tldr:["Parks made <strong>$10B in profit</strong> last year. More than movies, streaming, and sports combined.","Streaming went from <strong>losing $4B a year to making $1.3B.</strong> Three years. Most investors missed it.","Mickey, Stitch, Woody, Simba, Iron Man, Baby Yoda. Not characters. <strong>100-year revenue machines.</strong>","Board had 100 candidates and three years. Chose the <strong>parks man.</strong> That tells you what comes next.","First <strong>Super Bowl in Feb 2027.</strong> 13 cruise ships by 2031. SRK narrating Disney fireworks in Singapore.","<strong>$38.5B in debt.</strong> Universal next door. ESPN transition unproven. That is the real risk."]
 });
 
+Object.assign(CO,{meta:{id:"meta",domain:"meta.com",n:"Meta",t:"META",sec:"Social Media",fl:"🇺🇸",mc:"$1.43T",lb:"#0866FF",lc:"#fff",ac:"#0866FF",as:"rgba(8,102,255,0.18)",bg:"linear-gradient(180deg,#0D1B3E,#060C1A)",bl:"Half the world opens a Meta app. Every day.",
+sp:"-",sc:"",scDir:"",
+ks:[{l:"Daily users",v:"3.58B"},{l:"2025 Revenue",v:"$201B"},{l:"Op. margin",v:"41%"}],
+vb:14283,sentiment:"bull",
+ps:"The FTC spent five years trying to force Meta to break itself apart. A federal judge ruled against them. November 2025.",
+rails:["new"],nx:"netflix",
+cards:[
+{type:"cover",bg:"cover",chips:["META · NASDAQ","$201B Revenue"],hl:"3.58 billion people opened a Meta app <em>yesterday.</em>",bd:"Half the world's population. Every day. The most efficient attention machine ever built almost got broken up by the government. It won. Now it is betting $130 billion on AI.",ks:[{v:"3.58B",l:"Daily users"},{v:"$201B",l:"2025 Revenue"},{v:"41%",l:"Operating margin"}],ps:"The FTC spent five years trying to force Meta to break itself apart. A federal judge ruled against them. November 2025.",deep:"cover"},
+{type:"mt-money",bg:"cream",hl:"$201 billion a year. <em>98% from one source.</em>",stats:[{v:"$201B",l:"2025 Revenue"},{v:"$196B",l:"Advertising"},{v:"41%",l:"Op. margin"}],tiles:[{emoji:"📱",n:"Advertising",pct:"98%",amt:"$196B",desc:"Targeted ads across Facebook, Instagram, WhatsApp, Messenger. Every scroll trains the algorithm."},{emoji:"🥽",n:"Reality Labs",pct:"2%",amt:"$4.8B",desc:"Quest headsets, Ray-Ban AI glasses. Lost $19B in 2025. Still growing."},{emoji:"💬",n:"WhatsApp Business",pct:"",amt:"Emerging",desc:"Paid messaging to businesses. Approaching $2B annual run rate. Ad-free for 10 years. That is over."}],revs:[{yr:"2022",v:"$117B",pct:58,dir:"↓"},{yr:"2023",v:"$135B",pct:67,dir:"↑"},{yr:"2024",v:"$165B",pct:82,dir:"↑"},{yr:"2025",v:"$201B",pct:100,dir:"↑",current:true}],note:"$83B operating profit in 2025. That is more than the combined profit of Disney, Netflix, and Comcast.",deep:"mt-money"},
+{type:"mt-model",bg:"cream",hl:"Meta does not sell products. <em>It sells your attention.</em>",steps:[{n:"01",pill:"Data",t:"Users generate data",s:"3.58B people. Every scroll, every like, every second."},{n:"02",pill:"Targeting",t:"Data enables precision",s:"Advertisers reach exactly the right person at the right moment."},{n:"03",pill:"Value",t:"Precision commands premium",s:"More effective ads. Advertisers bid higher. Prices rise."},{n:"04",pill:"AI",t:"Revenue funds better AI",s:"Better targeting. More effective ads. Higher prices."},{n:"05",pill:"Scale",t:"More users, more data",s:"The flywheel spins faster."}],arpu:{us:"$233",global:"$57"},deep:"mt-model"},
+{type:"mt-rivals",bg:"cream",hl:"Alphabet earns more. <em>Meta is harder to kill.</em>",rows:[{n:"🇺🇸 Alphabet",val:"$3.84T",pct:100,tag:"Google Search plus YouTube. More revenue than Meta. Different product: search, not social.",h:false},{n:"🔵 Meta",val:"$1.43T",pct:37,tag:"Facebook, Instagram, WhatsApp. 3.58B daily users. $57 per user per year globally.",h:true},{n:"🎵 ByteDance",val:"$550B",pct:14,tag:"TikTok's parent. Private. Forced Meta to rebuild Instagram around Reels.",h:false},{n:"📌 Pinterest",val:"$11B",pct:0.3,tag:"High purchase intent. Cannot match Meta's scale or data depth.",h:false},{n:"👻 Snap",val:"$7B",pct:0.18,tag:"$4 per user per year vs Meta's $57. Same users. Completely different business.",h:false}],kicker:"Snap's full-year revenue is less than what Meta earns in 11 days.",deep:"mt-rivals"},
+{type:"mt-hidden",bg:"dkblue",myth:"Meta paid $1 billion for a photo app nobody had heard of.",truth:"Meta bought what is now worth more than $500 billion.",bd:"Instagram had 13 employees and 30 million users in 2012. The FTC called it a threat to competition and spent five years trying to unwind the deal.",timeline:[{dot:"buy",yr:"2012",title:"Instagram acquired: $1B",sub:"13 employees. 30 million users. Called reckless."},{dot:"buy",yr:"2014",title:"WhatsApp acquired: $19B",sub:"55 employees. Zero revenue. Also called reckless."},{dot:"warn",yr:"2019",title:"FTC investigates",sub:"Alleges 'buy or bury' strategy to kill rivals."},{dot:"win",yr:"Nov 2025",title:"Meta wins in court",sub:"Judge rules FTC failed to prove its case."}],deep:"mt-hidden"},
+{type:"mt-bull",bg:"green",eb:"06 · How it could double",hl:"Three reasons the next chapter could be <em>extraordinary.</em>",panels:[{icon:"↑",title:"AI is already lifting both levers",body:"Q1 2026: ad prices rose <strong>12%</strong> and ad impression volumes rose <strong>19%</strong>, simultaneously. Both rising at once is rare. AI-driven targeting is compounding into the flywheel."},{icon:"↑",title:"Meta AI reached 1 billion users in 18 months",body:"No AI product has scaled faster. Meta did not ask anyone to download anything. It installed Meta AI into apps <strong>4 billion people already open every day</strong>. OpenAI has to earn every user. Meta already has them."},{icon:"↑",title:"Ray-Ban AI glasses tripled",body:"<strong>7 million pairs sold in 2025</strong>, up from 2 million in 2023 and 2024 combined. The next computing platform after the smartphone may already be in production. At $350 per pair, this is a real business."}],deep:"mt-bull"},
+{type:"mt-bear",bg:"red",eb:"07 · What could sink it",hl:"Three risks that could make this <em>the new metaverse.</em>",panels:[{icon:"↓",title:"$130 billion with no proven return",body:"Meta will spend <strong>$125 to $145 billion</strong> on AI infrastructure in 2026. That is more than Apple, Microsoft, or Netflix has ever spent on anything in a single year. Reality Labs burned $80 billion before Meta changed course. There is a precedent here."},{icon:"↓",title:"The regulatory calendar is full",body:"EU found Meta in breach of digital rules on children in April 2026. Fines could reach <strong>$12 billion</strong>. Youth safety lawsuits active in the US."},{icon:"↓",title:"Platform dependency that cannot be fixed",body:"Roughly 65% of Meta's ad impressions come from mobile devices running iOS or Android. Apple made one privacy change in 2021 and cost Meta <strong>$10 billion in revenue</strong> in a single year."}],deep:"mt-bear"},
+{type:"mt-own",bg:"gold",hl:"He owns 13%. <em>He controls everything.</em>",bars:[{l:"Mark Zuckerberg",d:"Founder and CEO",p:61,d2:"61% votes",c:"#0866FF"},{l:"Index funds",d:"Vanguard, BlackRock, State Street",p:28,d2:"28%",c:"#C49A3E"},{l:"Public shareholders",d:"Everyone else",p:11,d2:"11%",c:"rgba(0,0,0,0.35)"}],power:[{init:"MZ",name:"Mark Zuckerberg",role:"Founder, CEO, Chairman",note:"Class B shares carry 10 votes each. He owns 99.7% of them. His majority vote cannot be changed without his agreement."},{init:"AW",name:"Alexandr Wang",role:"Chief AI Officer",note:"Founded Scale AI at 19. Meta invested $14.3B to hire him. Now runs the AI bet."}],chips:["Vanguard and BlackRock vote against Zuckerberg at every meeting","They lose every time","The board cannot remove him"],deep:"mt-own"},
+{type:"mt-debate",bg:"cream",hl:"The one question that decides <em>the next five years.</em>",q:"Is the $130 billion AI bet the flywheel compounding, or the metaverse repeating?",bull:["Q1 2026: revenue up 33% year over year. AI is already inside the machine, not a side project.","4 billion daily users give Meta a distribution advantage no AI company can replicate. No download required.","Ad prices and volumes rising simultaneously is the financial proof that AI targeting is working."],bear:["$130 billion capex with AI monetization at scale still unproven. The spending comes before the return.","One person controls everything. No institutional mechanism can stop the bet if the conviction is wrong.","iOS and Android control the surface where 65% of Meta's ads are seen. One policy change already cost $10 billion."],deep:"mt-debate"},
+{type:"conv",bg:"brand",hl:"Now you decide. <em>Meta in 5 years?</em>",opts:[{k:"bull",p:61},{k:"neutral",p:24},{k:"bear",p:15}]},
+{type:"next",bg:"brand",hl:"That was Meta.",bd:"Next: a company that built an empire in plain sight. Everyone uses it. Almost nobody understands how it makes money.",nx:"netflix"}
+],
+deep:{
+cover:{t:"The attention machine",e:"From the cover",h:`<div class="d-sub">Why this matters</div><div class="d-p">3.58 billion human beings opened a Meta app in a single day in December 2025. More people than have ever lived in any country except China and India.</div><div class="d-p">Facebook launched in February 2004 from a Harvard dorm room. By 2025, it generated more revenue than the GDP of New Zealand. The more interesting question is not how Meta got here. It is how a company that lost $80 billion on a virtual world, survived a government attempt to break it up, and still accelerated revenue growth to 22% a year.</div><div class="d-call">It is not luck. It is architecture.</div>`},
+"mt-money":{t:"The operating leverage",e:"From the money",h:`<div class="d-sub">Revenue and profit are different things</div><div class="d-p">Meta's operating margin is 41%. For every dollar that comes in, Meta keeps 41 cents as operating profit before taxes. Apple runs at roughly 30%. Netflix is around 26%.</div><div class="d-p">The core ad business needs almost no marginal cost per additional user. More users, better data, better targeting, higher prices per ad.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$83B</div><div class="d-s-l">Op. income 2025</div></div><div class="d-s"><div class="d-s-n">41%</div><div class="d-s-l">Op. margin</div></div><div class="d-s"><div class="d-s-n">22%</div><div class="d-s-l">Revenue growth</div></div></div><div class="d-call">The operating leverage is structural, not lucky.</div>`},
+"mt-model":{t:"The 2022 near-death experience",e:"From the business model",h:`<div class="d-sub">The best proof the flywheel works in reverse too</div><div class="d-p">In 2021, Apple released iOS privacy changes that prevented apps from tracking users across the internet. Meta could no longer see what its users were doing outside its ecosystem, which weakened targeting data. Revenue fell for the first time in the company's history.</div><div class="d-p">Meta invested heavily in AI to compensate, building systems that could infer user preferences from on-platform behavior alone. By 2024, revenue was back to $165 billion. By 2025, $201 billion.</div><div class="d-call">The machine adapted. The moat deepened. That recovery was engineered.</div>`},
+"mt-rivals":{t:"The ByteDance problem",e:"From the landscape",h:`<div class="d-sub">The competitor that actually moved the needle</div><div class="d-p">TikTok disrupted Meta more than any competitor since Google. Meta's response was to copy TikTok features with Reels, acquire nothing, and double down on AI-driven content algorithms. It worked. Reels now drives a meaningful portion of Instagram's engagement and ad revenue.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$57</div><div class="d-s-l">Meta / user / yr</div></div><div class="d-s"><div class="d-s-n">$4</div><div class="d-s-l">Snap / user / yr</div></div><div class="d-s"><div class="d-s-n">19%</div><div class="d-s-l">Impression growth</div></div></div><div class="d-call">Same users. Radically different businesses. That gap is Meta's moat.</div>`},
+"mt-hidden":{t:"The best deal in business history",e:"From the hidden truth",h:`<div class="d-sub">The FTC case rested on a specific argument</div><div class="d-p">The FTC defined the social media market narrowly: only Facebook, Instagram, Snapchat, and a minor player called MeWe. Meta's defense was simpler. The world had changed. TikTok and YouTube now directly competed for the same users and advertising budgets. Judge James Boasberg agreed.</div><div class="d-p">Instead of a breakup, Meta enters 2026 with both apps intact, a cleared legal horizon, and $81 billion in cash.</div><div class="d-call">"Whether or not Meta enjoyed monopoly power in the past, the agency must show that it continues to hold such power now." Judge James Boasberg, November 18, 2025.</div>`},
+"mt-bull":{t:"The distribution advantage",e:"From the bull case",h:`<div class="d-sub">Why this AI bet is structurally different</div><div class="d-p">OpenAI must convince someone to download ChatGPT. Google must convince someone to open Gemini. Meta does not ask. Meta AI is already inside the apps 4 billion people open every day. WhatsApp alone accounts for 63% of Meta AI usage.</div><div class="d-p">Meta AI crossed 1 billion monthly active users in approximately 18 months after launch. ChatGPT took nearly two years to reach comparable numbers. The difference is not the model. It is distribution.</div><div class="d-call">If Meta converts that scale into enhanced advertising pricing, the upside is enormous.</div>`},
+"mt-bear":{t:"The Reality Labs precedent",e:"From the bear case",h:`<div class="d-sub">The $80 billion lesson and whether it was learned</div><div class="d-p">Reality Labs cost $19 billion in 2025 alone. Cumulative losses exceed $80 billion since 2020. The board cannot remove Zuckerberg. The shareholders cannot outvote him. If the AI bet fails, there is no institutional mechanism to stop it.</div><div class="d-p">The difference this time is that AI is directly connected to Meta's core revenue engine, not a separate moonshot. AI-driven targeting is already showing up in financial results. Whether it is enough is genuinely unclear.</div><div class="d-call">The question is whether Meta's AI bet looks more like Amazon's AWS buildout or more like the metaverse.</div>`},
+"mt-own":{t:"The dual-class structure",e:"From who owns it",h:`<div class="d-sub">How one person controls a $1.4 trillion company</div><div class="d-p">Before the 2012 IPO, Zuckerberg structured Meta with two classes of shares. Class A shares carry one vote each. Class B shares, held almost entirely by Zuckerberg, carry ten votes each. You can buy a share of Meta. You cannot buy a voice in how it is run.</div><div class="d-st"><div class="d-s"><div class="d-s-n">13%</div><div class="d-s-l">Economic stake</div></div><div class="d-s"><div class="d-s-n">61%</div><div class="d-s-l">Voting control</div></div><div class="d-s"><div class="d-s-n">10x</div><div class="d-s-l">Class B votes</div></div></div><div class="d-call">Shareholder proposals to change this structure are consistently defeated. Because Zuckerberg's votes defeat them.</div>`},
+"mt-debate":{t:"Daily Dividend's read",e:"From the debate",h:`<div class="d-sub">How we think about the $130 billion question</div><div class="d-p">Reality Labs was a separate moonshot with no connection to Meta's core revenue engine. AI is being embedded directly into ads, targeting, and user products. The financial results already show it working. Revenue acceleration in Q1 2026 to 33% year over year is not a coincidence.</div><div class="d-p">The risk is real. The capex is unprecedented. But this bet is connected to the machine in a way that the metaverse never was.</div><div class="d-call">$130 billion equals roughly 17 times the entire market value of Snap. That is not a feature investment. That is a civilizational bet.</div>`}
+},
+tldr:["Meta's apps reach <strong>3.58 billion people daily</strong>. Nearly half the world's population, every single day.","<strong>$201 billion</strong> in 2025 revenue. 98% from advertising. One business model. No backup plans.","The moat is data: more users create more targeting intelligence, making ads more valuable to every advertiser.","In November 2025, the US government tried to force a Meta breakup. A federal judge ruled against them.","AI is already accelerating ad revenue. Q1 2026: prices up 12% and volumes up 19% simultaneously.","The bear case: <strong>$130 billion</strong> in AI capex in 2026, with monetization at scale still unproven."]}});
+
 const CS=[
 {id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
@@ -1497,10 +1582,10 @@ let profileState={streak:0,savedCompanies:[],previousVotes:{},readHistory:[]};
 let saved={};
 let calls=[];
 const voteAggregates={};
-const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100}};
+const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100}};
 let dbCos=[];
 let currentDbCo=null;
-const CO_TICKER_MAP={netflix:'NFLX',disney:'DIS'};
+const CO_TICKER_MAP={netflix:'NFLX',disney:'DIS',meta:'META'};
 function localReadDateKey(date=new Date()){
  const year=date.getFullYear();
  const month=String(date.getMonth()+1).padStart(2,'0');
@@ -1676,6 +1761,7 @@ function deepKeyForCard(card,idx){
  const legacy=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
  if(card&&card.type&&card.type.startsWith('nf-'))return card.type;
  if(card&&card.type&&card.type.startsWith('dis-'))return card.type;
+ if(card&&card.type&&card.type.startsWith('mt-'))return card.type;
  if(card&&card.type==='cover')return 'cover';
  if(card&&['conv','next'].includes(card.type))return card.type;
  return legacy[idx]||card.type;
@@ -1776,12 +1862,59 @@ function renderDisneyCard(card,idx){
  }
 }
 
+function renderMetaCard(card,idx){
+ switch(card.type){
+ case 'mt-money':return `
+<div class="eb-c">02 · The money</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-stat-boxes">${card.stats.map(s=>`<div class="nf-stat-box"><div class="nf-stat-val">${s.v}</div><div class="nf-stat-lbl">${s.l}</div></div>`).join('')}</div>
+<div class="mt-rev-row">${card.revs.map(r=>`<div class="mt-rev-yr${r.current?' current':''}"><div class="mt-rev-yr-lbl">${r.yr}</div><div class="mt-rev-yr-track"><div class="nf-bar-fill" data-w="${r.pct}" style="background:var(--accent)"></div></div><div class="mt-rev-yr-val">${r.v}</div><div class="mt-rev-yr-dir" style="color:${r.dir==='↑'?'var(--green)':'var(--red)'}">${r.dir}</div></div>`).join('')}</div>
+<div class="nf-tiles">${card.tiles.map(t=>`<div class="nf-tile"><div class="nf-tile-head"><div class="nf-tile-left"><span class="nf-tile-emoji">${t.emoji}</span><span class="nf-tile-n">${t.n}</span></div><div class="nf-tile-right">${t.pct?`<span class="nf-tile-pct">${t.pct}</span>`:''}<span class="nf-tile-amt">${t.amt}</span></div></div><div class="nf-tile-desc">${t.desc}</div></div>`).join('')}</div>
+<div class="nf-note-chip">${card.note}</div>`;
+ case 'mt-model':return `
+<div class="eb-c">03 · The model</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-model-pills">${card.steps.map(s=>`<div class="nf-model-pill">${s.pill}</div>`).join('')}</div>
+<div class="nf-flow">${card.steps.map((s,i)=>`${i>0?'<div class="nf-flow-arrow">↓</div>':''}<div class="nf-flow-step"><div class="nf-flow-step-n">${s.n}</div><div class="nf-flow-step-t">${s.t}</div><div class="nf-flow-step-s">${s.s}</div></div>`).join('')}</div>
+<div class="mt-arpu-compare"><div class="mt-arpu-card us"><div class="mt-arpu-val">${card.arpu.us}</div><div class="mt-arpu-lbl">US/Canada user / yr</div></div><div class="mt-arpu-card global"><div class="mt-arpu-val">${card.arpu.global}</div><div class="mt-arpu-lbl">Global avg / yr</div></div></div>`;
+ case 'mt-rivals':return `
+<div class="eb-c">04 · The landscape</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-bar-rows">${card.rows.map(r=>`<div class="nf-rival-card${r.h?' hero':''}"><div class="nf-bar-row-head"><span class="nf-bar-n">${r.n}</span><span class="nf-bar-val">${r.val}</span></div><div class="nf-bar-tag">${r.tag}</div><div class="nf-bar-track"><div class="nf-bar-fill" data-w="${r.pct}" style="background:${r.h?'var(--accent)':'rgba(0,0,0,0.3)'}"></div></div></div>`).join('')}</div>
+<div class="nf-kicker">${card.kicker}</div>`;
+ case 'mt-hidden':return `
+<div class="eb-c">05 · The hidden truth</div>
+<div class="nf-mt-box"><div class="nf-myth">${card.myth}</div><div class="nf-truth">${card.truth}</div></div>
+<div class="bd" style="margin-bottom:12px">${card.bd}</div>
+<div class="mt-timeline">${card.timeline.map(t=>`<div class="mt-tl-row"><div class="mt-tl-dot ${t.dot}">✓</div><div class="mt-tl-content"><div class="mt-tl-year">${t.yr}</div><div class="mt-tl-title">${t.title}</div><div class="mt-tl-sub">${t.sub}</div></div></div>`).join('')}</div>`;
+ case 'mt-bull':
+ case 'mt-bear':return `
+<div class="eb-c">${card.eb}</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-acc-list">${card.panels.map(p=>`<div class="nf-acc-item"><button class="nf-acc-btn" onclick="togglePanel(event,this)"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${p.title}</div><div class="nf-acc-chevron">▾</div></button><div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div></div>`).join('')}</div>`;
+ case 'mt-own':return `
+<div class="eb-c">08 · Who owns it</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-own-rows">${card.bars.map(b=>`<div class="nf-own-row"><div class="nf-own-l"><div class="nf-own-name">${b.l}</div><div class="nf-own-desc">${b.d}</div></div><div class="nf-own-track"><div class="nf-own-fill" data-w="${Math.max(b.p,8)}" style="background:${b.c}">${b.d2}</div></div></div>`).join('')}</div>
+<div class="mt-power-map">${card.power.map(p=>`<div class="mt-pm-card"><div class="mt-pm-avatar">${p.init}</div><div class="mt-pm-name">${p.name}</div><div class="mt-pm-role">${p.role}</div><div class="mt-pm-note">${p.note}</div></div>`).join('')}</div>
+<div class="nf-fact-chips">${card.chips.map(c=>`<div class="nf-fact-chip">${c}</div>`).join('')}</div>`;
+ case 'mt-debate':return `
+<div class="eb-c">09 · The debate</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-dbt-q">"${card.q}"</div>
+<div class="nf-dbt-half bull"><div class="nf-dbt-lbl">🟢 Bull case</div><div class="nf-dbt-pts">${card.bull.map(p=>`<div class="nf-dbt-pt"><div class="nf-dbt-dot"></div><span>${p}</span></div>`).join('')}</div></div>
+<div class="nf-dbt-half bear"><div class="nf-dbt-lbl">🔴 Bear case</div><div class="nf-dbt-pts">${card.bear.map(p=>`<div class="nf-dbt-pt"><div class="nf-dbt-dot"></div><span>${p}</span></div>`).join('')}</div></div>`;
+ default:return '';
+ }
+}
+
 function renderCard(card,idx){
  const total=CO[curCo].cards.length;const co=CO[curCo];
  const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
  const agg=getAggregate(curCo);
  if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
  if(card.type&&card.type.startsWith('dis-'))return renderDisneyCard(card,idx);
+ if(card.type&&card.type.startsWith('mt-'))return renderMetaCard(card,idx);
  switch(card.type){
 
  case 'cover':return `
@@ -2474,6 +2607,7 @@ function dtRenderCard(card,idx){
   const scDisp=co.sc&&co.sc.includes('%')?co.sc+' ytd':co.sc||'';
   if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
   if(card.type&&card.type.startsWith('dis-'))return renderDisneyCard(card,idx);
+  if(card.type&&card.type.startsWith('mt-'))return renderMetaCard(card,idx);
   switch(card.type){
   case 'cover':return `
 <div class="eb-c">01 · The cover</div>

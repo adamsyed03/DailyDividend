@@ -19,16 +19,18 @@ const SUPABASE_LOGO_BUCKET = process.env.SUPABASE_LOGO_BUCKET || 'company-logos'
 const PRICE_COMPANIES = Object.freeze({
   NFLX: { ticker: 'NFLX', name: 'Netflix', currency: 'USD', yearStartPrice: 90.99 },
   DIS:  { ticker: 'DIS',  name: 'Disney',  currency: 'USD', yearStartPrice: 111.85 },
+  META: { ticker: 'META', name: 'Meta',    currency: 'USD', yearStartPrice: 585.27 },
   SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', yearStartPrice: null }
   // RELIANCE:NSE and HDFCBANK:NSE require Twelve Data Grow plan ($79/mo)
 });
-const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc']);
+const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc', 'meta']);
 const LOCAL_LOGO_FILES = Object.freeze({
   netflix: path.join(__dirname, 'Site Pics', 'netflix logo.png'),
   visa: path.join(__dirname, 'Site Pics', 'visalogo.png')
 });
 const COMPANY_LOGO_DOMAINS = Object.freeze({
   netflix: 'netflix.com', disney: 'thewaltdisneycompany.com', reliance: 'ril.com', hdfc: 'hdfcbank.com',
+  meta: 'meta.com',
   spotify: 'spotify.com', visa: 'visa.com', zomato: 'zomato.com',
   ferrari: 'ferrari.com', hermes: 'hermes.com', google: 'google.com', amazon: 'amazon.com',
   costco: 'costco.com', tcs: 'tcs.com', 'asian-paints': 'asianpaints.com'

@@ -1006,6 +1006,16 @@
 
     // -- File drop ------------------------------------------------------
 
+    function parseDDProtoCo(html) {
+      // DD prototype format: const CO={n:"...",t:"...",...}
+      const m = html.match(/const\s+CO\s*=\s*(\{[^;]{10,600}?\})\s*;/);
+      if (!m) return null;
+      try {
+        const co = new Function('return ' + m[1])();
+        return (co && co.n && co.t) ? co : null;
+      } catch(e) { return null; }
+    }
+
     async function acceptHtmlFile(file) {
       if (!file) return;
       if (!file.name.toLowerCase().endsWith('.html') && file.type !== 'text/html') {
@@ -1015,6 +1025,16 @@
       const html = await file.text();
       pendingHtmlFile = { fileName: file.name, html, size: file.size };
       $('fileName').textContent = `${file.name} (${file.size.toLocaleString()} bytes)`;
+
+      const co = parseDDProtoCo(html);
+      if (co) {
+        if (!$('companyId').value.trim()) $('companyId').value = (co.t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || file.name.replace(/\.html?$/i,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        if (!$('companyName').value.trim()) $('companyName').value = co.n || '';
+        if (!$('companyHook').value.trim()) $('companyHook').value = co.bl || '';
+        if (!$('companyTicker').value.trim() && $('companyTicker')) $('companyTicker').value = (co.t||'').toUpperCase();
+        $('fileName').textContent = `${file.name} (${file.size.toLocaleString()} bytes) · DD prototype detected ✓`;
+        return;
+      }
       if (!$('companyId').value.trim()) {
         $('companyId').value = file.name.replace(/\.html?$/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       }
