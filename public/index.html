@@ -424,6 +424,11 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .cc-b.bear{background:var(--red-2)}
 .cc-m{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
 .cc-m .ym{color:var(--ink);font-weight:600}
+.cc-pnl{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:10px}
+.cc-ep{color:var(--muted)}
+.cc-pct.up{color:var(--green);font-weight:600}
+.cc-pct.down{color:var(--red);font-weight:600}
+.cc-pct.flat{color:var(--muted)}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sm{aspect-ratio:0.85;border-radius:14px;padding:13px 14px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s}
 .sm:hover{transform:translateY(-2px)}
@@ -1571,7 +1576,8 @@ function localizeAudienceCopy(value,seen=new WeakSet()){
  });
 }
 function syncSavedFromProfile(){saved={};(profileState.savedCompanies||[]).forEach(key=>{const item=parseSaveKey(key);if(!saved[item.co])saved[item.co]=new Set();if(Number.isFinite(item.idx))saved[item.co].add(item.idx);});}
-function syncCallsFromProfile(){calls=Object.entries(profileState.previousVotes||{}).map(([co,vote])=>{const a=getAggregate(co);return {co,vote,b:a.bull||0,n:a.neutral||0,bb:a.bear||0,when:"Saved"};}).filter(c=>CO[c.co]);}
+function syncCallsFromProfile(){const vd=profileState.voteData||{};calls=Object.entries(profileState.previousVotes||{}).map(([co,vote])=>{const a=getAggregate(co);const d=vd[co]||{};const when=d.date?new Date(d.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'Saved';return {co,vote,b:a.bull||0,n:a.neutral||0,bb:a.bear||0,when,entryPrice:d.price||null};}).filter(c=>CO[c.co]);}
+function callPnl(c){const co=CO[c.co];if(!c.entryPrice||!co||!co.sp||co.sp==='-')return'';const entry=parseFloat(c.entryPrice.replace(/[^0-9.]/g,''));const cur=parseFloat(co.sp.replace(/[^0-9.]/g,''));if(!entry||!cur||isNaN(entry)||isNaN(cur))return'';const pct=(cur-entry)/entry*100;const win=(c.vote==='bull'&&pct>0)||(c.vote==='bear'&&pct<0);const lose=(c.vote==='bull'&&pct<0)||(c.vote==='bear'&&pct>0);const cls=win?'up':lose?'down':'flat';const sign=pct>=0?'+':'';return`<div class="cc-pnl"><span class="cc-ep">Entry ${c.entryPrice}</span><span class="cc-pct ${cls}">${sign}${pct.toFixed(1)}% vs today</span></div>`;}
 function isRegisteredUser(){return Boolean(profileState.firstName||profileState.lastName||profileState.phoneNumber||profileState.profession);}
 function displayUserName(){return [profileState.firstName,profileState.lastName].filter(Boolean).join(' ')||'Daily Dividend reader';}
 function authPanel(){
@@ -2018,10 +2024,11 @@ function vote(el,type,idx){
  wrap.classList.add('voted');
  wrap.querySelectorAll('.co-opt').forEach(o=>o.classList.remove('you'));
  el.classList.add('you');
- api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:curCo,vote:type})})
+ api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:curCo,vote:type,price:CO[curCo]?.sp})})
  .then(data=>{
  voteAggregates[curCo]=data.percentages;
  profileState.previousVotes=data.previousVotes||profileState.previousVotes||{};
+ if(data.voteData)profileState.voteData=data.voteData;
  syncCallsFromProfile();
  wrap.querySelectorAll('.co-opt').forEach(o=>{const k=[...o.classList].find(cls=>['bull','neutral','bear'].includes(cls));const pct=(voteAggregates[curCo]&&voteAggregates[curCo][k])||0;o.querySelector('.cp').textContent=pct+'%';o.classList.add('revealed');o.querySelector('.cf').style.width=pct+'%';});
  const msgs={bull:"You're <strong>bullish</strong>, with the crowd. We'll check back in a few weeks.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};
@@ -2155,9 +2162,10 @@ function updateCoOvVoteBtns(){
 async function castCoVote(voteType){
  if(!currentDbCo)return;
  try{
-  const data=await api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:currentDbCo,vote:voteType})});
+  const data=await api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:currentDbCo,vote:voteType,price:currentDbCo&&CO[currentDbCo]?.sp})});
   voteAggregates[currentDbCo]=data.percentages;
   profileState.previousVotes=data.previousVotes||profileState.previousVotes||{};
+  if(data.voteData)profileState.voteData=data.voteData;
   syncCallsFromProfile();updateCoOvVoteBtns();
   showToast(`Voted ${voteType}`);
  }catch(e){showToast(e.message);}
@@ -2205,7 +2213,7 @@ ${personalityCard(personalityData)}
 </div>
 <div id="tourCallsEl">
 <div class="sect-t" style="margin-bottom:14px">Your calls</div>
-${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb||1;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'📈 Bullish':c.vote==='bear'?'📉 Bearish':'😐 Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div><div class="sh-f" style="margin-top:8px;font-size:11px">You voted with ${c[c.vote==='bull'?'b':c.vote==='bear'?'bb':'n']}% of readers. ${c.when}.</div></div>`;}).join('')}
+${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb||1;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'📈 Bullish':c.vote==='bear'?'📉 Bearish':'😐 Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div><div class="sh-f" style="margin-top:8px;font-size:11px">You voted with ${c[c.vote==='bull'?'b':c.vote==='bear'?'bb':'n']}% of readers. ${c.when}.</div>${callPnl(c)}</div>`;}).join('')}
 </div>
 <div class="sect-t" style="margin:22px 0 14px">Saved cards</div>
 ${allSaved.length===0?'<div class="empty">Nothing saved yet. Tap the bookmark on any card.</div>':`<div class="sg">${allSaved.map(s=>{const co=CO[s.co];if(!co)return '';const card=co.cards[s.idx]||co.cards[0];const txt=card.hl?card.hl.replace(/<[^>]+>/g,''):card.good?card.good.replace(/<[^>]+>/g,''):'Saved card';const bg=card.bg||'cream';return `<div class="sm bg-${bg}" onclick="openStack('${s.co}')"><div class="sm-tg">${co.n} - Card ${s.idx+1}</div><div class="sm-q">"${txt.slice(0,80)}${txt.length>80?'...':''}"</div><div class="sm-f"><span>${co.t}</span><span>Open &rarr;</span></div></div>`;}).join('')}</div>`}`;
@@ -2685,9 +2693,10 @@ async function dtVote(el,type,idx){
   const msgs={bull:"You're <strong>bullish</strong>, with the crowd.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};
   const r=document.getElementById('dtCvR-'+idx);if(r){r.innerHTML=msgs[type];r.classList.add('show');}
   try{
-    const data=await api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:curCo,vote:type})});
+    const data=await api('/api/vote',{method:'POST',body:JSON.stringify({userId,companyId:curCo,vote:type,price:CO[curCo]?.sp})});
     voteAggregates[curCo]=data.percentages||voteAggregates[curCo];
     profileState.previousVotes=data.previousVotes||profileState.previousVotes;
+    if(data.voteData)profileState.voteData=data.voteData;
     syncCallsFromProfile();
     dtRevealSavedVote(idx);
   }catch(error){
@@ -2847,7 +2856,10 @@ ${personalityCard(personalityData)}
   ${Object.keys(previousVotes).map(co=>{
     const v=previousVotes[co];const c=CO[co];if(!c)return'';
     const label=v==='bull'?'📈 Bullish':v==='bear'?'📉 Bearish':'😐 Neutral';
-    return`<div class="cc-card"><div class="cc-r"><div class="cc-co-name"><div class="th" style="background:${c.lb};color:${c.lc}">${companyLogo(c)}</div>${c.n}</div><div class="cc-ch ${v}">${label}</div></div></div>`;
+    const vd=(profileState.voteData||{})[co]||{};
+    const when=vd.date?new Date(vd.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'';
+    const pnl=callPnl({co,vote:v,entryPrice:vd.price||null});
+    return`<div class="cc-card"><div class="cc-r"><div class="cc-co-name"><div class="th" style="background:${c.lb};color:${c.lc}">${companyLogo(c)}</div>${c.n}</div><div class="cc-ch ${v}">${label}</div></div>${when?`<div class="sh-f" style="font-size:10px;margin-top:4px">${when}</div>`:''}${pnl}</div>`;
   }).join('')||'<div class="empty">No votes yet.</div>'}
   </div>
 </div>
