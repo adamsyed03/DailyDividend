@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Meta">
   <rect width="192" height="192" rx="40" fill="#fff"/>
-  <path d="M44 99c13-27 25-42 40-42 14 0 24 15 35 40 8 18 15 30 26 30 10 0 17-9 17-25 0-19-9-32-22-32-15 0-28 15-42 43-10 20-20 31-33 31-17 0-31-15-31-38 0-19 8-31 20-31 12 0 21 10 32 28" fill="none" stroke="#0866ff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="96" y="154" text-anchor="middle" fill="#1c1e21" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="28">Meta</text>
+  <path d="M30 94c15-31 29-48 47-48 17 0 29 17 42 47 10 21 18 34 31 34 12 0 20-11 20-29 0-22-11-37-26-37-18 0-33 17-49 49-12 23-24 36-39 36-20 0-36-17-36-44 0-22 10-36 24-36 14 0 25 12 38 32" fill="none" stroke="#0866ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="96" y="158" text-anchor="middle" fill="#1c1e21" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="34">Meta</text>
 </svg>
