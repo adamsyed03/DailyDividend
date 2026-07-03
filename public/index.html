@@ -413,7 +413,8 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .cc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
 .cc-r{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .cc-co{font-family:var(--serif);font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
-.cc-co .th{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:11px;color:#fff}
+.cc-co .th,.cc-co-name .th{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:11px;color:#fff;position:relative;overflow:hidden;flex:0 0 24px}
+.cc-co .th .company-logo-img,.cc-co-name .th .company-logo-img{background:transparent;padding:8%;object-fit:contain;transform:none}
 .cc-ch{font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:100px;letter-spacing:0.08em;display:inline-flex;align-items:center;gap:5px}
 .cc-ch.bull{background:var(--green-soft);color:#1F6B4A}
 .cc-ch.neutral{background:var(--gold-soft);color:#7a5f1a}
@@ -1086,7 +1087,7 @@ body{background:var(--ink);overflow:hidden}
   #dtShell .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
   #dtShell .company-logo-img.logo-meta{background:#fff;padding:8%;object-fit:contain;transform:none}
   #dtShell .company-logo-img.logo-cocacola{background:transparent;padding:6%;object-fit:contain;transform:none}
-  #dtShell .cc-co-name .th{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:var(--serif);font-weight:700;font-size:13px;color:#fff}
+  #dtShell .cc-co-name .th{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 30px;font-family:var(--serif);font-weight:700;font-size:13px;color:#fff}
   #dtShell .meta-you-card{background:linear-gradient(135deg,#fff,#eef4ff);border-color:rgba(8,102,255,.18);cursor:pointer}
   #dtShell .meta-you-card .cc-ch{background:rgba(8,102,255,.12);color:#0866ff}
   #dtShell .tg-name{font-size:20px}#dtShell .tg-bl{font-size:13px;max-width:34ch}
