@@ -8,7 +8,7 @@
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p=t.createElement("script");p.type="text/javascript";p.crossOrigin="anonymous";p.async=!0;p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js";r=t.getElementsByTagName("script")[0];r.parentNode.insertBefore(p,r);var u=e;void 0!==a?u=e[a]=[]:a="posthog";u.people=u.people||[];u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e};u.people.toString=function(){return u.toString(1)+".people (stub)"};o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group trackSessionId get_session_id get_distinct_id debug".split(" ");for(n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
 posthog.init('phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ',{api_host:'https://eu.i.posthog.com',ui_host:'https://eu.posthog.com',person_profiles:'identified_only'});
 </script>
-<style id="auth-gate">html.auth-pending{background:#0f0f0e}html.auth-pending body{visibility:hidden}html.auth-pending body::before{content:"";visibility:visible;position:fixed;inset:0;z-index:2147483647;background:#0f0f0e url('/api/brand-logo') center/58px 58px no-repeat}</style>
+<style id="auth-gate">html.auth-pending{background:#0f0f0e}html.auth-pending body{visibility:hidden}html.auth-pending body::before{content:"Daily Dividend";visibility:visible;position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#0f0f0e;color:#F5F1E8;font:600 18px Georgia,serif;letter-spacing:.01em}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -365,7 +365,9 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcd-th{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;align-self:center;font-family:var(--serif);font-weight:700;font-size:24px;color:#fff;margin-bottom:10px;box-shadow:0 4px 14px rgba(15,15,14,.08)}
 .rcd-th .company-logo-img{padding:5%;object-fit:contain}
 .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
-.company-logo-img.logo-cocacola{background:transparent;padding:6%;object-fit:contain}
+.company-logo-img.logo-disney,.company-logo-img.logo-nvidia,.company-logo-img.logo-reliance,.company-logo-img.logo-hdfc,.company-logo-img.logo-meta{background:transparent;padding:0;object-fit:contain;transform:none}
+.company-logo-img.logo-cocacola{background:transparent;padding:9%;object-fit:contain;transform:none}
+@media(max-width:899px){.company-logo-img.logo-meta,.company-logo-img.logo-cocacola{transform:none;padding:10%;object-fit:contain}}
 .rcd-fl{position:absolute;top:13px;right:13px;font-size:14px}
 .rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
 .rcd-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
@@ -1089,8 +1091,12 @@ body{background:var(--ink);overflow:hidden}
   #dtShell .tl-l .company-logo-img,
   #dtShell .th .company-logo-img{background:transparent;padding:10%;object-fit:contain;transform:none}
   #dtShell .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
-  #dtShell .company-logo-img.logo-meta{background:#fff;padding:8%;object-fit:contain;transform:none}
-  #dtShell .company-logo-img.logo-cocacola{background:transparent;padding:6%;object-fit:contain;transform:none}
+  #dtShell .company-logo-img.logo-disney,
+  #dtShell .company-logo-img.logo-nvidia,
+  #dtShell .company-logo-img.logo-reliance,
+  #dtShell .company-logo-img.logo-hdfc,
+  #dtShell .company-logo-img.logo-meta{background:transparent;padding:0;object-fit:contain;transform:none}
+  #dtShell .company-logo-img.logo-cocacola{background:transparent;padding:9%;object-fit:contain;transform:none}
   #dtShell .cc-co-name .th{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 30px;font-family:var(--serif);font-weight:700;font-size:13px;color:#fff}
   #dtShell .meta-you-card{background:linear-gradient(135deg,#fff,#eef4ff);border-color:rgba(8,102,255,.18);cursor:pointer}
   #dtShell .meta-you-card .cc-ch{background:rgba(8,102,255,.12);color:#0866ff}
@@ -1505,6 +1511,62 @@ next:{t:"The pattern across great companies",e:"From what's next",h:`<div class=
 tldr:["Parks made <strong>$10B in profit</strong> last year. More than movies, streaming, and sports combined.","Streaming went from <strong>losing $4B a year to making $1.3B.</strong> Three years. Most investors missed it.","Mickey, Stitch, Woody, Simba, Iron Man, Baby Yoda. Not characters. <strong>100-year revenue machines.</strong>","Board had 100 candidates and three years. Chose the <strong>parks man.</strong> That tells you what comes next.","First <strong>Super Bowl in Feb 2027.</strong> 13 cruise ships by 2031. SRK narrating Disney fireworks in Singapore.","<strong>$38.5B in debt.</strong> Universal next door. ESPN transition unproven. That is the real risk."]
 });
 
+Object.assign(CO,{nvidia:{id:"nvidia",domain:"nvidia.com",n:"NVIDIA",t:"NVDA",sec:"Semiconductors",fl:"",mc:"$3.3T",lb:"#76B900",lc:"#0A0A08",ac:"#76B900",as:"rgba(118,185,0,0.2)",bg:"linear-gradient(180deg,#1A1A14,#0A0A08)",bl:"Selling shovels in the AI gold rush.",
+sp:"$135.00",sc:"+1.8%",scDir:"up",
+ks:[{l:"Market cap",v:"$3.3T"},{l:"Quarter profit",v:"$58B"},{l:"Next guide",v:"$91B"}],
+vb:14628,sentiment:"bull",
+ps:"Every AI race needs engines. OpenAI, Meta, Google, Amazon, hospitals, banks and governments all keep buying the same engine: NVIDIA chips.",
+rails:["new","daily","twists"],nx:"cocacola",
+cards:[
+{type:"cover",chips:["NVDA - NASDAQ","Worth $3.3T"],hl:"NVIDIA sells the shovels while <em>the whole world digs for AI gold.</em>",bd:"Every time you use ChatGPT, every time a hospital uses AI to read an X-ray, every time a bank detects fraud with AI, there is a good chance NVIDIA hardware is doing the work. In the last three months alone, NVIDIA earned <strong>$58 billion in profit.</strong>",ks:[{v:"$58B",l:"Profit this quarter"},{v:"+85%",l:"Revenue growth"},{v:"$91B",l:"Next quarter guided"}]},
+{type:"pie",bg:"cream",hl:"Two businesses. <em>One is rewriting history.</em>",bd:"Gaming kept NVIDIA alive for decades. AI data centers turned it into one of the most valuable companies on earth.",tot:"$82B",tl:"quarterly revenue",sl:[
+{k:"ai",n:" AI chips",p:91,a:"$75B",c:"#76B900",x:"The data center business. Ten times the size of gaming and still growing fast."},
+{k:"gaming",n:" Gaming chips",p:9,a:"$7B",c:"#1A2A00",x:"Healthy and profitable. Almost small now by NVIDIA standards."},
+{k:"margin",n:" Gross margin",p:75,a:"74.9%",c:"#C49A3E",x:"Most manufacturers keep 5 to 10 cents per dollar. NVIDIA keeps about 75."}]},
+{type:"doors",bg:"cream",hl:"The chip is the door. <em>The software is the lock.</em>",dr:[
+{i:"01",n:"Build a better chip",a:"01",c:"#76B900",x:"Each generation is faster, more powerful, and more expensive."},
+{i:"02",n:"Build the software",a:"02",c:"#1A2A00",x:"CUDA is the language developers use to talk to NVIDIA chips. It started in 2006."},
+{i:"03",n:"Developers build on it",a:"03",c:"#C49A3E",x:"AI tools, medical systems, research code and enterprise software are built around CUDA."},
+{i:"04",n:"Tools need NVIDIA",a:"04",c:"#2E8A60",x:"If the software only runs well on NVIDIA, companies keep buying NVIDIA."},
+{i:"05",n:"Revenue funds the next chip",a:"05",c:"#0B1F3A",x:"The moat gets deeper every cycle."}]},
+{type:"rivals",bg:"brand",hl:"Every tech giant is trying to replace NVIDIA. <em>The market does not believe them.</em>",rv:[
+{n:" NVIDIA",t:"$3.3T",h:true,x:"Dominates AI chips and owns the ecosystem developers actually use."},
+{n:" Broadcom",t:"~$900B",x:"Makes custom AI chips for specific clients. A different game."},
+{n:" AMD",t:"~$200B",x:"The only real rival. Competitive hardware, weaker ecosystem."},
+{n:" Intel",t:"~$90B",x:"A decade trying to re-enter AI chips. Still struggling."}]},
+{type:"hidden",bg:"ink",bad:"Losing China destroyed NVIDIA's growth.",good:"NVIDIA lost China's AI chip market. <strong>Then grew 85%.</strong>",bd:"China was 17% of NVIDIA revenue two years ago. Today it is close to a rounding error. The AI buildout outside China is that large."},
+{type:"acc",bg:"green",ic:"Up",eb:"06 - How it could keep winning - ",hl:"Three reasons NVIDIA's best <em>years may still be ahead.</em>",items:[
+{t:"The next chip has not shipped yet",b:"Blackwell is inside every major AI company's servers right now. Vera Rubin, the next generation, starts shipping later this year. Each new chip forces an entire system upgrade: <strong>networking, connectors, everything.</strong>"},
+{t:"$119 billion is already ordered",b:"Customers have made contractual commitments to buy $119 billion of NVIDIA products. $95 billion of that is due within the next nine months. <strong>These chips are spoken for before they are built.</strong>"},
+{t:"AI is moving from answering to acting",b:"Current AI answers questions. Agentic AI takes actions over long tasks. That requires vastly more computing power. <strong>If agentic AI scales, NVIDIA demand can accelerate.</strong>"}]},
+{type:"acc",bg:"red",ic:"Down",eb:"07 - What could hurt it - ",hl:"Three risks that could <em>change the numbers overnight.</em>",items:[
+{t:"Three customers are 54% of revenue",b:"Three unnamed companies represented 21%, 17%, and 16% of NVIDIA's revenue this quarter. They are almost certainly major cloud companies. <strong>If one shifts spending to in-house chips, the effect is immediate.</strong>"},
+{t:"Export rules can change overnight",b:"In April 2025, the US government banned a chip NVIDIA had designed to comply with existing rules. <strong>NVIDIA wrote off $4.5 billion of inventory overnight.</strong>"},
+{t:"Regulators are circling",b:"The EU, US, UK, South Korea, France, and China all have active scrutiny around NVIDIA. <strong>NVIDIA is now so dominant that governments treat it as a problem to solve.</strong>"}]},
+{type:"own",bg:"gold",hl:"He started it in a Denny's diner. <em>He still runs it. No plan B.</em>",bars:[
+{l:"Index funds",p:20,d:"~20%",c:"#C49A3E"},
+{l:"Other institutions",p:55,d:"~55%",c:"#76B900"},
+{l:"Jensen Huang",p:3,d:"~3%",c:"#1A2A00"}],
+bd:"Jensen Huang holds tens of billions in NVIDIA stock. His interests and shareholder interests are aligned. The filing names no successor."},
+{type:"take",bg:"cream",hl:"Is the AI buildout permanent, <em>or the biggest bubble since dot-com?</em>",bd:"The bubble comparison misses something important. In 1999, the internet was a promise. In 2026, AI is already in your pocket, your hospital and your bank. The order book is real. The question is what happens in 2027."},
+{type:"conv",bg:"brand",hl:"The whole world is racing to build AI. Only one company makes the engine. <em>What is that worth?</em>",opts:[{k:"bull",p:61},{k:"neutral",p:26},{k:"bear",p:13}]},
+{type:"next",bg:"brand",hl:"NVIDIA makes the engine. <em>The next company built the road.</em>",bd:"Every NVIDIA chip ends up inside a large, expensive building filled with servers, cooled around the clock and powered by the grid. Next up: the company charging the AI world to use that infrastructure.",nx:"amazon"}
+],
+deep:{
+cover:{t:"The shovel analogy",e:"From the cover",h:`<div class="d-sub">Why NVIDIA wins when everyone else competes</div><div class="d-p">During the California Gold Rush, most prospectors lost money. The reliable winners sold picks, shovels and jeans to the miners. NVIDIA is in exactly that position today.</div><div class="d-call">OpenAI competes with Google. Google competes with Meta. Meta competes with Amazon. All of them buy their shovels from NVIDIA.</div>`},
+pie:{t:"Who is the other half",e:"From the money",h:`<div class="d-sub">The customer base is changing</div><div class="d-p">The AI business is no longer just four tech giants. It now includes governments, hospitals, car manufacturers and financial institutions building AI systems.</div><div class="d-call">The customer base is four tech giants plus a rapidly growing second economy.</div>`},
+doors:{t:"Why CUDA took 18 years to matter",e:"From the model",h:`<div class="d-sub">The patience behind the moat</div><div class="d-p">CUDA looked strange in 2006. NVIDIA was a gaming chip company investing in software for scientists. When AI training exploded, researchers had already spent years learning CUDA.</div><div class="d-call">Switching chips means rewriting code. The ecosystem built in obscurity is now the moat.</div>`},
+rivals:{t:"Why in-house chips are not a replacement",e:"From the rivals",h:`<div class="d-sub">Cost reduction, not replacement</div><div class="d-p">Amazon Trainium, Google TPU and Microsoft Maia are real chips. But they are mostly built for those companies' own workloads.</div><div class="d-call">A university, drug company or government lab cannot simply buy Amazon's internal chip. NVIDIA remains the general-purpose option at scale.</div>`},
+hidden:{t:"The $4.5B lesson",e:"From the hidden truth",h:`<div class="d-sub">What happens when policy changes overnight</div><div class="d-p">In April 2025, the US government changed export rules around a downgraded China chip. NVIDIA was left with billions of H20 inventory it could not sell.</div><div class="d-call">$4.5 billion was written off overnight. NVIDIA absorbed the hit and kept growing.</div>`},
+acc:{t:"The $119B is contractual",e:"From the bull case",h:`<div class="d-sub">Why the order book matters</div><div class="d-p">$119 billion in supply commitments are not vibes. They are contractual obligations backed by customer demand signals.</div><div class="d-call">NVIDIA also committed $30 billion to cloud capacity for internal research. A company preparing for a slowdown does not sign that kind of research bill.</div>`},
+acc2:{t:"The H20 write-down as warning",e:"From the bear case",h:`<div class="d-sub">Regulatory risk in one number</div><div class="d-p">The $4.5 billion H20 charge shows how fast policy can hit this business.</div><div class="d-call">With $119 billion in manufacturing commitments, a sudden export change can create real financial damage.</div>`},
+own:{t:"Power without legal control",e:"From ownership",h:`<div class="d-sub">The governance gap</div><div class="d-p">Jensen Huang holds ordinary shares. His authority rests on belief: employees, customers and investors believe he is the irreplaceable mind behind NVIDIA.</div><div class="d-call">For a $3.3 trillion company, naming no successor is a remarkable governance gap.</div>`},
+take:{t:"NVIDIA's $30B internal bet",e:"The market debate",h:`<div class="d-sub">The clearest signal</div><div class="d-p">NVIDIA has committed $30 billion to buying cloud computing capacity for its own research over the coming years.</div><div class="d-call">Companies preparing for a slowdown cut research spending. They do not sign $30 billion research commitments.</div>`},
+conv:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">NVIDIA's growth will slow eventually. That moment is not visible in the numbers yet. Guidance assumes zero AI chip revenue from China.</div><div class="d-call">The question is not whether NVIDIA is extraordinary. It is what extraordinary is worth when the market expects it.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not financial advisors.</div>`},
+next:{t:"The infrastructure behind NVIDIA",e:"From what's next",h:`<div class="d-sub">Where every chip ends up</div><div class="d-p">Every NVIDIA chip sold ends up inside a data centre. Somebody built it, cools it, powers it and rents it out by the hour.</div><div class="d-call">The cloud companies running these chips are the other side of the AI trade.</div>`}
+},
+tldr:["NVIDIA makes the chips that power almost <strong>every major AI system on earth.</strong>","The real moat is not just the chip. It is <strong>CUDA software</strong> that developers already build around.","The US restricted China sales. NVIDIA still grew <strong>85%</strong>.","There are <strong>$119 billion in committed orders</strong> already placed.","More than half of sales come from <strong>just three customers.</strong> That is the core risk.","The bull case is simple: AI demand keeps compounding faster than rivals can catch up."]}});
+
 const CS=[
 {id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
@@ -1519,17 +1581,17 @@ const CS=[
 ];
 
 /* STATE */
-let curCo="netflix",cardIdx=0;
+let curCo="nvidia",cardIdx=0;
 let personalityData=null;
 let userId=null;
 let profileState={streak:0,savedCompanies:[],previousVotes:{},readHistory:[]};
 let saved={};
 let calls=[];
 const voteAggregates={};
-const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100}};
+const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},nvidia:{bull:61,neutral:26,bear:13,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100}};
 let dbCos=[];
 let currentDbCo=null;
-const CO_TICKER_MAP={netflix:'NFLX',disney:'DIS',meta:'META',cocacola:'KO'};
+const CO_TICKER_MAP={netflix:'NFLX',nvidia:'NVDA',disney:'DIS',meta:'META',cocacola:'KO'};
 function localReadDateKey(date=new Date()){
  const year=date.getFullYear();
  const month=String(date.getMonth()+1).padStart(2,'0');
@@ -1567,7 +1629,7 @@ function companyKey(company){return company.id||company.n.toLowerCase().replace(
 function companyLogo(company){
  const key=companyKey(company);const initial=(company.n||'?').trim().charAt(0).toUpperCase();
  const logoSrc=`/api/logo/${key}${key==='cocacola'?'?v=cocacola-png':''}`;
- return `<span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${key}" src="${logoSrc}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`;
+ return `<span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${key}" src="${logoSrc}" alt="" loading="lazy" decoding="async" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()">`;
 }
 function usesIndianNumbering(){
  const country=String(profileState.country||'').toLowerCase();
@@ -1616,7 +1678,7 @@ function authPanel(){
  }
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="onboarding.html">Sign up</a><a class="auth-btn secondary" href="login.html">Log in</a></div></div>`;
 }
-async function api(path,options={}){const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}
+async function api(path,options={}){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),options.timeout||12000);try{const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options,signal:options.signal||controller.signal});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}catch(error){if(error&&error.name==='AbortError')throw new Error('Daily Dividend is taking too long to wake up. Please try again.');throw error;}finally{clearTimeout(timeout);}}
 async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
 async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();identifyPostHog();}
 async function loadVoteAggregates(){
@@ -2103,7 +2165,7 @@ async function loadDbCompanies(){try{const data=await api('/api/companies');dbCo
 function dbCompanyCard(c){
  const id=c.companyId;
  const initial=(c.name||'?').charAt(0).toUpperCase();
- return `<div class="rcd" onclick="openDbCompany('${id}')"><div class="rcd-th" style="background:#1A3D2B;color:#fff"><span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${id}" src="/api/logo/${id}" alt="" loading="lazy" onerror="this.remove()"></div><div class="rcd-ld"></div><div class="rcd-n">${c.name}</div><div class="rcd-bl">${c.hook||''}</div></div>`;
+ return `<div class="rcd" onclick="openDbCompany('${id}')"><div class="rcd-th" style="background:#1A3D2B;color:#fff"><span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${id}" src="/api/logo/${id}" alt="" loading="lazy" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()"></div><div class="rcd-ld"></div><div class="rcd-n">${c.name}</div><div class="rcd-bl">${c.hook||''}</div></div>`;
 }
 function renderLib(){
  const featured=CO[curCo];setTheme(curCo);
@@ -2417,7 +2479,23 @@ function startTour(){
 }
 
 /* INIT */
-ensureSession().then(()=>{localizeAudienceCopy(CO);identifyPostHog();document.documentElement.classList.remove('auth-pending');if(IS_DESKTOP){dtInit();}else{renderToday();}Promise.all([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){dtBuildTicker();dtRenderToday();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}});}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.replace('onboarding.html');});
+(function(){
+let booted=false;
+function releaseGate(){document.documentElement.classList.remove('auth-pending');}
+function bootShell(){if(booted)return;booted=true;localizeAudienceCopy(CO);identifyPostHog();releaseGate();if(IS_DESKTOP){dtInit();}else{renderToday();}Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){dtBuildTicker();dtRenderToday();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function clearStoredSession(){localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');}
+window.addEventListener('error',releaseGate);
+window.addEventListener('unhandledrejection',releaseGate);
+setTimeout(()=>{if(!booted)releaseGate();},5000);
+const cachedId=localStorage.getItem('dailyDividendUserId');
+const cachedUser=localStorage.getItem('user');
+if(cachedId&&cachedUser){
+ try{profileState=JSON.parse(cachedUser)||{};userId=cachedId;syncSavedFromProfile();syncCallsFromProfile();bootShell();ensureSession().catch(()=>{});}
+ catch(e){clearStoredSession();ensureSession().then(bootShell).catch(()=>{releaseGate();window.location.replace('onboarding.html');});}
+}else{
+ ensureSession().then(bootShell).catch(()=>{releaseGate();clearStoredSession();window.location.replace('onboarding.html');});
+}
+})();
 
 /* ══════════════════════════════════════
    DESKTOP-ONLY CODE (IS_DESKTOP gate)

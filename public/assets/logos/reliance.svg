@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Reliance">
+  <rect width="192" height="192" rx="40" fill="#063f70"/>
+  <circle cx="96" cy="96" r="58" fill="#d0ad56"/>
+  <path d="M88 143c-14-29-11-53 7-71 6 16 17 29 31 40-2 17-15 29-38 31z" fill="#fff"/>
+  <path d="M82 141c-10-18-11-36-2-53-18 13-25 35-15 59z" fill="#0e4f86"/>
+  <path d="M107 69c14 17 19 34 15 51 13-10 18-27 10-47-8-5-16-6-25-4z" fill="#0e4f86"/>
+</svg>

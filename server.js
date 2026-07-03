@@ -24,19 +24,25 @@ const TWELVE_DATA_API_KEY = process.env.TWELVE_DATA_API_KEY || '';
 const SUPABASE_LOGO_BUCKET = process.env.SUPABASE_LOGO_BUCKET || 'company-logos';
 const PRICE_COMPANIES = Object.freeze({
   NFLX: { ticker: 'NFLX', name: 'Netflix', currency: 'USD', exchange: 'NASDAQ', yearStartPrice: 90.99 },
+  NVDA: { ticker: 'NVDA', name: 'NVIDIA', currency: 'USD', exchange: 'NASDAQ', yearStartPrice: 135.00 },
   DIS:  { ticker: 'DIS',  name: 'Disney',  currency: 'USD', exchange: 'NYSE', yearStartPrice: 111.85 },
   META: { ticker: 'META', name: 'Meta',    currency: 'USD', exchange: 'NASDAQ', yearStartPrice: 585.27 },
   SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', exchange: 'NYSE', yearStartPrice: null },
   KO:   { ticker: 'KO',   name: 'Coca-Cola', currency: 'USD', exchange: 'NYSE', yearStartPrice: 61.50 }
   // RELIANCE:NSE and HDFCBANK:NSE require Twelve Data Grow plan ($79/mo)
 });
-const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola']);
+const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'nvidia', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola']);
 const LOCAL_LOGO_FILES = Object.freeze({
+  disney: path.join(LOGO_CACHE_DIR, 'disney.svg'),
+  nvidia: path.join(LOGO_CACHE_DIR, 'nvidia.svg'),
+  reliance: path.join(LOGO_CACHE_DIR, 'reliance.svg'),
+  hdfc: path.join(LOGO_CACHE_DIR, 'hdfc.svg'),
+  meta: path.join(LOGO_CACHE_DIR, 'meta.svg'),
   netflix: path.join(__dirname, 'Site Pics', 'netflix logo.png'),
   visa: path.join(__dirname, 'Site Pics', 'visalogo.png')
 });
 const COMPANY_LOGO_DOMAINS = Object.freeze({
-  netflix: 'netflix.com', disney: 'thewaltdisneycompany.com', reliance: 'ril.com', hdfc: 'hdfcbank.com',
+  netflix: 'netflix.com', nvidia: 'nvidia.com', disney: 'thewaltdisneycompany.com', reliance: 'ril.com', hdfc: 'hdfcbank.com',
   meta: 'meta.com', cocacola: 'coca-cola.com',
   spotify: 'spotify.com', visa: 'visa.com', zomato: 'zomato.com',
   ferrari: 'ferrari.com', hermes: 'hermes.com', google: 'google.com', amazon: 'amazon.com',
@@ -1668,12 +1674,6 @@ app.get('/api/logo/:companyId', async (req, res, next) => {
       return res.status(404).json({ error: 'Invalid company logo ID.' });
     }
     const domain = COMPANY_LOGO_DOMAINS[companyId];
-
-    const supabaseLogoPaths = companyId === 'cocacola'
-      ? ['cocacola.png', 'cocacola.jpg', 'cocacola.', 'coca-cola.png', 'coca-cola.jpg', 'coca-cola.']
-      : [`${companyId}.png`];
-    if (await sendFirstSupabaseLogo(res, supabaseLogoPaths)) return;
-
     const localLogo = LOCAL_LOGO_FILES[companyId];
     if (localLogo) {
       try {
@@ -1684,6 +1684,11 @@ app.get('/api/logo/:companyId', async (req, res, next) => {
         if (error.code !== 'ENOENT') throw error;
       }
     }
+
+    const supabaseLogoPaths = companyId === 'cocacola'
+      ? ['cocacola.png', 'cocacola.jpg', 'cocacola.', 'coca-cola.png', 'coca-cola.jpg', 'coca-cola.']
+      : [`${companyId}.png`];
+    if (await sendFirstSupabaseLogo(res, supabaseLogoPaths)) return;
 
     const cacheFiles = companyId === 'cocacola'
       ? [path.join(LOGO_CACHE_DIR, 'cocacola.png'), path.join(LOGO_CACHE_DIR, 'cocacola.jpg')]
