@@ -365,7 +365,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcd-th .company-logo-img{padding:5%;object-fit:contain}
 .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
 .company-logo-img.logo-meta{background:#fff;padding:0;object-fit:contain;transform:scale(2.5);transform-origin:center}
-.company-logo-img.logo-cocacola{background:transparent;padding:0;object-fit:cover}
+.company-logo-img.logo-cocacola{background:transparent;padding:6%;object-fit:contain}
 @media(max-width:899px){.company-logo-img.logo-meta{transform:none;padding:6%}}
 .rcd-fl{position:absolute;top:13px;right:13px;font-size:14px}
 .rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
@@ -1158,7 +1158,7 @@ body{background:var(--ink);overflow:hidden}
   #dtShell .th .company-logo-img{background:transparent;padding:10%;object-fit:contain;transform:none}
   #dtShell .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
   #dtShell .company-logo-img.logo-meta{background:#fff;padding:8%;object-fit:contain;transform:none}
-  #dtShell .company-logo-img.logo-cocacola{background:transparent;padding:0;object-fit:cover;transform:none}
+  #dtShell .company-logo-img.logo-cocacola{background:transparent;padding:6%;object-fit:contain;transform:none}
   #dtShell .cc-co-name .th{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:var(--serif);font-weight:700;font-size:13px;color:#fff}
   #dtShell .meta-you-card{background:linear-gradient(135deg,#fff,#eef4ff);border-color:rgba(8,102,255,.18);cursor:pointer}
   #dtShell .meta-you-card .cc-ch{background:rgba(8,102,255,.12);color:#0866ff}
@@ -1606,7 +1606,7 @@ cover:{t:"The number that makes it real",e:"From the cover",h:`<div class="d-sub
 tldr:["Meta's apps are free. The business made <strong>$201 billion</strong> last year by selling access to your attention.","<strong>3.58 billion people</strong> open a Meta app every single day. No company in history has owned this much human attention.","In 2025, the US government tried to force Meta to give back Instagram and WhatsApp. After a six-week trial, they failed.","Meta AI reached <strong>1 billion monthly users in 18 months</strong>, the fastest product growth in history, by placing it inside apps people already used.","The bull case: AI is already making every ad more valuable. Ad prices and volumes rising at the same time is the proof.","The bear case: Meta is spending <strong>$130 billion</strong> on AI this year. More than it earned in all of 2022. The return is not yet proven."]}});
 
 Object.assign(CO,{cocacola:{id:"cocacola",domain:"coca-cola.com",n:"Coca-Cola",t:"KO",sec:"Beverages",fl:"🇺🇸",mc:"$355B",lb:"#E0091B",lc:"#fff",ac:"#E0091B",as:"rgba(224,9,27,0.18)",bg:"linear-gradient(160deg,#0A0A0A,#1A0203)",bl:"140 years old. Still the most recognized brand on Earth.",
-sp:"$72.40",sc:"+0.6%",scDir:"up",
+sp:"$84.14",sc:"+36.8%",scDir:"up",
 ks:[{l:"Market cap",v:"$355B"},{l:"Revenue",v:"$48B"},{l:"Years old",v:"140"}],
 vb:11284,sentiment:"bull",
 ps:"Coke sells you a drink that costs 4 cents to make for $2. Then does it 2.2 billion times a day. In Mexico, the average person drinks 2.2 litres of Coke every single day.",
@@ -1693,8 +1693,9 @@ function localReadDateKey(date=new Date()){
 }
 
 function formatLivePrice(price,currency){
- if(currency==='INR')return `Rs ${price.toFixed(1)}`;
- return `$${price.toFixed(1)}`;
+ const formatted=Number(price).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+ if(currency==='INR')return `Rs ${formatted}`;
+ return `$${formatted}`;
 }
 async function loadLivePrices(){
  try{

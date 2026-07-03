@@ -23,11 +23,11 @@ const LOGO_DEV_TOKEN = process.env.LOGO_DEV_TOKEN || '';
 const TWELVE_DATA_API_KEY = process.env.TWELVE_DATA_API_KEY || '';
 const SUPABASE_LOGO_BUCKET = process.env.SUPABASE_LOGO_BUCKET || 'company-logos';
 const PRICE_COMPANIES = Object.freeze({
-  NFLX: { ticker: 'NFLX', name: 'Netflix', currency: 'USD', yearStartPrice: 90.99 },
-  DIS:  { ticker: 'DIS',  name: 'Disney',  currency: 'USD', yearStartPrice: 111.85 },
-  META: { ticker: 'META', name: 'Meta',    currency: 'USD', yearStartPrice: 585.27 },
-  SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', yearStartPrice: null },
-  KO:   { ticker: 'KO',   name: 'Coca-Cola', currency: 'USD', yearStartPrice: 61.50 }
+  NFLX: { ticker: 'NFLX', name: 'Netflix', currency: 'USD', exchange: 'NASDAQ', yearStartPrice: 90.99 },
+  DIS:  { ticker: 'DIS',  name: 'Disney',  currency: 'USD', exchange: 'NYSE', yearStartPrice: 111.85 },
+  META: { ticker: 'META', name: 'Meta',    currency: 'USD', exchange: 'NASDAQ', yearStartPrice: 585.27 },
+  SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', exchange: 'NYSE', yearStartPrice: null },
+  KO:   { ticker: 'KO',   name: 'Coca-Cola', currency: 'USD', exchange: 'NYSE', yearStartPrice: 61.50 }
   // RELIANCE:NSE and HDFCBANK:NSE require Twelve Data Grow plan ($79/mo)
 });
 const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola']);
@@ -52,10 +52,12 @@ const supabase = SUPABASE_URL && SUPABASE_KEY
   : null;
 const adminTokens = new Map();
 const DB_CACHE_TTL_MS = 5000;
+const PRICE_CACHE_MAX_AGE_MS = 20 * 60 * 60 * 1000;
 let dbCache = null;
 let dbCacheExpiresAt = 0;
 let dbReadPromise = null;
 const logoMemoryCache = new Map();
+let priceRefreshPromise = null;
 
 app.use(compression());
 app.use(express.json({ limit: '8mb' }));
@@ -317,9 +319,9 @@ async function safeMirrorPricesToLocalFile(prices) {
   }
 }
 
-async function fetchTwelveDataEod(symbolKey) {
+async function fetchTwelveDataQuote(symbolKey) {
   const company = PRICE_COMPANIES[symbolKey];
-  const url = new URL('https://api.twelvedata.com/eod');
+  const url = new URL('https://api.twelvedata.com/quote');
   url.searchParams.set('symbol', company.ticker);
   if (company.exchange) url.searchParams.set('exchange', company.exchange);
   url.searchParams.set('apikey', TWELVE_DATA_API_KEY);
@@ -328,8 +330,8 @@ async function fetchTwelveDataEod(symbolKey) {
   if (!response.ok || payload.status === 'error') {
     throw new Error(payload.message || `Twelve Data returned HTTP ${response.status}.`);
   }
-  const price = Number(payload.close);
-  if (!Number.isFinite(price) || price < 0) throw new Error('Twelve Data returned an invalid closing price.');
+  const price = Number(payload.close || payload.price);
+  if (!Number.isFinite(price) || price < 0) throw new Error('Twelve Data returned an invalid quote price.');
   return {
     price,
     currency: typeof payload.currency === 'string' && payload.currency ? payload.currency : (company.currency || 'USD'),
@@ -342,7 +344,7 @@ async function doRefreshPrices(db) {
   const results = [];
   for (const symbolKey of Object.keys(PRICE_COMPANIES)) {
     try {
-      const fresh = await fetchTwelveDataEod(symbolKey);
+      const fresh = await fetchTwelveDataQuote(symbolKey);
       const yearStart = PRICE_COMPANIES[symbolKey].yearStartPrice;
       const rawChange = yearStart ? (fresh.price - yearStart) / yearStart * 100 : null;
       const change = rawChange !== null ? parseFloat(rawChange.toFixed(2)) : null;
@@ -360,6 +362,39 @@ async function doRefreshPrices(db) {
     }
   }
   return results;
+}
+
+function priceCacheIsStale(prices, now = Date.now()) {
+  const normalized = normalizePrices(prices);
+  return Object.values(normalized).some(price => {
+    if (!price.price) return true;
+    const updatedAt = Date.parse(price.lastUpdated || '');
+    return !Number.isFinite(updatedAt) || now - updatedAt > PRICE_CACHE_MAX_AGE_MS;
+  });
+}
+
+async function refreshPricesIfStale(db) {
+  if (!TWELVE_DATA_API_KEY || !priceCacheIsStale(db.prices)) {
+    db.prices = normalizePrices(db.prices);
+    return { refreshed: false, updated: 0, failed: [] };
+  }
+
+  if (!priceRefreshPromise) {
+    priceRefreshPromise = (async () => {
+      const results = await doRefreshPrices(db);
+      const updated = results.filter(r => r.ok).length;
+      const failed = results.filter(r => !r.ok);
+      if (updated) {
+        await writeDb(db);
+        await safeMirrorPricesToLocalFile(db.prices);
+      }
+      return { refreshed: true, updated, failed };
+    })().finally(() => {
+      priceRefreshPromise = null;
+    });
+  }
+
+  return priceRefreshPromise;
 }
 
 async function autoRefreshPrices() {
@@ -1212,8 +1247,10 @@ app.get('/api/votes/:companyId', async (req, res, next) => {
 
 app.get('/api/prices', async (req, res, next) => {
   try {
-    const db = await readDb();
-    res.json({ prices: db.prices });
+    let db = await readDb();
+    const refresh = await refreshPricesIfStale(db);
+    if (refresh.refreshed) db = await readDb();
+    res.json({ prices: db.prices, priceRefresh: refresh });
   } catch (error) {
     next(error);
   }
@@ -1223,8 +1260,10 @@ app.get('/api/prices/:ticker', async (req, res, next) => {
   try {
     const ticker = String(req.params.ticker || '').trim().toUpperCase();
     if (!PRICE_COMPANIES[ticker]) return res.status(404).json({ error: 'Ticker not found.' });
-    const db = await readDb();
-    res.json(db.prices[ticker]);
+    let db = await readDb();
+    const refresh = await refreshPricesIfStale(db);
+    if (refresh.refreshed) db = await readDb();
+    res.json({ ...db.prices[ticker], priceRefresh: refresh });
   } catch (error) {
     next(error);
   }

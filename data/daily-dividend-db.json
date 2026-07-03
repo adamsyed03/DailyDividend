@@ -47,56 +47,61 @@
       "ticker": "NFLX",
       "name": "Netflix",
       "currency": "USD",
+      "exchange": "NASDAQ",
       "yearStartPrice": 90.99,
       "price": 77.65,
       "change": -14.66,
       "changeDirection": "down",
       "date": "2026-07-02",
-      "lastUpdated": "2026-07-03T15:40:45.484Z"
+      "lastUpdated": "2026-07-03T17:14:49.948Z"
     },
     "DIS": {
       "ticker": "DIS",
       "name": "Disney",
       "currency": "USD",
+      "exchange": "NYSE",
       "yearStartPrice": 111.85,
       "price": 99.5,
       "change": -11.04,
       "changeDirection": "down",
       "date": "2026-07-02",
-      "lastUpdated": "2026-07-03T15:40:45.789Z"
+      "lastUpdated": "2026-07-03T17:14:50.250Z"
     },
     "META": {
       "ticker": "META",
       "name": "Meta",
       "currency": "USD",
+      "exchange": "NASDAQ",
       "yearStartPrice": 585.27,
       "price": 582.90002,
       "change": -0.4,
       "changeDirection": "down",
       "date": "2026-07-02",
-      "lastUpdated": "2026-07-03T15:40:46.096Z"
+      "lastUpdated": "2026-07-03T17:14:50.492Z"
     },
     "SPOT": {
       "ticker": "SPOT",
       "name": "Spotify",
       "currency": "USD",
+      "exchange": "NYSE",
       "yearStartPrice": null,
       "price": 485.97,
       "change": null,
       "changeDirection": null,
       "date": "2026-07-02",
-      "lastUpdated": "2026-07-03T15:40:46.397Z"
+      "lastUpdated": "2026-07-03T17:14:50.762Z"
     },
     "KO": {
       "ticker": "KO",
       "name": "Coca-Cola",
       "currency": "USD",
+      "exchange": "NYSE",
       "yearStartPrice": 61.5,
       "price": 84.14,
       "change": 36.81,
       "changeDirection": "up",
       "date": "2026-07-02",
-      "lastUpdated": "2026-07-03T15:40:46.706Z"
+      "lastUpdated": "2026-07-03T17:14:51.074Z"
     }
   }
 }
