@@ -5,13 +5,14 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 const { createClient } = require('@supabase/supabase-js');
-const { PostHog } = require('posthog-node');
 
 loadEnv();
 
-const posthog = new PostHog(process.env.POSTHOG_API_KEY || '', {
-  host: process.env.POSTHOG_HOST || 'https://us.i.posthog.com'
-});
+const analytics = {
+  capture() {},
+  identify() {},
+  async shutdown() {}
+};
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -654,7 +655,7 @@ async function handleLogin(payload, res) {
   const user = getUser(db, authData.user.id);
   user.email = authData.user.email || email;
   await writeDb(db);
-  posthog.capture({ distinctId: authData.user.id, event: 'user_logged_in', properties: { $set: { email: user.email, username: user.username || '' } } });
+  analytics.capture({ distinctId: authData.user.id, event: 'user_logged_in', properties: { $set: { email: user.email, username: user.username || '' } } });
   setAuthCookies(res, authData.session);
   return res.json({ ok: true, status: 'login_success', user: profile(user) });
 }
@@ -743,8 +744,8 @@ async function handleOnboarding(payload, res) {
   delete user.passwordHash;
   db.users[user.userId] = user;
   await writeDb(db);
-  posthog.identify({ distinctId: user.userId, properties: { email, firstName: data.firstName, lastName: data.lastName, username: data.username, country: data.country, profession: data.profession } });
-  if (!existing) posthog.capture({ distinctId: user.userId, event: 'user_signed_up', properties: { country: data.country, profession: data.profession, how_heard: data.howHeard } });
+  analytics.identify({ distinctId: user.userId, properties: { email, firstName: data.firstName, lastName: data.lastName, username: data.username, country: data.country, profession: data.profession } });
+  if (!existing) analytics.capture({ distinctId: user.userId, event: 'user_signed_up', properties: { country: data.country, profession: data.profession, how_heard: data.howHeard } });
   setAuthCookies(res, signedIn.session);
   return res.status(existing ? 200 : 201).json({ ok: true, status: 'success', user: profile(user) });
 }
@@ -1097,7 +1098,7 @@ app.post('/api/read', requireUser, async (req, res, next) => {
     }
 
     await writeDb(db);
-    if (isNewRead) posthog.capture({ distinctId: userId, event: 'company_read', properties: { company_id: companyId, source, date: today } });
+    if (isNewRead) analytics.capture({ distinctId: userId, event: 'company_read', properties: { company_id: companyId, source, date: today } });
     res.json(profile(user));
   } catch (error) {
     next(error);
@@ -1119,7 +1120,7 @@ app.post('/api/save', requireUser, async (req, res, next) => {
     else user.savedCompanies.splice(index, 1);
 
     await writeDb(db);
-    posthog.capture({ distinctId: userId, event: saved ? 'company_saved' : 'company_unsaved', properties: { company_id: companyId } });
+    analytics.capture({ distinctId: userId, event: saved ? 'company_saved' : 'company_unsaved', properties: { company_id: companyId } });
     res.json({ saved, savedCompanies: user.savedCompanies });
   } catch (error) {
     next(error);
@@ -1176,7 +1177,7 @@ app.post('/api/vote', requireUser, async (req, res, next) => {
     }
 
     await writeDb(db);
-    posthog.capture({ distinctId: userId, event: 'company_voted', properties: { company_id: companyId, vote, is_revote: isRevote } });
+    analytics.capture({ distinctId: userId, event: 'company_voted', properties: { company_id: companyId, vote, is_revote: isRevote } });
     res.json({
       vote,
       percentages: aggregateVotes(db, companyId),
@@ -1504,7 +1505,7 @@ app.post('/api/deep-dive', requireUser, async (req, res, next) => {
     const p = calculateReadingPersonality(user);
     user.readingPersonality = p.unlocked ? p.personality : null;
     await writeDb(db);
-    posthog.capture({ distinctId: userId, event: 'deep_dive_opened', properties: { company_id: companyId } });
+    analytics.capture({ distinctId: userId, event: 'deep_dive_opened', properties: { company_id: companyId } });
     res.json({ ok: true });
   } catch (err) { next(err); }
 });
@@ -1529,7 +1530,7 @@ app.post('/api/story-complete', requireUser, async (req, res, next) => {
       user.readingPersonality = p.unlocked ? p.personality : null;
     }
     await writeDb(db);
-    posthog.capture({ distinctId: userId, event: 'story_completed', properties: { company_id: companyId } });
+    analytics.capture({ distinctId: userId, event: 'story_completed', properties: { company_id: companyId } });
     res.json({ ok: true, personality: calculateReadingPersonality(user) });
   } catch (err) { next(err); }
 });
@@ -1545,7 +1546,7 @@ app.post('/api/search-used', requireUser, async (req, res, next) => {
     const p = calculateReadingPersonality(user);
     user.readingPersonality = p.unlocked ? p.personality : null;
     await writeDb(db);
-    posthog.capture({ distinctId: userId, event: 'search_used' });
+    analytics.capture({ distinctId: userId, event: 'search_used' });
     res.json({ ok: true });
   } catch (err) { next(err); }
 });
@@ -1561,7 +1562,7 @@ app.post('/api/next-company-click', requireUser, async (req, res, next) => {
     const p = calculateReadingPersonality(user);
     user.readingPersonality = p.unlocked ? p.personality : null;
     await writeDb(db);
-    posthog.capture({ distinctId: userId, event: 'next_company_clicked' });
+    analytics.capture({ distinctId: userId, event: 'next_company_clicked' });
     res.json({ ok: true });
   } catch (err) { next(err); }
 });
@@ -1693,8 +1694,8 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong. Please try again.' });
 });
 
-process.on('SIGTERM', async () => { await posthog.shutdown(); process.exit(0); });
-process.on('SIGINT', async () => { await posthog.shutdown(); process.exit(0); });
+process.on('SIGTERM', async () => { await analytics.shutdown(); process.exit(0); });
+process.on('SIGINT', async () => { await analytics.shutdown(); process.exit(0); });
 
 app.listen(PORT, () => {
   console.log(`Daily Dividend running at http://localhost:${PORT}`);

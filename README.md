@@ -19,7 +19,7 @@ Render's Free web services spin down after idle periods and show a Render loadin
 /healthz
 ```
 
-The health check endpoint is intentionally lightweight and does not touch Supabase, Twelve Data, PostHog, or the local JSON database.
+The health check endpoint is intentionally lightweight and does not touch Supabase, Twelve Data, or the local JSON database.
 
 ## Authentication
 
