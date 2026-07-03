@@ -4,6 +4,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
 <script>if(location.protocol==='file:'||(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&location.port&&location.port!=='3000'))location.replace('http://localhost:3000/index.html');</script>
 <title>Daily Dividend</title>
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p=t.createElement("script");p.type="text/javascript";p.crossOrigin="anonymous";p.async=!0;p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js";r=t.getElementsByTagName("script")[0];r.parentNode.insertBefore(p,r);var u=e;void 0!==a?u=e[a]=[]:a="posthog";u.people=u.people||[];u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e};u.people.toString=function(){return u.toString(1)+".people (stub)"};o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group trackSessionId get_session_id get_distinct_id debug".split(" ");for(n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ',{api_host:'https://eu.i.posthog.com',ui_host:'https://eu.posthog.com',person_profiles:'identified_only'});
+</script>
 <style id="auth-gate">html.auth-pending{background:#0f0f0e}html.auth-pending body{visibility:hidden}html.auth-pending body::before{content:"";visibility:visible;position:fixed;inset:0;z-index:2147483647;background:#0f0f0e url('/api/brand-logo') center/58px 58px no-repeat}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1600,6 +1604,8 @@ function localizeAudienceCopy(value,seen=new WeakSet()){
 }
 function syncSavedFromProfile(){saved={};(profileState.savedCompanies||[]).forEach(key=>{const item=parseSaveKey(key);if(!saved[item.co])saved[item.co]=new Set();if(Number.isFinite(item.idx))saved[item.co].add(item.idx);});}
 function syncCallsFromProfile(){const vd=profileState.voteData||{};calls=Object.entries(profileState.previousVotes||{}).map(([co,vote])=>{const a=getAggregate(co);const d=vd[co]||{};const when=d.date?new Date(d.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'Saved';return {co,vote,b:a.bull||0,n:a.neutral||0,bb:a.bear||0,when,entryPrice:d.price||null};}).filter(c=>CO[c.co]);}
+function trackPostHogEvent(event,properties={}){try{if(window.posthog&&posthog.capture)posthog.capture(event,properties);}catch(e){}}
+function identifyPostHog(){try{if(userId&&window.posthog&&posthog.identify)posthog.identify(userId,{country:profileState.country||'',profession:profileState.profession||'',investor_level:profileState.investorLevel||'',streak:profileState.streak||0});}catch(e){}}
 function callPnl(c){const co=CO[c.co];if(!c.entryPrice||!co||!co.sp||co.sp==='-')return'';const entry=parseFloat(c.entryPrice.replace(/[^0-9.]/g,''));const cur=parseFloat(co.sp.replace(/[^0-9.]/g,''));if(!entry||!cur||isNaN(entry)||isNaN(cur))return'';const pct=(cur-entry)/entry*100;const win=(c.vote==='bull'&&pct>0)||(c.vote==='bear'&&pct<0);const lose=(c.vote==='bull'&&pct<0)||(c.vote==='bear'&&pct>0);const cls=win?'up':lose?'down':'flat';const sign=pct>=0?'+':'';return`<div class="cc-pnl"><span class="cc-ep">Entry ${c.entryPrice}</span><span class="cc-pct ${cls}">${sign}${pct.toFixed(1)}% vs today</span></div>`;}
 function isRegisteredUser(){return Boolean(profileState.firstName||profileState.lastName||profileState.phoneNumber||profileState.profession);}
 function displayUserName(){return [profileState.firstName,profileState.lastName].filter(Boolean).join(' ')||'Daily Dividend reader';}
@@ -1611,8 +1617,8 @@ function authPanel(){
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="onboarding.html">Sign up</a><a class="auth-btn secondary" href="login.html">Log in</a></div></div>`;
 }
 async function api(path,options={}){const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}
-async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();}
-async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();}
+async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
+async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();identifyPostHog();}
 async function loadVoteAggregates(){
  try{const data=await api('/api/votes');Object.assign(voteAggregates,data.votes||{});}
  catch(e){console.warn(e);}
@@ -1632,6 +1638,7 @@ function goTo(n){
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
  document.getElementById('screen-'+n).classList.add('active');
  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+ trackPostHogEvent('tab_opened',{tab:n});
  if(n==='today')renderToday();
  if(n==='library')renderLib();
  if(n==='you')renderShelf();
@@ -1678,6 +1685,7 @@ ${otherCos.map(k=>{const co=CO[k];return `
  twparse(document.getElementById('todayScroll'));
 }
 async function openStack(slug,source='today'){
+ trackPostHogEvent('company_opened',{company_id:slug,source});
  curCo=slug;cardIdx=0;setTheme(slug);
  const c=CO[slug];
  document.getElementById('cologo').innerHTML=companyLogo(c);
@@ -2409,7 +2417,7 @@ function startTour(){
 }
 
 /* INIT */
-ensureSession().then(()=>{localizeAudienceCopy(CO);document.documentElement.classList.remove('auth-pending');if(IS_DESKTOP){dtInit();}else{renderToday();}Promise.all([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){dtBuildTicker();dtRenderToday();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}});}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.replace('onboarding.html');});
+ensureSession().then(()=>{localizeAudienceCopy(CO);identifyPostHog();document.documentElement.classList.remove('auth-pending');if(IS_DESKTOP){dtInit();}else{renderToday();}Promise.all([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){dtBuildTicker();dtRenderToday();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}});}).catch(()=>{localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');window.location.replace('onboarding.html');});
 
 /* ══════════════════════════════════════
    DESKTOP-ONLY CODE (IS_DESKTOP gate)
@@ -2423,6 +2431,7 @@ function dtGoTo(tab){
   document.querySelectorAll('#dtShell .screen').forEach(s=>s.classList.remove('active'));
   const s=document.getElementById('dt-screen-'+tab);if(s)s.classList.add('active');
   document.querySelectorAll('.sb-item,.bnm-item,.dt-nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  trackPostHogEvent('tab_opened',{tab});
   const shell=document.getElementById('dtShell');if(shell)shell.classList.toggle('nav-light',tab!=='today');
   const main=document.getElementById('dtMainArea');if(main)main.scrollTop=0;
   if(tab==='library')dtRenderLib();
