@@ -11,6 +11,16 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## Deployment uptime
+
+Render's Free web services spin down after idle periods and show a Render loading page while the app wakes back up. To prevent that page in production, run the Daily Dividend web service on a paid Render instance type and set the service health check path to:
+
+```text
+/healthz
+```
+
+The health check endpoint is intentionally lightweight and does not touch Supabase, Twelve Data, PostHog, or the local JSON database.
+
 ## Authentication
 
 Customer accounts use Supabase Auth with email and password. The server stores Supabase access and refresh tokens in HttpOnly, SameSite cookies; application profile data remains in `daily_dividend_state` keyed by the Supabase Auth user ID. Passwords and password hashes are not stored in the application state.

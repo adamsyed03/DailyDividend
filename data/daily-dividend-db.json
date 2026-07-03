@@ -48,44 +48,55 @@
       "name": "Netflix",
       "currency": "USD",
       "yearStartPrice": 90.99,
-      "price": 74.19,
-      "change": -18.46,
+      "price": 77.65,
+      "change": -14.66,
       "changeDirection": "down",
-      "date": "2026-07-01",
-      "lastUpdated": "2026-07-01T21:00:01.637Z"
+      "date": "2026-07-02",
+      "lastUpdated": "2026-07-03T15:40:45.484Z"
     },
     "DIS": {
       "ticker": "DIS",
       "name": "Disney",
       "currency": "USD",
       "yearStartPrice": 111.85,
-      "price": 95.76,
-      "change": -14.39,
+      "price": 99.5,
+      "change": -11.04,
       "changeDirection": "down",
-      "date": "2026-07-01",
-      "lastUpdated": "2026-07-01T21:05:33.358Z"
+      "date": "2026-07-02",
+      "lastUpdated": "2026-07-03T15:40:45.789Z"
     },
     "META": {
       "ticker": "META",
       "name": "Meta",
       "currency": "USD",
       "yearStartPrice": 585.27,
-      "price": 612.91,
-      "change": 4.72,
-      "changeDirection": "up",
-      "date": "2026-07-01",
-      "lastUpdated": "2026-07-01T21:05:34.073Z"
+      "price": 582.90002,
+      "change": -0.4,
+      "changeDirection": "down",
+      "date": "2026-07-02",
+      "lastUpdated": "2026-07-03T15:40:46.096Z"
     },
     "SPOT": {
       "ticker": "SPOT",
       "name": "Spotify",
       "currency": "USD",
       "yearStartPrice": null,
-      "price": 472.45,
+      "price": 485.97,
       "change": null,
       "changeDirection": null,
-      "date": "2026-07-01",
-      "lastUpdated": "2026-07-01T21:05:34.588Z"
+      "date": "2026-07-02",
+      "lastUpdated": "2026-07-03T15:40:46.397Z"
+    },
+    "KO": {
+      "ticker": "KO",
+      "name": "Coca-Cola",
+      "currency": "USD",
+      "yearStartPrice": 61.5,
+      "price": 84.14,
+      "change": 36.81,
+      "changeDirection": "up",
+      "date": "2026-07-02",
+      "lastUpdated": "2026-07-03T15:40:46.706Z"
     }
   }
 }

@@ -25,17 +25,18 @@ const PRICE_COMPANIES = Object.freeze({
   NFLX: { ticker: 'NFLX', name: 'Netflix', currency: 'USD', yearStartPrice: 90.99 },
   DIS:  { ticker: 'DIS',  name: 'Disney',  currency: 'USD', yearStartPrice: 111.85 },
   META: { ticker: 'META', name: 'Meta',    currency: 'USD', yearStartPrice: 585.27 },
-  SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', yearStartPrice: null }
+  SPOT: { ticker: 'SPOT', name: 'Spotify', currency: 'USD', yearStartPrice: null },
+  KO:   { ticker: 'KO',   name: 'Coca-Cola', currency: 'USD', yearStartPrice: 61.50 }
   // RELIANCE:NSE and HDFCBANK:NSE require Twelve Data Grow plan ($79/mo)
 });
-const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc', 'meta']);
+const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola']);
 const LOCAL_LOGO_FILES = Object.freeze({
   netflix: path.join(__dirname, 'Site Pics', 'netflix logo.png'),
   visa: path.join(__dirname, 'Site Pics', 'visalogo.png')
 });
 const COMPANY_LOGO_DOMAINS = Object.freeze({
   netflix: 'netflix.com', disney: 'thewaltdisneycompany.com', reliance: 'ril.com', hdfc: 'hdfcbank.com',
-  meta: 'meta.com',
+  meta: 'meta.com', cocacola: 'coca-cola.com',
   spotify: 'spotify.com', visa: 'visa.com', zomato: 'zomato.com',
   ferrari: 'ferrari.com', hermes: 'hermes.com', google: 'google.com', amazon: 'amazon.com',
   costco: 'costco.com', tcs: 'tcs.com', 'asian-paints': 'asianpaints.com'
@@ -57,6 +58,10 @@ const logoMemoryCache = new Map();
 
 app.use(compression());
 app.use(express.json({ limit: '8mb' }));
+
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ ok: true });
+});
 
 const SERIALIZED_USER_MUTATIONS = new Set([
   '/api/read', '/api/save', '/api/vote', '/api/deep-dive',
@@ -112,6 +117,13 @@ async function sendSupabaseLogo(res, objectPath) {
   res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
   res.type(type).send(logo);
   return true;
+}
+
+async function sendFirstSupabaseLogo(res, objectPaths) {
+  for (const objectPath of objectPaths) {
+    if (await sendSupabaseLogo(res, objectPath)) return true;
+  }
+  return false;
 }
 
 function todayKey(date = new Date()) {
@@ -1617,7 +1629,10 @@ app.get('/api/logo/:companyId', async (req, res, next) => {
     }
     const domain = COMPANY_LOGO_DOMAINS[companyId];
 
-    if (await sendSupabaseLogo(res, `${companyId}.png`)) return;
+    const supabaseLogoPaths = companyId === 'cocacola'
+      ? ['cocacola.png', 'cocacola.jpg', 'cocacola.', 'coca-cola.png', 'coca-cola.jpg', 'coca-cola.']
+      : [`${companyId}.png`];
+    if (await sendFirstSupabaseLogo(res, supabaseLogoPaths)) return;
 
     const localLogo = LOCAL_LOGO_FILES[companyId];
     if (localLogo) {
@@ -1630,13 +1645,17 @@ app.get('/api/logo/:companyId', async (req, res, next) => {
       }
     }
 
-    const cacheFile = path.join(LOGO_CACHE_DIR, `${companyId}.png`);
-    try {
-      await fs.access(cacheFile);
-      res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
-      return res.sendFile(cacheFile);
-    } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
+    const cacheFiles = companyId === 'cocacola'
+      ? [path.join(LOGO_CACHE_DIR, 'cocacola.png'), path.join(LOGO_CACHE_DIR, 'cocacola.jpg')]
+      : [path.join(LOGO_CACHE_DIR, `${companyId}.png`)];
+    for (const cacheFile of cacheFiles) {
+      try {
+        await fs.access(cacheFile);
+        res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+        return res.sendFile(cacheFile);
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+      }
     }
 
     if (!domain || !LOGO_DEV_TOKEN) return res.status(404).json({ error: 'Logo unavailable.' });
@@ -1650,6 +1669,7 @@ app.get('/api/logo/:companyId', async (req, res, next) => {
     if (logo.length > 2 * 1024 * 1024) throw new Error('Logo response exceeded 2 MB.');
 
     await fs.mkdir(LOGO_CACHE_DIR, { recursive: true });
+    const cacheFile = path.join(LOGO_CACHE_DIR, `${companyId}.png`);
     await fs.writeFile(cacheFile, logo);
     res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
     res.type('png').send(logo);

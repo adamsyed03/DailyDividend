@@ -4,6 +4,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
 <script>if(location.protocol==='file:'||(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&location.port&&location.port!=='3000'))location.replace('http://localhost:3000/index.html');</script>
 <title>Daily Dividend</title>
+<link rel="icon" type="image/png" href="/api/brand-logo">
+<meta property="og:image" content="/api/brand-logo">
 <style id="auth-gate">html.auth-pending{background:#0f0f0e}html.auth-pending body{visibility:hidden}html.auth-pending body::before{content:"";visibility:visible;position:fixed;inset:0;z-index:2147483647;background:#0f0f0e url('/api/brand-logo') center/58px 58px no-repeat}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -363,6 +365,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcd-th .company-logo-img{padding:5%;object-fit:contain}
 .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
 .company-logo-img.logo-meta{background:#fff;padding:0;object-fit:contain;transform:scale(2.5);transform-origin:center}
+.company-logo-img.logo-cocacola{background:transparent;padding:0;object-fit:cover}
 @media(max-width:899px){.company-logo-img.logo-meta{transform:none;padding:6%}}
 .rcd-fl{position:absolute;top:13px;right:13px;font-size:14px}
 .rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
@@ -574,6 +577,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 
 @media(max-width:899px){
   .stage,.phone{height:100svh;height:100dvh}
+  .prog{top:max(14px,calc(env(safe-area-inset-top) + 10px));left:16px;right:16px}
   .topbar{gap:10px}
   .co{min-width:0;max-width:calc(100% - 116px)}
   .co>div:last-child{min-width:0}
@@ -584,8 +588,11 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .eb-c{font-size:9px;margin-bottom:10px}
   .hl{font-size:clamp(23px,3.8dvh,28px);line-height:1.08;margin-bottom:10px}
   .bd{font-size:clamp(12px,1.9dvh,14px);line-height:1.42}
-  .cv-top{margin-bottom:10px}.cv-mark{width:48px;height:48px}.cv-name{font-size:18px}
-  .cv-stock{margin-bottom:9px}.cv-ks{margin-top:10px}.cv-k{padding:7px 5px}.cv-ps{margin-top:9px;padding:8px 10px;font-size:11.5px}
+  .cv-top{margin-bottom:9px;gap:11px}.cv-mark{width:46px;height:46px;border-radius:12px}.cv-name{font-size:18px;line-height:1.05;margin-bottom:5px}
+  .cv-chips{gap:5px}.cv-chip{font-size:8px;padding:4px 8px;letter-spacing:.12em}
+  .cv-stock{margin-bottom:8px;gap:9px}.cv-sp{font-size:20px}.cv-sc{font-size:10px;padding:3px 8px}
+  .cv-ks{margin-top:9px;gap:6px}.cv-k{padding:7px 5px}.cv-kv{font-size:13px}.cv-kl{font-size:7px}
+  .cv-ps{margin-top:8px;padding:8px 10px;font-size:11px;line-height:1.34}
   .pie-wrap{gap:9px}.pie{width:min(155px,23dvh);height:min(155px,23dvh)}.pie-d{padding:9px 11px;min-height:50px}
   .doors,.riv{gap:7px}.door,.r{padding:9px 11px}.dt,.rtx{font-size:11.5px;line-height:1.32}
   .tw{padding:13px;margin-bottom:9px}.tb{font-size:15px;margin-bottom:7px}.tg{font-size:18px}
@@ -662,8 +669,9 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .tbtn{width:40px;height:40px;font-size:12px}
   .card{padding-top:max(126px,calc(env(safe-area-inset-top) + 112px));padding-bottom:max(76px,calc(env(safe-area-inset-bottom) + 64px));scroll-padding-top:max(126px,calc(env(safe-area-inset-top) + 112px));scroll-padding-bottom:max(86px,calc(env(safe-area-inset-bottom) + 74px));scrollbar-width:thin}
   .card::-webkit-scrollbar{display:block;width:3px}.card::-webkit-scrollbar-thumb{background:rgba(15,15,14,.22);border-radius:999px}
-  .eb-c{margin-bottom:7px}.hl{font-size:22px;margin-bottom:7px}.bd{font-size:11.5px;line-height:1.32}
-  .cv-top{margin-bottom:7px}.cv-mark{width:42px;height:42px}.cv-stock{margin-bottom:6px}.cv-ks{margin-top:7px}.cv-ps{margin-top:6px}
+  .eb-c{margin-bottom:6px}.hl{font-size:21px;margin-bottom:6px}.bd{font-size:11px;line-height:1.28}
+  .cv-top{margin-bottom:6px;gap:10px}.cv-mark{width:40px;height:40px}.cv-name{font-size:16px}.cv-chip{font-size:7.5px;padding:3px 7px}
+  .cv-stock{margin-bottom:5px}.cv-sp{font-size:18px}.cv-sc{font-size:9.5px}.cv-ks{margin-top:6px}.cv-k{padding:6px 4px}.cv-kv{font-size:12px}.cv-ps{margin-top:6px;font-size:10px;line-height:1.28}
   .pie{width:min(138px,21dvh);height:min(138px,21dvh)}.pie-wrap{gap:6px}
   .door,.r{padding:7px 9px}.doors,.riv,.acc,.cv-opts{gap:5px}
   .co-opt{padding:7px 10px}.ah{padding:7px 9px}.aic{width:32px;height:32px;min-width:32px}
@@ -686,7 +694,9 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
   .co{max-width:calc(100% - 128px);gap:7px}.co-logo{width:36px;height:36px;border-radius:9px}.co-name{font-size:12px}.co-sub{font-size:7.5px;max-width:112px}
   .tbtn{width:36px;height:36px}.tactions{gap:5px}
   .card{padding-top:max(116px,calc(env(safe-area-inset-top) + 104px));padding-bottom:max(74px,calc(env(safe-area-inset-bottom) + 62px));scroll-padding-top:max(116px,calc(env(safe-area-inset-top) + 104px));scroll-padding-bottom:max(84px,calc(env(safe-area-inset-bottom) + 72px))}
-  .hl{font-size:20px;line-height:1.04}.bd{font-size:10.5px;line-height:1.25}
+  .hl{font-size:19px;line-height:1.04}.bd{font-size:10px;line-height:1.23}
+  .cv-top{margin-bottom:5px}.cv-mark{width:38px;height:38px}.cv-name{font-size:15px}.cv-chip{font-size:7px;padding:3px 6px}
+  .cv-stock{gap:7px}.cv-sp{font-size:17px}.cv-ks{gap:5px}.cv-k{padding:5px 4px}.cv-kv{font-size:11px}.cv-kl{font-size:6.5px}.cv-ps{font-size:9.5px;padding:6px 9px}
   .nf-stat-boxes{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.nf-stat-box{padding:5px 4px}.nf-stat-val{font-size:12px}.nf-stat-lbl{font-size:6px}
   .nf-arpu-row{display:none}
   .nf-tile{padding:6px 8px}.nf-tile-desc{display:none}
@@ -854,7 +864,7 @@ body{background:var(--ink);overflow:hidden}
 /* ════════════════════════════════════
    APP SHELL (SIDEBAR + MAIN)
 ════════════════════════════════════ */
-#dtShell .app-shell{display:flex;height:calc(100vh - 40px);overflow:hidden}
+#dtShell .app-shell{display:flex;height:calc(100vh - 40px);min-height:0;overflow:hidden}
 
 /* ── SLEEK DESKTOP NAVBAR ── */
 .desktop-nav{position:absolute;top:0;left:0;right:0;height:40px;display:flex;align-items:center;justify-content:center;padding:0 56px;pointer-events:none;z-index:86}
@@ -901,9 +911,9 @@ body{background:var(--ink);overflow:hidden}
 #dtShell .sb-soon .sn-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
 /* ── MAIN AREA ── */
-#dtShell .main{flex:1;min-height:0;overflow-y:auto;background:var(--paper);display:flex;flex-direction:column}
-#dtShell .screen{display:none;flex-direction:column;min-height:100%;flex-shrink:0}
-#dtShell .screen.active{display:flex}
+#dtShell .main{flex:1;min-height:0;height:100%;overflow-y:scroll;overflow-x:hidden;background:var(--paper);overscroll-behavior:contain}
+#dtShell .screen{position:static;inset:auto;display:none;min-height:100%}
+#dtShell .screen.active{display:block}
 
 /* ════════════════════════════════════
    TODAY SCREEN — DESKTOP
@@ -1140,6 +1150,18 @@ body{background:var(--ink);overflow:hidden}
   #dtShell .today-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
   #dtShell .tg-card{min-height:190px;padding:22px 24px;gap:14px}
   #dtShell .tg-thumb{width:54px;height:54px;border-radius:14px;font-size:22px}
+  #dtShell .tg-thumb .company-logo-img,
+  #dtShell .lib-card-th .company-logo-img,
+  #dtShell .r-co-logo .company-logo-img,
+  #dtShell .cv-mark .company-logo-img,
+  #dtShell .tl-l .company-logo-img,
+  #dtShell .th .company-logo-img{background:transparent;padding:10%;object-fit:contain;transform:none}
+  #dtShell .company-logo-img.logo-netflix{background:#000;padding:0;object-fit:cover}
+  #dtShell .company-logo-img.logo-meta{background:#fff;padding:8%;object-fit:contain;transform:none}
+  #dtShell .company-logo-img.logo-cocacola{background:transparent;padding:0;object-fit:cover;transform:none}
+  #dtShell .cc-co-name .th{width:30px;height:30px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:var(--serif);font-weight:700;font-size:13px;color:#fff}
+  #dtShell .meta-you-card{background:linear-gradient(135deg,#fff,#eef4ff);border-color:rgba(8,102,255,.18);cursor:pointer}
+  #dtShell .meta-you-card .cc-ch{background:rgba(8,102,255,.12);color:#0866ff}
   #dtShell .tg-name{font-size:20px}#dtShell .tg-bl{font-size:13px;max-width:34ch}
   #dtShell .lib-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
   #dtShell .lib-card{min-height:190px;padding:18px;border-radius:17px}
@@ -1202,8 +1224,8 @@ body{background:var(--ink);overflow:hidden}
  <button class="tbtn" onclick="closeStack()">x</button>
  </div>
  </div>
- <div class="tz l" onclick="prevCard()"></div>
- <div class="tz r" onclick="nextCard()"></div>
+ <div class="tz l" onclick="event.stopPropagation();prevCard()"></div>
+ <div class="tz r" onclick="event.stopPropagation();nextCard()"></div>
  <div class="track" id="track"></div>
  <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">Up Go deeper</div><div class="pill" onclick="openTldr()">Menu TL;DR</div></div>
  </div>
@@ -1436,7 +1458,7 @@ sp:"-",sc:"price coming soon",scDir:"",
 ks:[{l:"Market cap",v:"Rs 11.4L cr"},{l:"Deposits",v:"Rs 31L cr"},{l:"Bad loans",v:"1.15%"}],
 vb:2134,sentiment:"neutral",
 ps:"If you have an HDFC savings account or credit card, you're part of the 100M customers who've kept this bank profitable for 30 years. That streak just got its first real test.",
-rails:["new"],nx:"netflix",
+rails:["new"],nx:"cocacola",
 cards:[
 {type:"cover",chips:["HDFCBANK - NSE","Rs 11.4 lakh crore"],hl:"For 30 years, HDFC was the gold standard. <em>Then 2026 happened.</em>",bd:"HDFC Bank had never had a losing year in three decades. Investors paid a premium for its boring-is-best reputation. Then in March 2026 the Chairman resigned over ethics concerns. Three senior executives were fired for selling risky bonds to Indians in Dubai. The stock dropped 22%. India's most trusted bank is having its first real reputation test."},
 {type:"pie",bg:"cream",hl:"Rs 3 lakh crore a year. <em>Banks make money two ways.</em>",bd:"A bank takes deposits from you and lends them to someone else. The difference is the profit.",tot:"Rs 3L cr",tl:"a year",sl:[
@@ -1466,7 +1488,7 @@ cards:[
 bd:"HDFC has no Ambani, no Tata, no controlling family. Half is owned by foreign institutions. The rest by Indian funds and 1.5 million small investors. That ownership is part of why this scandal matters: nobody is in charge of fixing the culture. It has to fix itself."},
 {type:"take",bg:"cream",hl:"HDFC was India's most trusted bank. <em>Now it has to earn that trust back.</em>",bd:"The business is still strong. Bad loans are still the lowest in India. Deposits are still growing. Customers are still there. But for 30 years HDFC charged a premium for never making a mistake. That premium just took a real hit. A great bank with a bruise. Buyable, but no longer untouchable."},
 {type:"conv",bg:"ink",hl:"Now you decide. <em>HDFC Bank in 5 years?</em>",opts:[{k:"bull",p:54},{k:"neutral",p:32},{k:"bear",p:14}]},
-{type:"next",bg:"brand",hl:"That was HDFC Bank.",bd:"Next, back to Netflix. Same idea: a great company, an uncertain decade.",nx:"netflix"}
+{type:"next",bg:"brand",hl:"That was HDFC Bank.",bd:"Next, Coca-Cola. A 140-year-old machine, built on the best margins in the world.",nx:"cocacola"}
 ],
 deep:{
 cover:{t:"The 30-year streak",e:"From the cover",h:`<div class="d-sub">A track record like no other</div><div class="d-p">From 1994 to 2024, HDFC Bank never reported an annual loss. Never. Through the 2008 financial crisis, demonetisation in 2016, the pandemic in 2020. Other Indian banks needed bailouts. <strong>HDFC just kept making money.</strong></div><div class="d-call">Then in March 2026, the Chairman quit over ethics. That streak doesn't measure trust. Trust took a hit anyway.</div>`},
@@ -1583,6 +1605,61 @@ cover:{t:"The number that makes it real",e:"From the cover",h:`<div class="d-sub
 },
 tldr:["Meta's apps are free. The business made <strong>$201 billion</strong> last year by selling access to your attention.","<strong>3.58 billion people</strong> open a Meta app every single day. No company in history has owned this much human attention.","In 2025, the US government tried to force Meta to give back Instagram and WhatsApp. After a six-week trial, they failed.","Meta AI reached <strong>1 billion monthly users in 18 months</strong>, the fastest product growth in history, by placing it inside apps people already used.","The bull case: AI is already making every ad more valuable. Ad prices and volumes rising at the same time is the proof.","The bear case: Meta is spending <strong>$130 billion</strong> on AI this year. More than it earned in all of 2022. The return is not yet proven."]}});
 
+Object.assign(CO,{cocacola:{id:"cocacola",domain:"coca-cola.com",n:"Coca-Cola",t:"KO",sec:"Beverages",fl:"🇺🇸",mc:"$355B",lb:"#E0091B",lc:"#fff",ac:"#E0091B",as:"rgba(224,9,27,0.18)",bg:"linear-gradient(160deg,#0A0A0A,#1A0203)",bl:"140 years old. Still the most recognized brand on Earth.",
+sp:"$72.40",sc:"+0.6%",scDir:"up",
+ks:[{l:"Market cap",v:"$355B"},{l:"Revenue",v:"$48B"},{l:"Years old",v:"140"}],
+vb:11284,sentiment:"bull",
+ps:"Coke sells you a drink that costs 4 cents to make for $2. Then does it 2.2 billion times a day. In Mexico, the average person drinks 2.2 litres of Coke every single day.",
+rails:["now","daily"],nx:"netflix",
+cards:[
+{type:"cover",chips:["KO · NYSE","Worth $355B","🇺🇸"],hl:"The drink that conquered Earth. <em>Coke doesn't own a single bottle.</em>",bd:"The original 1886 formula had actual cocaine in it. Not a scandal — the selling point, marketed as a headache cure. A morphine-addicted pharmacist sold the recipe for $2,300 in 1888. Today it's worth $355 billion, and Coke still doesn't own a single bottle."},
+{type:"pie",bg:"cream",hl:"$48 billion a year. <em>Most of it isn't even from Coke.</em>",bd:"They make syrup and keep 60% margin. Then 225 partners do all the bottling, trucking and selling.",tot:"$48B",tl:"a year",sl:[
+{k:"spark",n:" Sparkling drinks",p:60,a:"~60%",c:"#E0091B",x:"Coke, Zero Sugar, Fanta, Sprite. The classics everyone knows."},
+{k:"water",n:" Water, sports, coffee",p:25,a:"~25%",c:"#C49A3E",x:"Growing faster than anything else Coke sells right now."},
+{k:"juice",n:" Juice, dairy, plant",p:10,a:"~10%",c:"#1F6B4A",x:"Fairlife alone grew 28% last year. The breakout star."}]},
+{type:"doors",bg:"cream",hl:"One recipe. 225 partners. <em>Coke owns neither.</em>",dr:[
+{i:"",n:"The secret recipe",a:"01",c:"#E0091B",x:"Locked in an Atlanta vault. Only two people on Earth know it all at once. They can't fly on the same plane."},
+{i:"",n:"80 syrup plants",a:"02",c:"#C49A3E",x:"Coke gets paid the second syrup leaves the building. Before anyone opens a can."},
+{i:"",n:"225 bottling partners",a:"03",c:"#1F6B4A",x:"They own the factories, 30,000 trucks, 14 million shop fridges. Coke owns none of it."},
+{i:"",n:"33 million stores",a:"04",c:"#113CCF",x:"More places sell Coke than there are McDonald's on the planet, by 1,000 times."},
+{i:"",n:"2.2 billion drinks a day",a:"05",c:"#0B1F3A",x:"Every human alive drinks a Coke product roughly once every four days."}]},
+{type:"rivals",bg:"brand",hl:"Pepsi makes more money. <em>Coke is worth twice as much.</em>",rv:[
+{n:" Coca-Cola",t:"140 years doing one thing",h:true,x:"Pure play drinks. 60% margin on syrup. Worth $355B despite lower revenue than Pepsi."},
+{n:" PepsiCo",t:"More revenue, half the value",x:"Also owns Doritos, Cheetos, Quaker Oats. Diversification costs a $158B premium."},
+{n:" Monster Beverage",t:"The brand Coke secretly owns",x:"Coke holds 19% of Monster. So when Monster wins, Coke still wins."}]},
+{type:"hidden",bg:"ink",bad:"The average person drinks a can or two of Coke sometimes.",good:"In one part of Mexico, the average person drinks <strong>2.2 litres of Coke every single day.</strong>",bd:"That's 7 times what the average American drinks. Clean water is hard to find there, and Coke owns the leading bottled water brand too, priced about the same as Coke. So people just drink the Coke."},
+{type:"acc",bg:"green",ic:"Up",eb:"06 · How it could win — ",hl:"Three reasons Coca-Cola could be worth <em>way more.</em>",items:[
+{t:"The healthy eating wave is actually feeding Coke",b:"Coke Zero Sugar grew <strong>14% worldwide in 2025</strong>. People trying to eat healthier aren't ditching Coke — they're switching inside the brand. That's 13x faster than regular Coke."},
+{t:"Fairlife might be Coke's smartest move yet",b:"A high-protein milk growing <strong>28% a year</strong>. Coke paid $7.4 billion for it. So popular they literally can't make enough. A $650M factory upgrade lands by 2028."},
+{t:"64 years straight without cutting the dividend",b:"Through wars, recessions, 2008 and Covid, Coke has raised its dividend <strong>every year for 64 years in a row</strong>. Buffett's $1.3B bet now earns him $816M a year."}]},
+{type:"acc",bg:"red",ic:"Down",eb:"07 · What could sink it — ",hl:"Three things that could <em>actually hurt</em> Coca-Cola.",items:[
+{t:"A possible $20 billion bill, only $493 million saved up",b:"Tax authorities say Coke moved too much profit to low-tax countries. Already lost once, paid $6B, appealing the rest. If they lose completely, <strong>another $14 billion could be owed</strong>."},
+{t:"Ozempic doesn't just kill appetite — it kills sweet cravings",b:"Weight loss drugs make sugar cravings disappear. Among daily soda drinkers who started these drugs, <strong>77% cut way back or quit completely</strong>."},
+{t:"One war and one packaging choice erased a product from India",b:"Iran blockaded a Gulf shipping route in 2026. That region makes 9% of the world's aluminium for cans. Diet Coke in India only comes in cans. <strong>It vanished from shelves.</strong>"}]},
+{type:"own",bg:"gold",hl:"The new boss spent 30 years <em>working his way up inside Coke.</em>",bars:[
+{l:"Warren Buffett",p:9,d:"9.3%",c:"#E0091B"},
+{l:"Index funds",p:14,d:"~14%",c:"#C49A3E"},
+{l:"Everyone else",p:77,d:"~77%",c:"rgba(0,0,0,0.3)"}],
+bd:"No founder family runs this. Buffett is the closest thing to a power player, and he hasn't traded a single share since 1994. New CEO Henrique Braun spent 30 years inside Coke before reaching the top."},
+{type:"take",bg:"cream",hl:"Can a company built on sugar <em>survive a world turning against sugar?</em>",bd:"Coke isn't a company falling apart. It's a 140-year-old machine, and machines built that deep don't break overnight. The real thing to worry about is narrower than people think: whether Coke loses the tax fight, pays up to $20 billion, and breaks a 64-year dividend streak for the first time ever."},
+{type:"conv",bg:"ink",hl:"Now you decide. <em>Coca-Cola in 5 years?</em>",opts:[{k:"bull",p:65},{k:"neutral",p:22},{k:"bear",p:13}]},
+{type:"next",bg:"brand",hl:"That was Coca-Cola.",bd:"Next, Netflix. The company that burns $46M a day on shows — and still makes money.",nx:"netflix"}
+],
+deep:{
+cover:{t:"The man who got nothing",e:"From the cover",h:`<div class="d-sub">A $2,300 fortune he never saw</div><div class="d-p">Pemberton was a Civil War veteran who got addicted to morphine after being wounded in battle. He spent the 1880s mixing coca leaves, kola nuts, sugar and spice oils, trying to invent a substitute.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$2,300</div><div class="d-s-l">Sale price, 1888</div></div><div class="d-s"><div class="d-s-n">2 yrs</div><div class="d-s-l">Until his death</div></div><div class="d-s"><div class="d-s-n">$0</div><div class="d-s-l">Family kept</div></div></div><div class="d-call">Charley, his son, died in 1894 with opium by his side. The family that invented the world's most valuable drink got almost nothing from it.</div>`},
+pie:{t:"The billion dollar brand factory",e:"From the money",h:`<div class="d-sub">How Coke keeps finding the next big thing</div><div class="d-p">Coke now owns 32 brands that each earn over a billion dollars a year. Half were built from scratch inside Coke. The rest were small local brands Coke spotted early, bought, and scaled up using its own trucks and stores.</div><div class="d-st"><div class="d-s"><div class="d-s-n">32</div><div class="d-s-l">Billion dollar brands</div></div><div class="d-s"><div class="d-s-n">$220M</div><div class="d-s-l">Paid for Topo Chico</div></div><div class="d-s"><div class="d-s-n">15</div><div class="d-s-l">Built in-house</div></div></div><div class="d-call">Topo Chico was a small Mexican water brand. Coke bought it small and used its size to turn it into a billion dollar name.</div>`},
+doors:{t:"The country Coke walked away from",e:"From the business model",h:`<div class="d-sub">Why Coke left India for 16 years</div><div class="d-p">In 1977, India demanded Coke share its formula with a local partner. Coke said no, and walked away from the entire country instead.</div><div class="d-st"><div class="d-s"><div class="d-s-n">16 yrs</div><div class="d-s-l">Coke stayed away</div></div><div class="d-s"><div class="d-s-n">85%</div><div class="d-s-l">Thums Up share by 1990</div></div><div class="d-s"><div class="d-s-n">#1</div><div class="d-s-l">Coke's first move back</div></div></div><div class="d-call">When Coke returned in 1993, the first thing they did was buy Thums Up. It still outsells Coca-Cola itself in India today.</div>`},
+rivals:{t:"The spy who called the wrong friend",e:"From the rivals",h:`<div class="d-sub">How a $1.5 million theft fell apart</div><div class="d-p">In 2006, a Coca-Cola secretary stole confidential documents and offered to sell them to Pepsi for $1.5 million.</div><div class="d-call">Pepsi called Coca-Cola. Then they called the FBI. The thief was arrested in a sting and served eight years in prison. Even with the formula in hand, you still can't call it Coke. The brand is the moat, not the syrup.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$1.5M</div><div class="d-s-l">Asking price</div></div><div class="d-s"><div class="d-s-n">8 yrs</div><div class="d-s-l">Prison sentence</div></div><div class="d-s"><div class="d-s-n">0</div><div class="d-s-l">Days Pepsi waited to call FBI</div></div></div>`},
+hidden:{t:"The church made of Coke bottles",e:"From the hidden truth",h:`<div class="d-sub">Where soda replaced water and ritual</div><div class="d-p">In San Juan Chamula, a church has no pews and no priest. The floor is pine needles, the walls lined with open Coke bottles. People pray and pass Coke between them, believing the burp expels bad spirits.</div><div class="d-call">This started in the 1960s when missionaries discouraged the traditional local drink. Coke filled that gap with billboards in the local language, faster than clean water ever could.</div>`},
+acc:{t:"Pepsi Warren switches sides",e:"From the bull case",h:`<div class="d-sub">48 years loyal to the wrong soda</div><div class="d-p">Warren Buffett's own son called him "Pepsi Warren." In 1985 a friend mailed him an early sample of Cherry Coke. He switched on the spot.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$1B</div><div class="d-s-l">Bet, three years later</div></div><div class="d-s"><div class="d-s-n">30%</div><div class="d-s-l">Of Berkshire, at the time</div></div><div class="d-s"><div class="d-s-n">5</div><div class="d-s-l">Cans a day, still</div></div></div><div class="d-call">He has never sold a single share.</div>`},
+acc2:{t:"Diet Coke parties in Delhi",e:"From the bear case",h:`<div class="d-sub">When a war runs out a can supply</div><div class="d-p">In April 2026, people in Delhi paid entry fees to attend pop-up events. Not for music. For a Diet Coke.</div><div class="d-st"><div class="d-s"><div class="d-s-n">1.6M t</div><div class="d-s-l">Aluminium capacity lost</div></div><div class="d-s"><div class="d-s-n">9%</div><div class="d-s-l">Of world's aluminium</div></div><div class="d-s"><div class="d-s-n">+30%</div><div class="d-s-l">Coke paid to source cans</div></div></div><div class="d-call">This was never really about Diet Coke. It's a preview of what concentration risk looks like across 200 countries.</div>`},
+own:{t:"The investment that pays for itself",e:"From who owns it",h:`<div class="d-sub">Every 18 months, Buffett gets his money back</div><div class="d-p">Buffett bought his Coca-Cola shares between 1988 and 1994 for $1.3 billion total. He hasn't touched them since.</div><div class="d-st"><div class="d-s"><div class="d-s-n">62.8%</div><div class="d-s-l">Yearly yield on cost</div></div><div class="d-s"><div class="d-s-n">$28B</div><div class="d-s-l">Stake worth today</div></div><div class="d-s"><div class="d-s-n">18 mo</div><div class="d-s-l">To repay itself</div></div></div><div class="d-call">"I've been drinking Coke since I was six. I'm now one quarter Coca-Cola." Five cans a day for decades is a real quarter of his daily calories.</div>`},
+take:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">Coke isn't a company falling apart. It's a 140-year-old machine, and machines built that deep don't break overnight.</div><div class="d-call">The real thing to worry about is narrower than people think. It's whether Coke loses the tax fight, pays up to $20 billion, and breaks a 64-year dividend streak for the first time ever.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not financial advisors.</div>`},
+conv:{t:"What the crowd is saying",e:"From the vote",h:`<div class="d-sub">11,284 readers have voted</div><div class="d-st"><div class="d-s"><div class="d-s-n">65%</div><div class="d-s-l">Bullish</div></div><div class="d-s"><div class="d-s-n">22%</div><div class="d-s-l">Neutral</div></div><div class="d-s"><div class="d-s-n">13%</div><div class="d-s-l">Bearish</div></div></div><div class="d-call">The most common neutral take: wait and see if Zero Sugar and Fairlife can outgrow the sugar problem before it bites.</div>`},
+next:{t:"Same war, different weapons",e:"From what's next",h:`<div class="d-sub">Why Netflix is the opposite bet</div><div class="d-p">Netflix burns $46M a day on shows. Coca-Cola earns 60% margin on syrup and owns zero factories. Two completely different ways to build a dominant business.</div><div class="d-call">Netflix needs you to keep watching. Coke needs you to keep swallowing. Both are very confident you will.</div>`}
+},
+tldr:["Worth <strong>$355 billion</strong>. Started as a $2,300 purchase of a morphine addict's backyard recipe.","Coke owns <strong>zero bottling plants</strong>. It sells syrup to 225 partners and keeps 60% margin while they do the work.","Coke Zero Sugar is growing <strong>13 times faster</strong> than regular Coke. The healthy trend is funding it.","In one part of Mexico, the average person drinks <strong>2.2 litres of Coke every day</strong> — 7 times the US average.","A possible <strong>$20 billion tax bill</strong>, with only $493 million saved up to cover it.","Buffett's $1.3B bet now pays him <strong>$816M a year</strong>. He's never sold a single share."]}});
+
 const CS=[
 {id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
@@ -1597,17 +1674,17 @@ const CS=[
 ];
 
 /* STATE */
-let curCo="netflix",cardIdx=0;
+var curCo="netflix",cardIdx=0;
 let personalityData=null;
 let userId=null;
 let profileState={streak:0,savedCompanies:[],previousVotes:{},readHistory:[]};
 let saved={};
 let calls=[];
 const voteAggregates={};
-const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100}};
+const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100}};
 let dbCos=[];
 let currentDbCo=null;
-const CO_TICKER_MAP={netflix:'NFLX',disney:'DIS',meta:'META'};
+const CO_TICKER_MAP={netflix:'NFLX',disney:'DIS',meta:'META',cocacola:'KO'};
 function localReadDateKey(date=new Date()){
  const year=date.getFullYear();
  const month=String(date.getMonth()+1).padStart(2,'0');
@@ -1643,7 +1720,8 @@ function getAggregate(co){const a=voteAggregates[co]&&voteAggregates[co].total?v
 function companyKey(company){return company.id||company.n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 function companyLogo(company){
  const key=companyKey(company);const initial=(company.n||'?').trim().charAt(0).toUpperCase();
- return `<span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${key}" src="/api/logo/${key}" alt="" onerror="this.remove()">`;
+ const logoSrc=`/api/logo/${key}${key==='cocacola'?'?v=cocacola-png':''}`;
+ return `<span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${key}" src="${logoSrc}" alt="" onerror="this.remove()">`;
 }
 function usesIndianNumbering(){
  const country=String(profileState.country||'').toLowerCase();
@@ -1765,9 +1843,10 @@ async function openStack(slug,source='today'){
  document.getElementById('cologo').style.color=c.lc;
  document.getElementById('coname').textContent=c.n;
  document.getElementById('cosub').textContent=c.t+' - '+c.sec;
- try{profileState=await api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})});syncSavedFromProfile();syncCallsFromProfile();}
- catch(e){showToast(e.message);}
  renderCards();buildProg();showCard(0);renderTldr();goTo('stack');
+ api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})})
+ .then(data=>{profileState=data;syncSavedFromProfile();syncCallsFromProfile();updProg();})
+ .catch(e=>showToast(e.message));
 }
 function renderCards(){
  const c=CO[curCo];const tr=document.getElementById('track');tr.innerHTML='';
@@ -2106,8 +2185,15 @@ function revealSavedVote(idx){
  const r=document.getElementById('cvR-'+idx);
  if(r){const msgs={bull:"You're <strong>bullish</strong>, with the crowd. We'll check back in a few weeks.",neutral:"You're <strong>neutral</strong>. Fence, meet sitter.",bear:"You're <strong>bearish</strong>. Bold call."};r.innerHTML=msgs[voteType];r.classList.add('show');}
 }
-function nextCard(){if(cardIdx<CO[curCo].cards.length-1)showCard(cardIdx+1);else closeStack();}
-function prevCard(){if(cardIdx>0)showCard(cardIdx-1);else closeStack();}
+let cardNavLockedUntil=0;
+function moveCard(delta){
+ const now=Date.now();if(now<cardNavLockedUntil)return;
+ cardNavLockedUntil=now+260;
+ const target=cardIdx+delta;
+ if(target>=0&&target<CO[curCo].cards.length)showCard(target);
+}
+function nextCard(){moveCard(1);}
+function prevCard(){moveCard(-1);}
 function closeStack(){closeDrawer();closeTldr();goTo('today');}
 async function toggleSave(){
  if(!saved[curCo])saved[curCo]=new Set();
@@ -2366,13 +2452,25 @@ ${personalityCard(personalityData)}
 </div>
 <div id="tourCallsEl">
 <div class="sect-t" style="margin-bottom:14px">Your calls</div>
-${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb||1;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${co.n[0]}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'📈 Bullish':c.vote==='bear'?'📉 Bearish':'😐 Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div>${callPnl(c)}</div>`;}).join('')}
+${calls.length===0?'<div class="empty">No calls made yet. Read a company and vote at the end.</div>':calls.map(c=>{const co=CO[c.co];const total=c.b+c.n+c.bb||1;const bw=c.b/total*100,nw=c.n/total*100,brw=c.bb/total*100;return `<div class="cc"><div class="cc-r"><div class="cc-co"><div class="th" style="background:${co.lb};color:${co.lc}">${companyLogo(co)}</div>${co.n}</div><div class="cc-ch ${c.vote}">${c.vote==='bull'?'📈 Bullish':c.vote==='bear'?'📉 Bearish':'😐 Neutral'}</div></div><div class="cc-bars"><div class="cc-b bull" style="width:${bw}%"></div><div class="cc-b neutral" style="width:${nw}%"></div><div class="cc-b bear" style="width:${brw}%"></div></div><div class="cc-m"><span class="${c.vote==='bull'?'ym':''}">Bull ${c.b}%</span><span class="${c.vote==='neutral'?'ym':''}">Neutral ${c.n}%</span><span class="${c.vote==='bear'?'ym':''}">Bear ${c.bb}%</span></div>${callPnl(c)}</div>`;}).join('')}
 </div>
 <div class="sect-t" style="margin:22px 0 14px">Saved cards</div>
 ${allSaved.length===0?'<div class="empty">Nothing saved yet. Tap the bookmark on any card.</div>':`<div class="sg">${allSaved.map(s=>{const co=CO[s.co];if(!co)return '';const card=co.cards[s.idx]||co.cards[0];const txt=card.hl?card.hl.replace(/<[^>]+>/g,''):card.good?card.good.replace(/<[^>]+>/g,''):'Saved card';const bg=card.bg||'cream';return `<div class="sm bg-${bg}" onclick="openStack('${s.co}')"><div class="sm-tg">${co.n} - Card ${s.idx+1}</div><div class="sm-q">"${txt.slice(0,80)}${txt.length>80?'...':''}"</div><div class="sm-f"><span>${co.t}</span><span>Open &rarr;</span></div></div>`;}).join('')}</div>`}`;
  twparse(document.getElementById('youScroll'));
 }
-const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null,suppressNavClickUntil=0;
+function isStackControlTarget(target){
+ return target&&target.closest('input,textarea,select,a,button,.topbar,.pills,.tz,.ai,.nf-acc-item,.slice,.co-opt,.np,.ea');
+}
+shell.addEventListener('click',e=>{
+ if(Date.now()<suppressNavClickUntil){e.preventDefault();return;}
+ if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
+ if(isStackControlTarget(e.target))return;
+ const r=shell.getBoundingClientRect();
+ const x=e.clientX-r.left;
+ if(x<r.width*0.24){e.preventDefault();prevCard();}
+ else if(x>r.width*0.76){e.preventDefault();nextCard();}
+});
 shell.addEventListener('touchstart',e=>{
  if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
@@ -2387,10 +2485,10 @@ shell.addEventListener('touchend',e=>{
  const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
  if(ax<30&&ay<30)return;
  if(ax>ay)e.preventDefault();
- if(stg&&stg.closest('input,textarea,select,a,.ai,.slice,.co-opt'))return;
+ if(isStackControlTarget(stg))return;
  if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
- else if(dx<-40){if(cardIdx===CO[curCo].cards.length-1)closeStack();else nextCard();}
- else if(dx>40){if(cardIdx===0||cardIdx===CO[curCo].cards.length-1)closeStack();else prevCard();}
+ else if(dx<-40){suppressNavClickUntil=Date.now()+450;nextCard();}
+ else if(dx>40){suppressNavClickUntil=Date.now()+450;prevCard();}
 },{passive:false});
 document.addEventListener('keydown',e=>{
  if(!document.getElementById('screen-stack').classList.contains('active'))return;
@@ -2549,6 +2647,43 @@ function dtGoTo(tab){
   if(tab==='you')dtRenderShelf();
 }
 
+function dtMainCanScroll(){
+  const main=document.getElementById('dtMainArea');
+  return main&&main.scrollHeight>main.clientHeight+1;
+}
+
+function dtScrollMain(delta){
+  const main=document.getElementById('dtMainArea');
+  if(!main)return false;
+  main.scrollTop+=delta;
+  return true;
+}
+
+document.addEventListener('wheel',e=>{
+  const overlay=document.getElementById('dtReaderOverlay');
+  if(overlay&&overlay.classList.contains('open'))return;
+  if(!dtMainCanScroll())return;
+  dtScrollMain(e.deltaY);
+  e.preventDefault();
+},{passive:false});
+
+document.addEventListener('keydown',e=>{
+  const overlay=document.getElementById('dtReaderOverlay');
+  if(overlay&&overlay.classList.contains('open'))return;
+  if(e.target&&e.target.closest('input,textarea,select,[contenteditable="true"]'))return;
+  const keys=new Set(['ArrowDown','ArrowUp','PageDown','PageUp','Home','End',' ']);
+  if(!keys.has(e.key)||!dtMainCanScroll())return;
+  const main=document.getElementById('dtMainArea');
+  if(!main)return;
+  if(e.key==='ArrowDown')dtScrollMain(80);
+  else if(e.key==='ArrowUp')dtScrollMain(-80);
+  else if(e.key==='PageDown'||e.key===' ')dtScrollMain(main.clientHeight*0.85);
+  else if(e.key==='PageUp')dtScrollMain(-main.clientHeight*0.85);
+  else if(e.key==='Home')main.scrollTop=0;
+  else if(e.key==='End')main.scrollTop=main.scrollHeight;
+  e.preventDefault();
+});
+
 function dtBuildTicker(){
   const tr=document.getElementById('dtTickerTrack');if(!tr)return;
   const mk=k=>{const c=CO[k];return`<div class="ticker-item" onclick="openStack('${k}')"><span class="ti-name">${c.t||c.ticker||k.toUpperCase()}</span><span class="ti-price">${c.sp||'—'}</span><span class="ti-ch ${c.scDir||''}">${c.sc&&c.sc.includes('%')?c.sc+' ytd':c.sc||''}</span></div>`;};
@@ -2598,16 +2733,16 @@ async function dtOpenStack(slug,source='today'){
   const logo=document.getElementById('dtCologo');if(logo){logo.innerHTML=companyLogo(c);logo.style.background=c.lb||'#333';logo.style.color=c.lc||'#fff';}
   const nm=document.getElementById('dtConame');if(nm)nm.textContent=c.n;
   const sub=document.getElementById('dtCosub');if(sub)sub.textContent=(c.t||c.ticker||'')+' · '+(c.sec||'');
-  try{
-    profileState=await api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})});
-    syncSavedFromProfile();syncCallsFromProfile();
-    const sn=document.getElementById('dtStreakNum');if(sn)sn.textContent=profileState.streak||0;
-    const ns=document.getElementById('dtNavStreakNum');if(ns)ns.textContent=profileState.streak||0;
-  }catch(e){dtShowToast(e.message||'Daily Dividend could not save that yet');}
   dtRenderCards();dtBuildProg();dtShowCard(0);
   const ov=document.getElementById('dtReaderOverlay');if(ov)ov.classList.add('open');
-  document.body.style.overflow='hidden';
+  if(!IS_DESKTOP)document.body.style.overflow='hidden';
   const kh=document.getElementById('dtKbHint');if(kh){kh.classList.add('show');setTimeout(()=>kh.classList.remove('show'),3200);}
+  api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})})
+  .then(data=>{
+    profileState=data;syncSavedFromProfile();syncCallsFromProfile();dtUpdProg();
+    const sn=document.getElementById('dtStreakNum');if(sn)sn.textContent=profileState.streak||0;
+    const ns=document.getElementById('dtNavStreakNum');if(ns)ns.textContent=profileState.streak||0;
+  }).catch(e=>dtShowToast(e.message||'Daily Dividend could not save that yet'));
 }
 
 function dtCloseStack(){
@@ -2786,7 +2921,7 @@ function dtShowCard(i){
   if(i<0||i>=CO[curCo].cards.length)return;
   dtCardIdx=i;
   const activeType=CO[curCo].cards[i]&&CO[curCo].cards[i].type;
-  const interactiveTypes=new Set(['conv','next','acc','nf-bull','nf-bear','dis-bull','dis-bear']);
+  const interactiveTypes=new Set(['conv','next','nf-bull','nf-bear','dis-bull','dis-bear']);
   const ov=document.getElementById('dtReaderOverlay');if(ov)ov.classList.toggle('interactive-card',interactiveTypes.has(activeType));
   const cards=document.querySelectorAll('#dtTrack .card');
   cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
@@ -2798,8 +2933,15 @@ function dtShowCard(i){
   }
 }
 
-function dtNextCard(){if(dtCardIdx<CO[curCo].cards.length-1)dtShowCard(dtCardIdx+1);else dtCloseStack();}
-function dtPrevCard(){if(dtCardIdx>0)dtShowCard(dtCardIdx-1);}
+let dtCardNavLockedUntil=0;
+function dtMoveCard(delta){
+  const now=Date.now();if(now<dtCardNavLockedUntil)return;
+  dtCardNavLockedUntil=now+260;
+  const target=dtCardIdx+delta;
+  if(target>=0&&target<CO[curCo].cards.length)dtShowCard(target);
+}
+function dtNextCard(){dtMoveCard(1);}
+function dtPrevCard(){dtMoveCard(-1);}
 
 function dtUpdateRightPanel(idx){
   const c=CO[curCo];const card=c.cards[idx];const k=deepKeyForCard(card,idx);const d=k&&c.deep?c.deep[k]:null;
@@ -3006,6 +3148,8 @@ async function dtRenderShelf(){
   const allSaved=[];
   Object.entries(saved||{}).forEach(([co,set])=>{set.forEach(idx=>allSaved.push({co,idx}));});
   const previousVotes=profileState.previousVotes||{};
+  const metaCo=CO.meta;
+  const metaPrompt=!previousVotes.meta&&metaCo?`<div class="cc-card meta-you-card" onclick="openStack('meta','you')"><div class="cc-r"><div class="cc-co-name"><div class="th" style="background:${metaCo.lb};color:${metaCo.lc}">${companyLogo(metaCo)}</div>${metaCo.n}</div><div class="cc-ch neutral">Read next</div></div><div class="sh-f" style="font-size:11px;margin-top:4px">${metaCo.bl||'The AI bet inside the attention machine.'}</div></div>`:'';
   const streak=profileState.streak||0;
   yc.innerHTML=`
 <div class="you-head-row"><div class="you-head-copy"><div class="you-h">Your shelf.</div><div class="you-sub">What you've saved and how you voted.</div></div><button class="tour-replay-btn" onclick="startTour()">▶ Tutorial</button></div>
@@ -3017,6 +3161,7 @@ ${personalityCard(personalityData)}
     <div class="streak-n">${streak}<span class="u">days</span></div>
   </div>
   <div id="tourCallsEl" style="margin-top:8px"><div class="you-sect-t">Your calls</div>
+  ${metaPrompt}
   ${Object.keys(previousVotes).map(co=>{
     const v=previousVotes[co];const c=CO[co];if(!c)return'';
     const label=v==='bull'?'📈 Bullish':v==='bear'?'📉 Bearish':'😐 Neutral';
