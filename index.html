@@ -180,6 +180,10 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .cv-kv{font-family:var(--serif);font-size:14px;font-weight:500;line-height:1;margin-bottom:4px}
 .cv-kl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;line-height:1.3}
 .cv-ps{background:rgba(255,255,255,0.06);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 12px;margin-top:14px;font-family:var(--sans);font-size:12.5px;line-height:1.45;opacity:0.88;font-style:italic}
+.cv-callout2{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-left:3px solid var(--accent);border-radius:0 12px 12px 0;padding:11px 13px;margin-top:10px}
+.cv-callout2-ic{font-size:18px;line-height:1;flex-shrink:0;margin-top:1px}
+.cv-callout2-tx{font-family:var(--sans);font-size:12px;line-height:1.42;color:var(--cream);opacity:0.92}
+.cv-callout2-tx strong{font-weight:700;color:#fff;opacity:1}
 
 /* PIE CARD */
 .pie-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -1612,60 +1616,73 @@ cover:{t:"The number that makes it real",e:"From the cover",h:`<div class="d-sub
 },
 tldr:["Meta's apps are free. The business made <strong>$201 billion</strong> last year by selling access to your attention.","<strong>3.58 billion people</strong> open a Meta app every single day. No company in history has owned this much human attention.","In 2025, the US government tried to force Meta to give back Instagram and WhatsApp. After a six-week trial, they failed.","Meta AI reached <strong>1 billion monthly users in 18 months</strong>, the fastest product growth in history, by placing it inside apps people already used.","The bull case: AI is already making every ad more valuable. Ad prices and volumes rising at the same time is the proof.","The bear case: Meta is spending <strong>$130 billion</strong> on AI this year. More than it earned in all of 2022. The return is not yet proven."]}});
 
-Object.assign(CO,{cocacola:{id:"cocacola",domain:"coca-cola.com",n:"Coca-Cola",t:"KO",sec:"Beverages",fl:"🇺🇸",mc:"$355B",lb:"#E0091B",lc:"#fff",ac:"#E0091B",as:"rgba(224,9,27,0.18)",bg:"linear-gradient(160deg,#0A0A0A,#1A0203)",bl:"140 years old. Still the most recognized brand on Earth.",
-sp:"$84.14",sc:"+36.8%",scDir:"up",
-ks:[{l:"Market cap",v:"$355B"},{l:"Revenue",v:"$48B"},{l:"Years old",v:"140"}],
+Object.assign(CO,{cocacola:{id:"cocacola",domain:"coca-cola.com",n:"Coca-Cola",t:"KO",sec:"Beverages",fl:"🇺🇸",mc:"$355B",lb:"#ED232A",lc:"#fff",ac:"#ED232A",as:"rgba(237,35,42,0.18)",bg:"linear-gradient(160deg,#0A0A0A,#1A0505)",bl:"140 years old. Still the most recognized brand on Earth.",
+sp:"$72.40",sc:"+0.6%",scDir:"up",
+ks:[{l:"Worth today",v:"$355B"},{l:"Made every year",v:"$48B"},{l:"Years old",v:"140"}],
 vb:11284,sentiment:"bull",
-ps:"Coke sells you a drink that costs 4 cents to make for $2. Then does it 2.2 billion times a day. In Mexico, the average person drinks 2.2 litres of Coke every single day.",
+ps:"Coke sells you a drink that costs 4 cents to make for $2. Then does it 2.2 billion times a day.",
 rails:["now","daily"],nx:"netflix",
 cards:[
-{type:"cover",chips:["KO · NYSE","Worth $355B","🇺🇸"],hl:"The drink that conquered Earth. <em>Coke doesn't own a single bottle.</em>",bd:"The original 1886 formula had actual cocaine in it. Not a scandal — the selling point, marketed as a headache cure. A morphine-addicted pharmacist sold the recipe for $2,300 in 1888. Today it's worth $355 billion, and Coke still doesn't own a single bottle."},
-{type:"pie",bg:"cream",hl:"$48 billion a year. <em>Most of it isn't even from Coke.</em>",bd:"They make syrup and keep 60% margin. Then 225 partners do all the bottling, trucking and selling.",tot:"$48B",tl:"a year",sl:[
-{k:"spark",n:" Sparkling drinks",p:60,a:"~60%",c:"#E0091B",x:"Coke, Zero Sugar, Fanta, Sprite. The classics everyone knows."},
-{k:"water",n:" Water, sports, coffee",p:25,a:"~25%",c:"#C49A3E",x:"Growing faster than anything else Coke sells right now."},
-{k:"juice",n:" Juice, dairy, plant",p:10,a:"~10%",c:"#1F6B4A",x:"Fairlife alone grew 28% last year. The breakout star."}]},
-{type:"doors",bg:"cream",hl:"One recipe. 225 partners. <em>Coke owns neither.</em>",dr:[
-{i:"",n:"The secret recipe",a:"01",c:"#E0091B",x:"Locked in an Atlanta vault. Only two people on Earth know it all at once. They can't fly on the same plane."},
-{i:"",n:"80 syrup plants",a:"02",c:"#C49A3E",x:"Coke gets paid the second syrup leaves the building. Before anyone opens a can."},
-{i:"",n:"225 bottling partners",a:"03",c:"#1F6B4A",x:"They own the factories, 30,000 trucks, 14 million shop fridges. Coke owns none of it."},
-{i:"",n:"33 million stores",a:"04",c:"#113CCF",x:"More places sell Coke than there are McDonald's on the planet, by 1,000 times."},
-{i:"",n:"2.2 billion drinks a day",a:"05",c:"#0B1F3A",x:"Every human alive drinks a Coke product roughly once every four days."}]},
-{type:"rivals",bg:"brand",hl:"Pepsi makes more money. <em>Coke is worth twice as much.</em>",rv:[
-{n:" Coca-Cola",t:"140 years doing one thing",h:true,x:"Pure play drinks. 60% margin on syrup. Worth $355B despite lower revenue than Pepsi."},
-{n:" PepsiCo",t:"More revenue, half the value",x:"Also owns Doritos, Cheetos, Quaker Oats. Diversification costs a $158B premium."},
-{n:" Monster Beverage",t:"The brand Coke secretly owns",x:"Coke holds 19% of Monster. So when Monster wins, Coke still wins."}]},
-{type:"hidden",bg:"ink",bad:"The average person drinks a can or two of Coke sometimes.",good:"In one part of Mexico, the average person drinks <strong>2.2 litres of Coke every single day.</strong>",bd:"That's 7 times what the average American drinks. Clean water is hard to find there, and Coke owns the leading bottled water brand too, priced about the same as Coke. So people just drink the Coke."},
-{type:"acc",bg:"green",ic:"Up",eb:"06 · How it could win — ",hl:"Three reasons Coca-Cola could be worth <em>way more.</em>",items:[
-{t:"The healthy eating wave is actually feeding Coke",b:"Coke Zero Sugar grew <strong>14% worldwide in 2025</strong>. People trying to eat healthier aren't ditching Coke — they're switching inside the brand. That's 13x faster than regular Coke."},
-{t:"Fairlife might be Coke's smartest move yet",b:"A high-protein milk growing <strong>28% a year</strong>. Coke paid $7.4 billion for it. So popular they literally can't make enough. A $650M factory upgrade lands by 2028."},
-{t:"64 years straight without cutting the dividend",b:"Through wars, recessions, 2008 and Covid, Coke has raised its dividend <strong>every year for 64 years in a row</strong>. Buffett's $1.3B bet now earns him $816M a year."}]},
-{type:"acc",bg:"red",ic:"Down",eb:"07 · What could sink it — ",hl:"Three things that could <em>actually hurt</em> Coca-Cola.",items:[
-{t:"A possible $20 billion bill, only $493 million saved up",b:"Tax authorities say Coke moved too much profit to low-tax countries. Already lost once, paid $6B, appealing the rest. If they lose completely, <strong>another $14 billion could be owed</strong>."},
-{t:"Ozempic doesn't just kill appetite — it kills sweet cravings",b:"Weight loss drugs make sugar cravings disappear. Among daily soda drinkers who started these drugs, <strong>77% cut way back or quit completely</strong>."},
-{t:"One war and one packaging choice erased a product from India",b:"Iran blockaded a Gulf shipping route in 2026. That region makes 9% of the world's aluminium for cans. Diet Coke in India only comes in cans. <strong>It vanished from shelves.</strong>"}]},
-{type:"own",bg:"gold",hl:"The new boss spent 30 years <em>working his way up inside Coke.</em>",bars:[
-{l:"Warren Buffett",p:9,d:"9.3%",c:"#E0091B"},
-{l:"Index funds",p:14,d:"~14%",c:"#C49A3E"},
-{l:"Everyone else",p:77,d:"~77%",c:"rgba(0,0,0,0.3)"}],
-bd:"No founder family runs this. Buffett is the closest thing to a power player, and he hasn't traded a single share since 1994. New CEO Henrique Braun spent 30 years inside Coke before reaching the top."},
-{type:"take",bg:"cream",hl:"Can a company built on sugar <em>survive a world turning against sugar?</em>",bd:"Coke isn't a company falling apart. It's a 140-year-old machine, and machines built that deep don't break overnight. The real thing to worry about is narrower than people think: whether Coke loses the tax fight, pays up to $20 billion, and breaks a 64-year dividend streak for the first time ever."},
-{type:"conv",bg:"ink",hl:"Now you decide. <em>Coca-Cola in 5 years?</em>",opts:[{k:"bull",p:65},{k:"neutral",p:22},{k:"bear",p:13}]},
-{type:"next",bg:"brand",hl:"That was Coca-Cola.",bd:"Next, Netflix. The company that burns $46M a day on shows — and still makes money.",nx:"netflix"}
+{type:"ko-cover",deep:"cover",chips:["KO · NYSE","Beverages · 200 countries"],hl:"The drink that conquered Earth. <em>Coke doesn't own a single bottle.</em>",bd:"The original 1886 formula had actual cocaine in it. Not a scandal, the selling point, marketed as a headache cure. A morphine addicted pharmacist sold the recipe for $2,300 in 1888. Today it's worth $355 billion, and Coke still doesn't own a single bottle.",callout2:"Coke's own research found <strong>Coca Cola is the second most recognized word on Earth</strong>, in any language. Only OK beats it."},
+{type:"ko-money",bg:"cream",deep:"money",hl:"$48 billion a year. <em>Most of it isn't even from Coke.</em>",bigNum:60,bigSuffix:"%",bigLabel:"kept from every syrup dollar",bigSub:"the partners doing all the work keep just 30%",tiles:[
+{icon:"🥤",name:"Sparkling drinks",amt:"~60%",profit:"the core",profitCls:"high",desc:"Coke, Zero Sugar, Fanta, Sprite. The classics everyone knows."},
+{icon:"💧",name:"Water, sports, coffee",amt:"~25%",profit:"fastest growing",profitCls:"mid",desc:"Growing faster than anything else Coke sells right now."},
+{icon:"🥛",name:"Juice, dairy, plant milk",amt:"~10%",profit:"surging",profitCls:"mid",desc:"Fairlife alone grew 28% last year. The breakout star."}],
+callout:"Coke Zero Sugar is growing 13 times faster than regular Coke right now.",
+brandLine:"Coke now owns <strong>32 billion dollar brands</strong>, far beyond soda. Mango drink Maaza, milk brand Fairlife, and more, many bought small and grown huge."},
+{type:"ko-model",bg:"cream",deep:"model",hl:"One recipe. 225 partners. <em>Coke owns neither.</em>",pills:["Secret","Syrup","Bottler","Stores","You"],steps:[
+{n:"01",pill:"Secret",t:"One handwritten recipe",s:"Locked in an Atlanta vault. Only two people on Earth know it all at once. They can't even fly on the same plane together."},
+{n:"02",pill:"Syrup",t:"80 plants make just the syrup",s:"Coke gets paid the second it leaves the building, before anyone's even opened a can. Bottling is a different story entirely."},
+{n:"03",pill:"Bottler",t:"225 partners do the work",s:"They own the factories, the 30,000 trucks, the 14 million fridges in shops. Coke owns none of it."},
+{n:"04",pill:"Stores",t:"33 million stores sell it",s:"More places sell Coke than there are McDonald's restaurants on the planet, by 1,000 times over."},
+{n:"05",pill:"You",t:"2.2 billion drinks a day",s:"Basically every human alive drinks a Coke product roughly once every four days."}],
+loop:"The recipe makes money without owning a factory. The bottler makes money without owning the recipe. You pay for both, every single can."},
+{type:"ko-rivals",bg:"cream",deep:"rivals",hl:"Pepsi makes more money. <em>Coke is worth twice as much.</em>",bd:"Investors don't just pay for today's earnings. They pay extra for businesses that do one thing brilliantly, since that's easier to trust than five things at once.",rows:[
+{emoji:"🔴",n:"Coca-Cola",val:"$355B",pct:100,tag:"Just drinks. One job for 140 years. People love the simplicity.",h:true},
+{emoji:"🔵",n:"PepsiCo",val:"$197B",pct:55,tag:"Makes more money than Coke. Worth half. Also owns Doritos, Cheetos, Quaker Oats."},
+{emoji:"🟢",n:"Monster Beverage",val:"$88B",pct:25,tag:"Coke secretly owns 19% of Monster. So even when Monster wins, Coke wins too."},
+{emoji:"☕",n:"Keurig Dr Pepper",val:"$38B",pct:11,tag:"Quietly became more popular than Pepsi in the US in 2024. Nobody even noticed."}],
+kicker:"Same shelves, same customers. A $275 billion gap between two companies, all because of one thing: focus."},
+{type:"ko-hidden",bg:"ink",deep:"hidden",myth:"The average person drinks a can or two of Coke sometimes.",truth:"In one part of Mexico, the average person drinks 2.2 litres of Coke every single day. That's over 6 cans, daily.",bd:"That's 7 times what the average American drinks. Clean water is hard to find there, and Coke owns the leading bottled water brand too, priced about the same as a Coke, so people often just buy the Coke.",stats:[
+{cls:"red",year:"Daily intake",arrow:"↑",val:"2.2L",lbl:"of Coke, per person"},
+{cls:"amber",year:"In cans",arrow:"↑",val:"6+",lbl:"cans worth, every day"},
+{cls:"teal",year:"Water access",arrow:"↓",val:"1 in 3",lbl:"homes lack running water"},
+{cls:"blue",year:"Vs US average",arrow:"→",val:"7x",lbl:"more than typical American"}],
+callout:"Coke owns the soda and the water people would otherwise drink instead, priced about the same. That's how you end up drinking 2.2 litres a day."},
+{type:"ko-bull",bg:"green",deep:"bull",eb:"06 · How it could win",hl:"Three reasons Coca Cola could be worth <em>way more.</em>",panels:[
+{icon:"↑",title:"The healthy eating wave is actually feeding Coke",body:"Coke Zero Sugar grew <strong>14% worldwide in 2025</strong>, and 13% more in early 2026, everywhere at once. People trying to eat healthier aren't ditching Coke, they're switching inside the brand. In Europe, 60% of adults now avoid caffeine at night, so Coke made a version with zero sugar, zero caffeine, zero calories, just for them."},
+{icon:"↑",title:"Fairlife might be Coke's smartest move yet",body:"Fairlife is a high protein milk growing <strong>28% a year</strong>, while regular milk barely grows at all. Coke paid $7.4 billion for it, the biggest purchase the company has ever made. It's so popular Coke literally can't make enough. A $650 million factory upgrade lands by 2028."},
+{icon:"↑",title:"64 years straight without ever cutting the dividend",body:"Through wars, recessions, the 2008 crash and Covid, Coca Cola has raised its dividend <strong>every single year for 64 years in a row</strong>. Buffett's original $1.3 billion bet now earns him $816 million a year, just from owning the stock. When markets crash, people buy more Coke."}]},
+{type:"ko-bear",bg:"red",deep:"bear",eb:"07 · What could sink it",hl:"Three things that could <em>actually hurt</em> Coca Cola.",panels:[
+{icon:"↓",title:"A possible $20 billion bill, only $493 million saved up",body:"Tax authorities say Coke moved too much profit into low tax countries by undercharging its own overseas branches. Coke already lost once in court, paid $6 billion, and is appealing the rest. If they lose completely, <strong>another $14 billion could be owed</strong> on top."},
+{icon:"↓",title:"Ozempic doesn't just kill appetite, it kills sweet cravings",body:"Weight loss drugs specifically make sugar cravings disappear. Among people who drank soda daily before starting these drugs, <strong>77% cut way back or quit completely</strong>. These households could be a third of all food and drink spending by 2030."},
+{icon:"↓",title:"One war and one packaging choice erased a product from India",body:"Iran blockaded a major Gulf shipping route in 2026. That region makes 9% of the world's aluminium, which makes cans. Diet Coke in India only ever comes in cans. <strong>It vanished from shelves</strong>, and people started paying entry fees just to access one."}]},
+{type:"ko-own",bg:"gold",deep:"own",hl:"The new boss spent 30 years <em>working his way up inside Coke.</em>",bars:[
+{l:"Warren Buffett",l2:"Berkshire Hathaway",p:9,d:"9.3%",c:"#ED232A",sm:true},
+{l:"Index funds",l2:"Vanguard, BlackRock and similar",p:14,d:"~14%",c:"#C49A3E",sm:true},
+{l:"Everyone else",l2:"Pension funds, regular investors, governments",p:77,d:"~77%",c:"rgba(0,0,0,0.3)"}],
+people:[
+{init:"HB",name:"Henrique Braun",role:"CEO since March 2026",note:"30 years at Coke, starting as a trainee engineer. Ran China, Korea, Brazil and Latin America before reaching the top."},
+{init:"JQ",name:"James Quincey",role:"Now Executive Chairman",note:"9 years as CEO. Added over 10 billion dollar brands before handing over the keys."}],
+insight:"No founder family runs this company. Buffett is the closest thing to a power player, and he hasn't traded a single share since 1994."},
+{type:"ko-debate",bg:"cream",deep:"debate",hl:"Can a company built on sugar <em>survive a world turning against sugar?</em>"},
+{type:"conv",bg:"brand",deep:"conv",hl:"Now you decide. <em>Coca-Cola in 5 years?</em>",opts:[{k:"bull",p:65},{k:"neutral",p:22},{k:"bear",p:13}]},
+{type:"next",bg:"brand",deep:"next",hl:"That was Coca-Cola.",bd:"Next, Netflix. The company that burns $46M a day on shows — and still makes money.",nx:"netflix"}
 ],
 deep:{
 cover:{t:"The man who got nothing",e:"From the cover",h:`<div class="d-sub">A $2,300 fortune he never saw</div><div class="d-p">Pemberton was a Civil War veteran who got addicted to morphine after being wounded in battle. He spent the 1880s mixing coca leaves, kola nuts, sugar and spice oils, trying to invent a substitute.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$2,300</div><div class="d-s-l">Sale price, 1888</div></div><div class="d-s"><div class="d-s-n">2 yrs</div><div class="d-s-l">Until his death</div></div><div class="d-s"><div class="d-s-n">$0</div><div class="d-s-l">Family kept</div></div></div><div class="d-call">Charley, his son, died in 1894 with opium by his side. The family that invented the world's most valuable drink got almost nothing from it.</div>`},
-pie:{t:"The billion dollar brand factory",e:"From the money",h:`<div class="d-sub">How Coke keeps finding the next big thing</div><div class="d-p">Coke now owns 32 brands that each earn over a billion dollars a year. Half were built from scratch inside Coke. The rest were small local brands Coke spotted early, bought, and scaled up using its own trucks and stores.</div><div class="d-st"><div class="d-s"><div class="d-s-n">32</div><div class="d-s-l">Billion dollar brands</div></div><div class="d-s"><div class="d-s-n">$220M</div><div class="d-s-l">Paid for Topo Chico</div></div><div class="d-s"><div class="d-s-n">15</div><div class="d-s-l">Built in-house</div></div></div><div class="d-call">Topo Chico was a small Mexican water brand. Coke bought it small and used its size to turn it into a billion dollar name.</div>`},
-doors:{t:"The country Coke walked away from",e:"From the business model",h:`<div class="d-sub">Why Coke left India for 16 years</div><div class="d-p">In 1977, India demanded Coke share its formula with a local partner. Coke said no, and walked away from the entire country instead.</div><div class="d-st"><div class="d-s"><div class="d-s-n">16 yrs</div><div class="d-s-l">Coke stayed away</div></div><div class="d-s"><div class="d-s-n">85%</div><div class="d-s-l">Thums Up share by 1990</div></div><div class="d-s"><div class="d-s-n">#1</div><div class="d-s-l">Coke's first move back</div></div></div><div class="d-call">When Coke returned in 1993, the first thing they did was buy Thums Up. It still outsells Coca-Cola itself in India today.</div>`},
-rivals:{t:"The spy who called the wrong friend",e:"From the rivals",h:`<div class="d-sub">How a $1.5 million theft fell apart</div><div class="d-p">In 2006, a Coca-Cola secretary stole confidential documents and offered to sell them to Pepsi for $1.5 million.</div><div class="d-call">Pepsi called Coca-Cola. Then they called the FBI. The thief was arrested in a sting and served eight years in prison. Even with the formula in hand, you still can't call it Coke. The brand is the moat, not the syrup.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$1.5M</div><div class="d-s-l">Asking price</div></div><div class="d-s"><div class="d-s-n">8 yrs</div><div class="d-s-l">Prison sentence</div></div><div class="d-s"><div class="d-s-n">0</div><div class="d-s-l">Days Pepsi waited to call FBI</div></div></div>`},
+money:{t:"The billion dollar brand factory",e:"From the money",h:`<div class="d-sub">How Coke keeps finding the next big thing</div><div class="d-p">Coke now owns 32 brands that each earn over a billion dollars a year. Half were built from scratch inside Coke. The rest were small local brands Coke spotted early, bought, and scaled up using its own trucks and stores.</div><div class="d-st"><div class="d-s"><div class="d-s-n">32</div><div class="d-s-l">Billion dollar brands</div></div><div class="d-s"><div class="d-s-n">$220M</div><div class="d-s-l">Paid for Topo Chico</div></div><div class="d-s"><div class="d-s-n">15</div><div class="d-s-l">Built in-house, from zero</div></div></div><div class="d-call">Topo Chico was a small Mexican water brand. Santa Clara was a local dairy brand. Coke bought both small and used its size to turn them into billion dollar names.</div>`},
+model:{t:"The country Coke walked away from",e:"From the business model",h:`<div class="d-sub">Why Coke left India for 16 years</div><div class="d-p">In 1977, India demanded Coke share its formula with a local partner. Coke said no, and walked away from the entire country instead.</div><div class="d-st"><div class="d-s"><div class="d-s-n">16 yrs</div><div class="d-s-l">Coke stayed away</div></div><div class="d-s"><div class="d-s-n">85%</div><div class="d-s-l">Thums Up's share by 1990</div></div><div class="d-s"><div class="d-s-n">#1</div><div class="d-s-l">Coke's first move back</div></div></div><div class="d-call">When Coke returned in 1993, the first thing they did was buy Thums Up. It still outsells Coca Cola itself in India today.</div>`},
+rivals:{t:"The spy who called the wrong friend",e:"From the rivals",h:`<div class="d-sub">How a $1.5 million theft fell apart</div><div class="d-p">In 2006, a Coca Cola secretary stole confidential documents and offered to sell them to Pepsi for $1.5 million.</div><div class="d-call">Pepsi called Coca Cola. Then they called the FBI. The thief was arrested in a sting and served eight years in prison. Even with the formula in hand, you still can't call it Coke. The brand is the moat, not the syrup.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$1.5M</div><div class="d-s-l">Asking price</div></div><div class="d-s"><div class="d-s-n">8 yrs</div><div class="d-s-l">Prison sentence</div></div><div class="d-s"><div class="d-s-n">0</div><div class="d-s-l">Days it took Pepsi to call the FBI</div></div></div>`},
 hidden:{t:"The church made of Coke bottles",e:"From the hidden truth",h:`<div class="d-sub">Where soda replaced water and ritual</div><div class="d-p">In San Juan Chamula, a church has no pews and no priest. The floor is pine needles, the walls lined with open Coke bottles. People pray and pass Coke between them, believing the burp expels bad spirits.</div><div class="d-call">This started in the 1960s when missionaries discouraged the traditional local drink. Coke filled that gap with billboards in the local language, faster than clean water ever could.</div>`},
-acc:{t:"Pepsi Warren switches sides",e:"From the bull case",h:`<div class="d-sub">48 years loyal to the wrong soda</div><div class="d-p">Warren Buffett's own son called him "Pepsi Warren." In 1985 a friend mailed him an early sample of Cherry Coke. He switched on the spot.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$1B</div><div class="d-s-l">Bet, three years later</div></div><div class="d-s"><div class="d-s-n">30%</div><div class="d-s-l">Of Berkshire, at the time</div></div><div class="d-s"><div class="d-s-n">5</div><div class="d-s-l">Cans a day, still</div></div></div><div class="d-call">He has never sold a single share.</div>`},
-acc2:{t:"Diet Coke parties in Delhi",e:"From the bear case",h:`<div class="d-sub">When a war runs out a can supply</div><div class="d-p">In April 2026, people in Delhi paid entry fees to attend pop-up events. Not for music. For a Diet Coke.</div><div class="d-st"><div class="d-s"><div class="d-s-n">1.6M t</div><div class="d-s-l">Aluminium capacity lost</div></div><div class="d-s"><div class="d-s-n">9%</div><div class="d-s-l">Of world's aluminium</div></div><div class="d-s"><div class="d-s-n">+30%</div><div class="d-s-l">Coke paid to source cans</div></div></div><div class="d-call">This was never really about Diet Coke. It's a preview of what concentration risk looks like across 200 countries.</div>`},
-own:{t:"The investment that pays for itself",e:"From who owns it",h:`<div class="d-sub">Every 18 months, Buffett gets his money back</div><div class="d-p">Buffett bought his Coca-Cola shares between 1988 and 1994 for $1.3 billion total. He hasn't touched them since.</div><div class="d-st"><div class="d-s"><div class="d-s-n">62.8%</div><div class="d-s-l">Yearly yield on cost</div></div><div class="d-s"><div class="d-s-n">$28B</div><div class="d-s-l">Stake worth today</div></div><div class="d-s"><div class="d-s-n">18 mo</div><div class="d-s-l">To repay itself</div></div></div><div class="d-call">"I've been drinking Coke since I was six. I'm now one quarter Coca-Cola." Five cans a day for decades is a real quarter of his daily calories.</div>`},
-take:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">Coke isn't a company falling apart. It's a 140-year-old machine, and machines built that deep don't break overnight.</div><div class="d-call">The real thing to worry about is narrower than people think. It's whether Coke loses the tax fight, pays up to $20 billion, and breaks a 64-year dividend streak for the first time ever.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not financial advisors.</div>`},
+bull:{t:"Pepsi Warren switches sides",e:"From the bull case",h:`<div class="d-sub">48 years loyal to the wrong soda</div><div class="d-p">Warren Buffett's own son called him "Pepsi Warren." In 1985 a friend mailed him an early sample of Cherry Coke. He switched on the spot.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$1B</div><div class="d-s-l">Bet, three years later</div></div><div class="d-s"><div class="d-s-n">30%</div><div class="d-s-l">Of Berkshire, at the time</div></div><div class="d-s"><div class="d-s-n">5</div><div class="d-s-l">Cans, still, daily</div></div></div><div class="d-call">He has never sold a single share.</div>`},
+bear:{t:"Diet Coke parties in Delhi",e:"From the bear case",h:`<div class="d-sub">When a war runs out a can supply</div><div class="d-p">In April 2026, people in Delhi paid entry fees to attend pop up events. Not for music. For a Diet Coke.</div><div class="d-st"><div class="d-s"><div class="d-s-n">1.6M t</div><div class="d-s-l">Aluminium capacity lost</div></div><div class="d-s"><div class="d-s-n">9%</div><div class="d-s-l">Of world's aluminium, Gulf made</div></div><div class="d-s"><div class="d-s-n">+30%</div><div class="d-s-l">Coke paid to source cans</div></div></div><div class="d-call">This was never really about Diet Coke. It's a preview of what concentration risk looks like across 200 countries.</div>`},
+own:{t:"The investment that pays for itself",e:"From who owns it",h:`<div class="d-sub">Every 18 months, Buffett gets his money back</div><div class="d-p">Buffett bought his Coca Cola shares between 1988 and 1994 for $1.3 billion total. He hasn't touched them since.</div><div class="d-st"><div class="d-s"><div class="d-s-n">62.8%</div><div class="d-s-l">Yearly yield on cost</div></div><div class="d-s"><div class="d-s-n">$28B</div><div class="d-s-l">Stake worth today</div></div><div class="d-s"><div class="d-s-n">18 mo</div><div class="d-s-l">To repay itself</div></div></div><div class="d-call">"I've been drinking Coke since I was six. I'm now one quarter Coca Cola." Five cans a day for decades is a real quarter of his daily calories.</div>`},
+debate:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">Coke isn't a company falling apart. It's a 140 year old machine, and machines built that deep don't break overnight.</div><div class="d-call">The real thing to worry about is narrower than people think. It's whether Coke loses the tax fight, pays up to $20 billion, and breaks a 64 year dividend streak for the first time ever.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not financial advisors.</div>`},
 conv:{t:"What the crowd is saying",e:"From the vote",h:`<div class="d-sub">11,284 readers have voted</div><div class="d-st"><div class="d-s"><div class="d-s-n">65%</div><div class="d-s-l">Bullish</div></div><div class="d-s"><div class="d-s-n">22%</div><div class="d-s-l">Neutral</div></div><div class="d-s"><div class="d-s-n">13%</div><div class="d-s-l">Bearish</div></div></div><div class="d-call">The most common neutral take: wait and see if Zero Sugar and Fairlife can outgrow the sugar problem before it bites.</div>`},
 next:{t:"Same war, different weapons",e:"From what's next",h:`<div class="d-sub">Why Netflix is the opposite bet</div><div class="d-p">Netflix burns $46M a day on shows. Coca-Cola earns 60% margin on syrup and owns zero factories. Two completely different ways to build a dominant business.</div><div class="d-call">Netflix needs you to keep watching. Coke needs you to keep swallowing. Both are very confident you will.</div>`}
 },
-tldr:["Worth <strong>$355 billion</strong>. Started as a $2,300 purchase of a morphine addict's backyard recipe.","Coke owns <strong>zero bottling plants</strong>. It sells syrup to 225 partners and keeps 60% margin while they do the work.","Coke Zero Sugar is growing <strong>13 times faster</strong> than regular Coke. The healthy trend is funding it.","In one part of Mexico, the average person drinks <strong>2.2 litres of Coke every day</strong> — 7 times the US average.","A possible <strong>$20 billion tax bill</strong>, with only $493 million saved up to cover it.","Buffett's $1.3B bet now pays him <strong>$816M a year</strong>. He's never sold a single share."]}});
+tldr:["Worth <strong>$355 billion</strong>. Started as a $2,300 purchase of a morphine addict's backyard recipe.","Coke owns <strong>zero bottling plants</strong>. It sells syrup to 225 partners and keeps 60% margin while they do the work.","Coke Zero Sugar is growing <strong>13 times faster</strong> than regular Coke. The healthy trend is funding it.","In one part of Mexico, the average person drinks <strong>2.2 litres of Coke every day</strong>, 7 times the US average.","A possible <strong>$20 billion tax bill</strong>, with only $493 million saved up to cover it.","Buffett's $1.3B bet now pays him <strong>$816M a year</strong>. He's never sold a single share."]}});
 
 Object.assign(CO,{nvidia:{id:"nvidia",domain:"nvidia.com",n:"NVIDIA",t:"NVDA",sec:"Semiconductors",fl:"",mc:"$4.7T",lb:"#76B900",lc:"#0A0A08",ac:"#76B900",as:"rgba(118,185,0,0.2)",bg:"linear-gradient(180deg,#1A1A14,#0A0A08)",bl:"Selling shovels in the AI gold rush.",
 sp:"$195.00",sc:"at writing",scDir:"up",
@@ -2048,6 +2065,77 @@ function renderMetaCard(card,idx){
  }
 }
 
+function renderCocaColaCard(card,idx){
+ const co=CO[curCo];
+ const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${co.cards.length}`;
+ switch(card.type){
+ case 'ko-cover':return `
+<div class="eb-c">01 · The company</div>
+<div class="cv-top">
+ <div class="cv-mark">${companyLogo(co)}</div>
+ <div class="cv-co-info">
+ <div class="cv-name">${co.n}</div>
+ <div class="cv-chips">${(card.chips||[]).map(x=>`<div class="cv-chip">${x}</div>`).join('')}</div>
+ </div>
+</div>
+<div class="cv-stock">
+ <span class="cv-sp">${co.sp}</span>
+ <span class="cv-sc ${co.scDir}">${co.sc}</span>
+</div>
+<div class="hl">${card.hl}</div>
+<div class="bd">${card.bd}</div>
+<div class="cv-ks">${co.ks.map(k=>`<div class="cv-k"><div class="cv-kv">${k.v}</div><div class="cv-kl">${k.l}</div></div>`).join('')}</div>
+${card.callout2?`<div class="cv-callout2"><span class="cv-callout2-ic">🌍</span><span class="cv-callout2-tx">${card.callout2}</span></div>`:''}`;
+ case 'ko-money':return `
+<div class="eb-c">02 · The money</div>
+<div class="hl">${card.hl}</div>
+<div class="dis-money-big"><div class="dis-money-num" data-countup="${card.bigNum}" data-suffix="${card.bigSuffix}">0%</div><div class="dis-money-meta"><div class="dis-money-chip">${card.bigLabel}</div><div class="dis-money-sub">${card.bigSub}</div></div></div>
+<div class="dis-rev-tiles">${card.tiles.map(t=>`<div class="dis-rev-tile"><div class="dis-rev-tile-top"><div class="dis-rev-tile-left"><span class="dis-rev-icon">${t.icon}</span><span class="dis-rev-name">${t.name}</span></div><div class="dis-rev-right"><span class="dis-rev-amt">${t.amt}</span><span class="dis-rev-profit ${t.profitCls}">${t.profit}</span></div></div><div class="dis-rev-desc">${t.desc}</div></div>`).join('')}</div>
+<div class="dis-callout-note">${card.callout}</div>
+<div class="dis-brand-teaser">${card.brandLine}</div>`;
+ case 'ko-model':return `
+<div class="eb-c">03 · The model</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-model-pills">${card.pills.map(p=>`<div class="nf-model-pill">${p}</div>`).join('')}</div>
+<div class="nf-flow">${card.steps.map((s,i)=>`${i>0?'<div class="nf-flow-arrow">↓</div>':''}<div class="nf-flow-step"><div class="nf-flow-step-n">${s.n} · ${s.pill}</div><div class="nf-flow-step-t">${s.t}</div><div class="nf-flow-step-s">${s.s}</div></div>`).join('')}</div>
+<div class="dis-model-loop"><span class="dis-model-loop-icon">↺</span><span>${card.loop}</span></div>`;
+ case 'ko-rivals':return `
+<div class="eb-c">04 · The rivals</div>
+<div class="hl">${card.hl}</div>
+<div class="bd" style="margin-bottom:4px">${card.bd}</div>
+<div class="nf-bar-rows" style="margin-top:10px">${card.rows.map(r=>`<div class="nf-rival-card${r.h?' hero':''}"><div class="nf-bar-row-head"><span class="nf-bar-n"><span class="nf-bar-emoji">${r.emoji}</span>${r.n}</span><span class="nf-bar-val">${r.val}</span></div><div class="nf-bar-tag">${r.tag}</div><div class="nf-bar-track"><div class="nf-bar-fill" data-w="${r.pct}" style="background:${r.h?'var(--accent)':'rgba(0,0,0,0.35)'}"></div></div></div>`).join('')}</div>
+<div class="nf-kicker">${card.kicker}</div>`;
+ case 'ko-hidden':return `
+<div class="eb-c">05 · The hidden truth</div>
+<div class="nf-mt-box"><div class="nf-myth">${card.myth}</div><div class="nf-truth">${card.truth}</div></div>
+<div class="bd" style="margin-bottom:12px;font-size:13px">${card.bd}</div>
+<div class="dis-stat-grid">${card.stats.map(s=>`<div class="dis-stat-cell ${s.cls}"><div class="dis-stat-year">${s.year}</div><div class="dis-stat-arrow">${s.arrow}</div><div class="dis-stat-val">${s.val}</div><div class="dis-stat-lbl">${s.lbl}</div></div>`).join('')}</div>
+<div class="dis-h5-callout">${card.callout}</div>`;
+ case 'ko-bull':
+ case 'ko-bear':return `
+<div class="eb-c">${eb}</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-acc-list">${card.panels.map(p=>`<div class="nf-acc-item"><button class="nf-acc-btn" onclick="togglePanel(event,this)"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${p.title}</div><div class="nf-acc-chevron">▾</div></button><div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div></div>`).join('')}</div>`;
+ case 'ko-own':return `
+<div class="eb-c">08 · Who owns it</div>
+<div class="hl">${card.hl}</div>
+<div class="dis-own-section">
+ <div class="dis-own-rows">${card.bars.map(b=>`<div class="dis-own-row"><div class="dis-own-l"><div style="font-weight:600;font-size:12px">${b.l}</div><div style="font-size:10px;opacity:.65;margin-top:1px">${b.l2||''}</div></div><div class="dis-own-track"><div class="dis-own-fill${b.sm?' sm':''}" data-w="${Math.max(b.p,2)}" style="background:${b.c}">${b.sm?'':b.d}</div></div>${b.sm?`<div class="dis-own-ext">${b.d}</div>`:''}</div>`).join('')}</div>
+ <div class="dis-power-label">Who actually runs it</div>
+ <div class="dis-power-people">${card.people.map(p=>`<div class="dis-power-person"><div class="dis-power-icon">${p.init}</div><div class="dis-power-info"><div class="dis-power-name">${p.name}</div><div class="dis-power-role">${p.role}</div><div class="dis-power-note">${p.note}</div></div></div>`).join('')}</div>
+ <div class="dis-own-insight">${card.insight}</div>
+</div>`;
+ case 'ko-debate':return `
+<div class="eb-c">09 · The market debate</div>
+<div class="hl">${card.hl}</div>
+<div class="dis-pullquote"><div class="dis-pullquote-mark">"</div><div class="dis-pullquote-text">Probably yes, because Coke isn't really betting on sugar anymore. It's betting on <em>owning whatever you switch to next.</em></div></div>
+<div class="dis-chip-section"><div class="dis-chip-section-label works">✓ What's working</div><div class="dis-chip-row"><div class="dis-chip works">Zero Sugar growing fast</div><div class="dis-chip works">Fairlife is a hit</div><div class="dis-chip works">64 years of rising dividends</div></div></div>
+<div class="dis-chip-section"><div class="dis-chip-section-label notyet">✗ Still a worry</div><div class="dis-chip-row"><div class="dis-chip notyet">$20B tax bill looming</div><div class="dis-chip notyet">Ozempic killing sweet cravings</div><div class="dis-chip notyet">People drinking less than before</div></div></div>
+<div class="dis-debate-callout">Coke has sold sugar and water at a premium for 140 years. That worked because the world didn't know, or didn't care. Now it does.</div>`;
+ default:return '';
+ }
+}
+
 function renderCard(card,idx){
  const total=CO[curCo].cards.length;const co=CO[curCo];
  const ebText=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
@@ -2055,6 +2143,7 @@ function renderCard(card,idx){
  if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
  if(card.type&&card.type.startsWith('dis-'))return renderDisneyCard(card,idx);
  if(card.type&&card.type.startsWith('mt-'))return renderMetaCard(card,idx);
+ if(card.type&&card.type.startsWith('ko-'))return renderCocaColaCard(card,idx);
  switch(card.type){
 
  case 'cover':return `
@@ -2816,6 +2905,7 @@ function dtRenderCard(card,idx){
   if(card.type&&card.type.startsWith('nf-'))return renderNetflixCard(card,idx);
   if(card.type&&card.type.startsWith('dis-'))return renderDisneyCard(card,idx);
   if(card.type&&card.type.startsWith('mt-'))return renderMetaCard(card,idx);
+  if(card.type&&card.type.startsWith('ko-'))return renderCocaColaCard(card,idx);
   switch(card.type){
   case 'cover':return `
 <div class="eb-c">01 · The cover</div>
