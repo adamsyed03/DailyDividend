@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="HDFC Bank">
-  <rect width="192" height="192" rx="38" fill="#fff"/>
+  <rect width="192" height="192" rx="0" fill="#fff"/>
   <rect x="34" y="34" width="124" height="124" fill="#ed1c24"/>
   <rect x="61" y="61" width="70" height="70" fill="#fff"/>
   <rect x="78" y="78" width="36" height="36" fill="#005baa"/>

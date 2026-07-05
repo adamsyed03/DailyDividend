@@ -33,11 +33,6 @@ const PRICE_COMPANIES = Object.freeze({
 });
 const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'nvidia', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola']);
 const LOCAL_LOGO_FILES = Object.freeze({
-  disney: path.join(LOGO_CACHE_DIR, 'disney.svg'),
-  nvidia: path.join(LOGO_CACHE_DIR, 'nvidia.svg'),
-  reliance: path.join(LOGO_CACHE_DIR, 'reliance.svg'),
-  hdfc: path.join(LOGO_CACHE_DIR, 'hdfc.svg'),
-  meta: path.join(LOGO_CACHE_DIR, 'meta.svg'),
   netflix: path.join(__dirname, 'Site Pics', 'netflix logo.png'),
   visa: path.join(__dirname, 'Site Pics', 'visalogo.png')
 });
