@@ -1674,6 +1674,11 @@ function localizeAudienceCopy(value,seen=new WeakSet()){
 function syncSavedFromProfile(){saved={};(profileState.savedCompanies||[]).forEach(key=>{const item=parseSaveKey(key);if(!saved[item.co])saved[item.co]=new Set();if(Number.isFinite(item.idx))saved[item.co].add(item.idx);});}
 function syncCallsFromProfile(){const vd=profileState.voteData||{};calls=Object.entries(profileState.previousVotes||{}).map(([co,vote])=>{const a=getAggregate(co);const d=vd[co]||{};const when=d.date?new Date(d.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'Saved';return {co,vote,b:a.bull||0,n:a.neutral||0,bb:a.bear||0,when,entryPrice:d.price||null};}).filter(c=>CO[c.co]);}
 function trackPostHogEvent(event,properties={}){try{if(window.posthog&&posthog.capture)posthog.capture(event,properties);}catch(e){}}
+function trackMetaEvent(event,properties={}){try{if(window.fbq&&typeof window.fbq==='function')window.fbq('track',event,properties);}catch(e){}}
+function companyMetaPayload(companyId,extra={}){const c=typeof companyId==='string'?CO[companyId]:companyId;if(!c)return extra;return {content_name:c.n||c.name||companyKey(c),content_category:c.sec||'Company story',content_ids:[companyKey(c)],content_type:'article',currency:c.t==='RELIANCE'?'INR':'USD',...extra};}
+function trackMetaViewContent(companyId,source='story'){const c=CO[companyId]||CO[curCo];if(!c||c.disabled)return;trackMetaEvent('ViewContent',companyMetaPayload(c,{source}));}
+function trackMetaSearch(query){const q=String(query||'').trim();if(q.length<2||trackMetaSearch._last===q)return;trackMetaSearch._last=q;trackMetaEvent('Search',{search_string:q,content_category:'Company search'});}
+function trackMetaWishlist(companyId,idx=0){const c=CO[companyId]||CO[curCo];if(!c||c.disabled)return;trackMetaEvent('AddToWishlist',companyMetaPayload(c,{card_index:Number(idx)+1}));}
 function identifyPostHog(){try{if(userId&&window.posthog&&posthog.identify)posthog.identify(userId,{country:profileState.country||'',profession:profileState.profession||'',investor_level:profileState.investorLevel||'',streak:profileState.streak||0});}catch(e){}}
 function callPnl(c){const co=CO[c.co];if(!c.entryPrice||!co||!co.sp||co.sp==='-')return'';const entry=parseFloat(c.entryPrice.replace(/[^0-9.]/g,''));const cur=parseFloat(co.sp.replace(/[^0-9.]/g,''));if(!entry||!cur||isNaN(entry)||isNaN(cur))return'';const pct=(cur-entry)/entry*100;const win=(c.vote==='bull'&&pct>0)||(c.vote==='bear'&&pct<0);const lose=(c.vote==='bull'&&pct<0)||(c.vote==='bear'&&pct>0);const cls=win?'up':lose?'down':'flat';const sign=pct>=0?'+':'';return`<div class="cc-pnl"><span class="cc-ep">Entry ${c.entryPrice}</span><span class="cc-pct ${cls}">${sign}${pct.toFixed(1)}% vs today</span></div>`;}
 function isRegisteredUser(){return Boolean(profileState.firstName||profileState.lastName||profileState.phoneNumber||profileState.profession);}
@@ -1756,6 +1761,7 @@ ${otherCos.map(k=>{const co=CO[k];return `
 async function openStack(slug,source='today'){
  if(!CO[slug]||CO[slug].disabled){slug=curCo;}
  trackPostHogEvent('company_opened',{company_id:slug,source});
+ trackMetaViewContent(slug,source);
  curCo=slug;cardIdx=0;setTheme(slug);
  const c=CO[slug];
  document.getElementById('cologo').innerHTML=companyLogo(c);
@@ -2069,14 +2075,14 @@ async function toggleSave(){
  if(!saved[curCo])saved[curCo]=new Set();
  const key=saveKey(curCo,cardIdx);const b=document.getElementById('saveBtn');const wasSaved=saved[curCo].has(cardIdx);
  if(wasSaved){saved[curCo].delete(cardIdx);b.classList.remove('saved');}else{saved[curCo].add(cardIdx);b.classList.add('saved');}
- try{const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();updProg();showToast(data.saved?"Card saved":"Removed");}
+ try{const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();updProg();if(data.saved)trackMetaWishlist(curCo,cardIdx);showToast(data.saved?"Card saved":"Removed");}
  catch(e){if(wasSaved){saved[curCo].add(cardIdx);b.classList.add('saved');}else{saved[curCo].delete(cardIdx);b.classList.remove('saved');}showToast(e.message);}
 }
 async function saveCo(e){
  if(e)e.stopPropagation();
  const key=saveKey(curCo,0);
  if(saved[curCo]&&saved[curCo].has(0)){showToast("Already on your shelf");setTimeout(()=>goTo('you'),900);return;}
- try{const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();showToast("Saved "+CO[curCo].n+" to your shelf");setTimeout(()=>goTo('you'),900);}
+ try{const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();if(data.saved)trackMetaWishlist(curCo,0);showToast("Saved "+CO[curCo].n+" to your shelf");setTimeout(()=>goTo('you'),900);}
  catch(error){showToast(error.message);}
 }
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
@@ -2215,6 +2221,7 @@ function surpriseMe(){const keys=liveCompanyKeys();openStack(keys[Math.floor(Mat
 let _searchThrottle=null;
 function onSearch(){
  const q=document.getElementById('searchBox').value.toLowerCase().trim();
+ trackMetaSearch(q);
  const sr=document.getElementById('sr'),lc=document.getElementById('lc'),fs=document.getElementById('libFs');
  if(!q){sr.classList.remove('active');lc.classList.remove('hidden');fs.style.display='flex';return;}
  clearTimeout(_searchThrottle);
@@ -2259,6 +2266,7 @@ async function toggleCoSave(){
   const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});
   profileState.savedCompanies=data.savedCompanies||[];
   syncSavedFromProfile();updateCoOvSave();
+  if(data.saved)trackMetaEvent('AddToWishlist',{content_name:co?.name||companyId,content_ids:[companyId],content_type:'article'});
   showToast(data.saved?'Saved':'Removed');
  }catch(e){showToast(e.message);}
 }
@@ -2492,7 +2500,7 @@ let booted=false;
 function releaseGate(){document.documentElement.classList.remove('auth-pending');}
 function runDesktopInit(){const run=()=>{if(typeof dtInit==='function')dtInit();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else setTimeout(run,0);}
 function refreshDesktopShell(){const run=()=>{if(typeof dtBuildTicker==='function')dtBuildTicker();if(typeof dtRenderToday==='function')dtRenderToday();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else setTimeout(run,0);}
-function bootShell(){if(booted)return;booted=true;localizeAudienceCopy(CO);identifyPostHog();releaseGate();if(IS_DESKTOP){runDesktopInit();}else{renderToday();}Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){refreshDesktopShell();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function bootShell(){if(booted)return;booted=true;localizeAudienceCopy(CO);identifyPostHog();releaseGate();trackMetaViewContent(curCo,'home');if(IS_DESKTOP){runDesktopInit();}else{renderToday();}Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){refreshDesktopShell();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
 function clearStoredSession(){localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');}
 window.addEventListener('error',releaseGate);
 window.addEventListener('unhandledrejection',releaseGate);
@@ -2608,6 +2616,7 @@ function dtRenderToday(){
 
 async function dtOpenStack(slug,source='today'){
   if(!CO[slug]||CO[slug].disabled){slug=curCo;}
+  trackMetaViewContent(slug,source);
   curCo=slug;dtCardIdx=0;setTheme(slug);
   const c=CO[slug];
   const logo=document.getElementById('dtCologo');if(logo){logo.innerHTML=companyLogo(c);logo.style.background=c.lb||'#333';logo.style.color=c.lc||'#fff';}
@@ -2921,6 +2930,7 @@ async function dtToggleSave(){
   else{saved[curCo].add(dtCardIdx);if(b)b.classList.add('saved');}
   try{
     const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});
+    if(data.saved)trackMetaWishlist(curCo,dtCardIdx);
     profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();dtShowToast(data.saved?'★ Card saved':'Removed');
   }catch(error){
     if(wasSaved)saved[curCo].add(dtCardIdx);else saved[curCo].delete(dtCardIdx);
@@ -2932,6 +2942,7 @@ async function dtSaveCo(){
   const key=saveKey(curCo,0);
   try{
     const data=await api('/api/save',{method:'POST',body:JSON.stringify({userId,companyId:key})});
+    if(data.saved)trackMetaWishlist(curCo,0);
     profileState.savedCompanies=data.savedCompanies||[];syncSavedFromProfile();dtUpdProg();
     dtShowToast(data.saved?'★ Saved to shelf':'Removed from shelf');
   }catch(error){dtShowToast(error.message);}
@@ -3009,6 +3020,7 @@ function dtSurpriseMe(){const keys=liveCompanyKeys();openStack(keys[Math.floor(M
 
 function dtOnSearch(){
   const q=(document.getElementById('dtSearchBox')||{}).value||'';const ql=q.toLowerCase().trim();
+  trackMetaSearch(ql);
   const sr=document.getElementById('dtLibSr');if(!sr)return;
   if(!ql){sr.classList.remove('active');return;}
   const matches=[...liveCompanyKeys().map(k=>({...CO[k],_slug:k})),...(CS||[]),...(dbCos||[]).map(c=>({n:c.name||c.companyId,bl:c.hook||'',_dbco:c.companyId}))].filter(c=>(c.n||'').toLowerCase().includes(ql)||((c.bl||'').toLowerCase().includes(ql)));
