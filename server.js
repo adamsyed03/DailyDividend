@@ -857,8 +857,8 @@ function ensurePersonalityScores(user) {
 
 function calculateReadingPersonality(user) {
   const streak = user.streak || 0;
-  if (streak < 4) {
-    return { unlocked: false, daysNeeded: 4 - streak, message: 'Build a 4-day streak to unlock your reading personality.' };
+  if (streak < 2) {
+    return { unlocked: false, daysNeeded: 2 - streak, message: 'Build a 2-day streak to unlock your reading personality.' };
   }
   const sc = user.personalityScores || { contrarian: 0, operator: 0, patternSpotter: 0, momentumReader: 0 };
   const scores = {
@@ -967,7 +967,7 @@ function adminSummary(db) {
       totalReads: users.reduce((sum, user) => sum + (Array.isArray(user.readHistory) ? user.readHistory.length : 0), 0),
       savedCompaniesCount: users.reduce((sum, user) => sum + (Array.isArray(user.savedCompanies) ? user.savedCompanies.length : 0), 0),
       totalVotes: Object.values(db.votes).reduce((sum, companyVotes) => sum + Object.keys(companyVotes || {}).length, 0),
-      personalityUnlocked: users.filter(u => (u.streak || 0) >= 4).length,
+      personalityUnlocked: users.filter(u => (u.streak || 0) >= 2).length,
       personalityDistribution: users.reduce((dist, u) => {
         const p = calculateReadingPersonality(u);
         if (p.unlocked) dist[p.personality] = (dist[p.personality] || 0) + 1;
