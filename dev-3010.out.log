@@ -1,6 +1,2 @@
-
-> dev
-> node server.js
-
-Daily Dividend running at http://localhost:3000
+Daily Dividend running at http://localhost:3010
 [prices] Next automatic refresh scheduled for 2026-07-07T21:00:00.000Z (5:00 PM America/New_York)
