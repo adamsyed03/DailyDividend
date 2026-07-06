@@ -265,7 +265,7 @@
       <section class="screen" id="s-hook">
         <div class="hook-inner">
           <div class="hook-stats">
-            <div class="hook-stat"><div class="hook-stat-n">4</div><div class="hook-stat-l">Companies live</div></div>
+            <div class="hook-stat"><div class="hook-stat-n" data-live-company-count>...</div><div class="hook-stat-l">Companies live</div></div>
             <div class="hook-stat"><div class="hook-stat-n">~90s</div><div class="hook-stat-l">Per read</div></div>
             <div class="hook-stat"><div class="hook-stat-n">Free</div><div class="hook-stat-l">Always</div></div>
           </div>
@@ -670,7 +670,21 @@
       checkAccount();
     }
 
-    twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
+    async function loadCatalogStats(){
+      const target = document.querySelector('[data-live-company-count]');
+      if(!target)return;
+      try{
+        const response = await fetch('/api/catalog-stats', {credentials:'same-origin'});
+        if(!response.ok)throw new Error('Catalog stats unavailable');
+        const data = await response.json();
+        if(Number.isFinite(data.liveCompanyCount))target.textContent = data.liveCompanyCount;
+      }catch(error){
+        target.textContent = '';
+        target.parentElement.style.display = 'none';
+      }
+    }
+    loadCatalogStats();
+    if(window.twemoji)twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
   </script>
 </body>
 </html>
