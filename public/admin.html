@@ -335,6 +335,20 @@
       </table>
     </section>
 
+    <!-- -- Release nudges -- -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Release nudges</h2>
+        <div class="sub">Users poking us to release a company - "Nudge founders to release" button in the library</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Company</th><th>Nudges</th><th>Last nudged</th></tr></thead>
+          <tbody id="nudgesBody"></tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- -- Streak leaderboard -- -->
     <section class="panel">
       <div class="panel-head"><h2>Streak leaderboard</h2></div>
@@ -372,9 +386,24 @@
             <label for="companyCategory">Library category</label>
             <select id="companyCategory" style="font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:9px 10px;background:#fff;color:var(--ink);width:100%;outline:none">
               <option value="">-- Select category --</option>
-              <option value="brands you use daily">Brands you use daily</option>
-              <option value="plot twists">Plot twists</option>
-              <option value="underrated businesses">Underrated businesses</option>
+              <option value="big tech">💻 Big Tech</option>
+              <option value="made in usa">🇺🇸 Made in USA</option>
+              <option value="made in india">🇮🇳 Made in India</option>
+              <option value="banks &amp; money">🏦 Banks &amp; Money</option>
+              <option value="junk food">🍟 Junk Food</option>
+              <option value="entertainment">🎬 Entertainment</option>
+              <option value="ai &amp; chips">🤖 AI &amp; Chips</option>
+              <option value="cars &amp; evs">🚗 Cars &amp; EVs</option>
+              <option value="luxury">💎 Luxury</option>
+              <option value="sports">🏆 Sports</option>
+              <option value="fashion &amp; sneakers">👟 Fashion &amp; Sneakers</option>
+              <option value="travel &amp; flights">✈️ Travel &amp; Flights</option>
+              <option value="energy &amp; oil">⛽ Energy &amp; Oil</option>
+              <optgroup label="Legacy">
+                <option value="brands you use daily">Brands you use daily</option>
+                <option value="plot twists">Plot twists</option>
+                <option value="underrated businesses">Underrated businesses</option>
+              </optgroup>
             </select>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -726,6 +755,16 @@
 
       renderUsersTable();
       renderVotesTable(data.voteTotals || []);
+
+      const nudges = data.nudges || [];
+      $('nudgesBody').innerHTML = nudges.length
+        ? nudges.map(n => `
+          <tr>
+            <td><strong>${escapeHtml(n.companyId)}</strong></td>
+            <td><span class="streak-highlight" style="font-weight:800">${Number(n.count) || 0}</span></td>
+            <td>${n.lastNudgedAt ? escapeHtml(formatDate(n.lastNudgedAt)) : '-'}</td>
+          </tr>`).join('')
+        : `<tr><td colspan="3"><div class="empty">No nudges yet.</div></td></tr>`;
 
       $('leaderboardBody').innerHTML = data.streakLeaderboard.length
         ? data.streakLeaderboard.map((u, i) => `

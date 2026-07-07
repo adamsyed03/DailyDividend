@@ -325,16 +325,19 @@
           <div class="q-h">What gets you <em>excited?</em></div>
           <div class="q-sub">Pick your rabbit holes. Choose as many as you like.</div>
           <div class="sector-grid">
-            <button class="sector-btn" data-s="tech" onclick="toggleSector(this)" type="button"><span class="sector-emoji">📱</span>Tech</button>
-            <button class="sector-btn" data-s="banking" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏦</span>Banking</button>
-            <button class="sector-btn" data-s="consumer" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🛒</span>Consumer</button>
-            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button"><span class="sector-emoji">⛽</span>Energy</button>
-            <button class="sector-btn" data-s="media" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🎬</span>Media</button>
-            <button class="sector-btn" data-s="healthcare" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💊</span>Healthcare</button>
-            <button class="sector-btn" data-s="realestate" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏗️</span>Real Estate</button>
-            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button"><span class="sector-emoji">✈️</span>Travel</button>
+            <button class="sector-btn" data-s="big-tech" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💻</span>Big Tech</button>
+            <button class="sector-btn" data-s="usa" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🇺🇸</span>Made in USA</button>
+            <button class="sector-btn" data-s="india" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🇮🇳</span>Made in India</button>
+            <button class="sector-btn" data-s="banks" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏦</span>Banks &amp; Money</button>
+            <button class="sector-btn" data-s="junk-food" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🍟</span>Junk Food</button>
+            <button class="sector-btn" data-s="entertainment" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🎬</span>Entertainment</button>
+            <button class="sector-btn" data-s="ai-chips" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🤖</span>AI &amp; Chips</button>
+            <button class="sector-btn" data-s="cars-evs" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🚗</span>Cars &amp; EVs</button>
             <button class="sector-btn" data-s="luxury" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💎</span>Luxury</button>
-            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏏</span>Sports</button>
+            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏆</span>Sports</button>
+            <button class="sector-btn" data-s="fashion" onclick="toggleSector(this)" type="button"><span class="sector-emoji">👟</span>Fashion &amp; Sneakers</button>
+            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button"><span class="sector-emoji">✈️</span>Travel &amp; Flights</button>
+            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button"><span class="sector-emoji">⛽</span>Energy &amp; Oil</button>
           </div>
         </div>
         <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue <span class="btn-arrow">→</span></button></div>
@@ -647,7 +650,7 @@
       }
     }
     const marketLabels = {us:'US', india:'India', uk:'UK', global:'Global'};
-    const sectorLabels = {tech:'Tech', banking:'Banking', consumer:'Consumer', energy:'Energy', media:'Media', healthcare:'Healthcare', realestate:'Real Estate', travel:'Travel', luxury:'Luxury', sports:'Sports'};
+    const sectorLabels = {'big-tech':'Big Tech', usa:'Made in USA', india:'Made in India', banks:'Banks & Money', 'junk-food':'Junk Food', entertainment:'Entertainment', 'ai-chips':'AI & Chips', 'cars-evs':'Cars & EVs', luxury:'Luxury', sports:'Sports', fashion:'Fashion & Sneakers', travel:'Travel & Flights', energy:'Energy & Oil'};
     function buildPayoff(){
       document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
       document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');

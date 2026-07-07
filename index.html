@@ -371,10 +371,38 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rail{margin:22px 0 4px}
 .rh{padding:0 24px;display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
 .rail-t{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-0.01em}
-.rc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em}
-.rs{display:flex;gap:11px;padding:2px 24px 4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rc{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;border-radius:999px;padding:3px 9px;font-weight:700}
+.rs{display:flex;gap:11px;padding:2px 24px 4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scroll-padding-left:24px;align-items:stretch}
+.rail.flash{animation:railFlash 1.1s ease}
+@keyframes railFlash{0%{background:rgba(196,154,62,0.16)}100%{background:transparent}}
+.cat-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:14px 24px 4px;-webkit-overflow-scrolling:touch}
+.cat-chips::-webkit-scrollbar{display:none}
+.cat-chip{flex-shrink:0;display:flex;align-items:center;gap:6px;border-radius:999px;padding:8px 13px;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--cc,#1A3D2B);background:#fff;border:1.5px solid color-mix(in srgb,var(--cc,#1A3D2B) 25%,transparent);cursor:pointer;transition:transform 0.15s,background 0.15s;white-space:nowrap}
+.cat-chip:active{transform:scale(0.94)}
+.cat-chip.active{background:var(--cc,#1A3D2B);color:#fff;border-color:var(--cc,#1A3D2B)}
+.cat-chip-e{font-size:13px;line-height:1}
+.nudge-btn{margin-top:8px;width:100%;border:1px solid rgba(26,61,43,0.3);background:#fff;color:#1A3D2B;font-family:var(--mono);font-size:8px;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;border-radius:9px;padding:6px 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1.35;text-align:center;transition:transform 0.15s,background 0.15s,color 0.15s}
+.nudge-btn:active{transform:scale(0.94)}
+.nudge-btn.done{background:#1A3D2B;color:#fff;border-color:#1A3D2B}
+.nudge-btn.pop{animation:nudgePop 0.4s cubic-bezier(0.2,0.8,0.2,1)}
+@keyframes nudgePop{0%{transform:scale(1)}40%{transform:scale(1.14) rotate(-2deg)}100%{transform:scale(1)}}
+.nudge-n{background:rgba(26,61,43,0.12);border-radius:999px;padding:1px 6px;font-size:8px}
+.nudge-btn.done .nudge-n{background:rgba(255,255,255,0.22)}
+.int-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:18px}
+.int-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.int-edit{border:1px solid rgba(26,61,43,0.2);background:#fff;color:#1A3D2B;border-radius:999px;padding:7px 11px;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;cursor:pointer;white-space:nowrap}
+.int-edit:active{transform:scale(0.96)}
+.int-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.int-sub{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:12px}
+.int-head+.int-sub{display:none}
+.int-chips{display:flex;flex-wrap:wrap;gap:8px}
+.int-current{cursor:pointer}
+.fy-cta{margin:14px 24px 2px;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1A3D2B,#0D2818);color:var(--cream,#F5F1E8);border-radius:14px;padding:13px 16px;font-family:var(--sans);font-size:12.5px;font-weight:500;line-height:1.4;cursor:pointer;transition:transform 0.15s}
+.fy-cta:active{transform:scale(0.98)}
+.fy-cta-e{font-size:18px;flex-shrink:0}
+#dtShell .fy-cta{margin:0 0 20px}
 .rs::-webkit-scrollbar{display:none}
-.rcd{flex-shrink:0;width:138px;height:172px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s}
+.rcd{flex-shrink:0;width:138px;min-height:172px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s;scroll-snap-align:start}
 .rcd:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
 .rcd-th{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;align-self:center;font-family:var(--serif);font-weight:700;font-size:24px;color:#fff;margin-bottom:10px;box-shadow:0 4px 14px rgba(15,15,14,.08)}
 .rcd-th .company-logo-img{padding:5%;object-fit:contain}
@@ -384,8 +412,9 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rcd-ld{position:absolute;top:16px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
 .rcd-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
 .rcd-bl{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.3;margin-top:3px}
-.rcd.cs{background:var(--cream-2);border-style:dashed;opacity:0.65}
-.rcd.cs .rcd-th{background:var(--mute-2) !important;box-shadow:none}
+.rcd.cs{background:var(--cream-2);border-style:dashed}
+.rcd.cs .rcd-th{background:var(--mute-2) !important;box-shadow:none;filter:grayscale(0.3);opacity:0.85}
+.rcd.cs .rcd-n,.rcd.cs .rcd-bl{opacity:0.7}
 .cs-tag{position:absolute;top:13px;right:13px;font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
 .lib-fs{margin:32px 24px 0;padding:18px 0 8px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
 .lib-fs .big{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink);letter-spacing:-0.01em}
@@ -1011,11 +1040,20 @@ body{background:var(--ink);overflow:hidden}
 .lib-feat-bl{font-family:var(--sans);font-size:14px;opacity:0.65;line-height:1.4;max-width:400px}
 .lib-feat-cta{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);color:var(--cream);border-radius:100px;padding:10px 20px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;transition:background 0.18s}
 .lib-feat-cta:hover{background:rgba(255,255,255,0.2)}
-.lib-section{margin-bottom:36px}
+.lib-section{margin-bottom:36px;border-radius:14px}
+.lib-section.flash{animation:railFlash 1.1s ease}
 .lib-section-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .lib-section-t{font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-0.01em}
-.lib-section-c{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em}
+.lib-section-side{display:flex;align-items:center;gap:8px}
+.lib-section-c{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;border-radius:999px;padding:3px 9px;font-weight:700}
+.lib-arrow{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:13px;line-height:1;transition:transform 0.15s,background 0.15s}
+.lib-arrow:hover{background:var(--cream-2)}
+.lib-arrow:active{transform:scale(0.9)}
+.lib-row-scroll{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;padding:4px 2px 10px}
+.lib-row-scroll::-webkit-scrollbar{display:none}
+.lib-row-scroll .lib-card{flex:0 0 200px;scroll-snap-align:start}
 .lib-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#dtShell .cat-chips{padding:2px 0 18px}
 .lib-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s;min-height:148px}
 .lib-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.07)}
 .lib-card-th{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;color:#fff;margin-bottom:8px}
@@ -1023,8 +1061,11 @@ body{background:var(--ink);overflow:hidden}
 .lib-card-ld{position:absolute;top:17px;right:14px;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
 .lib-card-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-top:auto}
 .lib-card-bl{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.3;margin-top:3px}
-.lib-card.cs{background:var(--cream-2);border-style:dashed;opacity:0.6;cursor:default}
+.lib-card.cs{background:var(--cream-2);border-style:dashed;cursor:default}
 .lib-card.cs:hover{transform:none;box-shadow:none}
+.lib-card.cs .lib-card-th{filter:grayscale(0.3);opacity:0.85}
+.lib-card.cs .lib-card-n,.lib-card.cs .lib-card-bl{opacity:0.7}
+.lib-card .nudge-btn{font-size:8.5px}
 #dtShell .cs-tag{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
 .lib-sr{display:none}
 .lib-sr.active{display:block;margin-bottom:24px}
@@ -1038,8 +1079,8 @@ body{background:var(--ink);overflow:hidden}
 .you-head-copy{min-width:0}
 .you-head-row .you-h,.you-head-row .you-sub{margin:0}
 .you-head-row .you-sub{margin-top:7px}
-#dtYouContent>.auth-card,#dtYouContent>.id-c{grid-column:1/-1}
-#dtYouContent>.auth-card{margin:0}
+#dtYouContent>.auth-card,#dtYouContent>.id-c,#dtYouContent>.int-card{grid-column:1/-1}
+#dtYouContent>.auth-card,#dtYouContent>.int-card{margin:0}
 .you-left{display:flex;flex-direction:column;gap:18px}
 .you-right{display:flex;flex-direction:column;gap:18px}
 .you-h{font-family:var(--serif);font-weight:400;font-size:28px;letter-spacing:-0.02em;margin-bottom:4px;grid-column:1/-1}
@@ -1193,6 +1234,8 @@ body{background:var(--ink);overflow:hidden}
   #dtShell .meta-you-card .cc-ch{background:rgba(8,102,255,.12);color:#0866ff}
   #dtShell .tg-name{font-size:20px}#dtShell .tg-bl{font-size:13px;max-width:34ch}
   #dtShell .lib-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+  #dtShell .lib-row-scroll{gap:16px}
+  #dtShell .lib-row-scroll .lib-card{flex:0 0 230px}
   #dtShell .lib-card{min-height:190px;padding:18px;border-radius:17px}
   #dtShell .lib-card-th{width:58px;height:58px;border-radius:14px;font-size:22px;margin-bottom:12px}
   #dtShell .lib-card-n{font-size:17px}#dtShell .lib-card-bl{font-size:12px;max-width:28ch}
@@ -1327,7 +1370,7 @@ sp:"$952",sc:"+2.3%",scDir:"up",
 ks:[{l:"Market cap",v:"$380B"},{l:"Subscribers",v:"302M"},{l:"Annual profit",v:"$13B"}],
 vb:8412,sentiment:"bull",
 ps:"You pay Netflix $15.99/mo. Their average across 302M people is $17. You're funding $46M in content spend every single day.",
-rails:["new","daily","twists"],nx:"disney",
+cats:["Entertainment","Big Tech","Made in USA"],rails:["new","daily","twists"],nx:"disney",
 cards:[
 {type:"cover",chips:["NFLX - NASDAQ","Worth $380B"],hl:"Netflix burns <em>$46M</em> a day on shows. <em>And still makes money.</em>",bd:"The red app on your phone is worth about $380 billion on the stock market - bigger than Disney. 302 million people pay every month, more than the population of the United States. They just bought HBO too."},
 {type:"pie",bg:"cream",hl:"$45 billion a year. <em>Three revenue streams.</em>",bd:"Every dollar comes from one of three revenue streams. Subscriptions are the core business. Live sport and ads did not exist three years ago.",tot:"$45B",tl:"a year",sl:[
@@ -1379,7 +1422,7 @@ sp:"$95",sc:"-1.2%",scDir:"down",
 ks:[{l:"Market cap",v:"$184B"},{l:"Park revenue",v:"$36B"},{l:"Streaming users",v:"132M"}],
 vb:5218,sentiment:"neutral",
 ps:"Every time you watched a Marvel film, you made Disney $8 on the ticket. But the family that goes to Disneyland after spends $6,000. The movie is just the advertisement.",
-rails:["twists","daily"],nx:"reliance",
+cats:["Entertainment","Made in USA"],rails:["twists","daily"],nx:"reliance",
 cards:[
 {type:"cover",chips:["DIS - NYSE","Worth $184B"],hl:"Disney's movies aren't the business. <em>The theme parks are.</em>",bd:"Mickey Mouse is the most successful advertisement in human history. Every Marvel film, every Pixar release, every Star Wars sequel is a billboard for the place that actually prints money: 12 theme parks, 6 cruise ships, and $4 billion in toys last year alone."},
 {type:"pie",bg:"cream",hl:"$94 billion a year. <em>The trick is the profit.</em>",bd:"Disney makes money three ways. The biggest one might surprise you. Tap a slice.",tot:"$94B",tl:"a year",sl:[
@@ -1431,7 +1474,7 @@ sp:"-",sc:"price coming soon",scDir:"",
 ks:[{l:"Market cap",v:"Rs 18.5L cr"},{l:"Jio users",v:"524M"},{l:"Retail stores",v:"20,160"}],
 vb:3841,sentiment:"bull",
 ps:"Your Jio bill, your Smart Bazaar groceries, the Campa Cola in your fridge, the IPL on your screen - you probably paid Reliance four times today without realising it.",
-rails:["new","daily"],nx:"hdfc",
+cats:["Made in India","Energy & Oil"],rails:["new","daily"],nx:"hdfc",
 cards:[
 {type:"cover",chips:["RELIANCE - NSE","Rs 18.5 lakh crore"],hl:"You probably paid Reliance today. <em>Without knowing.</em>",bd:"Your phone bill. Your IPL stream. The Campa Cola in your fridge. The petrol pump on the corner. The grocery store down the road. The Mumbai Indians IPL team. Reliance owns all of them. Market cap Rs 18.5 lakh crore. India's most valuable company."},
 {type:"pie",bg:"cream",hl:"Rs 11.76 lakh crore a year. <em>Four giants.</em>",bd:"Reliance is not one company. It's four giants stitched together. Tap a slice.",tot:"Rs 11.76L cr",tl:"a year",sl:[
@@ -1487,7 +1530,7 @@ sp:"-",sc:"price coming soon",scDir:"",
 ks:[{l:"Market cap",v:"Rs 11.4L cr"},{l:"Deposits",v:"Rs 31L cr"},{l:"Bad loans",v:"1.15%"}],
 vb:2134,sentiment:"neutral",
 ps:"If you have an HDFC savings account or credit card, you're part of the 100M customers who've kept this bank profitable for 30 years. That streak just got its first real test.",
-rails:["new"],nx:"cocacola",
+cats:["Banks & Money","Made in India"],rails:["new"],nx:"cocacola",
 cards:[
 {type:"cover",chips:["HDFCBANK - NSE","Rs 11.4 lakh crore"],hl:"For 30 years, HDFC was the gold standard. <em>Then 2026 happened.</em>",bd:"HDFC Bank had never had a losing year in three decades. Investors paid a premium for its boring-is-best reputation. Then in March 2026 the Chairman resigned over ethics concerns. Three senior executives were fired for selling risky bonds to Indians in Dubai. The stock dropped 22%. India's most trusted bank is having its first real reputation test."},
 {type:"pie",bg:"cream",hl:"Rs 3 lakh crore a year. <em>Banks make money two ways.</em>",bd:"A bank takes deposits from you and lends them to someone else. The difference is the profit.",tot:"Rs 3L cr",tl:"a year",sl:[
@@ -1607,7 +1650,7 @@ sp:"-",sc:"",scDir:"",
 ks:[{v:"$201B",l:"2025 Revenue"},{v:"3.58B",l:"Daily Users"},{v:"$0",l:"Charged to You"}],
 vb:14283,sentiment:"bull",
 ps:"3.58 billion people open a Meta app every single day. The apps are free. The attention is not. This is the most profitable advertising machine ever built. And you built it for them every time you scrolled.",
-rails:["new","daily"],nx:"netflix",
+cats:["Big Tech","Made in USA"],rails:["new","daily"],nx:"netflix",
 cards:[
 {type:"cover",bg:"cover",chips:["META · NASDAQ","Social · AI · Advertising"],hl:"The app is free. You are the product. <em>And it made $201 billion.</em>",bd:"You have never paid Meta a single dollar. Neither has anyone you know. And yet Meta made $201 billion last year. The money came from every brand, retailer, and political campaign that paid for the right to reach you. Precisely you. At exactly the right moment.",deep:"cover"},
 {type:"mt-money",bg:"cream",deep:"mt-money",hl:"$201 billion a year. <em>Almost all of it from one thing.</em>",bigNum:98,bigSuffix:"%",bigLabel:"of revenue comes from advertising",bigSub:"one revenue stream, one bet, working since 2007",tiles:[{icon:"📱",name:"Advertising",amt:"$198B",tag:"high",tagLabel:"98%",desc:"Targeted ads across Facebook, Instagram, WhatsApp and Messenger. Every scroll is inventory. Meta sells all of it."},{icon:"🥽",name:"Reality Labs",amt:"$2.2B",tag:"low",tagLabel:"2%",desc:"Quest headsets and Ray-Ban AI glasses. Lost $19B in 2025. Possibly the most important $5B in the company's next five years."},{icon:"💬",name:"WhatsApp Business",amt:"Growing",tag:"grow",tagLabel:"New",desc:"Paid messaging to businesses. Approaching $2B annual run rate. WhatsApp was ad-free for its first ten years. That era is over."}],callout:"For every $100 that comes in, Meta keeps $41. Apple keeps $30. Netflix keeps $26. More users. Almost no extra cost to serve them. The machine scales."},
@@ -1639,7 +1682,7 @@ sp:"$72.40",sc:"+0.6%",scDir:"up",
 ks:[{l:"Worth today",v:"$355B"},{l:"Made every year",v:"$48B"},{l:"Years old",v:"140"}],
 vb:11284,sentiment:"bull",
 ps:"Coke sells you a drink that costs 4 cents to make for $2. Then does it 2.2 billion times a day.",
-rails:["now","daily"],nx:"netflix",
+cats:["Junk Food","Made in USA"],rails:["now","daily"],nx:"netflix",
 cards:[
 {type:"ko-cover",bg:"cover",deep:"cover",chips:["KO · NYSE","Beverages · 200 countries"],hl:"The drink that conquered Earth. <em>Coke doesn't own a single bottle.</em>",bd:"The original 1886 formula had actual cocaine in it. Not a scandal, the selling point, marketed as a headache cure. A morphine addicted pharmacist sold the recipe for $2,300 in 1888. Today it's worth $355 billion, and Coke still doesn't own a single bottle.",callout2:"Coke's own research found <strong>Coca Cola is the second most recognized word on Earth</strong>, in any language. Only OK beats it."},
 {type:"ko-money",bg:"cream",deep:"money",hl:"$48 billion a year. <em>Most of it isn't even from Coke.</em>",bigNum:60,bigSuffix:"%",bigLabel:"kept from every syrup dollar",bigSub:"the partners doing all the work keep just 30%",tiles:[
@@ -1707,7 +1750,7 @@ sp:"$195.00",sc:"at writing",scDir:"up",
 ks:[{l:"Market cap",v:"$4.7T"},{l:"GAAP net income",v:"$58.3B"},{l:"Q2 guide",v:"$91B +/-2%"}],
 vb:14628,sentiment:"bull",disabled:true,
 ps:"Every AI race needs engines. OpenAI, Meta, Google, Amazon, hospitals, banks and governments all keep buying the same engine: NVIDIA chips.",
-rails:["new","daily","twists"],nx:"cocacola",
+cats:["AI & Chips","Big Tech","Made in USA"],rails:["new","daily","twists"],nx:"cocacola",
 cards:[
 {type:"cover",chips:["NVDA - NASDAQ","Worth $4.7T"],hl:"NVIDIA sells the shovels while <em>the whole world digs for AI gold.</em>",bd:"Every time you use ChatGPT, every time a hospital uses AI to read an X-ray, every time a bank detects fraud with AI, NVIDIA hardware powers much of the work. In the last three months, NVIDIA reported <strong>$58.3 billion in GAAP net income.</strong>",ks:[{v:"$58.3B",l:"GAAP net income"},{v:"+85%",l:"Revenue growth YoY"},{v:"$91B +/-2%",l:"Q2 FY2027 guide"}]},
 {type:"pie",bg:"cream",hl:"Two businesses. <em>One is rewriting history.</em>",bd:"Graphics kept NVIDIA alive for decades. Data Center turned it into one of the most valuable companies on earth.",tot:"$81.6B",tl:"quarterly revenue",sl:[{k:"dc",n:" Data Center",p:92,a:"$75.2B",c:"#76B900",x:"The official Data Center segment. AI infrastructure is the engine inside it."},{k:"graphics",n:" Graphics",p:8,a:"$7.1B",c:"#1A2A00",x:"GeForce gaming, PC, and workstation graphics. Healthy, but now small by NVIDIA standards."},{k:"margin",n:" GAAP gross margin",p:75,a:"74.9%",c:"#C49A3E",x:"NVIDIA kept about 75 cents of every revenue dollar after direct costs."}]},
@@ -1724,17 +1767,52 @@ deep:{cover:{t:"The shovel analogy",e:"From the cover",h:`<div class="d-sub">Why
 tldr:["NVIDIA powers <strong>much of today's AI infrastructure.</strong>","The real moat is not just the chip. It is <strong>CUDA software</strong> that developers already build around.","The US restricted China sales. NVIDIA still grew <strong>85%</strong>.","There are <strong>$119 billion</strong> in manufacturing, supply, and capacity commitments.","More than half of sales come from <strong>just three customers.</strong> That is the core risk.","The bull case is simple: Data Center demand keeps compounding faster than rivals can catch up."]}});
 
 const CS=[
-{id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760"},
-{id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71"},
-{id:"zomato",domain:"zomato.com",n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:""},
-{id:"ferrari",domain:"ferrari.com",n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:""},
-{id:"hermes",domain:"hermes.com",n:"Hermes",bl:"The 6-year Birkin waitlist is the product.",lb:"#000",fl:""},
-{id:"google",domain:"google.com",n:"Google",bl:"Sells your attention 8.5 billion times a day.",lb:"#4285F4"},
-{id:"amazon",domain:"amazon.com",n:"Amazon",bl:"AWS quietly funds everything else.",lb:"#FF9900"},
-{id:"costco",domain:"costco.com",n:"Costco",bl:"Profit comes from memberships, not products.",lb:"#E31837"},
-{id:"tcs",domain:"tcs.com",n:"TCS",bl:"Runs the back office of Wall Street.",lb:"#1E3A8A",fl:""},
-{id:"asian-paints",domain:"asianpaints.com",n:"Asian Paints",bl:"Uses data science to sell paint. Yes, paint.",lb:"#D62828",fl:""}
+{id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760",cats:["Entertainment","Big Tech"]},
+{id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71",cats:["Banks & Money","Made in USA"]},
+{id:"zomato",domain:"zomato.com",n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:"",cats:["Made in India","Junk Food"]},
+{id:"ferrari",domain:"ferrari.com",n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:"",cats:["Cars & EVs","Luxury"]},
+{id:"hermes",domain:"hermes.com",n:"Hermes",bl:"The 6-year Birkin waitlist is the product.",lb:"#000",fl:"",cats:["Luxury","Fashion & Sneakers"]},
+{id:"google",domain:"google.com",n:"Google",bl:"Sells your attention 8.5 billion times a day.",lb:"#4285F4",cats:["Big Tech","Made in USA"]},
+{id:"amazon",domain:"amazon.com",n:"Amazon",bl:"AWS quietly funds everything else.",lb:"#FF9900",cats:["Big Tech","Made in USA"]},
+{id:"costco",domain:"costco.com",n:"Costco",bl:"Profit comes from memberships, not products.",lb:"#E31837",cats:["Made in USA"]},
+{id:"tcs",domain:"tcs.com",n:"TCS",bl:"Runs the back office of Wall Street.",lb:"#1E3A8A",fl:"",cats:["Made in India","Big Tech"]},
+{id:"asian-paints",domain:"asianpaints.com",n:"Asian Paints",bl:"Uses data science to sell paint. Yes, paint.",lb:"#D62828",fl:"",cats:["Made in India"]}
 ];
+
+/* CATEGORIES — single source of truth for cover-card corners, onboarding interests and library rails */
+const DD_CATS=[
+{k:"big-tech",label:"Big Tech",emoji:"💻",c:"#3B6FE0"},
+{k:"usa",label:"Made in USA",emoji:"🇺🇸",c:"#B23A48"},
+{k:"india",label:"Made in India",emoji:"🇮🇳",c:"#E58A00"},
+{k:"banks",label:"Banks & Money",emoji:"🏦",c:"#1F6B4A"},
+{k:"junk-food",label:"Junk Food",emoji:"🍟",c:"#D7263D"},
+{k:"entertainment",label:"Entertainment",emoji:"🎬",c:"#7B4FBF"},
+{k:"ai-chips",label:"AI & Chips",emoji:"🤖",c:"#76B900"},
+{k:"cars-evs",label:"Cars & EVs",emoji:"🚗",c:"#0F8B8D"},
+{k:"luxury",label:"Luxury",emoji:"💎",c:"#C49A3E"},
+{k:"sports",label:"Sports",emoji:"🏆",c:"#E4572E"},
+{k:"fashion",label:"Fashion & Sneakers",emoji:"👟",c:"#C2185B"},
+{k:"travel",label:"Travel & Flights",emoji:"✈️",c:"#2E86AB"},
+{k:"energy",label:"Energy & Oil",emoji:"⛽",c:"#6B4226"}
+];
+const DD_NEW_CAT={k:"new",label:"New drops",emoji:"🆕",c:"#1A3D2B"};
+const DD_FORYOU_CAT={k:"for-you",label:"Especially for you",emoji:"✨",c:"#C49A3E"};
+/* Old onboarding sector slugs → current category keys */
+const DD_CAT_LEGACY_SLUGS={tech:"big-tech",banking:"banks",media:"entertainment",consumer:"junk-food"};
+function userCatKeys(){
+ const prefs=(profileState&&profileState.sectorPreferences)||[];
+ const keys=new Set();
+ prefs.forEach(p=>{const k=DD_CAT_LEGACY_SLUGS[String(p).toLowerCase()]||String(p).toLowerCase();if(DD_CATS.some(c=>c.k===k))keys.add(k);});
+ return keys;
+}
+function userCatLabels(){
+ const keys=userCatKeys();
+ return new Set(DD_CATS.filter(c=>keys.has(c.k)).map(c=>c.label));
+}
+function companyCats(c){return c&&Array.isArray(c.cats)?c.cats:[];}
+function primaryCat(c){return companyCats(c)[0]||'';}
+function dbCatMatches(dbCo,label){return String((dbCo&&dbCo.category)||'').trim().toLowerCase()===label.toLowerCase();}
+function dbCatIsKnown(dbCo){return DD_CATS.some(cat=>dbCatMatches(dbCo,cat.label));}
 
 /* STATE */
 var curCo="cocacola",cardIdx=0;
@@ -1743,6 +1821,7 @@ let userId=null;
 let profileState={streak:0,savedCompanies:[],previousVotes:{},readHistory:[]};
 let saved={};
 let calls=[];
+let interestEditing=false;
 const voteAggregates={};
 const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},nvidia:{bull:61,neutral:26,bear:13,total:100},disney:{bull:54,neutral:32,bear:14,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100}};
 let dbCos=[];
@@ -1833,9 +1912,10 @@ function trackMetaSearch(query){const q=String(query||'').trim();if(q.length<2||
 function trackMetaWishlist(companyId,idx=0){const c=CO[companyId]||CO[curCo];if(!c||c.disabled)return;trackMetaEvent('AddToWishlist',companyMetaPayload(c,{card_index:Number(idx)+1}));}
 function identifyPostHog(){try{if(userId&&window.posthog&&posthog.identify)posthog.identify(userId,{country:profileState.country||'',profession:profileState.profession||'',investor_level:profileState.investorLevel||'',streak:profileState.streak||0});}catch(e){}}
 function callPnlPct(c){const co=CO[c.co];if(!c.entryPrice||!co||!co.sp||co.sp==='-')return null;const entry=parseFloat(String(c.entryPrice).replace(/[^0-9.]/g,''));const cur=parseFloat(String(co.sp).replace(/[^0-9.]/g,''));if(!entry||!cur||isNaN(entry)||isNaN(cur))return null;return (cur-entry)/entry*100;}
-function callPnl(c){const when=c.when&&c.when!=='Saved'?c.when:'';let left=when,pctHtml='';const pct=callPnlPct(c);if(pct!==null){const win=(c.vote==='bull'&&pct>0)||(c.vote==='bear'&&pct<0);const lose=(c.vote==='bull'&&pct<0)||(c.vote==='bear'&&pct>0);const cls=win?'up':lose?'down':'flat';const sign=pct>=0?'+':'';left=when?`${when} · ${c.entryPrice}`:c.entryPrice;pctHtml=`<span class="cc-pct ${cls}">${sign}${pct.toFixed(1)}%</span>`;}if(!left&&!pctHtml)return'';return`<div class="cc-pnl"><span class="cc-ep">${left}</span>${pctHtml}</div>`;}
-function callPnlTotals(){let sum=0,counted=0,wins=0,losses=0;calls.forEach(c=>{const pct=callPnlPct(c);if(pct===null||c.vote==='neutral')return;const dir=c.vote==='bear'?-pct:pct;counted++;sum+=dir;if(dir>0)wins++;else if(dir<0)losses++;});if(!counted)return null;return {avg:sum/counted,counted,wins,losses};}
-function pnlSummaryCard(){const t=callPnlTotals();if(!t)return'';const cls=t.avg>0.05?'up':t.avg<-0.05?'down':'flat';const sign=t.avg>=0?'+':'';return`<div class="sh pnl-sum" id="tourPnlEl"><div class="sh-h"><div><div class="sh-l">Total P&amp;L on your calls</div><div class="sh-n pnl-n ${cls}">${sign}${t.avg.toFixed(1)}<span class="u">%</span></div></div><div class="pnl-wl"><span class="w">${t.wins} winning</span><span class="l">${t.losses} losing</span></div></div><div class="sh-f">Average move since the day of each call, counted in your direction. <strong>${t.counted} call${t.counted!==1?'s':''} tracked.</strong></div></div>`;}
+function callDirectionalPnl(c){const pct=callPnlPct(c);if(pct===null)return null;if(c.vote==='bear')return -pct;if(c.vote==='neutral')return -Math.abs(pct);return pct;}
+function callPnl(c){const when=c.when&&c.when!=='Saved'?c.when:'';let left=when,pctHtml='';const pct=callPnlPct(c);if(pct!==null){const dir=callDirectionalPnl(c);const cls=dir>0.05?'up':dir<-0.05?'down':'flat';const shown=c.vote==='neutral'?dir:pct;const sign=shown>=0?'+':'';left=when?`${when} · ${c.entryPrice}`:c.entryPrice;pctHtml=`<span class="cc-pct ${cls}">${sign}${shown.toFixed(1)}%</span>`;}if(!left&&!pctHtml)return'';return`<div class="cc-pnl"><span class="cc-ep">${left}</span>${pctHtml}</div>`;}
+function callPnlTotals(){let sum=0,counted=0,wins=0,losses=0;calls.forEach(c=>{const dir=callDirectionalPnl(c);if(dir===null)return;counted++;sum+=dir;if(dir>0.05)wins++;else if(dir<-0.05)losses++;});if(!counted)return null;return {avg:sum/counted,counted,wins,losses,total:calls.length};}
+function pnlSummaryCard(){const t=callPnlTotals();if(!t)return'';const cls=t.avg>0.05?'up':t.avg<-0.05?'down':'flat';const sign=t.avg>=0?'+':'';const total=t.total||calls.length;return`<div class="sh pnl-sum" id="tourPnlEl"><div class="sh-h"><div><div class="sh-l">Total P&amp;L on your calls</div><div class="sh-n pnl-n ${cls}">${sign}${t.avg.toFixed(1)}<span class="u">%</span></div></div><div class="pnl-wl"><span class="w">${t.wins} winning</span><span class="l">${t.losses} losing</span></div></div><div class="sh-f">Average move since the day of each priced call, counted against your call type. <strong>${total} call${total!==1?'s':''} made. ${t.counted} with P&amp;L.</strong></div></div>`;}
 function isRegisteredUser(){return Boolean(profileState.firstName||profileState.lastName||profileState.phoneNumber||profileState.profession);}
 function displayUserName(){return [profileState.firstName,profileState.lastName].filter(Boolean).join(' ')||'Daily Dividend reader';}
 function authPanel(){
@@ -2098,7 +2178,7 @@ function renderCocaColaCard(card,idx){
  const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${co.cards.length}`;
  switch(card.type){
  case 'ko-cover':return `
-<div class="eb-c">01 · The company</div>
+<div class="eb-c">${primaryCat(co)||'01 · The company'}</div>
 <div class="cv-top">
  <div class="cv-mark">${companyLogo(co)}</div>
  <div class="cv-co-info">
@@ -2175,7 +2255,7 @@ function renderCard(card,idx){
  switch(card.type){
 
  case 'cover':return `
-<div class="eb-c">01 - The cover</div>
+<div class="eb-c">${primaryCat(co)||'01 - The cover'}</div>
 <div class="cv-top">
  <div class="cv-mark">${companyLogo(co)}</div>
  <div class="cv-co-info">
@@ -2459,6 +2539,41 @@ function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
 
 /* LIBRARY */
 async function loadDbCompanies(){try{const data=await api('/api/companies');dbCos=data.companies||[];}catch(e){dbCos=[];}}
+
+/* NUDGES — "nudge founders to release" on coming-soon companies */
+let nudgeCounts={},myNudges=new Set();
+async function loadNudges(){
+ try{
+  const q=userId?`?userId=${encodeURIComponent(userId)}`:'';
+  const data=await api('/api/nudges'+q);
+  nudgeCounts=data.nudges||{};
+  myNudges=new Set(data.userNudged||[]);
+ }catch(e){}
+}
+function nudgeBtnHtml(id){
+ const n=nudgeCounts[id]||0;
+ const done=myNudges.has(id);
+ return `<button class="nudge-btn${done?' done':''}" data-nudge="${id}" onclick="event.stopPropagation();sendNudge('${id}')">${done?'Nudged &#10003;':'Nudge founders to release'}${n?`<span class="nudge-n">${n}</span>`:''}</button>`;
+}
+async function sendNudge(id){
+ if(myNudges.has(id))return;
+ myNudges.add(id);
+ nudgeCounts[id]=(nudgeCounts[id]||0)+1;
+ document.querySelectorAll(`[data-nudge="${id}"]`).forEach(b=>{
+  b.classList.add('done','pop');
+  b.innerHTML=`Nudged &#10003;<span class="nudge-n">${nudgeCounts[id]}</span>`;
+ });
+ const toast=IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast;
+ toast('👉 Nudge sent. The founders felt that.');
+ trackPostHogEvent('company_nudged',{company_id:id});
+ try{
+  const data=await api('/api/nudge',{method:'POST',body:JSON.stringify({userId,companyId:id})});
+  if(data&&typeof data.count==='number'){
+   nudgeCounts[id]=data.count;
+   document.querySelectorAll(`[data-nudge="${id}"] .nudge-n`).forEach(el=>el.textContent=data.count);
+  }
+ }catch(e){}
+}
 function dbCompanyCard(c){
  const id=c.companyId;
  const initial=(c.name||'?').charAt(0).toUpperCase();
@@ -2473,32 +2588,50 @@ function renderLib(){
  document.querySelector('#screen-library .lib-st').innerHTML=`<span class="big">${liveCount}</span><br>live`;
  document.querySelector('#screen-library .lib-st').title=liveNames;
  document.getElementById('libFs').innerHTML=`<div title="${liveNames}"><span class="big">${liveCount}</span> live</div><div><span class="big">${comingCount}</span> coming</div><div><span class="big">~90s</span> per read</div>`;
- const newRail=liveCompanyValues().filter(c=>c.rails&&c.rails.includes('new'));
- const dailyRail=liveCompanyValues().filter(c=>c.rails&&c.rails.includes('daily'));
- const twistRail=liveCompanyValues().filter(c=>c.rails&&c.rails.includes('twists'));
- const dbDaily=dbCos.filter(c=>c.category==='brands you use daily');
- const dbTwist=dbCos.filter(c=>c.category==='plot twists');
- const dbUnder=dbCos.filter(c=>c.category==='underrated businesses');
- const dbNew=dbCos.filter(c=>!c.category);
+ const rails=libRailData();
+ const chips=rails.map(r=>`<button class="cat-chip" style="--cc:${r.cat.c}" onclick="jumpToRail('rail-${r.cat.k}',this)"><span class="cat-chip-e">${r.cat.emoji}</span>${r.cat.label}</button>`).join('');
  document.getElementById('lc').innerHTML=`
 <div class="lib-feat" id="tourLibEl" onclick="openStack('${companyKey(featured)}')">
  <div class="lib-feat-tag"> STORY OF THE WEEK</div>
  <div class="lib-feat-co">${featured.n}</div>
  <div class="lib-feat-bl">${featured.bl}</div>
 </div>
-${rail(' New drops this week',newRail,[CS[3]],dbNew)}
-${rail(' Brands you use daily',dailyRail,[CS[0]],dbDaily)}
-${rail(' Plot twists',twistRail,CS.slice(4,6),dbTwist)}
-${rail(' Underrated businesses',[],CS.slice(9,11),dbUnder)}`;
+<div class="cat-chips">${chips}</div>
+${userCatLabels().size?'':`<div class="fy-cta" onclick="goTo('you')"><span class="fy-cta-e">✨</span><span>Pick your interests on the You page to unlock an <strong>Especially for you</strong> shelf →</span></div>`}
+${rails.map(r=>rail(r)).join('')}`;
  twparse(document.getElementById('lc'));
 }
-function rail(title,liveItems,csItems,dbItems){
- dbItems=dbItems||[];
+function libRailData(){
+ const live=liveCompanyValues();
+ const railList=[{cat:DD_NEW_CAT,title:'🆕 New drops this week',liveItems:live.filter(c=>c.rails&&c.rails.includes('new')),csItems:[],dbItems:dbCos.filter(c=>!dbCatIsKnown(c))}];
+ const fyLabels=userCatLabels();
+ if(fyLabels.size){
+  railList.unshift({cat:DD_FORYOU_CAT,title:`${DD_FORYOU_CAT.emoji} Especially for you`,
+   liveItems:live.filter(c=>companyCats(c).some(l=>fyLabels.has(l))),
+   csItems:CS.filter(c=>companyCats(c).some(l=>fyLabels.has(l))),
+   dbItems:dbCos.filter(c=>[...fyLabels].some(l=>dbCatMatches(c,l)))});
+ }
+ DD_CATS.forEach(cat=>{railList.push({cat,title:`${cat.emoji} ${cat.label}`,
+  liveItems:live.filter(c=>companyCats(c).includes(cat.label)),
+  csItems:CS.filter(c=>companyCats(c).includes(cat.label)),
+  dbItems:dbCos.filter(c=>dbCatMatches(c,cat.label))});});
+ return railList.filter(r=>r.liveItems.length+r.csItems.length+r.dbItems.length>0);
+}
+function jumpToRail(id,chip){
+ const el=document.getElementById(id);if(!el)return;
+ document.querySelectorAll('.cat-chip.active').forEach(c=>c.classList.remove('active'));
+ if(chip)chip.classList.add('active');
+ el.scrollIntoView({behavior:'smooth',block:'start'});
+ el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+}
+function rail(r){
+ const {cat,title,liveItems,csItems,dbItems}=r;
  const count=liveItems.length+csItems.length+dbItems.length;
+ if(!count)return'';
  const cards=liveItems.map(c=>`<div class="rcd" onclick="openStack('${companyKey(c)}')"><div class="rcd-th" style="background:${c.lb};color:${c.lc||'#fff'}">${companyLogo(c)}</div>${c.fl?`<div class="rcd-fl">${c.fl}</div>`:'<div class="rcd-ld"></div>'}<div class="rcd-n">${c.n}</div><div class="rcd-bl">${c.bl}</div></div>`).join('')+
- csItems.map(c=>`<div class="rcd cs"><div class="rcd-th" style="background:${c.lb}">${companyLogo(c)}</div>${c.fl?`<div class="rcd-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div class="rcd-n">${c.n}</div><div class="rcd-bl">${c.bl}</div></div>`).join('')+
+ csItems.map(c=>`<div class="rcd cs"><div class="rcd-th" style="background:${c.lb}">${companyLogo(c)}</div>${c.fl?`<div class="rcd-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div class="rcd-n">${c.n}</div><div class="rcd-bl">${c.bl}</div>${nudgeBtnHtml(c.id||companyKey(c))}</div>`).join('')+
  dbItems.map(c=>dbCompanyCard(c)).join('');
- return `<div class="rail"><div class="rh"><div class="rail-t">${title}</div><div class="rc">${count}</div></div><div class="rs">${cards}</div></div>`;
+ return `<div class="rail" id="rail-${cat.k}"><div class="rh"><div class="rail-t">${title}</div><div class="rc" style="background:${cat.c}14;color:${cat.c}">${count}</div></div><div class="rs">${cards}</div></div>`;
 }
 function surpriseMe(){const keys=liveCompanyKeys();openStack(keys[Math.floor(Math.random()*keys.length)]);}
 let _searchThrottle=null;
@@ -2572,6 +2705,44 @@ async function castCoVote(voteType){
 }
 
 /* SHELF / YOU */
+function interestsPanel(){
+ const sel=userCatKeys();
+ const current=DD_CATS.filter(c=>sel.has(c.k));
+ const currentHtml=current.length?current.map(c=>`<button class="cat-chip active" style="--cc:${c.c}" onclick="setInterestEditing(true)"><span class="cat-chip-e">${c.emoji}</span>${c.label}</button>`).join(''):`<button class="cat-chip" style="--cc:#1A3D2B" onclick="setInterestEditing(true)">Pick interests</button>`;
+ const optionsHtml=interestEditing?`<div class="int-sub">Tap to toggle. These power the especially-for-you shelf in your library.</div><div class="int-chips">${DD_CATS.map(c=>`<button class="cat-chip${sel.has(c.k)?' active':''}" style="--cc:${c.c}" onclick="toggleInterest('${c.k}',this)"><span class="cat-chip-e">${c.emoji}</span>${c.label}</button>`).join('')}</div>`:'';
+ return `<div class="int-card" id="intCard">
+<div class="int-head"><div><div class="int-tag">Your interests</div><div class="int-sub">${current.length?'Your current library filters.':'Choose what you want more of.'}</div></div><button class="int-edit" onclick="setInterestEditing(${interestEditing?'false':'true'})">${interestEditing?'Done':'Edit'}</button></div>
+<div class="int-sub">Tap to toggle. These power the ✨ <strong>Especially for you</strong> shelf in your library.</div>
+<div class="int-chips int-current">${currentHtml}</div>
+${optionsHtml}
+</div>`;
+}
+function setInterestEditing(edit){
+ interestEditing=!!edit;
+ const card=document.getElementById('intCard');
+ if(card)card.outerHTML=interestsPanel();
+}
+function toggleInterest(k,btn){
+ const keys=userCatKeys();
+ if(keys.has(k))keys.delete(k);else keys.add(k);
+ profileState.sectorPreferences=[...keys];
+ if(btn)btn.classList.toggle('active');
+ setInterestEditing(true);
+ saveInterests();
+}
+let _intSaveT=null;
+function saveInterests(){
+ clearTimeout(_intSaveT);
+ _intSaveT=setTimeout(async()=>{
+  const toast=IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast;
+  try{
+   const data=await api('/api/preferences',{method:'POST',body:JSON.stringify({sectorPreferences:profileState.sectorPreferences})});
+   if(data&&Array.isArray(data.sectorPreferences))profileState.sectorPreferences=data.sectorPreferences;
+   try{localStorage.setItem('user',JSON.stringify(profileState));}catch(e){}
+   toast('✨ Interests saved. Your library just got personal.');
+  }catch(e){toast(e.message);}
+ },700);
+}
 function personalityCard(p){
  if(!p||!p.unlocked){
   const streak=profileState&&profileState.streak||0;
@@ -2606,6 +2777,7 @@ async function renderShelf(){
 <div class="you-top-row"><div><div class="yg">Your shelf. <em>Your calls.</em></div><div class="ys">Cards you saved. Bets you made.</div></div><button class="tour-replay-btn" onclick="startTour()">▶ Tutorial</button></div>
 ${authPanel()}
 ${personalityCard(personalityData)}
+${interestsPanel()}
 <div class="sh">
  <div class="sh-h"><div><div class="sh-l">Reading streak</div><div class="sh-n">${streak}<span class="u">days</span></div></div><div class="sh-fl"><span class="flame">&#128293;</span></div></div>
  <div class="sh-w">${['M','T','W','T','F','S','S'].map((d,i)=>{const jsDay=(i+1)%7;const today=new Date().getDay()===jsDay;const cls=readDays.has(jsDay)?'done':today?'today':'';return `<div class="sh-c${today?' today':''}"><div class="sh-d ${cls}"></div><div class="sh-dl">${d}</div></div>`;}).join('')}</div>
@@ -2792,7 +2964,7 @@ function _releaseGate(){document.documentElement.classList.remove('auth-pending'
 function _clearStoredSession(){localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');}
 function _runDesktopInit(){const run=()=>{if(typeof dtInit==='function')dtInit();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else setTimeout(run,0);}
 function _refreshDesktopShell(){const run=()=>{if(typeof dtBuildTicker==='function')dtBuildTicker();if(typeof dtRenderToday==='function')dtRenderToday();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else setTimeout(run,0);}
-function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
 function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');if(IS_DESKTOP){_runDesktopInit();}else{renderToday();}_secondary();}
 function _fullAuth(){ensureSession().then(_boot).catch(()=>{_releaseGate();_clearStoredSession();window.location.replace('onboarding.html');});}
 window.addEventListener('error',_releaseGate);
@@ -2948,7 +3120,7 @@ function dtRenderCard(card,idx){
   if(card.type&&card.type.startsWith('ko-'))return renderCocaColaCard(card,idx);
   switch(card.type){
   case 'cover':return `
-<div class="eb-c">01 · The cover</div>
+<div class="eb-c">${primaryCat(co)||'01 · The cover'}</div>
 <div class="cv-top">
   <div class="cv-mark" style="background:${co.lb||'#333'};color:${co.lc||'#fff'}">${companyLogo(co)}</div>
   <div class="cv-co-info">
@@ -3269,29 +3441,45 @@ function dtRenderLib(){
     return `<div class="lib-card" onclick="openStack('${slug}')"><div class="lib-card-th" style="background:${c.lb||'#333'};color:${c.lc||'#fff'}">${companyLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:'<div class="lib-card-ld"></div>'}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
   }
   function csCard(c){
-    return `<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${companyLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div></div>`;
+    return `<div class="lib-card cs"><div class="lib-card-th" style="background:${c.lb||'#333'}">${companyLogo(c)}</div>${c.fl?`<div class="lib-card-fl">${c.fl}</div>`:`<div class="cs-tag">Soon</div>`}<div style="flex:1"></div><div class="lib-card-n">${c.n}</div><div class="lib-card-bl">${c.bl||''}</div>${nudgeBtnHtml(c.id||companyKey(c))}</div>`;
   }
-  function section(title, liveArr, dbArr=[], csArr=[]){
+  function section(cat, title, liveArr, dbArr=[], csArr=[]){
     const cards=[...liveArr.map(libCard),...dbArr.map(dbLibCard),...csArr.map(csCard)];
     if(!cards.length)return'';
-    return `<div class="lib-section"><div class="lib-section-h"><div class="lib-section-t">${title}</div><div class="lib-section-c">${cards.length}</div></div><div class="lib-grid">${cards.join('')}</div></div>`;
+    const arrows=cards.length>4?`<button class="lib-arrow" onclick="dtScrollRail(this,-1)" aria-label="Scroll left">&#8592;</button><button class="lib-arrow" onclick="dtScrollRail(this,1)" aria-label="Scroll right">&#8594;</button>`:'';
+    return `<div class="lib-section" id="dtrail-${cat.k}"><div class="lib-section-h"><div class="lib-section-t">${title}</div><div class="lib-section-side"><div class="lib-section-c" style="background:${cat.c}14;color:${cat.c}">${cards.length}</div>${arrows}</div></div><div class="lib-row-scroll">${cards.join('')}</div></div>`;
   }
 
-  const daily=liveKeys.filter(k=>CO[k].rails&&CO[k].rails.includes('daily'));
-  const twists=liveKeys.filter(k=>CO[k].rails&&CO[k].rails.includes('twists'));
   const newKeys=liveKeys.filter(k=>CO[k].rails&&CO[k].rails.includes('new'));
 
   // DB companies by category
   const desktopDbCos=(dbCos||[]).filter(c=>!CO[String(c.companyId||'').toLowerCase()]);
-  const dbBrands=desktopDbCos.filter(c=>c.category==='brands you use daily');
-  const dbTwists=desktopDbCos.filter(c=>c.category==='plot twists');
-  const dbUnder=desktopDbCos.filter(c=>c.category==='underrated businesses');
-  const dbNew=desktopDbCos.filter(c=>!c.category);
+  const dbNew=desktopDbCos.filter(c=>!dbCatIsKnown(c));
 
   function dbLibCard(c){
     const slug=c.companyId;
     return `<div class="lib-card" onclick="openDbCompany('${slug}')"><div class="lib-card-th" style="background:#1A3D2B;color:#fff">${companyLogo({id:slug,n:c.name||slug})}</div><div style="flex:1"></div><div class="lib-card-n">${c.name||slug}</div><div class="lib-card-bl">${c.hook||''}</div></div>`;
   }
+
+  const fyLabels=userCatLabels();
+  const sections=[
+    ...(fyLabels.size?[{cat:DD_FORYOU_CAT,html:section(
+      DD_FORYOU_CAT,
+      `${DD_FORYOU_CAT.emoji} Especially for you`,
+      liveKeys.filter(k=>companyCats(CO[k]).some(l=>fyLabels.has(l))),
+      desktopDbCos.filter(c=>[...fyLabels].some(l=>dbCatMatches(c,l))),
+      (CS||[]).filter(c=>companyCats(c).some(l=>fyLabels.has(l)))
+    )}]:[]),
+    {cat:DD_NEW_CAT,html:section(DD_NEW_CAT,'🆕 New drops this week',newKeys,dbNew)},
+    ...DD_CATS.map(cat=>({cat,html:section(
+      cat,
+      `${cat.emoji} ${cat.label}`,
+      liveKeys.filter(k=>companyCats(CO[k]).includes(cat.label)),
+      desktopDbCos.filter(c=>dbCatMatches(c,cat.label)),
+      (CS||[]).filter(c=>companyCats(c).includes(cat.label))
+    )}))
+  ].filter(s=>s.html);
+  const chips=sections.map(s=>`<button class="cat-chip" style="--cc:${s.cat.c}" onclick="dtJumpToRail('dtrail-${s.cat.k}',this)"><span class="cat-chip-e">${s.cat.emoji}</span>${s.cat.label}</button>`).join('');
 
   lm.innerHTML=`
 <div class="lib-feat-card" onclick="openStack('${curCo}')">
@@ -3300,10 +3488,20 @@ function dtRenderLib(){
     <button class="lib-feat-cta">Read now →</button>
   </div>
 </div>
-${section('🆕 New drops this week',newKeys,dbNew,CS?[CS[3]]:[])}
-${section('📱 Brands you use daily',daily,dbBrands)}
-${section('🎬 Plot twists',twists,dbTwists,CS?CS.slice(4,6):[])}
-${section('🫥 Underrated businesses',[],dbUnder,CS?CS.slice(9,11):[])}`;
+<div class="cat-chips">${chips}</div>
+${fyLabels.size?'':`<div class="fy-cta" onclick="dtGoTo('you')"><span class="fy-cta-e">✨</span><span>Pick your interests on the You page to unlock an <strong>Especially for you</strong> shelf →</span></div>`}
+${sections.map(s=>s.html).join('')}`;
+}
+function dtScrollRail(btn,dir){
+  const sc=btn.closest('.lib-section')&&btn.closest('.lib-section').querySelector('.lib-row-scroll');if(!sc)return;
+  sc.scrollBy({left:dir*Math.max(sc.clientWidth-180,300),behavior:'smooth'});
+}
+function dtJumpToRail(id,chip){
+  const el=document.getElementById(id);if(!el)return;
+  document.querySelectorAll('#dtShell .cat-chip.active').forEach(c=>c.classList.remove('active'));
+  if(chip)chip.classList.add('active');
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
 }
 
 function dtSurpriseMe(){const keys=liveCompanyKeys();openStack(keys[Math.floor(Math.random()*keys.length)]);}
@@ -3336,6 +3534,7 @@ async function dtRenderShelf(){
 <div class="you-head-row"><div class="you-head-copy"><div class="you-h">Your shelf.</div><div class="you-sub">What you've saved and how you voted.</div></div><button class="tour-replay-btn" onclick="startTour()">▶ Tutorial</button></div>
 ${authPanel()}
 ${personalityCard(personalityData)}
+${interestsPanel()}
 <div class="you-left">
   <div class="streak-card">
     <div class="streak-card-h"><div class="streak-label">Reading streak</div><div class="streak-emoji">🔥</div></div>

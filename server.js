@@ -193,7 +193,8 @@ function emptyDb() {
       featuredCompany: 'netflix'
     },
     companies: {},
-    prices: emptyPrices()
+    prices: emptyPrices(),
+    nudges: {}
   };
 }
 
@@ -236,7 +237,8 @@ function normalizeDb(parsed = {}) {
       ...(parsed.settings && typeof parsed.settings === 'object' ? parsed.settings : {})
     },
     companies: parsed.companies && typeof parsed.companies === 'object' ? parsed.companies : empty.companies,
-    prices: normalizePrices(parsed.prices)
+    prices: normalizePrices(parsed.prices),
+    nudges: parsed.nudges && typeof parsed.nudges === 'object' ? parsed.nudges : empty.nudges
   };
 }
 
@@ -982,6 +984,11 @@ function adminSummary(db) {
       .slice(0, 25),
     settings: db.settings,
     companies: db.companies,
+    nudges: Object.entries(db.nudges || {}).map(([companyId, entry]) => ({
+      companyId,
+      count: Number(entry && entry.count) || 0,
+      lastNudgedAt: (entry && entry.lastNudgedAt) || null
+    })).sort((a, b) => b.count - a.count),
     prices: db.prices,
     priceLastUpdated: Object.values(db.prices || {})
       .map(item => item.lastUpdated)
@@ -1078,6 +1085,23 @@ app.get('/api/user/:userId', requireUser, async (req, res, next) => {
     const existed = Boolean(db.users[userId]);
     const user = getUser(db, userId);
     if (!existed) await writeDb(db);
+    res.json(profile(user));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/preferences', requireUser, async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    if (Array.isArray(req.body.sectorPreferences)) {
+      user.sectorPreferences = req.body.sectorPreferences.map(normalize).filter(Boolean);
+    }
+    if (Array.isArray(req.body.marketPreferences)) {
+      user.marketPreferences = req.body.marketPreferences.map(normalize).filter(Boolean);
+    }
+    await writeDb(db);
     res.json(profile(user));
   } catch (error) {
     next(error);
@@ -1383,6 +1407,47 @@ app.get('/api/companies', async (req, res, next) => {
     const db = await readDb();
     const companies = Object.values(db.companies).map(({ html, ...rest }) => rest);
     res.json({ companies });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/nudge', async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const companyId = requireString(req.body.companyId, 'companyId', res);
+    if (!companyId) return;
+    const id = companyId.toLowerCase();
+    const userId = String(req.body.userId || '').trim();
+    const entry = db.nudges[id] && typeof db.nudges[id] === 'object'
+      ? db.nudges[id]
+      : { companyId: id, count: 0, users: {} };
+    if (!entry.users || typeof entry.users !== 'object') entry.users = {};
+    const alreadyNudged = Boolean(userId && entry.users[userId]);
+    if (!alreadyNudged) {
+      if (userId) entry.users[userId] = new Date().toISOString();
+      entry.count = (Number(entry.count) || 0) + 1;
+      entry.lastNudgedAt = new Date().toISOString();
+      db.nudges[id] = entry;
+      await writeDb(db);
+    }
+    res.json({ companyId: id, count: Number(entry.count) || 0, alreadyNudged });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/nudges', async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const userId = String(req.query.userId || '').trim();
+    const counts = {};
+    const userNudged = [];
+    Object.entries(db.nudges || {}).forEach(([id, entry]) => {
+      counts[id] = Number(entry && entry.count) || 0;
+      if (userId && entry && entry.users && entry.users[userId]) userNudged.push(id);
+    });
+    res.json({ nudges: counts, userNudged });
   } catch (error) {
     next(error);
   }
