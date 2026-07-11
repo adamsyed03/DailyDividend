@@ -2888,7 +2888,7 @@ function renderLib(){
  const chips=rails.map(r=>`<button class="cat-chip" style="--cc:${r.cat.c}" onclick="jumpToRail('rail-${r.cat.k}',this)"><span class="cat-chip-e">${r.cat.emoji}</span>${r.cat.label}</button>`).join('');
  document.getElementById('lc').innerHTML=`
 <div class="lib-feat" id="tourLibEl" onclick="openStack('${companyKey(featured)}')">
- <div class="lib-feat-tag"> STORY OF THE WEEK</div>
+ <div class="lib-feat-tag">STORY OF THE WEEK</div>
  <div class="lib-feat-co">${featured.n}</div>
  <div class="lib-feat-bl">${featured.bl}</div>
 </div>
@@ -2899,15 +2899,15 @@ ${rails.map(r=>rail(r)).join('')}`;
 }
 function libRailData(){
  const live=liveCompanyValues();
- const railList=[{cat:DD_NEW_CAT,title:'🆕 New drops this week',liveItems:live.filter(c=>c.rails&&c.rails.includes('new')),csItems:[],dbItems:dbCos.filter(c=>!dbCatIsKnown(c))}];
+ const railList=[{cat:DD_NEW_CAT,title:'New drops this week',liveItems:live.filter(c=>c.rails&&c.rails.includes('new')),csItems:[],dbItems:dbCos.filter(c=>!dbCatIsKnown(c))}];
  const fyLabels=userCatLabels();
  if(fyLabels.size){
-  railList.unshift({cat:DD_FORYOU_CAT,title:`${DD_FORYOU_CAT.emoji} Especially for you`,
+  railList.unshift({cat:DD_FORYOU_CAT,title:'Especially for you',
    liveItems:live.filter(c=>companyCats(c).some(l=>fyLabels.has(l))),
    csItems:CS.filter(c=>companyCats(c).some(l=>fyLabels.has(l))),
    dbItems:dbCos.filter(c=>[...fyLabels].some(l=>dbCatMatches(c,l)))});
  }
- DD_CATS.forEach(cat=>{railList.push({cat,title:`${cat.emoji} ${cat.label}`,
+ DD_CATS.forEach(cat=>{railList.push({cat,title:cat.label,
   liveItems:live.filter(c=>companyCats(c).includes(cat.label)),
   csItems:CS.filter(c=>companyCats(c).includes(cat.label)),
   dbItems:dbCos.filter(c=>dbCatMatches(c,cat.label))});});
@@ -3764,15 +3764,15 @@ function dtRenderLib(){
   const sections=[
     ...(fyLabels.size?[{cat:DD_FORYOU_CAT,html:section(
       DD_FORYOU_CAT,
-      `${DD_FORYOU_CAT.emoji} Especially for you`,
+      'Especially for you',
       liveKeys.filter(k=>companyCats(CO[k]).some(l=>fyLabels.has(l))),
       desktopDbCos.filter(c=>[...fyLabels].some(l=>dbCatMatches(c,l))),
       (CS||[]).filter(c=>companyCats(c).some(l=>fyLabels.has(l)))
     )}]:[]),
-    {cat:DD_NEW_CAT,html:section(DD_NEW_CAT,'🆕 New drops this week',newKeys,dbNew)},
+    {cat:DD_NEW_CAT,html:section(DD_NEW_CAT,'New drops this week',newKeys,dbNew)},
     ...DD_CATS.map(cat=>({cat,html:section(
       cat,
-      `${cat.emoji} ${cat.label}`,
+      cat.label,
       liveKeys.filter(k=>companyCats(CO[k]).includes(cat.label)),
       desktopDbCos.filter(c=>dbCatMatches(c,cat.label)),
       (CS||[]).filter(c=>companyCats(c).includes(cat.label))
@@ -3783,7 +3783,7 @@ function dtRenderLib(){
   lm.innerHTML=`
 <div class="lib-feat-card" onclick="openStack('${curCo}')">
   <div class="lib-feat-inner">
-    <div><div class="lib-feat-tag">📰 STORY OF THE WEEK</div><div class="lib-feat-co">${featured.n}</div><div class="lib-feat-bl">${featured.bl||''}</div></div>
+    <div><div class="lib-feat-tag">STORY OF THE WEEK</div><div class="lib-feat-co">${featured.n}</div><div class="lib-feat-bl">${featured.bl||''}</div></div>
     <button class="lib-feat-cta">Read now →</button>
   </div>
 </div>

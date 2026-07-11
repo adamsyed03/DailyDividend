@@ -49,11 +49,11 @@
       "currency": "USD",
       "exchange": "NASDAQ",
       "yearStartPrice": 90.99,
-      "price": 75.46,
-      "change": -17.07,
+      "price": 73.37,
+      "change": -19.36,
       "changeDirection": "down",
-      "date": "2026-07-09",
-      "lastUpdated": "2026-07-09T21:00:03.307Z"
+      "date": "2026-07-10",
+      "lastUpdated": "2026-07-11T01:16:53.197Z"
     },
     "NVDA": {
       "ticker": "NVDA",
@@ -61,11 +61,11 @@
       "currency": "USD",
       "exchange": "NASDAQ",
       "yearStartPrice": 135,
-      "price": 202.765,
-      "change": 50.2,
+      "price": 210.96001,
+      "change": 56.27,
       "changeDirection": "up",
-      "date": "2026-07-09",
-      "lastUpdated": "2026-07-09T20:59:59.724Z"
+      "date": "2026-07-10",
+      "lastUpdated": "2026-07-11T01:16:53.430Z"
     },
     "DIS": {
       "ticker": "DIS",
@@ -73,11 +73,11 @@
       "currency": "USD",
       "exchange": "NYSE",
       "yearStartPrice": 111.85,
-      "price": 96.15,
-      "change": -14.04,
+      "price": 95.62,
+      "change": -14.51,
       "changeDirection": "down",
-      "date": "2026-07-09",
-      "lastUpdated": "2026-07-09T20:59:59.960Z"
+      "date": "2026-07-10",
+      "lastUpdated": "2026-07-11T01:16:53.665Z"
     },
     "META": {
       "ticker": "META",
@@ -85,11 +85,11 @@
       "currency": "USD",
       "exchange": "NASDAQ",
       "yearStartPrice": 585.27,
-      "price": 631.46,
-      "change": 7.89,
+      "price": 669.21002,
+      "change": 14.34,
       "changeDirection": "up",
-      "date": "2026-07-09",
-      "lastUpdated": "2026-07-09T21:00:00.182Z"
+      "date": "2026-07-10",
+      "lastUpdated": "2026-07-11T01:16:53.895Z"
     },
     "SPOT": {
       "ticker": "SPOT",
@@ -97,11 +97,11 @@
       "currency": "USD",
       "exchange": "NYSE",
       "yearStartPrice": null,
-      "price": 485.985,
+      "price": 479.76999,
       "change": null,
       "changeDirection": null,
-      "date": "2026-07-09",
-      "lastUpdated": "2026-07-09T21:00:00.415Z"
+      "date": "2026-07-10",
+      "lastUpdated": "2026-07-11T01:16:54.128Z"
     },
     "KO": {
       "ticker": "KO",
@@ -109,11 +109,11 @@
       "currency": "USD",
       "exchange": "NYSE",
       "yearStartPrice": 61.5,
-      "price": 82.625,
-      "change": 34.35,
+      "price": 83.49,
+      "change": 35.76,
       "changeDirection": "up",
-      "date": "2026-07-09",
-      "lastUpdated": "2026-07-09T21:00:00.676Z"
+      "date": "2026-07-10",
+      "lastUpdated": "2026-07-11T01:16:54.374Z"
     }
   },
   "nudges": {}
