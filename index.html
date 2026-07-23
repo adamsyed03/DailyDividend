@@ -1436,6 +1436,116 @@ body{background:var(--ink);overflow:hidden}
   #tourDesktopNav button.active{background:rgba(181,227,200,.14);color:#F5F1E8}
 }
 </style>
+<style>
+/* Slides 1–5: consistent, phone-readable hierarchy across every company deck. */
+.card[data-deep="cover"],.card[data-deep="money"],.card[data-deep="pie"],.card[data-deep="mt-money"],.card[data-deep="model"],.card[data-deep="doors"],.card[data-deep="mt-model"],.card[data-deep="rivals"],.card[data-deep="mt-rivals"],.card[data-deep="hidden"],.card[data-deep="mt-hidden"]{justify-content:flex-start}
+
+/* 01 — top-aligned with a larger story block. */
+.card[data-deep="cover"] .hl{font-size:clamp(30px,5.2dvh,50px);line-height:1.08;margin:8px 0 12px;max-width:100%}
+.card[data-deep="cover"] .bd{font-size:clamp(15.5px,2.35dvh,21px);line-height:1.48;max-width:100%}
+.card[data-deep="cover"] .kick{margin-top:clamp(20px,4dvh,38px)}
+
+/* 02 — pull the bubbles up and enlarge their body copy. */
+.card[data-deep="money"] .hl,.card[data-deep="mt-money"] .hl{margin-bottom:3px}
+.card[data-deep="money"] .mn-lbl,.card[data-deep="mt-money"] .mn-lbl{margin-bottom:5px}
+.card[data-deep="money"] .mn-rows{justify-content:flex-start;margin-top:0;gap:9px}
+.card[data-deep="money"] .mn-row{padding:clamp(12px,1.8dvh,16px) 16px}
+.card[data-deep="money"] .mn-desc{font-size:clamp(13px,1.8dvh,15px);line-height:1.4}
+.card[data-deep="mt-money"] .mt-money-big{margin-top:3px}
+.card[data-deep="mt-money"] .mt-rev-tiles{gap:8px}
+.card[data-deep="mt-money"] .mt-rev-desc,.card[data-deep="money"] .dis-rev-desc,.card[data-deep="money"] .nf-tile-desc{font-size:clamp(12.5px,1.75dvh,14.5px);line-height:1.4}
+.card[data-deep="pie"] .hl{margin-bottom:3px}
+.card[data-deep="pie"] .bd{margin-bottom:8px!important}
+.card[data-deep="pie"] .pie-d-t{font-size:clamp(13px,1.8dvh,15px);line-height:1.4}
+
+/* 03 — even rhythm and larger copy inside each step. */
+.card[data-deep="model"] .md-flow{justify-content:flex-start;gap:7px}
+.card[data-deep="model"] .md-arrow{height:12px;line-height:12px;padding:0}
+.card[data-deep="model"] .md-step{padding:clamp(12px,1.8dvh,16px) 14px}
+.card[data-deep="model"] .md-t{font-size:clamp(16px,2.1dvh,19px)}
+.card[data-deep="model"] .md-s{font-size:clamp(13px,1.8dvh,15px);line-height:1.38}
+.card[data-deep="mt-model"] .nf-flow{justify-content:flex-start;gap:6px}
+.card[data-deep="mt-model"] .nf-flow-arrow{height:10px;line-height:10px;padding:0}
+.card[data-deep="mt-model"] .nf-flow-step{padding:clamp(11px,1.7dvh,15px) 14px}
+.card[data-deep="mt-model"] .nf-flow-step-t{font-size:clamp(16px,2.1dvh,19px)}
+.card[data-deep="mt-model"] .nf-flow-step-s{font-size:clamp(13px,1.8dvh,15px);line-height:1.38}
+.card[data-deep="model"] .doors{justify-content:flex-start;gap:9px}
+.card[data-deep="model"] .door .dt{font-size:clamp(13px,1.8dvh,15px);line-height:1.4}
+.card[data-deep="doors"] .doors{justify-content:flex-start;gap:9px}
+.card[data-deep="doors"] .door{padding:clamp(12px,1.8dvh,16px) 14px}
+.card[data-deep="doors"] .dt{font-size:clamp(13px,1.8dvh,15px);line-height:1.4}
+
+/* 04 — use the same readable spacing as slide 3. */
+.card[data-deep="rivals"] .rv-rows,.card[data-deep="mt-rivals"] .nf-bar-rows{justify-content:flex-start;gap:8px}
+.card[data-deep="rivals"] .rv-row,.card[data-deep="mt-rivals"] .nf-rival-card{padding:clamp(10px,1.55dvh,14px) 13px}
+.card[data-deep="rivals"] .rv-tag,.card[data-deep="mt-rivals"] .nf-bar-tag{font-size:clamp(12.5px,1.7dvh,14.5px);line-height:1.38}
+.card[data-deep="rivals"] .riv{justify-content:flex-start;gap:9px}
+.card[data-deep="rivals"] .rtx{font-size:clamp(13px,1.8dvh,15.5px);line-height:1.4}
+
+/* 05 — smaller body, clearer headline, and breathing room before the graph. */
+.card[data-deep="hidden"] .bd,.card[data-deep="mt-hidden"] .bd{font-size:clamp(12.5px,1.65dvh,14.5px);line-height:1.38;margin-bottom:clamp(12px,2dvh,20px)}
+.card[data-deep="hidden"] .ht-sub{margin-bottom:8px}
+.card[data-deep="hidden"] .ht-lbl{margin-top:0;margin-bottom:10px}
+.card[data-deep="hidden"] .htv{margin-top:2px}
+.card[data-deep="mt-hidden"] .mt-timeline{margin-top:6px}
+
+/* 06–07 — larger accordion copy, top alignment, and a clear tap target. */
+.card[data-deep="bull"],.card[data-deep="bear"],.card[data-deep="mt-bull"],.card[data-deep="mt-bear"],.card[data-deep="acc"],.card[data-deep="acc2"]{justify-content:flex-start}
+.card[data-deep="bull"] .nf-acc-list,.card[data-deep="bear"] .nf-acc-list,.card[data-deep="mt-bull"] .nf-acc-list,.card[data-deep="mt-bear"] .nf-acc-list{justify-content:flex-start;gap:10px;margin-top:2px}
+.nf-acc-item,.ai{position:relative;z-index:12}
+.nf-acc-btn{padding:clamp(20px,2.8dvh,27px) 14px;--acc-title-size:clamp(16px,2.25dvh,19px)}
+.nf-acc-title{min-height:calc(3 * 1.28 * var(--acc-title-size));line-height:1.28}
+.nf-acc-text{font-size:clamp(14.5px,2.05dvh,17.5px);line-height:1.5;padding-right:18px}
+.nf-acc-chevron{
+ width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+ background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);
+ font-family:var(--sans);font-size:18px;font-weight:700;opacity:1;line-height:1
+}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.card[data-deep="acc"] .acc,.card[data-deep="acc2"] .acc{justify-content:flex-start;gap:10px}
+.card[data-deep="acc"] .ah,.card[data-deep="acc2"] .ah{padding:clamp(20px,2.8dvh,27px) 14px;--acc-title-size:clamp(16px,2.25dvh,19px)}
+.card[data-deep="acc"] .at,.card[data-deep="acc2"] .at{min-height:calc(3 * 1.25 * var(--acc-title-size))}
+.card[data-deep="acc"] .abt,.card[data-deep="acc2"] .abt{font-size:clamp(14.5px,2.05dvh,17.5px);line-height:1.5}
+.card[data-deep="acc"] .ach,.card[data-deep="acc2"] .ach{
+ width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+ background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);
+ font-size:0;opacity:1
+}
+.card[data-deep="acc"] .ach::before,.card[data-deep="acc2"] .ach::before{content:"↓";font-family:var(--sans);font-size:18px;font-weight:700;line-height:1}
+
+/* 08 — preserve the layout, enlarge only its explanatory copy. */
+.card[data-deep="own"] .ow-note{font-size:clamp(15px,2.1dvh,18px);line-height:1.5}
+.card[data-deep="own"]>.bd{font-size:clamp(15px,2.1dvh,18px);line-height:1.5}
+.card[data-deep="own"] .dis-own-insight,.card[data-deep="own"] .dis-power-note{font-size:clamp(13.5px,1.9dvh,16px);line-height:1.45}
+.card[data-deep="mt-own"] .mt-own-desc{font-size:clamp(12.5px,1.7dvh,14.5px)}
+.card[data-deep="mt-own"] .mt-own-insight,.card[data-deep="mt-own"] .mt-ctrl-sub{font-size:clamp(14px,1.95dvh,17px);line-height:1.48}
+
+/* 09 — larger debate/take copy with consistent top-down spacing. */
+.card[data-deep="debate"],.card[data-deep="mt-debate"],.card[data-deep="take"]{justify-content:flex-start}
+.card[data-deep="debate"] .hl,.card[data-deep="mt-debate"] .hl,.card[data-deep="take"] .hl{margin-bottom:12px}
+.card[data-deep="debate"] .dis-pullquote-text,.card[data-deep="mt-debate"] .mt-pullquote-text{font-size:clamp(15px,2.15dvh,18px);line-height:1.45}
+.card[data-deep="debate"] .dis-chip-section,.card[data-deep="mt-debate"] .mt-chip-section{margin:0 0 12px}
+.card[data-deep="debate"] .dis-chip,.card[data-deep="mt-debate"] .mt-chip{font-size:clamp(12.5px,1.75dvh,15px);line-height:1.3;padding:7px 11px}
+.card[data-deep="take"]>.bd{font-size:clamp(15px,2.1dvh,18px);line-height:1.55}
+
+/* 10 — remove stretched vertical gaps and keep the vote controls together. */
+.card[data-card-type="conv"]{justify-content:flex-start}
+.card[data-card-type="conv"] .hl{margin-bottom:12px}
+.card[data-card-type="conv"] .cv-sent-row{margin-bottom:16px}
+.card[data-card-type="conv"] .cv-opts{justify-content:flex-start;gap:12px;flex:0 0 auto;margin-top:4px}
+.card[data-card-type="conv"] .co-opt{padding:clamp(12px,1.8dvh,16px) 14px;min-height:54px}
+.card[data-card-type="conv"] .cr{margin-top:16px}
+
+@media(max-width:899px) and (max-height:700px){
+ .card[data-deep="cover"] .hl{font-size:clamp(28px,4.6dvh,34px)}
+ .card[data-deep="cover"] .bd{font-size:clamp(14.5px,2.15dvh,17px);line-height:1.4}
+ .card[data-deep="money"] .mn-desc,.card[data-deep="model"] .md-s,.card[data-deep="mt-model"] .nf-flow-step-s,.card[data-deep="rivals"] .rv-tag,.card[data-deep="mt-rivals"] .nf-bar-tag{font-size:12px}
+ .nf-acc-btn,.card[data-deep="acc"] .ah,.card[data-deep="acc2"] .ah{padding:16px 12px}
+ .nf-acc-text,.card[data-deep="acc"] .abt,.card[data-deep="acc2"] .abt{font-size:14px}
+ .card[data-deep="own"] .ow-note,.card[data-deep="own"]>.bd{font-size:14px}
+ .card[data-deep="debate"] .dis-pullquote-text,.card[data-deep="mt-debate"] .mt-pullquote-text,.card[data-deep="take"]>.bd{font-size:14px}
+}
+</style>
 </head><body>
 
 <div class="stage"><div class="phone">
@@ -1466,7 +1576,7 @@ body{background:var(--ink);overflow:hidden}
  <div class="tz l" onclick="event.stopPropagation();prevCard()"></div>
  <div class="tz r" onclick="event.stopPropagation();nextCard()"></div>
  <div class="track" id="track"></div>
- <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">Up Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
+ <div class="pills" id="pills"><div class="pill" id="deepDivePill" onclick="openDrawer()">Up Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
  </div>
  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
  <div class="dw" id="dw">
@@ -2443,6 +2553,7 @@ function renderCards(){
  c.cards.forEach((card,i)=>{
  const el=document.createElement('div');
  el.className='card bg-'+(card.bg||(card.type==='cover'?'cover':'cream'));
+ el.dataset.cardType=card.type||'';
  el.dataset.deep=deepKeyForCard(card,i);
  el.innerHTML=renderCard(card,i);
  tr.appendChild(el);
@@ -2451,6 +2562,7 @@ function renderCards(){
 
 function deepKeyForCard(card,idx){
  const legacy=['cover','pie','doors','rivals','hidden','acc','acc2','own','take','conv','next'];
+ if(card&&card.type==='conv')return null;
  if(card&&card.deep)return card.deep;
  if(card&&card.type&&card.type.startsWith('nf-'))return card.type;
  if(card&&card.type&&card.type.startsWith('dis-'))return card.type;
@@ -2490,7 +2602,7 @@ function renderMetaCard(card,idx){
  case 'mt-bear':return `
 <div class="eb-c">${eb}</div>
 <div class="hl">${card.hl}</div>
-<div class="nf-acc-list">${card.panels.map(p=>`<div class="nf-acc-item"><button class="nf-acc-btn" onclick="togglePanel(event,this)"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${safeBoxCopy(p.title)}</div><div class="nf-acc-chevron">▾</div></button><div class="nf-acc-body"><div class="nf-acc-text">${safeBoxCopy(p.body)}</div></div></div>`).join('')}</div>`;
+<div class="nf-acc-list">${card.panels.map(p=>`<div class="nf-acc-item" onclick="togglePanel(event,this.querySelector('.nf-acc-btn'))"><button class="nf-acc-btn"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${safeBoxCopy(p.title)}</div><div class="nf-acc-chevron" aria-hidden="true">↓</div></button><div class="nf-acc-body"><div class="nf-acc-text">${safeBoxCopy(p.body)}</div></div></div>`).join('')}</div>`;
  case 'mt-own':return `
 <div class="eb-c">08 · Who owns it</div>
 <div class="hl">${card.hl}</div>
@@ -2579,7 +2691,7 @@ ${card.kick?`<div class="kick a4">${card.kick}</div>`:''}`;
  case 'v2-bear':return `
 <div class="eb-c a1">${eb}</div>
 <div class="hl a2">${card.hl}</div>
-<div class="nf-acc-list a3">${card.panels.map(p=>`<div class="nf-acc-item"><button class="nf-acc-btn" onclick="togglePanel(event,this)"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${safeBoxCopy(p.title)}</div><div class="nf-acc-chevron">▾</div></button><div class="nf-acc-body"><div class="nf-acc-text">${safeBoxCopy(p.body)}</div></div></div>`).join('')}</div>`;
+<div class="nf-acc-list a3">${card.panels.map(p=>`<div class="nf-acc-item" onclick="togglePanel(event,this.querySelector('.nf-acc-btn'))"><button class="nf-acc-btn"><div class="nf-acc-icon">${p.icon}</div><div class="nf-acc-title">${safeBoxCopy(p.title)}</div><div class="nf-acc-chevron" aria-hidden="true">↓</div></button><div class="nf-acc-body"><div class="nf-acc-text">${safeBoxCopy(p.body)}</div></div></div>`).join('')}</div>`;
  case 'v2-own':return `
 <div class="eb-c a1">${card.eb||'08 · Who owns it'}</div>
 <div class="hl a2">${card.hl}</div>
@@ -2762,6 +2874,12 @@ function updProg(){
  if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}
  else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
  bp.style.display=(cardIdx===CO[curCo].cards.length-1)?'none':'flex';
+ const deepPill=document.getElementById('deepDivePill');
+ if(deepPill){
+  const card=CO[curCo].cards[cardIdx];
+  const key=deepKeyForCard(card,cardIdx);
+  deepPill.style.display=(key&&CO[curCo].deep&&CO[curCo].deep[key])?'block':'none';
+ }
  const sb=document.getElementById('saveBtn');
  saved[curCo]&&saved[curCo].has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
 }
@@ -2887,6 +3005,7 @@ function vote(el,type,idx){
 }
 function openDrawer(){
  const card=CO[curCo].cards[cardIdx];
+ if(card&&card.type==='conv')return;
  const k=deepKeyForCard(card,cardIdx);const d=CO[curCo].deep[k];if(!d)return;
  document.getElementById('dwT').textContent=d.t;document.getElementById('dwEb').textContent=d.e;document.getElementById('dwB').innerHTML=d.h;
  document.getElementById('dwBd').classList.add('open');document.getElementById('dw').classList.add('open');
@@ -3479,6 +3598,7 @@ function dtRenderCards(){
   c.cards.forEach((card,i)=>{
     const el=document.createElement('div');
     el.className='card bg-'+(card.bg||(card.type==='cover'?'cover':'cream'));
+    el.dataset.cardType=card.type||'';
     el.dataset.deep=deepKeyForCard(card,i);
     el.innerHTML=dtRenderCard(card,i);
     tr.appendChild(el);
@@ -3668,6 +3788,14 @@ function dtPrevCard(){dtMoveCard(-1);}
 function dtUpdateRightPanel(idx){
   const c=CO[curCo];const card=c.cards[idx];const k=deepKeyForCard(card,idx);const d=k&&c.deep?c.deep[k]:null;
   const rdTldr=document.getElementById('dtRdTldr');
+  const rdHeader=document.querySelector('#dtReaderRight .rd-header');
+  if(rdHeader)rdHeader.style.display=card&&card.type==='conv'?'none':'block';
+  const rdBody=document.getElementById('dtRdBody');
+  if(rdBody)rdBody.style.display=card&&card.type==='conv'?'none':'block';
+  if(card&&card.type==='conv'){
+    if(rdTldr)rdTldr.style.display='none';
+    return;
+  }
   if(!d){
     const rf=document.getElementById('dtRdFrom');if(rf)rf.textContent='From the deep dive';
     const rt=document.getElementById('dtRdTitle');if(rt)rt.textContent='Go deeper';
