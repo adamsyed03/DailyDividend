@@ -31,7 +31,7 @@ const PRICE_COMPANIES = Object.freeze({
   KO:   { ticker: 'KO',   name: 'Coca-Cola', currency: 'USD', exchange: 'NYSE', yearStartPrice: 61.50 }
   // RELIANCE:NSE and HDFCBANK:NSE require Twelve Data Grow plan ($79/mo)
 });
-const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'nvidia', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola']);
+const BUILT_IN_LIVE_COMPANIES = Object.freeze(['netflix', 'nvidia', 'disney', 'reliance', 'hdfc', 'meta', 'cocacola', 'spotify']);
 const LOCAL_LOGO_FILES = Object.freeze({
   netflix: path.join(__dirname, 'Site Pics', 'netflix logo.png'),
   visa: path.join(__dirname, 'Site Pics', 'visalogo.png')

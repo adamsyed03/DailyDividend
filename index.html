@@ -517,6 +517,8 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .sm.bg-dkred,.saved-sm.bg-dkred{background:linear-gradient(165deg,#33090B,#140404);color:var(--cream)}
 .sm.bg-dkblue,.saved-sm.bg-dkblue{background:linear-gradient(180deg,#0B1F3A,#06101f);color:var(--cream)}
 .sm.bg-own,.saved-sm.bg-own{background:linear-gradient(165deg,#EDF3FE,#D9E6FB);color:var(--ink);border:1px solid var(--line)}
+.sm.bg-dkgreen,.saved-sm.bg-dkgreen{background:linear-gradient(165deg,#0B2417,#04120A);color:var(--cream)}
+.sm.bg-mint,.saved-sm.bg-mint{background:linear-gradient(165deg,#EAF6EE,#D2E8DA);color:var(--ink);border:1px solid var(--line)}
 .sm-tg{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.7;margin-bottom:8px}
 .sm-q{font-family:var(--serif);font-size:14px;font-weight:500;line-height:1.25;letter-spacing:-0.01em;flex:1}
 .sm-f{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:8.5px;opacity:0.65;letter-spacing:0.1em;text-transform:uppercase}
@@ -632,12 +634,17 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .card.entered .a4{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.24s both}
 .card.bg-dkred{background:radial-gradient(circle at 80% 0%,color-mix(in srgb,var(--dk) 32%,transparent),transparent 55%),linear-gradient(165deg,#33090B,#140404 70%,#0C0202);color:var(--cream)}
 .card.bg-dkred .hl,.card.bg-dkred .bd{color:var(--cream)}
-.card.bg-dkred .eb-c,.card.bg-dkblue .eb-c{color:var(--dk-lite);opacity:1}
+.card.bg-dkred .eb-c,.card.bg-dkblue .eb-c,.card.bg-dkgreen .eb-c{color:var(--dk-lite);opacity:1}
 .card.bg-own{background:linear-gradient(165deg,#EDF3FE,#D9E6FB);color:var(--ink)}
+.card.bg-dkgreen{background:radial-gradient(circle at 80% 0%,rgba(29,185,84,0.30),transparent 55%),linear-gradient(165deg,#0B2417,#04120A 70%,#020806);color:var(--cream)}
+.card.bg-dkgreen .hl,.card.bg-dkgreen .bd{color:var(--cream)}
+.card.bg-mint{background:linear-gradient(165deg,#EAF6EE,#D2E8DA);color:var(--ink)}
+.card.bg-mint .eb-c{color:var(--dk);opacity:1}
+.card.bg-mint .hl em{color:var(--dk)}
 .kick{margin-top:auto;padding-top:clamp(10px,1.6dvh,16px);border-top:1px solid var(--line);font-family:var(--serif);font-style:italic;font-size:clamp(14px,2.1dvh,20px);line-height:1.42;color:var(--ink-2)}
 .kick strong{font-style:normal;font-weight:600;color:var(--dk)}
-.card.bg-cover .kick,.card.bg-brand .kick,.card.bg-dkred .kick,.card.bg-dkblue .kick,.card.bg-green .kick,.card.bg-red .kick,.card.bg-ink .kick{border-top-color:rgba(255,255,255,0.16);color:rgba(246,242,233,0.85)}
-.card.bg-dkred .kick strong,.card.bg-dkblue .kick strong,.card.bg-cover .kick strong,.card.bg-ink .kick strong{color:var(--dk-lite)}
+.card.bg-cover .kick,.card.bg-brand .kick,.card.bg-dkred .kick,.card.bg-dkblue .kick,.card.bg-dkgreen .kick,.card.bg-green .kick,.card.bg-red .kick,.card.bg-ink .kick{border-top-color:rgba(255,255,255,0.16);color:rgba(246,242,233,0.85)}
+.card.bg-dkred .kick strong,.card.bg-dkblue .kick strong,.card.bg-dkgreen .kick strong,.card.bg-cover .kick strong,.card.bg-ink .kick strong{color:var(--dk-lite)}
 .mn-lbl,.rv-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
 .mn-rows{display:flex;flex-direction:column;gap:clamp(8px,1.5dvh,14px);margin-top:6px;flex:1 0 auto;justify-content:center}
 .mn-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:16px;padding:clamp(10px,1.7dvh,16px) 16px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
@@ -705,6 +712,16 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .d-q{border-left:3px solid var(--dk);padding:4px 0 4px 15px;margin:16px 0;font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink)}
 .d-k{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dk);font-weight:600;margin:20px 0 8px}
 .d-fine{font-family:var(--sans);font-size:11.5px;color:var(--mute-2);font-style:italic;margin-top:16px;line-height:1.5}
+.d-vbars{display:flex;flex-direction:column;gap:12px;margin:18px 0 6px}
+.d-vrow{display:flex;flex-direction:column;gap:6px}
+.d-vhead{display:flex;justify-content:space-between;align-items:baseline}
+.d-vname{font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink)}
+.d-vname span{font-weight:400;color:var(--muted);font-size:12px}
+.d-vval{font-family:var(--mono);font-size:13.5px;font-weight:600;color:var(--dk)}
+.d-vtrack{height:10px;background:rgba(0,0,0,0.08);border-radius:6px;overflow:hidden}
+.d-vfill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--dk),var(--accent))}
+.d-vfill.muted{background:linear-gradient(90deg,#8E938C,#B6BBB3)}
+.d-vcap{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.4}
 #dtShell .ht-num{font-size:64px}
 @media(max-height:720px){
  .mn-rows{gap:6px}.mn-row{padding:9px 12px;border-radius:12px}.mn-desc{font-size:11.5px;line-height:1.3}.mn-head{margin-bottom:3px}.mn-bar{margin-bottom:4px}
@@ -1004,7 +1021,7 @@ body{background:var(--ink);overflow:hidden}
 .card.entered .mt-timeline{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) .18s both}
 .card.entered .mt-own-section{animation:slideUp .45s cubic-bezier(.2,.8,.2,1) .14s both}
 /* Short-screen tightening for the mt-/nf- (Meta) family. Placed AFTER the base
-   .mt-*/.nf-* rules above (not in the earlier @media(max-height:720px) block near
+   mt-/nf- rules above (not in the earlier @media(max-height:720px) block near
    the top of this stylesheet) because an unconditional rule appearing LATER in
    source order always wins over an earlier media-query rule of equal specificity
    — putting this before the base rules made it silently dead code at every size. */
@@ -1481,6 +1498,16 @@ body{background:var(--ink);overflow:hidden}
 .card[data-deep="rivals"] .rv-tag,.card[data-deep="mt-rivals"] .nf-bar-tag{font-size:clamp(12.5px,1.7dvh,14.5px);line-height:1.38}
 .card[data-deep="rivals"] .riv{justify-content:flex-start;gap:9px}
 .card[data-deep="rivals"] .rtx{font-size:clamp(13px,1.8dvh,15.5px);line-height:1.4}
+/* 04b — dense variant for decks with 5+ rival rows (Spotify): same rhythm, tighter metrics. */
+.card[data-deep="rivals"]:has(.rv-dense) .hl{font-size:clamp(19px,2.9dvh,28px)}
+.card[data-deep="rivals"]:has(.rv-dense) .rv-lbl{margin:0 0 6px}
+.card[data-deep="rivals"] .rv-rows.rv-dense{gap:clamp(5px,0.9dvh,8px)}
+.card[data-deep="rivals"] .rv-rows.rv-dense .rv-row{padding:clamp(7px,1.1dvh,11px) 12px}
+.card[data-deep="rivals"] .rv-rows.rv-dense .rv-head{margin-bottom:2px}
+.card[data-deep="rivals"] .rv-rows.rv-dense .rv-n,.card[data-deep="rivals"] .rv-rows.rv-dense .rv-val,.card[data-deep="rivals"] .rv-rows.rv-dense .rv-n .rv-emoji{font-size:clamp(12.5px,1.8dvh,15px)}
+.card[data-deep="rivals"] .rv-rows.rv-dense .rv-bar{height:4px;margin-bottom:2px}
+.card[data-deep="rivals"] .rv-rows.rv-dense .rv-tag{font-size:clamp(11px,1.5dvh,13px);line-height:1.3}
+.card[data-deep="rivals"] .rv-rows.rv-dense~.kick{margin-top:clamp(10px,1.6dvh,16px);padding-top:10px;font-size:clamp(13px,1.9dvh,15.5px)}
 
 /* 05 — smaller body, clearer headline, and breathing room before the graph. */
 .card[data-deep="hidden"] .bd,.card[data-deep="mt-hidden"] .bd{font-size:clamp(12.5px,1.65dvh,14.5px);line-height:1.38;margin-bottom:clamp(12px,2dvh,20px)}
@@ -1544,6 +1571,87 @@ body{background:var(--ink);overflow:hidden}
  .nf-acc-text,.card[data-deep="acc"] .abt,.card[data-deep="acc2"] .abt{font-size:14px}
  .card[data-deep="own"] .ow-note,.card[data-deep="own"]>.bd{font-size:14px}
  .card[data-deep="debate"] .dis-pullquote-text,.card[data-deep="mt-debate"] .mt-pullquote-text,.card[data-deep="take"]>.bd{font-size:14px}
+}
+/* Denser v2 decks (Spotify) on short phones: tighten the flow/vault/chips families. */
+@media(max-width:899px) and (max-height:700px){
+ .card[data-deep="model"] .md-flow{gap:4px}
+ .card[data-deep="model"] .md-arrow{height:10px;line-height:10px}
+ .card[data-deep="model"] .md-step{padding:9px 12px}
+ .card[data-deep="model"] .md-t{font-size:15px}
+ .card[data-deep="model"] .md-s{font-size:12px;line-height:1.32}
+ .card[data-deep="model"] .md-vault{padding:9px 12px;margin-top:8px}
+ .card[data-deep="model"] .md-vault-tx{font-size:12.5px}
+ .card[data-deep="money"] .mn-row{padding:10px 13px}
+ .card[data-deep="money"] .mn-desc{font-size:12px;line-height:1.32}
+ .card[data-deep="rivals"] .rv-rows.rv-dense{gap:4px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-row{padding:6px 11px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-tag{font-size:10.5px;line-height:1.25}
+ .card[data-deep="rivals"] .rv-rows.rv-dense~.kick{font-size:12.5px;margin-top:8px;padding-top:8px}
+ .card[data-deep="debate"] .dis-pullquote{padding:12px 14px 11px;margin-bottom:10px}
+ .card[data-deep="debate"] .dis-pullquote-text{font-size:14px}
+ .card[data-deep="debate"] .dis-chip{font-size:11px;padding:5px 9px}
+ .card[data-deep="debate"] .dis-chip-section{margin-bottom:8px}
+}
+/* 360x640-class phones. */
+@media(max-width:899px) and (max-height:650px){
+ .card[data-deep="money"] .mn-row{padding:9px 12px}
+ .card[data-deep="model"] .hl{font-size:20px}
+ .card[data-deep="model"] .md-step{padding:8px 11px}
+ .card[data-deep="model"] .md-s{font-size:11.5px}
+ .card[data-deep="model"] .md-vault{margin-top:6px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense{gap:3px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-row{padding:5px 10px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-tag{font-size:10px}
+}
+/* 320-wide / very short phones (e.g. iPhone SE 1st gen). */
+@media(max-width:899px) and (max-height:590px){
+ .card[data-deep="cover"] .hl{font-size:24px}
+ .card[data-deep="cover"] .bd{font-size:13px}
+ .card[data-deep="model"] .hl,.card[data-deep="rivals"] .hl,.card[data-deep="debate"] .hl,.card[data-deep="money"] .hl,.card[data-deep="own"] .hl,.card[data-deep="bull"] .hl,.card[data-deep="bear"] .hl{font-size:19px;margin-bottom:6px}
+ .card[data-deep="model"] .hl{font-size:17px}
+ .card[data-deep="model"] .eb-c{margin-bottom:8px}
+ .card[data-deep="model"] .md-arrow{display:none}
+ .card[data-deep="model"] .md-flow{gap:6px}
+ .card[data-deep="model"] .md-step{padding:6px 9px}
+ .card[data-deep="model"] .md-t{font-size:14px}
+ .card[data-deep="model"] .md-s{font-size:10.5px}
+ .card[data-deep="model"] .md-vault-tx{font-size:11px}
+ .card[data-deep="money"] .mn-row{padding:7px 10px}
+ .card[data-deep="money"] .mn-rows{gap:6px}
+ .card[data-deep="money"] .mn-desc{font-size:10.5px}
+ .card[data-deep="money"] .mn-pct{font-size:17px}
+ .card[data-deep="money"] .mn-name{font-size:13px}
+ .card[data-deep="money"] .mn-bar{height:5px;margin-bottom:4px}
+ .card[data-deep="money"] .mn-rows{gap:5px}
+ .card[data-deep="money"] .kick{margin-top:8px;padding-top:7px;font-size:12px}
+ .card[data-deep="hidden"] .ht-num{font-size:44px}
+ .card[data-deep="hidden"] .ht-myth{margin-bottom:8px}
+ .card[data-deep="hidden"] .bd{font-size:11.5px}
+ .card[data-deep="hidden"] .htv{min-height:66px}
+ .card[data-deep="own"] .ow-spot{padding:12px}
+ .card[data-deep="own"] .ow-face{width:38px;height:38px;font-size:15px}
+ .card[data-deep="own"] .ow-name{font-size:17px}
+ .card[data-deep="own"] .ow-cv{font-size:19px}
+ .card[data-deep="own"] .ow-math{margin-bottom:8px}
+ .card[data-deep="own"] .ow-note{font-size:12px;padding-top:8px}
+ .card[data-deep="bull"] .nf-acc-btn,.card[data-deep="bear"] .nf-acc-btn{padding:9px 10px}
+ .card[data-deep="bull"] .nf-acc-title,.card[data-deep="bear"] .nf-acc-title{font-size:13px}
+ .card[data-deep="debate"] .hl{font-size:18px}
+ .card[data-deep="debate"] .eb-c{margin-bottom:8px}
+ .card[data-deep="debate"] .dis-pullquote{padding:10px 12px 9px;margin-bottom:8px}
+ .card[data-deep="debate"] .dis-pullquote-text{font-size:12.5px}
+ .card[data-deep="debate"] .dis-chip{font-size:10px;padding:3px 7px}
+ .card[data-deep="debate"] .dis-chip-row{gap:4px}
+ .card[data-deep="debate"] .dis-chip-section{margin-bottom:5px}
+ .card[data-deep="debate"] .dis-chip-section-label{margin-bottom:5px}
+ .card[data-deep="rivals"] .rv-lbl{margin:0 0 4px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense{gap:3px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-head{margin-bottom:1px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense~.kick{margin-top:6px;padding-top:6px;font-size:12px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-row{padding:5px 9px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-bar{display:none}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-tag{font-size:10px}
+ .card[data-deep="rivals"] .rv-rows.rv-dense .rv-n,.card[data-deep="rivals"] .rv-rows.rv-dense .rv-val,.card[data-deep="rivals"] .rv-rows.rv-dense .rv-n .rv-emoji{font-size:11.5px}
 }
 </style>
 </head><body>
@@ -2275,8 +2383,184 @@ cards:[
 deep:{cover:{t:"The shovel analogy",e:"From the cover",h:`<div class="d-sub">Why NVIDIA wins when everyone else competes</div><div class="d-p">During the California Gold Rush, most prospectors lost money. The reliable winners sold picks, shovels and jeans to the miners. NVIDIA is in exactly that position today.</div><div class="d-call">OpenAI competes with Google. Google competes with Meta. Meta competes with Amazon. All of them buy their shovels from NVIDIA.</div>`},pie:{t:"Who is the other half",e:"From the money",h:`<div class="d-sub">The customer base is changing</div><div class="d-p">The Data Center business is no longer just four tech giants. It now includes governments, hospitals, car manufacturers and financial institutions building AI systems.</div><div class="d-call">The customer base is four tech giants plus a rapidly growing second economy.</div>`},doors:{t:"Why CUDA took 18 years to matter",e:"From the model",h:`<div class="d-sub">The patience behind the moat</div><div class="d-p">CUDA looked strange in 2006. NVIDIA was a gaming chip company investing in software for scientists. When AI training exploded, researchers had already spent years learning CUDA.</div><div class="d-call">Switching chips means rewriting code. The ecosystem built in obscurity is now the moat.</div>`},rivals:{t:"Why in-house chips are not a replacement",e:"From the rivals",h:`<div class="d-sub">Cost reduction, not replacement</div><div class="d-p">Amazon Trainium, Google TPU and Microsoft Maia are real chips. But they are mostly built for those companies' own workloads.</div><div class="d-call">A university, drug company or government lab cannot simply buy Amazon's internal chip. NVIDIA remains the general-purpose option at scale.</div>`},hidden:{t:"The $4.5B lesson",e:"From the hidden truth",h:`<div class="d-sub">What happens when policy changes overnight</div><div class="d-p">In April 2025, the US government changed export rules around a downgraded China chip. NVIDIA was left with billions of H20 inventory it could not sell.</div><div class="d-call">$4.5 billion was written off overnight. NVIDIA absorbed the hit and kept growing.</div>`},acc:{t:"The $119B is contractual",e:"From the bull case",h:`<div class="d-sub">Why the order book matters</div><div class="d-p">NVIDIA disclosed $119 billion of manufacturing, supply, and capacity commitments. These are not vibes or casual demand signals.</div><div class="d-call">NVIDIA also committed about $30 billion under multi-year cloud service agreements, primarily used for R&D. A company preparing for a slowdown does not sign that kind of bill.</div>`},acc2:{t:"The H20 write-down as warning",e:"From the bear case",h:`<div class="d-sub">Regulatory risk in one number</div><div class="d-p">The $4.5 billion H20 charge shows how fast policy can hit this business.</div><div class="d-call">With $119 billion in manufacturing, supply, and capacity commitments, a sudden export change can create real financial damage.</div>`},own:{t:"Power without legal control",e:"From ownership",h:`<div class="d-sub">The governance gap</div><div class="d-p">Jensen Huang holds ordinary shares. His authority rests on belief: employees, customers and investors believe he is the irreplaceable mind behind NVIDIA.</div><div class="d-call">For a $4.7 trillion company, naming no successor is a remarkable governance gap.</div>`},take:{t:"NVIDIA's $30B internal bet",e:"The market debate",h:`<div class="d-sub">The clearest signal</div><div class="d-p">NVIDIA has committed about $30 billion under multi-year cloud service agreements, primarily used for R&D.</div><div class="d-call">Companies preparing for a slowdown cut research spending. They do not sign multi-year $30 billion cloud service agreements for R&D.</div>`},conv:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">NVIDIA's growth will slow eventually. That moment is not visible in the numbers yet. Guidance assumes zero Data Center compute revenue from China.</div><div class="d-call">The question is not whether NVIDIA is extraordinary. It is what extraordinary is worth when the market expects it.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not financial advisors.</div>`},next:{t:"The infrastructure behind NVIDIA",e:"From what's next",h:`<div class="d-sub">Where every chip ends up</div><div class="d-p">Every NVIDIA chip sold ends up inside a data centre. Somebody built it, cools it, powers it and rents it out by the hour.</div><div class="d-call">The cloud companies running these chips are the other side of the AI trade.</div>`}},
 tldr:["NVIDIA powers <strong>much of today's AI infrastructure.</strong>","The real moat is not just the chip. It is <strong>CUDA software</strong> that developers already build around.","The US restricted China sales. NVIDIA still grew <strong>85%</strong>.","There are <strong>$119 billion</strong> in manufacturing, supply, and capacity commitments.","More than half of sales come from <strong>just three customers.</strong> That is the core risk.","The bull case is simple: Data Center demand keeps compounding faster than rivals can catch up."]}});
 
+Object.assign(CO,{spotify:{id:"spotify",domain:"spotify.com",n:"Spotify",t:"SPOT",sec:"Music Streaming",fl:"",mc:"$108B",lb:"#1DB954",lc:"#04150B",ac:"#1DB954",as:"rgba(29,185,84,0.18)",dk:"#0B6B34",dkl:"#4EE07C",bg:"radial-gradient(circle at 85% -5%,rgba(29,185,84,0.42),transparent 55%),radial-gradient(circle at -10% 110%,rgba(4,54,28,0.75),transparent 55%),linear-gradient(160deg,#131613,#080A08 60%,#000)",bl:"250 million songs. It owns none of them.",
+sp:"$524.00",sc:"+0.8%",scDir:"up",
+ks:[{l:"Worth today",v:"$108B"},{l:"Listeners",v:"761M"},{l:"Made every year",v:"€17B"}],
+vb:9412,sentiment:"bull",
+ps:"Spotify hands back roughly two thirds of every dollar it collects to the people who own the music. 293 million people pay it anyway.",
+cats:["Entertainment","Big Tech"],rails:["new","daily"],nx:"netflix",
+learn:{sub:"How a company that owns no music ended up running it.",items:[
+{e:"🎧",c:"#1DB954",t:"Every rival sells the same songs",s:"Spotify sells knowing which one you want next"},
+{e:"💸",c:"#0B6B34",t:"Your money never reaches your artists",s:"It all goes into one giant global pot"},
+{e:"🗳️",c:"#04361C",t:"He quit as CEO and still runs it",s:"24% of the company, 70.7% of the votes"}]},
+cards:[
+{type:"v2-cover",bg:"cover",deep:"cover",chips:["SPOT · NYSE","Music · 761M listeners"],
+hl:"Spotify has 250 million songs. <em>It owns exactly none of them.</em>",
+bd:"Every one of them is borrowed. The catalogue is <strong>125 times bigger</strong> than at launch, and playing it costs two thirds of every dollar coming in.",
+kick:"<strong>$70 billion</strong> paid out since 2008. Two thirds of what the company is worth today."},
+{type:"v2-money",bg:"cream",deep:"money",
+hl:"Spotify made <em>€17 billion</em> last year. Here's where it comes from.",
+rows:[
+{name:"💳 Subscriptions",pct:"92%",w:100,fill:"#1DB954",desc:"293 million people pay a monthly fee, whether they listen or not. Almost the whole business."},
+{name:"📻 Adverts",pct:"8%",w:9,fill:"#26261F",desc:"483 million listen free and hear adverts. A crowd bigger than the EU, one twelfth of the money."},
+{name:"📚 Add-ons",pct:"NEW",sm:true,w:4,fill:"#A8D8B9",desc:"Extra audiobook hours on top of a subscription. Tiny, but the first new thing to charge for in years."}
+],
+kick:"That works out at about <strong>€50 million</strong> arriving every single day."},
+{type:"v2-model",bg:"cream",deep:"model",vic:"🔒",
+hl:"Rivals sell the same songs. <em>Spotify sells knowing what you want next.</em>",
+steps:[
+{n:"Step 1 · The way in",t:"Anyone can listen for nothing",s:"The whole catalogue, free, with adverts. Apple Music has no free tier at all."},
+{n:"Step 2 · The habit",t:"The adverts wear you down",s:"So you pay and they stop. By then, leaving means starting from scratch."},
+{n:"Step 3 · The obsessives",t:"A few want far more than music",s:"Audiobook hours, podcasts, video and fitness give them ever more reasons to stay."}
+],
+vault:"Everyone licenses the same songs. Spotify owns <strong>20 years of what people played next.</strong>"},
+{type:"v2-rivals",bg:"cream",deep:"rivals",
+hl:"More paying listeners than Apple and Amazon combined. <em>And music is the only thing it does.</em>",
+lbl:"Share of the world's paying music subscribers",
+rows:[
+{emoji:"🎧",n:"Spotify",val:"31.4%",pct:100,fill:"#1DB954",tag:"293 million paying, the only published number here.",h:true},
+{emoji:"💬",n:"Tencent Music",val:"13.8%",pct:44,fill:"rgba(0,0,0,0.3)",tag:"Enormous inside China, invisible outside it."},
+{emoji:"🍎",n:"Apple Music",val:"12.6%",pct:40,fill:"rgba(0,0,0,0.3)",tag:"Built into every iPhone. No count published in years."},
+{emoji:"📦",n:"Amazon Music",val:"11.1%",pct:35,fill:"rgba(0,0,0,0.3)",tag:"Bundled with Prime delivery. Few of them chose it."},
+{emoji:"▶️",n:"YouTube Music",val:"10.3%",pct:33,fill:"rgba(0,0,0,0.3)",tag:"Paid for by Google's adverts. Growing fastest of all."}
+],
+kick:"Nobody else is above 14%. Spotify wins because it is <strong>the only one that has to.</strong>"},
+{type:"v2-hidden",bg:"dkgreen",deep:"hidden",
+myth:"The money you pay goes to the artists you listen to.",
+num:"1,000 <span>plays</span>",
+sub:"What a song needs in a year, <em>before it earns anything at all.</em>",
+bd:"Spotify does not pay artists for your plays. All the subscription and advert money goes into one giant pot, split by who got the most plays worldwide. You can spend a month on one small band, and your money still ends up with Bad Bunny and Taylor Swift.",
+lbl:"Artists earning from Spotify in 2025",
+world:[
+{c:"earned anything",v:"3.5M",h:100},
+{c:"$100k or more",v:"13,800",h:64},
+{c:"$1M or more",v:"1,500",h:49},
+{c:"$10M or more",v:"80",h:29}
+]},
+{type:"v2-bull",bg:"green",deep:"bull",
+eb:"06 · How it could win",
+hl:"Three reasons this stock could <em>double.</em>",
+panels:[
+{icon:"↑",title:"Spotify keeps <strong>more of every dollar</strong> than it ever has",
+body:"Four years ago Spotify kept 25 cents out of every dollar. It now keeps 32. Some came from renegotiating with the record companies, twice. The rest came from audiobooks and podcasts, where Spotify deals directly with creators, so far more of what you pay stays in the building.<span class='acc-ctx'>How big is this? On last year's revenue, every extra cent kept is worth about €170 million of pure profit. Management has promised another eight cents by 2030.</span>"},
+{icon:"↑",title:"<strong>483 million people</strong> use Spotify without paying a thing",
+body:"In the US and Canada, the share of listeners who pay has climbed from 32% in 2016 to 60% today. India has multiplied its paying subscribers sevenfold since 2022. The stated target is a billion users by 2030.<span class='acc-ctx'>How big is this? Spotify has already turned free listeners into paying ones once, in the rich world, and it worked. Doing it again across Asia is what the entire 2030 plan rests on.</span>"},
+{icon:"↑",title:"Spotify is finding <strong>new things to sell</strong> to people it already has",
+body:"Extra audiobook hours came first. Since then: concert tickets held back for an artist's biggest fans with Live Nation, a fitness section built with Peloton, and a Universal deal letting fans pay to make AI remixes of real songs.<span class='acc-ctx'>How big is this? None of these needs a single new customer. Spotify is just selling more to the 293 million people already paying, which is the cheapest money a company can make.</span>"}
+]},
+{type:"v2-bear",bg:"red",deep:"bear",
+eb:"07 · What could sink it",
+hl:"Three things that could <em>cut the stock in half.</em>",
+panels:[
+{icon:"↓",title:"It beat every forecast in April. The stock <strong>fell 12% in a day</strong>",
+body:"The problem was what came next. Management said it would spend an extra €200 million or so on marketing and new AI features, which means less profit for a couple of quarters. Investors did not want to hear it.<span class='acc-ctx'>How big is this? AI features are expensive to build and run. Investors have been trained to expect profits to rise every single year here. Even a deliberate, temporary pause got punished this hard.</span>"},
+{icon:"↓",title:"More listeners than ever, but the <strong>advertising business barely grew</strong>",
+body:"People are listening more, and every extra hour costs Spotify money in royalties. The adverts meant to pay for that grew only 3%, while the company grew 14%. Spotify spent 18 months rebuilding its ad technology and says the payoff arrives later in 2026.<span class='acc-ctx'>How big is this? Adverts are only 8% of revenue, but they are the entire reason the free version can exist. If more listening keeps making that side less profitable, 483 million free users stop being an opportunity and start being a bill.</span>"},
+{icon:"↓",title:"<strong>Half of all new songs</strong> are now made by machines",
+body:"Deezer, a rival that publishes the figure, counted about 90,000 fully AI-generated tracks arriving every day in June, more than half of everything uploaded. Every one takes a slice of the same royalty pot.<span class='acc-ctx'>How big is this? Spotify's bosses say more songs make recommendation more valuable. The worry is simpler. If anyone can make endless music for nothing, it gets harder to explain why anyone should pay €12 a month to hear it.</span>"}
+]},
+{type:"v2-own",bg:"mint",deep:"own",
+eb:"08 · Who owns it",
+hl:"Daniel Ek stopped running Spotify in January. <em>He still controls it completely.</em>",
+face:{i:"DE",n:"Daniel Ek",r:"Executive Chairman · Co-founder, 2006"},
+math:{a:"24%",al:"What the two founders own of the company",b:"70.7%",bl:"The share of all votes they control"},
+note:"Spotify is registered in <strong>Luxembourg</strong>, which lets its two founders hold votes far beyond their shares. In January 2026 Ek stepped up to Executive Chairman, and the two new co-CEOs report to him. <strong>No outside shareholder, however large, can outvote the pair.</strong>"},
+{type:"v2-debate",bg:"cream",deep:"debate",
+hl:"Spotify's profits did not come from a better app. <em>They came from a better deal.</em>",
+quote:"Spotify has promised to keep 40 cents of every dollar by 2030, up from 33. <em>Every one of those cents comes out of somebody else's pocket.</em>",
+works:["Already renegotiated twice","Pays the industry more every year","Audiobooks and podcasts pay better"],
+worry:["The labels own what it sells","Artists are already angry","Every contract runs out eventually"]},
+{type:"conv",bg:"brand",deep:"conv",hl:"Now you decide. <em>Spotify in 5 years?</em>",opts:[{k:"bull",p:58,ico:"🎧",sub:"It keeps more every year"},{k:"neutral",p:27,ico:"😐",sub:"Wait for the adverts"},{k:"bear",p:15,ico:"📉",sub:"It rents everything it sells"}]},
+{type:"next",bg:"brand",deep:"next",hl:"That was Spotify.",bd:"Next up: <strong>Netflix.</strong> Spotify rents every song it plays. Netflix looked at the same trap and decided to own the shows instead. It now spends $55 million a day making them.",nx:"netflix"}
+],
+deep:{
+cover:{t:"It took 17 years to keep anything",e:"From the cover",h:`
+<div class="d-hero">Spotify collected billions for 17 years and kept nothing. <em>Not one profitable year.</em></div>
+<div class="d-p">Spotify launched in 2008 with one argument: piracy cannot be beaten by lawyers, only by something <strong>more convenient than stealing</strong>. It worked on listeners immediately, and on the accounts not at all.</div>
+<div class="d-big"><div class="d-bignum">€1.1B</div><div class="d-biglbl">Profit in 2024, its first ever. Spotify had lost money in every single year before it.</div></div>
+<div class="d-k">What actually changed</div>
+<div class="d-p">Not the music. The arithmetic. Spotify cut about a fifth of its staff, raised US prices three times, and renegotiated its contracts with the record companies. Twice.</div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">Spotify is a <strong>Swedish idea, a Luxembourg company, and listed in New York</strong>. It has never fitted anywhere neatly.</div>`},
+money:{t:"Where your €10 actually goes",e:"From the money",h:`
+<div class="d-hero">Spotify collects about €50 million a day. <em>Almost none of it stays.</em></div>
+<div class="d-p">Out of every €10 that comes in, roughly <strong>€6.70</strong> goes straight back out to the people who own the music, plus the cost of getting the sound onto your phone. All of that happens before Spotify pays a single employee.</div>
+<div class="d-p">Another <strong>€1.70</strong> runs the company: every engineer, every advert, every office, all 7,258 staff. What is left is <strong>€1.60</strong>.</div>
+<div class="d-big"><div class="d-bignum">2 of 20</div><div class="d-biglbl">Spotify has existed for twenty years. It has made a profit in two of them. It only worked out how to keep money in 2024.</div></div>
+<div class="d-k">How it turned around</div>
+<div class="d-p">Not by selling more music. Spotify cut about a fifth of its staff, raised US prices three times since 2023, and renegotiated its deals with the record companies. Twice. Bad Bunny was played <strong>19.8 billion times</strong> last year, and none of that moved the profit line as much as those three decisions did.</div>`},
+model:{t:"Three kinds of listener",e:"From the model",h:`
+<div class="d-hero">There are three kinds of listener. <em>Until recently, Spotify could only charge two of them.</em></div>
+<div class="d-p">Some people listen occasionally and would never pay. The free version exists for them, and keeping them costs Spotify very little.</div>
+<div class="d-p">Most people listen often enough that the adverts become annoying, so they pay. <strong>This is where nearly all the money comes from.</strong></div>
+<div class="d-p">Then there is a small group who listen obsessively. For years Spotify had no way to take more from them, however much they wanted to spend. Audiobook add-ons were the first product that let them, and it worked. The most-played audiobook on Spotify is a fantasy series, <strong>A Court of Thorns and Roses</strong>, which is not what anyone building a music app expected.</div>
+<div class="d-big"><div class="d-bignum">94M</div><div class="d-biglbl">Subscribers using the AI DJ, which picks songs and talks between them. Three years ago it did not exist.</div></div>
+<div class="d-k">Why rivals cannot simply copy this</div>
+<div class="d-p">Anyone can license the same catalogue. Nobody can copy 20 years of listening history.</div>
+<div class="d-q">Co-CEO Gustav Söderström puts it well: taste is not a fact, it is an opinion, and it changes every week. Even if a rival stole all of Spotify's data tomorrow, the model would be out of date within weeks.</div>`},
+rivals:{t:"The smallest company in the fight",e:"From the rivals",h:`
+<div class="d-hero">Spotify is winning. <em>It is also, by an enormous distance, the smallest company in the room.</em></div>
+<div class="d-p">Apple is worth about <strong>$4.5 trillion</strong>. Alphabet, which owns YouTube, about $4.3 trillion. Spotify is worth around $108 billion. If Apple Music shut down tomorrow, Apple would barely notice on its own accounts. If Spotify's music stopped, there would be no Spotify.</div>
+<div class="d-big"><div class="d-bignum">2%</div><div class="d-biglbl">Spotify's value compared with Apple's. Being the specialist is the strength and the danger at the same time.</div></div>
+<div class="d-p">That is why everybody is bolting things on. Amazon has shopping, YouTube has video, Apple has phones. Spotify is doing the same thing in reverse: <strong>700,000 audiobooks</strong>, video podcasts, and from 2026 a fitness section built with Peloton, because roughly 70% of its paying users say they exercise every month.</div>
+<div class="d-q">The uncomfortable version: if Apple, Google or Amazon ever decided music genuinely mattered to them, any one of them could outspend Spotify without feeling it. None has yet.</div>`},
+hidden:{t:"5.4 billion at one end, nothing at the other",e:"From the hidden truth",h:`
+<div class="d-hero">The most played song in history has been streamed 5.4 billion times. <em>Tens of millions of songs have never reached a thousand.</em></div>
+<div class="d-p">The song is <strong>Blinding Lights</strong> by The Weeknd, the first ever to pass five billion plays. At the going rate of roughly a third of a cent a play, it has generated somewhere around $20 million. One song.</div>
+<div class="d-p">At the other end, Spotify decided in April 2024 that a track must be played <strong>1,000 times in a year</strong> before it earns anything. Its defence is arithmetic: those songs were earning about three cents a month, and payments under $2 often never reach the artist anyway. Critics point out that the plays were real, and the money did not vanish. It moved upward.</div>
+<div class="d-big"><div class="d-bignum">0.5%</div><div class="d-biglbl">Share of all plays that come from songs below the cutoff. Out of an $11 billion pot, that is tens of millions of dollars, redirected every year.</div></div>
+<div class="d-k">There is another way to do it</div>
+<div class="d-p">SoundCloud and Deezer split each listener's fee among the artists that listener <strong>actually played</strong>. Spotify has studied that model and kept the pot. In June 2026 an independent artist sued over the threshold.</div>`},
+bull:{t:"Fewer people, more everything",e:"From the bull case",h:`
+<div class="d-hero">Spotify shipped more new features last year than in any year of its life. <em>It did it with fewer staff than it had in 2023.</em></div>
+<div class="d-p">Spotify laid off about a fifth of its people in 2023. Headcount has been roughly flat ever since, while the company added <strong>83 million listeners in a single year</strong>.</div>
+<div class="d-p">What replaced the hiring was computing power. Söderström says Spotify now spends far more on compute per employee and ships several times as much: the AI DJ reached 94 million subscribers, and SongDNA, which shows you who actually made a track, reached 52 million people in four weeks.</div>
+<div class="d-big"><div class="d-bignum">7,258</div><div class="d-biglbl">Employees at the end of March 2026, serving 761 million listeners. That is one member of staff for every 105,000 people.</div></div>
+<div class="d-k">What they have promised</div>
+<div class="d-p">By 2030: revenue growing in the mid teens every year, 35 to 40 cents kept out of every dollar, and more than 20 cents of every dollar as profit. <strong>Deliver that and profit roughly triples.</strong></div>`},
+bear:{t:"All three risks are the same risk",e:"From the bear case",h:`
+<div class="d-hero">Spotify sells something it does not own. <em>Everything else follows from that.</em></div>
+<div class="d-p">Its own filings say it plainly: Spotify depends on licences from other companies for most of what it plays, and those companies are few, and can change its access on their own. <strong>Universal, Sony and Warner</strong> control roughly two thirds of recorded music between them.</div>
+<div class="d-p">That is why the spending scare landed as hard as it did. Investors are not really worried about €200 million. They are worried that Spotify's improving profits came from <strong>winning negotiations, not from owning anything</strong>.</div>
+<div class="d-big"><div class="d-bignum">33¢</div><div class="d-biglbl">Kept out of every dollar today. Every extra cent promised by 2030 has to come out of somebody else's share.</div></div>
+<div class="d-k">The one to watch</div>
+<div class="d-p">Advertising. Management has been promising improvement in the second half of 2026 for six months now. If it does not arrive, the free version turns from Spotify's best idea into its most expensive one.</div>`},
+own:{t:"The record labels used to own Spotify",e:"From who owns it",h:`
+<div class="d-hero">The companies Spotify pays were once its shareholders. <em>They sold, and made a fortune.</em></div>
+<div class="d-p">When Spotify was starting out and had almost no money, it paid for its first licences partly in shares. Sony, Warner and Universal all ended up owning pieces of the company they were supplying.</div>
+<div class="d-p">When Spotify listed in 2018, they cashed in. Warner sold its entire stake for <strong>$504 million</strong> and credited artists $126 million, though much of that was set against money artists already owed. Sony sold half its stake for <strong>$768 million</strong> and paid artists over $250 million with no such conditions. Universal held on.</div>
+<div class="d-big"><div class="d-bignum">$504M</div><div class="d-biglbl">What Warner made from selling shares in the company it licenses to. Spotify would not turn a profit for another six years.</div></div>
+<div class="d-k">The quiet one</div>
+<div class="d-p">The largest block of votes at Spotify does not belong to Ek. <strong>Martin Lorentzon</strong> co-founded the company and then stayed out of view. He sits on the board, and says very little.</div>
+<div class="d-vbars">
+ <div class="d-vrow"><div class="d-vhead"><div class="d-vname">Martin Lorentzon <span>· co-founder</span></div><div class="d-vval">41.6%</div></div><div class="d-vtrack"><div class="d-vfill" style="width:41.6%"></div></div></div>
+ <div class="d-vrow"><div class="d-vhead"><div class="d-vname">Daniel Ek <span>· executive chairman</span></div><div class="d-vval">29.1%</div></div><div class="d-vtrack"><div class="d-vfill" style="width:29.1%"></div></div></div>
+ <div class="d-vrow"><div class="d-vhead"><div class="d-vname">Everyone else <span>· all other shareholders</span></div><div class="d-vval">29.3%</div></div><div class="d-vtrack"><div class="d-vfill muted" style="width:29.3%"></div></div></div>
+</div>
+<div class="d-vcap">Share of all votes. Between them the two founders hold 70.7%, so no combination of outside investors can outvote them.</div>
+<div class="d-fine">And Ek's attention has moved. In 2025 his investment firm put €600 million into Helsing, a German military AI company that builds drones. He is its chairman. Massive Attack, King Gizzard and the Lizard Wizard, Deerhoof and dozens of others have pulled their music off Spotify over it.</div>`},
+debate:{t:"Our honest read",e:"The Daily Dividend take",h:`
+<div class="d-hero">Everyone is arguing about AI. <em>The real fight is over a number.</em></div>
+<div class="d-p"><strong>What the bulls say:</strong> Spotify paid the music industry more than 10% more last year, while the industry's other income grew about 4%. A partner making the pie bigger has room to ask for more. And Spotify can find its extra cents outside music entirely, in audiobooks, podcasts, adverts and fitness, where the record companies are not in the room.</div>
+<div class="d-p"><strong>What the bears say:</strong> Spotify's own filings warn that its suppliers are few and can change its access whenever they choose. Universal, Sony and Warner have watched Spotify's share of every dollar climb from 25 cents to 33 while artists complained loudly. Every contract runs out eventually, and the next one gets negotiated in that mood.</div>
+<div class="d-big"><div class="d-bignum">7¢</div><div class="d-biglbl">The gap between what Spotify keeps now and what it has promised by 2030.</div></div>
+<div class="d-k">Our read</div>
+<div class="d-p">The turnaround was real and it is not reversing. But the next seven cents are far harder than the last seven, because they cannot come from firing people again.</div>
+<div class="d-q">Watch the parts of Spotify that are not music. If audiobooks, adverts and add-ons carry the extra profit, Spotify never has to fight for it. If they do not, it walks back to the record companies, and this time the record companies will be ready.</div>
+<div class="d-fine">Not financial advice. For educational purposes only.</div>`},
+conv:{t:"Where people land",e:"From the vote",h:`
+<div class="d-hero">This splits on one question: <em>do you trust a company's own five-year forecast?</em></div>
+<div class="d-p"><strong>Longer-term holders point at the record.</strong> Spotify said it would reach 30 cents kept per dollar and got to 32. It said it would become profitable and did. On that record, 2026's extra spending looks like the price of the next stretch of growth.</div>
+<div class="d-p"><strong>Shorter-term holders point at the price.</strong> Investors are paying roughly $33 for every $1 of profit while margins dip and adverts stall.</div>
+<div class="d-q">The most common neutral position: wait two quarters. If the rebuilt advertising business grows in the second half of 2026 as promised, the argument is settled. If it does not, the free version becomes a very expensive habit.</div>`},
+next:{t:"The other side of the trap",e:"From what's next",h:`
+<div class="d-hero">Spotify rents everything it plays. <em>Netflix decided to own the shows instead.</em></div>
+<div class="d-p">Both started as middlemen for other people's content. Spotify still is one, and pays two thirds of every dollar for the privilege. Netflix spent a decade and hundreds of billions building a catalogue nobody can take away.</div>
+<div class="d-q">Which would you rather own: the shop that rents its shelves, or the one that built its own?</div>`}
+},
+tldr:["<strong>250 million songs</strong>, 761 million listeners, and Spotify owns none of the music.","Free tier hooks you, subscriptions pay the bills, add-ons let superfans spend more.","Nobody else has more than <strong>14%</strong> of paying listeners, and nobody else does only music.","Your money goes into <strong>one global pot</strong>. It never reaches the artists you actually play.","Spotify now keeps <strong>32 cents</strong> of every dollar, up from 25 four years ago.","Listening surged and advert revenue grew <strong>3%</strong>. The free tier is not paying for itself."]}});
+
 const CS=[
-{id:"spotify",domain:"spotify.com",n:"Spotify",bl:"600M users. Almost no profit.",lb:"#1ED760",cats:["Entertainment","Big Tech"]},
 {id:"visa",domain:"visa.com",n:"Visa",bl:"800M card taps a day. Earns from each.",lb:"#1A1F71",cats:["Banks & Money","Made in USA"]},
 {id:"zomato",domain:"zomato.com",n:"Zomato",bl:"14 years of losses. Just flipped profitable.",lb:"#cc092f",fl:"",cats:["Made in India","Junk Food"]},
 {id:"ferrari",domain:"ferrari.com",n:"Ferrari",bl:"Limits supply on purpose. Scarcity equals strategy.",lb:"#FF0000",fl:"",cats:["Cars & EVs","Luxury"]},
@@ -2332,10 +2616,10 @@ let saved={};
 let calls=[];
 let interestEditing=false;
 const voteAggregates={};
-const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},nvidia:{bull:61,neutral:26,bear:13,total:100},disney:{bull:58,neutral:27,bear:15,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100}};
+const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},nvidia:{bull:61,neutral:26,bear:13,total:100},disney:{bull:58,neutral:27,bear:15,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100},spotify:{bull:58,neutral:27,bear:15,total:100}};
 let dbCos=[];
 let currentDbCo=null;
-const CO_TICKER_MAP={netflix:'NFLX',nvidia:'NVDA',disney:'DIS',meta:'META',cocacola:'KO'};
+const CO_TICKER_MAP={netflix:'NFLX',nvidia:'NVDA',disney:'DIS',meta:'META',cocacola:'KO',spotify:'SPOT'};
 function liveCompanyKeys(){return Object.keys(CO).filter(k=>!CO[k].disabled);}
 function liveCompanyValues(){return liveCompanyKeys().map(k=>CO[k]);}
 function recentCompanyKeys(limit=3){return liveCompanyKeys().slice(-limit).reverse();}
@@ -2666,7 +2950,7 @@ ${card.kick?`<div class="kick a4">${card.kick}</div>`:''}`;
 <div class="hl a2">${card.hl}</div>
 ${card.bd?`<div class="bd a2" style="margin-bottom:14px">${card.bd}</div>`:''}
 ${card.lbl?`<div class="rv-lbl a3">${card.lbl}</div>`:''}
-<div class="rv-rows a3">${card.rows.map(r=>`
+<div class="rv-rows${card.rows.length>4?' rv-dense':''} a3">${card.rows.map(r=>`
 <div class="rv-row${r.h?' hero':''}">
  <div class="rv-head"><span class="rv-n"><span class="rv-emoji">${r.emoji}</span>${r.n}</span><span class="rv-val">${r.val}</span></div>
  <div class="rv-bar"><div class="rv-fill" data-w="${r.pct}" style="background:${r.fill}"></div></div>
@@ -2867,7 +3151,7 @@ function buildProg(){
  const w=document.getElementById('prog');w.innerHTML='';
  for(let i=0;i<CO[curCo].cards.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}
 }
-function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold')||c.classList.contains('bg-mint')||c.classList.contains('bg-own'));}
 function updProg(){
  document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
  const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
@@ -3747,7 +4031,7 @@ function dtBuildProg(){
   for(let i=0;i<CO[curCo].cards.length;i++){const t=document.createElement('div');t.className='r-tick';w.appendChild(t);}
 }
 
-function dtIsLight(i){const c=document.querySelectorAll('#dtTrack .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));}
+function dtIsLight(i){const c=document.querySelectorAll('#dtTrack .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold')||c.classList.contains('bg-mint')||c.classList.contains('bg-own'));}
 
 function dtUpdProg(){
   document.querySelectorAll('#dtProg .r-tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<dtCardIdx)t.classList.add('done');else if(i===dtCardIdx)t.classList.add('current');});
