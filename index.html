@@ -114,6 +114,7 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;letter-spacing:.02em;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .tbtn:hover{background:rgba(255,255,255,0.22)}
 .tbtn svg{width:15px;height:15px}
+.tbtn.close-btn{font-size:20px;font-weight:400;line-height:1;padding:0 0 2px}
 .topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
 .tbtn.saved{background:var(--accent);color:#fff}
 
@@ -396,6 +397,35 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .cat-chip:active{transform:scale(0.94)}
 .cat-chip.active{background:var(--cc,#1A3D2B);color:#fff;border-color:var(--cc,#1A3D2B)}
 .cat-chip-e{font-size:13px;line-height:1}
+/* LIBRARY MODE SWITCH — top-level content type (Stock Spotlight | Rabbit Holes) */
+.lib-modes{display:flex;gap:4px;margin:16px 24px 2px;background:var(--brand-soft);border-radius:999px;padding:4px}
+.lib-mode{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:0;background:transparent;border-radius:999px;padding:11px 10px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:background 0.18s,color 0.18s,box-shadow 0.18s;white-space:nowrap;line-height:1}
+.lib-mode.active{background:#fff;color:var(--mc,var(--brand));box-shadow:0 2px 8px rgba(0,0,0,0.09)}
+.lib-mode-e{font-size:14px;line-height:1}
+.lib-mode-n{font-family:var(--mono);font-size:9.5px;font-weight:700;background:var(--mc,var(--brand));color:#fff;border-radius:999px;padding:2px 6px;line-height:1.3}
+.lib-mode:not(.active) .lib-mode-n{background:var(--mute-2)}
+/* RABBIT HOLES */
+.rbh-feat{margin:14px 24px 4px;border-radius:20px;padding:20px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.14)}
+.rbh-feat::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 88% 15%,rgba(255,255,255,0.22),transparent 58%);pointer-events:none}
+.rbh-feat-tag{position:relative;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.85;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.rbh-feat-t{position:relative;font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:-0.015em;line-height:1.18;margin-bottom:7px}
+.rbh-feat-dek{position:relative;font-family:var(--sans);font-size:12.5px;opacity:0.82;line-height:1.45}
+.rbh-feat-meta{position:relative;font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.72;margin-top:12px}
+.rbh-sect{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:20px 24px 2px}
+.rbh-list{display:flex;flex-direction:column;gap:11px;padding:4px 24px 0}
+.rbh-card{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;cursor:pointer;transition:transform 0.18s,box-shadow 0.18s}
+.rbh-card:active{transform:scale(0.985)}
+.rbh-th{flex-shrink:0;width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}
+.rbh-body{min-width:0;flex:1}
+.rbh-cats{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rc,var(--muted));margin-bottom:5px}
+.rbh-t{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em;line-height:1.25;color:var(--ink);margin-bottom:4px}
+.rbh-dek{font-family:var(--sans);font-size:12px;line-height:1.42;color:var(--muted);margin-bottom:7px}
+.rbh-meta{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute-2)}
+.rbh-empty{margin:16px 24px;padding:30px 22px;border:1px dashed var(--line);border-radius:18px;text-align:center;font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.5}
+.rbh-empty strong{display:block;font-family:var(--serif);font-size:17px;color:var(--ink);font-weight:500;margin-bottom:6px}
+.rbh-foot{margin:30px 24px 0;padding:18px 0 8px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mute-2);text-align:center}
+.co-overlay.rbh-reading .co-ov-vote{display:none}
+.sr .rbh-list,.lib-sr .rbh-list{padding-left:0;padding-right:0}
 .nudge-btn{margin-top:8px;width:100%;border:1px solid rgba(26,61,43,0.3);background:#fff;color:#1A3D2B;font-family:var(--mono);font-size:8px;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;border-radius:9px;padding:6px 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1.35;text-align:center;transition:transform 0.15s,background 0.15s,color 0.15s}
 .nudge-btn:active{transform:scale(0.94)}
 .nudge-btn.done{background:#1A3D2B;color:#fff;border-color:#1A3D2B}
@@ -929,6 +959,11 @@ body{background:var(--ink);overflow:hidden}
 .lib-feat{margin:0 0 12px;border-radius:22px;padding:32px 38px;background:var(--co-bg);box-shadow:0 12px 48px rgba(0,0,0,.2)}.lib-feat-tag{font-size:10px;margin-bottom:10px}.lib-feat-co{font-size:38px;font-weight:500;letter-spacing:-.02em;margin-bottom:6px}.lib-feat-bl{font-size:14px;opacity:.82;line-height:1.45;max-width:760px}
 .rail{margin:28px 0 4px}.rail-t{font-size:16px}.rh{padding:0;margin-bottom:12px}.rs{padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;overflow:visible}
 .rcd{width:auto;height:236px;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}.rcd:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}.rcd-th{width:88px;height:88px;border-radius:18px;font-size:28px;margin-bottom:14px}.rcd-th .company-logo-img{padding:12%}.rcd-n{font-size:17px;font-weight:600;letter-spacing:-.01em}.rcd-bl{font-size:12px;line-height:1.4;max-width:22ch}.lib-fs{margin:36px 0 0;font-size:11px;letter-spacing:.1em}.sr{padding:12px 0 0;max-width:840px}
+ .lib-modes{margin:0 0 6px;max-width:420px}.lib-mode{font-size:13.5px;padding:12px 14px}
+ .rbh-feat{margin:14px 0 4px;padding:30px 34px;border-radius:22px}.rbh-feat-t{font-size:34px}.rbh-feat-dek{font-size:14px;max-width:720px}
+ .rbh-sect{padding:24px 0 4px}.rbh-list{padding:6px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+ .rbh-card{padding:18px;border-radius:18px}.rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+ .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}.rbh-t{font-size:18px}.rbh-empty{margin:16px 0}.rbh-foot{margin:34px 0 0;font-size:11px;letter-spacing:.1em}
 .you-scroll{max-width:none}.you-scroll>*{max-width:1200px}.id-c{border-radius:20px}.sh,.cc{border-radius:18px}.sg{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.sm{border-radius:18px;aspect-ratio:auto;height:220px;min-height:0;padding:20px 22px}.sm-q{font-size:20px;line-height:1.25;max-width:680px}.sh-n{font-size:52px}
 #screen-stack .shell{left:0}#screen-stack .prog{top:32px;left:248px;right:56px;gap:5px}#screen-stack .prog .tick{height:2px;border-radius:2px}#screen-stack .topbar{top:56px;left:240px;right:56px}#screen-stack .co-logo{width:36px;height:36px;border-radius:9px;font-size:17px}
 #screen-stack .card{padding:116px clamp(80px,11vw,220px) 96px;overflow-y:auto}#screen-stack .hl{font-size:clamp(36px,4.5vw,66px);max-width:960px;line-height:1.07;letter-spacing:-.03em}#screen-stack .bd{font-size:18px;max-width:800px;line-height:1.7;opacity:.9}.eb-c{font-size:10px;letter-spacing:.22em}#screen-stack .tz{top:112px;bottom:84px;width:15%}#screen-stack .pills{bottom:28px}#screen-stack .pill{font-size:10px;padding:9px 16px;backdrop-filter:blur(16px)}
@@ -941,12 +976,20 @@ body{background:var(--ink);overflow:hidden}
 /* COMPANY ARTICLE OVERLAY */
 .co-overlay{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;background:#fff}
 .co-ov-bar{display:flex;align-items:center;gap:12px;padding:0 14px;height:52px;background:#111;color:#fff;flex-shrink:0}
-.co-ov-back{background:none;border:0;color:rgba(255,255,255,.75);font:inherit;font-size:13px;cursor:pointer;padding:6px 10px 6px 0;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.co-ov-back{order:3;background:rgba(255,255,255,.12);border:0;color:#fff;font:inherit;font-size:20px;line-height:1;cursor:pointer;padding:0 0 2px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;white-space:nowrap}
 .co-ov-back:hover{color:#fff}
-.co-ov-name{flex:1;font-family:var(--serif);font-size:15px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.co-ov-save{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font:inherit;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;cursor:pointer;transition:background .15s}
+.co-ov-name{order:1;flex:1;font-family:var(--serif);font-size:15px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.co-ov-save{order:2;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font:inherit;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;cursor:pointer;transition:background .15s}
 .co-ov-save:hover,.co-ov-save.saved{background:var(--accent,#2E8A60);border-color:transparent}
 .co-ov-frame{flex:1;border:0;width:100%}
+.co-overlay.rbh-reading .co-ov-bar{position:absolute;z-index:2;top:max(18px,env(safe-area-inset-top));right:18px;width:auto;height:auto;padding:0;gap:8px;background:transparent}
+.co-overlay.rbh-reading .co-ov-name{display:none}
+.co-overlay.rbh-reading .co-ov-save,.co-overlay.rbh-reading .co-ov-back{width:44px;height:44px;padding:0;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.13);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.co-overlay.rbh-reading .co-ov-save{order:1;font-size:0}
+.co-overlay.rbh-reading .co-ov-save::before{content:"";width:18px;height:18px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8'%3E%3Cpath d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'/%3E%3C/svg%3E") center/contain no-repeat;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8'%3E%3Cpath d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'/%3E%3C/svg%3E") center/contain no-repeat}
+.co-overlay.rbh-reading .co-ov-save.saved{background:#1F6B4A}
+.co-overlay.rbh-reading .co-ov-back{order:2;font-size:21px;line-height:1}
+.co-overlay.rbh-reading .co-ov-frame{height:100%;flex:1}
 .co-ov-vote{flex-shrink:0;background:#fff;border-top:1px solid #eee;padding:14px 16px;display:flex;align-items:center;gap:12px}
 .co-ov-label{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;flex-shrink:0}
 .co-vb{flex:1;border:1px solid #ddd;background:#fff;border-radius:8px;padding:8px 6px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.06em}
@@ -1233,6 +1276,21 @@ body{background:var(--ink);overflow:hidden}
 .lib-row-scroll .lib-card{flex:0 0 200px;scroll-snap-align:start}
 .lib-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 #dtShell .cat-chips{padding:2px 0 18px}
+#dtShell .lib-modes{margin:0 0 20px;max-width:440px;padding:5px}
+#dtShell .lib-mode{font-size:14px;padding:12px 16px}
+#dtShell .rbh-feat{margin:0 0 26px;padding:32px 38px;border-radius:22px}
+#dtShell .rbh-feat-t{font-size:32px}
+#dtShell .rbh-feat-dek{font-size:14.5px;max-width:640px}
+#dtShell .rbh-feat-meta{font-size:10px}
+#dtShell .rbh-sect{padding:0 0 12px}
+#dtShell .rbh-list{padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+#dtShell .rbh-card{padding:20px;border-radius:18px}
+#dtShell .rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+#dtShell .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}
+#dtShell .rbh-t{font-size:18px}
+#dtShell .rbh-dek{font-size:12.5px}
+#dtShell .rbh-empty{margin:0}
+#dtShell .rbh-foot{margin:36px 0 0;font-size:11px;letter-spacing:0.1em}
 .lib-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s;min-height:148px}
 .lib-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.07)}
 .lib-card-th{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;color:#fff;margin-bottom:8px}
@@ -1293,7 +1351,7 @@ body{background:var(--ink);overflow:hidden}
 .reader-overlay.open{display:flex}
 .reader-overlay.interactive-card .r-tz{pointer-events:auto!important}
 .reader-shell{display:flex;gap:0;width:100%;max-width:1120px;height:100%;max-height:820px;border-radius:28px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.6);min-height:0}
-.reader-close{position:fixed;top:24px;right:28px;background:rgba(255,255,255,0.1);border:0;width:38px;height:38px;border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.18s;z-index:10}
+.reader-close{position:fixed;top:24px;right:28px;background:rgba(255,255,255,0.1);border:0;width:38px;height:38px;border-radius:50%;color:#fff;font-size:24px;line-height:1;padding:0 0 3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.18s;z-index:10}
 .reader-close:hover{background:rgba(255,255,255,0.2)}
 
 /* ── LEFT PANEL (CARD) ── */
@@ -1678,7 +1736,7 @@ body{background:var(--ink);overflow:hidden}
  <div class="co"><div class="co-logo" id="cologo">N</div><div><div class="co-name" id="coname">Netflix</div><div class="co-sub" id="cosub">NFLX</div></div></div>
  <div class="tactions">
  <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
- <button class="tbtn" onclick="closeStack()">x</button>
+ <button class="tbtn close-btn" onclick="closeStack()" aria-label="Close">&times;</button>
  </div>
  </div>
  <div class="tz l" onclick="event.stopPropagation();prevCard()"></div>
@@ -1704,6 +1762,7 @@ body{background:var(--ink);overflow:hidden}
  <div class="lib-tr"><div class="lib-t">The library.</div><div class="lib-st"><span class="big">4</span><br>live</div></div>
  <div class="s-row"><input class="s-box" id="searchBox" placeholder="Search any company..." oninput="onSearch()"/><button class="sb" onclick="surpriseMe()" title="Surprise me" aria-label="Surprise me">🎲</button></div>
  </div>
+ <div id="libModes"></div>
  <div class="sr" id="sr"></div>
  <div class="lc" id="lc"></div>
  <div class="lib-fs" id="libFs"><div><span class="big">4</span> live</div><div><span class="big">11</span> coming</div><div><span class="big">~90s</span> per read</div></div>
@@ -1733,7 +1792,7 @@ body{background:var(--ink);overflow:hidden}
 <!-- COMPANY ARTICLE OVERLAY (for DB-uploaded companies) -->
 <div id="coOverlay" class="co-overlay" style="display:none">
   <div class="co-ov-bar">
-    <button class="co-ov-back" onclick="closeCoOverlay()">&#8592; Back</button>
+    <button class="co-ov-back" onclick="closeCoOverlay()" aria-label="Close">&times;</button>
     <span class="co-ov-name" id="coOvName"></span>
     <button class="co-ov-save" id="coOvSave" onclick="toggleCoSave()">Save</button>
   </div>
@@ -2590,6 +2649,17 @@ const DD_CATS=[
 ];
 const DD_NEW_CAT={k:"new",label:"New drops",emoji:"🆕",c:"#1A3D2B"};
 const DD_FORYOU_CAT={k:"for-you",label:"Especially for you",emoji:"✨",c:"#C49A3E"};
+const DD_RH_CAT={k:"rabbit-holes",label:"Rabbit Holes",emoji:"🕳️",c:"#4A3B8C"};
+/* RABBIT HOLES — long reads about a theme or a place, not a single company.
+   Each entry opens `url` (an uploaded HTML page) in the reader overlay.
+   `cats` must use DD_CATS labels so the category chips filter correctly.
+   `date` is ISO yyyy-mm-dd and drives ordering — newest becomes the hero. */
+const RH=[
+{k:"solar-panels-on-water",title:"Solar panels on water",
+ dek:"India is about to put 5,000 megawatts of solar panels on its lakes and dams. Seven companies already doing the work.",
+ cats:["Made in India","Energy & Oil"],mins:6,date:"2026-08-27",
+ bg:"#0B3140",emoji:"☀️",url:"/reports/solar-panels-on-water.html"}
+];
 /* Old onboarding sector slugs → current category keys */
 const DD_CAT_LEGACY_SLUGS={tech:"big-tech",banking:"banks",media:"entertainment",consumer:"junk-food"};
 function userCatKeys(){
@@ -2619,6 +2689,14 @@ const voteAggregates={};
 const DEFAULT_VOTES={netflix:{bull:68,neutral:22,bear:10,total:100},nvidia:{bull:61,neutral:26,bear:13,total:100},disney:{bull:58,neutral:27,bear:15,total:100},reliance:{bull:62,neutral:26,bear:12,total:100},hdfc:{bull:54,neutral:32,bear:14,total:100},meta:{bull:61,neutral:24,bear:15,total:100},cocacola:{bull:65,neutral:22,bear:13,total:100},spotify:{bull:58,neutral:27,bear:15,total:100}};
 let dbCos=[];
 let currentDbCo=null;
+let currentRabbitHole=null;
+function savedRabbitHoles(){try{return JSON.parse(localStorage.getItem('dd_saved_rabbit_holes')||'[]')}catch(e){return []}}
+function updateRabbitHoleSave(){
+ const btn=document.getElementById('coOvSave');
+ const isSaved=currentRabbitHole&&savedRabbitHoles().includes(currentRabbitHole);
+ btn.classList.toggle('saved',Boolean(isSaved));
+ btn.setAttribute('aria-label',isSaved?'Remove rabbit hole from saved':'Save rabbit hole');
+}
 const CO_TICKER_MAP={netflix:'NFLX',nvidia:'NVDA',disney:'DIS',meta:'META',cocacola:'KO',spotify:'SPOT'};
 function liveCompanyKeys(){return Object.keys(CO).filter(k=>!CO[k].disabled);}
 function liveCompanyValues(){return liveCompanyKeys().map(k=>CO[k]);}
@@ -3353,18 +3431,113 @@ function dbCompanyCard(c){
  const initial=(c.name||'?').charAt(0).toUpperCase();
  return `<div class="rcd" onclick="openDbCompany('${id}')"><div class="rcd-th" style="background:#1A3D2B;color:#fff"><span class="logo-fallback">${initial}</span><img class="company-logo-img logo-${id}" src="/api/logo/${id}" alt="" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()"></div><div class="rcd-ld"></div><div class="rcd-n">${c.name}</div><div class="rcd-bl">${c.hook||''}</div></div>`;
 }
+/* LIBRARY MODE — 'stocks' (company decks) or 'holes' (rabbit holes).
+   Shared by both shells; the markup below is identical in each and only
+   differs by CSS scope, so it is built once here. */
+let libMode='stocks';
+let libRhCat='';
+function renderLibActive(){
+ if(IS_DESKTOP&&typeof dtRenderLib==='function')dtRenderLib();else renderLib();
+}
+function setLibMode(m){
+ if(libMode===m)return;
+ libMode=m;libRhCat='';
+ trackPostHogEvent('library_mode_changed',{mode:m});
+ renderLibActive();
+}
+function setRhCat(k){
+ const cat=DD_CATS.find(c=>c.k===k);
+ const label=cat?cat.label:'';
+ libRhCat=(libRhCat===label)?'':label;
+ renderLibActive();
+}
+function rhSorted(){return RH.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));}
+function rhCatsPresent(){return DD_CATS.filter(c=>RH.some(r=>(r.cats||[]).includes(c.label)));}
+function rhMatches(q){return RH.filter(r=>(r.title||'').toLowerCase().includes(q)||(r.dek||'').toLowerCase().includes(q)||(r.cats||[]).some(c=>c.toLowerCase().includes(q)));}
+function rhDate(d){
+ const t=Date.parse(String(d||'')+'T00:00:00');
+ return isNaN(t)?'':new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+function libModesHtml(){
+ const n=RH.length;
+ return `<div class="lib-modes">
+ <button class="lib-mode${libMode==='stocks'?' active':''}" onclick="setLibMode('stocks')"><span class="lib-mode-e">📈</span>Stock Spotlight</button>
+ <button class="lib-mode${libMode==='holes'?' active':''}" style="--mc:${DD_RH_CAT.c}" onclick="setLibMode('holes')"><span class="lib-mode-e">${DD_RH_CAT.emoji}</span>Rabbit Holes${n?`<span class="lib-mode-n">${n}</span>`:''}</button>
+</div>`;
+}
+function rhFeatHtml(r){
+ const meta=[(r.cats||[]).join(' · '),r.mins?r.mins+' min read':'',rhDate(r.date)].filter(Boolean).join('  ·  ');
+ return `<div class="rbh-feat" style="background:${r.bg||DD_RH_CAT.c}" onclick="openRabbitHole('${r.k}')">
+ <div class="rbh-feat-tag">Latest rabbit hole</div>
+ <div class="rbh-feat-t">${r.title}</div>
+ <div class="rbh-feat-dek">${r.dek||''}</div>
+ <div class="rbh-feat-meta">${meta}</div>
+</div>`;
+}
+function rhCardHtml(r){
+ const first=(r.cats||[])[0]||'';
+ const cc=(DD_CATS.find(c=>c.label===first)||DD_RH_CAT).c;
+ const meta=[r.mins?r.mins+' min read':'',rhDate(r.date)].filter(Boolean).join(' · ');
+ return `<div class="rbh-card" onclick="openRabbitHole('${r.k}')">
+ <div class="rbh-th" style="background:${r.bg||DD_RH_CAT.c}">${r.emoji||DD_RH_CAT.emoji}</div>
+ <div class="rbh-body">
+  <div class="rbh-cats" style="--rc:${cc}">${(r.cats||[]).join(' · ')}</div>
+  <div class="rbh-t">${r.title}</div>
+  <div class="rbh-dek">${r.dek||''}</div>
+  <div class="rbh-meta">${meta}</div>
+ </div>
+</div>`;
+}
+function rhBodyHtml(){
+ const all=rhSorted();
+ if(!all.length)return `<div class="rbh-empty"><strong>No rabbit holes yet.</strong>Long reads on the themes behind the market — the first one lands soon.</div>`;
+ const chips=`<div class="cat-chips"><button class="cat-chip${libRhCat?'':' active'}" style="--cc:${DD_RH_CAT.c}" onclick="setRhCat('')">All</button>`+
+  rhCatsPresent().map(c=>`<button class="cat-chip${libRhCat===c.label?' active':''}" style="--cc:${c.c}" onclick="setRhCat('${c.k}')">${c.label}</button>`).join('')+`</div>`;
+ if(libRhCat){
+  const f=all.filter(r=>(r.cats||[]).includes(libRhCat));
+  return chips+(f.length
+   ?`<div class="rbh-sect">${f.length} in ${libRhCat}</div><div class="rbh-list">${f.map(rhCardHtml).join('')}</div>`
+   :`<div class="rbh-empty"><strong>Nothing here yet.</strong>No rabbit holes filed under ${libRhCat}.</div>`);
+ }
+ const rest=all.slice(1);
+ return rhFeatHtml(all[0])+chips
+  +(rest.length?`<div class="rbh-sect">More rabbit holes</div><div class="rbh-list">${rest.map(rhCardHtml).join('')}</div>`:'')
+  +`<div class="rbh-foot">New rabbit holes land every few weeks</div>`;
+}
+function openRabbitHole(k){
+ const r=RH.find(x=>x.k===k);if(!r)return;
+ if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
+ const ov=document.getElementById('coOverlay');if(!ov)return;
+ currentDbCo=null;
+ currentRabbitHole=k;
+ ov.classList.add('rbh-reading');
+ document.getElementById('coOvName').textContent=r.title;
+ document.getElementById('coOvFrame').src=r.url;
+ ov.style.display='flex';
+ updateRabbitHoleSave();
+ trackPostHogEvent('rabbit_hole_opened',{rabbit_hole_id:k});
+}
 function renderLib(){
  const featured=CO[curCo];setTheme(curCo);
  const liveCompanies=liveCompanyValues();
  const liveCount=liveCompanies.length+dbCos.length;
  const comingCount=CS.length;
  const liveNames=[...liveCompanies.map(c=>c.n),...dbCos.map(c=>c.name)].join(', ');
- document.querySelector('#screen-library .lib-st').innerHTML=`<span class="big">${liveCount}</span><br>live`;
- document.querySelector('#screen-library .lib-st').title=liveNames;
+ const st=document.querySelector('#screen-library .lib-st');
+ st.innerHTML=libMode==='holes'?`<span class="big">${RH.length}</span><br>reads`:`<span class="big">${liveCount}</span><br>live`;
+ st.title=libMode==='holes'?'':liveNames;
  document.getElementById('libFs').innerHTML=`<div title="${liveNames}"><span class="big">${liveCount}</span> live</div><div><span class="big">${comingCount}</span> coming</div><div><span class="big">~90s</span> per read</div>`;
+ const sb=document.getElementById('searchBox');
+ if(sb)sb.placeholder=libMode==='holes'?'Search rabbit holes...':'Search any company...';
+ const fs=document.getElementById('libFs');
+ if(fs)fs.style.display=libMode==='holes'?'none':'flex';
+ const lcEl=document.getElementById('lc');
+ const mEl=document.getElementById('libModes');
+ if(mEl)mEl.innerHTML=libModesHtml();
+ if(libMode==='holes'){lcEl.innerHTML=rhBodyHtml();twparse(lcEl);return;}
  const rails=libRailData();
  const chips=rails.map(r=>`<button class="cat-chip" style="--cc:${r.cat.c}" onclick="jumpToRail('rail-${r.cat.k}',this)">${r.cat.label}</button>`).join('');
- document.getElementById('lc').innerHTML=`
+ lcEl.innerHTML=`
 <div class="lib-feat" id="tourLibEl" onclick="openStack('${companyKey(featured)}')">
  <div class="lib-feat-tag">STORY OF THE WEEK</div>
  <div class="lib-feat-co">${featured.n}</div>
@@ -3413,7 +3586,15 @@ function onSearch(){
  const q=document.getElementById('searchBox').value.toLowerCase().trim();
  trackMetaSearch(q);
  const sr=document.getElementById('sr'),lc=document.getElementById('lc'),fs=document.getElementById('libFs');
- if(!q){sr.classList.remove('active');lc.classList.remove('hidden');fs.style.display='flex';return;}
+ if(!q){sr.classList.remove('active');lc.classList.remove('hidden');fs.style.display=libMode==='holes'?'none':'flex';return;}
+ if(libMode==='holes'){
+  const rm=rhMatches(q);
+  sr.classList.add('active');lc.classList.add('hidden');fs.style.display='none';
+  sr.innerHTML=rm.length
+   ?`<div class="sect-s" style="margin-top:8px">${rm.length} rabbit hole${rm.length!==1?'s':''}</div><div class="rbh-list">${rm.map(rhCardHtml).join('')}</div>`
+   :`<div class="sr-e">No rabbit holes match "${q}".<div class="sm">Try a company name in Stock Spotlight.</div></div>`;
+  return;
+ }
  clearTimeout(_searchThrottle);
  _searchThrottle=setTimeout(()=>{if(q.length>=2)api('/api/search-used',{method:'POST',body:JSON.stringify({userId})}).catch(()=>{});},800);
  const dbSearchItems=dbCos.map(c=>({n:c.name,bl:c.hook||'',lb:'#1A3D2B',lc:'#fff',_dbId:c.companyId}));
@@ -3426,11 +3607,14 @@ function onSearch(){
 /* DB COMPANY OVERLAY */
 function openDbCompany(companyId){
  currentDbCo=companyId;
+ currentRabbitHole=null;
  const co=dbCos.find(c=>c.companyId===companyId);
  if(!co)return;
  document.getElementById('coOvName').textContent=co.name;
  document.getElementById('coOvFrame').src=`/api/company/${encodeURIComponent(companyId)}`;
- document.getElementById('coOverlay').style.display='flex';
+ const ov=document.getElementById('coOverlay');
+ ov.classList.remove('rbh-reading');
+ ov.style.display='flex';
  updateCoOvSave();
  updateCoOvVoteBtns();
  api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId,source:'library',readDate:localReadDateKey()})})
@@ -3438,9 +3622,12 @@ function openDbCompany(companyId){
   .catch(e=>console.warn(e));
 }
 function closeCoOverlay(){
- document.getElementById('coOverlay').style.display='none';
+ const ov=document.getElementById('coOverlay');
+ ov.style.display='none';
+ ov.classList.remove('rbh-reading');
  document.getElementById('coOvFrame').src='';
  currentDbCo=null;
+ currentRabbitHole=null;
 }
 function updateCoOvSave(){
  if(!currentDbCo)return;
@@ -3450,6 +3637,15 @@ function updateCoOvSave(){
  btn.classList.toggle('saved',Boolean(isSaved));
 }
 async function toggleCoSave(){
+ if(currentRabbitHole){
+  const items=savedRabbitHoles();
+  const i=items.indexOf(currentRabbitHole);
+  if(i===-1)items.push(currentRabbitHole);else items.splice(i,1);
+  localStorage.setItem('dd_saved_rabbit_holes',JSON.stringify(items));
+  updateRabbitHoleSave();
+  showToast(i===-1?'Saved':'Removed');
+  return;
+ }
  if(!currentDbCo)return;
  const key=saveKey(currentDbCo,0);
  try{
@@ -3721,6 +3917,7 @@ function tourEnd(){
 function startTour(){
   if(document.getElementById('tourOverlay'))return;
   tourIdx=0;
+  if(libMode!=='stocks')setLibMode('stocks');
   const ov=document.createElement('div');
   ov.id='tourOverlay';
   ov.addEventListener('click',e=>{if(!e.target.closest('#tourCard'))tourAdvance();});
@@ -4222,6 +4419,11 @@ function dtRenderLib(){
   const featured=CO[curCo];if(!featured)return;setTheme(curCo);
   const liveKeys=liveCompanyKeys();
   const lm=document.getElementById('dtLibMain');if(!lm)return;
+  const dsb=document.getElementById('dtSearchBox');
+  if(dsb)dsb.placeholder=libMode==='holes'?'Search rabbit holes…':'Search any company…';
+  const dtmEl=document.getElementById('dtLibModes');
+  if(dtmEl)dtmEl.innerHTML=libModesHtml();
+  if(libMode==='holes'){lm.innerHTML=rhBodyHtml();return;}
 
   function libCard(k){
     const c=CO[k];const slug=k;
@@ -4298,6 +4500,14 @@ function dtOnSearch(){
   trackMetaSearch(ql);
   const sr=document.getElementById('dtLibSr');if(!sr)return;
   if(!ql){sr.classList.remove('active');return;}
+  if(libMode==='holes'){
+    const rm=rhMatches(ql);
+    sr.classList.add('active');
+    sr.innerHTML=rm.length
+      ?`<div class="lib-section-h"><div class="lib-section-t">${rm.length} rabbit hole${rm.length!==1?'s':''}</div></div><div class="rbh-list">${rm.map(rhCardHtml).join('')}</div>`
+      :`<div class="rd-empty">No rabbit holes match "${q}".</div>`;
+    return;
+  }
   const matches=[...liveCompanyKeys().map(k=>({...CO[k],_slug:k})),...(CS||[]),...(dbCos||[]).map(c=>({n:c.name||c.companyId,bl:c.hook||'',_dbco:c.companyId}))].filter(c=>(c.n||'').toLowerCase().includes(ql)||((c.bl||'').toLowerCase().includes(ql)));
   sr.classList.add('active');
   if(!matches.length){sr.innerHTML=`<div class="rd-empty">No matches for "${q}".</div>`;return;}
@@ -4476,6 +4686,7 @@ Object.assign(window,{
             <button class="lib-dice" onclick="dtSurpriseMe()" title="Surprise me">🎲</button>
           </div>
         </div>
+        <div id="dtLibModes"></div>
         <div class="lib-sr" id="dtLibSr"></div>
         <div id="dtLibMain"></div>
       </div>

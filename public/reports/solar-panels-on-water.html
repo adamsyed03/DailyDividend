@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en" data-layer="surface">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Solar Panels On Water | The Daily Dividend</title>
+<meta name="description" content="A watchlist of seven Indian companies with existing exposure to floating solar. Educational only, not investment advice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lyr-surface:#0B3140;
+  --lyr-deep:#04171F;
+  --lyr-mid:#0A3243;
+  --lyr-shallow:#135C72;
+  --lyr-sun:#1A7186;
+
+  --sun:#FFC845;
+  --sun-deep:#E8A317;
+  --foam:#EDF6F7;
+  --mist:#93B4BE;
+  --rule:rgba(237,246,247,.14);
+  --rule-soft:rgba(237,246,247,.07);
+
+  --bg:var(--lyr-surface);
+  --glow:0;
+
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","SF Mono",ui-monospace,monospace;
+
+  --pad:clamp(22px,5vw,72px);
+  --col:min(760px,100%);
+}
+
+html[data-layer="surface"]{--bg:var(--lyr-surface);--glow:.10}
+html[data-layer="deep"]   {--bg:var(--lyr-deep);   --glow:0}
+html[data-layer="mid"]    {--bg:var(--lyr-mid);    --glow:.08}
+html[data-layer="shallow"]{--bg:var(--lyr-shallow);--glow:.20}
+html[data-layer="sun"]    {--bg:var(--lyr-sun);    --glow:.34}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--foam);
+  font-family:var(--body);
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color 1100ms cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+
+/* the sun, sitting above the water. grows as the deck rises */
+.sky{
+  position:fixed;
+  top:-30vh;left:50%;
+  width:120vh;height:120vh;
+  transform:translateX(-50%);
+  background:radial-gradient(circle at 50% 50%,var(--sun) 0%,rgba(255,200,69,0) 62%);
+  opacity:var(--glow);
+  transition:opacity 1100ms cubic-bezier(.4,0,.2,1);
+  pointer-events:none;z-index:0;
+}
+
+/* the waterline. one persistent rule the whole deck is measured against */
+.waterline{
+  position:fixed;left:0;right:0;top:50%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--rule) 12%,var(--rule) 88%,transparent);
+  pointer-events:none;z-index:1;
+}
+.waterline::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:34vh;
+  background:linear-gradient(180deg,rgba(3,20,28,.30),transparent);
+}
+
+.deck{
+  position:relative;z-index:2;
+  height:100dvh;overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+}
+.deck::-webkit-scrollbar{display:none}
+
+.card{
+  min-height:100dvh;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  display:flex;align-items:center;
+  padding:calc(var(--pad) + 34px) var(--pad) calc(var(--pad) + 40px);
+}
+.inner{
+  width:var(--col);
+  margin:0 auto;
+  opacity:0;transform:translateY(18px);
+  transition:opacity 700ms ease,transform 700ms cubic-bezier(.2,.7,.3,1);
+}
+.card.on .inner{opacity:1;transform:none}
+
+/* shared type */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;font-weight:500;
+  letter-spacing:.20em;text-transform:uppercase;
+  color:var(--sun);
+  margin:0 0 22px;
+}
+.eyebrow.plain{color:var(--mist)}
+h1,h2,h3{
+  font-family:var(--display);
+  font-variation-settings:"wdth" 112;
+  font-weight:700;
+  line-height:.98;
+  letter-spacing:-.015em;
+  margin:0;
+  text-wrap:balance;
+}
+h1{font-size:clamp(52px,11.5vw,116px)}
+h2{font-size:clamp(38px,7.5vw,72px)}
+h3{font-size:clamp(28px,5vw,44px)}
+p{line-height:1.6;margin:0}
+
+/* cover */
+.card--cover .brand{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.26em;text-transform:uppercase;
+  color:var(--mist);margin:0 0 auto;
+}
+.card--cover h1{margin:26px 0 0}
+.card--cover .stand{
+  font-size:clamp(17px,2.4vw,21px);
+  color:var(--foam);max-width:30em;margin-top:30px;
+}
+.figurehead{
+  margin-top:38px;padding-top:26px;
+  border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;
+}
+.figurehead b{
+  font-family:var(--mono);font-weight:600;
+  font-size:clamp(24px,4.5vw,34px);color:var(--sun);
+  letter-spacing:-.02em;
+}
+.figurehead span{font-size:14px;color:var(--mist);max-width:22em}
+.cover-foot{
+  margin-top:34px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.20em;
+  text-transform:uppercase;color:var(--mist);
+}
+
+/* note + closing cards */
+.lede{
+  font-size:clamp(17px,2.3vw,20px);
+  color:var(--foam);max-width:34em;margin-top:26px;
+}
+.lede + .lede{margin-top:16px;color:var(--mist)}
+
+.words{
+  margin-top:44px;padding-top:28px;
+  border-top:1px solid var(--rule);
+  display:grid;gap:26px;
+}
+@media(min-width:680px){.words{grid-template-columns:1fr 1fr;gap:38px}}
+.word dt{
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--sun);margin-bottom:9px;
+}
+.word dd{margin:0;font-size:16px;color:var(--foam);line-height:1.55}
+.words-foot{
+  margin-top:26px;font-size:14px;color:var(--mist);
+  grid-column:1/-1;
+}
+
+/* the index card: three jobs, stacked as a cross section */
+.strata{margin-top:40px;display:grid;gap:0;border-top:1px solid var(--rule)}
+.stratum{
+  padding:22px 0;
+  border-bottom:1px solid var(--rule-soft);
+  display:grid;gap:6px 26px;align-items:baseline;
+}
+@media(min-width:680px){.stratum{grid-template-columns:1fr auto}}
+.stratum .job{
+  font-family:var(--display);font-variation-settings:"wdth" 108;
+  font-weight:600;font-size:clamp(20px,3.4vw,28px);letter-spacing:-.01em;
+}
+.stratum .who{
+  font-family:var(--mono);font-size:13px;color:var(--sun);
+  letter-spacing:.02em;
+}
+.index-foot{margin-top:28px;font-size:15px;color:var(--mist)}
+
+/* group divider */
+.card--group .inner{max-width:min(640px,100%)}
+.card--group .count{
+  font-family:var(--mono);font-size:12px;letter-spacing:.20em;
+  text-transform:uppercase;color:var(--mist);margin-top:26px;
+}
+
+/* company card */
+.co-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.co-num{
+  font-family:var(--mono);font-weight:500;font-size:13px;
+  letter-spacing:.12em;color:var(--sun);
+  padding-bottom:2px;border-bottom:1px solid var(--sun);
+}
+.stats{
+  margin-top:22px;padding:18px 0;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:14px 44px;
+}
+.stat{display:flex;flex-direction:column;gap:5px}
+.stat-v{
+  font-family:var(--mono);font-weight:600;
+  font-size:clamp(19px,3.2vw,25px);letter-spacing:-.02em;color:var(--sun);
+}
+.stat-l{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--mist);
+}
+.stat--text .stat-v{font-size:clamp(15px,2.2vw,17px);color:var(--foam);font-weight:400}
+
+.pts{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:13px}
+.pts li{
+  position:relative;padding-left:20px;
+  font-size:16px;line-height:1.55;color:var(--foam);
+}
+.pts li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:7px;height:7px;background:var(--mist);
+}
+
+.tags{margin-top:28px;display:grid;gap:14px}
+.tag{padding:14px 0 14px 16px;border-left:2px solid var(--rule)}
+.tag--fit{border-left-color:var(--sun)}
+.tag--catch{border-left-color:var(--mist)}
+.tag-l{
+  display:block;font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:7px;
+}
+.tag--fit .tag-l{color:var(--sun)}
+.tag--catch .tag-l{color:var(--mist)}
+.tag p{font-size:15.5px;color:var(--foam)}
+
+/* closing */
+.card--close .kicker{
+  margin-top:30px;font-size:clamp(17px,2.3vw,20px);max-width:32em;
+}
+.card--close .payoff{
+  margin-top:30px;padding:24px 0 0;border-top:1px solid var(--rule);
+  font-family:var(--display);font-variation-settings:"wdth" 108;
+  font-weight:600;font-size:clamp(19px,3vw,26px);line-height:1.28;
+  max-width:20em;color:var(--sun);
+}
+.card--outro .inner{max-width:min(620px,100%)}
+.handle{
+  font-family:var(--mono);font-size:clamp(15px,2.6vw,19px);
+  color:var(--sun);letter-spacing:.02em;margin-top:26px;
+}
+.disclaimer{
+  margin-top:40px;padding-top:22px;border-top:1px solid var(--rule);
+  font-size:12.5px;line-height:1.65;color:var(--mist);
+}
+
+/* depth readout */
+.depth{
+  position:fixed;left:var(--pad);bottom:20px;z-index:5;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mist);
+  display:flex;gap:10px;align-items:center;
+  pointer-events:none;
+}
+.depth b{color:var(--sun);font-weight:500}
+
+/* first-card affordance: makes the vertical story interaction discoverable */
+.swipe-cue{
+  position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));z-index:6;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:8px 16px;border:0;background:rgba(4,23,31,.46);color:var(--foam);
+  border-radius:999px;font-family:var(--mono);font-size:9px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;cursor:pointer;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:opacity 220ms ease,transform 220ms ease;
+}
+.swipe-cue span{display:block;color:var(--sun);font-size:17px;line-height:.65;animation:swipeCue 1.45s ease-in-out infinite}
+.swipe-cue.is-hidden{opacity:0;transform:translate(-50%,10px);pointer-events:none}
+@keyframes swipeCue{0%,100%{transform:translateY(-2px);opacity:.55}50%{transform:translateY(3px);opacity:1}}
+
+/* tick rail */
+.rail{
+  position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:5;
+  display:flex;flex-direction:column;gap:7px;
+}
+.rail button{
+  width:22px;height:9px;padding:0;border:0;background:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:flex-end;
+}
+.rail button::after{
+  content:"";display:block;height:1px;width:9px;
+  background:var(--mist);opacity:.45;
+  transition:width 260ms ease,opacity 260ms ease,background-color 260ms ease;
+}
+.rail button:hover::after{width:16px;opacity:.9}
+.rail button[aria-current="true"]::after{width:22px;opacity:1;background:var(--sun)}
+.rail button:focus-visible{outline:1px solid var(--sun);outline-offset:3px}
+
+@media(max-width:640px){
+  .rail{display:none}
+  .depth{font-size:9.5px;bottom:14px}
+  .swipe-cue{bottom:max(13px,env(safe-area-inset-bottom))}
+  .pts li{font-size:15px}
+}
+
+/* Roomier reader canvases should feel like full slides, not small cards floating
+   in the middle. Keep the compact rules above for short/narrow phones. */
+@media(min-width:480px) and (min-height:700px){
+  :root{--pad:clamp(28px,5.5vw,76px);--col:min(880px,100%)}
+  .card{padding:clamp(72px,9dvh,104px) var(--pad) clamp(58px,7dvh,84px)}
+  h2{font-size:clamp(48px,8vw,78px)}
+  h3{font-size:clamp(36px,5.8vw,52px)}
+  .eyebrow{font-size:12px;margin-bottom:clamp(24px,3.5dvh,38px)}
+  .lede{font-size:clamp(19px,2.6vw,23px);line-height:1.6}
+
+  .card:not(.card--cover):not(.card--co) .inner{
+    min-height:min(62dvh,590px);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+  }
+  .card:not(.card--cover):not(.card--co) .inner>.eyebrow,
+  .card:not(.card--cover):not(.card--co) .inner>.lede,
+  .card:not(.card--cover):not(.card--co) .inner>.words,
+  .card:not(.card--cover):not(.card--co) .inner>.words-foot,
+  .card:not(.card--cover):not(.card--co) .inner>.strata,
+  .card:not(.card--cover):not(.card--co) .inner>.index-foot,
+  .card:not(.card--cover):not(.card--co) .inner>.count{margin-top:0;margin-bottom:0}
+
+  .card--co .inner{
+    min-height:min(68dvh,650px);
+    display:grid;
+    grid-template-rows:auto auto auto auto;
+    align-content:space-between;
+    row-gap:clamp(24px,3.2dvh,38px);
+  }
+  .card--co .stats,.card--co .pts,.card--co .tags{margin-top:0}
+  .co-head{gap:22px}
+  .co-num{font-size:14px}
+  .stats{padding:clamp(20px,2.8dvh,30px) 0;gap:18px clamp(54px,9vw,92px)}
+  .stat-v{font-size:clamp(24px,3.8vw,32px)}
+  .stat-l{font-size:11px}
+  .pts{gap:clamp(15px,2dvh,22px)}
+  .pts li{font-size:clamp(17px,2.25vw,20px);line-height:1.58;padding-left:22px}
+  .tags{gap:clamp(16px,2.2dvh,24px)}
+  .tag{padding:clamp(15px,2dvh,21px) 0 clamp(15px,2dvh,21px) 18px}
+  .tag-l{font-size:11px;margin-bottom:9px}
+  .tag p{font-size:clamp(16px,2.1vw,19px);line-height:1.55}
+
+  .words{margin-top:clamp(48px,7dvh,72px);padding-top:clamp(30px,4dvh,44px)}
+  .word dd{font-size:19px}
+  .strata{margin-top:clamp(44px,6dvh,68px)}
+  .stratum{padding:clamp(24px,3.4dvh,34px) 0}
+  .job{font-size:13px}.who{font-size:19px}
+  .card--close .kicker{font-size:22px;margin-top:clamp(34px,5dvh,50px)}
+  .card--close .payoff{font-size:clamp(25px,3.8vw,34px);margin-top:clamp(34px,5dvh,50px);padding-top:clamp(28px,4dvh,40px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  .deck{scroll-behavior:auto}
+  .inner{opacity:1;transform:none}
+}
+
+/* one card per page when printed back out */
+@media print{
+  body{background:#04171F;overflow:visible}
+  .rail,.depth,.waterline,.sky{display:none}
+  .deck{height:auto;overflow:visible}
+  .card{min-height:auto;page-break-after:always;padding:40px}
+  .inner{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true"></div>
+<div class="waterline" aria-hidden="true"></div>
+
+<div class="depth" aria-hidden="true"><span id="depthLabel">Surface</span><b id="depthNum">01 / 15</b></div>
+
+<nav class="rail" id="rail" aria-label="Card navigation"></nav>
+
+<button class="swipe-cue" id="swipeCue" type="button" aria-label="Swipe or tap to continue">
+  Swipe to keep going <span aria-hidden="true">&#8595;</span>
+</button>
+
+<main class="deck" id="deck" tabindex="-1">
+
+  <!-- 1 cover -->
+  <section class="card card--cover" data-layer="surface" data-depth="Surface" data-title="Cover">
+    <div class="inner">
+      <p class="brand">The Daily Dividend</p>
+      <h1>Solar<br>Panels<br>On Water</h1>
+      <p class="stand">India is about to put 5,000 megawatts of solar panels on its lakes and dams.</p>
+      <div class="figurehead">
+        <b>&#8377;5,070 crore</b>
+        <span>approved by the government on 31 July 2026</span>
+      </div>
+      <p class="cover-foot">A watchlist &nbsp;&middot;&nbsp; Seven companies</p>
+    </div>
+  </section>
+
+  <!-- 2 read this first -->
+  <section class="card" data-layer="surface" data-depth="Surface" data-title="Read this first">
+    <div class="inner">
+      <p class="eyebrow">Read this first</p>
+      <h2>Nobody has won anything yet.</h2>
+      <p class="lede">Projects get handed out between now and 2031. A government body called SECI runs the process.</p>
+      <p class="lede">So this is not a list of winners. It is a list of companies that already do this kind of work.</p>
+    </div>
+  </section>
+
+  <!-- 3 two words -->
+  <section class="card" data-layer="surface" data-depth="Surface" data-title="Two words you need">
+    <div class="inner">
+      <p class="eyebrow">Two words you need</p>
+      <h3>Before any number makes sense.</h3>
+      <dl class="words">
+        <div class="word">
+          <dt>Revenue</dt>
+          <dd>Money that came in last year.</dd>
+        </div>
+        <div class="word">
+          <dt>Margin</dt>
+          <dd>Operating profit out of every &#8377;100 of sales.</dd>
+        </div>
+      </dl>
+      <p class="words-foot">A power plant and a factory will never look alike. Compare like with like.</p>
+    </div>
+  </section>
+
+  <!-- 4 the seven -->
+  <section class="card" data-layer="surface" data-depth="Surface" data-title="The seven, in three groups">
+    <div class="inner">
+      <p class="eyebrow">The seven, in three groups</p>
+      <h3>Every company here does one of three jobs.</h3>
+      <div class="strata">
+        <div class="stratum">
+          <span class="job">Who owns the water</span>
+          <span class="who">NHPC &middot; SJVN &middot; NTPC Green</span>
+        </div>
+        <div class="stratum">
+          <span class="job">Who builds on it</span>
+          <span class="who">Tata Power &middot; BHEL</span>
+        </div>
+        <div class="stratum">
+          <span class="job">Who makes the panels</span>
+          <span class="who">Waaree &middot; Saatvik</span>
+        </div>
+      </div>
+      <p class="index-foot">Thirty seconds each. Then one line on what could go wrong.</p>
+    </div>
+  </section>
+
+  <!-- 5 group one -->
+  <section class="card card--group" data-layer="deep" data-depth="Group one" data-title="Group one">
+    <div class="inner">
+      <p class="eyebrow">Group one</p>
+      <h2>Who owns the water</h2>
+      <p class="lede">Government companies that already control India's reservoirs.</p>
+      <p class="count">Three companies</p>
+    </div>
+  </section>
+
+  <!-- 6 NHPC -->
+  <section class="card card--co" data-layer="deep" data-depth="Group one" data-title="NHPC">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">01</span><h3>NHPC</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;11,615 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat"><span class="stat-v">~48%</span><span class="stat-l">Operating margin</span></div>
+      </div>
+      <ul class="pts">
+        <li>India's biggest hydro company. Runs 28 power stations.</li>
+        <li>Its arm NHDC owns the reservoir under India's largest floating solar park.</li>
+        <li>Started a 50 MW floating plant in Kerala in March 2026. Over &#8377;260 crore.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>You cannot float a panel without a lake. NHPC has the lakes.</p></div>
+        <div class="tag tag--catch"><span class="tag-l">The catch</span><p>Solar is still a small slice. This is a hydro company.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 SJVN -->
+  <section class="card card--co" data-layer="deep" data-depth="Group one" data-title="SJVN">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">02</span><h3>SJVN</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;4,528 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat"><span class="stat-v">Up 47%</span><span class="stat-l">In a year</span></div>
+      </div>
+      <ul class="pts">
+        <li>Government power company from Shimla. Hydro, solar, thermal.</li>
+        <li>Owns a 90 MW floating plant at Omkareshwar. Cost &#8377;646 crore.</li>
+        <li>Sells that power at &#8377;3.26 a unit on a 25 year contract.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>The only one here that already knows what a floating plant earns.</p></div>
+        <div class="tag tag--catch"><span class="tag-l">The catch</span><p>Debt is up to &#8377;32,207 crore. Growth is being borrowed.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 NTPC Green -->
+  <section class="card card--co" data-layer="deep" data-depth="Group one" data-title="NTPC Green">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">03</span><h3>NTPC Green</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;3,035 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat"><span class="stat-v">~92%</span><span class="stat-l">Operating margin</span></div>
+      </div>
+      <ul class="pts">
+        <li>The green arm of NTPC, India's biggest power producer.</li>
+        <li>Went from 5,902 MW to 10,076 MW of clean power in a single year.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>The NTPC group runs India's oldest floating plants.</p></div>
+        <div class="tag tag--catch"><span class="tag-l">The catch</span><p>Those plants sit in the parent company, not this one. This one is only now bidding for its first small floating project.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 group two -->
+  <section class="card card--group" data-layer="mid" data-depth="Group two" data-title="Group two">
+    <div class="inner">
+      <p class="eyebrow">Group two</p>
+      <h2>Who builds on it</h2>
+      <p class="lede">The two companies that have actually done it.</p>
+      <p class="count">Two companies</p>
+    </div>
+  </section>
+
+  <!-- 10 Tata Power -->
+  <section class="card card--co" data-layer="mid" data-depth="Group two" data-title="Tata Power">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">04</span><h3>Tata Power</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;62,429 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat"><span class="stat-v">~25%</span><span class="stat-l">Operating margin</span></div>
+      </div>
+      <ul class="pts">
+        <li>Electricity end to end. Makes it, moves it, sells it to your house.</li>
+        <li>Built India's two largest floating plants. 126 MW at Omkareshwar, 101 MW in Kerala.</li>
+        <li>Omkareshwar was a &#8377;596 crore government contract. 213,460 panels. 26 months.</li>
+        <li>Clean energy is now &#8377;15,028 crore of sales, up 52% in a year.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>The only one that can make the panel, build the plant and own it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 BHEL -->
+  <section class="card card--co" data-layer="mid" data-depth="Group two" data-title="BHEL">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">05</span><h3>BHEL</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;33,782 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat stat--text"><span class="stat-v">Thin margins, huge order book</span><span class="stat-l">The shape of it</span></div>
+      </div>
+      <ul class="pts">
+        <li>The old government engineering giant. Builds power plants for everyone else.</li>
+        <li>Built India's first big floating plant. 100 MW at Ramagundam, for &#8377;423 crore.</li>
+        <li>Order book of &#8377;2.2 lakh crore. Roughly seven years of work already booked.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>When the government needs something hard built on water, this is the default.</p></div>
+        <div class="tag tag--catch"><span class="tag-l">The catch</span><p>About &#8377;7 of operating profit per &#8377;100 of sales. Volume, not margin.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 group three -->
+  <section class="card card--group" data-layer="shallow" data-depth="Group three" data-title="Group three">
+    <div class="inner">
+      <p class="eyebrow">Group three</p>
+      <h2>Who makes the panels</h2>
+      <p class="lede">Floating or not, someone has to build the actual panel.</p>
+      <p class="count">Two companies</p>
+    </div>
+  </section>
+
+  <!-- 13 Waaree -->
+  <section class="card card--co" data-layer="shallow" data-depth="Group three" data-title="Waaree Energies">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">06</span><h3>Waaree Energies</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;26,537 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat"><span class="stat-v">22%</span><span class="stat-l">Operating margin</span></div>
+      </div>
+      <ul class="pts">
+        <li>The biggest solar panel maker in India. And the biggest outside China, anywhere.</li>
+        <li>Sales almost doubled last year. Order book of &#8377;53,000 crore.</li>
+        <li>Also building a battery factory. This scheme makes batteries compulsory.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>5,000 MW of panels have to come from somewhere.</p></div>
+        <div class="tag tag--catch"><span class="tag-l">The catch</span><p>Money is going out faster than it comes in. Watch the cash.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 Saatvik -->
+  <section class="card card--co" data-layer="shallow" data-depth="Group three" data-title="Saatvik Green">
+    <div class="inner">
+      <div class="co-head"><span class="co-num">07</span><h3>Saatvik Green</h3></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-v">&#8377;4,548 cr</span><span class="stat-l">Revenue</span></div>
+        <div class="stat"><span class="stat-v">~13%</span><span class="stat-l">Operating margin</span></div>
+      </div>
+      <ul class="pts">
+        <li>Smaller panel maker. Listed on the market only last year.</li>
+        <li>Sales more than doubled. Order book of about &#8377;8,000 crore.</li>
+        <li>Says it has supplied panels to floating projects before, and expects this scheme to drive growth.</li>
+      </ul>
+      <div class="tags">
+        <div class="tag tag--fit"><span class="tag-l">Why it fits</span><p>Panels, construction and batteries in one place. Exactly what this scheme pays for.</p></div>
+        <div class="tag tag--catch"><span class="tag-l">The catch</span><p>Smallest and newest here. Less history to judge it on.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 the one thing -->
+  <section class="card card--close" data-layer="sun" data-depth="Surface" data-title="The one thing to remember">
+    <div class="inner">
+      <p class="eyebrow">The one thing to remember</p>
+      <h2>The money only arrives at the end.</h2>
+      <p class="kicker">The government pays &#8377;1 crore per megawatt. But only after the plant is switched on and working.</p>
+      <p class="payoff">This is not a subsidy for promising. It is a payment for finishing. So watch who actually finishes.</p>
+    </div>
+  </section>
+
+  <!-- 16 outro -->
+  <section class="card card--outro" data-layer="sun" data-depth="Surface" data-title="The Daily Dividend">
+    <div class="inner">
+      <p class="eyebrow plain">The Daily Dividend</p>
+      <h3>For more stories behind the stocks you actually want to understand.</h3>
+      <p class="handle">@dailydividend.official</p>
+      <p class="disclaimer">Not investment advice. For educational purposes only. These are companies with existing exposure to this theme, not recommendations. Figures are from company results for the year ended March 2026, and are subject to change. Do your own research before making any financial decision.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var deck  = document.getElementById('deck');
+  var cards = Array.prototype.slice.call(deck.querySelectorAll('.card'));
+  var rail  = document.getElementById('rail');
+  var dLabel= document.getElementById('depthLabel');
+  var dNum  = document.getElementById('depthNum');
+  var swipeCue = document.getElementById('swipeCue');
+  var root  = document.documentElement;
+  var active = -1;
+
+  function pad(n){ return (n<10?'0':'')+n; }
+
+  cards.forEach(function(card,i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', card.dataset.title);
+    b.addEventListener('click', function(){ go(i); });
+    rail.appendChild(b);
+  });
+  var ticks = Array.prototype.slice.call(rail.children);
+
+  function paint(i){
+    if(i === active) return;
+    active = i;
+    var card = cards[i];
+    root.dataset.layer = card.dataset.layer;
+    dLabel.textContent = card.dataset.depth;
+    dNum.textContent = pad(i+1) + ' / ' + pad(cards.length);
+    swipeCue.classList.toggle('is-hidden', i !== 0);
+    ticks.forEach(function(t,n){ t.setAttribute('aria-current', n===i ? 'true' : 'false'); });
+  }
+
+  function go(i){
+    i = Math.max(0, Math.min(cards.length-1, i));
+    cards[i].scrollIntoView({block:'start'});
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        if(e.intersectionRatio > 0.55) paint(cards.indexOf(e.target));
+      }
+    });
+  }, {root:deck, threshold:[0.25,0.6]});
+  cards.forEach(function(c){ io.observe(c); });
+
+  cards[0].classList.add('on');
+  paint(0);
+  swipeCue.addEventListener('click', function(){ go(1); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if(k==='ArrowDown' || k==='ArrowRight' || k==='PageDown' || k===' '){ e.preventDefault(); go(active+1); }
+    else if(k==='ArrowUp' || k==='ArrowLeft' || k==='PageUp'){ e.preventDefault(); go(active-1); }
+    else if(k==='Home'){ e.preventDefault(); go(0); }
+    else if(k==='End'){ e.preventDefault(); go(cards.length-1); }
+  });
+})();
+</script>
+</body>
+</html>
