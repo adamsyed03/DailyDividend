@@ -2816,7 +2816,16 @@ function setTheme(co){
 }
 
 /* NAV */
-function goTo(n){
+function detailPath(kind,slug){return `/${kind}/${encodeURIComponent(slug)}`;}
+function setAppUrl(path,replace=false){
+ if(location.pathname===path)return;
+ history[replace?'replaceState':'pushState']({ddPath:path},'',path);
+}
+function routeFromLocation(){
+ const m=location.pathname.match(/^\/(companies|rabbit-holes)\/([^/]+)\/?$/);
+ return m?{kind:m[1],slug:decodeURIComponent(m[2])}:null;
+}
+function goTo(n,preserveUrl=false){
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
  document.getElementById('screen-'+n).classList.add('active');
  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
@@ -2824,6 +2833,7 @@ function goTo(n){
  if(n==='today')renderToday();
  if(n==='library')renderLib();
  if(n==='you')renderShelf();
+ if(!preserveUrl&&n!=='stack')setAppUrl('/');
 }
 
 function twparse(el){if(typeof twemoji!=='undefined')twemoji.parse(el||document.body,{folder:'svg',ext:'.svg'});}
@@ -2888,7 +2898,7 @@ ${snips.map(s=>`
 </div>`).join('')}`;
  twparse(document.getElementById('todayScroll'));
 }
-async function openStack(slug,source='today'){
+async function openStack(slug,source='today',routeMode='push'){
  if(!CO[slug]||CO[slug].disabled){slug=curCo;}
  trackPostHogEvent('company_opened',{company_id:slug,source});
  trackMetaViewContent(slug,source);
@@ -2899,7 +2909,8 @@ async function openStack(slug,source='today'){
  document.getElementById('cologo').style.color=c.lc;
  document.getElementById('coname').textContent=c.n;
  document.getElementById('cosub').textContent=c.t+' - '+c.sec;
- renderCards();buildProg();showCard(0);renderTldr();goTo('stack');
+ renderCards();buildProg();showCard(0);renderTldr();goTo('stack',true);
+ setAppUrl(detailPath('companies',slug),routeMode==='replace');
  api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})})
  .then(data=>{profileState=data;syncSavedFromProfile();syncCallsFromProfile();updProg();})
  .catch(e=>showToast(e.message));
@@ -3504,7 +3515,7 @@ function rhBodyHtml(){
   +(rest.length?`<div class="rbh-sect">More rabbit holes</div><div class="rbh-list">${rest.map(rhCardHtml).join('')}</div>`:'')
   +`<div class="rbh-foot">New rabbit holes land every few weeks</div>`;
 }
-function openRabbitHole(k){
+function openRabbitHole(k,routeMode='push'){
  const r=RH.find(x=>x.k===k);if(!r)return;
  if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
  const ov=document.getElementById('coOverlay');if(!ov)return;
@@ -3514,6 +3525,7 @@ function openRabbitHole(k){
  document.getElementById('coOvName').textContent=r.title;
  document.getElementById('coOvFrame').src=r.url;
  ov.style.display='flex';
+ setAppUrl(detailPath('rabbit-holes',k),routeMode==='replace');
  updateRabbitHoleSave();
  trackPostHogEvent('rabbit_hole_opened',{rabbit_hole_id:k});
 }
@@ -3605,7 +3617,7 @@ function onSearch(){
 }
 
 /* DB COMPANY OVERLAY */
-function openDbCompany(companyId){
+function openDbCompany(companyId,routeMode='push'){
  currentDbCo=companyId;
  currentRabbitHole=null;
  const co=dbCos.find(c=>c.companyId===companyId);
@@ -3615,19 +3627,21 @@ function openDbCompany(companyId){
  const ov=document.getElementById('coOverlay');
  ov.classList.remove('rbh-reading');
  ov.style.display='flex';
+ setAppUrl(detailPath('companies',companyId),routeMode==='replace');
  updateCoOvSave();
  updateCoOvVoteBtns();
  api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId,source:'library',readDate:localReadDateKey()})})
   .then(data=>{profileState=data;syncSavedFromProfile();syncCallsFromProfile();updateCoOvSave();})
   .catch(e=>console.warn(e));
 }
-function closeCoOverlay(){
+function closeCoOverlay(preserveUrl=false){
  const ov=document.getElementById('coOverlay');
  ov.style.display='none';
  ov.classList.remove('rbh-reading');
  document.getElementById('coOvFrame').src='';
  currentDbCo=null;
  currentRabbitHole=null;
+ if(!preserveUrl)setAppUrl('/');
 }
 function updateCoOvSave(){
  if(!currentDbCo)return;
@@ -3935,7 +3949,18 @@ function _releaseGate(){document.documentElement.classList.remove('auth-pending'
 function _clearStoredSession(){localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');}
 function _runDesktopInit(){const run=()=>{if(typeof dtInit==='function')dtInit();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else setTimeout(run,0);}
 function _refreshDesktopShell(){const run=()=>{if(typeof dtBuildTicker==='function')dtBuildTicker();if(typeof dtRenderToday==='function')dtRenderToday();};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else setTimeout(run,0);}
-function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else{renderToday();}if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function openCurrentRoute(routeMode='replace'){
+ const route=routeFromLocation();if(!route)return false;
+ if(route.kind==='rabbit-holes'){openRabbitHole(route.slug,routeMode);return true;}
+ if(CO[route.slug]&&!CO[route.slug].disabled){
+  if(IS_DESKTOP&&typeof dtOpenStack==='function')dtOpenStack(route.slug,'shared-url',routeMode);
+  else openStack(route.slug,'shared-url',routeMode);
+  return true;
+ }
+ if(dbCos.some(c=>c.companyId===route.slug)){openDbCompany(route.slug,routeMode);return true;}
+ return false;
+}
+function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else{renderToday();}openCurrentRoute('replace');if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
 function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');if(IS_DESKTOP){_runDesktopInit();}else{renderToday();}_secondary();}
 function _fullAuth(){ensureSession().then(_boot).catch(()=>{_releaseGate();_clearStoredSession();window.location.replace('onboarding.html');});}
 window.addEventListener('error',_releaseGate);
@@ -3943,6 +3968,14 @@ window.addEventListener('unhandledrejection',_releaseGate);
 setTimeout(()=>{if(!_booted)_releaseGate();},5000);
 if(_cuid&&_cu){try{profileState=JSON.parse(_cu)||{};userId=_cuid;syncSavedFromProfile();syncCallsFromProfile();_boot();ensureSession().catch(()=>{});}catch(e){_clearStoredSession();_fullAuth();}}else{_fullAuth();}
 })();
+
+window.addEventListener('popstate',()=>{
+ const route=routeFromLocation();
+ if(route){openCurrentRoute('replace');return;}
+ closeCoOverlay(true);
+ if(IS_DESKTOP&&typeof dtCloseStack==='function'){dtCloseStack(true);dtGoTo('today');}
+ else if(document.getElementById('screen-stack')?.classList.contains('active'))goTo('today',true);
+});
 
 /* ══════════════════════════════════════
    DESKTOP-ONLY CODE (IS_DESKTOP gate)
@@ -4046,7 +4079,7 @@ function dtRenderToday(){
   }
 }
 
-async function dtOpenStack(slug,source='today'){
+async function dtOpenStack(slug,source='today',routeMode='push'){
   if(!CO[slug]||CO[slug].disabled){slug=curCo;}
   trackMetaViewContent(slug,source);
   curCo=slug;dtCardIdx=0;setTheme(slug);
@@ -4056,6 +4089,7 @@ async function dtOpenStack(slug,source='today'){
   const sub=document.getElementById('dtCosub');if(sub)sub.textContent=(c.t||c.ticker||'')+' · '+(c.sec||'');
   dtRenderCards();dtBuildProg();dtShowCard(0);
   const ov=document.getElementById('dtReaderOverlay');if(ov)ov.classList.add('open');
+  setAppUrl(detailPath('companies',slug),routeMode==='replace');
   if(!IS_DESKTOP)document.body.style.overflow='hidden';
   const kh=document.getElementById('dtKbHint');if(kh){kh.classList.add('show');setTimeout(()=>kh.classList.remove('show'),3200);}
   api('/api/read',{method:'POST',body:JSON.stringify({userId,companyId:slug,source,readDate:localReadDateKey()})})
@@ -4066,12 +4100,13 @@ async function dtOpenStack(slug,source='today'){
   }).catch(e=>dtShowToast(e.message||'Daily Dividend could not save that yet'));
 }
 
-function dtCloseStack(){
+function dtCloseStack(preserveUrl=false){
   dtCloseTldr();
   const ov=document.getElementById('dtReaderOverlay');if(ov)ov.classList.remove('open');
   document.body.style.overflow='';
   const rb=document.getElementById('dtRdBody');if(rb)rb.innerHTML='<div class="rd-empty">Tap a card to see the full context here.</div>';
   const rt=document.getElementById('dtRdTldr');if(rt)rt.style.display='none';
+  if(!preserveUrl)setAppUrl('/');
 }
 
 function dtRenderCards(){
@@ -4571,8 +4606,8 @@ document.addEventListener('keydown',e=>{
 
 /* Override openStack for desktop */
 const _mbOpenStack=openStack;
-window.openStack=function(slug,source='today'){
-  if(IS_DESKTOP){dtOpenStack(slug,source);}else{_mbOpenStack(slug,source);}
+window.openStack=function(slug,source='today',routeMode='push'){
+  if(IS_DESKTOP){dtOpenStack(slug,source,routeMode);}else{_mbOpenStack(slug,source,routeMode);}
 };
 
 /* Desktop init */

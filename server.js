@@ -1701,6 +1701,11 @@ app.get('/admin', (req, res) => {
 // Serve root-level HTML files explicitly so edits to root are always live
 app.get('/', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/index.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+// Shareable app routes. The client reads the slug and opens the matching reader.
+app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], (req, res) => {
+  res.setHeader('Cache-Control', 'private, no-cache');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
