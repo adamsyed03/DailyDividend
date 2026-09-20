@@ -1,0 +1,13 @@
+{
+  "comment_replies": [
+    "Check your DMs — hope you enjoy!",
+    "Just sent it to your DMs — hope you enjoy!",
+    "Sent! Check your DMs.",
+    "It’s in your DMs — enjoy!",
+    "Check your inbox — just sent it!"
+  ],
+  "direct_message": {
+    "text": "YOUR STANDARDIZED DM MESSAGE",
+    "link": "https://example.com/your-resource-or-file.pdf"
+  }
+}

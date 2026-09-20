@@ -2,6 +2,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "instagram:login": "node instagram-dd-bot/bot.js --login-only",
     "supabase:push": "node scripts/push-local-db-to-supabase.js",
     "supabase:logos": "node scripts/setup-supabase-logos.js"
   },
@@ -11,6 +12,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
     "compression": "^1.8.1",
-    "express": "^4.18.3"
+    "express": "^4.18.3",
+    "playwright": "^1.63.0"
   }
 }

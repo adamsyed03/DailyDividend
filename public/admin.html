@@ -81,6 +81,25 @@
     .empty{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:8px;padding:14px;font-size:13px}
     .hidden{display:none!important}
 
+    /* -- Local Instagram automation ------------------ */
+    .ig-panel{border-color:#c9d9cf;background:linear-gradient(180deg,#fff 0%,#fbfdfb 100%)}
+    .ig-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:18px}
+    .ig-form{display:grid;gap:14px}
+    .ig-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .ig-checks{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .ig-checks label{display:flex;align-items:center;gap:7px;margin:0;text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}
+    .ig-checks input{width:auto}
+    .ig-replies{display:grid;gap:10px}
+    .ig-reply{border:1px solid var(--line);border-radius:9px;padding:12px;background:#faf8f3}
+    .ig-reply-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+    .ig-reply-title{font-weight:800;font-size:13px}
+    .ig-remove{background:transparent;color:var(--red);padding:4px 7px;font-size:12px}
+    .ig-status{border:1px solid var(--line);border-radius:9px;padding:14px;background:#fff;display:grid;gap:11px;align-content:start}
+    .ig-status-line{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .ig-note{font-size:12px;color:var(--muted);margin:0}
+    .ig-log{height:210px;overflow:auto;margin:0;padding:10px;border-radius:7px;background:#171716;color:#eee;font:11px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word}
+    .ig-locked{padding:10px;border-radius:7px;background:#fdf1d0;color:#6d5510;font-size:12px}
+
     /* -- Controls bar ------------------------------- */
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
     .ctrl-search{flex:1;min-width:200px;position:relative}
@@ -193,6 +212,7 @@
     @media(max-width:1100px){
       .grid{grid-template-columns:repeat(3,1fr)}
       .forms{grid-template-columns:1fr}
+      .ig-layout{grid-template-columns:1fr}
     }
     @media(max-width:700px){
       .grid{grid-template-columns:repeat(2,1fr)}
@@ -357,6 +377,93 @@
           <thead><tr><th>Rank</th><th>User</th><th>Streak</th><th>Reads</th><th>Last read</th></tr></thead>
           <tbody id="leaderboardBody"></tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- -- Company HTML files -- -->
+    <section class="panel ig-panel" aria-label="Instagram automation">
+      <div class="panel-head">
+        <div>
+          <h2>Instagram comment replies</h2>
+          <div class="sub">Runs only from this computer through a visible Google Chrome session. No Instagram or Meta API.</div>
+        </div>
+        <span class="badge badge-gray" id="igStatusBadge">Checking local bot...</span>
+      </div>
+
+      <div class="ig-layout">
+        <form id="instagramJobForm" class="ig-form">
+          <div>
+            <label for="igPostUrl">Instagram post or reel URL</label>
+            <input id="igPostUrl" type="url" required placeholder="https://www.instagram.com/p/...">
+          </div>
+          <div>
+            <label for="igTriggerComment">Comment to look for</label>
+            <input id="igTriggerComment" required maxlength="100" value="DD" placeholder="DD">
+          </div>
+          <div class="ig-checks">
+            <label><input id="igExactMatch" type="checkbox" checked> Match the whole comment only</label>
+            <label><input id="igCaseInsensitive" type="checkbox" checked> Ignore uppercase/lowercase</label>
+          </div>
+
+          <div>
+            <div class="panel-head" style="margin-bottom:8px">
+              <div>
+                <label style="margin:0">Rotating public comment replies</label>
+                <div class="sub">The bot posts one of these beneath the qualifying comment, then moves to the next variation.</div>
+              </div>
+              <button class="secondary" id="igAddReplyButton" type="button">Add reply</button>
+            </div>
+            <div id="igReplies" class="ig-replies"></div>
+          </div>
+
+          <div class="ig-reply">
+            <div class="ig-reply-title" style="margin-bottom:9px">Standardized direct message</div>
+            <div class="form-grid">
+              <div>
+                <label for="igDmText">DM message text</label>
+                <textarea id="igDmText" maxlength="2000" required placeholder="Thanks for commenting — here is the resource I promised..."></textarea>
+              </div>
+              <div>
+                <label for="igDmLink">Optional URL or public PDF link</label>
+                <input id="igDmLink" type="url" placeholder="https://example.com/guide.pdf">
+              </div>
+            </div>
+            <p class="ig-note" style="margin-top:8px">Every qualifying commenter receives this same DM once. The link is added after the message text.</p>
+          </div>
+
+          <div class="ig-row">
+            <div>
+              <label for="igPollInterval">Poll every (seconds)</label>
+              <input id="igPollInterval" type="number" min="60" max="3600" value="180">
+            </div>
+            <div>
+              <label for="igMaxHour">Maximum DMs per hour</label>
+              <input id="igMaxHour" type="number" min="1" max="50" value="10">
+            </div>
+          </div>
+          <div>
+            <label for="igMaxDay">Maximum DMs per day</label>
+            <input id="igMaxDay" type="number" min="1" max="200" value="30">
+          </div>
+
+          <div class="actions">
+            <button type="submit">Save settings</button>
+            <button class="secondary" id="igLoginButton" type="button">Open Instagram login</button>
+            <button class="secondary" id="igDryRunButton" type="button" disabled>Run dry scan</button>
+            <button id="igLiveButton" type="button" disabled>Start live replies</button>
+            <button class="danger" id="igStopButton" type="button" disabled>Stop</button>
+          </div>
+          <div id="igMessage" class="msg" role="status"></div>
+        </form>
+
+        <aside class="ig-status">
+          <div class="ig-status-line"><strong>Device status</strong><span id="igDeviceStatus">Checking...</span></div>
+          <div class="ig-status-line"><strong>Engine phase</strong><span id="igEnginePhase">-</span></div>
+          <div id="igPhaseNotice" class="ig-locked">Dry-run and live sending remain locked until login testing and Instagram DOM inspection are complete.</div>
+          <p class="ig-note">Sign in once in the Chrome window opened by this panel. It uses a dedicated local profile, so your password is never read or saved by the bot.</p>
+          <p class="ig-note">A local PDF file cannot be shared as a web link. Host it somewhere you control and paste its public HTTPS URL into the standardized DM.</p>
+          <pre id="igLog" class="ig-log" aria-label="Instagram bot log">No local bot events yet.</pre>
+        </aside>
       </div>
     </section>
 
@@ -535,6 +642,7 @@
     let latestUserDetail = null;
     let pendingHtmlFile = null;
     let activeSort = 'newest';
+    let instagramJobLoaded = false;
 
     const $ = id => document.getElementById(id);
     const escapeHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -567,6 +675,159 @@
       $('loginView').classList.toggle('hidden', loggedIn);
       $('dashboardView').classList.toggle('hidden', !loggedIn);
     }
+
+    // -- Local Instagram automation -----------------------------------
+
+    function updateReplyLabels() {
+      const rows = [...document.querySelectorAll('#igReplies .ig-reply')];
+      rows.forEach((row, index) => {
+        row.querySelector('.ig-reply-title').textContent = `Reply ${index + 1}`;
+        row.querySelector('.ig-remove').disabled = rows.length === 1;
+      });
+    }
+
+    function addInstagramReply(reply = '') {
+      const row = document.createElement('div');
+      row.className = 'ig-reply';
+      row.innerHTML = `
+        <div class="ig-reply-head">
+          <span class="ig-reply-title">Reply</span>
+          <button class="ig-remove" type="button">Remove</button>
+        </div>
+        <div class="form-grid">
+          <div>
+            <label>Public reply text</label>
+            <input class="ig-reply-text" maxlength="500" required placeholder="Check your DMs — hope you enjoy!">
+          </div>
+        </div>`;
+      row.querySelector('.ig-reply-text').value = reply || '';
+      row.querySelector('.ig-remove').addEventListener('click', () => {
+        row.remove();
+        updateReplyLabels();
+      });
+      $('igReplies').appendChild(row);
+      updateReplyLabels();
+    }
+
+    function populateInstagramJob(job) {
+      $('igPostUrl').value = job.postUrl || '';
+      $('igTriggerComment').value = job.triggerComment || 'DD';
+      $('igExactMatch').checked = job.exactMatch !== false;
+      $('igCaseInsensitive').checked = job.caseInsensitive !== false;
+      $('igPollInterval').value = job.pollIntervalSeconds || 180;
+      $('igMaxHour').value = job.maxDmsPerHour || 10;
+      $('igMaxDay').value = job.maxDmsPerDay || 30;
+      $('igDmText').value = (job.directMessage && job.directMessage.text) || '';
+      $('igDmLink').value = (job.directMessage && job.directMessage.link) || '';
+      $('igReplies').innerHTML = '';
+      const defaultReplies = [
+        'Check your DMs — hope you enjoy!',
+        'Just sent it to your DMs — hope you enjoy!',
+        'Sent! Check your DMs.',
+        'It’s in your DMs — enjoy!',
+        'Check your inbox — just sent it!'
+      ];
+      const savedReplies = job.commentReplies && job.commentReplies.length
+        ? job.commentReplies
+        : defaultReplies;
+      savedReplies.forEach(addInstagramReply);
+      instagramJobLoaded = true;
+    }
+
+    function readInstagramJob() {
+      return {
+        postUrl: $('igPostUrl').value.trim(),
+        triggerComment: $('igTriggerComment').value.trim(),
+        exactMatch: $('igExactMatch').checked,
+        caseInsensitive: $('igCaseInsensitive').checked,
+        commentReplies: [...document.querySelectorAll('#igReplies .ig-reply')]
+          .map(row => row.querySelector('.ig-reply-text').value.trim()),
+        directMessage: {
+          text: $('igDmText').value.trim(),
+          link: $('igDmLink').value.trim()
+        },
+        pollIntervalSeconds: Number($('igPollInterval').value),
+        maxDmsPerHour: Number($('igMaxHour').value),
+        maxDmsPerDay: Number($('igMaxDay').value)
+      };
+    }
+
+    function renderInstagramStatus(status) {
+      const running = Boolean(status.running);
+      $('igStatusBadge').className = `badge ${running ? 'badge-green' : 'badge-gray'}`;
+      $('igStatusBadge').textContent = running ? `Running: ${status.mode}` : 'Stopped';
+      $('igDeviceStatus').textContent = running ? 'Browser running' : 'Ready locally';
+      $('igEnginePhase').textContent = `Phase ${status.enginePhase || 1}`;
+      $('igLoginButton').disabled = running || !(status.capabilities && status.capabilities.login);
+      $('igDryRunButton').disabled = running || !(status.capabilities && status.capabilities.dryRun);
+      $('igLiveButton').disabled = running || !(status.capabilities && status.capabilities.live);
+      $('igStopButton').disabled = !running;
+      const logs = status.logs || [];
+      $('igLog').textContent = logs.length
+        ? logs.map(item => `[${new Date(item.at).toLocaleTimeString()}] ${item.message}`).join('\n')
+        : 'No local bot events yet.';
+      $('igLog').scrollTop = $('igLog').scrollHeight;
+      if (!instagramJobLoaded) populateInstagramJob(status.job || {});
+    }
+
+    async function loadInstagramBot() {
+      try {
+        const status = await api('/api/admin/instagram-bot/status');
+        renderInstagramStatus(status);
+      } catch (error) {
+        $('igStatusBadge').className = 'badge badge-amber';
+        $('igStatusBadge').textContent = 'Local bot unavailable';
+        $('igDeviceStatus').textContent = 'Open this admin page through localhost';
+        $('igLoginButton').disabled = true;
+        $('igDryRunButton').disabled = true;
+        $('igLiveButton').disabled = true;
+        $('igStopButton').disabled = true;
+        $('igLog').textContent = error.message;
+        if (!instagramJobLoaded) populateInstagramJob({});
+      }
+    }
+
+    async function startInstagramBot(mode) {
+      if (mode === 'live' && !confirm('LIVE MODE: Instagram DMs may be sent. Continue?')) return;
+      try {
+        const result = await api('/api/admin/instagram-bot/start', {
+          method: 'POST',
+          body: JSON.stringify({ mode })
+        });
+        showMessage('igMessage', result.message);
+        renderInstagramStatus(result.status);
+      } catch (error) {
+        showMessage('igMessage', error.message, 'error');
+        await loadInstagramBot();
+      }
+    }
+
+    $('igAddReplyButton').addEventListener('click', () => addInstagramReply());
+    $('instagramJobForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      try {
+        const result = await api('/api/admin/instagram-bot/job', {
+          method: 'PUT',
+          body: JSON.stringify(readInstagramJob())
+        });
+        populateInstagramJob(result.job);
+        showMessage('igMessage', result.message);
+      } catch (error) {
+        showMessage('igMessage', error.message, 'error');
+      }
+    });
+    $('igLoginButton').addEventListener('click', () => startInstagramBot('login'));
+    $('igDryRunButton').addEventListener('click', () => startInstagramBot('dry-run'));
+    $('igLiveButton').addEventListener('click', () => startInstagramBot('live'));
+    $('igStopButton').addEventListener('click', async () => {
+      try {
+        const result = await api('/api/admin/instagram-bot/stop', { method: 'POST', body: '{}' });
+        showMessage('igMessage', result.message);
+        renderInstagramStatus(result.status);
+      } catch (error) {
+        showMessage('igMessage', error.message, 'error');
+      }
+    });
 
     // -- Search / filter / sort -----------------------------------------
 
@@ -1008,6 +1269,7 @@
       latestData = await api('/api/admin/summary');
       renderDashboard(latestData);
       setView(true);
+      loadInstagramBot();
     }
 
     async function deleteUser(userId) {
@@ -1204,6 +1466,9 @@
     } else {
       setView(false);
     }
+    setInterval(() => {
+      if (adminToken && !$('dashboardView').classList.contains('hidden')) loadInstagramBot();
+    }, 4000);
   </script>
 </body>
 </html>

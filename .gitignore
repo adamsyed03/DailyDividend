@@ -3,3 +3,11 @@ dev.*.log
 data/users.json
 .env
 public/assets/logos/*.png
+
+# Instagram DD bot: local session, runtime data, logs, and local configuration
+instagram-dd-bot/browser-profile/
+instagram-dd-bot/data/*.db
+instagram-dd-bot/data/*.db-*
+instagram-dd-bot/data/*.json
+instagram-dd-bot/logs/
+instagram-dd-bot/config.json

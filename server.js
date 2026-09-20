@@ -5,6 +5,7 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 const { createClient } = require('@supabase/supabase-js');
+const { createInstagramBotController } = require('./instagram-dd-bot/control');
 
 loadEnv();
 
@@ -59,6 +60,7 @@ let dbCacheExpiresAt = 0;
 let dbReadPromise = null;
 const logoMemoryCache = new Map();
 let priceRefreshPromise = null;
+const instagramBot = createInstagramBotController();
 
 app.use(compression());
 app.use(express.json({ limit: '8mb' }));
@@ -1009,6 +1011,17 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+function requireLocalDevice(req, res, next) {
+  const address = String(req.socket.remoteAddress || '').toLowerCase();
+  const isLoopback = address === '127.0.0.1' || address === '::1' || address === '::ffff:127.0.0.1';
+  if (!isLoopback) {
+    return res.status(403).json({
+      error: 'Instagram browser control is available only from the Daily Dividend server running on this device.'
+    });
+  }
+  next();
+}
+
 app.post('/api/session', async (req, res, next) => {
   try {
     const db = await readDb();
@@ -1694,6 +1707,46 @@ app.get('/api/admin/export', requireAdmin, async (req, res, next) => {
   }
 });
 
+app.get('/api/admin/instagram-bot/status', requireAdmin, requireLocalDevice, async (req, res, next) => {
+  try {
+    res.json(await instagramBot.status());
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put('/api/admin/instagram-bot/job', requireAdmin, requireLocalDevice, async (req, res, next) => {
+  try {
+    const job = await instagramBot.saveJob(req.body);
+    res.json({ message: 'Instagram automation settings saved on this device.', job });
+  } catch (error) {
+    if (/^(Enter|Add|Public|Use|The post URL|The standardized|Polling|Hourly|Daily|Instagram bot settings)/.test(error.message)) {
+      return res.status(400).json({ error: error.message });
+    }
+    next(error);
+  }
+});
+
+app.post('/api/admin/instagram-bot/start', requireAdmin, requireLocalDevice, async (req, res, next) => {
+  try {
+    const status = await instagramBot.start(String(req.body.mode || ''));
+    res.json({ message: 'Instagram login browser started on this device.', status });
+  } catch (error) {
+    if (/^(Playwright|The Instagram browser|Dry-run)/.test(error.message)) {
+      return res.status(409).json({ error: error.message });
+    }
+    next(error);
+  }
+});
+
+app.post('/api/admin/instagram-bot/stop', requireAdmin, requireLocalDevice, async (req, res, next) => {
+  try {
+    res.json({ message: 'Stop requested.', status: await instagramBot.stop() });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
@@ -1803,8 +1856,8 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong. Please try again.' });
 });
 
-process.on('SIGTERM', async () => { await analytics.shutdown(); process.exit(0); });
-process.on('SIGINT', async () => { await analytics.shutdown(); process.exit(0); });
+process.on('SIGTERM', async () => { instagramBot.shutdown(); await analytics.shutdown(); process.exit(0); });
+process.on('SIGINT', async () => { instagramBot.shutdown(); await analytics.shutdown(); process.exit(0); });
 
 app.listen(PORT, () => {
   console.log(`Daily Dividend running at http://localhost:${PORT}`);
