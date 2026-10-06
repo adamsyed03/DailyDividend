@@ -1732,7 +1732,7 @@ app.post('/api/admin/instagram-bot/start', requireAdmin, requireLocalDevice, asy
     const status = await instagramBot.start(String(req.body.mode || ''));
     res.json({ message: 'Instagram login browser started on this device.', status });
   } catch (error) {
-    if (/^(Playwright|The Instagram browser|Dry-run)/.test(error.message)) {
+    if (/^(Playwright|The Instagram browser|Live sending)/.test(error.message)) {
       return res.status(409).json({ error: error.message });
     }
     next(error);

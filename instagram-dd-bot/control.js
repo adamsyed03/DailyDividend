@@ -125,8 +125,8 @@ function createInstagramBotController() {
   async function status() {
     return {
       ...state,
-      enginePhase: 1,
-      capabilities: { login: true, dryRun: false, live: false },
+      enginePhase: 5,
+      capabilities: { login: true, dryRun: true, dmPreview: true, live: true },
       job: await readJob()
     };
   }
@@ -140,9 +140,7 @@ function createInstagramBotController() {
   }
 
   async function start(mode) {
-    if (mode !== 'login') {
-      throw new Error('Dry-run scanning and live sending stay locked until Phase 1 login testing is complete.');
-    }
+    if (!['login', 'dry-run', 'dm-preview', 'live'].includes(mode)) throw new Error('Unknown Instagram bot mode.');
     if (state.running || child) throw new Error('The Instagram browser is already running.');
 
     const playwrightPackage = path.join(BOT_DIR, '..', 'node_modules', 'playwright', 'package.json');
@@ -150,14 +148,23 @@ function createInstagramBotController() {
       throw new Error('Playwright is not installed. Run npm install once from the Daily Dividend folder.');
     }
 
-    const args = [path.join(BOT_DIR, 'bot.js'), '--login-only'];
+    const modeArgument = mode === 'dry-run'
+      ? '--dry-run'
+      : mode === 'dm-preview' ? '--dm-preview' : mode === 'live' ? '--live' : '--login-only';
+    const args = [path.join(BOT_DIR, 'bot.js'), modeArgument];
     state.running = true;
     state.mode = mode;
     state.startedAt = new Date().toISOString();
     state.stoppedAt = null;
     state.exitCode = null;
     state.lastError = null;
-    addLog('control', 'Starting the local Instagram login browser.');
+    addLog('control', mode === 'dry-run'
+      ? 'Starting a read-only Instagram comment scan.'
+      : mode === 'dm-preview'
+        ? 'Starting a non-sending DM conversation preview.'
+        : mode === 'live'
+          ? 'LIVE MODE: Instagram public replies and DMs may be sent.'
+          : 'Starting the local Instagram login browser.');
 
     child = spawn(process.execPath, args, {
       cwd: BOT_DIR,

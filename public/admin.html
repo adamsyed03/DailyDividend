@@ -450,6 +450,7 @@
             <button type="submit">Save settings</button>
             <button class="secondary" id="igLoginButton" type="button">Open Instagram login</button>
             <button class="secondary" id="igDryRunButton" type="button" disabled>Run dry scan</button>
+            <button class="secondary" id="igPreviewDmButton" type="button" disabled>Test DM opening</button>
             <button id="igLiveButton" type="button" disabled>Start live replies</button>
             <button class="danger" id="igStopButton" type="button" disabled>Stop</button>
           </div>
@@ -459,7 +460,7 @@
         <aside class="ig-status">
           <div class="ig-status-line"><strong>Device status</strong><span id="igDeviceStatus">Checking...</span></div>
           <div class="ig-status-line"><strong>Engine phase</strong><span id="igEnginePhase">-</span></div>
-          <div id="igPhaseNotice" class="ig-locked">Dry-run and live sending remain locked until login testing and Instagram DOM inspection are complete.</div>
+          <div id="igPhaseNotice" class="ig-locked">Dry-run reads comments only. Live replies and DMs remain locked until detection is verified.</div>
           <p class="ig-note">Sign in once in the Chrome window opened by this panel. It uses a dedicated local profile, so your password is never read or saved by the bot.</p>
           <p class="ig-note">A local PDF file cannot be shared as a web link. Host it somewhere you control and paste its public HTTPS URL into the standardized DM.</p>
           <pre id="igLog" class="ig-log" aria-label="Instagram bot log">No local bot events yet.</pre>
@@ -760,8 +761,14 @@
       $('igEnginePhase').textContent = `Phase ${status.enginePhase || 1}`;
       $('igLoginButton').disabled = running || !(status.capabilities && status.capabilities.login);
       $('igDryRunButton').disabled = running || !(status.capabilities && status.capabilities.dryRun);
+      $('igPreviewDmButton').disabled = running || !(status.capabilities && status.capabilities.dmPreview);
       $('igLiveButton').disabled = running || !(status.capabilities && status.capabilities.live);
       $('igStopButton').disabled = !running;
+      $('igPhaseNotice').textContent = status.capabilities && status.capabilities.live
+        ? 'Live mode is enabled. It requires confirmation and may post one public reply plus one DM per new qualifying comment.'
+        : status.capabilities && status.capabilities.dryRun
+          ? 'Dry-run reads comments only. Live replies and DMs remain locked until detection is verified.'
+          : 'Dry-run and live sending remain locked until login testing and Instagram DOM inspection are complete.';
       const logs = status.logs || [];
       $('igLog').textContent = logs.length
         ? logs.map(item => `[${new Date(item.at).toLocaleTimeString()}] ${item.message}`).join('\n')
@@ -780,6 +787,7 @@
         $('igDeviceStatus').textContent = 'Open this admin page through localhost';
         $('igLoginButton').disabled = true;
         $('igDryRunButton').disabled = true;
+        $('igPreviewDmButton').disabled = true;
         $('igLiveButton').disabled = true;
         $('igStopButton').disabled = true;
         $('igLog').textContent = error.message;
@@ -818,6 +826,7 @@
     });
     $('igLoginButton').addEventListener('click', () => startInstagramBot('login'));
     $('igDryRunButton').addEventListener('click', () => startInstagramBot('dry-run'));
+    $('igPreviewDmButton').addEventListener('click', () => startInstagramBot('dm-preview'));
     $('igLiveButton').addEventListener('click', () => startInstagramBot('live'));
     $('igStopButton').addEventListener('click', async () => {
       try {

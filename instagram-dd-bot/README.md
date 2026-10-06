@@ -6,10 +6,11 @@ the Instagram API, Meta Graph API, or any external automation API.
 
 ## Current status
 
-Phase 1 is implemented: persistent Chrome startup and manual Instagram login.
-There is currently **no comment scanning, public replying, or DM sending**. Those
-controls remain locked until the saved login is tested and Instagram's current
-comment DOM is inspected.
+Phases 1–4 are verified: persistent Chrome login, read-only comment scanning,
+exact matching, SQLite duplicate tracking, and non-sending Reply/DM composer
+checks. Phase 5 live sending is implemented as a single pass and requires an
+explicit confirmation in the admin dashboard. Continuous polling remains locked
+until that first controlled live workflow succeeds.
 
 The admin panel already stores the intended job:
 
@@ -19,10 +20,12 @@ The admin panel already stores the intended job:
 - One standardized DM with an optional HTTPS webpage or public PDF link.
 - Polling and hourly/daily safety limits.
 
-The eventual workflow for each new qualifying comment is one rotating public
-reply followed by one standardized DM. Duplicate tracking will record the two
-actions independently so a successful action is never repeated after a partial
-failure.
+The live workflow collapses matching comments to unique Instagram accounts for
+the linked post. An account already completed on that same post is skipped, but
+an interaction recorded for another post never suppresses the new workflow. For
+each eligible account it posts one rotating public reply and then sends one
+standardized DM. The two actions are recorded independently so a successful
+action is never repeated after a partial failure.
 
 ## Run from the terminal
 
@@ -43,6 +46,22 @@ press `Ctrl+C` to close Chrome safely.
 
 Run `npm run instagram:login` a second time. If Instagram opens already signed
 in, the persistent-session test passed.
+
+Run a read-only scan of the post saved through the admin dashboard with:
+
+```powershell
+npm run instagram:dry-run
+```
+
+The dry run may expand comment sections and read visible comment rows. It does
+not click Reply, open a conversation, post a comment, or send a DM. Its local DOM
+inspection report is written to `logs/last-dom-inspection.json`.
+
+Live mode can be launched from the admin dashboard after reviewing the dry-run
+log. It prints a prominent warning and performs at most one public reply and one
+standardized DM for each new qualifying comment. SQLite status and hourly/daily
+limits are checked before anything is posted. Failed or uncertain attempts are
+not retried automatically.
 
 ## Use through the admin dashboard
 
@@ -85,10 +104,12 @@ does not solve or bypass Instagram security mechanisms.
 
 ## Planned phases
 
-1. Persistent Chrome session and manual login (current phase).
+1. Persistent Chrome session and manual login (complete).
 2. Inspect one real post/reel and read comments/usernames using current semantic
-   DOM selectors.
-3. Exact trigger matching, SQLite duplicate tracking, and dry-run recording.
-4. Open the commenter's profile/conversation without sending.
-5. Rotating public replies, one standardized DM, and explicit live sending.
+   DOM selectors (complete).
+3. Exact trigger matching, SQLite duplicate tracking, and dry-run recording
+   (complete).
+4. Open the commenter's Reply and DM composers without sending (complete).
+5. Rotating public replies, one standardized DM, and explicit live sending
+   (implemented; controlled live sending verified).
 6. Conservative polling, limits, file logging, and resilience.
