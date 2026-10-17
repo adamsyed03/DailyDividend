@@ -156,22 +156,9 @@ class ProcessedCommentDatabase {
     const handledPostAccount = this.firstRow(`
       SELECT * FROM processed_comments
       WHERE post_key = ? AND LOWER(username) = LOWER(?)
-        AND (dm_status = 'SENT' OR status = 'SKIPPED')
+        AND dm_status = 'SENT'
       ORDER BY id DESC LIMIT 1
     `, [currentPostKey, comment.username]);
-    if (handledPostAccount) {
-      return { eligible: false, reason: 'POST_ACCOUNT_ALREADY_REPLIED', record: handledPostAccount };
-    }
-
-    const partialPostAccount = this.firstRow(`
-      SELECT * FROM processed_comments
-      WHERE post_key = ? AND LOWER(username) = LOWER(?)
-        AND public_reply_status = 'SENT' AND dm_status = 'DETECTED'
-      ORDER BY id DESC LIMIT 1
-    `, [currentPostKey, comment.username]);
-    if (partialPostAccount) {
-      return { eligible: true, resumeDmOnly: true, record: partialPostAccount };
-    }
 
     this.database.run(`
       INSERT OR IGNORE INTO processed_comments (
@@ -199,7 +186,7 @@ class ProcessedCommentDatabase {
     `, [publicReply, dmMessage, now, record.id]);
     this.persist();
     record = this.firstRow('SELECT * FROM processed_comments WHERE id = ?', [record.id]);
-    return { eligible: true, record };
+    return { eligible: true, dmAlreadySent: Boolean(handledPostAccount), record };
   }
 
   countSentDmsSince(isoTimestamp) {
@@ -264,6 +251,16 @@ class ProcessedCommentDatabase {
       SET dm_status = 'SENT', dm_sent_at = ?, status = 'SENT', error_message = NULL, updated_at = ?
       WHERE id = ?
     `, [now, now, id]);
+    this.persist();
+  }
+
+  markDmNotRequired(id) {
+    const now = new Date().toISOString();
+    this.database.run(`
+      UPDATE processed_comments
+      SET dm_status = 'SKIPPED', status = 'SENT', error_message = NULL, updated_at = ?
+      WHERE id = ?
+    `, [now, id]);
     this.persist();
   }
 

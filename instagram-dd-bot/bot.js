@@ -63,56 +63,78 @@ async function main() {
       const database = await ProcessedCommentDatabase.open();
       try {
         if (live) {
-          let sentCount = 0;
+          let completedCount = 0;
+          let publicReplySentCount = 0;
+          let dmSentCount = 0;
           let skippedCount = 0;
           let failedCount = 0;
           let commentsPageReady = true;
-          const uniqueAccounts = [];
-          const usernames = new Set();
-          for (const comment of result.matches) {
-            const usernameKey = comment.username.toLowerCase();
-            if (usernames.has(usernameKey)) continue;
-            usernames.add(usernameKey);
-            uniqueAccounts.push(comment);
-          }
-          log('INFO', `Post-level account queue: ${uniqueAccounts.length} unique commenter(s) from ${result.matches.length} matching comment(s).`);
+          const uniqueAccountCount = new Set(result.matches.map(comment => comment.username.toLowerCase())).size;
+          log('INFO', `Comment-level reply queue: ${result.matches.length} matching comment(s) from ${uniqueAccountCount} unique account(s).`);
 
-          for (const comment of uniqueAccounts) {
+          for (const comment of result.matches) {
             const publicReply = job.commentReplies[database.getRotationIndex() % job.commentReplies.length];
             const prepared = database.prepareLive(comment, job, publicReply);
             if (!prepared.eligible) {
               skippedCount += 1;
-              log('INFO', `SKIPPED ACCOUNT: @${comment.username} is already ${prepared.reason}.`);
+              log('INFO', `SKIPPED COMMENT: @${comment.username}'s matching comment is already ${prepared.reason}.`);
               continue;
             }
 
-            const limit = sendingLimit(database, job);
-            if (limit) {
-              log('WARNING', `${limit} Comment remains DETECTED for a later run.`);
-              break;
-            }
-
             let stage = prepared.record.public_reply_status === 'SENT' ? 'dm' : 'public_reply';
+            let existingPublicReply = false;
             try {
               const dmMessage = [job.directMessage.text, job.directMessage.link].filter(Boolean).join('\n');
-              database.markSending(prepared.record.id);
               if (prepared.record.public_reply_status !== 'SENT') {
                 if (!commentsPageReady) {
-                  log('INFO', 'Returning to the configured reel before processing the next commenter.');
+                  log('INFO', 'Returning to the configured reel before processing the next comment.');
+                  await browser.openPostComments(job.postUrl);
+                  commentsPageReady = true;
+                }
+                existingPublicReply = await browser.hasExistingPublicReply(comment);
+                if (existingPublicReply) {
+                  database.confirmPublicReplySent(prepared.record.id);
+                  stage = 'dm';
+                  log('INFO', `SKIPPED PUBLIC REPLY: @ruchivgala has already replied to @${comment.username}'s comment.`);
+                }
+              }
+
+              if (!prepared.dmAlreadySent) {
+                const limit = sendingLimit(database, job);
+                if (limit) {
+                  log('WARNING', `${limit} Comment remains DETECTED for a later run.`);
+                  break;
+                }
+              }
+
+              database.markSending(prepared.record.id);
+              if (prepared.record.public_reply_status !== 'SENT' && !existingPublicReply) {
+                if (!commentsPageReady) {
+                  log('INFO', 'Returning to the configured reel before processing the next comment.');
                   await browser.openPostComments(job.postUrl);
                   commentsPageReady = true;
                 }
                 await browser.sendPublicReply(comment, publicReply);
                 database.markPublicReplySent(prepared.record.id);
+                publicReplySentCount += 1;
               } else {
                 log('INFO', `RESUME: @${comment.username}'s public reply is already SENT; it will not be posted again.`);
               }
               stage = 'dm';
+              if (prepared.dmAlreadySent) {
+                database.markDmNotRequired(prepared.record.id);
+                completedCount += 1;
+                log('INFO', `SENT: public reply handled for @${comment.username}; DM skipped because this account already received one for this post.`);
+                continue;
+              }
               await browser.sendDirectMessage(comment, dmMessage);
               commentsPageReady = false;
               database.markDmSent(prepared.record.id);
-              sentCount += 1;
-              log('INFO', `SENT: one public reply and one standardized DM for @${comment.username}.`);
+              dmSentCount += 1;
+              completedCount += 1;
+              log('INFO', existingPublicReply
+                ? `SENT: standardized DM for @${comment.username}; existing @ruchivgala public reply was preserved.`
+                : `SENT: one public reply and one standardized DM for @${comment.username}.`);
             } catch (error) {
               failedCount += 1;
               database.markFailed(prepared.record.id, stage, error.message);
@@ -124,12 +146,13 @@ async function main() {
               }
             }
           }
-          log('INFO', `Live pass complete: ${result.matches.length} matching comment(s), ${uniqueAccounts.length} unique account(s); ${sentCount} sent, ${skippedCount} skipped, ${failedCount} failed.`);
+          log('INFO', `Live pass complete: ${result.matches.length} matching comment(s), ${uniqueAccountCount} unique account(s); ${publicReplySentCount} public reply/replies and ${dmSentCount} DM(s) sent, ${completedCount} comment(s) completed, ${skippedCount} skipped, ${failedCount} failed.`);
           return;
         }
 
         const rotationIndex = database.getRotationIndex();
         let newMatchCount = 0;
+        const dryRunDmAccounts = new Set();
         for (const comment of result.matches) {
           const publicReply = job.commentReplies[(rotationIndex + newMatchCount) % job.commentReplies.length];
           const stored = database.recordDryRun(comment, job, publicReply);
@@ -141,7 +164,13 @@ async function main() {
           const dm = [job.directMessage.text, job.directMessage.link].filter(Boolean).join(' ');
           log('INFO', `NEW MATCH: @${comment.username} wrote "${comment.text}"; recorded in SQLite.`);
           log('INFO', `DRY RUN ONLY: would publicly reply "${publicReply}".`);
-          log('INFO', `DRY RUN ONLY: would send standardized DM "${dm}".`);
+          const usernameKey = comment.username.toLowerCase();
+          if (!dryRunDmAccounts.has(usernameKey)) {
+            dryRunDmAccounts.add(usernameKey);
+            log('INFO', `DRY RUN ONLY: would send standardized DM "${dm}".`);
+          } else {
+            log('INFO', `DRY RUN ONLY: would not send another DM to @${comment.username} for this post.`);
+          }
         }
         log('INFO', `SQLite dry-run complete: ${newMatchCount} new, ${result.matches.length - newMatchCount} already recorded.`);
       } finally {

@@ -765,7 +765,7 @@
       $('igLiveButton').disabled = running || !(status.capabilities && status.capabilities.live);
       $('igStopButton').disabled = !running;
       $('igPhaseNotice').textContent = status.capabilities && status.capabilities.live
-        ? 'Live mode is enabled. It requires confirmation and may post one public reply plus one DM per new qualifying comment.'
+        ? 'Live mode is enabled. It may reply once to each qualifying comment and send at most one DM per account for this post.'
         : status.capabilities && status.capabilities.dryRun
           ? 'Dry-run reads comments only. Live replies and DMs remain locked until detection is verified.'
           : 'Dry-run and live sending remain locked until login testing and Instagram DOM inspection are complete.';

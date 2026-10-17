@@ -5,6 +5,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const INSTAGRAM_HOME = 'https://www.instagram.com/';
+const PUBLIC_REPLY_AUTHOR = 'ruchivgala';
 const SAFETY_TEXT = [
   'captcha',
   'challenge required',
@@ -303,6 +304,57 @@ class InstagramBrowser {
     return null;
   }
 
+  async commentThreadForReplyButton(replyButton) {
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const thread = replyButton.locator(
+      `xpath=ancestor::*[(self::li or self::div) and .//button[`
+      + `contains(translate(normalize-space(.), '${upper}', '${lower}'), 'repl') and (`
+      + `contains(translate(normalize-space(.), '${upper}', '${lower}'), 'view') or `
+      + `contains(translate(normalize-space(.), '${upper}', '${lower}'), 'hide'))]][1]`
+    );
+    if (await thread.count()) return thread;
+    return replyButton.locator('xpath=ancestor::*[(self::li or self::div) and .//a[@href] and .//time][1]');
+  }
+
+  async hasExistingPublicReply(comment, replyAuthor = PUBLIC_REPLY_AUTHOR) {
+    const replyButton = await this.findCommentReplyButton(comment);
+    if (!replyButton) throw new Error(`Could not relocate @${comment.username}'s Reply control.`);
+
+    const thread = await this.commentThreadForReplyButton(replyButton);
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const controls = thread.getByRole('button', { name: /^view .*repl(?:y|ies)$/i });
+      let expanded = false;
+      for (let index = 0; index < await controls.count(); index += 1) {
+        const control = controls.nth(index);
+        if (!await control.isVisible().catch(() => false)) continue;
+        await control.click({ timeout: 5000 });
+        await this.page.waitForTimeout(1000);
+        await this.raiseIfSafetyScreen();
+        expanded = true;
+        break;
+      }
+      if (!expanded) break;
+    }
+
+    const authorKey = String(replyAuthor || '').replace(/^@/, '').trim().toLowerCase();
+    if (!authorKey) throw new Error('A public reply author username is required.');
+    const threadReplyButtons = thread.getByRole('button', { name: /^reply$/i });
+    for (let index = 0; index < await threadReplyButtons.count(); index += 1) {
+      const candidateButton = threadReplyButtons.nth(index);
+      const row = candidateButton.locator('xpath=ancestor::*[(self::li or self::div) and .//a[@href] and .//time][1]');
+      if (!await row.count()) continue;
+      const hrefs = await row.locator('a[href]').evaluateAll(links => links.map(link => link.getAttribute('href') || ''));
+      const isReplyAuthor = hrefs.some(href => href.toLowerCase() === `/${authorKey}/`);
+      if (!isReplyAuthor) continue;
+
+      const timestamp = await row.locator('time').first().getAttribute('datetime').catch(() => null);
+      const isTargetComment = comment.timestamp && timestamp && timestamp === comment.timestamp;
+      if (!isTargetComment) return true;
+    }
+    return comment.username.toLowerCase() === authorKey;
+  }
+
   async findCommentComposer() {
     const candidates = [
       this.page.getByRole('textbox', { name: /add a comment/i }),
@@ -373,9 +425,14 @@ class InstagramBrowser {
     const composer = await this.findCommentComposer();
     if (!composer) throw new Error(`Clicked Reply for @${comment.username}, but no comment composer appeared.`);
 
-    const existing = await this.composerText(composer);
-    const prefix = existing && !/\s$/.test(existing) ? ' ' : '';
-    await composer.pressSequentially(`${prefix}${message}`, { delay: 25 });
+    // Clicking Reply associates the composer with the parent comment, while
+    // Instagram also inserts an @mention as editable text. Replace that text
+    // so this remains a threaded reply without displaying @username.
+    await composer.fill(message);
+    const enteredText = (await this.composerText(composer)).trim();
+    if (enteredText !== String(message).trim()) {
+      throw new Error('Could not replace Instagram\'s automatic @mention with the reply text.');
+    }
     const composerRegion = composer.locator('xpath=ancestor::div[.//*[@role="button" and normalize-space(.)="Post"]][1]');
     const postButtons = await composerRegion.count()
       ? composerRegion.getByRole('button', { name: /^post$/i })

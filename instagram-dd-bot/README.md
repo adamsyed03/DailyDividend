@@ -20,12 +20,12 @@ The admin panel already stores the intended job:
 - One standardized DM with an optional HTTPS webpage or public PDF link.
 - Polling and hourly/daily safety limits.
 
-The live workflow collapses matching comments to unique Instagram accounts for
-the linked post. An account already completed on that same post is skipped, but
-an interaction recorded for another post never suppresses the new workflow. For
-each eligible account it posts one rotating public reply and then sends one
-standardized DM. The two actions are recorded independently so a successful
-action is never repeated after a partial failure.
+The live workflow handles every matching comment on the linked post, so two
+qualifying comments from the same account can each receive one rotating public
+reply. Direct messages are deduplicated by account and post: that account gets
+at most one standardized DM for the post. An interaction recorded for another
+post never suppresses the new workflow. Public replies and DMs are recorded
+independently so a successful action is never repeated after a partial failure.
 
 ## Run from the terminal
 
@@ -58,10 +58,10 @@ not click Reply, open a conversation, post a comment, or send a DM. Its local DO
 inspection report is written to `logs/last-dom-inspection.json`.
 
 Live mode can be launched from the admin dashboard after reviewing the dry-run
-log. It prints a prominent warning and performs at most one public reply and one
-standardized DM for each new qualifying comment. SQLite status and hourly/daily
-limits are checked before anything is posted. Failed or uncertain attempts are
-not retried automatically.
+log. It prints a prominent warning and performs at most one public reply for
+each new qualifying comment plus one standardized DM per account for that post.
+SQLite status and hourly/daily limits are checked before anything is posted.
+Failed or uncertain attempts are not retried automatically.
 
 ## Use through the admin dashboard
 
