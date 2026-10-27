@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#030719">
+<title>Jio IPO Decoded · Daily Dividend</title>
+<meta name="description" content="India's biggest IPO, decoded in 11 swipes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#030719;--bg1:#06103A;--bg2:#0B1E6B;
+  --jio:#2F62FF;--cyan:#5FD4FF;--gold:#F2C46B;--coral:#FF7A6B;--mint:#6BE3B0;--violet:#A796FF;--airtel:#FF4D5A;--vi:#F2C46B;
+  --cream:#F6F2E9;--muted:rgba(246,242,233,.68);--faint:rgba(246,242,233,.4);--line:rgba(255,255,255,.14);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --b1:#2F62FF;--b2:#5FD4FF;--b3:#A796FF;--ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg0);color:var(--cream);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* background */
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,var(--bg2) 0%,var(--bg1) 45%,var(--bg0) 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;transition:background 1.2s var(--ease)}
+.blob.a{width:70vmax;height:70vmax;left:-25vmax;top:-20vmax;background:var(--b1);animation:d1 22s ease-in-out infinite alternate}
+.blob.b{width:55vmax;height:55vmax;right:-22vmax;top:25vh;background:var(--b2);opacity:.28;animation:d2 26s ease-in-out infinite alternate}
+.blob.c{width:60vmax;height:60vmax;left:-10vmax;bottom:-35vmax;background:var(--b3);opacity:.32;animation:d3 30s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(12vmax,10vmax) scale(1.12)}}
+@keyframes d2{to{transform:translate(-14vmax,-8vmax) scale(.9)}}
+@keyframes d3{to{transform:translate(10vmax,-12vmax) scale(1.08)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* deck + mobile layout */
+.deck{position:fixed;inset:0;z-index:2;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.deck::-webkit-scrollbar{display:none}
+.slide{height:100vh;min-height:100vh;height:100dvh;min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;justify-content:center;position:relative}
+.inner{width:100%;max-width:440px;height:100%;padding:calc(env(safe-area-inset-top) + 74px) max(18px,env(safe-area-inset-left)) calc(env(safe-area-inset-bottom) + 58px) max(18px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:13px;overflow:hidden}
+.inner::before{content:"";order:0;flex:1 1 0;min-height:0}
+.copy{display:contents}
+.status,.eyebrow{order:1}
+h1,h2{order:2}
+.v{order:3;display:flex;flex-direction:column;gap:10px}
+.body,.chips{order:4}
+.fillgap{order:5;flex:1 1 0;min-height:6px}
+.foot{order:6}
+.end{order:7}
+.disc{order:8}
+.hint{order:9}
+
+/* chrome */
+.chrome{position:fixed;z-index:5;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;padding:calc(env(safe-area-inset-top) + 10px) 16px 14px;pointer-events:none;background:linear-gradient(180deg,rgba(3,7,25,.72),rgba(3,7,25,.35) 70%,transparent)}
+.bars{display:flex;gap:4px}
+.bars i{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.24);overflow:hidden;position:relative}
+.bars i::after{content:"";position:absolute;inset:0;background:var(--cream);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.bars i.done::after{transform:scaleX(1)}
+.bars i.cur::after{background:linear-gradient(90deg,var(--cream),var(--gold),var(--cream));background-size:200% 100%;animation:shim 2s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.brand{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.dd{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dd b{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--cream);color:#06103A;font-family:var(--serif);font-size:12px;letter-spacing:0}
+.count{font-family:var(--mono);font-size:10.5px;color:var(--cream);letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid var(--line)}
+.navbtn{display:none}
+.nudge{position:fixed;z-index:4;left:50%;bottom:calc(env(safe-area-inset-bottom) + 10px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);pointer-events:none;transition:opacity .4s}
+.nudge svg{animation:bob 1.6s ease-in-out infinite}
+.nudge.hide{opacity:0}
+
+/* type */
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;gap:8px;align-items:center}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.7}
+h1,h2{font-family:var(--serif);font-weight:500;line-height:1.04;letter-spacing:-.02em}
+h1{font-size:clamp(34px,10vw,44px)}
+h2{font-size:clamp(27px,8vw,35px)}
+h1 em,h2 em{font-style:italic;color:var(--gold);font-weight:400}
+.body{font-size:15px;line-height:1.5;color:var(--muted)}
+.body b{color:var(--cream);font-weight:600}
+.lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+
+/* glass */
+.glass{position:relative;border-radius:24px;background:linear-gradient(140deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 60%);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 24px 60px -20px rgba(0,0,0,.55);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);overflow:hidden}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 60% at 10% 0%,rgba(255,255,255,.16),transparent 50%)}
+.viz{padding:17px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.concept{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .2s,background .2s}
+.concept:hover{background:rgba(255,255,255,.16)}
+.concept:active{transform:scale(.96)}
+.concept i{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);animation:glow 2.4s ease-in-out infinite}
+.concept .q{font-family:var(--sans);font-size:11px;letter-spacing:0;opacity:.7;margin-left:2px}
+@keyframes glow{50%{box-shadow:0 0 2px var(--gold)}}
+.more{padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;background:var(--cream);color:#06103A;display:inline-flex;gap:6px;align-items:center;box-shadow:0 8px 24px -8px rgba(246,242,233,.5);transition:transform .2s;white-space:nowrap}
+.more:active{transform:scale(.96)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.on .rv{opacity:1;transform:none}
+.on .v.rv{transition-delay:.12s}.on .body.rv,.on .chips.rv{transition-delay:.24s}.on .foot.rv{transition-delay:.34s}
+
+/* S1 */
+.status{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(107,227,176,.14);border:1px solid rgba(107,227,176,.35);color:var(--mint)}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,227,176,.7)}100%{box-shadow:0 0 0 10px rgba(107,227,176,0)}}
+.hero-num{font-family:var(--serif);font-size:clamp(46px,14vw,60px);line-height:1;letter-spacing:-.03em;font-weight:500}
+.hero-num small{font-size:.42em;font-style:italic;color:var(--gold);font-weight:400;margin-left:4px}
+.ipo-row{display:grid;grid-template-columns:74px 1fr;gap:10px;align-items:center;margin-top:11px}
+.ipo-row .n{font-size:13px;font-weight:600}
+.ipo-row .n span{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:400;margin-top:2px}
+.track{height:30px;border-radius:10px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.fill{height:100%;width:0;border-radius:10px;transition:width 1.4s var(--ease);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap}
+.on .fill{width:var(--w)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:6px 10px;border-radius:10px;font-size:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--muted)}
+.chip b{color:var(--cream);font-weight:600}
+.hint{display:none;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.hint svg{animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+
+/* S2 */
+.eq{display:flex;align-items:stretch;justify-content:center;gap:6px;margin-bottom:14px}
+.eq .t{flex:1;padding:8px 6px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid var(--line);text-align:center;display:flex;flex-direction:column;justify-content:center}
+.eq .t b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.1}
+.eq .t span{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:4px;line-height:1.3}
+.eq .t.hl{background:rgba(242,196,107,.14);border-color:rgba(242,196,107,.45)}
+.eq .t.hl span{color:var(--gold)}
+.eq .op{font-family:var(--serif);font-size:20px;color:var(--gold);align-self:center}
+.donut-wrap{display:flex;align-items:center;gap:16px}
+.donut{width:140px;height:140px;flex:none;position:relative}
+.donut svg{transform:rotate(-90deg);width:100%;height:100%}
+.arc{transition:stroke-dashoffset 1.6s var(--ease)}
+.donut .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.donut .c b{font-family:var(--serif);font-size:36px;font-weight:600;line-height:1}
+.donut .c .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
+.legend{display:flex;flex-direction:column;gap:12px;font-size:13px}
+.legend div{display:flex;gap:8px;align-items:flex-start;color:var(--muted);line-height:1.35}
+.legend i{width:10px;height:10px;border-radius:3px;flex:none;margin-top:4px}
+.legend b{color:var(--cream)}
+
+/* S3 */
+.split{display:flex;height:60px;border-radius:16px;overflow:hidden;margin:12px 0 10px;background:rgba(255,255,255,.05)}
+.split div{height:100%;width:0;transition:width 1.4s var(--ease);display:flex;align-items:flex-end;padding:8px 10px;font-family:var(--mono);font-size:11px;font-weight:600}
+.on .split div{width:var(--w)}
+.split .s1{background:linear-gradient(135deg,var(--jio),var(--cyan));color:#031033}
+.split .s2{background:rgba(242,196,107,.85);color:#3a2604;transition-delay:.3s;justify-content:center;padding:8px 0}
+.kv{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:6px 0;border-top:1px solid rgba(255,255,255,.08)}
+.kv b{color:var(--cream)}
+.debt{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:14px 16px}
+.debt .side{text-align:center}
+.debt .side b{display:block;font-family:var(--serif);font-size:24px;font-weight:600}
+.debt .side span{font-size:11.5px;color:var(--muted)}
+.debt .arrow{font-size:20px;color:var(--gold)}
+.debt .zeroish b{color:var(--mint)}
+
+/* S4 */
+.cols{display:flex;align-items:flex-end;justify-content:center;gap:28px;height:200px}
+.col{display:flex;flex-direction:column;align-items:center;gap:8px;width:96px}
+.col .val{font-family:var(--serif);font-size:30px;font-weight:600}
+.col .bar{width:100%;height:132px;border-radius:18px;background:rgba(255,255,255,.06);display:flex;align-items:flex-end;overflow:hidden}
+.col .bar div{width:100%;height:0;border-radius:18px;transition:height 1.5s var(--ease)}
+.on .col .bar div{height:var(--h)}
+.col .nm{font-size:13px;font-weight:600}
+
+/* S5 */
+.stack{display:flex;height:50px;border-radius:16px;overflow:hidden;gap:3px;margin:8px 0 6px}
+.stack div{height:100%;width:0;transition:width 1.3s var(--ease);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;color:#031033;border-radius:6px}
+.on .stack div{width:var(--w)}
+.stack div:nth-child(2){transition-delay:.15s}.stack div:nth-child(3){transition-delay:.3s}.stack div:nth-child(4){transition-delay:.45s}
+.keys{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;font-size:11.5px;color:var(--muted)}
+.keys span{display:flex;gap:5px;align-items:center}.keys i{width:8px;height:8px;border-radius:2px}
+.arpu{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.arow{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;margin-top:8px;font-size:12.5px;font-weight:600}
+.arow .track{height:26px}
+.gapnote{margin-top:12px;padding:10px 12px;border-radius:14px;background:rgba(255,77,90,.12);border:1px dashed rgba(255,77,90,.5);font-size:12.5px;line-height:1.45;color:var(--muted)}
+.gapnote b{color:var(--cream)}
+.wild{display:flex;gap:10px;align-items:center;padding:12px 14px;font-size:13px;color:var(--muted);line-height:1.35}
+.wild b{color:var(--cream)}
+
+/* S6 */
+.bill{padding:14px 16px}
+.bill .top{display:flex;justify-content:space-between;align-items:baseline}
+.bill .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral)}
+.taxrow{margin-top:10px}
+.taxrow .l{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:5px}
+.taxrow .l b{color:var(--cream);font-family:var(--mono)}
+.taxrow .track{height:18px}
+.perf{border-top:1px dashed rgba(255,255,255,.22);margin:12px -16px 0;padding:10px 16px 0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.perf b{color:var(--cream)}
+.perf em{font-style:normal;color:var(--gold);font-weight:600}
+.billrow{display:flex;align-items:baseline;justify-content:space-between;margin-top:8px}
+.big{font-family:var(--serif);font-size:36px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.big small{font-size:.42em;color:var(--muted);font-weight:400;margin-left:4px}
+.tlm{display:flex;align-items:center;gap:6px;margin-top:10px}
+.tlm span{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.tlm .ln{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+.tlm .ln div{height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--gold));transition:width 2s var(--ease) .3s}
+.on .tlm .ln div{width:100%}
+
+/* S7 */
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;aspect-ratio:1;max-width:210px;margin:0 auto}
+.waffle i{border-radius:4px;background:rgba(255,255,255,.07);transform:scale(.3);opacity:0;transition:transform .5s var(--ease),opacity .5s,background .5s}
+.on .waffle i{transform:scale(1);opacity:1}
+.own-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-top:14px}
+.own-legend div{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.own-legend i{width:10px;height:10px;border-radius:3px;flex:none}
+.own-legend b{color:var(--cream);font-family:var(--mono);font-size:12px;margin-left:auto}
+.own-legend .full{grid-column:1/-1;color:var(--cream);font-weight:600}
+
+/* S8 */
+.dials{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dial{text-align:center}
+.dial svg{width:100%;max-width:170px;overflow:visible}
+.dial .needle{transform-origin:85px 85px;transform:rotate(-90deg);transition:transform 1.6s var(--ease)}
+.on .dial .needle{transform:rotate(var(--r))}
+.dial .val{font-family:var(--serif);font-size:34px;font-weight:600;margin-top:-6px}
+.dial .val small{font-size:.5em;color:var(--muted)}
+.dial .nm{font-size:12.5px;font-weight:600}
+.dial .nm span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);font-weight:400;margin-top:2px}
+.dcap{text-align:center;font-size:12.5px;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.dcap b{color:var(--cream)}
+
+/* S9 */
+.toggle{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.toggle button{position:relative;z-index:1;padding:10px;font-size:14px;font-weight:600;color:var(--muted);transition:color .3s}
+.toggle button.act{color:#06103A}
+.toggle .pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--mint);box-shadow:0 6px 20px -6px var(--mint);transition:transform .5s var(--ease),background .5s}
+.toggle.bear .pill{transform:translateX(100%);background:var(--coral);box-shadow:0 6px 20px -6px var(--coral)}
+.views{position:relative;min-height:262px}
+.view{position:absolute;inset:0;opacity:0;transform:translateX(-20px) scale(.98);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
+.view.show{opacity:1;transform:none;pointer-events:auto}
+.view.bearv{transform:translateX(20px) scale(.98)}
+.view.bearv.show{transform:none}
+.rings{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ring{text-align:center;padding:14px 8px}
+.ring svg{transform:rotate(-90deg)}
+.ring .rv2{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:-76px;height:64px}
+.ring p{font-size:12px;color:var(--muted);line-height:1.35;margin-top:14px}
+.ring p b{color:var(--cream)}
+.vbars{display:flex;align-items:flex-end;gap:14px;height:160px;padding:6px 8px 0}
+.vb{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.vb .val{font-family:var(--serif);font-size:20px;font-weight:600}
+.vb .val small{font-size:.55em;color:var(--muted)}
+.vb .b{width:100%;height:0;border-radius:12px 12px 6px 6px;transition:height 1.2s var(--ease)}
+.vb .y{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+.vb.hit .b{background:linear-gradient(180deg,var(--coral),rgba(255,122,107,.35))}
+.vb .flag{font-size:10px;font-family:var(--mono);color:var(--coral);letter-spacing:.06em;text-transform:uppercase}
+.vtext{font-size:14px;line-height:1.5;color:var(--muted);margin-top:12px}
+.vtext b{color:var(--cream)}
+
+/* S10 */
+.meter .row{display:flex;justify-content:space-between;align-items:baseline}
+.meter .now{font-family:var(--serif);font-size:28px;font-weight:600}
+.meter .goal{font-family:var(--serif);font-size:28px;font-weight:600;color:var(--gold)}
+.meter .mt{height:12px;margin:10px 0 6px;border-radius:12px;position:relative;background:rgba(255,255,255,.08)}
+.meter .fm{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:12px;background:linear-gradient(90deg,var(--jio),var(--cyan));transition:width 1.4s var(--ease)}
+.on .meter .fm{width:92%}
+.meter .tg{position:absolute;right:0;top:-5px;bottom:-5px;width:3px;border-radius:3px;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.meter .sub{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.lock{display:flex;gap:14px;align-items:center;padding:14px 16px}
+.lock .ic{width:46px;height:46px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:22px;background:rgba(242,196,107,.15);border:1px solid rgba(242,196,107,.4)}
+.lock .d{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.08em}
+.lock p{font-size:13.5px;line-height:1.4;color:var(--muted);margin-top:2px}
+.lock p b{color:var(--cream)}
+.lock small{display:block;font-size:11.5px;color:var(--faint);margin-top:4px}
+.watch{padding:14px 16px}
+.watch .w{display:flex;gap:12px;align-items:flex-start;padding-top:10px}
+.watch .w + .w{margin-top:10px;border-top:1px solid rgba(255,255,255,.08)}
+.watch .e{font-size:18px;line-height:1.2}
+.watch p{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.watch p b{color:var(--cream)}
+
+/* S11 */
+.drow{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:center;margin-top:12px}
+.drow .n{font-size:12.5px;font-weight:600;line-height:1.2}
+.drow .n span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);font-weight:400}
+.drow .track{height:36px;overflow:visible}
+.drow .fill{justify-content:flex-start;padding-left:10px;font-size:13px;color:#031033}
+.avg{position:absolute;top:-6px;bottom:-6px;width:0;border-left:2px dashed var(--gold);left:0;transition:left 1.4s var(--ease) .4s}
+.on .avg{left:var(--x)}
+.avg span{position:absolute;bottom:-18px;left:-30px;width:60px;text-align:center;font-family:var(--mono);font-size:9.5px;color:var(--gold)}
+.take{padding:16px 18px;font-family:var(--serif);font-size:19px;line-height:1.35}
+.take em{color:var(--gold)}
+.end{display:flex;gap:8px;margin-top:4px}
+.end button{flex:1;text-align:center;padding:12px;border-radius:14px;font-size:13.5px;font-weight:600;color:var(--cream);background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.end button.pri{background:var(--cream);color:#06103A}
+.disc{font-size:10.5px;line-height:1.45;color:var(--faint);text-align:center;margin-top:6px}
+
+/* sheets */
+.scrim{position:fixed;inset:0;z-index:20;background:rgba(3,7,25,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .4s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:21;left:50%;bottom:0;width:100%;max-width:440px;transform:translate(-50%,105%);transition:transform .55s var(--ease);border-radius:28px 28px 0 0;padding:12px 22px calc(env(safe-area-inset-bottom) + 24px);max-height:84svh;overflow-y:auto;background:linear-gradient(160deg,rgba(28,44,120,.9),rgba(8,16,58,.95));border:1px solid var(--line);border-bottom:0;backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.sheet.open{transform:translate(-50%,0)}
+.grab{width:42px;height:5px;border-radius:5px;background:rgba(255,255,255,.3);margin:0 auto 16px}
+.sheet .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.sheet h3{font-family:var(--serif);font-size:26px;font-weight:500;line-height:1.1;margin-bottom:12px}
+.sheet h3 em{color:var(--gold)}
+.sheet .sp{font-size:15px;line-height:1.55;color:var(--muted)}
+.sheet .sp b{color:var(--cream)}
+.sheet .close{margin-top:18px;width:100%;padding:13px;border-radius:14px;background:var(--cream);color:#06103A;font-weight:600}
+.gfx{margin:4px 0 16px;padding:16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.flow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.flow .box{flex:1;text-align:center;padding:12px 8px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.flow .box b{display:block;font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.15}
+.flow .box span{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.3}
+.flow .box.g{background:rgba(242,196,107,.14);border-color:rgba(242,196,107,.45)}
+.flow .op{font-family:var(--serif);font-size:22px;color:var(--gold)}
+.dots{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--cream)}
+.dots i.o{background:rgba(255,255,255,.2)}
+.dots i.c{background:var(--coral);animation:leave 2s ease-in-out infinite}
+@keyframes leave{0%,30%{transform:none;opacity:1}100%{transform:translate(26px,-12px);opacity:0}}
+.lanes{display:grid;gap:10px}
+.lane{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:center;font-size:12.5px;color:var(--muted)}
+.lane b{color:var(--cream);font-size:13px}
+.lane .path{display:flex;align-items:center;gap:6px;font-size:12px}
+.lane .path .p{padding:6px 9px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--cream);white-space:nowrap}
+.lane .path .p.g{background:rgba(107,227,176,.16);border-color:rgba(107,227,176,.5)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair div{text-align:center;padding:12px 8px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.pair b{display:block;font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.1}
+.pair span{font-size:11.5px;color:var(--muted)}
+.hbar{margin-top:6px}
+.hbar .l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px}
+.hbar .l b{color:var(--cream);font-family:var(--mono)}
+.hbar .t{height:16px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden}
+.hbar .t div{height:100%;border-radius:8px}
+.hbar + .hbar{margin-top:10px}
+.splitlist{display:grid;gap:8px;margin-top:12px}
+.splitlist div{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.splitlist .e{font-size:18px}
+.splitlist b{color:var(--cream)}
+.splitlist span.n{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--cream);text-align:right}
+.anchors{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.pt{display:flex;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.1)}
+.pt .no{font-family:var(--serif);font-size:22px;color:var(--gold);line-height:1;min-width:22px}
+.pt p{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.pt p b{color:var(--cream)}
+
+/* short phones */
+@media (max-height:720px){
+  .inner{padding-top:calc(env(safe-area-inset-top) + 66px);gap:10px;padding-bottom:calc(env(safe-area-inset-bottom) + 56px)}
+  h1{font-size:31px}h2{font-size:25px}.body{font-size:14px}
+  .cols{height:170px}.col .bar{height:105px}
+  .donut{width:118px;height:118px}
+  .views{min-height:236px}.vbars{height:130px}
+  .waffle{max-width:180px}
+}
+/* tablets */
+@media (min-width:700px) and (max-width:1019px){
+  .inner,.chrome{max-width:560px}
+  .sheet{max-width:560px}
+}
+/* laptop / desktop: bigger cards, text left, visual right */
+@media (min-width:1020px){
+  .chrome{max-width:1200px;padding:20px 40px}
+  .inner{max-width:1200px;padding:110px 40px 56px;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.1fr);column-gap:64px;align-items:center}
+  .inner::before,.fillgap{display:none}
+  .copy{display:flex;flex-direction:column;gap:18px;grid-column:1}
+  .v{grid-column:2;grid-row:1;zoom:1.14}
+  .hint{display:none}
+  h1{font-size:64px}h2{font-size:52px}
+  .body{font-size:18px}
+  .foot{margin-top:10px}
+  .viz{padding:26px}
+  .glass{border-radius:30px}
+  .eq .t b{font-size:24px}
+  .donut{width:180px;height:180px}.donut .c b{font-size:44px}
+  .legend{font-size:15px}
+  .cols{height:280px;gap:48px}.col{width:130px}.col .bar{height:200px}.col .val{font-size:40px}
+  .track{height:36px}
+  .waffle{max-width:300px;gap:6px}
+  .hero-num{font-size:80px}
+  .vbars{height:220px}.views{min-height:330px}
+  .ring svg{width:120px;height:120px}.ring .rv2{margin-top:-90px;height:78px;font-size:28px}
+  .take{font-size:24px;padding:22px 24px}
+  .sheet{max-width:540px;bottom:50%;border-radius:28px;border-bottom:1px solid var(--line);transform:translate(-50%,calc(50% + 100vh))}
+  .sheet.open{transform:translate(-50%,50%)}
+  .nudge{display:none}
+  .navbtn{display:grid;position:fixed;z-index:6;right:28px;width:48px;height:48px;border-radius:50%;place-items:center;background:rgba(255,255,255,.1);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:18px;transition:background .2s}
+  .navbtn:hover{background:rgba(255,255,255,.2)}
+  .navbtn.up{bottom:92px}.navbtn.dn{bottom:34px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="ambient"><div class="blob a"></div><div class="blob b"></div><div class="blob c"></div></div>
+<div class="grain"></div>
+
+<div class="chrome">
+  <div class="bars" id="bars"></div>
+  <div class="brand"><div class="dd"><b>DD</b>Rabbit hole · Made in India</div><div class="count" id="count">01 / 11</div></div>
+</div>
+<div class="nudge" id="nudge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 15l6-6 6 6"/></svg><span id="nudgeT">Tap or swipe up</span></div>
+<button class="navbtn up" id="navUp" aria-label="Previous">↑</button>
+<button class="navbtn dn" id="navDn" aria-label="Next">↓</button>
+
+<main class="deck" id="deck">
+
+<!-- 1 -->
+<section class="slide" data-tint="#2F62FF,#5FD4FF,#A796FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="status rv" id="status"><i></i><span>Shares credited · Lists 28 Oct</span></div>
+   <div class="eyebrow rv">The Jio IPO, decoded</div>
+   <h1 class="rv" id="coverH">India's <em>biggest</em> IPO ever is happening.</h1>
+   <div class="chips rv"><span class="chip">Price <b>₹1,119</b></span><span class="chip">1 lot <b>12 shares</b></span><span class="chip">Min <b>₹13,428</b></span></div>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="ipo"><i></i>Concept · IPO<span class="q">?</span></button></div>
+   <div class="hint rv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15l6-6 6 6"/></svg>Tap or swipe up</div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl">Jio is now worth</div>
+    <div class="hero-num">₹<span data-count="10.3" data-dec="1">0</span><small>lakh crore</small></div>
+    <div class="lbl" style="margin-top:16px">India's biggest IPOs (₹ crore raised)</div>
+    <div class="ipo-row"><div class="n">Jio<span>2026</span></div><div class="track"><div class="fill" style="--w:100%;background:linear-gradient(90deg,#2F62FF,#5FD4FF);color:#031033">30,213</div></div></div>
+    <div class="ipo-row"><div class="n">Hyundai<span>2024</span></div><div class="track"><div class="fill" style="--w:92%;background:rgba(255,255,255,.22);transition-delay:.15s">27,859</div></div></div>
+    <div class="ipo-row"><div class="n">LIC<span>2022</span></div><div class="track"><div class="fill" style="--w:70%;background:rgba(255,255,255,.14);transition-delay:.3s">21,008</div></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-tint="#2F62FF,#6BE3B0,#5FD4FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">02 · How it makes money</div>
+   <h2 class="rv">Jio's whole business is <em>one equation.</em></h2>
+   <p class="body rv">The average Jio user pays it <b>₹214 a month.</b> Everything else it sells, from JioFiber to JioSaavn, exists to push that number up.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="arpu"><i></i>Concept · ARPU<span class="q">?</span></button><button class="more" data-sheet="split">See the split <span>↑</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="eq">
+     <div class="t"><b>52.4 cr</b><span>users</span></div><div class="op">×</div>
+     <div class="t hl"><b>₹214</b><span>average revenue per user (ARPU)</span></div><div class="op">=</div>
+     <div class="t"><b>₹1.47L cr</b><span>revenue a year</span></div>
+    </div>
+    <div class="donut-wrap">
+     <div class="donut">
+      <svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="58" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="18"/>
+      <circle class="arc" cx="75" cy="75" r="58" fill="none" stroke="url(#g2)" stroke-width="18" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4" data-off="83.8"/>
+      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2F62FF"/><stop offset="1" stop-color="#5FD4FF"/></linearGradient></defs></svg>
+      <div class="c"><div><b><span data-count="77">0</span>%</b><br><span class="sub">Prepaid</span></div></div>
+     </div>
+     <div class="legend">
+      <div><i style="background:#5FD4FF"></i><span><b>Prepaid recharges</b><br>the ₹199, ₹299 packs</span></div>
+      <div><i style="background:rgba(255,255,255,.25)"></i><span><b>Everything else</b><br>home internet, business, apps</span></div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-tint="#5FD4FF,#F2C46B,#2F62FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">03 · Why it's going public</div>
+   <h2 class="rv">Jio doesn't really <em>need</em> this money.</h2>
+   <p class="body rv">Almost all of it goes to <b>paying off loans</b>, which leaves Jio close to debt-free (apart from what it owes for airwaves). The bigger reason to list: a share price it can use as <b>currency in future deals</b> with big investors and partners.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="fresh"><i></i>Concept · Fresh issue<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl">Where the ₹30,213 crore goes</div>
+    <div class="split"><div class="s1" style="--w:91%">₹27,500 cr</div><div class="s2" style="--w:9%">9%</div></div>
+    <div class="kv"><span><span style="color:var(--cyan)">●</span> Paying off loans</span><b>91%</b></div>
+    <div class="kv"><span><span style="color:var(--gold)">●</span> General use and IPO costs</span><b>9%</b></div>
+   </div>
+   <div class="glass debt">
+    <div class="side"><b>₹27,450 cr</b><span>net debt before</span></div>
+    <div class="arrow">→</div>
+    <div class="side zeroish"><b>≈ ₹0</b><span>after paying it off</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-tint="#2F62FF,#FF7A6B,#A796FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">04 · The numbers</div>
+   <h2 class="rv">Huge profits, <em>ordinary</em> returns.</h2>
+   <p class="body rv">Jio makes more profit than almost any Indian company, at a <b>52% margin.</b> But it sits on so much shareholder money that the returns look small.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="roe"><i></i>Concept · ROE<span class="q">?</span></button><button class="more" data-sheet="roe">Why so low? <span>↑</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl" style="text-align:center;margin-bottom:18px">Profit a year, per ₹100 of shareholder money</div>
+    <div class="cols">
+     <div class="col"><div class="val">₹<span data-count="9.4" data-dec="1">0</span></div><div class="bar"><div style="--h:46%;background:linear-gradient(180deg,#5FD4FF,#2F62FF)"></div></div><div class="nm">Jio</div></div>
+     <div class="col"><div class="val">₹<span data-count="20.3" data-dec="1">0</span></div><div class="bar"><div style="--h:100%;background:linear-gradient(180deg,#FF8A93,#FF4D5A);transition-delay:.2s"></div></div><div class="nm">Airtel</div></div>
+    </div>
+    <div class="dcap">₹30,049 cr profit in FY26 · <b>52% margin</b></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-tint="#2F62FF,#FF4D5A,#F2C46B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">05 · Rivals</div>
+   <h2 class="rv">Half of India's mobile internet runs on <em>Jio.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="share"><i></i>Concept · Market share<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl">Share of wireless broadband users</div>
+    <div class="stack">
+     <div style="--w:49.95%;background:linear-gradient(135deg,#2F62FF,#5FD4FF)">50%</div>
+     <div style="--w:35.13%;background:#FF4D5A">35%</div>
+     <div style="--w:12.65%;background:#F2C46B">13%</div>
+     <div style="--w:2.24%;background:#6BE3B0"></div>
+    </div>
+    <div class="keys"><span><i style="background:#2F62FF"></i>Jio</span><span><i style="background:#FF4D5A"></i>Airtel</span><span><i style="background:#F2C46B"></i>Vodafone Idea</span><span><i style="background:#6BE3B0"></i>BSNL 2%</span></div>
+    <div class="arpu">
+     <div class="lbl">Who earns more per user? (ARPU, ₹ a month)</div>
+     <div class="arow"><span>Airtel</span><div class="track"><div class="fill" style="--w:100%;background:#FF4D5A;color:#fff">₹257</div></div></div>
+     <div class="arow"><span>Jio</span><div class="track"><div class="fill" style="--w:83%;background:linear-gradient(90deg,#2F62FF,#5FD4FF);color:#031033;transition-delay:.15s">₹214</div></div></div>
+     <div class="arow"><span>Vodafone Idea</span><div class="track"><div class="fill" style="--w:68%;background:#F2C46B;color:#3a2604;transition-delay:.3s">₹174</div></div></div>
+     <div class="gapnote">Airtel earns <b>₹43 more per user</b> every month. If Jio closed that gap across its 52 crore users, it would add about <b>₹27,000 crore a year.</b></div>
+    </div>
+   </div>
+   <div class="glass wild"><span style="font-size:22px">🛰️</span><span><b>Wildcard: Starlink.</b> Expected around ₹3,000 a month vs JioFiber's ₹399.</span></div>
+  </div>
+ </div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-tint="#FF7A6B,#F2C46B,#2F62FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">06 · What the headlines missed</div>
+   <h2 class="rv">Two bills that <em>haven't arrived</em> yet.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="deferred"><i></i>Concept · Deferred tax<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass bill">
+    <div class="top"><span class="tag">Bill 01 · Tax</span><span class="lbl">FY26</span></div>
+    <div class="taxrow"><div class="l"><span>Tax bill</span><b>₹10,300 cr</b></div><div class="track"><div class="fill" style="--w:100%;background:rgba(255,255,255,.22)"></div></div></div>
+    <div class="taxrow"><div class="l"><span>Actually paid</span><b style="color:var(--coral)">₹118 cr</b></div><div class="track"><div class="fill" style="--w:1.2%;min-width:3px;background:var(--coral);transition-delay:.4s"></div></div></div>
+    <div class="perf">While Jio is building its network, tax rules let it <b>write off that spending faster</b>, so most of the bill is pushed to later. Around <em>FY29</em> that break runs out and Jio starts paying the full amount.</div>
+   </div>
+   <div class="glass bill">
+    <div class="top"><span class="tag">Bill 02 · Airwaves</span><span class="lbl">Owed to the government</span></div>
+    <div class="billrow"><div class="big">₹<span data-count="1.04" data-dec="2">0</span><small>lakh crore</small></div></div>
+    <div class="tlm"><span>Now</span><div class="ln"><div></div></div><span>2044</span></div>
+    <div class="perf">To run a mobile network, Jio buys the right to use <b>airwaves (spectrum)</b> from the government. It didn't pay upfront, so it pays in <b>yearly instalments with about 7% interest</b> until 2044.</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-tint="#2F62FF,#A796FF,#6BE3B0">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">07 · Who owns it</div>
+   <h2 class="rv">Reliance still <em>runs the show.</em></h2>
+   <div class="chips rv"><span class="chip">Reliance owns <b>the Jio name</b></span><span class="chip">Reliance Retail sells <b>every recharge</b></span></div>
+   <p class="body rv">Meta and Google bought in at <b>₹488 to ₹549</b> a share in 2020. The IPO priced it at <b>₹1,119.</b></p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="promoter"><i></i>Concept · Promoter<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="waffle" id="waffle"></div>
+    <div class="own-legend">
+     <div class="full"><i style="background:#F6F2E9"></i>Reliance Industries<b>64.5%</b></div>
+     <div><i style="background:#A796FF"></i>Meta<b>9.7%</b></div>
+     <div><i style="background:#6BE3B0"></i>Google<b>7.5%</b></div>
+     <div><i style="background:#F2C46B"></i>KKR, PIF + 8 more<b>15.4%</b></div>
+     <div><i style="background:#FF7A6B"></i>New IPO buyers<b>2.9%</b></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-tint="#5FD4FF,#FF4D5A,#2F62FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">08 · What you're paying</div>
+   <h2 class="rv">Cheaper than Airtel, but <em>there's a reason.</em></h2>
+   <p class="body rv">At ₹1,119 you pay about <b>33 years of Jio's current profit</b> for a share. Airtel costs 42 years. Jio is cheaper partly because it earns half the return.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="pe"><i></i>Concept · P/E<span class="q">?</span></button><button class="more" data-sheet="pb">Another lens <span>↑</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl" style="text-align:center;margin-bottom:6px">Price ÷ yearly profit (P/E)</div>
+    <div class="dials">
+     <div class="dial" style="--r:28.8deg">
+      <svg viewBox="0 0 170 100"><path d="M15 85 A70 70 0 0 1 155 85" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="12" stroke-linecap="round"/>
+      <path class="arc" d="M15 85 A70 70 0 0 1 155 85" fill="none" stroke="url(#gj)" stroke-width="12" stroke-linecap="round" stroke-dasharray="219.9" stroke-dashoffset="219.9" data-off="74.8"/>
+      <g class="needle"><line x1="85" y1="85" x2="85" y2="28" stroke="#F6F2E9" stroke-width="3" stroke-linecap="round"/></g><circle cx="85" cy="85" r="6" fill="#F6F2E9"/>
+      <defs><linearGradient id="gj"><stop offset="0" stop-color="#2F62FF"/><stop offset="1" stop-color="#5FD4FF"/></linearGradient></defs></svg>
+      <div class="val"><span data-count="33">0</span><small>x</small></div><div class="nm">Jio<span>at ₹1,119</span></div>
+     </div>
+     <div class="dial" style="--r:61.2deg">
+      <svg viewBox="0 0 170 100"><path d="M15 85 A70 70 0 0 1 155 85" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="12" stroke-linecap="round"/>
+      <path class="arc" d="M15 85 A70 70 0 0 1 155 85" fill="none" stroke="#FF4D5A" stroke-width="12" stroke-linecap="round" stroke-dasharray="219.9" stroke-dashoffset="219.9" data-off="35.2"/>
+      <g class="needle"><line x1="85" y1="85" x2="85" y2="28" stroke="#F6F2E9" stroke-width="3" stroke-linecap="round"/></g><circle cx="85" cy="85" r="6" fill="#F6F2E9"/></svg>
+      <div class="val"><span data-count="42">0</span><small>x</small></div><div class="nm">Airtel<span>in June 2026</span></div>
+     </div>
+    </div>
+    <div class="dcap">Higher number = investors paying more for each <b>₹1 of profit</b></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-tint="#6BE3B0,#FF7A6B,#2F62FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">09 · Bull vs bear</div>
+   <h2 class="rv">Two ways to <em>read</em> the same company.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="churn"><i></i>Concept · Churn<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="toggle" id="toggle"><div class="pill"></div><button class="act" data-v="bull">🐂 Bull</button><button data-v="bear">🐻 Bear</button></div>
+   <div class="views">
+    <div class="view bullv show" id="vbull">
+     <div class="rings">
+      <div class="glass ring">
+       <svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="38" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/><circle class="arc" cx="48" cy="48" r="38" fill="none" stroke="#6BE3B0" stroke-width="10" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="238.8" data-off="191"/></svg>
+       <div class="rv2">20%</div><p>of Indian homes have <b>broadband</b> today</p>
+      </div>
+      <div class="glass ring">
+       <svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="38" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/><circle class="arc" cx="48" cy="48" r="38" fill="none" stroke="#6BE3B0" stroke-width="10" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="238.8" data-off="231.6"/></svg>
+       <div class="rv2">&lt;3%</div><p>of 7.9 cr small businesses use <b>digital services</b></p>
+      </div>
+     </div>
+     <p class="vtext">That's a lot of room to grow. Jio is also the easiest way for <b>AI companies</b> to reach Indian users.</p>
+    </div>
+    <div class="view bearv" id="vbear">
+     <div class="glass viz">
+      <div class="lbl">New customers added each year</div>
+      <div class="vbars">
+       <div class="vb"><div class="val">4.25<small> cr</small></div><div class="b" data-h="100%" style="background:rgba(255,255,255,.22)"></div><div class="y">FY24</div></div>
+       <div class="vb hit"><div class="flag">price hike</div><div class="val">0.64<small> cr</small></div><div class="b" data-h="15%"></div><div class="y">FY25</div></div>
+       <div class="vb"><div class="val">3.62<small> cr</small></div><div class="b" data-h="85%" style="background:rgba(255,255,255,.22)"></div><div class="y">FY26</div></div>
+      </div>
+     </div>
+     <p class="vtext">When Jio raised prices in 2024, growth almost stopped. <b>Indians switch when prices rise.</b></p>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-tint="#5FD4FF,#F2C46B,#A796FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">10 · What to watch</div>
+   <h2 class="rv">The number that decides <em>everything.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="lockin"><i></i>Concept · Lock-in<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz meter">
+    <div class="lbl">What each user pays per month (ARPU)</div>
+    <div class="row"><div class="now">₹214</div><div class="goal">₹232</div></div>
+    <div class="mt"><div class="fm"></div><div class="tg"></div></div>
+    <div class="sub"><span>Today</span><span>Needed by ~FY29 (+₹18)</span></div>
+   </div>
+   <div class="glass lock">
+    <div class="ic">🔓</div>
+    <div><div class="d">AROUND APR 2027</div><p><b>Meta, Google and the 2020 investors</b> are allowed to start selling.</p><small>Anchor funds unlock earlier: half ~25 Nov, rest ~24 Jan</small></div>
+   </div>
+   <div class="glass watch">
+    <div class="lbl">Watch out for</div>
+    <div class="w"><span class="e">⏳</span><p><b>The tax break ending</b> around FY29, when Jio starts paying its full tax bill.</p></div>
+    <div class="w"><span class="e">📈</span><p><b>Price hikes.</b> Each one tests whether users stay or switch.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-tint="#F2C46B,#2F62FF,#FF7A6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv" style="color:var(--gold)">11 · The DD take</div>
+   <h2 class="rv">Big funds wanted it <em>70x</em> over. You wanted it 2.7x.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="qib"><i></i>Concept · QIB vs retail<span class="q">?</span></button></div>
+   <div class="end rv"><button class="pri" data-sheet="anchors">Who were the anchors?</button><button id="restart">Start again ↺</button></div>
+   <p class="disc rv">Education, not advice. Nothing here is a recommendation to buy, sell or hold. Sources: Jio Platforms DRHP (19 Jun 2026), NSE/BSE issue data.</p>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl">Times oversubscribed, by who was bidding</div>
+    <div class="drow"><div class="n">Big funds<span>QIB</span></div><div class="track"><div class="fill" style="--w:100%;background:linear-gradient(90deg,#F2C46B,#FFD98F)">70.6x</div><div class="avg" style="--x:31.4%"><span>avg 22x</span></div></div></div>
+    <div class="drow"><div class="n">Wealthy individuals<span>NII</span></div><div class="track"><div class="fill" style="--w:19.8%;background:rgba(255,255,255,.75);transition-delay:.15s">14x</div></div></div>
+    <div class="drow"><div class="n">Regular people<span>Retail</span></div><div class="track"><div class="fill" style="--w:6%;background:#5FD4FF;transition-delay:.3s;overflow:visible">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.7x</div></div></div>
+   </div>
+   <div class="glass take">Big money is betting Jio can get each of us to <em>pay a little more.</em> That's the whole story. Watch ARPU.</div>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- generic concept sheet -->
+<div class="sheet" id="sheet-concept"><div class="grab"></div><div class="k">Concept</div><h3 id="cTitle"></h3><div class="gfx" id="cGfx"></div><p class="sp" id="cText"></p><button class="close">Got it</button></div>
+
+<div class="sheet" id="sheet-split">
+ <div class="grab"></div><div class="k">How it makes money</div>
+ <h3>Where Jio's <em>₹1.47 lakh crore</em> comes from</h3>
+ <div class="hbar"><div class="l"><span>Prepaid recharges</span><b>77%</b></div><div class="t"><div style="width:77%;background:linear-gradient(90deg,#2F62FF,#5FD4FF)"></div></div></div>
+ <div class="hbar"><div class="l"><span>Everything else</span><b>23%</b></div><div class="t"><div style="width:23%;background:rgba(255,255,255,.4)"></div></div></div>
+ <div class="splitlist">
+  <div><span class="e">🏠</span><span><b>Home internet</b><br>JioFiber, AirFiber</span><span class="n">2.7 cr homes</span></div>
+  <div><span class="e">🏦</span><span><b>Businesses</b><br>connectivity, cloud</span><span class="n">90%+ of banks</span></div>
+  <div><span class="e">📱</span><span><b>Ads and apps</b><br>MyJio, JioTV, JioSaavn</span><span class="n">21.6 cr monthly users</span></div>
+  <div><span class="e">🧾</span><span><b>Postpaid and devices</b><br>plans, JioBharat phones</span><span class="n">smaller slices</span></div>
+ </div>
+ <p class="sp" style="margin-top:12px;font-size:12.5px">Jio's filing only breaks out the prepaid share. The rest is listed by what's in it.</p>
+ <button class="close">Got it</button>
+</div>
+
+<div class="sheet" id="sheet-roe">
+ <div class="grab"></div><div class="k">Why so low?</div>
+ <h3>Lots of money in, <em>still warming up</em></h3>
+ <div class="gfx">
+  <div class="hbar"><div class="l"><span>Shareholder money inside Jio</span><b>₹3.36L cr</b></div><div class="t"><div style="width:100%;background:rgba(255,255,255,.35)"></div></div></div>
+  <div class="hbar"><div class="l"><span>Profit last year</span><b>₹0.30L cr</b></div><div class="t"><div style="width:9%;background:var(--cyan)"></div></div></div>
+ </div>
+ <div class="pt"><span class="no">1</span><p><b>The pile is huge.</b> Reliance's spending plus about ₹1.5 lakh crore from Meta, Google and others. Profit is only about 9% of it.</p></div>
+ <div class="pt"><span class="no">2</span><p><b>A lot of it is new.</b> 5G airwaves and towers bought in the last few years haven't started earning fully yet.</p></div>
+ <button class="close">Got it</button>
+</div>
+
+<div class="sheet" id="sheet-pb">
+ <div class="grab"></div><div class="k">Another way to see it</div>
+ <h3>What you pay for <em>₹1 of what it owns</em></h3>
+ <div class="gfx"><div class="pair"><div><b>₹3</b><span>for ₹1 of Jio</span></div><div><b>₹7.7</b><span>for ₹1 of Airtel</span></div></div></div>
+ <p class="sp">Take everything a company owns and subtract what it owes. That's its <b>net worth.</b> Investors pay ₹3 for every ₹1 of Jio's net worth, and ₹7.7 for Airtel's, because each rupee inside Airtel earns about twice as much.</p>
+ <button class="close">Got it</button>
+</div>
+
+<div class="sheet" id="sheet-anchors">
+ <div class="grab"></div><div class="k">The anchor round</div>
+ <h3>₹8,110 crore, <em>before anyone else</em></h3>
+ <p class="sp" style="margin-bottom:12px">Two days before the IPO opened, big investors bought 7.25 crore shares at ₹1,119.</p>
+ <div class="anchors"><span class="chip">SBI MF</span><span class="chip">HDFC MF</span><span class="chip">ICICI Pru MF</span><span class="chip">LIC</span><span class="chip">HDFC Life</span><span class="chip">SBI Life</span><span class="chip">BlackRock</span><span class="chip">Fidelity</span><span class="chip">GIC Singapore</span><span class="chip">ADIA</span><span class="chip">Goldman Sachs</span></div>
+ <div class="pt"><span class="no">½</span><p>Half their shares unlock <b>around 25 Nov</b>, the rest <b>around 24 Jan</b>.</p></div>
+ <button class="close">Got it</button>
+</div>
+
+<script>
+(function(){
+  const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],bars=document.getElementById('bars'),count=document.getElementById('count'),root=document.documentElement;
+  slides.forEach(()=>bars.appendChild(document.createElement('i')));const segs=[...bars.children];let cur=0;
+
+  // date-aware cover
+  try{const now=new Date(),list=new Date('2026-10-28T09:00:00+05:30'),st=document.querySelector('#status span'),h=document.getElementById('coverH');
+    if(now>=list){st.textContent='Listed 28 Oct on NSE and BSE';h.innerHTML="India's <em>biggest</em> IPO ever just listed."}
+}catch(e){}
+
+  // waffle
+  const w=document.getElementById('waffle');let k=0;
+  [[64,'#F6F2E9'],[10,'#A796FF'],[8,'#6BE3B0'],[15,'#F2C46B'],[3,'#FF7A6B']].forEach(([n,c])=>{for(let j=0;j<n;j++){const i=document.createElement('i');i.dataset.c=c;i.style.transitionDelay=(k*12)+'ms';w.appendChild(i);k++}});
+
+  function countUp(el){const t=parseFloat(el.dataset.count),d=+(el.dataset.dec||0),dur=1400,s=performance.now();(function f(n){const p=Math.min(1,(n-s)/dur),e=1-Math.pow(1-p,3);el.textContent=(t*e).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});if(p<1)requestAnimationFrame(f)})(s)}
+  function activate(s){if(s.classList.contains('on'))return;s.classList.add('on');
+    s.querySelectorAll('[data-count]').forEach(countUp);
+    s.querySelectorAll('.arc[data-off]').forEach(a=>{if(!a.closest('.view')||a.closest('.view.show'))a.style.strokeDashoffset=a.dataset.off});
+    s.querySelectorAll('#waffle i').forEach(i=>i.style.background=i.dataset.c);
+    s.querySelectorAll('.view.show .b').forEach(b=>b.style.height=b.dataset.h)}
+  function tint(s){const t=(s.dataset.tint||'').split(',');if(t.length===3){root.style.setProperty('--b1',t[0]);root.style.setProperty('--b2',t[1]);root.style.setProperty('--b3',t[2])}}
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cur=slides.indexOf(e.target);activate(e.target);tint(e.target);segs.forEach((g,i)=>{g.classList.toggle('done',i<=cur);g.classList.toggle('cur',i===cur)});const nd=document.getElementById('nudge');nd.classList.toggle('hide',cur===slides.length-1);document.getElementById('nudgeT').textContent=cur===0?'Tap or swipe up':'Next';count.textContent=String(cur+1).padStart(2,'0')+' / '+slides.length}})},{root:deck,threshold:.55});
+  slides.forEach(s=>io.observe(s));
+
+  function go(i){i=Math.max(0,Math.min(slides.length-1,i));slides[i].scrollIntoView({block:'start',behavior:'smooth'})}
+  // tap to advance (right 70%) / go back (left 30%)
+  deck.addEventListener('click',e=>{if(e.target.closest('button,a,.toggle,.sheet'))return;if(getSelection&&String(getSelection()).length)return;
+    const x=e.clientX/window.innerWidth;go(x<0.3?cur-1:cur+1)});
+  document.getElementById('navUp').addEventListener('click',()=>go(cur-1));
+  document.getElementById('navDn').addEventListener('click',()=>go(cur+1));
+  document.addEventListener('keydown',e=>{if(document.querySelector('.sheet.open')){if(e.key==='Escape')closeAll();return}
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}});
+
+  // bull/bear
+  const tg=document.getElementById('toggle');
+  tg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const bear=b.dataset.v==='bear';tg.classList.toggle('bear',bear);tg.querySelectorAll('button').forEach(x=>x.classList.toggle('act',x===b));
+    const vb=document.getElementById('vbull'),vr=document.getElementById('vbear');vb.classList.toggle('show',!bear);vr.classList.toggle('show',bear);const v=bear?vr:vb;
+    v.querySelectorAll('.b').forEach(x=>{x.style.height='0';requestAnimationFrame(()=>requestAnimationFrame(()=>x.style.height=x.dataset.h))});
+    v.querySelectorAll('.arc[data-off]').forEach(a=>{a.style.strokeDashoffset=a.getAttribute('stroke-dasharray');requestAnimationFrame(()=>requestAnimationFrame(()=>a.style.strokeDashoffset=a.dataset.off))})}));
+
+  // concepts
+  const C={
+   ipo:{t:'IPO <em>(initial public offering)</em>',g:`<div class="flow"><div class="box"><b>A few</b><span>big owners before</span><div class="dots">${'<i></i>'.repeat(10)}</div></div><div class="op">→</div><div class="box g"><b>Anyone</b><span>with a demat account</span><div class="dots">${'<i></i>'.repeat(40)}</div></div></div>`,x:'The first time a company sells its shares to the public. Before it, only a handful of big investors owned Jio. From listing day, <b>anyone can buy a piece.</b>'},
+   arpu:{t:'ARPU <em>(average revenue per user)</em>',g:`<div class="flow"><div class="box"><b>Revenue</b><span>per month</span></div><div class="op">÷</div><div class="box"><b>Users</b><span>52.4 crore</span></div><div class="op">=</div><div class="box g"><b>₹214</b><span>ARPU</span></div></div>`,x:'How much the average customer pays each month. For a telecom company it is <b>the number that matters most</b>, because every ₹1 more is multiplied by crores of users.'},
+   fresh:{t:'Fresh issue <em>vs offer for sale</em>',g:`<div class="lanes"><div class="lane"><b>Fresh issue</b><div class="path"><span class="p">New shares</span>→<span class="p g">Money to company</span></div></div><div class="lane"><b>Offer for sale</b><div class="path"><span class="p">Old shares</span>→<span class="p">Money to old owners</span></div></div></div>`,x:'In a fresh issue the company creates new shares and <b>keeps the money.</b> In an offer for sale, existing owners sell and the company gets nothing. Jio\'s IPO was 100% fresh issue.'},
+   roe:{t:'ROE <em>(return on equity)</em>',g:`<div class="flow"><div class="box"><b>₹100</b><span>shareholders put in</span></div><div class="op">→</div><div class="box g"><b>₹9.4</b><span>profit a year (Jio)</span></div></div>`,x:'How much profit a company makes for every ₹100 its shareholders have in it. <b>Higher means each rupee is working harder.</b>'},
+   share:{t:'Market <em>share</em>',g:`<div class="hbar"><div class="l"><span>Jio's slice of mobile internet users</span><b>50%</b></div><div class="t"><div style="width:50%;background:linear-gradient(90deg,#2F62FF,#5FD4FF)"></div></div></div>`,x:'Out of all the customers in a market, the slice that uses one company. A bigger share usually means <b>more pricing power.</b>'},
+   deferred:{t:'Deferred <em>tax</em>',g:`<div class="pair"><div><b>₹118 cr</b><span>paid now</span></div><div><b>Later</b><span>the rest comes due</span></div></div>`,x:'Tax a company owes but is <b>allowed to pay later.</b> It is still counted in profit today, so profit is real, but the cash leaves the business later.'},
+   promoter:{t:'Promoter',g:`<div class="flow"><div class="box g"><b>👑 Reliance</b><span>promoter</span></div><div class="op">=</div><div class="box"><b>64.5%</b><span>controls the big decisions</span></div></div>`,x:'The founder or parent company that <b>controls</b> a listed company. Big decisions, like who runs it and where money goes, are theirs.'},
+   pe:{t:'P/E <em>(price to earnings)</em>',g:`<div class="flow"><div class="box"><b>₹1,119</b><span>share price</span></div><div class="op">÷</div><div class="box"><b>₹33.6</b><span>profit per share</span></div><div class="op">=</div><div class="box g"><b>33x</b><span>P/E</span></div></div>`,x:'How many years of today\'s profit you are paying for upfront. <b>Higher usually means investors expect faster growth.</b>'},
+   churn:{t:'Churn',g:`<div class="dots" style="max-width:260px;margin:0 auto">${'<i></i>'.repeat(48)}<i class="c"></i><i class="c" style="animation-delay:.6s"></i></div><p class="sp" style="text-align:center;font-size:12px;margin-top:10px">Jio 1.67% a month · Airtel 2.43%</p>`,x:'The share of customers who <b>leave every month.</b> Lower is better, because finding new customers costs money.'},
+   lockin:{t:'Lock-in <em>period</em>',g:`<div class="flow"><div class="box"><b>🔒</b><span>can't sell</span></div><div class="op">→</div><div class="box"><b>⏳</b><span>30 days to 6 months</span></div><div class="op">→</div><div class="box g"><b>🔓</b><span>free to sell</span></div></div>`,x:'A stretch after the IPO when certain investors <b>aren\'t allowed to sell.</b> When it ends, lots of shares can hit the market at once.'},
+   qib:{t:'QIB <em>vs retail</em>',g:`<div class="pair"><div><b>🏦</b><span><b style="font-size:13px;font-family:var(--sans);display:inline">QIBs:</b> mutual funds, insurers, foreign funds</span></div><div><b>🙋</b><span><b style="font-size:13px;font-family:var(--sans);display:inline">Retail:</b> individuals investing up to ₹2 lakh</span></div></div>`,x:'IPOs set aside separate portions for big professional investors (QIBs) and for regular people (retail). <b>Each portion gets its own subscription number.</b>'}
+  };
+  const scrim=document.getElementById('scrim');
+  function closeAll(){document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));scrim.classList.remove('open')}
+  function open(id){const s=document.getElementById(id);if(!s)return;s.scrollTop=0;s.classList.add('open');scrim.classList.add('open')}
+  document.querySelectorAll('[data-concept]').forEach(b=>b.addEventListener('click',()=>{const c=C[b.dataset.concept];if(!c)return;
+    document.getElementById('cTitle').innerHTML=c.t;document.getElementById('cGfx').innerHTML=c.g;document.getElementById('cText').innerHTML=c.x;open('sheet-concept')}));
+  document.querySelectorAll('[data-sheet]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();open('sheet-'+b.dataset.sheet)}));
+  scrim.addEventListener('click',closeAll);
+  document.querySelectorAll('.sheet .close').forEach(b=>b.addEventListener('click',closeAll));
+  document.querySelectorAll('.sheet').forEach(s=>{let y0=null;s.addEventListener('touchstart',e=>{if(s.scrollTop<=0)y0=e.touches[0].clientY},{passive:true});s.addEventListener('touchmove',e=>{if(y0!==null&&e.touches[0].clientY-y0>70){closeAll();y0=null}},{passive:true});s.addEventListener('touchend',()=>y0=null)});
+
+  // fit every slide to any screen: shrink the visual until nothing overflows
+  function fit(){slides.forEach(s=>{const inn=s.querySelector('.inner'),v=s.querySelector('.v'),h=s.querySelector('h1,h2');if(!v)return;
+    v.style.zoom='';if(h)h.style.fontSize='';const base=parseFloat(getComputedStyle(v).zoom)||1;let z=base,n=0;
+    while(inn.scrollHeight>inn.clientHeight+1&&n<14){z-=.04*base;v.style.zoom=z;n++}
+    if(inn.scrollHeight>inn.clientHeight+1&&h){h.style.fontSize=(parseFloat(getComputedStyle(h).fontSize)*.88)+'px'}})}
+  let ft;window.addEventListener('resize',()=>{clearTimeout(ft);ft=setTimeout(fit,120)});
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(fit);fit();
+  document.getElementById('restart').addEventListener('click',()=>go(0));
+})();
+</script>
+</body>
+</html>
