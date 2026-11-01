@@ -433,18 +433,25 @@
 
           <div class="ig-row">
             <div>
+              <label for="igQueueSize">Maximum matching comments to queue</label>
+              <input id="igQueueSize" type="number" min="1" max="500" value="500">
+            </div>
+            <div>
               <label for="igPollInterval">Poll every (seconds)</label>
               <input id="igPollInterval" type="number" min="60" max="3600" value="180">
             </div>
+          </div>
+          <div class="ig-row">
             <div>
-              <label for="igMaxHour">Maximum DMs per hour</label>
-              <input id="igMaxHour" type="number" min="1" max="50" value="10">
+              <label for="igMaxHour">Maximum DMs per hour (recommended: 10)</label>
+              <input id="igMaxHour" type="number" min="1" max="30" value="10">
+            </div>
+            <div>
+              <label for="igMaxDay">Maximum DMs per day</label>
+              <input id="igMaxDay" type="number" min="1" max="100" value="30">
             </div>
           </div>
-          <div>
-            <label for="igMaxDay">Maximum DMs per day</label>
-            <input id="igMaxDay" type="number" min="1" max="200" value="30">
-          </div>
+          <p class="ig-note">The queue may contain 500 matches, but sends are evenly paced. This browser-driven workflow is intentionally capped at 30 per hour and 100 per day.</p>
 
           <div class="actions">
             <button type="submit">Save settings</button>
@@ -715,9 +722,10 @@
       $('igTriggerComment').value = job.triggerComment || 'DD';
       $('igExactMatch').checked = job.exactMatch !== false;
       $('igCaseInsensitive').checked = job.caseInsensitive !== false;
+      $('igQueueSize').value = job.maxQueueComments || 500;
       $('igPollInterval').value = job.pollIntervalSeconds || 180;
-      $('igMaxHour').value = job.maxDmsPerHour || 10;
-      $('igMaxDay').value = job.maxDmsPerDay || 30;
+      $('igMaxHour').value = Math.min(30, job.maxDmsPerHour || 10);
+      $('igMaxDay').value = Math.min(100, job.maxDmsPerDay || 30);
       $('igDmText').value = (job.directMessage && job.directMessage.text) || '';
       $('igDmLink').value = (job.directMessage && job.directMessage.link) || '';
       $('igReplies').innerHTML = '';
@@ -747,6 +755,7 @@
           text: $('igDmText').value.trim(),
           link: $('igDmLink').value.trim()
         },
+        maxQueueComments: Number($('igQueueSize').value),
         pollIntervalSeconds: Number($('igPollInterval').value),
         maxDmsPerHour: Number($('igMaxHour').value),
         maxDmsPerDay: Number($('igMaxDay').value)

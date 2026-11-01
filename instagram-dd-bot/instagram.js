@@ -76,11 +76,11 @@ class InstagramBrowser {
     }
   }
 
-  async scanPostDryRun(job, dryRunOnly = true) {
+  async scanPostDryRun(job, dryRunOnly = true, onMatches = null) {
     if (!this.page) throw new Error('Browser context has not been started.');
     this.logger('INFO', `Scanning post read-only: ${job.postUrl}`);
     await this.openPostComments(job.postUrl);
-    const result = await this.extractComments(job);
+    const result = await this.collectComments(job, onMatches);
     await this.writeInspection(result);
 
     this.logger('INFO', `Inspected ${result.candidates.length} semantic comment candidates.`);
@@ -90,9 +90,12 @@ class InstagramBrowser {
       return result;
     }
 
-    result.matches.forEach(comment => {
+    result.matches.slice(0, 20).forEach(comment => {
       this.logger('INFO', `MATCH: @${comment.username} wrote "${comment.text}".`);
     });
+    if (result.matches.length > 20) {
+      this.logger('INFO', `${result.matches.length - 20} additional match(es) are stored in the persistent queue.`);
+    }
     this.logger('INFO', dryRunOnly
       ? `Dry scan complete: ${result.matches.length} match(es), zero replies, zero DMs sent.`
       : `Live scan complete: ${result.matches.length} qualifying match(es) found.`);
@@ -112,7 +115,6 @@ class InstagramBrowser {
     }
 
     await this.openCommentPanel();
-    await this.expandCommentControls();
   }
 
   async openCommentPanel() {
@@ -289,7 +291,7 @@ class InstagramBrowser {
     return composer;
   }
 
-  async findCommentReplyButton(comment) {
+  async findVisibleCommentReplyButton(comment) {
     const replyButtons = this.page.getByRole('button', { name: /^reply$/i });
     for (let index = 0; index < await replyButtons.count(); index += 1) {
       const button = replyButtons.nth(index);
@@ -300,6 +302,30 @@ class InstagramBrowser {
       const timestamp = await row.locator('time').first().getAttribute('datetime').catch(() => null);
       if (comment.timestamp && timestamp && timestamp !== comment.timestamp) continue;
       return button;
+    }
+    return null;
+  }
+
+  async findCommentReplyButton(comment) {
+    let stalledAttempts = 0;
+    for (let attempt = 0; attempt < 200; attempt += 1) {
+      const replyButton = await this.findVisibleCommentReplyButton(comment);
+      if (replyButton) return replyButton;
+
+      const expanded = await this.expandCommentControlOnce();
+      if (expanded) {
+        stalledAttempts = 0;
+        continue;
+      }
+      const scrolled = await this.scrollCommentSurface();
+      if (scrolled) {
+        stalledAttempts = 0;
+        await this.page.waitForTimeout(900);
+        await this.raiseIfSafetyScreen();
+        continue;
+      }
+      stalledAttempts += 1;
+      if (stalledAttempts >= 2) break;
     }
     return null;
   }
@@ -508,24 +534,114 @@ class InstagramBrowser {
     );
   }
 
-  async expandCommentControls() {
-    if (!this.page) return;
+  async expandCommentControlOnce() {
+    if (!this.page) return false;
     const names = /^(view all \d+ comments?|view more comments?|load more comments?)$/i;
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      const controls = this.page.getByRole('button', { name: names });
-      const count = await controls.count();
-      let clicked = false;
-      for (let index = 0; index < count; index += 1) {
-        const control = controls.nth(index);
-        if (!await control.isVisible().catch(() => false)) continue;
-        await control.click({ timeout: 5000 });
-        await this.page.waitForTimeout(1200);
-        await this.raiseIfSafetyScreen();
-        clicked = true;
-        break;
-      }
-      if (!clicked) return;
+    const controls = this.page.getByRole('button', { name: names });
+    const count = await controls.count();
+    for (let index = 0; index < count; index += 1) {
+      const control = controls.nth(index);
+      if (!await control.isVisible().catch(() => false)) continue;
+      await control.click({ timeout: 5000 });
+      await this.page.waitForTimeout(1000);
+      await this.raiseIfSafetyScreen();
+      return true;
     }
+    return false;
+  }
+
+  async scrollCommentSurface() {
+    if (!this.page) return false;
+    return await this.page.locator('body').evaluate(() => {
+      const elements = Array.from(document.querySelectorAll('[role="dialog"], main, div'));
+      const scrollable = elements
+        .filter(element => element.scrollHeight > element.clientHeight + 80)
+        .filter(element => {
+          const style = getComputedStyle(element);
+          return /(auto|scroll)/.test(style.overflowY);
+        })
+        .sort((a, b) => (b.clientHeight * b.clientWidth) - (a.clientHeight * a.clientWidth));
+      for (const element of scrollable) {
+        const before = element.scrollTop;
+        element.scrollTop = Math.min(element.scrollHeight, before + Math.max(500, element.clientHeight * 0.8));
+        if (element.scrollTop > before) return true;
+      }
+      return false;
+    }).catch(() => false);
+  }
+
+  async rewindCommentSurface() {
+    if (!this.page) return;
+    await this.page.locator('body').evaluate(() => {
+      Array.from(document.querySelectorAll('[role="dialog"], main, div'))
+        .filter(element => element.scrollHeight > element.clientHeight + 80)
+        .forEach(element => { element.scrollTop = 0; });
+    }).catch(() => {});
+    await this.page.waitForTimeout(700);
+  }
+
+  async collectComments(job, onMatches = null) {
+    const maxMatches = Math.max(1, Math.min(500, Number(job.maxQueueComments) || 500));
+    const maxAttempts = Math.min(200, Math.max(50, Math.ceil(maxMatches / 3)));
+    const candidateMap = new Map();
+    const matchMap = new Map();
+    let stalledAttempts = 0;
+    let replyButtonCount = 0;
+    let nextReplyIndex = 0;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      const before = candidateMap.size;
+      const batch = await this.extractComments(job, { includeSnapshot: false, startIndex: nextReplyIndex });
+      nextReplyIndex = batch.replyButtonCount >= nextReplyIndex
+        ? batch.replyButtonCount
+        : 0;
+      replyButtonCount = Math.max(replyButtonCount, batch.replyButtonCount);
+      batch.candidates.forEach(candidate => {
+        const key = `${candidate.username.toLowerCase()}|${candidate.timestamp || ''}|${candidate.lines.join('|')}`;
+        if (!candidateMap.has(key)) candidateMap.set(key, candidate);
+      });
+      const newMatches = [];
+      batch.matches.forEach(comment => {
+        const key = `${comment.username.toLowerCase()}|${comment.timestamp || ''}|${comment.lines.join('|')}`;
+        if (!matchMap.has(key) && matchMap.size < maxMatches) {
+          matchMap.set(key, comment);
+          newMatches.push(comment);
+        }
+      });
+      if (newMatches.length && typeof onMatches === 'function') await onMatches(newMatches);
+
+      const grew = candidateMap.size > before;
+      stalledAttempts = grew ? 0 : stalledAttempts + 1;
+      if (attempt === 0 || (attempt + 1) % 5 === 0 || matchMap.size >= maxMatches) {
+        this.logger('INFO', `Comment scan progress: ${candidateMap.size} candidate(s), ${matchMap.size}/${maxMatches} matching queued.`);
+      }
+      if (matchMap.size >= maxMatches) break;
+
+      const expanded = await this.expandCommentControlOnce();
+      if (expanded) continue;
+      const scrolled = await this.scrollCommentSurface();
+      if (scrolled) {
+        await this.page.waitForTimeout(900);
+        await this.raiseIfSafetyScreen();
+      }
+      if (!scrolled && stalledAttempts >= 2) break;
+      if (stalledAttempts >= 6) break;
+    }
+
+    const scope = await this.page.locator('main').count() ? this.page.locator('main') : this.page.locator('body');
+    const ariaSnapshot = await scope.ariaSnapshot({ timeout: 5000 }).catch(() => '');
+    await this.rewindCommentSurface();
+    return {
+      inspectedAt: new Date().toISOString(),
+      postUrl: job.postUrl,
+      finalUrl: this.page.url(),
+      triggerComment: job.triggerComment,
+      queueLimit: maxMatches,
+      replyButtonCount,
+      candidates: Array.from(candidateMap.values()),
+      matches: Array.from(matchMap.values()),
+      ariaSnapshot: ariaSnapshot.slice(0, 50000)
+    };
   }
 
   matchesTrigger(value, job) {
@@ -539,15 +655,16 @@ class InstagramBrowser {
     return job.exactMatch === false ? candidate.includes(trigger) : candidate === trigger;
   }
 
-  async extractComments(job) {
+  async extractComments(job, options = {}) {
     const candidates = [];
     const matches = [];
     const seen = new Set();
     const reservedPaths = new Set(['about', 'accounts', 'direct', 'explore', 'reel', 'reels', 'p']);
     const replyButtons = this.page.getByRole('button', { name: /^reply$/i });
     const replyCount = await replyButtons.count();
+    const startIndex = Math.max(0, Math.min(replyCount, Number(options.startIndex) || 0));
 
-    for (let index = 0; index < replyCount; index += 1) {
+    for (let index = startIndex; index < replyCount; index += 1) {
       const replyButton = replyButtons.nth(index);
       const row = replyButton.locator('xpath=ancestor::*[(self::li or self::div) and .//a[@href] and .//time][1]');
       if (!await row.count()) continue;
@@ -591,8 +708,11 @@ class InstagramBrowser {
       if (matchedText) matches.push({ ...candidate, text: matchedText });
     }
 
-    const scope = await this.page.locator('main').count() ? this.page.locator('main') : this.page.locator('body');
-    const ariaSnapshot = await scope.ariaSnapshot({ timeout: 5000 }).catch(() => '');
+    let ariaSnapshot = '';
+    if (options.includeSnapshot !== false) {
+      const scope = await this.page.locator('main').count() ? this.page.locator('main') : this.page.locator('body');
+      ariaSnapshot = await scope.ariaSnapshot({ timeout: 5000 }).catch(() => '');
+    }
     return {
       inspectedAt: new Date().toISOString(),
       postUrl: job.postUrl,

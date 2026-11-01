@@ -711,8 +711,6 @@ async function handleOnboarding(payload, res) {
   if (!fullNameCheck) required.push('full name');
   if (!email || !/^\S+@\S+\.\S+$/.test(email)) required.push('valid email');
   if (password.length < 8) required.push('password with at least 8 characters');
-  if (!normalize(payload.profession)) required.push('profession');
-  if (!normalize(payload.howHeard)) required.push('how did you hear about us');
   if (required.length) {
     return res.status(400).json({ error: `Missing: ${required.join(', ')}.` });
   }
@@ -954,19 +952,7 @@ function adminSummary(db) {
   return {
     stats: {
       userCount: users.length,
-      signupCompleteCount: users.filter(user =>
-        user.firstName &&
-        user.lastName &&
-        user.email &&
-        user.profession &&
-        user.howHeard &&
-        Array.isArray(user.marketPreferences) &&
-        user.marketPreferences.length &&
-        Array.isArray(user.sectorPreferences) &&
-        user.sectorPreferences.length &&
-        user.ageRange &&
-        user.investorLevel
-      ).length,
+      signupCompleteCount: users.filter(user => user.onboardingCompleted).length,
       activeStreakCount: users.filter(user => (user.streak || 0) > 0).length,
       totalReads: users.reduce((sum, user) => sum + (Array.isArray(user.readHistory) ? user.readHistory.length : 0), 0),
       savedCompaniesCount: users.reduce((sum, user) => sum + (Array.isArray(user.savedCompanies) ? user.savedCompanies.length : 0), 0),
@@ -1053,6 +1039,60 @@ app.post('/api/onboarding', async (req, res, next) => {
 app.post('/api/login', async (req, res, next) => {
   try {
     return await handleLogin(req.body, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/auth/google', async (req, res, next) => {
+  try {
+    const client = authClient();
+    if (!client) return res.status(503).json({ error: 'Supabase Auth is not configured.' });
+    const forwardedProto = String(req.get('x-forwarded-proto') || req.protocol || 'https').split(',')[0].trim();
+    const redirectTo = `${forwardedProto}://${req.get('host')}/auth/google/callback`;
+    const { data, error } = await client.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo, skipBrowserRedirect: true }
+    });
+    if (error || !data || !data.url) {
+      return res.status(503).json({ error: (error && error.message) || 'Google login is not available yet.' });
+    }
+    return res.redirect(302, data.url);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/auth/google-session', async (req, res, next) => {
+  try {
+    const accessToken = normalize(req.body.accessToken);
+    const refreshToken = normalize(req.body.refreshToken);
+    if (!accessToken || !refreshToken) return res.status(400).json({ error: 'Google login could not be completed.' });
+    const client = authClient();
+    if (!client) return res.status(503).json({ error: 'Supabase Auth is not configured.' });
+    const { data, error } = await client.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+    const authUser = data && data.user;
+    if (error || !authUser || !data.session) return res.status(401).json({ error: 'Google login expired. Please try again.' });
+
+    const db = await readDb();
+    const user = getUser(db, authUser.id);
+    const metadata = authUser.user_metadata || {};
+    const fullName = normalize(metadata.full_name || metadata.name);
+    const nameParts = fullName.split(/\s+/).filter(Boolean);
+    user.email = authUser.email || user.email || '';
+    if (!user.firstName && nameParts.length) user.firstName = nameParts.shift();
+    if (!user.lastName && nameParts.length) user.lastName = nameParts.join(' ');
+    if (normalize(req.body.ageRange)) user.ageRange = normalize(req.body.ageRange);
+    if (normalize(req.body.investorLevel)) {
+      user.investorLevel = normalize(req.body.investorLevel);
+      user.financeProficiency = levelToFinanceProficiency(user.investorLevel);
+    }
+    user.onboardingCompleted = true;
+    user.updatedAt = new Date().toISOString();
+    await writeDb(db);
+    setAuthCookies(res, data.session);
+    analytics.identify({ distinctId: authUser.id, properties: { email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    return res.json({ ok: true, user: profile(user) });
   } catch (error) {
     next(error);
   }
@@ -1754,17 +1794,33 @@ app.get('/admin', (req, res) => {
 // Serve root-level HTML files explicitly so edits to root are always live
 app.get('/', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/index.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
-// Shareable app routes. The client reads the slug and opens the matching reader.
+// Keep the Rabbit Holes redesign isolated under /testing123.
+app.get([
+  '/testing123',
+  '/testing123/',
+  '/testing123/index.html',
+  '/testing123/rabbit-holes/:reportId'
+], (req, res) => {
+  res.setHeader('Cache-Control', 'private, no-cache');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/testing123/companies/:companyId', (req, res) => res.redirect(302, '/testing123'));
+// The original full product remains the normal public site.
 app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/testing123/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/testing123/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/auth/google/callback', (req, res) => res.sendFile(path.join(__dirname, 'public', 'google-callback.html')));
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
 app.get('/signup.html', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
-app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
-app.get('/onboarding.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
+app.get('/onboarding.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
+app.get('/testing123/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/testing123/onboarding.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
 
 app.get('/desktop.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'dd_v6_desktop_revised (1).html'));

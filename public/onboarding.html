@@ -120,7 +120,11 @@
     .ph-input{flex:1;padding:14px 16px;font-family:var(--mono);font-size:18px;font-weight:600;outline:none;min-width:0}
     .ph-input::placeholder{color:rgba(245,241,232,.28);font-family:var(--sans);font-size:14px;font-weight:400}
     .ph-or{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);text-align:center;margin:16px 0}
-    .ph-email{width:100%;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(245,241,232,.66);border-radius:14px;padding:14px 16px}
+    .ph-email,.google-btn{width:100%;border:1.5px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 16px;font-family:var(--sans);font-weight:600;cursor:pointer}
+    .ph-email{background:transparent;color:rgba(245,241,232,.66)}
+    .google-btn{background:#fff;color:#202124;display:flex;align-items:center;justify-content:center;gap:10px}
+    .google-btn:hover{background:#f7f7f7}
+    .google-btn svg{width:18px;height:18px;flex:0 0 18px}
     .ph-privacy,.flow-msg{font-size:11px;line-height:1.5;text-align:center;margin-top:16px;color:rgba(255,255,255,.28)}
     .flow-msg{min-height:18px;color:#FCC9C2;opacity:0;transition:opacity .18s}
     .flow-msg.show{opacity:1}
@@ -252,7 +256,7 @@
       .feat-icon{width:52px;height:52px;font-size:24px}
       .phone-inner,.acct-inner{display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,620px);grid-auto-rows:min-content;column-gap:72px;align-content:start}
       .ph-tag,.ph-h,.ph-sub{grid-column:1}
-      .ph-row,.ph-or,.ph-email,.ph-privacy,.flow-msg{grid-column:2}
+      .ph-row,.ph-or,.ph-email,.google-btn,.ph-privacy,.flow-msg{grid-column:2}
       .acct-tag,.acct-h,.acct-sub{grid-column:1}
       .acct-grid{grid-column:2;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
       .acct-field.full{grid-column:1/-1}
@@ -296,58 +300,15 @@
           <div class="hook-tag">Why Daily Dividend</div>
           <div class="hook-h">Most people scroll past tickers they <em>don't understand.</em></div>
           <div class="hook-sub">We fix that. One company a week. The real story: <strong>where the money comes from, who owns it, and what could go wrong</strong>, in the time it takes to drink a coffee.</div>
-          <button class="btn-full btn-primary" onclick="goTo('markets')">I'm in <span class="btn-arrow">→</span></button>
+          <button class="btn-full btn-primary" onclick="goTo('about')">I'm in <span class="btn-arrow">→</span></button>
         </div>
-      </section>
-
-      <section class="screen" id="s-markets">
-        <div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div>
-        <button class="back-btn dark" onclick="goTo('hook')" aria-label="Back">←</button>
-        <div class="q-wrap">
-          <div class="q-tag">01 of 03</div>
-          <div class="q-h">Which markets do you <em>follow?</em></div>
-          <div class="q-sub">Select all that apply. We'll personalize your stories.</div>
-          <div class="market-grid">
-            <button class="market-btn" data-m="us" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇺🇸</span><span class="mb-info"><span class="mb-name">US</span><span class="mb-sub">NYSE · NASDAQ</span></span><span class="mb-check">✓</span></button>
-            <button class="market-btn" data-m="india" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇮🇳</span><span class="mb-info"><span class="mb-name">India</span><span class="mb-sub">NSE · BSE</span></span><span class="mb-check">✓</span></button>
-            <button class="market-btn" data-m="uk" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇬🇧</span><span class="mb-info"><span class="mb-name">UK</span><span class="mb-sub">LSE · FTSE</span></span><span class="mb-check">✓</span></button>
-            <button class="market-btn" data-m="global" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🌍</span><span class="mb-info"><span class="mb-name">Global</span><span class="mb-sub">All markets</span></span><span class="mb-check">✓</span></button>
-          </div>
-        </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="mktNext" onclick="goTo('sectors')" disabled>Continue <span class="btn-arrow">→</span></button></div>
-      </section>
-
-      <section class="screen" id="s-sectors">
-        <div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div>
-        <button class="back-btn dark" onclick="goTo('markets')" aria-label="Back">←</button>
-        <div class="q-wrap">
-          <div class="q-tag">02 of 03</div>
-          <div class="q-h">What gets you <em>excited?</em></div>
-          <div class="q-sub">Pick your rabbit holes. Choose as many as you like.</div>
-          <div class="sector-grid">
-            <button class="sector-btn" data-s="big-tech" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💻</span>Big Tech</button>
-            <button class="sector-btn" data-s="usa" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🇺🇸</span>Made in USA</button>
-            <button class="sector-btn" data-s="india" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🇮🇳</span>Made in India</button>
-            <button class="sector-btn" data-s="banks" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏦</span>Banks &amp; Money</button>
-            <button class="sector-btn" data-s="junk-food" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🍟</span>Junk Food</button>
-            <button class="sector-btn" data-s="entertainment" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🎬</span>Entertainment</button>
-            <button class="sector-btn" data-s="ai-chips" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🤖</span>AI &amp; Chips</button>
-            <button class="sector-btn" data-s="cars-evs" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🚗</span>Cars &amp; EVs</button>
-            <button class="sector-btn" data-s="luxury" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💎</span>Luxury</button>
-            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏆</span>Sports</button>
-            <button class="sector-btn" data-s="fashion" onclick="toggleSector(this)" type="button"><span class="sector-emoji">👟</span>Fashion &amp; Sneakers</button>
-            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button"><span class="sector-emoji">✈️</span>Travel &amp; Flights</button>
-            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button"><span class="sector-emoji">⛽</span>Energy &amp; Oil</button>
-          </div>
-        </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue <span class="btn-arrow">→</span></button></div>
       </section>
 
       <section class="screen" id="s-about">
-        <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
-        <button class="back-btn dark" onclick="goTo('sectors')" aria-label="Back">←</button>
+        <div class="prog-bar"><div class="prog-fill" style="width:33%"></div></div>
+        <button class="back-btn dark" onclick="goTo('hook')" aria-label="Back">←</button>
         <div class="q-wrap">
-          <div class="q-tag">03 of 03</div>
+          <div class="q-tag">Quick setup</div>
           <div class="q-h">A little about <em>you.</em></div>
           <div class="q-sub">Two quick ones.</div>
           <div class="about-block">
@@ -372,7 +333,7 @@
       </section>
 
       <section class="screen" id="s-phone">
-        <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:66%"></div></div>
         <button class="back-btn" onclick="goTo('about')" aria-label="Back">←</button>
         <div class="phone-inner">
           <div class="ph-tag">Almost there</div>
@@ -382,7 +343,10 @@
             <input class="ph-input" id="emailInput" type="email" autocomplete="email" placeholder="you@example.com" oninput="onEmailInput()">
           </div>
           <div class="ph-or">or</div>
-          <button class="ph-email" type="button" onclick="showError('Phone-number signup is currently a beta feature. Please use email for now.')">Continue with phone number <span style="opacity:.55">(beta)</span></button>
+          <button class="google-btn" type="button" onclick="startGoogleAuth()" aria-label="Log in with Google">
+            <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.797 2.715v2.258h2.909c1.703-1.568 2.684-3.878 2.684-6.614Z"/><path fill="#34A853" d="M9 18c2.43 0 4.468-.806 5.956-2.181l-2.91-2.258c-.805.54-1.835.859-3.046.859-2.344 0-4.328-1.585-5.037-3.714H.956v2.332A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.963 10.706A5.41 5.41 0 0 1 3.68 9c0-.592.102-1.168.283-1.706V4.962H.956A9 9 0 0 0 0 9c0 1.452.347 2.827.956 4.038l3.007-2.332Z"/><path fill="#EA4335" d="M9 3.58c1.322 0 2.508.454 3.441 1.346l2.581-2.581C13.464.892 11.426 0 9 0A9 9 0 0 0 .956 4.962l3.007 2.332C4.672 5.165 6.656 3.58 9 3.58Z"/></svg>
+            Log in with Google
+          </button>
           <div class="ph-privacy">We never sell your data or send spam.</div>
           <div class="flow-msg" id="flowMsg" role="status"></div>
         </div>
@@ -406,37 +370,13 @@
               <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Min. 8 characters">
             </div>
             <div class="acct-field">
-              <label for="professionInput">Profession</label>
-              <input class="acct-input" id="professionInput" autocomplete="organization-title" oninput="checkAccount()" placeholder="Student, founder, analyst...">
-            </div>
-            <div class="acct-field">
-              <label for="heardInput">How did you hear about us?</label>
-              <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="Friend, TikTok, LinkedIn...">
-            </div>
-            <div class="acct-field">
-              <label>Country</label>
-              <input type="hidden" id="countryInput">
-              <button type="button" class="cntry-trigger empty" id="cntryTrigger" onclick="openCountryDD()"><span id="cntryLabel">Select your country</span><span class="cntry-trigger-arrow">▼</span></button>
+              <label for="confirmPasswordInput">Confirm password</label>
+              <input class="acct-input" id="confirmPasswordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Enter password again">
             </div>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
         </div>
         <div class="acct-foot"><button class="btn-full-dark" id="accountNext" onclick="completeOnboarding()" disabled>Create account <span class="btn-arrow">→</span></button></div>
-      </section>
-
-      <section class="screen" id="s-payoff">
-        <div class="payoff-inner">
-          <div class="payoff-mark">DD</div>
-          <div class="payoff-h">You're <em>in.</em></div>
-          <div class="payoff-sub">Welcome to Daily Dividend. We built this for people who want to actually understand what they're reading about, not just the numbers, the story.</div>
-          <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
-          <div class="payoff-card"><div class="payoff-card-label">Your interests</div><div class="payoff-chips" id="payoffSectors"></div></div>
-          <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix: The $46M a day question</div></div></div>
-        </div>
-        <div class="payoff-foot">
-          <button class="btn-payoff" onclick="goToApp()">Let's go <span class="btn-arrow">→</span></button>
-          <div class="payoff-terms">New company every Monday</div>
-        </div>
       </section>
 
       <div class="cntry-overlay" id="cntryOverlay" onclick="closeCntryDD(event)">
@@ -475,8 +415,6 @@
     window.addEventListener('orientationchange', () => setTimeout(setAppHeight, 80), {passive:true});
     if(window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight, {passive:true});
 
-    let selectedMarkets = new Set();
-    let selectedSectors = new Set();
     let selectedAge = '';
     let selectedLevel = '';
     let emailAddress = '';
@@ -510,18 +448,6 @@
       }, 160);
     });
 
-    function toggleMarket(el){
-      const value = el.dataset.m;
-      selectedMarkets.has(value) ? selectedMarkets.delete(value) : selectedMarkets.add(value);
-      el.classList.toggle('sel');
-      document.getElementById('mktNext').disabled = selectedMarkets.size === 0;
-    }
-    function toggleSector(el){
-      const value = el.dataset.s;
-      selectedSectors.has(value) ? selectedSectors.delete(value) : selectedSectors.add(value);
-      el.classList.toggle('sel');
-      document.getElementById('secNext').disabled = selectedSectors.size === 0;
-    }
     function selAge(el){
       document.querySelectorAll('.age-btn').forEach(button => button.classList.remove('sel'));
       el.classList.add('sel');
@@ -552,21 +478,33 @@
       goTo('account');
       setTimeout(() => document.getElementById('fullNameInput').focus(), 420);
     }
+    function startGoogleAuth(){
+      sessionStorage.setItem('ddGoogleOnboarding', JSON.stringify({ageRange:selectedAge, investorLevel:selectedLevel}));
+      sessionStorage.setItem('ddGoogleReturnTo', '/testing123');
+      window.location.href = '/api/auth/google';
+    }
     function fieldValue(id){
       return document.getElementById(id).value.trim();
     }
     function accountDetails(){
       return {
         name: fieldValue('fullNameInput'),
-        password: fieldValue('passwordInput'),
-        profession: fieldValue('professionInput'),
-        howHeard: fieldValue('heardInput'),
-        country: fieldValue('countryInput')
+        password: fieldValue('passwordInput')
       };
     }
     function checkAccount(){
       const details = accountDetails();
-      const complete = Object.values(details).every(Boolean);
+      const confirmation = fieldValue('confirmPasswordInput');
+      const passwordsMatch = details.password === confirmation;
+      const complete = Boolean(details.name && details.password.length >= 8 && confirmation && passwordsMatch);
+      const message = document.getElementById('acctMsg');
+      if(confirmation && !passwordsMatch){
+        message.textContent = 'Passwords do not match.';
+        message.classList.add('show');
+      }else if(message.textContent === 'Passwords do not match.'){
+        message.textContent = '';
+        message.classList.remove('show');
+      }
       document.getElementById('accountNext').disabled = !complete;
       return complete;
     }
@@ -607,8 +545,8 @@
         phoneNumber: cleanPhone(phoneNum, phoneCode),
         countryName: selectedCountryName,
         ...accountDetails(),
-        marketPreferences: [...selectedMarkets],
-        sectorPreferences: [...selectedSectors],
+        marketPreferences: [],
+        sectorPreferences: [],
         ageRange: selectedAge,
         investorLevel: selectedLevel,
         onboardingCompleted: true
@@ -638,7 +576,7 @@
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('dailyDividendOnboarded', 'true');
         }
-        goTo('payoff');
+        goToApp();
         return true;
       }catch(error){
         showError(error.message, 'acctMsg');
@@ -649,13 +587,8 @@
         checkAccount();
       }
     }
-    const marketLabels = {us:'US', india:'India', uk:'UK', global:'Global'};
-    const sectorLabels = {'big-tech':'Big Tech', usa:'Made in USA', india:'Made in India', banks:'Banks & Money', 'junk-food':'Junk Food', entertainment:'Entertainment', 'ai-chips':'AI & Chips', 'cars-evs':'Cars & EVs', luxury:'Luxury', sports:'Sports', fashion:'Fashion & Sneakers', travel:'Travel & Flights', energy:'Energy & Oil'};
-    function buildPayoff(){
-      document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
-      document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
-    }
-    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='index.html';}
+    function buildPayoff(){}
+    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='/testing123';}
 
     const COUNTRIES = [
       'India','United States','United Kingdom','UAE','Singapore','Australia','Canada',

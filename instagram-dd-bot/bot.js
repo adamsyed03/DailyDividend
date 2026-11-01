@@ -5,6 +5,10 @@ const { ProcessedCommentDatabase } = require('./database');
 const { InstagramBrowser, InstagramSafetyStop } = require('./instagram');
 const { loadJob } = require('./job');
 
+const MAX_BROWSER_DMS_PER_HOUR = 30;
+const MAX_BROWSER_DMS_PER_DAY = 100;
+const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+
 function log(level, message) {
   const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
   const output = `[${time}] ${level}: ${message}`;
@@ -12,16 +16,52 @@ function log(level, message) {
   else console.log(output);
 }
 
-function sendingLimit(database, job) {
+function sendingWindow(database, job) {
   const now = new Date();
+  const hourlyLimit = Math.min(MAX_BROWSER_DMS_PER_HOUR, Math.max(1, Number(job.maxDmsPerHour) || 10));
+  const dailyLimit = Math.min(MAX_BROWSER_DMS_PER_DAY, Math.max(1, Number(job.maxDmsPerDay) || 30));
   const hourStart = new Date(now.getTime() - 60 * 60 * 1000).toISOString();
   const dayStart = new Date(now);
   dayStart.setHours(0, 0, 0, 0);
-  const hourly = database.countSentDmsSince(hourStart);
+  const hourlyTimestamps = database.sentDmTimestampsSince(hourStart);
+  const hourly = hourlyTimestamps.length;
   const daily = database.countSentDmsSince(dayStart.toISOString());
-  if (hourly >= job.maxDmsPerHour) return `Hourly DM limit reached (${hourly}/${job.maxDmsPerHour}).`;
-  if (daily >= job.maxDmsPerDay) return `Daily DM limit reached (${daily}/${job.maxDmsPerDay}).`;
-  return null;
+  if (daily >= dailyLimit) {
+    return { blocked: true, waitMs: 0, message: `Daily DM limit reached (${daily}/${dailyLimit}). Resume tomorrow.` };
+  }
+
+  let nextAllowedAt = now.getTime();
+  if (hourly >= hourlyLimit) {
+    nextAllowedAt = Math.max(nextAllowedAt, Date.parse(hourlyTimestamps[0]) + 60 * 60 * 1000);
+  }
+  const latest = database.latestSentDmAt();
+  if (latest) {
+    const evenSpacingMs = Math.ceil((60 * 60 * 1000) / hourlyLimit);
+    nextAllowedAt = Math.max(nextAllowedAt, Date.parse(latest) + evenSpacingMs);
+  }
+  const waitMs = Math.max(0, nextAllowedAt - now.getTime());
+  return {
+    blocked: false,
+    waitMs,
+    message: waitMs > 0
+      ? `Rate pacing: next DM slot in ${Math.ceil(waitMs / 1000)} second(s) (${hourlyLimit}/hour, ${dailyLimit}/day).`
+      : ''
+  };
+}
+
+async function waitForSendSlot(database, job, shouldStop) {
+  let announcedWait = false;
+  while (!shouldStop()) {
+    const window = sendingWindow(database, job);
+    if (window.blocked) return window;
+    if (window.waitMs <= 0) return window;
+    if (!announcedWait) {
+      log('INFO', window.message);
+      announcedWait = true;
+    }
+    await delay(Math.min(window.waitMs, 15000));
+  }
+  return { blocked: true, waitMs: 0, message: 'Stop requested while waiting for the next paced DM slot.' };
 }
 
 async function main() {
@@ -52,17 +92,41 @@ async function main() {
     await browser.start();
     if (dryRun || dmPreview || live) {
       const job = await loadJob();
-      const result = await browser.scanPostDryRun(job, !live);
-      if (dmPreview) {
-        if (!result.matches.length) throw new Error(`No comment matched "${job.triggerComment}"; no conversation was opened.`);
-        await browser.previewPublicReply(result.matches[0]);
-        await browser.previewDirectMessage(result.matches[0]);
-        log('INFO', 'Phase 4 preview complete: reply and DM composers opened, zero custom text entered, zero actions sent.');
-        return;
-      }
-      const database = await ProcessedCommentDatabase.open();
+      const database = dmPreview ? null : await ProcessedCommentDatabase.open();
+      const rotationIndex = database ? database.getRotationIndex() : 0;
+      let newMatchCount = 0;
+      let existingMatchCount = 0;
+      const recordMatches = database ? async comments => {
+        for (const comment of comments) {
+          const publicReply = job.commentReplies[(rotationIndex + newMatchCount) % job.commentReplies.length];
+          const stored = database.recordDryRun(comment, job, publicReply);
+          if (!stored.inserted) {
+            existingMatchCount += 1;
+            continue;
+          }
+          newMatchCount += 1;
+          if (newMatchCount <= 20) {
+            log('INFO', `QUEUED: @${comment.username} wrote "${comment.text}"; saved durably in SQLite.`);
+          } else if (newMatchCount === 21) {
+            log('INFO', 'Additional new matches will be queued without one log line each.');
+          }
+        }
+      } : null;
       try {
+        const result = await browser.scanPostDryRun(job, !live, recordMatches);
+        if (dmPreview) {
+          if (!result.matches.length) throw new Error(`No comment matched "${job.triggerComment}"; no conversation was opened.`);
+          await browser.previewPublicReply(result.matches[0]);
+          await browser.previewDirectMessage(result.matches[0]);
+          log('INFO', 'Phase 4 preview complete: reply and DM composers opened, zero custom text entered, zero actions sent.');
+          return;
+        }
         if (live) {
+          const configuredHourly = Number(job.maxDmsPerHour) || 10;
+          const configuredDaily = Number(job.maxDmsPerDay) || 30;
+          if (configuredHourly > MAX_BROWSER_DMS_PER_HOUR || configuredDaily > MAX_BROWSER_DMS_PER_DAY) {
+            log('WARNING', `Browser safety caps applied: ${MAX_BROWSER_DMS_PER_HOUR}/hour and ${MAX_BROWSER_DMS_PER_DAY}/day.`);
+          }
           let completedCount = 0;
           let publicReplySentCount = 0;
           let dmSentCount = 0;
@@ -100,9 +164,9 @@ async function main() {
               }
 
               if (!prepared.dmAlreadySent) {
-                const limit = sendingLimit(database, job);
-                if (limit) {
-                  log('WARNING', `${limit} Comment remains DETECTED for a later run.`);
+                const slot = await waitForSendSlot(database, job, () => closing);
+                if (slot.blocked) {
+                  log('WARNING', `${slot.message} Comment remains DETECTED for a later run.`);
                   break;
                 }
               }
@@ -146,35 +210,17 @@ async function main() {
               }
             }
           }
+          const queue = database.queueSummary(job.postUrl);
+          log('INFO', `Persistent queue: ${queue.total} recorded comment(s); ${JSON.stringify(queue.statuses)}.`);
           log('INFO', `Live pass complete: ${result.matches.length} matching comment(s), ${uniqueAccountCount} unique account(s); ${publicReplySentCount} public reply/replies and ${dmSentCount} DM(s) sent, ${completedCount} comment(s) completed, ${skippedCount} skipped, ${failedCount} failed.`);
           return;
         }
 
-        const rotationIndex = database.getRotationIndex();
-        let newMatchCount = 0;
-        const dryRunDmAccounts = new Set();
-        for (const comment of result.matches) {
-          const publicReply = job.commentReplies[(rotationIndex + newMatchCount) % job.commentReplies.length];
-          const stored = database.recordDryRun(comment, job, publicReply);
-          if (!stored.inserted) {
-            log('INFO', `SKIPPED DUPLICATE: @${comment.username}'s comment is already recorded as ${stored.record.status}.`);
-            continue;
-          }
-          newMatchCount += 1;
-          const dm = [job.directMessage.text, job.directMessage.link].filter(Boolean).join(' ');
-          log('INFO', `NEW MATCH: @${comment.username} wrote "${comment.text}"; recorded in SQLite.`);
-          log('INFO', `DRY RUN ONLY: would publicly reply "${publicReply}".`);
-          const usernameKey = comment.username.toLowerCase();
-          if (!dryRunDmAccounts.has(usernameKey)) {
-            dryRunDmAccounts.add(usernameKey);
-            log('INFO', `DRY RUN ONLY: would send standardized DM "${dm}".`);
-          } else {
-            log('INFO', `DRY RUN ONLY: would not send another DM to @${comment.username} for this post.`);
-          }
-        }
-        log('INFO', `SQLite dry-run complete: ${newMatchCount} new, ${result.matches.length - newMatchCount} already recorded.`);
+        const queue = database.queueSummary(job.postUrl);
+        log('INFO', `Persistent queue: ${queue.total} recorded comment(s); ${JSON.stringify(queue.statuses)}.`);
+        log('INFO', `SQLite dry-run complete: ${newMatchCount} new, ${existingMatchCount} already recorded; zero replies and zero DMs sent.`);
       } finally {
-        database.close();
+        if (database) database.close();
       }
     } else await browser.openForManualLogin();
   } catch (error) {

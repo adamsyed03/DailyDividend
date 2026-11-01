@@ -403,37 +403,13 @@
               <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Min. 8 characters">
             </div>
             <div class="acct-field">
-              <label for="professionInput">Profession</label>
-              <input class="acct-input" id="professionInput" autocomplete="organization-title" oninput="checkAccount()" placeholder="Student, founder, analyst...">
-            </div>
-            <div class="acct-field">
-              <label for="heardInput">How did you hear about us?</label>
-              <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="Friend, TikTok, LinkedIn...">
-            </div>
-            <div class="acct-field">
-              <label>Country</label>
-              <input type="hidden" id="countryInput">
-              <button type="button" class="cntry-trigger empty" id="cntryTrigger" onclick="openCountryDD()"><span id="cntryLabel">Select your country</span><span class="cntry-trigger-arrow">▼</span></button>
+              <label for="confirmPasswordInput">Confirm password</label>
+              <input class="acct-input" id="confirmPasswordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Enter password again">
             </div>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
         </div>
         <div class="acct-foot"><button class="btn-full-dark" id="accountNext" onclick="completeOnboarding()" disabled>Create account <span class="btn-arrow">→</span></button></div>
-      </section>
-
-      <section class="screen" id="s-payoff">
-        <div class="payoff-inner">
-          <div class="payoff-mark">DD</div>
-          <div class="payoff-h">You're <em>in.</em></div>
-          <div class="payoff-sub">Welcome to Daily Dividend. We built this for people who want to actually understand what they're reading about, not just the numbers, the story.</div>
-          <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
-          <div class="payoff-card"><div class="payoff-card-label">Your interests</div><div class="payoff-chips" id="payoffSectors"></div></div>
-          <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix: The $46M a day question</div></div></div>
-        </div>
-        <div class="payoff-foot">
-          <button class="btn-payoff" onclick="goToApp()">Let's go <span class="btn-arrow">→</span></button>
-          <div class="payoff-terms">New company every Monday</div>
-        </div>
       </section>
 
       <div class="cntry-overlay" id="cntryOverlay" onclick="closeCntryDD(event)">
@@ -555,15 +531,22 @@
     function accountDetails(){
       return {
         name: fieldValue('fullNameInput'),
-        password: fieldValue('passwordInput'),
-        profession: fieldValue('professionInput'),
-        howHeard: fieldValue('heardInput'),
-        country: fieldValue('countryInput')
+        password: fieldValue('passwordInput')
       };
     }
     function checkAccount(){
       const details = accountDetails();
-      const complete = Object.values(details).every(Boolean);
+      const confirmation = fieldValue('confirmPasswordInput');
+      const passwordsMatch = details.password === confirmation;
+      const complete = Boolean(details.name && details.password.length >= 8 && confirmation && passwordsMatch);
+      const message = document.getElementById('acctMsg');
+      if(confirmation && !passwordsMatch){
+        message.textContent = 'Passwords do not match.';
+        message.classList.add('show');
+      }else if(message.textContent === 'Passwords do not match.'){
+        message.textContent = '';
+        message.classList.remove('show');
+      }
       document.getElementById('accountNext').disabled = !complete;
       return complete;
     }
@@ -635,7 +618,7 @@
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('dailyDividendOnboarded', 'true');
         }
-        goTo('payoff');
+        goToApp();
         return true;
       }catch(error){
         showError(error.message, 'acctMsg');

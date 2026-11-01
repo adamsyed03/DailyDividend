@@ -86,9 +86,10 @@ function normalizeJob(input) {
     caseInsensitive: input.caseInsensitive !== false,
     commentReplies,
     directMessage,
+    maxQueueComments: integerInRange(input.maxQueueComments, 'Queue size', 1, 500, 500),
     pollIntervalSeconds: integerInRange(input.pollIntervalSeconds, 'Polling interval', 60, 3600, 180),
-    maxDmsPerHour: integerInRange(input.maxDmsPerHour, 'Hourly DM limit', 1, 50, 10),
-    maxDmsPerDay: integerInRange(input.maxDmsPerDay, 'Daily DM limit', 1, 200, 30),
+    maxDmsPerHour: integerInRange(input.maxDmsPerHour, 'Hourly DM limit', 1, 30, 10),
+    maxDmsPerDay: integerInRange(input.maxDmsPerDay, 'Daily DM limit', 1, 100, 30),
     updatedAt: new Date().toISOString()
   };
 }

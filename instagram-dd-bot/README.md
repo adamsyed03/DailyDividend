@@ -8,9 +8,10 @@ the Instagram API, Meta Graph API, or any external automation API.
 
 Phases 1–4 are verified: persistent Chrome login, read-only comment scanning,
 exact matching, SQLite duplicate tracking, and non-sending Reply/DM composer
-checks. Phase 5 live sending is implemented as a single pass and requires an
-explicit confirmation in the admin dashboard. Continuous polling remains locked
-until that first controlled live workflow succeeds.
+checks. Phase 5 live sending is implemented as a resumable pass and requires an
+explicit confirmation in the admin dashboard. A scan can queue up to 500
+matching comments in SQLite. Live sends are evenly paced and stop on Instagram
+safety screens.
 
 The admin panel already stores the intended job:
 
@@ -18,7 +19,9 @@ The admin panel already stores the intended job:
 - The exact trigger comment, such as `DD`.
 - Four or five rotating public replies, such as "Check your DMs."
 - One standardized DM with an optional HTTPS webpage or public PDF link.
-- Polling and hourly/daily safety limits.
+- A queue limit plus hourly/daily safety limits. Browser automation is hard
+  capped at 30 DMs per hour and 100 per day; the recommended defaults remain
+  10 per hour and 30 per day.
 
 The live workflow handles every matching comment on the linked post, so two
 qualifying comments from the same account can each receive one rotating public
@@ -61,7 +64,13 @@ Live mode can be launched from the admin dashboard after reviewing the dry-run
 log. It prints a prominent warning and performs at most one public reply for
 each new qualifying comment plus one standardized DM per account for that post.
 SQLite status and hourly/daily limits are checked before anything is posted.
-Failed or uncertain attempts are not retried automatically.
+Sends are spaced evenly across the configured hour instead of bursting at the
+start of a run. Failed or uncertain attempts are not retried automatically.
+
+The dry scan repeatedly loads and scrolls the comment surface, preserving
+matches collected across batches until the queue limit is reached or Instagram
+stops exposing more comments. Review the reported candidate and match totals
+before live mode; Instagram's web interface can change without notice.
 
 ## Use through the admin dashboard
 

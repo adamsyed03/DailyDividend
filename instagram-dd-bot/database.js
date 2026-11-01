@@ -197,6 +197,54 @@ class ProcessedCommentDatabase {
     return Number(row && row.count) || 0;
   }
 
+  sentDmTimestampsSince(isoTimestamp) {
+    const statement = this.database.prepare(`
+      SELECT dm_sent_at FROM processed_comments
+      WHERE dm_status = 'SENT' AND dm_sent_at >= ?
+      ORDER BY dm_sent_at ASC
+    `);
+    const timestamps = [];
+    try {
+      statement.bind([isoTimestamp]);
+      while (statement.step()) timestamps.push(String(statement.get()[0] || ''));
+    } finally {
+      statement.free();
+    }
+    return timestamps.filter(Boolean);
+  }
+
+  latestSentDmAt() {
+    const row = this.firstRow(`
+      SELECT dm_sent_at FROM processed_comments
+      WHERE dm_status = 'SENT' AND dm_sent_at IS NOT NULL
+      ORDER BY dm_sent_at DESC LIMIT 1
+    `);
+    return row && row.dm_sent_at ? String(row.dm_sent_at) : null;
+  }
+
+  queueSummary(postUrl) {
+    const statement = this.database.prepare(`
+      SELECT status, COUNT(*) AS count
+      FROM processed_comments
+      WHERE post_key = ?
+      GROUP BY status
+    `);
+    const statuses = {};
+    try {
+      statement.bind([postKey(postUrl)]);
+      while (statement.step()) {
+        const [status, count] = statement.get();
+        statuses[String(status)] = Number(count) || 0;
+      }
+    } finally {
+      statement.free();
+    }
+    return {
+      total: Object.values(statuses).reduce((sum, count) => sum + count, 0),
+      statuses
+    };
+  }
+
   markSending(id) {
     const now = new Date().toISOString();
     this.database.run(`

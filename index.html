@@ -3,6 +3,10 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
 <script>if(location.protocol==='file:'||(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&location.port&&location.port!=='3000'))location.replace('http://localhost:3000/index.html');</script>
+<script>
+window.DD_IS_TESTING_PREVIEW=/^\/testing123(?:\/|$)/.test(location.pathname);
+document.documentElement.classList.toggle('rabbit-only',window.DD_IS_TESTING_PREVIEW);
+</script>
 <title>Daily Dividend</title>
 <script>
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p=t.createElement("script");p.type="text/javascript";p.crossOrigin="anonymous";p.async=!0;p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js";r=t.getElementsByTagName("script")[0];r.parentNode.insertBefore(p,r);var u=e;void 0!==a?u=e[a]=[]:a="posthog";u.people=u.people||[];u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e};u.people.toString=function(){return u.toString(1)+".people (stub)"};o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group trackSessionId get_session_id get_distinct_id debug".split(" ");for(n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
@@ -416,6 +420,9 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .rbh-card{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;cursor:pointer;transition:transform 0.18s,box-shadow 0.18s}
 .rbh-card:active{transform:scale(0.985)}
 .rbh-th{flex-shrink:0;width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}
+html.rabbit-only .rbh-th{width:68px;height:68px;border-radius:18px;position:relative;overflow:hidden;isolation:isolate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(15,20,30,.14)}
+html.rabbit-only .rbh-th::before{content:"";position:absolute;inset:-25%;z-index:-1;background:radial-gradient(circle at 72% 18%,rgba(255,255,255,.34),transparent 33%),radial-gradient(circle at 8% 92%,rgba(0,0,0,.22),transparent 48%);transform:rotate(-8deg)}
+html.rabbit-only .rbh-th svg{display:block;width:100%;height:100%}
 .rbh-body{min-width:0;flex:1}
 .rbh-cats{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rc,var(--muted));margin-bottom:5px}
 .rbh-t{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em;line-height:1.25;color:var(--ink);margin-bottom:4px}
@@ -963,7 +970,7 @@ body{background:var(--ink);overflow:hidden}
  .rbh-feat{margin:14px 0 4px;padding:30px 34px;border-radius:22px}.rbh-feat-t{font-size:34px}.rbh-feat-dek{font-size:14px;max-width:720px}
  .rbh-sect{padding:24px 0 4px}.rbh-list{padding:6px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
  .rbh-card{padding:18px;border-radius:18px}.rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
- .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}.rbh-t{font-size:18px}.rbh-empty{margin:16px 0}.rbh-foot{margin:34px 0 0;font-size:11px;letter-spacing:.1em}
+ .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}html.rabbit-only .rbh-th{width:74px;height:74px;border-radius:19px}.rbh-t{font-size:18px}.rbh-empty{margin:16px 0}.rbh-foot{margin:34px 0 0;font-size:11px;letter-spacing:.1em}
 .you-scroll{max-width:none}.you-scroll>*{max-width:1200px}.id-c{border-radius:20px}.sh,.cc{border-radius:18px}.sg{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.sm{border-radius:18px;aspect-ratio:auto;height:220px;min-height:0;padding:20px 22px}.sm-q{font-size:20px;line-height:1.25;max-width:680px}.sh-n{font-size:52px}
 #screen-stack .shell{left:0}#screen-stack .prog{top:32px;left:248px;right:56px;gap:5px}#screen-stack .prog .tick{height:2px;border-radius:2px}#screen-stack .topbar{top:56px;left:240px;right:56px}#screen-stack .co-logo{width:36px;height:36px;border-radius:9px;font-size:17px}
 #screen-stack .card{padding:116px clamp(80px,11vw,220px) 96px;overflow-y:auto}#screen-stack .hl{font-size:clamp(36px,4.5vw,66px);max-width:960px;line-height:1.07;letter-spacing:-.03em}#screen-stack .bd{font-size:18px;max-width:800px;line-height:1.7;opacity:.9}.eb-c{font-size:10px;letter-spacing:.22em}#screen-stack .tz{top:112px;bottom:84px;width:15%}#screen-stack .pills{bottom:28px}#screen-stack .pill{font-size:10px;padding:9px 16px;backdrop-filter:blur(16px)}
@@ -1287,6 +1294,7 @@ body{background:var(--ink);overflow:hidden}
 #dtShell .rbh-card{padding:20px;border-radius:18px}
 #dtShell .rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
 #dtShell .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}
+html.rabbit-only #dtShell .rbh-th{width:74px;height:74px;border-radius:19px}
 #dtShell .rbh-t{font-size:18px}
 #dtShell .rbh-dek{font-size:12.5px}
 #dtShell .rbh-empty{margin:0}
@@ -1712,6 +1720,24 @@ body{background:var(--ink);overflow:hidden}
  .card[data-deep="rivals"] .rv-rows.rv-dense .rv-n,.card[data-deep="rivals"] .rv-rows.rv-dense .rv-val,.card[data-deep="rivals"] .rv-rows.rv-dense .rv-n .rv-emoji{font-size:11.5px}
 }
 </style>
+<style>
+/* The Rabbit Holes redesign is isolated under /testing123. */
+html.rabbit-only .bottom-nav,
+html.rabbit-only #libModes,
+html.rabbit-only .hint{display:none!important}
+html.rabbit-only #screen-library .lib-scroll{padding-bottom:max(28px,env(safe-area-inset-bottom))}
+html.rabbit-only #screen-library .lib-top{padding-top:12px}
+@media(min-width:900px){
+ html.rabbit-only #dtShell .ticker-bar,
+ html.rabbit-only #dtShell .desktop-nav,
+ html.rabbit-only #dtShell .sidebar,
+ html.rabbit-only #dtLibModes{display:none!important}
+ html.rabbit-only #dtShell .app-shell{height:100vh}
+ html.rabbit-only #dtShell .lib-content{max-width:1200px;padding-top:56px}
+ html.rabbit-only #dtShell .lib-head{margin-bottom:34px}
+ html.rabbit-only #dtShell .lib-title{font-size:38px}
+}
+</style>
 </head><body>
 
 <div class="stage"><div class="phone">
@@ -1807,6 +1833,10 @@ body{background:var(--ink);overflow:hidden}
 
 <script>
 const IS_DESKTOP = window.matchMedia('(min-width:900px)').matches;
+const IS_TESTING_PREVIEW = Boolean(window.DD_IS_TESTING_PREVIEW);
+const RABBIT_ONLY = IS_TESTING_PREVIEW;
+const APP_ROOT = IS_TESTING_PREVIEW ? '/testing123' : '/';
+const AUTH_ROOT = IS_TESTING_PREVIEW ? '/testing123' : '';
 /* COMPANY DATA */
 const CO={
 netflix:{id:"netflix",domain:"netflix.com",n:"Netflix",t:"NFLX",sec:"Streaming",fl:"",mc:"$360B",lb:"#E50914",lc:"#fff",ac:"#E50914",as:"rgba(229,9,20,0.2)",dk:"#B20710",dkl:"#FF5F57",bg:"radial-gradient(circle at 85% -5%,rgba(229,9,20,0.48),transparent 55%),radial-gradient(circle at -10% 110%,rgba(90,11,16,0.6),transparent 55%),linear-gradient(160deg,#191414,#080505 60%,#000)",bl:"Spends $55M a day on shows. Still profits.",
@@ -2658,23 +2688,23 @@ const RH=[
 {k:"jio-ipo-decoded",title:"Jio IPO, decoded",
  dek:"India's biggest IPO, unpacked in 11 swipes: the business, the valuation, the risks, and the number that decides everything.",
  cats:["Made in India","Big Tech","Banks & Money"],mins:8,date:"2026-10-27",
- bg:"#071B57",emoji:"📶",url:"/reports/jio-ipo-decoded.html"},
+ bg:"#071B57",art:"signal",emoji:"📶",url:"/reports/jio-ipo-decoded.html"},
 {k:"trump-june-trades",title:"1,051 trades in one month",
  dek:"Every name we could identify from Donald Trump's June filing. What was bought, what was sold, and what each company actually does.",
  cats:["Banks & Money","Big Tech"],mins:7,date:"2026-10-07",
- bg:"#163D4D",emoji:"💼",url:"/reports/trump-june-trades.html"},
+ bg:"#163D4D",art:"filing",emoji:"💼",url:"/reports/trump-june-trades.html"},
 {k:"top-10-upcoming-indian-ipos",title:"Top 10 upcoming Indian IPOs",
  dek:"Ten companies preparing to go public. What they do, how they make money, their valuations, and what could go wrong.",
  cats:["Made in India","Banks & Money"],mins:10,date:"2026-10-07",
- bg:"#184D3E",emoji:"🇮🇳",url:"/reports/top-10-upcoming-indian-ipos.html"},
+ bg:"#184D3E",art:"ipo",emoji:"🇮🇳",url:"/reports/top-10-upcoming-indian-ipos.html"},
 {k:"temasek-india-portfolio",title:"Everyone sold India. Except them.",
  dek:"Singapore's state investor owns pieces of Haldiram's, Manipal, the NSE and Milky Mist. Here is every holding we could find.",
  cats:["Made in India","Banks & Money"],mins:6,date:"2026-10-06",
- bg:"#0E4E60",emoji:"🇮🇳",url:"/reports/temasek-india-portfolio.html"},
+ bg:"#0E4E60",art:"portfolio",emoji:"🇮🇳",url:"/reports/temasek-india-portfolio.html"},
 {k:"solar-panels-on-water",title:"Solar panels on water",
  dek:"India is about to put 5,000 megawatts of solar panels on its lakes and dams. Seven companies already doing the work.",
  cats:["Made in India","Energy & Oil"],mins:6,date:"2026-08-27",
- bg:"#0B3140",emoji:"☀️",url:"/reports/solar-panels-on-water.html"}
+ bg:"#0B3140",art:"solar",emoji:"☀️",url:"/reports/solar-panels-on-water.html"}
 ];
 /* Old onboarding sector slugs → current category keys */
 const DD_CAT_LEGACY_SLUGS={tech:"big-tech",banking:"banks",media:"entertainment",consumer:"junk-food"};
@@ -2810,7 +2840,7 @@ function authPanel(){
  const _ct=profileState.country&&profileState.country.toLowerCase()!=='unknown'?profileState.country:'';
  return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>`;
  }
- return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="onboarding.html">Sign up</a><a class="auth-btn secondary" href="login.html">Log in</a></div></div>`;
+ return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>`;
 }
 async function api(path,options={}){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),options.timeout||12000);try{const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options,signal:options.signal||controller.signal});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}catch(error){if(error&&error.name==='AbortError')throw new Error('Daily Dividend is taking too long to wake up. Please try again.');throw error;}finally{clearTimeout(timeout);}}
 async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
@@ -2819,7 +2849,7 @@ async function loadVoteAggregates(){
  try{const data=await api('/api/votes');Object.assign(voteAggregates,data.votes||{});}
  catch(e){console.warn(e);}
 }
-async function signOut(){try{await api('/api/logout',{method:'POST'});}catch(e){}localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');localStorage.removeItem('dailyDividendOnboarded');showToast('Signed out');setTimeout(()=>window.location.href='onboarding.html',450);}
+async function signOut(){try{await api('/api/logout',{method:'POST'});}catch(e){}localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');localStorage.removeItem('dailyDividendOnboarded');showToast('Signed out');setTimeout(()=>window.location.href=`${AUTH_ROOT}/onboarding`,450);}
 function setTheme(co){
  const c=CO[co];
  document.documentElement.style.setProperty('--dk',c.dk||c.ac);
@@ -2832,16 +2862,25 @@ function setTheme(co){
 }
 
 /* NAV */
-function detailPath(kind,slug){return `/${kind}/${encodeURIComponent(slug)}`;}
+function detailPath(kind,slug){return `${IS_TESTING_PREVIEW?'/testing123':''}/${kind}/${encodeURIComponent(slug)}`;}
 function setAppUrl(path,replace=false){
+ if(path==='/')path=APP_ROOT;
  if(location.pathname===path)return;
  history[replace?'replaceState':'pushState']({ddPath:path},'',path);
 }
 function routeFromLocation(){
- const m=location.pathname.match(/^\/(companies|rabbit-holes)\/([^/]+)\/?$/);
- return m?{kind:m[1],slug:decodeURIComponent(m[2])}:null;
+ const m=location.pathname.match(/^\/(?:testing123\/)?(companies|rabbit-holes)\/([^/]+)\/?$/);
+ if(!m||(RABBIT_ONLY&&m[1]==='companies'))return null;
+ return {kind:m[1],slug:decodeURIComponent(m[2])};
+}
+function applyRabbitOnlyShell(){
+ if(!RABBIT_ONLY)return;
+ document.title='Daily Dividend — Rabbit Holes';
+ const mobileTitle=document.querySelector('#screen-library .lib-t');if(mobileTitle)mobileTitle.textContent='Rabbit holes.';
+ const desktopTitle=document.querySelector('#dt-screen-library .lib-title');if(desktopTitle)desktopTitle.textContent='Rabbit holes.';
 }
 function goTo(n,preserveUrl=false){
+ if(RABBIT_ONLY)n='library';
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
  document.getElementById('screen-'+n).classList.add('active');
  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
@@ -3461,12 +3500,13 @@ function dbCompanyCard(c){
 /* LIBRARY MODE — 'stocks' (company decks) or 'holes' (rabbit holes).
    Shared by both shells; the markup below is identical in each and only
    differs by CSS scope, so it is built once here. */
-let libMode='stocks';
+let libMode=RABBIT_ONLY?'holes':'stocks';
 let libRhCat='';
 function renderLibActive(){
  if(IS_DESKTOP&&typeof dtRenderLib==='function')dtRenderLib();else renderLib();
 }
 function setLibMode(m){
+ if(RABBIT_ONLY)m='holes';
  if(libMode===m)return;
  libMode=m;libRhCat='';
  trackPostHogEvent('library_mode_changed',{mode:m});
@@ -3486,6 +3526,7 @@ function rhDate(d){
  return isNaN(t)?'':new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric'});
 }
 function libModesHtml(){
+ if(RABBIT_ONLY)return '';
  const n=RH.length;
  return `<div class="lib-modes">
  <button class="lib-mode${libMode==='stocks'?' active':''}" onclick="setLibMode('stocks')"><span class="lib-mode-e">📈</span>Stock Spotlight</button>
@@ -3501,12 +3542,23 @@ function rhFeatHtml(r){
  <div class="rbh-feat-meta">${meta}</div>
 </div>`;
 }
+function rhArtHtml(r){
+ const common='fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"';
+ const art={
+  signal:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M21 60h38" opacity=".45"/><path d="M25 56V43M36 56V34M47 56V25M58 56V17" stroke-width="6"/><path d="M18 25c5-5 11-8 18-9" stroke="#ffb400" stroke-width="3"/><path d="m32 12 6 4-4 6" stroke="#ffb400" stroke-width="3"/></g><circle cx="20" cy="59" r="3" fill="#ffb400"/></svg>`,
+  filing:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M24 13h25l10 10v42H24z" fill="rgba(255,255,255,.12)" stroke-width="2"/><path d="M49 13v11h10M32 34h18M32 43h12M32 52h18" stroke-width="3" opacity=".9"/><path d="m14 32 5-5 5 5M19 27v14M66 48v14m-5-5 5 5 5-5" stroke="#ffcc66" stroke-width="3"/></g></svg>`,
+  ipo:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M18 24h32v39H18z" fill="rgba(255,255,255,.1)" stroke-width="2"/><path d="M25 17h32v39" stroke-width="2" opacity=".55"/><path d="M26 35h16M26 43h12M26 51h18" stroke-width="3" opacity=".8"/><circle cx="51" cy="51" r="13" fill="#ffb400" stroke="none"/><path d="M47 44h8M47 49h8M50 44c7 0 7 8 0 8l6 7" stroke="#173f36" stroke-width="2.4"/></g></svg>`,
+  portfolio:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M23 29C31 19 45 19 56 29S66 48 57 57" stroke="rgba(255,255,255,.42)" stroke-width="2" stroke-dasharray="3 5"/><circle cx="20" cy="32" r="13" fill="rgba(255,255,255,.16)" stroke-width="2"/><circle cx="59" cy="53" r="15" fill="#ffb400" stroke="none"/><path d="m34 33 11 8m-4-9 5 9-9 2" stroke="#fff" stroke-width="3"/></g><text x="20" y="36" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" font-family="Arial">SG</text><text x="59" y="57" text-anchor="middle" fill="#114453" font-size="10" font-weight="800" font-family="Arial">IN</text></svg>`,
+  solar:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="58" cy="19" r="8" fill="#ffbf3f" stroke="none"/><path d="M58 6v5M58 27v5M45 19h5M66 19h5" stroke="#ffbf3f" stroke-width="2.5"/><path d="m17 31 38 5-8 23-39-5z" fill="rgba(71,170,213,.28)" stroke-width="2"/><path d="m27 32-7 24m19-22-7 24m-20-16 39 5" stroke-width="1.6" opacity=".8"/><path d="M9 64c7-5 13 5 20 0s13 5 20 0 13 5 20 0" stroke="#67d5e8" stroke-width="3"/></g></svg>`
+ };
+ return art[r.art]||`<span aria-hidden="true">${r.emoji||DD_RH_CAT.emoji}</span>`;
+}
 function rhCardHtml(r){
  const first=(r.cats||[])[0]||'';
  const cc=(DD_CATS.find(c=>c.label===first)||DD_RH_CAT).c;
  const meta=[r.mins?r.mins+' min read':'',rhDate(r.date)].filter(Boolean).join(' · ');
  return `<div class="rbh-card" onclick="openRabbitHole('${r.k}')">
- <div class="rbh-th" style="background:${r.bg||DD_RH_CAT.c}">${r.emoji||DD_RH_CAT.emoji}</div>
+ <div class="rbh-th" style="background:${r.bg||DD_RH_CAT.c}">${IS_TESTING_PREVIEW?rhArtHtml(r):(r.emoji||DD_RH_CAT.emoji)}</div>
  <div class="rbh-body">
   <div class="rbh-cats" style="--rc:${cc}">${(r.cats||[]).join(' · ')}</div>
   <div class="rbh-t">${r.title}</div>
@@ -3608,7 +3660,12 @@ function rail(r){
  dbItems.map(c=>dbCompanyCard(c)).join('');
  return `<div class="rail" id="rail-${cat.k}"><div class="rh"><div class="rail-t">${title}</div><div class="rc" style="background:${cat.c}14;color:${cat.c}">${count}</div></div><div class="rs">${cards}</div></div>`;
 }
-function surpriseMe(){const keys=liveCompanyKeys();openStack(keys[Math.floor(Math.random()*keys.length)]);}
+function surpriseMe(){
+ if(RABBIT_ONLY||libMode==='holes'){
+  const reads=RH.filter(r=>r.url);if(reads.length)openRabbitHole(reads[Math.floor(Math.random()*reads.length)].k);return;
+ }
+ const keys=liveCompanyKeys();openStack(keys[Math.floor(Math.random()*keys.length)]);
+}
 let _searchThrottle=null;
 function onSearch(){
  const q=document.getElementById('searchBox').value.toLowerCase().trim();
@@ -3620,7 +3677,7 @@ function onSearch(){
   sr.classList.add('active');lc.classList.add('hidden');fs.style.display='none';
   sr.innerHTML=rm.length
    ?`<div class="sect-s" style="margin-top:8px">${rm.length} rabbit hole${rm.length!==1?'s':''}</div><div class="rbh-list">${rm.map(rhCardHtml).join('')}</div>`
-   :`<div class="sr-e">No rabbit holes match "${q}".<div class="sm">Try a company name in Stock Spotlight.</div></div>`;
+   :`<div class="sr-e">No rabbit holes match "${q}".<div class="sm">Try another topic or theme.</div></div>`;
   return;
  }
  clearTimeout(_searchThrottle);
@@ -3634,6 +3691,7 @@ function onSearch(){
 
 /* DB COMPANY OVERLAY */
 function openDbCompany(companyId,routeMode='push'){
+ if(RABBIT_ONLY){goTo('library');return;}
  currentDbCo=companyId;
  currentRabbitHole=null;
  const co=dbCos.find(c=>c.companyId===companyId);
@@ -3945,7 +4003,8 @@ function tourEnd(){
   else goTo('today');
 }
 function startTour(){
-  if(document.getElementById('tourOverlay'))return;
+   if(RABBIT_ONLY)return;
+   if(document.getElementById('tourOverlay'))return;
   tourIdx=0;
   if(libMode!=='stocks')setLibMode('stocks');
   const ov=document.createElement('div');
@@ -3976,9 +4035,9 @@ function openCurrentRoute(routeMode='replace'){
  if(dbCos.some(c=>c.companyId===route.slug)){openDbCompany(route.slug,routeMode);return true;}
  return false;
 }
-function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else{renderToday();}openCurrentRoute('replace');if(localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
-function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');if(IS_DESKTOP){_runDesktopInit();}else{renderToday();}_secondary();}
-function _fullAuth(){ensureSession().then(_boot).catch(()=>{_releaseGate();_clearStoredSession();window.location.replace('onboarding.html');});}
+function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else if(RABBIT_ONLY){renderLib();}else{renderToday();}openCurrentRoute('replace');if(!RABBIT_ONLY&&localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');applyRabbitOnlyShell();if(IS_DESKTOP){_runDesktopInit();}else if(RABBIT_ONLY){goTo('library',true);}else{renderToday();}_secondary();}
+function _fullAuth(){ensureSession().then(_boot).catch(()=>{_releaseGate();_clearStoredSession();window.location.replace(`${AUTH_ROOT}/onboarding`);});}
 window.addEventListener('error',_releaseGate);
 window.addEventListener('unhandledrejection',_releaseGate);
 setTimeout(()=>{if(!_booted)_releaseGate();},5000);
@@ -4002,6 +4061,7 @@ const DEEP_KEYS=['cover','pie','doors','rivals','hidden','acc','acc2','own','tak
 let dtCardIdx=0;
 
 function dtGoTo(tab){
+  if(RABBIT_ONLY)tab='library';
   document.querySelectorAll('#dtShell .screen').forEach(s=>s.classList.remove('active'));
   const s=document.getElementById('dt-screen-'+tab);if(s)s.classList.add('active');
   document.querySelectorAll('.sb-item,.dt-nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
@@ -4544,7 +4604,12 @@ function dtJumpToRail(id,chip){
   el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
 }
 
-function dtSurpriseMe(){const keys=liveCompanyKeys();openStack(keys[Math.floor(Math.random()*keys.length)]);}
+function dtSurpriseMe(){
+  if(RABBIT_ONLY||libMode==='holes'){
+    const reads=RH.filter(r=>r.url);if(reads.length)openRabbitHole(reads[Math.floor(Math.random()*reads.length)].k);return;
+  }
+  const keys=liveCompanyKeys();openStack(keys[Math.floor(Math.random()*keys.length)]);
+}
 
 function dtOnSearch(){
   const q=(document.getElementById('dtSearchBox')||{}).value||'';const ql=q.toLowerCase().trim();
@@ -4628,6 +4693,8 @@ window.openStack=function(slug,source='today',routeMode='push'){
 
 /* Desktop init */
 function dtInit(){
+  applyRabbitOnlyShell();
+  if(RABBIT_ONLY){dtGoTo('library');return;}
   dtBuildTicker();
   dtRenderToday();
   /* populate sidebar soon list */
@@ -4638,6 +4705,9 @@ function dtInit(){
 }
 
 Object.assign(window,{
+  dtInit,
+  dtBuildTicker,
+  dtRenderToday,
   dtGoTo,
   dtOpenStack,
   dtCloseStack,
