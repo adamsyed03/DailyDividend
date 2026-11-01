@@ -1082,6 +1082,12 @@ app.post('/api/auth/google-session', async (req, res, next) => {
     user.email = authUser.email || user.email || '';
     if (!user.firstName && nameParts.length) user.firstName = nameParts.shift();
     if (!user.lastName && nameParts.length) user.lastName = nameParts.join(' ');
+    if (Array.isArray(req.body.marketPreferences)) {
+      user.marketPreferences = req.body.marketPreferences.map(normalize).filter(Boolean);
+    }
+    if (Array.isArray(req.body.sectorPreferences)) {
+      user.sectorPreferences = req.body.sectorPreferences.map(normalize).filter(Boolean);
+    }
     if (normalize(req.body.ageRange)) user.ageRange = normalize(req.body.ageRange);
     if (normalize(req.body.investorLevel)) {
       user.investorLevel = normalize(req.body.investorLevel);

@@ -117,7 +117,11 @@
     .ph-input{flex:1;padding:14px 16px;font-family:var(--mono);font-size:18px;font-weight:600;outline:none;min-width:0}
     .ph-input::placeholder{color:rgba(245,241,232,.28);font-family:var(--sans);font-size:14px;font-weight:400}
     .ph-or{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);text-align:center;margin:16px 0}
-    .ph-email{width:100%;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(245,241,232,.66);border-radius:14px;padding:14px 16px}
+    .ph-email,.google-btn{width:100%;border:1.5px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 16px;font-family:var(--sans);font-weight:600;cursor:pointer}
+    .ph-email{background:transparent;color:rgba(245,241,232,.66)}
+    .google-btn{background:#fff;color:#202124;display:flex;align-items:center;justify-content:center;gap:10px}
+    .google-btn:hover{background:#f7f7f7}
+    .google-btn svg{width:18px;height:18px;flex:0 0 18px}
     .ph-privacy,.flow-msg{font-size:11px;line-height:1.5;text-align:center;margin-top:16px;color:rgba(255,255,255,.28)}
     .flow-msg{min-height:18px;color:#FCC9C2;opacity:0;transition:opacity .18s}
     .flow-msg.show{opacity:1}
@@ -228,7 +232,7 @@
       .feat-icon{width:52px;height:52px;font-size:24px}
       .phone-inner,.acct-inner{display:grid;grid-template-columns:minmax(320px,430px) minmax(420px,620px);grid-auto-rows:min-content;column-gap:72px;align-content:start}
       .ph-tag,.ph-h,.ph-sub{grid-column:1}
-      .ph-row,.ph-or,.ph-email,.ph-privacy,.flow-msg{grid-column:2}
+      .ph-row,.ph-or,.ph-email,.google-btn,.ph-privacy,.flow-msg{grid-column:2}
       .acct-tag,.acct-h,.acct-sub{grid-column:1}
       .acct-grid{grid-column:2;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
       .acct-field.full{grid-column:1/-1}
@@ -358,7 +362,10 @@
             <input class="ph-input" id="emailInput" type="email" autocomplete="email" placeholder="you@example.com" oninput="onEmailInput()">
           </div>
           <div class="ph-or">or</div>
-          <button class="ph-email" type="button" onclick="showError('Phone-number signup is currently a beta feature. Please use email for now.')">Continue with phone number <span style="opacity:.55">(beta)</span></button>
+          <button class="google-btn" type="button" onclick="startGoogleAuth()" aria-label="Sign in with Google">
+            <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.797 2.715v2.258h2.909c1.703-1.568 2.684-3.878 2.684-6.614Z"/><path fill="#34A853" d="M9 18c2.43 0 4.468-.806 5.956-2.181l-2.91-2.258c-.805.54-1.835.859-3.046.859-2.344 0-4.328-1.585-5.037-3.714H.956v2.332A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.963 10.706A5.41 5.41 0 0 1 3.68 9c0-.592.102-1.168.283-1.706V4.962H.956A9 9 0 0 0 0 9c0 1.452.347 2.827.956 4.038l3.007-2.332Z"/><path fill="#EA4335" d="M9 3.58c1.322 0 2.508.454 3.441 1.346l2.581-2.581C13.464.892 11.426 0 9 0A9 9 0 0 0 .956 4.962l3.007 2.332C4.672 5.165 6.656 3.58 9 3.58Z"/></svg>
+            Sign in with Google
+          </button>
           <div class="ph-privacy">We never sell your data or send spam.</div>
           <div class="flow-msg" id="flowMsg" role="status"></div>
         </div>
@@ -515,6 +522,16 @@
       }
       goTo('account');
       setTimeout(() => document.getElementById('fullNameInput').focus(), 420);
+    }
+    function startGoogleAuth(){
+      sessionStorage.setItem('ddGoogleOnboarding', JSON.stringify({
+        marketPreferences:[...selectedMarkets],
+        sectorPreferences:[...selectedSectors],
+        ageRange:selectedAge,
+        investorLevel:selectedLevel
+      }));
+      sessionStorage.setItem('ddGoogleReturnTo', '/');
+      window.location.href = '/api/auth/google';
     }
     function fieldValue(id){
       return document.getElementById(id).value.trim();

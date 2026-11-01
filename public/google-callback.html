@@ -40,6 +40,8 @@
             accessToken,
             refreshToken,
             expiresIn:Number(params.get('expires_in'))||3600,
+            ...(Array.isArray(onboarding.marketPreferences)?{marketPreferences:onboarding.marketPreferences}:{}),
+            ...(Array.isArray(onboarding.sectorPreferences)?{sectorPreferences:onboarding.sectorPreferences}:{}),
             ageRange:onboarding.ageRange||'',
             investorLevel:onboarding.investorLevel||''
           })
