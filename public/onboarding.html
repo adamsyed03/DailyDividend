@@ -479,9 +479,9 @@
       setTimeout(() => document.getElementById('fullNameInput').focus(), 420);
     }
     function startGoogleAuth(){
-      sessionStorage.setItem('ddGoogleOnboarding', JSON.stringify({ageRange:selectedAge, investorLevel:selectedLevel}));
-      sessionStorage.setItem('ddGoogleReturnTo', '/testing123');
-      window.location.href = '/api/auth/google';
+      const onboarding=JSON.stringify({ageRange:selectedAge,investorLevel:selectedLevel});
+      const params=new URLSearchParams({onboarding,returnTo:'/testing123'});
+      window.location.href = '/api/auth/google?'+params.toString();
     }
     function fieldValue(id){
       return document.getElementById(id).value.trim();

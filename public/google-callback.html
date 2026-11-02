@@ -26,6 +26,8 @@
       const status=document.getElementById('status');
       try{
         const params=new URLSearchParams(location.hash.slice(1));
+        const query=new URLSearchParams(location.search);
+        query.forEach((value,key)=>{if(!params.has(key))params.set(key,value);});
         const error=params.get('error_description')||params.get('error');
         if(error)throw new Error(error);
         const accessToken=params.get('access_token');

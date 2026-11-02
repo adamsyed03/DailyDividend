@@ -524,14 +524,14 @@
       setTimeout(() => document.getElementById('fullNameInput').focus(), 420);
     }
     function startGoogleAuth(){
-      sessionStorage.setItem('ddGoogleOnboarding', JSON.stringify({
+      const onboarding=JSON.stringify({
         marketPreferences:[...selectedMarkets],
         sectorPreferences:[...selectedSectors],
         ageRange:selectedAge,
         investorLevel:selectedLevel
-      }));
-      sessionStorage.setItem('ddGoogleReturnTo', '/');
-      window.location.href = '/api/auth/google';
+      });
+      const params=new URLSearchParams({onboarding,returnTo:'/'});
+      window.location.href = '/api/auth/google?'+params.toString();
     }
     function fieldValue(id){
       return document.getElementById(id).value.trim();

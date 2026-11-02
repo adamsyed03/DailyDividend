@@ -49,6 +49,9 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'barclays';
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const SUPABASE_STATE_ID = process.env.SUPABASE_STATE_ID || 'default';
+const GOOGLE_OAUTH_STORAGE_KEY = 'dd-google-oauth';
+const GOOGLE_OAUTH_VERIFIER_COOKIE = 'dd_google_pkce';
+const GOOGLE_OAUTH_CONTEXT_COOKIE = 'dd_google_context';
 const supabase = SUPABASE_URL && SUPABASE_KEY
   ? createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } })
   : null;
@@ -582,6 +585,48 @@ function authClient() {
   });
 }
 
+function oauthCookieOptions(maxAge) {
+  return {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge
+  };
+}
+
+function googleAuthClient(req, res) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return null;
+  const cookies = parseCookies(req);
+  const verifierKey = `${GOOGLE_OAUTH_STORAGE_KEY}-code-verifier`;
+  const storage = {
+    isServer: true,
+    getItem(key) {
+      return key === verifierKey ? (cookies[GOOGLE_OAUTH_VERIFIER_COOKIE] || null) : null;
+    },
+    setItem(key, value) {
+      if (key !== verifierKey) return;
+      cookies[GOOGLE_OAUTH_VERIFIER_COOKIE] = String(value);
+      res.cookie(GOOGLE_OAUTH_VERIFIER_COOKIE, String(value), oauthCookieOptions(10 * 60 * 1000));
+    },
+    removeItem(key) {
+      if (key !== verifierKey) return;
+      delete cookies[GOOGLE_OAUTH_VERIFIER_COOKIE];
+      res.clearCookie(GOOGLE_OAUTH_VERIFIER_COOKIE, oauthCookieOptions());
+    }
+  };
+  return createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+      flowType: 'pkce',
+      storageKey: GOOGLE_OAUTH_STORAGE_KEY,
+      storage,
+      persistSession: true,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+}
+
 function parseCookies(req) {
   return String(req.headers.cookie || '').split(';').reduce((cookies, part) => {
     const index = part.indexOf('=');
@@ -603,6 +648,28 @@ function clearAuthCookies(res) {
   const options = { httpOnly: true, sameSite: 'lax', secure, path: '/' };
   res.clearCookie('dd_access_token', options);
   res.clearCookie('dd_refresh_token', options);
+}
+
+function googleOAuthContext(req) {
+  const cookies = parseCookies(req);
+  let context = {};
+  try {
+    context = JSON.parse(cookies[GOOGLE_OAUTH_CONTEXT_COOKIE] || '{}');
+  } catch (error) {
+    context = {};
+  }
+  return {
+    returnTo: context.returnTo === '/testing123' ? '/testing123' : '/',
+    marketPreferences: Array.isArray(context.marketPreferences) ? context.marketPreferences : undefined,
+    sectorPreferences: Array.isArray(context.sectorPreferences) ? context.sectorPreferences : undefined,
+    ageRange: normalize(context.ageRange),
+    investorLevel: normalize(context.investorLevel)
+  };
+}
+
+function clearGoogleOAuthCookies(res) {
+  res.clearCookie(GOOGLE_OAUTH_VERIFIER_COOKIE, oauthCookieOptions());
+  res.clearCookie(GOOGLE_OAUTH_CONTEXT_COOKIE, oauthCookieOptions());
 }
 
 async function requireUser(req, res, next) {
@@ -1044,10 +1111,52 @@ app.post('/api/login', async (req, res, next) => {
   }
 });
 
+async function completeGoogleLogin(authUser, session, payload, res) {
+  const db = await readDb();
+  const user = getUser(db, authUser.id);
+  const metadata = authUser.user_metadata || {};
+  const fullName = normalize(metadata.full_name || metadata.name);
+  const nameParts = fullName.split(/\s+/).filter(Boolean);
+  user.email = authUser.email || user.email || '';
+  if (!user.firstName && nameParts.length) user.firstName = nameParts.shift();
+  if (!user.lastName && nameParts.length) user.lastName = nameParts.join(' ');
+  if (Array.isArray(payload.marketPreferences)) {
+    user.marketPreferences = payload.marketPreferences.map(normalize).filter(Boolean);
+  }
+  if (Array.isArray(payload.sectorPreferences)) {
+    user.sectorPreferences = payload.sectorPreferences.map(normalize).filter(Boolean);
+  }
+  if (normalize(payload.ageRange)) user.ageRange = normalize(payload.ageRange);
+  if (normalize(payload.investorLevel)) {
+    user.investorLevel = normalize(payload.investorLevel);
+    user.financeProficiency = levelToFinanceProficiency(user.investorLevel);
+  }
+  user.onboardingCompleted = true;
+  user.updatedAt = new Date().toISOString();
+  await writeDb(db);
+  setAuthCookies(res, session);
+  analytics.identify({ distinctId: authUser.id, properties: { email: user.email, firstName: user.firstName, lastName: user.lastName } });
+  return profile(user);
+}
+
 app.get('/api/auth/google', async (req, res, next) => {
   try {
-    const client = authClient();
+    const client = googleAuthClient(req, res);
     if (!client) return res.status(503).json({ error: 'Supabase Auth is not configured.' });
+    let onboarding = {};
+    try {
+      onboarding = JSON.parse(normalize(req.query.onboarding) || '{}');
+    } catch (error) {
+      onboarding = {};
+    }
+    const context = {
+      returnTo: normalize(req.query.returnTo) === '/testing123' ? '/testing123' : '/',
+      marketPreferences: Array.isArray(onboarding.marketPreferences) ? onboarding.marketPreferences.map(normalize).filter(Boolean) : undefined,
+      sectorPreferences: Array.isArray(onboarding.sectorPreferences) ? onboarding.sectorPreferences.map(normalize).filter(Boolean) : undefined,
+      ageRange: normalize(onboarding.ageRange),
+      investorLevel: normalize(onboarding.investorLevel)
+    };
+    res.cookie(GOOGLE_OAUTH_CONTEXT_COOKIE, JSON.stringify(context), oauthCookieOptions(10 * 60 * 1000));
     const forwardedProto = String(req.get('x-forwarded-proto') || req.protocol || 'https').split(',')[0].trim();
     const redirectTo = `${forwardedProto}://${req.get('host')}/auth/google/callback`;
     const { data, error } = await client.auth.signInWithOAuth({
@@ -1073,32 +1182,8 @@ app.post('/api/auth/google-session', async (req, res, next) => {
     const { data, error } = await client.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
     const authUser = data && data.user;
     if (error || !authUser || !data.session) return res.status(401).json({ error: 'Google login expired. Please try again.' });
-
-    const db = await readDb();
-    const user = getUser(db, authUser.id);
-    const metadata = authUser.user_metadata || {};
-    const fullName = normalize(metadata.full_name || metadata.name);
-    const nameParts = fullName.split(/\s+/).filter(Boolean);
-    user.email = authUser.email || user.email || '';
-    if (!user.firstName && nameParts.length) user.firstName = nameParts.shift();
-    if (!user.lastName && nameParts.length) user.lastName = nameParts.join(' ');
-    if (Array.isArray(req.body.marketPreferences)) {
-      user.marketPreferences = req.body.marketPreferences.map(normalize).filter(Boolean);
-    }
-    if (Array.isArray(req.body.sectorPreferences)) {
-      user.sectorPreferences = req.body.sectorPreferences.map(normalize).filter(Boolean);
-    }
-    if (normalize(req.body.ageRange)) user.ageRange = normalize(req.body.ageRange);
-    if (normalize(req.body.investorLevel)) {
-      user.investorLevel = normalize(req.body.investorLevel);
-      user.financeProficiency = levelToFinanceProficiency(user.investorLevel);
-    }
-    user.onboardingCompleted = true;
-    user.updatedAt = new Date().toISOString();
-    await writeDb(db);
-    setAuthCookies(res, data.session);
-    analytics.identify({ distinctId: authUser.id, properties: { email: user.email, firstName: user.firstName, lastName: user.lastName } });
-    return res.json({ ok: true, user: profile(user) });
+    const user = await completeGoogleLogin(authUser, data.session, req.body, res);
+    return res.json({ ok: true, user });
   } catch (error) {
     next(error);
   }
@@ -1820,7 +1905,27 @@ app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html'))
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/testing123/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/testing123/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
-app.get('/auth/google/callback', (req, res) => res.sendFile(path.join(__dirname, 'public', 'google-callback.html')));
+app.get('/auth/google/callback', async (req, res, next) => {
+  const code = normalize(req.query.code);
+  if (!code) return res.sendFile(path.join(__dirname, 'public', 'google-callback.html'));
+  try {
+    const client = googleAuthClient(req, res);
+    if (!client) return res.status(503).send('Google login is not configured.');
+    const { data, error } = await client.auth.exchangeCodeForSession(code);
+    const authUser = data && data.user;
+    if (error || !authUser || !data.session) {
+      throw new Error((error && error.message) || 'Google login could not be completed.');
+    }
+    const context = googleOAuthContext(req);
+    await completeGoogleLogin(authUser, data.session, context, res);
+    clearGoogleOAuthCookies(res);
+    return res.redirect(302, context.returnTo);
+  } catch (error) {
+    clearGoogleOAuthCookies(res);
+    const message = encodeURIComponent(error.message || 'Google login could not be completed.');
+    return res.redirect(302, `/login?oauthError=${message}`);
+  }
+});
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
 app.get('/signup.html', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
 app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
