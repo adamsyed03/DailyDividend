@@ -7,7 +7,7 @@ Error: listen EADDRINUSE: address already in use :::3000
     at listenInCluster (node:net:1969:12)
     at Server.listen (node:net:2074:7)
     at Function.listen (C:\Users\adamk\OneDrive\Desktop\DailyDividend\node_modules\express\lib\application.js:635:24)
-    at Object.<anonymous> (C:\Users\adamk\OneDrive\Desktop\DailyDividend\server.js:2378:5)
+    at Object.<anonymous> (C:\Users\adamk\OneDrive\Desktop\DailyDividend\server.js:2414:5)
     at Module._compile (node:internal/modules/cjs/loader:1565:14)
     at Object..js (node:internal/modules/cjs/loader:1708:10)
     at Module.load (node:internal/modules/cjs/loader:1318:32)

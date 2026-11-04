@@ -47,6 +47,16 @@ async function run() {
   assert.ok(serverSource.includes("'consent_collection[terms_of_service]': 'required'"));
   assert.ok(serverSource.includes("'custom_text[submit][message]'"));
   assert.ok(serverSource.includes('stripePlanDetails()'));
+  assert.ok(serverSource.includes("app.get('/', requireAuthenticatedPage"), 'The main app must not require a subscription');
+  assert.ok(serverSource.includes("app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], requireSubscribedPage"), 'Direct article routes must require a subscription');
+  assert.ok(serverSource.includes("app.get('/api/company/:companyId', requireSubscribedApi"), 'Article APIs must require a subscription');
+
+  const appSource = read('index.html');
+  assert.ok(appSource.includes('function requireArticleSubscription()'));
+  assert.ok(appSource.includes("async function openStack(slug,source='today',routeMode='push'){\n if(!requireArticleSubscription())return;"));
+  assert.ok(!/ensureSession\(\).*window\.location\.replace\('\/subscribe'\)/s.test(appSource), 'App startup must not redirect free users to subscribe');
+  assert.ok(read('login.html').includes("window.location.href = '/';"), 'Login must open the app, not billing');
+  assert.ok(read('onboarding.html').includes("window.location.href='/';"), 'Onboarding must open the app, not billing');
 
   const publicFiles = ['public/terms.html', 'public/privacy.html', 'public/cookies.html', 'public/subscribe.html', 'public/js/consent.js', 'login.html', 'index.html'];
   for (const file of publicFiles) assert.doesNotMatch(read(file), /sk_(?:live|test)_[A-Za-z0-9]+/, `${file} exposes a Stripe secret key`);

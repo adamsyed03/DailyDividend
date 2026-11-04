@@ -414,14 +414,14 @@
         <div class="payoff-inner">
           <div class="payoff-mark">DD</div>
           <div class="payoff-h">Account <em>ready.</em></div>
-          <div class="payoff-sub">One last step: activate your Daily Dividend membership to unlock every story and keep your shelf synced.</div>
+          <div class="payoff-sub">Browse Daily Dividend and discover the stories you want to read. Membership is only requested when you open a full article.</div>
           <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
           <div class="payoff-card"><div class="payoff-card-label">Your interests</div><div class="payoff-chips" id="payoffSectors"></div></div>
           <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix - The $46M a day question</div></div></div>
         </div>
         <div class="payoff-foot">
-          <button class="btn-payoff" onclick="goToApp()">Choose membership -></button>
-          <div class="payoff-terms">₹300/month - Cancel anytime</div>
+          <button class="btn-payoff" onclick="goToApp()">Explore Daily Dividend -></button>
+          <div class="payoff-terms">Browse first - subscribe when you open a story</div>
         </div>
       </section>
 
@@ -534,7 +534,7 @@
         ageRange:selectedAge,
         investorLevel:selectedLevel
       });
-      const params=new URLSearchParams({onboarding,returnTo:'/subscribe'});
+      const params=new URLSearchParams({onboarding,returnTo:'/'});
       window.location.href = '/api/auth/google?'+params.toString();
     }
     function fieldValue(id){
@@ -640,7 +640,7 @@
       document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
       document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
     }
-    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='/subscribe';}
+    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='/';}
 
     const COUNTRIES = [
       'India','United States','United Kingdom','UAE','Singapore','Australia','Canada',

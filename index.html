@@ -2844,7 +2844,8 @@ function authPanel(){
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
 }
 async function api(path,options={}){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),options.timeout||12000);try{const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options,signal:options.signal||controller.signal});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}catch(error){if(error&&error.name==='AbortError')throw new Error('Daily Dividend is taking too long to wake up. Please try again.');throw error;}finally{clearTimeout(timeout);}}
-async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');if(!profileState.subscriptionActive){window.location.replace('/subscribe');throw new Error('An active membership is required.');}localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
+async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
+function requireArticleSubscription(){if(profileState.subscriptionActive)return true;window.location.href='/subscribe';return false;}
 async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();identifyPostHog();}
 async function loadVoteAggregates(){
  try{const data=await api('/api/votes');Object.assign(voteAggregates,data.votes||{});}
@@ -2955,6 +2956,7 @@ ${snips.map(s=>`
  twparse(document.getElementById('todayScroll'));
 }
 async function openStack(slug,source='today',routeMode='push'){
+ if(!requireArticleSubscription())return;
  if(!CO[slug]||CO[slug].disabled){slug=curCo;}
  trackPostHogEvent('company_opened',{company_id:slug,source});
  trackMetaViewContent(slug,source);
@@ -3587,6 +3589,7 @@ function rhBodyHtml(){
 function openRabbitHole(k,routeMode='push'){
  const r=RH.find(x=>x.k===k);if(!r)return;
  if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
+ if(!requireArticleSubscription())return;
  const ov=document.getElementById('coOverlay');if(!ov)return;
  currentDbCo=null;
  currentRabbitHole=k;
@@ -3693,10 +3696,11 @@ function onSearch(){
 /* DB COMPANY OVERLAY */
 function openDbCompany(companyId,routeMode='push'){
  if(RABBIT_ONLY){goTo('library');return;}
- currentDbCo=companyId;
- currentRabbitHole=null;
  const co=dbCos.find(c=>c.companyId===companyId);
  if(!co)return;
+ if(!requireArticleSubscription())return;
+ currentDbCo=companyId;
+ currentRabbitHole=null;
  document.getElementById('coOvName').textContent=co.name;
  document.getElementById('coOvFrame').src=`/api/company/${encodeURIComponent(companyId)}`;
  const ov=document.getElementById('coOverlay');

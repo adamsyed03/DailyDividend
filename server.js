@@ -766,6 +766,33 @@ async function requireSubscribedPage(req, res, next) {
   }
 }
 
+async function requireAuthenticatedPage(req, res, next) {
+  try {
+    const authUser = await authenticatedUser(req, res);
+    if (!authUser) return res.redirect(302, '/onboarding');
+    req.authUser = authUser;
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function requireSubscribedApi(req, res, next) {
+  try {
+    const authUser = await authenticatedUser(req, res);
+    if (!authUser) return res.status(401).json({ error: 'Please log in to continue.' });
+    const db = await readDb();
+    const user = getUser(db, authUser.id);
+    if (!ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) {
+      return res.status(402).json({ error: 'An active membership is required to open this article.', code: 'subscription_required' });
+    }
+    req.authUser = authUser;
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 function stripeConfigured() {
   return Boolean(STRIPE_SECRET_KEY && STRIPE_PRICE_ID);
 }
@@ -1944,7 +1971,7 @@ app.get('/api/catalog-stats', async (req, res, next) => {
   }
 });
 
-app.get('/api/company/:companyId', async (req, res, next) => {
+app.get('/api/company/:companyId', requireSubscribedApi, async (req, res, next) => {
   try {
     const db = await readDb();
     const id = String(req.params.companyId || '').toLowerCase();
@@ -2230,15 +2257,18 @@ app.get(['/cookies', '/cookies.html'], (req, res) => {
 });
 
 // Serve root-level HTML files explicitly so edits to root are always live
-app.get('/', requireSubscribedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
-app.get('/index.html', requireSubscribedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+app.get('/', requireAuthenticatedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+app.get('/index.html', requireAuthenticatedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 // Keep the Rabbit Holes redesign isolated under /testing123.
 app.get([
   '/testing123',
   '/testing123/',
-  '/testing123/index.html',
-  '/testing123/rabbit-holes/:reportId'
-], requireSubscribedPage, (req, res) => {
+  '/testing123/index.html'
+], requireAuthenticatedPage, (req, res) => {
+  res.setHeader('Cache-Control', 'private, no-cache');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/testing123/rabbit-holes/:reportId', requireSubscribedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -2247,6 +2277,12 @@ app.get('/testing123/companies/:companyId', (req, res) => res.redirect(302, '/te
 app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], requireSubscribedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/reports/:reportFile', requireSubscribedPage, (req, res) => {
+  const reportFile = String(req.params.reportFile || '');
+  if (!/^[a-z0-9-]+\.(?:html|css|js)$/i.test(reportFile)) return res.status(404).send('Not found.');
+  res.setHeader('Cache-Control', 'private, no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'reports', reportFile));
 });
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
