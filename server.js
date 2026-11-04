@@ -47,8 +47,15 @@ const COMPANY_LOGO_DOMAINS = Object.freeze({
 const VALID_VOTES = new Set(['bull', 'neutral', 'bear']);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'barclays';
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const SUPABASE_STATE_ID = process.env.SUPABASE_STATE_ID || 'default';
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
+const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || '';
+const STRIPE_API_VERSION = process.env.STRIPE_API_VERSION || '2026-10-28.endive';
+const PUBLIC_APP_URL = String(process.env.PUBLIC_APP_URL || '').replace(/\/$/, '');
+const ACTIVE_SUBSCRIPTION_STATUSES = new Set(['active', 'trialing']);
+const LEGAL_POLICY_VERSION = '2026-11-04';
 const GOOGLE_OAUTH_STORAGE_KEY = 'dd-google-oauth';
 const GOOGLE_OAUTH_VERIFIER_COOKIE = 'dd_google_pkce';
 const GOOGLE_OAUTH_CONTEXT_COOKIE = 'dd_google_context';
@@ -63,9 +70,22 @@ let dbCacheExpiresAt = 0;
 let dbReadPromise = null;
 const logoMemoryCache = new Map();
 let priceRefreshPromise = null;
+let stripePlanCache = null;
+let stripePlanCacheExpiresAt = 0;
 const instagramBot = createInstagramBotController();
 
 app.use(compression());
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  try {
+    if (!STRIPE_WEBHOOK_SECRET) return res.status(503).json({ error: 'Stripe webhook is not configured.' });
+    const event = verifyStripeWebhook(req.body, req.get('stripe-signature'));
+    await processStripeEvent(event);
+    res.json({ received: true });
+  } catch (error) {
+    console.error('[stripe webhook]', error.message);
+    res.status(400).json({ error: 'Invalid Stripe webhook.' });
+  }
+});
 app.use(express.json({ limit: '8mb' }));
 
 app.get('/healthz', (req, res) => {
@@ -509,6 +529,12 @@ function makeUser(userId = crypto.randomUUID()) {
     nextCompanyClicks: 0,
     sectorsRead: [],
     contrarianVotes: 0,
+    stripeCustomerId: '',
+    stripeSubscriptionId: '',
+    subscriptionStatus: 'inactive',
+    subscriptionCancelAtPeriodEnd: false,
+    subscriptionCurrentPeriodEnd: null,
+    subscriptionUpdatedAt: null,
     personalityScores: { contrarian: 0, operator: 0, patternSpotter: 0, momentumReader: 0 },
     readingPersonality: null
   };
@@ -558,6 +584,10 @@ function profile(user) {
     todayReads: user.todayReads || 0,
     libraryReads: user.libraryReads || 0,
     searchUses: user.searchUses || 0,
+    subscriptionActive: ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus),
+    subscriptionStatus: user.subscriptionStatus || 'inactive',
+    subscriptionCancelAtPeriodEnd: Boolean(user.subscriptionCancelAtPeriodEnd),
+    subscriptionCurrentPeriodEnd: user.subscriptionCurrentPeriodEnd || null,
     nextCompanyClicks: user.nextCompanyClicks || 0,
     sectorsRead: user.sectorsRead || [],
     contrarianVotes: user.contrarianVotes || 0,
@@ -672,33 +702,227 @@ function clearGoogleOAuthCookies(res) {
   res.clearCookie(GOOGLE_OAUTH_CONTEXT_COOKIE, oauthCookieOptions());
 }
 
+async function authenticatedUser(req, res) {
+  const client = authClient();
+  if (!client) throw new Error('Supabase Auth is not configured.');
+  const cookies = parseCookies(req);
+  const bearer = String(req.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  let accessToken = bearer || cookies.dd_access_token || '';
+  let result = accessToken ? await client.auth.getUser(accessToken) : { data: { user: null }, error: true };
+
+  if ((!result.data || !result.data.user) && cookies.dd_refresh_token) {
+    const refreshed = await client.auth.refreshSession({ refresh_token: cookies.dd_refresh_token });
+    if (!refreshed.error && refreshed.data.session) {
+      setAuthCookies(res, refreshed.data.session);
+      accessToken = refreshed.data.session.access_token;
+      result = await client.auth.getUser(accessToken);
+    }
+  }
+
+  if (!result.data || !result.data.user) {
+    clearAuthCookies(res);
+    return null;
+  }
+  return result.data.user;
+}
+
 async function requireUser(req, res, next) {
   try {
-    const client = authClient();
-    if (!client) return res.status(503).json({ error: 'Supabase Auth is not configured.' });
-    const cookies = parseCookies(req);
-    const bearer = String(req.get('authorization') || '').replace(/^Bearer\s+/i, '');
-    let accessToken = bearer || cookies.dd_access_token || '';
-    let result = accessToken ? await client.auth.getUser(accessToken) : { data: { user: null }, error: true };
-
-    if ((!result.data || !result.data.user) && cookies.dd_refresh_token) {
-      const refreshed = await client.auth.refreshSession({ refresh_token: cookies.dd_refresh_token });
-      if (!refreshed.error && refreshed.data.session) {
-        setAuthCookies(res, refreshed.data.session);
-        accessToken = refreshed.data.session.access_token;
-        result = await client.auth.getUser(accessToken);
-      }
+    req.authUser = await authenticatedUser(req, res);
+    if (!req.authUser) return res.status(401).json({ error: 'Please log in to continue.' });
+    next();
+  } catch (error) {
+    if (/Supabase Auth is not configured/.test(error.message || '')) {
+      return res.status(503).json({ error: error.message });
     }
+    next(error);
+  }
+}
 
-    if (!result.data || !result.data.user) {
-      clearAuthCookies(res);
-      return res.status(401).json({ error: 'Please log in to continue.' });
+async function requireActiveSubscription(req, res, next) {
+  try {
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    if (!ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) {
+      return res.status(402).json({ error: 'An active Daily Dividend membership is required.', subscribeUrl: '/subscribe' });
     }
-    req.authUser = result.data.user;
     next();
   } catch (error) {
     next(error);
   }
+}
+
+async function requireSubscribedPage(req, res, next) {
+  try {
+    const authUser = await authenticatedUser(req, res);
+    if (!authUser) return res.redirect(302, '/onboarding');
+    const db = await readDb();
+    const user = getUser(db, authUser.id);
+    if (!ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) return res.redirect(302, '/subscribe');
+    req.authUser = authUser;
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+function stripeConfigured() {
+  return Boolean(STRIPE_SECRET_KEY && STRIPE_PRICE_ID);
+}
+
+function stripeObjectId(value) {
+  return typeof value === 'string' ? value : (value && value.id) || '';
+}
+
+function stripeForm(params = {}) {
+  const form = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === '') return;
+    form.append(key, String(value));
+  });
+  return form;
+}
+
+async function stripeRequest(endpoint, { method = 'GET', params = {} } = {}) {
+  if (!STRIPE_SECRET_KEY) throw new Error('Stripe is not configured.');
+  const form = stripeForm(params);
+  const url = new URL(`https://api.stripe.com${endpoint}`);
+  const headers = {
+    Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
+    'Stripe-Version': STRIPE_API_VERSION
+  };
+  const options = { method, headers, signal: AbortSignal.timeout(15000) };
+  if (method === 'GET') {
+    form.forEach((value, key) => url.searchParams.append(key, value));
+  } else {
+    headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    options.body = form;
+  }
+  const response = await fetch(url, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error((data.error && data.error.message) || 'Stripe request failed.');
+    error.statusCode = response.status;
+    throw error;
+  }
+  return data;
+}
+
+async function stripePlanDetails() {
+  if (!stripeConfigured()) return { amount: 300, amountMinor: 30000, currency: 'INR', interval: 'month', intervalCount: 1, source: 'setup-default' };
+  if (stripePlanCache && Date.now() < stripePlanCacheExpiresAt) return { ...stripePlanCache };
+  const price = await stripeRequest(`/v1/prices/${encodeURIComponent(STRIPE_PRICE_ID)}`);
+  if (!price.active || !price.recurring || !Number.isFinite(Number(price.unit_amount))) {
+    throw new Error('The configured Stripe price must be an active recurring fixed price.');
+  }
+  stripePlanCache = {
+    amount: Number(price.unit_amount) / 100,
+    amountMinor: Number(price.unit_amount),
+    currency: String(price.currency || '').toUpperCase(),
+    interval: price.recurring.interval,
+    intervalCount: Number(price.recurring.interval_count || 1),
+    source: 'stripe'
+  };
+  stripePlanCacheExpiresAt = Date.now() + (5 * 60 * 1000);
+  return { ...stripePlanCache };
+}
+
+function verifyStripeWebhook(payload, signatureHeader) {
+  if (!Buffer.isBuffer(payload)) throw new Error('Stripe webhook body must be raw.');
+  const parts = String(signatureHeader || '').split(',').map(part => part.trim());
+  const timestamp = Number((parts.find(part => part.startsWith('t=')) || '').slice(2));
+  const signatures = parts.filter(part => part.startsWith('v1=')).map(part => part.slice(3));
+  if (!Number.isFinite(timestamp) || !signatures.length) throw new Error('Stripe signature is missing.');
+  if (Math.abs(Math.floor(Date.now() / 1000) - timestamp) > 300) throw new Error('Stripe signature is too old.');
+  const expected = crypto.createHmac('sha256', STRIPE_WEBHOOK_SECRET)
+    .update(`${timestamp}.`)
+    .update(payload)
+    .digest();
+  const valid = signatures.some(signature => {
+    if (!/^[a-f0-9]{64}$/i.test(signature)) return false;
+    const candidate = Buffer.from(signature, 'hex');
+    return candidate.length === expected.length && crypto.timingSafeEqual(candidate, expected);
+  });
+  if (!valid) throw new Error('Stripe signature did not match.');
+  return JSON.parse(payload.toString('utf8'));
+}
+
+function subscriptionPeriodEnd(subscription) {
+  const item = subscription && subscription.items && Array.isArray(subscription.items.data)
+    ? subscription.items.data[0]
+    : null;
+  const seconds = (item && item.current_period_end) || subscription.current_period_end;
+  return Number.isFinite(Number(seconds)) ? new Date(Number(seconds) * 1000).toISOString() : null;
+}
+
+function findStripeUser(db, { userId, customerId, subscriptionId } = {}) {
+  if (userId && db.users[userId]) return db.users[userId];
+  return Object.values(db.users).find(user =>
+    (customerId && user.stripeCustomerId === customerId) ||
+    (subscriptionId && user.stripeSubscriptionId === subscriptionId)
+  );
+}
+
+function applyStripeSubscription(db, subscription, fallbackUserId = '') {
+  if (!subscription) return null;
+  const customerId = stripeObjectId(subscription.customer);
+  const metadataUserId = normalize(subscription.metadata && subscription.metadata.dd_user_id);
+  const user = findStripeUser(db, {
+    userId: metadataUserId || fallbackUserId,
+    customerId,
+    subscriptionId: subscription.id
+  });
+  if (!user) return null;
+  user.stripeCustomerId = customerId || user.stripeCustomerId || '';
+  user.stripeSubscriptionId = subscription.id || user.stripeSubscriptionId || '';
+  user.subscriptionStatus = normalizeLookup(subscription.status) || 'inactive';
+  user.subscriptionCancelAtPeriodEnd = Boolean(subscription.cancel_at_period_end);
+  user.subscriptionCurrentPeriodEnd = subscriptionPeriodEnd(subscription);
+  user.subscriptionUpdatedAt = new Date().toISOString();
+  return user;
+}
+
+async function processStripeEvent(event) {
+  if (!event || !event.id || !event.type) throw new Error('Stripe event is invalid.');
+  const db = await readDb();
+  const processed = Array.isArray(db.settings.stripeWebhookEvents) ? db.settings.stripeWebhookEvents : [];
+  if (processed.includes(event.id)) return;
+
+  if (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') {
+    const snapshot = event.data && event.data.object;
+    const session = await stripeRequest(`/v1/checkout/sessions/${encodeURIComponent(snapshot.id)}`);
+    const subscriptionId = stripeObjectId(session.subscription);
+    if (subscriptionId) {
+      const subscription = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(subscriptionId)}`);
+      const user = applyStripeSubscription(db, subscription, session.client_reference_id || normalize(session.metadata && session.metadata.dd_user_id));
+      if (user) user.stripeCustomerId = stripeObjectId(session.customer) || user.stripeCustomerId;
+    }
+  } else if (event.type === 'customer.subscription.created' || event.type === 'customer.subscription.updated') {
+    const snapshot = event.data && event.data.object;
+    const subscription = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(snapshot.id)}`);
+    applyStripeSubscription(db, subscription);
+  } else if (event.type === 'customer.subscription.deleted') {
+    applyStripeSubscription(db, event.data && event.data.object);
+  }
+
+  db.settings.stripeWebhookEvents = [...processed, event.id].slice(-100);
+  await writeDb(db);
+}
+
+function requestBaseUrl(req) {
+  if (PUBLIC_APP_URL) return PUBLIC_APP_URL;
+  const protocol = String(req.get('x-forwarded-proto') || req.protocol || 'https').split(',')[0].trim();
+  return `${protocol}://${req.get('host')}`;
+}
+
+function billingSnapshot(user) {
+  return {
+    active: ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus),
+    status: user.subscriptionStatus || 'inactive',
+    cancelAtPeriodEnd: Boolean(user.subscriptionCancelAtPeriodEnd),
+    currentPeriodEnd: user.subscriptionCurrentPeriodEnd || null,
+    hasCustomer: Boolean(user.stripeCustomerId)
+  };
 }
 
 function hasAnyPhoneDigits(value) {
@@ -1150,7 +1374,7 @@ app.get('/api/auth/google', async (req, res, next) => {
       onboarding = {};
     }
     const context = {
-      returnTo: normalize(req.query.returnTo) === '/testing123' ? '/testing123' : '/',
+      returnTo: ['/testing123', '/subscribe'].includes(normalize(req.query.returnTo)) ? normalize(req.query.returnTo) : '/',
       marketPreferences: Array.isArray(onboarding.marketPreferences) ? onboarding.marketPreferences.map(normalize).filter(Boolean) : undefined,
       sectorPreferences: Array.isArray(onboarding.sectorPreferences) ? onboarding.sectorPreferences.map(normalize).filter(Boolean) : undefined,
       ageRange: normalize(onboarding.ageRange),
@@ -1204,6 +1428,116 @@ app.get('/api/auth/session', requireUser, async (req, res, next) => {
   }
 });
 
+app.get('/api/billing/status', requireUser, async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    const checkoutSessionId = normalize(req.query.session_id);
+
+    if (checkoutSessionId && stripeConfigured()) {
+      if (!/^cs_[A-Za-z0-9_]+$/.test(checkoutSessionId)) return res.status(400).json({ error: 'Invalid Checkout Session.' });
+      const session = await stripeRequest(`/v1/checkout/sessions/${encodeURIComponent(checkoutSessionId)}`);
+      const sessionUserId = session.client_reference_id || normalize(session.metadata && session.metadata.dd_user_id);
+      if (sessionUserId !== req.authUser.id) return res.status(403).json({ error: 'That Checkout Session belongs to another account.' });
+      if (session.status === 'complete') {
+        const subscriptionId = stripeObjectId(session.subscription);
+        if (subscriptionId) {
+          const subscription = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(subscriptionId)}`);
+          applyStripeSubscription(db, subscription, req.authUser.id);
+          user.stripeCustomerId = stripeObjectId(session.customer) || user.stripeCustomerId;
+        }
+      }
+      await writeDb(db);
+    } else if (user.stripeSubscriptionId && STRIPE_SECRET_KEY) {
+      try {
+        const subscription = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(user.stripeSubscriptionId)}`);
+        applyStripeSubscription(db, subscription, req.authUser.id);
+        await writeDb(db);
+      } catch (error) {
+        if (error.statusCode !== 404) throw error;
+        user.subscriptionStatus = 'canceled';
+        user.subscriptionUpdatedAt = new Date().toISOString();
+        await writeDb(db);
+      }
+    }
+
+    const plan = await stripePlanDetails();
+    res.json({
+      ok: true,
+      configured: stripeConfigured(),
+      plan,
+      billing: billingSnapshot(user)
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/billing/checkout', requireUser, async (req, res, next) => {
+  try {
+    if (!stripeConfigured()) return res.status(503).json({ error: 'Payments are not configured yet.' });
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    if (ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) {
+      return res.status(409).json({ error: 'Your membership is already active.' });
+    }
+
+    if (!user.stripeCustomerId) {
+      const customer = await stripeRequest('/v1/customers', {
+        method: 'POST',
+        params: {
+          email: req.authUser.email || user.email,
+          name: userDisplayName(user),
+          'metadata[dd_user_id]': req.authUser.id
+        }
+      });
+      user.stripeCustomerId = customer.id;
+      await writeDb(db);
+    }
+
+    const baseUrl = requestBaseUrl(req);
+    const session = await stripeRequest('/v1/checkout/sessions', {
+      method: 'POST',
+      params: {
+        mode: 'subscription',
+        customer: user.stripeCustomerId,
+        client_reference_id: req.authUser.id,
+        'metadata[dd_user_id]': req.authUser.id,
+        'subscription_data[metadata][dd_user_id]': req.authUser.id,
+        'metadata[legal_policy_version]': LEGAL_POLICY_VERSION,
+        'subscription_data[metadata][legal_policy_version]': LEGAL_POLICY_VERSION,
+        'line_items[0][price]': STRIPE_PRICE_ID,
+        'line_items[0][quantity]': 1,
+        allow_promotion_codes: true,
+        payment_method_collection: 'if_required',
+        'consent_collection[terms_of_service]': 'required',
+        'custom_text[submit][message]': 'Your subscription renews automatically at the price and billing frequency shown until cancelled. You can cancel future renewals at any time from the Daily Dividend billing page. Daily Dividend provides general financial information, not personalised investment advice.',
+        success_url: `${baseUrl}/subscribe?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/subscribe?checkout=cancelled`
+      }
+    });
+    res.json({ ok: true, url: session.url });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/billing/portal', requireUser, async (req, res, next) => {
+  try {
+    if (!STRIPE_SECRET_KEY) return res.status(503).json({ error: 'Payments are not configured yet.' });
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    if (!user.stripeCustomerId) return res.status(400).json({ error: 'No billing profile exists for this account yet.' });
+    const session = await stripeRequest('/v1/billing_portal/sessions', {
+      method: 'POST',
+      params: { customer: user.stripeCustomerId, return_url: `${requestBaseUrl(req)}/subscribe` }
+    });
+    res.json({ ok: true, url: session.url });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post('/api/logout', (req, res) => {
   clearAuthCookies(res);
   res.json({ ok: true });
@@ -1220,7 +1554,7 @@ app.post('/api/dd', async (req, res, next) => {
   }
 });
 
-app.get('/api/user/:userId', requireUser, async (req, res, next) => {
+app.get('/api/user/:userId', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = requireString(req.params.userId, 'userId', res);
@@ -1235,7 +1569,7 @@ app.get('/api/user/:userId', requireUser, async (req, res, next) => {
   }
 });
 
-app.post('/api/preferences', requireUser, async (req, res, next) => {
+app.post('/api/preferences', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const user = getUser(db, req.authUser.id);
@@ -1252,7 +1586,7 @@ app.post('/api/preferences', requireUser, async (req, res, next) => {
   }
 });
 
-app.post('/api/read', requireUser, async (req, res, next) => {
+app.post('/api/read', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1309,7 +1643,7 @@ app.post('/api/read', requireUser, async (req, res, next) => {
   }
 });
 
-app.post('/api/save', requireUser, async (req, res, next) => {
+app.post('/api/save', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1331,7 +1665,7 @@ app.post('/api/save', requireUser, async (req, res, next) => {
   }
 });
 
-app.post('/api/vote', requireUser, async (req, res, next) => {
+app.post('/api/vote', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1741,7 +2075,7 @@ app.delete('/api/admin/user/:userId/votes/:companyId', requireAdmin, async (req,
   }
 });
 
-app.post('/api/deep-dive', requireUser, async (req, res, next) => {
+app.post('/api/deep-dive', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1759,7 +2093,7 @@ app.post('/api/deep-dive', requireUser, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.post('/api/story-complete', requireUser, async (req, res, next) => {
+app.post('/api/story-complete', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1784,7 +2118,7 @@ app.post('/api/story-complete', requireUser, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.post('/api/search-used', requireUser, async (req, res, next) => {
+app.post('/api/search-used', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1800,7 +2134,7 @@ app.post('/api/search-used', requireUser, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.post('/api/next-company-click', requireUser, async (req, res, next) => {
+app.post('/api/next-company-click', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1816,7 +2150,7 @@ app.post('/api/next-company-click', requireUser, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.get('/api/personality/:userId', requireUser, async (req, res, next) => {
+app.get('/api/personality/:userId', requireUser, requireActiveSubscription, async (req, res, next) => {
   try {
     const db = await readDb();
     const targetId = String(req.params.userId || '').trim();
@@ -1882,22 +2216,35 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
+app.get(['/terms', '/terms.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.sendFile(path.join(__dirname, 'public', 'terms.html'));
+});
+app.get(['/privacy', '/privacy.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
+app.get(['/cookies', '/cookies.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.sendFile(path.join(__dirname, 'public', 'cookies.html'));
+});
+
 // Serve root-level HTML files explicitly so edits to root are always live
-app.get('/', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
-app.get('/index.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+app.get('/', requireSubscribedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+app.get('/index.html', requireSubscribedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 // Keep the Rabbit Holes redesign isolated under /testing123.
 app.get([
   '/testing123',
   '/testing123/',
   '/testing123/index.html',
   '/testing123/rabbit-holes/:reportId'
-], (req, res) => {
+], requireSubscribedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 app.get('/testing123/companies/:companyId', (req, res) => res.redirect(302, '/testing123'));
 // The original full product remains the normal public site.
-app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], (req, res) => {
+app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], requireSubscribedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -1905,6 +2252,8 @@ app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html'))
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/testing123/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/testing123/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/subscribe', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'subscribe.html')); });
+app.get('/subscribe.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'subscribe.html')); });
 app.get('/auth/google/callback', async (req, res, next) => {
   const code = normalize(req.query.code);
   if (!code) return res.sendFile(path.join(__dirname, 'public', 'google-callback.html'));

@@ -8,10 +8,7 @@ window.DD_IS_TESTING_PREVIEW=/^\/testing123(?:\/|$)/.test(location.pathname);
 document.documentElement.classList.toggle('rabbit-only',window.DD_IS_TESTING_PREVIEW);
 </script>
 <title>Daily Dividend</title>
-<script>
-!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p=t.createElement("script");p.type="text/javascript";p.crossOrigin="anonymous";p.async=!0;p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js";r=t.getElementsByTagName("script")[0];r.parentNode.insertBefore(p,r);var u=e;void 0!==a?u=e[a]=[]:a="posthog";u.people=u.people||[];u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e};u.people.toString=function(){return u.toString(1)+".people (stub)"};o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group trackSessionId get_session_id get_distinct_id debug".split(" ");for(n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ',{api_host:'https://eu.i.posthog.com',ui_host:'https://eu.posthog.com',person_profiles:'identified_only'});
-</script>
+<script defer src="/js/consent.js" data-posthog-key="phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ" data-posthog-host="https://eu.i.posthog.com"></script>
 <link rel="icon" type="image/png" href="/api/brand-logo">
 <meta property="og:image" content="/api/brand-logo">
 <style id="auth-gate">html.auth-pending{background:#0f0f0e}html.auth-pending body{visibility:hidden}html.auth-pending body::before{content:"Daily Dividend";visibility:visible;position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#0f0f0e;color:#F5F1E8;font:600 18px Georgia,serif;letter-spacing:.01em}</style>
@@ -568,6 +565,8 @@ html.rabbit-only .rbh-th svg{display:block;width:100%;height:100%}
 .auth-actions{display:flex;gap:8px;flex-shrink:0}
 .auth-btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:100px;padding:10px 13px;font-family:var(--sans);font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;background:var(--ink);color:var(--cream)}
 .auth-btn.secondary{background:var(--cream-2);color:var(--ink)}
+.account-legal{display:flex;flex-wrap:wrap;gap:9px 14px;margin:-8px 2px 18px;font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.account-legal a,.account-legal button{border:0;background:none;padding:0;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.account-legal a:hover,.account-legal button:hover{color:var(--brand)}
 @media(max-width:560px){.auth-card{align-items:stretch;flex-direction:column}.auth-actions{display:grid;grid-template-columns:1fr 1fr}.auth-btn{width:100%}}
 /* MISC */
 .hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
@@ -2821,13 +2820,14 @@ function localizeAudienceCopy(value,seen=new WeakSet()){
 }
 function syncSavedFromProfile(){saved={};(profileState.savedCompanies||[]).forEach(key=>{const item=parseSaveKey(key);if(!saved[item.co])saved[item.co]=new Set();if(Number.isFinite(item.idx))saved[item.co].add(item.idx);});}
 function syncCallsFromProfile(){const vd=profileState.voteData||{};calls=Object.entries(profileState.previousVotes||{}).map(([co,vote])=>{const a=getAggregate(co);const d=vd[co]||{};const when=d.date?new Date(d.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}):'Saved';return {co,vote,b:a.bull||0,n:a.neutral||0,bb:a.bear||0,when,entryPrice:d.price||null};}).filter(c=>CO[c.co]);}
-function trackPostHogEvent(event,properties={}){try{if(window.posthog&&posthog.capture)posthog.capture(event,properties);}catch(e){}}
+function trackPostHogEvent(event,properties={}){try{if(window.DDConsent&&DDConsent.allows('analytics')&&window.posthog&&posthog.capture)posthog.capture(event,properties);}catch(e){}}
 function trackMetaEvent(event,properties={}){try{if(window.fbq&&typeof window.fbq==='function')window.fbq('track',event,properties);}catch(e){}}
 function companyMetaPayload(companyId,extra={}){const c=typeof companyId==='string'?CO[companyId]:companyId;if(!c)return extra;return {content_name:c.n||c.name||companyKey(c),content_category:c.sec||'Company story',content_ids:[companyKey(c)],content_type:'article',currency:c.t==='RELIANCE'?'INR':'USD',...extra};}
 function trackMetaViewContent(companyId,source='story'){const c=CO[companyId]||CO[curCo];if(!c||c.disabled)return;trackMetaEvent('ViewContent',companyMetaPayload(c,{source}));}
 function trackMetaSearch(query){const q=String(query||'').trim();if(q.length<2||trackMetaSearch._last===q)return;trackMetaSearch._last=q;trackMetaEvent('Search',{search_string:q,content_category:'Company search'});}
 function trackMetaWishlist(companyId,idx=0){const c=CO[companyId]||CO[curCo];if(!c||c.disabled)return;trackMetaEvent('AddToWishlist',companyMetaPayload(c,{card_index:Number(idx)+1}));}
-function identifyPostHog(){try{if(userId&&window.posthog&&posthog.identify)posthog.identify(userId,{country:profileState.country||'',profession:profileState.profession||'',investor_level:profileState.investorLevel||'',streak:profileState.streak||0});}catch(e){}}
+function identifyPostHog(){try{if(userId&&window.DDConsent&&DDConsent.allows('analytics')&&window.posthog&&posthog.identify)posthog.identify(userId,{country:profileState.country||'',profession:profileState.profession||'',investor_level:profileState.investorLevel||'',streak:profileState.streak||0});}catch(e){}}
+document.addEventListener('dd:consent-changed',event=>{if(event.detail&&event.detail.analytics)setTimeout(identifyPostHog,250);});
 function callPnlPct(c){const co=CO[c.co];if(!c.entryPrice||!co||!co.sp||co.sp==='-')return null;const entry=parseFloat(String(c.entryPrice).replace(/[^0-9.]/g,''));const cur=parseFloat(String(co.sp).replace(/[^0-9.]/g,''));if(!entry||!cur||isNaN(entry)||isNaN(cur))return null;return (cur-entry)/entry*100;}
 function callDirectionalPnl(c){const pct=callPnlPct(c);if(pct===null)return null;if(c.vote==='bear')return -pct;if(c.vote==='neutral')return -Math.abs(pct);return pct;}
 function callPnl(c){const when=c.when&&c.when!=='Saved'?c.when:'';let left=when,pctHtml='';const pct=callPnlPct(c);if(pct!==null){const dir=callDirectionalPnl(c);const cls=dir>0.05?'up':dir<-0.05?'down':'flat';const shown=c.vote==='neutral'?dir:pct;const sign=shown>=0?'+':'';left=when?`${when} · ${c.entryPrice}`:c.entryPrice;pctHtml=`<span class="cc-pct ${cls}">${sign}${shown.toFixed(1)}%</span>`;}if(!left&&!pctHtml)return'';return`<div class="cc-pnl"><span class="cc-ep">${left}</span>${pctHtml}</div>`;}
@@ -2836,20 +2836,21 @@ function pnlSummaryCard(){const t=callPnlTotals();if(!t)return'';const cls=t.avg
 function isRegisteredUser(){return Boolean(profileState.firstName||profileState.lastName||profileState.phoneNumber||profileState.profession);}
 function displayUserName(){return [profileState.firstName,profileState.lastName].filter(Boolean).join(' ')||'Daily Dividend reader';}
 function authPanel(){
+ const legalLinks=`<nav class="account-legal" aria-label="Account and legal"><a href="/subscribe">Membership &amp; billing</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><button type="button" data-cookie-settings>Cookie settings</button></nav>`;
  if(isRegisteredUser()){
  const _ct=profileState.country&&profileState.country.toLowerCase()!=='unknown'?profileState.country:'';
- return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>`;
+ return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
  }
- return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>`;
+ return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
 }
 async function api(path,options={}){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),options.timeout||12000);try{const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options,signal:options.signal||controller.signal});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}catch(error){if(error&&error.name==='AbortError')throw new Error('Daily Dividend is taking too long to wake up. Please try again.');throw error;}finally{clearTimeout(timeout);}}
-async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
+async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');if(!profileState.subscriptionActive){window.location.replace('/subscribe');throw new Error('An active membership is required.');}localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
 async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();identifyPostHog();}
 async function loadVoteAggregates(){
  try{const data=await api('/api/votes');Object.assign(voteAggregates,data.votes||{});}
  catch(e){console.warn(e);}
 }
-async function signOut(){try{await api('/api/logout',{method:'POST'});}catch(e){}localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');localStorage.removeItem('dailyDividendOnboarded');showToast('Signed out');setTimeout(()=>window.location.href=`${AUTH_ROOT}/onboarding`,450);}
+async function signOut(){try{await api('/api/logout',{method:'POST'});}catch(e){}try{if(window.posthog&&posthog.reset)posthog.reset(true);}catch(e){}localStorage.removeItem('dailyDividendUserId');localStorage.removeItem('user');localStorage.removeItem('dailyDividendOnboarded');showToast('Signed out');setTimeout(()=>window.location.href=`${AUTH_ROOT}/onboarding`,450);}
 function setTheme(co){
  const c=CO[co];
  document.documentElement.style.setProperty('--dk',c.dk||c.ac);
@@ -4037,11 +4038,11 @@ function openCurrentRoute(routeMode='replace'){
 }
 function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else if(RABBIT_ONLY){renderLib();}else{renderToday();}openCurrentRoute('replace');if(!RABBIT_ONLY&&localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
 function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');applyRabbitOnlyShell();if(IS_DESKTOP){_runDesktopInit();}else if(RABBIT_ONLY){goTo('library',true);}else{renderToday();}_secondary();}
-function _fullAuth(){ensureSession().then(_boot).catch(()=>{_releaseGate();_clearStoredSession();window.location.replace(`${AUTH_ROOT}/onboarding`);});}
+function _fullAuth(){ensureSession().then(_boot).catch(error=>{if(/active membership/i.test(error&&error.message||''))return;_releaseGate();_clearStoredSession();window.location.replace(`${AUTH_ROOT}/onboarding`);});}
 window.addEventListener('error',_releaseGate);
 window.addEventListener('unhandledrejection',_releaseGate);
 setTimeout(()=>{if(!_booted)_releaseGate();},5000);
-if(_cuid&&_cu){try{profileState=JSON.parse(_cu)||{};userId=_cuid;syncSavedFromProfile();syncCallsFromProfile();_boot();ensureSession().catch(()=>{});}catch(e){_clearStoredSession();_fullAuth();}}else{_fullAuth();}
+if(_cuid&&_cu){try{profileState=JSON.parse(_cu)||{};userId=_cuid;syncSavedFromProfile();syncCallsFromProfile();_fullAuth();}catch(e){_clearStoredSession();_fullAuth();}}else{_fullAuth();}
 })();
 
 window.addEventListener('popstate',()=>{

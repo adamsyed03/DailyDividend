@@ -25,6 +25,24 @@ The health check endpoint is intentionally lightweight and does not touch Supaba
 
 Customer accounts use Supabase Auth with email and password. The server stores Supabase access and refresh tokens in HttpOnly, SameSite cookies; application profile data remains in `daily_dividend_state` keyed by the Supabase Auth user ID. Passwords and password hashes are not stored in the application state.
 
+## Stripe membership
+
+Accounts require an active Stripe subscription. The plan is ₹300 INR per month. Stripe-hosted Checkout accepts promotion codes; `barclays123` maps to a 100%-off coupon with a `forever` duration, so a valid redemption does not require a payment method.
+
+1. Put a Stripe test-mode secret key in `.env` as `STRIPE_SECRET_KEY`.
+2. Run `npm run stripe:setup`. Add the printed `STRIPE_PRICE_ID` to `.env` and to the production service environment.
+3. In Stripe Workbench, add a snapshot webhook destination at `https://dailydividend.info/api/stripe/webhook` for:
+   - `checkout.session.completed`
+   - `checkout.session.async_payment_succeeded`
+   - `customer.subscription.created`
+   - `customer.subscription.updated`
+   - `customer.subscription.deleted`
+4. Copy that endpoint's `whsec_...` signing secret to `STRIPE_WEBHOOK_SECRET` locally and in production.
+5. Enable and save the Stripe Customer Portal configuration so members can cancel or manage billing.
+6. Set `PUBLIC_APP_URL=https://dailydividend.info` in production.
+
+Use test-mode keys and objects first. When ready to charge real customers, repeat the setup with the live-mode secret key and replace all three Stripe environment values with their live-mode counterparts. Never put Stripe secret or webhook keys in HTML or client-side JavaScript.
+
 ## Company logos
 
 Logo slots use `/api/logo/:companyId` and automatically fall back to the company's initial. Curated logos are read from the public Supabase Storage bucket configured by `SUPABASE_LOGO_BUCKET` (default: `company-logos`). Set up the bucket and upload the included DD, Netflix, and Visa assets with:

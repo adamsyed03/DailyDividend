@@ -164,6 +164,8 @@
     .payoff-terms{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-top:4px}
     .feat-inner{flex:1;padding:72px 28px 24px;display:flex;flex-direction:column;overflow-y:auto}
     .feat-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.68);margin-bottom:14px}
+    .legal-ack{font-family:var(--sans);font-size:11px;line-height:1.45;color:rgba(245,241,232,.58);margin:10px 0 2px}.legal-ack a{color:var(--cream);text-underline-offset:3px}
+    .onboarding-legal{position:fixed;right:18px;top:18px;z-index:120;display:flex;gap:12px;font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase}.onboarding-legal a{color:rgba(245,241,232,.7);text-underline-offset:3px}
     .feat-h{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;letter-spacing:-.025em;margin-bottom:6px;color:var(--cream)}
     .feat-h em{font-style:italic;color:#B5E3C8;font-weight:300}
     .feat-sub{font-size:14px;color:rgba(245,241,232,.5);margin-bottom:32px;line-height:1.5}
@@ -401,6 +403,7 @@
               <input type="hidden" id="countryInput">
               <button type="button" class="cntry-trigger empty" id="cntryTrigger" onclick="openCountryDD()"><span id="cntryLabel">Select your country</span><span class="cntry-trigger-arrow">▼</span></button>
             </div>
+            <p class="legal-ack">By creating an account, you agree to our <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and acknowledge our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
         </div>
@@ -410,15 +413,15 @@
       <section class="screen" id="s-payoff">
         <div class="payoff-inner">
           <div class="payoff-mark">DD</div>
-          <div class="payoff-h">You're <em>in.</em></div>
-          <div class="payoff-sub">Welcome to Daily Dividend. We built this for people who want to actually understand what they're reading about - not just the numbers, the story.</div>
+          <div class="payoff-h">Account <em>ready.</em></div>
+          <div class="payoff-sub">One last step: activate your Daily Dividend membership to unlock every story and keep your shelf synced.</div>
           <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
           <div class="payoff-card"><div class="payoff-card-label">Your interests</div><div class="payoff-chips" id="payoffSectors"></div></div>
           <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix - The $46M a day question</div></div></div>
         </div>
         <div class="payoff-foot">
-          <button class="btn-payoff" onclick="goToApp()">Let's go -></button>
-          <div class="payoff-terms">New company every Monday - Free forever</div>
+          <button class="btn-payoff" onclick="goToApp()">Choose membership -></button>
+          <div class="payoff-terms">₹300/month - Cancel anytime</div>
         </div>
       </section>
 
@@ -448,6 +451,7 @@
     </div>
   </div>
 
+  <nav class="onboarding-legal" aria-label="Legal"><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a></nav>
   <script>
     let selectedMarkets = new Set();
     let selectedSectors = new Set();
@@ -530,7 +534,7 @@
         ageRange:selectedAge,
         investorLevel:selectedLevel
       });
-      const params=new URLSearchParams({onboarding,returnTo:'/'});
+      const params=new URLSearchParams({onboarding,returnTo:'/subscribe'});
       window.location.href = '/api/auth/google?'+params.toString();
     }
     function fieldValue(id){
@@ -636,7 +640,7 @@
       document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
       document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
     }
-    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='index.html';}
+    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='/subscribe';}
 
     const COUNTRIES = [
       'India','United States','United Kingdom','UAE','Singapore','Australia','Canada',
@@ -706,5 +710,6 @@
     loadCatalogStats();
     if(window.twemoji)twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
   </script>
+  <script defer src="/js/consent.js"></script>
 </body>
 </html>

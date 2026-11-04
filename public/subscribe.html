@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Daily Dividend Membership</title>
+  <link rel="icon" type="image/png" href="/api/brand-logo">
+  <style>
+    :root{--cream:#f5f1e8;--paper:#fffdf8;--ink:#0f0f0e;--muted:#6b6b66;--line:#d9d2c2;--brand:#1a3d2b;--green:#2e8a60;--red:#b23a2e;--serif:Georgia,"Times New Roman",serif;--sans:Inter,Arial,sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#284f39 0,#112a1d 32%,#0b1711 72%);color:var(--ink);font-family:var(--sans);display:grid;place-items:center;padding:24px}
+    .shell{width:min(100%,480px)}.brand{color:var(--cream);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px;font-weight:700}.mark{width:42px;height:42px;border-radius:12px;background:var(--cream);color:var(--brand);display:grid;place-items:center;font:700 19px var(--serif)}
+    .card{background:var(--paper);border:1px solid rgba(255,255,255,.34);border-radius:24px;padding:30px;box-shadow:0 26px 70px rgba(0,0,0,.34)}.eyebrow{color:var(--green);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px}h1{font:400 38px/1.05 var(--serif);letter-spacing:-.025em;margin:0 0 12px}h1 em{color:var(--brand);font-weight:400}.sub{color:var(--muted);font-size:15px;line-height:1.55;margin:0 0 24px}
+    .price{display:flex;align-items:flex-end;gap:7px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:20px}.amount{font:600 42px/1 var(--serif)}.period{color:var(--muted);font-size:14px;padding-bottom:4px}.features{display:grid;gap:11px;margin:0 0 22px;padding:0;list-style:none;font-size:14px}.features li{display:flex;gap:10px}.features li:before{content:"✓";color:var(--green);font-weight:800}
+    .promo{background:#edf6f0;border:1px solid #cfe5d6;border-radius:14px;padding:13px 14px;margin-bottom:18px;color:#204b32;font-size:13px;line-height:1.45}.promo code{font:700 13px ui-monospace,monospace;background:#fff;padding:3px 6px;border-radius:6px;border:1px solid #cfe5d6}.button{width:100%;border:0;border-radius:999px;padding:14px 18px;background:var(--ink);color:#fff;font:700 15px var(--sans);cursor:pointer;transition:.16s}.button:hover{background:var(--brand);transform:translateY(-1px)}.button:disabled{opacity:.5;cursor:not-allowed;transform:none}.button.secondary{margin-top:10px;background:transparent;color:var(--ink);border:1px solid var(--line)}
+    .status{display:none;border-radius:12px;padding:12px 14px;margin:0 0 16px;font-size:13px;line-height:1.45}.status.show{display:block}.status.error{background:#f8e6e2;color:var(--red)}.status.success{background:#e8f5ec;color:#1e6945}.fine{text-align:center;color:var(--muted);font-size:11px;line-height:1.5;margin:14px 8px 0}.fine a,.legal-nav a,.legal-nav button{color:inherit;text-underline-offset:3px}.renewal-notice{background:#f3efe5;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 18px;color:#42423d;font-size:12px;line-height:1.55}.renewal-notice strong{color:var(--ink)}.active-panel{display:none}.active-panel.show{display:block}.plan-panel.hidden{display:none}.legal-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;color:rgba(245,241,232,.7);font-size:11px;margin:16px 0 0}.legal-nav button{border:0;background:none;font:inherit;padding:0;cursor:pointer}
+    @media(max-width:520px){body{padding:14px}.card{padding:24px 20px;border-radius:20px}h1{font-size:33px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="brand"><span class="mark">DD</span><span>Daily Dividend</span></div>
+    <section class="card">
+      <div class="eyebrow">Membership</div>
+      <h1>Understand the story <em>behind the stock.</em></h1>
+      <p class="sub">One clear company story at a time, with your shelf, calls and reading streak synced to your account.</p>
+      <div id="status" class="status" role="status"></div>
+
+      <div id="planPanel" class="plan-panel">
+        <div class="price"><span class="amount" id="planAmount">Loading…</span><span class="period" id="planPeriod">membership price</span></div>
+        <ul class="features">
+          <li>Full access to every company story</li>
+          <li>Saved shelf, calls and streaks</li>
+          <li>Cancel anytime in the billing portal</li>
+        </ul>
+        <div class="promo">Have the access code? Enter <code>barclays123</code> on the Stripe checkout page for 100% off for the life of this subscription.</div>
+        <div class="renewal-notice"><strong>Recurring membership.</strong> Your subscription renews automatically at the price and billing frequency shown until cancelled. Cancel future renewals at any time through Manage billing. By subscribing, you agree to our <a href="/terms">Terms of Service</a> and acknowledge our <a href="/privacy">Privacy Policy</a>. Daily Dividend provides general financial information, not personalised investment advice.</div>
+        <button id="checkoutButton" class="button" type="button">Continue to secure checkout</button>
+      </div>
+
+      <div id="activePanel" class="active-panel">
+        <div class="price"><span class="amount">Active</span><span class="period" id="renewalText">membership</span></div>
+        <div class="renewal-notice" id="membershipSummary">Loading your billing status…</div>
+        <ul class="features"><li>Your Daily Dividend account is unlocked</li><li>Billing is securely managed by Stripe</li></ul>
+        <button class="button" type="button" onclick="location.href='/'">Enter Daily Dividend</button>
+        <button id="portalButton" class="button secondary" type="button">Manage billing</button>
+      </div>
+      <p class="fine">Payments are processed by Stripe. Daily Dividend does not receive or store your complete card details. Statutory consumer rights are not affected.</p>
+    </section>
+    <nav class="legal-nav" aria-label="Legal"><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/login">Sign in</a><button type="button" data-cookie-settings>Cookie settings</button></nav>
+  </main>
+  <script>
+    const statusBox=document.getElementById('status');
+    const checkoutButton=document.getElementById('checkoutButton');
+    const portalButton=document.getElementById('portalButton');
+    function showStatus(message,type='error'){statusBox.textContent=message;statusBox.className=`status show ${type}`;}
+    function formatPlan(plan){
+      const amount=new Intl.NumberFormat('en-IN',{style:'currency',currency:plan.currency||'INR',maximumFractionDigits:Number.isInteger(plan.amount)?0:2}).format(plan.amount||0);
+      const count=Number(plan.intervalCount||1);const interval=plan.interval||'month';
+      return {amount,period:`${plan.currency||''} / ${count===1?'':count+' '}${interval}${count===1?'':'s'}`.trim()};
+    }
+    async function request(path,options={}){
+      const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options});
+      const data=await response.json().catch(()=>({}));
+      if(response.status===401){location.replace('/login');throw new Error('Please log in first.');}
+      if(!response.ok)throw new Error(data.error||'Something went wrong. Please try again.');
+      return data;
+    }
+    function render(data){
+      const active=Boolean(data.billing&&data.billing.active);
+      const plan=formatPlan(data.plan||{});
+      document.getElementById('planAmount').textContent=plan.amount;
+      document.getElementById('planPeriod').textContent=plan.period;
+      document.getElementById('planPanel').classList.toggle('hidden',active);
+      document.getElementById('activePanel').classList.toggle('show',active);
+      checkoutButton.disabled=!data.configured;
+      if(!data.configured&&!active)showStatus('Stripe is ready in the app, but the server keys and price still need to be added.');
+      if(active){
+        const end=data.billing.currentPeriodEnd?new Date(data.billing.currentPeriodEnd):null;
+        const endText=end?end.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}):'the date shown in Stripe';
+        document.getElementById('renewalText').textContent=data.billing.cancelAtPeriodEnd?'cancellation scheduled':plan.period;
+        document.getElementById('membershipSummary').innerHTML=data.billing.cancelAtPeriodEnd
+          ? `<strong>Cancellation scheduled.</strong> Your paid access remains active until ${endText}. Stripe will not renew this subscription after that date.`
+          : `<strong>Renews automatically.</strong> Your next billing date is ${endText} at ${plan.amount} ${plan.period.replace((data.plan&&data.plan.currency)||'','').trim()}. Use Manage billing below to cancel future renewals.`;
+        showStatus(data.billing.cancelAtPeriodEnd?'Your membership remains active until the end of the paid period.':'Your membership is active. Welcome in.','success');
+      }
+    }
+    async function load(){
+      try{
+        const params=new URLSearchParams(location.search);
+        const sessionId=params.get('session_id');
+        const query=sessionId?`?session_id=${encodeURIComponent(sessionId)}`:'';
+        const data=await request('/api/billing/status'+query);
+        render(data);
+        if(sessionId){history.replaceState(null,'','/subscribe');}
+        else if(params.get('checkout')==='cancelled')showStatus('Checkout was cancelled. Your account has not been charged.');
+      }catch(error){showStatus(error.message);}
+    }
+    checkoutButton.addEventListener('click',async()=>{
+      checkoutButton.disabled=true;checkoutButton.textContent='Opening Stripe...';
+      try{const data=await request('/api/billing/checkout',{method:'POST'});location.assign(data.url);}
+      catch(error){showStatus(error.message);checkoutButton.disabled=false;checkoutButton.textContent='Continue to secure checkout';}
+    });
+    portalButton.addEventListener('click',async()=>{
+      portalButton.disabled=true;
+      try{const data=await request('/api/billing/portal',{method:'POST'});location.assign(data.url);}
+      catch(error){showStatus(error.message);portalButton.disabled=false;}
+    });
+    load();
+  </script>
+  <script defer src="/js/consent.js"></script>
+</body>
+</html>

@@ -6,6 +6,8 @@
     "instagram:dry-run": "node instagram-dd-bot/bot.js --dry-run",
     "instagram:dm-preview": "node instagram-dd-bot/bot.js --dm-preview",
     "instagram:live": "node instagram-dd-bot/bot.js --live",
+    "stripe:setup": "node scripts/setup-stripe.js",
+    "test:legal": "node scripts/test-legal.js",
     "supabase:push": "node scripts/push-local-db-to-supabase.js",
     "supabase:logos": "node scripts/setup-supabase-logos.js"
   },

@@ -167,6 +167,8 @@
     .payoff-terms{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-top:4px}
     .feat-inner{flex:1;padding:72px 28px 24px;display:flex;flex-direction:column;overflow-y:auto}
     .feat-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(181,227,200,.68);margin-bottom:14px}
+    .legal-ack{font-family:var(--sans);font-size:11px;line-height:1.45;color:rgba(245,241,232,.58);margin:10px 0 2px}.legal-ack a{color:var(--cream);text-underline-offset:3px}
+    .onboarding-legal{position:fixed;right:18px;top:18px;z-index:120;display:flex;gap:12px;font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase}.onboarding-legal a{color:rgba(245,241,232,.7);text-underline-offset:3px}
     .feat-h{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;letter-spacing:-.025em;margin-bottom:6px;color:var(--cream)}
     .feat-h em{font-style:italic;color:#B5E3C8;font-weight:300}
     .feat-sub{font-size:14px;color:rgba(245,241,232,.5);margin-bottom:32px;line-height:1.5}
@@ -373,6 +375,7 @@
               <label for="confirmPasswordInput">Confirm password</label>
               <input class="acct-input" id="confirmPasswordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Enter password again">
             </div>
+            <p class="legal-ack">By creating an account, you agree to our <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and acknowledge our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
         </div>
@@ -405,6 +408,7 @@
     </div>
   </div>
 
+  <nav class="onboarding-legal" aria-label="Legal"><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a></nav>
   <script>
     function setAppHeight(){
       const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
@@ -670,5 +674,6 @@
     loadCatalogStats();
     if(document.readyState==='complete')parseOnboardingEmoji();else window.addEventListener('load',parseOnboardingEmoji,{once:true});
   </script>
+  <script defer src="/js/consent.js"></script>
 </body>
 </html>

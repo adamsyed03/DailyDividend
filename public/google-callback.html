@@ -24,12 +24,19 @@
     (async function(){
       const title=document.getElementById('title');
       const status=document.getElementById('status');
+      function readableError(value){
+        let message=String(value||'Google login could not be completed.');
+        for(let i=0;i<2&&/%[0-9a-f]{2}/i.test(message);i++){
+          try{message=decodeURIComponent(message);}catch(e){break;}
+        }
+        return message;
+      }
       try{
         const params=new URLSearchParams(location.hash.slice(1));
         const query=new URLSearchParams(location.search);
         query.forEach((value,key)=>{if(!params.has(key))params.set(key,value);});
         const error=params.get('error_description')||params.get('error');
-        if(error)throw new Error(error);
+        if(error)throw new Error(readableError(error));
         const accessToken=params.get('access_token');
         const refreshToken=params.get('refresh_token');
         if(!accessToken||!refreshToken)throw new Error('Google did not return a login session.');
