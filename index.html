@@ -2956,7 +2956,6 @@ ${snips.map(s=>`
  twparse(document.getElementById('todayScroll'));
 }
 async function openStack(slug,source='today',routeMode='push'){
- if(!requireArticleSubscription())return;
  if(!CO[slug]||CO[slug].disabled){slug=curCo;}
  trackPostHogEvent('company_opened',{company_id:slug,source});
  trackMetaViewContent(slug,source);
@@ -3698,7 +3697,6 @@ function openDbCompany(companyId,routeMode='push'){
  if(RABBIT_ONLY){goTo('library');return;}
  const co=dbCos.find(c=>c.companyId===companyId);
  if(!co)return;
- if(!requireArticleSubscription())return;
  currentDbCo=companyId;
  currentRabbitHole=null;
  document.getElementById('coOvName').textContent=co.name;

@@ -48,12 +48,14 @@ async function run() {
   assert.ok(serverSource.includes("'custom_text[submit][message]'"));
   assert.ok(serverSource.includes('stripePlanDetails()'));
   assert.ok(serverSource.includes("app.get('/', requireAuthenticatedPage"), 'The main app must not require a subscription');
-  assert.ok(serverSource.includes("app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], requireSubscribedPage"), 'Direct article routes must require a subscription');
-  assert.ok(serverSource.includes("app.get('/api/company/:companyId', requireSubscribedApi"), 'Article APIs must require a subscription');
+  assert.ok(serverSource.includes("app.get('/companies/:companyId', requireAuthenticatedPage"), 'Company articles should require login but not a subscription');
+  assert.ok(serverSource.includes("app.get('/rabbit-holes/:reportId', requireSubscribedPage"), 'Direct Rabbit Hole routes must require a subscription');
+  assert.ok(serverSource.includes("app.get('/api/company/:companyId', requireUser"), 'Company article APIs should require login but not a subscription');
 
   const appSource = read('index.html');
   assert.ok(appSource.includes('function requireArticleSubscription()'));
-  assert.ok(appSource.includes("async function openStack(slug,source='today',routeMode='push'){\n if(!requireArticleSubscription())return;"));
+  assert.ok(!/async function openStack\([^]*?requireArticleSubscription\(\)/.test(appSource.split('function safeBoxCopy')[0]), 'Normal company stories must not trigger the paywall');
+  assert.ok(/function openRabbitHole\([^]*?requireArticleSubscription\(\)/.test(appSource), 'Rabbit Holes must trigger the paywall');
   assert.ok(!/ensureSession\(\).*window\.location\.replace\('\/subscribe'\)/s.test(appSource), 'App startup must not redirect free users to subscribe');
   assert.ok(read('login.html').includes("window.location.href = '/';"), 'Login must open the app, not billing');
   assert.ok(read('onboarding.html').includes("window.location.href='/';"), 'Onboarding must open the app, not billing');

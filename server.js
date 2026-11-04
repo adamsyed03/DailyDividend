@@ -777,22 +777,6 @@ async function requireAuthenticatedPage(req, res, next) {
   }
 }
 
-async function requireSubscribedApi(req, res, next) {
-  try {
-    const authUser = await authenticatedUser(req, res);
-    if (!authUser) return res.status(401).json({ error: 'Please log in to continue.' });
-    const db = await readDb();
-    const user = getUser(db, authUser.id);
-    if (!ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) {
-      return res.status(402).json({ error: 'An active membership is required to open this article.', code: 'subscription_required' });
-    }
-    req.authUser = authUser;
-    next();
-  } catch (error) {
-    next(error);
-  }
-}
-
 function stripeConfigured() {
   return Boolean(STRIPE_SECRET_KEY && STRIPE_PRICE_ID);
 }
@@ -1971,7 +1955,7 @@ app.get('/api/catalog-stats', async (req, res, next) => {
   }
 });
 
-app.get('/api/company/:companyId', requireSubscribedApi, async (req, res, next) => {
+app.get('/api/company/:companyId', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const id = String(req.params.companyId || '').toLowerCase();
@@ -2274,7 +2258,11 @@ app.get('/testing123/rabbit-holes/:reportId', requireSubscribedPage, (req, res) 
 });
 app.get('/testing123/companies/:companyId', (req, res) => res.redirect(302, '/testing123'));
 // The original full product remains the normal public site.
-app.get(['/companies/:companyId', '/rabbit-holes/:reportId'], requireSubscribedPage, (req, res) => {
+app.get('/companies/:companyId', requireAuthenticatedPage, (req, res) => {
+  res.setHeader('Cache-Control', 'private, no-cache');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/rabbit-holes/:reportId', requireSubscribedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
