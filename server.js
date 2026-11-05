@@ -1587,6 +1587,8 @@ app.post('/api/billing/checkout', requireUser, async (req, res, next) => {
       params: {
         ui_mode: 'hosted_page',
         mode: 'subscription',
+        'adaptive_pricing[enabled]': true,
+        locale: 'auto',
         billing_address_collection: 'auto',
         'phone_number_collection[enabled]': false,
         'automatic_tax[enabled]': false,

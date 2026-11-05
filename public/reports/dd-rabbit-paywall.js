@@ -7,6 +7,7 @@
 
   var statusReady=false;
   var subscriptionActive=false;
+  var parentManaged=false;
   var attemptedBeyondPreview=false;
   var touchStartY=null;
 
@@ -55,6 +56,10 @@
   function showPaywall(){
     if(!statusReady||subscriptionActive||!attemptedBeyondPreview)return;
     returnToPreview();
+    if(parentManaged&&window.parent!==window){
+      window.parent.postMessage({type:'dd:paywall-request'},window.location.origin);
+      return;
+    }
     wall.classList.add('show');
   }
 
@@ -68,8 +73,25 @@
   }
 
   wall.querySelector('.dd-pro-button').addEventListener('click',function(){
-    try{sessionStorage.setItem('ddRabbitHoleReturnTo',paymentPath());}catch(error){}
-    window.top.location.assign(paymentPath());
+    var button=this;
+    var originalText=button.textContent;
+    button.disabled=true;
+    button.textContent='Opening secure checkout...';
+    fetch('/api/billing/checkout',{
+      method:'POST',credentials:'same-origin',
+      headers:{Accept:'application/json','Content-Type':'application/json'}
+    }).then(function(response){
+      return response.json().catch(function(){return {};}).then(function(data){return {response:response,data:data};});
+    }).then(function(result){
+      if(result.response.status===401){window.top.location.assign('/login?returnTo='+encodeURIComponent('/subscribe'));return;}
+      if(!result.response.ok)throw new Error(result.data.error||'Could not open checkout.');
+      if(!result.data.url)throw new Error('Stripe did not return a checkout page.');
+      window.top.location.assign(result.data.url);
+    }).catch(function(){
+      button.disabled=false;
+      button.textContent=originalText;
+      window.top.location.assign(paymentPath());
+    });
   });
   wall.querySelector('.dd-pro-back').addEventListener('click',function(){
     wall.classList.remove('show');
@@ -114,6 +136,23 @@
     .then(function(data){subscriptionActive=Boolean(data&&data.user&&data.user.subscriptionActive);})
     .catch(function(){subscriptionActive=false;})
     .then(function(){statusReady=true;showPaywall();});
+
+  window.addEventListener('message',function(event){
+    if(event.origin!==window.location.origin||!event.data)return;
+    if(event.data.type==='dd:membership'){
+      parentManaged=Boolean(event.data.parentManaged);
+      subscriptionActive=Boolean(event.data.subscriptionActive);
+      statusReady=true;
+      if(subscriptionActive)wall.classList.remove('show');
+      else showPaywall();
+    }
+    if(event.data.type==='dd:return-preview'){
+      attemptedBeyondPreview=false;
+      wall.classList.remove('show');
+      returnToPreview();
+    }
+  });
+  if(window.parent!==window)window.parent.postMessage({type:'dd:reader-ready'},window.location.origin);
 
   var observer=new IntersectionObserver(function(entries){
     entries.forEach(function(entry){

@@ -1001,6 +1001,14 @@ body{background:var(--ink);overflow:hidden}
 .co-overlay.rbh-reading .co-ov-save.saved{background:#1F6B4A}
 .co-overlay.rbh-reading .co-ov-back{order:2;font-size:21px;line-height:1}
 .co-overlay.rbh-reading .co-ov-frame{height:100%;flex:1}
+.rbh-paywall{position:absolute;inset:0;z-index:5;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(7,16,12,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.rbh-paywall.show{display:flex}
+.rbh-paywall-card{width:min(420px,100%);border-radius:24px;background:var(--cream);color:var(--ink);padding:28px;box-shadow:0 28px 80px rgba(0,0,0,.35)}
+.rbh-paywall-k{font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
+.rbh-paywall-h{font-family:var(--serif);font-size:34px;line-height:1.02;letter-spacing:-.03em;margin-bottom:12px}
+.rbh-paywall-p{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:22px}
+.rbh-paywall-cta{width:100%;border:0;border-radius:999px;padding:14px 18px;background:var(--ink);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+.rbh-paywall-back{width:100%;border:0;background:transparent;color:var(--muted);font-size:12px;padding:13px 8px 0;cursor:pointer}
 .co-ov-vote{flex-shrink:0;background:#fff;border-top:1px solid #eee;padding:14px 16px;display:flex;align-items:center;gap:12px}
 .co-ov-label{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;flex-shrink:0}
 .co-vb{flex:1;border:1px solid #ddd;background:#fff;border-radius:8px;padding:8px 6px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.06em}
@@ -1829,6 +1837,15 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
     <button class="co-ov-save" id="coOvSave" onclick="toggleCoSave()">Save</button>
   </div>
   <iframe id="coOvFrame" class="co-ov-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+  <div id="rbhPaywall" class="rbh-paywall" role="dialog" aria-modal="true" aria-label="Daily Dividend Pro membership required">
+    <div class="rbh-paywall-card">
+      <div class="rbh-paywall-k">Daily Dividend Pro</div>
+      <div class="rbh-paywall-h">Keep going down the rabbit hole.</div>
+      <div class="rbh-paywall-p">The first page is free. Become a PRO member to unlock every page of every Rabbit Hole.</div>
+      <button class="rbh-paywall-cta" type="button" onclick="openRabbitHoleMembership()">View membership</button>
+      <button class="rbh-paywall-back" type="button" onclick="closeRabbitHolePaywall()">Back to the first page</button>
+    </div>
+  </div>
   <div class="co-ov-vote">
     <span class="co-ov-label" id="coOvLabel">Your call</span>
     <button class="co-vb bull" data-vote="bull" onclick="castCoVote('bull')">Bull</button>
@@ -3613,6 +3630,7 @@ function openRabbitHole(k,routeMode='push'){
  const r=RH.find(x=>x.k===k);if(!r)return;
  if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
  const ov=document.getElementById('coOverlay');if(!ov)return;
+ const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
  currentDbCo=null;
  currentRabbitHole=k;
  ov.classList.add('rbh-reading');
@@ -3623,6 +3641,44 @@ function openRabbitHole(k,routeMode='push'){
  updateRabbitHoleSave();
  trackPostHogEvent('rabbit_hole_opened',{rabbit_hole_id:k});
 }
+function syncRabbitHoleMembership(){
+ const frame=document.getElementById('coOvFrame');
+ if(!frame||!frame.contentWindow)return;
+ frame.contentWindow.postMessage({type:'dd:membership',subscriptionActive:Boolean(profileState.subscriptionActive),parentManaged:true},location.origin);
+}
+function showRabbitHolePaywall(){
+ if(profileState.subscriptionActive)return;
+ const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.add('show');
+}
+function closeRabbitHolePaywall(){
+ const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
+ const frame=document.getElementById('coOvFrame');
+ if(frame&&frame.contentWindow)frame.contentWindow.postMessage({type:'dd:return-preview'},location.origin);
+}
+async function openRabbitHoleMembership(){
+ const button=document.querySelector('#rbhPaywall .rbh-paywall-cta');
+ const originalText=button?button.textContent:'View membership';
+ if(button){button.disabled=true;button.textContent='Opening secure checkout...';}
+ try{
+  const response=await fetch('/api/billing/checkout',{method:'POST',credentials:'same-origin',headers:{Accept:'application/json','Content-Type':'application/json'}});
+  const data=await response.json().catch(()=>({}));
+  if(response.status===401){window.location.href='/login?returnTo='+encodeURIComponent('/subscribe');return;}
+  if(!response.ok)throw new Error(data.error||'Could not open checkout. Please try again.');
+  if(!data.url)throw new Error('Stripe did not return a checkout page. Please try again.');
+  window.location.assign(data.url);
+ }catch(error){
+  if(button){button.disabled=false;button.textContent=originalText;}
+  showToast(error.message||'Could not open checkout. Please try again.');
+ }
+}
+document.getElementById('coOvFrame').addEventListener('load',syncRabbitHoleMembership);
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin)return;
+ const frame=document.getElementById('coOvFrame');
+ if(!frame||event.source!==frame.contentWindow||!event.data)return;
+ if(event.data.type==='dd:reader-ready')syncRabbitHoleMembership();
+ if(event.data.type==='dd:paywall-request')showRabbitHolePaywall();
+});
 function renderLib(){
  const featured=CO[curCo];setTheme(curCo);
  const liveCompanies=liveCompanyValues();
@@ -3738,6 +3794,7 @@ function closeCoOverlay(preserveUrl=false){
  const ov=document.getElementById('coOverlay');
  ov.style.display='none';
  ov.classList.remove('rbh-reading');
+ const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
  document.getElementById('coOvFrame').src='';
  currentDbCo=null;
  currentRabbitHole=null;
