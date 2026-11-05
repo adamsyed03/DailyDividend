@@ -514,6 +514,10 @@ function makeUser(userId = crypto.randomUUID()) {
     ageRange: '',
     investorLevel: '',
     onboardingCompleted: false,
+    authProvider: '',
+    authProviders: [],
+    lastSignInAt: null,
+    signInCount: 0,
     createdAt: new Date().toISOString(),
     streak: 0,
     lastReadDate: null,
@@ -574,6 +578,10 @@ function profile(user) {
     ageRange: user.ageRange || '',
     investorLevel: user.investorLevel || '',
     onboardingCompleted: Boolean(user.onboardingCompleted),
+    authProvider: user.authProvider || '',
+    authProviders: Array.isArray(user.authProviders) ? user.authProviders : [],
+    lastSignInAt: user.lastSignInAt || null,
+    signInCount: Number(user.signInCount) || 0,
     streak: user.streak || 0,
     savedCompanies: user.savedCompanies || [],
     previousVotes: user.previousVotes || {},
@@ -602,6 +610,21 @@ function normalize(value) {
 
 function normalizeLookup(value) {
   return normalize(value).toLowerCase();
+}
+
+function recordUserSignIn(user, authUser, fallbackProvider = 'email') {
+  const appMetadata = (authUser && authUser.app_metadata) || {};
+  const identityProviders = Array.isArray(authUser && authUser.identities)
+    ? authUser.identities.map(identity => normalizeLookup(identity && identity.provider)).filter(Boolean)
+    : [];
+  const metadataProviders = Array.isArray(appMetadata.providers)
+    ? appMetadata.providers.map(normalizeLookup).filter(Boolean)
+    : [];
+  const provider = normalizeLookup(appMetadata.provider || identityProviders[0] || fallbackProvider) || fallbackProvider;
+  user.authProvider = provider;
+  user.authProviders = [...new Set([provider, ...metadataProviders, ...identityProviders])];
+  user.lastSignInAt = new Date().toISOString();
+  user.signInCount = (Number(user.signInCount) || 0) + 1;
 }
 
 function normalizePhoneNumber(value, phoneCode = '') {
@@ -771,6 +794,16 @@ async function requireAuthenticatedPage(req, res, next) {
     const authUser = await authenticatedUser(req, res);
     if (!authUser) return res.redirect(302, '/onboarding');
     req.authUser = authUser;
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function redirectAuthenticatedToApp(req, res, next) {
+  try {
+    const authUser = await authenticatedUser(req, res);
+    if (authUser) return res.redirect(302, '/');
     next();
   } catch (error) {
     next(error);
@@ -996,6 +1029,7 @@ async function handleLogin(payload, res) {
   const db = await readDb();
   const user = getUser(db, authData.user.id);
   user.email = authData.user.email || email;
+  recordUserSignIn(user, authData.user, 'email');
   await writeDb(db);
   analytics.capture({ distinctId: authData.user.id, event: 'user_logged_in', properties: { $set: { email: user.email, username: user.username || '' } } });
   setAuthCookies(res, authData.session);
@@ -1071,6 +1105,8 @@ async function handleOnboarding(payload, res) {
     onboardingCompleted: true,
     name: `${data.firstName} ${data.lastName}`.trim()
   };
+
+  recordUserSignIn(user, authUser, 'email');
 
   if (oldUserId && oldUserId !== authUser.id) {
     delete db.users[oldUserId];
@@ -1231,6 +1267,10 @@ function adminSummary(db) {
     username: user.username || '',
     email: user.email || '',
     passwordSet: Boolean(user.email),
+    authProvider: user.authProvider || '',
+    authProviders: Array.isArray(user.authProviders) ? user.authProviders : [],
+    lastSignInAt: user.lastSignInAt || null,
+    signInCount: Number(user.signInCount) || 0,
     onboardingCompleted: Boolean(user.onboardingCompleted),
     status: userStatus(user),
     country: user.country || '',
@@ -1254,6 +1294,7 @@ function adminSummary(db) {
   return {
     stats: {
       userCount: users.length,
+      googleUserCount: users.filter(user => normalizeLookup(user.authProvider) === 'google').length,
       signupCompleteCount: users.filter(user => user.onboardingCompleted).length,
       activeStreakCount: users.filter(user => (user.streak || 0) > 0).length,
       totalReads: users.reduce((sum, user) => sum + (Array.isArray(user.readHistory) ? user.readHistory.length : 0), 0),
@@ -1366,6 +1407,7 @@ async function completeGoogleLogin(authUser, session, payload, res) {
     user.investorLevel = normalize(payload.investorLevel);
     user.financeProficiency = levelToFinanceProficiency(user.investorLevel);
   }
+  recordUserSignIn(user, authUser, 'google');
   user.onboardingCompleted = true;
   user.updatedAt = new Date().toISOString();
   await writeDb(db);
@@ -2273,10 +2315,10 @@ app.get('/reports/:reportFile', requireSubscribedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'public', 'reports', reportFile));
 });
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
-app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
-app.get('/testing123/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
-app.get('/testing123/login.html', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/login', redirectAuthenticatedToApp, (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/login.html', redirectAuthenticatedToApp, (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/testing123/login', redirectAuthenticatedToApp, (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/testing123/login.html', redirectAuthenticatedToApp, (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/subscribe', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'subscribe.html')); });
 app.get('/subscribe.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'subscribe.html')); });
 app.get('/auth/google/callback', async (req, res, next) => {
@@ -2302,10 +2344,10 @@ app.get('/auth/google/callback', async (req, res, next) => {
 });
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
 app.get('/signup.html', (req, res) => res.sendFile(path.join(__dirname, 'signup.html')));
-app.get('/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
-app.get('/onboarding.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
-app.get('/testing123/onboarding', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
-app.get('/testing123/onboarding.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/onboarding', redirectAuthenticatedToApp, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
+app.get('/onboarding.html', redirectAuthenticatedToApp, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'onboarding.html')); });
+app.get('/testing123/onboarding', redirectAuthenticatedToApp, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
+app.get('/testing123/onboarding.html', redirectAuthenticatedToApp, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'public', 'onboarding.html')); });
 
 app.get('/desktop.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'dd_v6_desktop_revised (1).html'));

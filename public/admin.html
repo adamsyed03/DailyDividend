@@ -273,6 +273,7 @@
     <!-- Stats cards -->
     <section class="grid" aria-label="Key stats">
       <div class="card"><div class="k">Users</div><div class="v" id="statUsers">0</div></div>
+      <div class="card"><div class="k">Google users</div><div class="v" id="statGoogleUsers">0</div></div>
       <div class="card"><div class="k">Full signups</div><div class="v" id="statSignups">0</div></div>
       <div class="card"><div class="k">Active streaks</div><div class="v" id="statStreaks">0</div></div>
       <div class="card"><div class="k">Total reads</div><div class="v" id="statReads">0</div></div>
@@ -314,6 +315,8 @@
           <option value="empty">○ Empty (no profile data)</option>
           <option value="active">Has active streak</option>
           <option value="readers">Has reads</option>
+          <option value="google">Google sign-in</option>
+          <option value="email">Email sign-in</option>
         </select>
         <select id="userSort" class="ctrl-select">
           <option value="newest">Newest first</option>
@@ -334,7 +337,7 @@
               <th>Activity</th>
               <th>Profile</th>
               <th>Preferences</th>
-              <th>Source</th>
+              <th>Authentication</th>
               <th>Dates</th>
             </tr>
           </thead>
@@ -589,6 +592,9 @@
           </div>
           <div class="detail-section">
             <div class="detail-row"><strong>Email</strong><span id="ovEmail">-</span></div>
+            <div class="detail-row"><strong>Sign-in method</strong><span id="ovAuthProvider">-</span></div>
+            <div class="detail-row"><strong>Last sign-in</strong><span id="ovLastSignIn">-</span></div>
+            <div class="detail-row"><strong>Sign-in count</strong><span id="ovSignInCount">0</span></div>
             <div class="detail-row"><strong>Status</strong><span id="ovStatus">-</span></div>
             <div class="detail-row"><strong>How heard</strong><span id="ovHeard">-</span></div>
             <div class="detail-row"><strong>Joined</strong><span id="ovJoined">-</span></div>
@@ -867,6 +873,8 @@
       if (filter === 'empty')     users = users.filter(u => u.status === 'empty');
       if (filter === 'active')    users = users.filter(u => (u.streak || 0) > 0);
       if (filter === 'readers')   users = users.filter(u => (u.reads || 0) > 0);
+      if (filter === 'google')    users = users.filter(u => String(u.authProvider || '').toLowerCase() === 'google');
+      if (filter === 'email')     users = users.filter(u => String(u.authProvider || '').toLowerCase() === 'email');
 
       activeSort = $('userSort').value;
       users.sort((a, b) => {
@@ -960,7 +968,13 @@
                 ${renderPills(u.sectorPreferences, 'Sectors')}
               </div>
             </td>
-            <td>${escapeHtml(u.howHeard || '-')}</td>
+            <td>
+              <div class="cell-stack">
+                <div>${escapeHtml(u.authProvider ? u.authProvider.charAt(0).toUpperCase() + u.authProvider.slice(1) : 'Unknown')}</div>
+                <div class="cell-sub">${u.signInCount || 0} sign-in${Number(u.signInCount) === 1 ? '' : 's'}</div>
+                <div class="cell-sub">Heard via ${escapeHtml(u.howHeard || '-')}</div>
+              </div>
+            </td>
             <td>
               <div class="cell-stack">
                 <div class="cell-sub">Joined ${escapeHtml(formatDateShort(u.createdAt))}</div>
@@ -1015,6 +1029,7 @@
 
     function renderDashboard(data) {
       $('statUsers').textContent  = data.stats.userCount;
+      $('statGoogleUsers').textContent = data.stats.googleUserCount || 0;
       $('statSignups').textContent = data.stats.signupCompleteCount || 0;
       $('statStreaks').textContent = data.stats.activeStreakCount || 0;
       $('statReads').textContent  = data.stats.totalReads;
@@ -1116,6 +1131,9 @@
       $('ovVotes').textContent     = data.totalVotes || 0;
       $('ovStreak').textContent    = user.streak || 0;
       $('ovEmail').textContent     = user.email || '-';
+      $('ovAuthProvider').textContent = user.authProvider ? user.authProvider.charAt(0).toUpperCase() + user.authProvider.slice(1) : 'Unknown';
+      $('ovLastSignIn').textContent = user.lastSignInAt ? formatDate(user.lastSignInAt) : 'Never';
+      $('ovSignInCount').textContent = user.signInCount || 0;
       const st = userStatusLabel(user);
       $('ovStatus').innerHTML = st.html;
       $('ovHeard').textContent     = user.howHeard || '-';

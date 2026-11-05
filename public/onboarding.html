@@ -671,7 +671,18 @@
         target.parentElement.style.display = 'none';
       }
     }
-    loadCatalogStats();
+    function forwardOAuthError(){
+      const params = new URLSearchParams(window.location.hash.slice(1));
+      if(!params.get('error'))return false;
+      let message = params.get('error_description') || 'Google sign-in could not be completed.';
+      for(let attempt=0;attempt<2;attempt++){
+        try{const decoded=decodeURIComponent(message);if(decoded===message)break;message=decoded;}catch(error){break;}
+      }
+      history.replaceState(null,'',window.location.pathname + window.location.search);
+      window.location.replace('/login?oauthError=' + encodeURIComponent(message));
+      return true;
+    }
+    if(!forwardOAuthError())loadCatalogStats();
     if(document.readyState==='complete')parseOnboardingEmoji();else window.addEventListener('load',parseOnboardingEmoji,{once:true});
   </script>
   <script defer src="/js/consent.js"></script>
