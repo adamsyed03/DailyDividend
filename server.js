@@ -1491,7 +1491,10 @@ app.get('/api/billing/status', requireUser, async (req, res, next) => {
       if (!/^cs_[A-Za-z0-9_]+$/.test(checkoutSessionId)) return res.status(400).json({ error: 'Invalid Checkout Session.' });
       const session = await stripeRequest(`/v1/checkout/sessions/${encodeURIComponent(checkoutSessionId)}`);
       const sessionUserId = session.client_reference_id || normalize(session.metadata && session.metadata.dd_user_id);
-      if (sessionUserId !== req.authUser.id) return res.status(403).json({ error: 'That Checkout Session belongs to another account.' });
+      const sessionCustomerId = stripeObjectId(session.customer);
+      const belongsToUser = sessionUserId === req.authUser.id
+        || (sessionCustomerId && sessionCustomerId === user.stripeCustomerId);
+      if (!belongsToUser) return res.status(403).json({ error: 'That Checkout Session belongs to another account.' });
       if (session.status === 'complete') {
         const subscriptionId = stripeObjectId(session.subscription);
         if (subscriptionId) {
@@ -1560,6 +1563,9 @@ app.post('/api/billing/checkout', requireUser, async (req, res, next) => {
         allow_promotion_codes: true,
         payment_method_collection: 'always',
         submit_type: 'auto',
+        client_reference_id: req.authUser.id,
+        'metadata[dd_user_id]': req.authUser.id,
+        'subscription_data[metadata][dd_user_id]': req.authUser.id,
         'consent_collection[terms_of_service]': 'required',
         'custom_text[terms_of_service_acceptance][message]': 'By subscribing to Daily Dividend, you agree to our Terms of Service and acknowledge that your subscription renews automatically at ₹300 per month until cancelled. You may cancel at any time before your next renewal.\n\nDaily Dividend provides financial news, market analysis and educational content for informational purposes only, not personalised financial or investment advice. Investing involves risk.',
         integration_identifier: 'hosted_web_0001',
@@ -2295,7 +2301,7 @@ app.get([
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/testing123/rabbit-holes/:reportId', requireSubscribedPage, (req, res) => {
+app.get('/testing123/rabbit-holes/:reportId', requireAuthenticatedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -2305,11 +2311,11 @@ app.get('/companies/:companyId', requireAuthenticatedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/rabbit-holes/:reportId', requireSubscribedPage, (req, res) => {
+app.get('/rabbit-holes/:reportId', requireAuthenticatedPage, (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/reports/:reportFile', requireSubscribedPage, (req, res) => {
+app.get('/reports/:reportFile', requireAuthenticatedPage, (req, res) => {
   const reportFile = String(req.params.reportFile || '');
   if (!/^[a-z0-9-]+\.(?:html|css|js)$/i.test(reportFile)) return res.status(404).send('Not found.');
   res.setHeader('Cache-Control', 'private, no-cache');

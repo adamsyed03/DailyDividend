@@ -278,58 +278,15 @@
           <div class="hook-tag">Why Daily Dividend</div>
           <div class="hook-h">Most people scroll past tickers they <em>don't understand.</em></div>
           <div class="hook-sub">We fix that. One company a week. The real story - <strong>where the money comes from, who owns it, and what could go wrong</strong> - in the time it takes to drink a coffee.</div>
-          <button class="btn-full btn-primary" onclick="goTo('markets')">I'm in -></button>
+          <button class="btn-full btn-primary" onclick="goTo('about')">I'm in -></button>
         </div>
-      </section>
-
-      <section class="screen" id="s-markets">
-        <div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div>
-        <button class="back-btn dark" onclick="goTo('hook')"><-</button>
-        <div class="q-wrap">
-          <div class="q-tag">01 of 03</div>
-          <div class="q-h">Which markets do you <em>follow?</em></div>
-          <div class="q-sub">Select all that apply - we'll personalize your stories.</div>
-          <div class="market-grid">
-            <button class="market-btn" data-m="us" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇺🇸</span><span class="mb-info"><span class="mb-name">US</span><span class="mb-sub">NYSE · NASDAQ</span></span><span class="mb-check">✓</span></button>
-            <button class="market-btn" data-m="india" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇮🇳</span><span class="mb-info"><span class="mb-name">India</span><span class="mb-sub">NSE · BSE</span></span><span class="mb-check">✓</span></button>
-            <button class="market-btn" data-m="uk" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🇬🇧</span><span class="mb-info"><span class="mb-name">UK</span><span class="mb-sub">LSE · FTSE</span></span><span class="mb-check">✓</span></button>
-            <button class="market-btn" data-m="global" onclick="toggleMarket(this)" type="button"><span class="sector-emoji">🌍</span><span class="mb-info"><span class="mb-name">Global</span><span class="mb-sub">All markets</span></span><span class="mb-check">✓</span></button>
-          </div>
-        </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="mktNext" onclick="goTo('sectors')" disabled>Continue -></button></div>
-      </section>
-
-      <section class="screen" id="s-sectors">
-        <div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div>
-        <button class="back-btn dark" onclick="goTo('markets')"><-</button>
-        <div class="q-wrap">
-          <div class="q-tag">02 of 03</div>
-          <div class="q-h">What gets you <em>excited?</em></div>
-          <div class="q-sub">Pick your rabbit holes. Choose as many as you like.</div>
-          <div class="sector-grid">
-            <button class="sector-btn" data-s="big-tech" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💻</span>Big Tech</button>
-            <button class="sector-btn" data-s="usa" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🇺🇸</span>Made in USA</button>
-            <button class="sector-btn" data-s="india" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🇮🇳</span>Made in India</button>
-            <button class="sector-btn" data-s="banks" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏦</span>Banks &amp; Money</button>
-            <button class="sector-btn" data-s="junk-food" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🍟</span>Junk Food</button>
-            <button class="sector-btn" data-s="entertainment" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🎬</span>Entertainment</button>
-            <button class="sector-btn" data-s="ai-chips" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🤖</span>AI &amp; Chips</button>
-            <button class="sector-btn" data-s="cars-evs" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🚗</span>Cars &amp; EVs</button>
-            <button class="sector-btn" data-s="luxury" onclick="toggleSector(this)" type="button"><span class="sector-emoji">💎</span>Luxury</button>
-            <button class="sector-btn" data-s="sports" onclick="toggleSector(this)" type="button"><span class="sector-emoji">🏆</span>Sports</button>
-            <button class="sector-btn" data-s="fashion" onclick="toggleSector(this)" type="button"><span class="sector-emoji">👟</span>Fashion &amp; Sneakers</button>
-            <button class="sector-btn" data-s="travel" onclick="toggleSector(this)" type="button"><span class="sector-emoji">✈️</span>Travel &amp; Flights</button>
-            <button class="sector-btn" data-s="energy" onclick="toggleSector(this)" type="button"><span class="sector-emoji">⛽</span>Energy &amp; Oil</button>
-          </div>
-        </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="secNext" onclick="goTo('about')" disabled>Continue -></button></div>
       </section>
 
       <section class="screen" id="s-about">
-        <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
-        <button class="back-btn dark" onclick="goTo('sectors')"><-</button>
+        <div class="prog-bar"><div class="prog-fill" style="width:33%"></div></div>
+        <button class="back-btn dark" onclick="goTo('hook')"><-</button>
         <div class="q-wrap">
-          <div class="q-tag">03 of 03</div>
+          <div class="q-tag">1.1</div>
           <div class="q-h">A little about <em>you.</em></div>
           <div class="q-sub">Two quick ones.</div>
           <div class="about-block">
@@ -415,8 +372,6 @@
           <div class="payoff-mark">DD</div>
           <div class="payoff-h">Account <em>ready.</em></div>
           <div class="payoff-sub">Browse Daily Dividend and discover the stories you want to read. Membership is only requested when you open a full article.</div>
-          <div class="payoff-card"><div class="payoff-card-label">Your markets</div><div class="payoff-chips" id="payoffMarkets"></div></div>
-          <div class="payoff-card"><div class="payoff-card-label">Your interests</div><div class="payoff-chips" id="payoffSectors"></div></div>
           <div class="payoff-drop"><div class="payoff-drop-ic">DD</div><div><div class="payoff-drop-t">First story ready now</div><div class="payoff-drop-s">Netflix - The $46M a day question</div></div></div>
         </div>
         <div class="payoff-foot">
@@ -453,8 +408,6 @@
 
   <nav class="onboarding-legal" aria-label="Legal"><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a></nav>
   <script>
-    let selectedMarkets = new Set();
-    let selectedSectors = new Set();
     let selectedAge = '';
     let selectedLevel = '';
     let emailAddress = '';
@@ -485,18 +438,6 @@
       }, 160);
     });
 
-    function toggleMarket(el){
-      const value = el.dataset.m;
-      selectedMarkets.has(value) ? selectedMarkets.delete(value) : selectedMarkets.add(value);
-      el.classList.toggle('sel');
-      document.getElementById('mktNext').disabled = selectedMarkets.size === 0;
-    }
-    function toggleSector(el){
-      const value = el.dataset.s;
-      selectedSectors.has(value) ? selectedSectors.delete(value) : selectedSectors.add(value);
-      el.classList.toggle('sel');
-      document.getElementById('secNext').disabled = selectedSectors.size === 0;
-    }
     function selAge(el){
       document.querySelectorAll('.age-btn').forEach(button => button.classList.remove('sel'));
       el.classList.add('sel');
@@ -529,8 +470,8 @@
     }
     function startGoogleAuth(){
       const onboarding=JSON.stringify({
-        marketPreferences:[...selectedMarkets],
-        sectorPreferences:[...selectedSectors],
+        marketPreferences:[],
+        sectorPreferences:[],
         ageRange:selectedAge,
         investorLevel:selectedLevel
       });
@@ -592,8 +533,8 @@
         phoneNumber: cleanPhone(phoneNum, phoneCode),
         countryName: selectedCountryName,
         ...accountDetails(),
-        marketPreferences: [...selectedMarkets],
-        sectorPreferences: [...selectedSectors],
+        marketPreferences: [],
+        sectorPreferences: [],
         ageRange: selectedAge,
         investorLevel: selectedLevel,
         onboardingCompleted: true
@@ -634,12 +575,7 @@
         checkAccount();
       }
     }
-    const marketLabels = {us:'US', india:'India', uk:'UK', global:'Global'};
-    const sectorLabels = {'big-tech':'Big Tech', usa:'Made in USA', india:'Made in India', banks:'Banks & Money', 'junk-food':'Junk Food', entertainment:'Entertainment', 'ai-chips':'AI & Chips', 'cars-evs':'Cars & EVs', luxury:'Luxury', sports:'Sports', fashion:'Fashion & Sneakers', travel:'Travel & Flights', energy:'Energy & Oil'};
-    function buildPayoff(){
-      document.getElementById('payoffMarkets').innerHTML = [...selectedMarkets].map(item => `<div class="payoff-chip">${marketLabels[item] || item}</div>`).join('');
-      document.getElementById('payoffSectors').innerHTML = [...selectedSectors].map(item => `<div class="payoff-chip">${sectorLabels[item] || item}</div>`).join('');
-    }
+    function buildPayoff(){}
     function goToApp(){localStorage.setItem('ddTour','1');window.location.href='/';}
 
     const COUNTRIES = [

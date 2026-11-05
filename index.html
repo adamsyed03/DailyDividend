@@ -5,7 +5,8 @@
 <script>if(location.protocol==='file:'||(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&location.port&&location.port!=='3000'))location.replace('http://localhost:3000/index.html');</script>
 <script>
 window.DD_IS_TESTING_PREVIEW=/^\/testing123(?:\/|$)/.test(location.pathname);
-document.documentElement.classList.toggle('rabbit-only',window.DD_IS_TESTING_PREVIEW);
+window.DD_RABBIT_ONLY=true;
+document.documentElement.classList.toggle('rabbit-only',window.DD_RABBIT_ONLY);
 </script>
 <title>Daily Dividend</title>
 <script defer src="/js/consent.js" data-posthog-key="phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ" data-posthog-host="https://eu.i.posthog.com"></script>
@@ -1833,7 +1834,9 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
 <script>
 const IS_DESKTOP = window.matchMedia('(min-width:900px)').matches;
 const IS_TESTING_PREVIEW = Boolean(window.DD_IS_TESTING_PREVIEW);
-const RABBIT_ONLY = IS_TESTING_PREVIEW;
+// Stock Spotlight remains in this file for a future return, but the live
+// experience is intentionally Rabbit Holes only for now.
+const RABBIT_ONLY = true;
 const APP_ROOT = IS_TESTING_PREVIEW ? '/testing123' : '/';
 const AUTH_ROOT = IS_TESTING_PREVIEW ? '/testing123' : '';
 /* COMPANY DATA */
@@ -3588,7 +3591,6 @@ function rhBodyHtml(){
 function openRabbitHole(k,routeMode='push'){
  const r=RH.find(x=>x.k===k);if(!r)return;
  if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
- if(!requireArticleSubscription())return;
  const ov=document.getElementById('coOverlay');if(!ov)return;
  currentDbCo=null;
  currentRabbitHole=k;
