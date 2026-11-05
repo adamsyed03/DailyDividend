@@ -410,18 +410,20 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 /* RABBIT HOLES */
 .rbh-feat{margin:14px 24px 4px;border-radius:20px;padding:20px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.14)}
 .rbh-feat::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 88% 15%,rgba(255,255,255,0.22),transparent 58%);pointer-events:none}
+.rbh-feat-art{position:absolute;right:14px;top:14px;width:76px;height:76px;opacity:.96;filter:drop-shadow(0 10px 16px rgba(0,0,0,.16));pointer-events:none}
+.rbh-feat-art svg{display:block;width:100%;height:100%}
 .rbh-feat-tag{position:relative;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;opacity:0.85;margin-bottom:9px;display:flex;align-items:center;gap:6px}
-.rbh-feat-t{position:relative;font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:-0.015em;line-height:1.18;margin-bottom:7px}
-.rbh-feat-dek{position:relative;font-family:var(--sans);font-size:12.5px;opacity:0.82;line-height:1.45}
+.rbh-feat-t{position:relative;font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:-0.015em;line-height:1.18;margin-bottom:7px;max-width:calc(100% - 86px)}
+.rbh-feat-dek{position:relative;font-family:var(--sans);font-size:12.5px;opacity:0.82;line-height:1.45;max-width:calc(100% - 86px)}
 .rbh-feat-meta{position:relative;font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.72;margin-top:12px}
 .rbh-sect{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:20px 24px 2px}
 .rbh-list{display:flex;flex-direction:column;gap:11px;padding:4px 24px 0}
 .rbh-card{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;cursor:pointer;transition:transform 0.18s,box-shadow 0.18s}
 .rbh-card:active{transform:scale(0.985)}
 .rbh-th{flex-shrink:0;width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}
-html.rabbit-only .rbh-th{width:68px;height:68px;border-radius:18px;position:relative;overflow:hidden;isolation:isolate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(15,20,30,.14)}
-html.rabbit-only .rbh-th::before{content:"";position:absolute;inset:-25%;z-index:-1;background:radial-gradient(circle at 72% 18%,rgba(255,255,255,.34),transparent 33%),radial-gradient(circle at 8% 92%,rgba(0,0,0,.22),transparent 48%);transform:rotate(-8deg)}
-html.rabbit-only .rbh-th svg{display:block;width:100%;height:100%}
+html.rabbit-only .rbh-th,html.stock-spotlights-hidden .rbh-th{width:68px;height:68px;border-radius:18px;position:relative;overflow:hidden;isolation:isolate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 6px 16px rgba(15,20,30,.14)}
+html.rabbit-only .rbh-th::before,html.stock-spotlights-hidden .rbh-th::before{content:"";position:absolute;inset:-25%;z-index:-1;background:radial-gradient(circle at 72% 18%,rgba(255,255,255,.34),transparent 33%),radial-gradient(circle at 8% 92%,rgba(0,0,0,.22),transparent 48%);transform:rotate(-8deg)}
+html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:block;width:100%;height:100%}
 .rbh-body{min-width:0;flex:1}
 .rbh-cats{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rc,var(--muted));margin-bottom:5px}
 .rbh-t{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em;line-height:1.25;color:var(--ink);margin-bottom:4px}
@@ -968,10 +970,10 @@ body{background:var(--ink);overflow:hidden}
 .rail{margin:28px 0 4px}.rail-t{font-size:16px}.rh{padding:0;margin-bottom:12px}.rs{padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;overflow:visible}
 .rcd{width:auto;height:236px;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}.rcd:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}.rcd-th{width:88px;height:88px;border-radius:18px;font-size:28px;margin-bottom:14px}.rcd-th .company-logo-img{padding:12%}.rcd-n{font-size:17px;font-weight:600;letter-spacing:-.01em}.rcd-bl{font-size:12px;line-height:1.4;max-width:22ch}.lib-fs{margin:36px 0 0;font-size:11px;letter-spacing:.1em}.sr{padding:12px 0 0;max-width:840px}
  .lib-modes{margin:0 0 6px;max-width:420px}.lib-mode{font-size:13.5px;padding:12px 14px}
- .rbh-feat{margin:14px 0 4px;padding:30px 34px;border-radius:22px}.rbh-feat-t{font-size:34px}.rbh-feat-dek{font-size:14px;max-width:720px}
+.rbh-feat{margin:14px 0 4px;padding:30px 34px;border-radius:22px}.rbh-feat-art{right:26px;top:22px;width:104px;height:104px}.rbh-feat-t{font-size:34px}.rbh-feat-dek{font-size:14px;max-width:min(720px,calc(100% - 120px))}
  .rbh-sect{padding:24px 0 4px}.rbh-list{padding:6px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
- .rbh-card{padding:18px;border-radius:18px}.rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
- .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}html.rabbit-only .rbh-th{width:74px;height:74px;border-radius:19px}.rbh-t{font-size:18px}.rbh-empty{margin:16px 0}.rbh-foot{margin:34px 0 0;font-size:11px;letter-spacing:.1em}
+.rbh-card{padding:18px;border-radius:18px}.rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}html.rabbit-only .rbh-th,html.stock-spotlights-hidden .rbh-th{width:74px;height:74px;border-radius:19px}.rbh-t{font-size:18px}.rbh-empty{margin:16px 0}.rbh-foot{margin:34px 0 0;font-size:11px;letter-spacing:.1em}
 .you-scroll{max-width:none}.you-scroll>*{max-width:1200px}.id-c{border-radius:20px}.sh,.cc{border-radius:18px}.sg{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.sm{border-radius:18px;aspect-ratio:auto;height:220px;min-height:0;padding:20px 22px}.sm-q{font-size:20px;line-height:1.25;max-width:680px}.sh-n{font-size:52px}
 #screen-stack .shell{left:0}#screen-stack .prog{top:32px;left:248px;right:56px;gap:5px}#screen-stack .prog .tick{height:2px;border-radius:2px}#screen-stack .topbar{top:56px;left:240px;right:56px}#screen-stack .co-logo{width:36px;height:36px;border-radius:9px;font-size:17px}
 #screen-stack .card{padding:116px clamp(80px,11vw,220px) 96px;overflow-y:auto}#screen-stack .hl{font-size:clamp(36px,4.5vw,66px);max-width:960px;line-height:1.07;letter-spacing:-.03em}#screen-stack .bd{font-size:18px;max-width:800px;line-height:1.7;opacity:.9}.eb-c{font-size:10px;letter-spacing:.22em}#screen-stack .tz{top:112px;bottom:84px;width:15%}#screen-stack .pills{bottom:28px}#screen-stack .pill{font-size:10px;padding:9px 16px;backdrop-filter:blur(16px)}
@@ -1295,7 +1297,7 @@ body{background:var(--ink);overflow:hidden}
 #dtShell .rbh-card{padding:20px;border-radius:18px}
 #dtShell .rbh-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
 #dtShell .rbh-th{width:64px;height:64px;border-radius:16px;font-size:28px}
-html.rabbit-only #dtShell .rbh-th{width:74px;height:74px;border-radius:19px}
+html.rabbit-only #dtShell .rbh-th,html.stock-spotlights-hidden #dtShell .rbh-th{width:74px;height:74px;border-radius:19px}
 #dtShell .rbh-t{font-size:18px}
 #dtShell .rbh-dek{font-size:12.5px}
 #dtShell .rbh-empty{margin:0}
@@ -2691,6 +2693,14 @@ const DD_RH_CAT={k:"rabbit-holes",label:"Rabbit Holes",emoji:"🕳️",c:"#4A3B8
    `cats` must use DD_CATS labels so the category chips filter correctly.
    `date` is ISO yyyy-mm-dd and drives ordering — newest becomes the hero. */
 const RH=[
+{k:"marico-decoded",title:"Marico, decoded",
+ dek:"The Parachute company in 11 swipes: coconut oil dominance, Saffola's second act, the overseas bet, and what could break the story.",
+ cats:["Made in India"],mins:8,date:"2026-11-05",
+ bg:"#014FA1",art:"marico",emoji:"🥥",url:"/reports/marico-decoded.html"},
+{k:"reliance-decoded",title:"Reliance, decoded",
+ dek:"India's most valuable company in 11 swipes: oil, retail, telecom, media, and the machine connecting all of it.",
+ cats:["Made in India","Big Tech","Energy & Oil","Entertainment"],mins:8,date:"2026-11-05",
+ bg:"#273D8F",art:"reliance",emoji:"🕸️",url:"/reports/reliance-decoded.html"},
 {k:"jio-ipo-decoded",title:"Jio IPO, decoded",
  dek:"India's biggest IPO, unpacked in 11 swipes: the business, the valuation, the risks, and the number that decides everything.",
  cats:["Made in India","Big Tech","Banks & Money"],mins:8,date:"2026-10-27",
@@ -3547,6 +3557,7 @@ function libModesHtml(){
 function rhFeatHtml(r){
  const meta=[(r.cats||[]).join(' · '),r.mins?r.mins+' min read':'',rhDate(r.date)].filter(Boolean).join('  ·  ');
  return `<div class="rbh-feat" style="background:${r.bg||DD_RH_CAT.c}" onclick="openRabbitHole('${r.k}')">
+ <div class="rbh-feat-art">${rhArtHtml(r)}</div>
  <div class="rbh-feat-tag">Latest rabbit hole</div>
  <div class="rbh-feat-t">${r.title}</div>
  <div class="rbh-feat-dek">${r.dek||''}</div>
@@ -3560,7 +3571,9 @@ function rhArtHtml(r){
   filing:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M24 13h25l10 10v42H24z" fill="rgba(255,255,255,.12)" stroke-width="2"/><path d="M49 13v11h10M32 34h18M32 43h12M32 52h18" stroke-width="3" opacity=".9"/><path d="m14 32 5-5 5 5M19 27v14M66 48v14m-5-5 5 5 5-5" stroke="#ffcc66" stroke-width="3"/></g></svg>`,
   ipo:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M18 24h32v39H18z" fill="rgba(255,255,255,.1)" stroke-width="2"/><path d="M25 17h32v39" stroke-width="2" opacity=".55"/><path d="M26 35h16M26 43h12M26 51h18" stroke-width="3" opacity=".8"/><circle cx="51" cy="51" r="13" fill="#ffb400" stroke="none"/><path d="M47 44h8M47 49h8M50 44c7 0 7 8 0 8l6 7" stroke="#173f36" stroke-width="2.4"/></g></svg>`,
   portfolio:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M23 29C31 19 45 19 56 29S66 48 57 57" stroke="rgba(255,255,255,.42)" stroke-width="2" stroke-dasharray="3 5"/><circle cx="20" cy="32" r="13" fill="rgba(255,255,255,.16)" stroke-width="2"/><circle cx="59" cy="53" r="15" fill="#ffb400" stroke="none"/><path d="m34 33 11 8m-4-9 5 9-9 2" stroke="#fff" stroke-width="3"/></g><text x="20" y="36" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" font-family="Arial">SG</text><text x="59" y="57" text-anchor="middle" fill="#114453" font-size="10" font-weight="800" font-family="Arial">IN</text></svg>`,
-  solar:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="58" cy="19" r="8" fill="#ffbf3f" stroke="none"/><path d="M58 6v5M58 27v5M45 19h5M66 19h5" stroke="#ffbf3f" stroke-width="2.5"/><path d="m17 31 38 5-8 23-39-5z" fill="rgba(71,170,213,.28)" stroke-width="2"/><path d="m27 32-7 24m19-22-7 24m-20-16 39 5" stroke-width="1.6" opacity=".8"/><path d="M9 64c7-5 13 5 20 0s13 5 20 0 13 5 20 0" stroke="#67d5e8" stroke-width="3"/></g></svg>`
+  solar:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="58" cy="19" r="8" fill="#ffbf3f" stroke="none"/><path d="M58 6v5M58 27v5M45 19h5M66 19h5" stroke="#ffbf3f" stroke-width="2.5"/><path d="m17 31 38 5-8 23-39-5z" fill="rgba(71,170,213,.28)" stroke-width="2"/><path d="m27 32-7 24m19-22-7 24m-20-16 39 5" stroke-width="1.6" opacity=".8"/><path d="M9 64c7-5 13 5 20 0s13 5 20 0 13 5 20 0" stroke="#67d5e8" stroke-width="3"/></g></svg>`,
+  marico:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M37 14h13v8l5 5v35H30V27l7-5z" fill="rgba(255,255,255,.18)" stroke-width="2.2"/><path d="M37 14h13M38 33h9M34 45c8-7 16-7 17 1-7 8-14 9-17-1Z" fill="#96C61C" stroke="none"/><path d="M51 18c8-8 14-6 17-3-5 7-10 9-17 3Z" fill="#96C61C" stroke="none"/><circle cx="20" cy="54" r="11" fill="#f4e5c8" stroke-width="2"/><path d="M13 57c4-7 10-10 17-7" stroke="#8b5a34" stroke-width="2.5"/></g></svg>`,
+  reliance:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="40" cy="40" r="15" fill="#F2C46B" stroke="none"/><circle cx="40" cy="12" r="6" fill="#6BE3B0" stroke="none"/><circle cx="66" cy="31" r="6" fill="#FF9F43" stroke="none"/><circle cx="56" cy="64" r="6" fill="#A796FF" stroke="none"/><circle cx="24" cy="64" r="6" fill="#6BE3B0" stroke="none"/><circle cx="14" cy="31" r="6" fill="#FF7A6B" stroke="none"/><path d="M40 25V18M54 35l6-2M49 52l4 7M31 52l-4 7M26 35l-6-2" stroke="#fff" stroke-width="2.5"/><path d="M35 49V31h7c9 0 9 10 0 10h-7m7 0 7 8" stroke="#273D8F" stroke-width="2.8"/></g></svg>`
  };
  return art[r.art]||`<span aria-hidden="true">${r.emoji||DD_RH_CAT.emoji}</span>`;
 }
@@ -3569,7 +3582,7 @@ function rhCardHtml(r){
  const cc=(DD_CATS.find(c=>c.label===first)||DD_RH_CAT).c;
  const meta=[r.mins?r.mins+' min read':'',rhDate(r.date)].filter(Boolean).join(' · ');
  return `<div class="rbh-card" onclick="openRabbitHole('${r.k}')">
- <div class="rbh-th" style="background:${r.bg||DD_RH_CAT.c}">${IS_TESTING_PREVIEW?rhArtHtml(r):(r.emoji||DD_RH_CAT.emoji)}</div>
+ <div class="rbh-th" style="background:${r.bg||DD_RH_CAT.c}">${(IS_TESTING_PREVIEW||STOCK_SPOTLIGHTS_HIDDEN)?rhArtHtml(r):(r.emoji||DD_RH_CAT.emoji)}</div>
  <div class="rbh-body">
   <div class="rbh-cats" style="--rc:${cc}">${(r.cats||[]).join(' · ')}</div>
   <div class="rbh-t">${r.title}</div>

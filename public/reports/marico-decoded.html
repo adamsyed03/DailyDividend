@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Marico Decoded · Daily Dividend</title>
+<meta name="description" content="The Parachute company, decoded in 11 swipes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#020A18;--bg1:#06193D;--bg2:#0B2F6E;
+  --blue:#3B82F0;--mblue:#014FA1;--green:#A8D63A;--leaf:#96C61C;--coco:#E9D7B4;--coral:#FF7A6B;--mint:#6BE3B0;--gold:#F2C46B;--violet:#A796FF;--pink:#FF8FB8;--cyan:#5FD4FF;
+  --cream:#F6F2E9;--muted:rgba(246,242,233,.7);--faint:rgba(246,242,233,.42);--line:rgba(255,255,255,.14);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --b1:#014FA1;--b2:#96C61C;--b3:#3B82F0;--ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg0);color:var(--cream);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,var(--bg2) 0%,var(--bg1) 45%,var(--bg0) 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;transition:background 1.2s var(--ease)}
+.blob.a{width:70vmax;height:70vmax;left:-25vmax;top:-22vmax;background:var(--b1);animation:d1 22s ease-in-out infinite alternate}
+.blob.b{width:55vmax;height:55vmax;right:-22vmax;top:25vh;background:var(--b2);opacity:.2;animation:d2 26s ease-in-out infinite alternate}
+.blob.c{width:60vmax;height:60vmax;left:-10vmax;bottom:-35vmax;background:var(--b3);opacity:.3;animation:d3 30s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(12vmax,10vmax) scale(1.12)}}
+@keyframes d2{to{transform:translate(-14vmax,-8vmax) scale(.9)}}
+@keyframes d3{to{transform:translate(10vmax,-12vmax) scale(1.08)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.deck{position:fixed;inset:0;z-index:2;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.deck::-webkit-scrollbar{display:none}
+.slide{height:100svh;min-height:100svh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;justify-content:center;position:relative}
+.inner{width:100%;max-width:440px;height:100%;padding:calc(env(safe-area-inset-top) + 74px) max(18px,env(safe-area-inset-left)) calc(env(safe-area-inset-bottom) + 58px) max(18px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.inner::before{content:"";order:0;flex:1 1 0;min-height:0}
+.copy{display:contents}
+.logo,.eyebrow{order:1}
+h1,h2{order:2}
+.v{order:3;display:flex;flex-direction:column;gap:10px}
+.body,.chips{order:4}
+.fillgap{order:5;flex:1 1 0;min-height:6px}
+.foot{order:6}.end{order:7}.disc{order:8}
+
+.chrome{position:fixed;z-index:5;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;padding:calc(env(safe-area-inset-top) + 10px) 16px 14px;pointer-events:none;background:linear-gradient(180deg,rgba(2,10,24,.75),rgba(2,10,24,.35) 70%,transparent)}
+.bars{display:flex;gap:4px}
+.bars i{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.22);overflow:hidden;position:relative}
+.bars i::after{content:"";position:absolute;inset:0;background:var(--cream);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.bars i.done::after{transform:scaleX(1)}
+.bars i.cur::after{background:linear-gradient(90deg,var(--cream),var(--green),var(--cream));background-size:200% 100%;animation:shim 2s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.brand{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.dd{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dd b{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--cream);color:#06193D;font-family:var(--serif);font-size:12px;letter-spacing:0}
+.count{font-family:var(--mono);font-size:10.5px;color:var(--cream);letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid var(--line)}
+.navbtn{display:none}
+.nudge{position:fixed;z-index:4;left:50%;bottom:calc(env(safe-area-inset-bottom) + 10px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);pointer-events:none;transition:opacity .4s}
+.nudge svg{animation:bob 1.6s ease-in-out infinite}
+.nudge.hide{opacity:0}
+@keyframes bob{50%{transform:translateY(-6px)}}
+
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);display:flex;gap:8px;align-items:center}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.7}
+h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05;letter-spacing:-.02em}
+h1{font-size:clamp(32px,9.4vw,42px)}
+h2{font-size:clamp(27px,7.8vw,35px)}
+h1 em,h2 em{font-style:italic;color:var(--green);font-weight:400}
+.body{font-size:15px;line-height:1.5;color:var(--muted)}
+.body b{color:var(--cream);font-weight:600}
+.lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:6px 10px;border-radius:10px;font-size:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--muted)}
+.chip b{color:var(--cream);font-weight:600}
+
+.glass{position:relative;border-radius:24px;background:linear-gradient(140deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 60%);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 24px 60px -20px rgba(0,0,0,.55);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);overflow:hidden}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 60% at 10% 0%,rgba(255,255,255,.16),transparent 50%)}
+.viz{padding:18px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.concept{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .2s,background .2s}
+.concept:hover{background:rgba(255,255,255,.16)}
+.concept:active{transform:scale(.96)}
+.concept i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:glow 2.4s ease-in-out infinite}
+.concept .q{font-family:var(--sans);font-size:11px;letter-spacing:0;opacity:.7;margin-left:2px}
+@keyframes glow{50%{box-shadow:0 0 2px var(--green)}}
+.more{padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;background:var(--cream);color:#06193D;display:inline-flex;gap:6px;align-items:center;box-shadow:0 8px 24px -8px rgba(246,242,233,.5);transition:transform .2s;white-space:nowrap}
+.more:active{transform:scale(.96)}
+
+.rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.on .rv{opacity:1;transform:none}
+.on .v.rv{transition-delay:.12s}.on .body.rv,.on .chips.rv{transition-delay:.24s}.on .foot.rv{transition-delay:.34s}
+.st{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.on .st{opacity:1;transform:none}
+
+/* logo */
+.logo{align-self:flex-start;display:flex;align-items:center;gap:10px}
+.logo .lg{background:var(--cream);border-radius:14px;padding:7px 12px;display:grid;place-items:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+.logo svg{height:42px;width:auto;display:block}
+.logo span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* S1 bottles */
+.bottles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px 14px;padding:4px 10px 2px;max-width:280px;margin:0 auto}
+.bt{position:relative;aspect-ratio:.52}
+.bt svg{width:100%;height:100%;display:block;overflow:visible}
+.bt .liq{transform-origin:50% 100%;transform:scaleY(0);transition:transform 1s var(--ease)}
+.on .bt .liq{transform:scaleY(1)}
+.big6{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:12px}
+.big6 b{white-space:nowrap;font-family:var(--serif);font-size:42px;font-weight:600;line-height:1;color:var(--cream)}
+.big6 b small{font-size:.5em;color:var(--muted);font-weight:400}
+.big6 span{font-size:13px;color:var(--muted);max-width:150px;line-height:1.3}
+
+/* S2 mix */
+.split2{display:flex;height:40px;border-radius:14px;overflow:hidden;gap:3px}
+.split2 div{height:100%;width:0;transition:width 1.3s var(--ease);display:flex;align-items:center;padding:0 12px;font-family:var(--mono);font-size:11.5px;font-weight:600;white-space:nowrap;border-radius:10px}
+.on .split2 div{width:var(--w)}
+.mx{display:grid;grid-template-columns:1fr 54px;gap:10px;align-items:center;padding:9px 0}
+.mx + .mx{border-top:1px solid rgba(255,255,255,.07)}
+.mx .n{font-size:14px;font-weight:600}
+.mx .n span{display:block;font-size:11.5px;color:var(--faint);font-weight:400;margin-top:1px}
+.mx .t{height:6px;border-radius:6px;background:rgba(255,255,255,.07);margin-top:7px;overflow:hidden}
+.mx .t div{height:100%;width:0;border-radius:6px;background:var(--c);transition:width 1.2s var(--ease)}
+.on .mx .t div{width:var(--w)}
+.mx .r{font-family:var(--serif);font-size:26px;font-weight:600;text-align:right;line-height:1}
+.mx .r small{font-size:.5em;color:var(--muted);font-weight:400}
+.abroad{display:flex;gap:12px;align-items:center;padding:13px 16px}
+.abroad b{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1}
+.abroad p{font-size:12.5px;line-height:1.4;color:var(--muted)}
+.abroad p strong{color:var(--cream);font-weight:600}
+
+/* S3 seesaw */
+.yt{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);margin-bottom:6px}
+.yt button{position:relative;z-index:1;padding:9px;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--muted);transition:color .3s}
+.yt button.act{color:#06193D}
+.yt .pl{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--coral);transition:transform .5s var(--ease),background .5s}
+.yt.y26 .pl{transform:translateX(100%);background:var(--green)}
+.saw{width:100%;height:auto;display:block;overflow:visible}
+.beam{transform-origin:160px 92px;transform:rotate(0deg);transition:transform 1.2s var(--ease)}
+.on .beam{transform:rotate(14deg)}
+.on .y26 ~ .saw .beam,.saw.y26 .beam{transform:rotate(-14deg)}
+.ystats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.ystats div{padding:12px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.ystats b{display:block;font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.1}
+.ystats span{font-size:11.5px;color:var(--muted);line-height:1.35;display:block;margin-top:3px}
+.ystats .up b{color:var(--coral)}.ystats .gd b{color:var(--green)}
+.fade{transition:opacity .35s}
+.fade.out{opacity:0}
+
+/* S4 shops */
+.shops{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:220px;margin:0 auto}
+.shops i{aspect-ratio:1;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,.08);position:relative;transform:scale(.4);opacity:0;transition:transform .45s var(--ease),opacity .45s,background .45s,box-shadow .45s}
+.shops i::before{content:"";position:absolute;left:-1px;right:-1px;top:0;height:32%;border-radius:3px 3px 0 0;background:rgba(255,255,255,.12)}
+.on .shops i{transform:scale(1);opacity:1}
+.on .shops i.lit{background:var(--blue);box-shadow:0 0 10px rgba(59,130,240,.6)}
+.on .shops i.lit::before{background:var(--green)}
+.shopnum{text-align:center;margin-top:14px}
+.shopnum b{font-family:var(--serif);font-size:40px;font-weight:600;line-height:1}
+.shopnum b small{font-size:.45em;color:var(--muted);font-weight:400;margin-left:4px}
+.shopnum span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
+.flywheel{display:grid;grid-template-columns:1fr 18px 1fr 18px 1fr;align-items:center;gap:4px;padding:13px 12px}
+.flywheel div{text-align:center;font-size:11.5px;line-height:1.3;color:var(--muted)}
+.flywheel div b{display:block;font-size:13px;color:var(--cream);margin-bottom:2px}
+.flywheel .ar{color:var(--green);font-family:var(--serif);font-size:18px;text-align:center}
+
+/* S5 brands */
+.target{padding:13px 16px}
+.tg-row{display:flex;justify-content:space-between;align-items:baseline}
+.tg-row b{font-family:var(--serif);font-size:24px;font-weight:600}
+.tg-row b.g{color:var(--green)}
+.tgbar{position:relative;height:10px;border-radius:10px;background:rgba(255,255,255,.08);margin:8px 0 5px}
+.tgbar div{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width 1.4s var(--ease)}
+.on .tgbar div{width:37%}
+.tgbar i{position:absolute;left:50%;top:-5px;bottom:-5px;width:3px;border-radius:3px;background:var(--green);box-shadow:0 0 10px var(--green)}
+.tg-sub{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.brands{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.bc{padding:14px 13px 13px;display:flex;flex-direction:column;gap:3px}
+.bc .nm{font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
+.bc .wh{font-size:11.5px;color:var(--faint)}
+.bc .deal{font-family:var(--mono);font-size:11px;color:var(--cream);margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);line-height:1.5}
+.bc .now{font-size:12px;line-height:1.35;color:var(--green);font-weight:600;margin-top:4px}
+
+/* S6 gauges */
+.gr{display:grid;grid-template-columns:78px 1fr;gap:14px;align-items:center;padding:13px 0}
+.gr + .gr{border-top:1px solid rgba(255,255,255,.08)}
+.gauge svg{width:78px;height:46px;overflow:visible}
+.gauge .nd{transform-origin:37px 38px;transform:rotate(-90deg);transition:transform 1.6s var(--ease)}
+.on .gauge .nd{transform:rotate(var(--r))}
+.gr .vd{font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
+.gr .vd span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;font-weight:400;margin-bottom:2px}
+.gr p{font-size:13px;line-height:1.4;color:var(--muted);margin-top:3px}
+.gr p b{color:var(--cream)}
+
+/* S7 rats */
+.rats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rats .glass{padding:16px 12px 14px;text-align:center}
+.rats svg{height:120px;width:auto;display:block;margin:0 auto}
+.rats b{display:block;font-size:13.5px;margin-top:8px}
+.rats span{font-size:11.5px;color:var(--muted)}
+.rats .x b{color:var(--coral)}.rats .ok b{color:var(--green)}
+.nib{animation:nib 1.4s ease-in-out infinite;transform-origin:center}
+@keyframes nib{50%{transform:translateY(-2px) rotate(-6deg)}}
+
+/* S8 PE */
+.pe3{display:flex;align-items:flex-end;justify-content:center;gap:22px;height:210px;padding-top:10px}
+.pc{display:flex;flex-direction:column;align-items:center;gap:8px;width:84px;height:100%;justify-content:flex-end}
+.pc .val{font-family:var(--serif);font-size:28px;font-weight:600}
+.pc .bar{width:100%;border-radius:16px 16px 8px 8px;height:0;transition:height 1.4s var(--ease)}
+.on .pc .bar{height:var(--h)}
+.pc .nm{font-size:13px;font-weight:600}
+.pc.me .val{color:var(--green)}
+.own{padding:13px 16px}
+.ownbar{display:flex;height:12px;border-radius:8px;overflow:hidden;gap:2px;margin:8px 0}
+.ownbar div{height:100%}
+.ownk{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted)}
+.ownk span{display:flex;gap:5px;align-items:center}.ownk i{width:8px;height:8px;border-radius:2px}
+.ownk b{color:var(--cream)}
+
+/* S9 bull bear */
+.toggle{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.toggle button{position:relative;z-index:1;padding:10px;font-size:14px;font-weight:600;color:var(--muted);transition:color .3s}
+.toggle button.act{color:#06193D}
+.toggle .pl{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--mint);box-shadow:0 6px 20px -6px var(--mint);transition:transform .5s var(--ease),background .5s}
+.toggle.bear .pl{transform:translateX(100%);background:var(--coral);box-shadow:0 6px 20px -6px var(--coral)}
+.views{display:grid}
+.view{grid-area:1/1;opacity:0;transform:translateX(-20px) scale(.98);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
+.view.show{opacity:1;transform:none;pointer-events:auto}
+.view.bearv{transform:translateX(20px) scale(.98)}
+.view.bearv.show{transform:none}
+.case{padding:4px 16px}
+.cr{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:13px 0}
+.cr + .cr{border-top:1px solid rgba(255,255,255,.08)}
+.cr b{font-size:14.5px;font-weight:600}
+.sz{padding:6px 9px;border-radius:10px;font-family:var(--mono);font-size:11px;font-weight:600;text-align:right;line-height:1.25;max-width:150px}
+.bullv .sz{background:rgba(107,227,176,.14);border:1px solid rgba(107,227,176,.4);color:var(--mint)}
+.bearv .sz{background:rgba(255,122,107,.12);border:1px solid rgba(255,122,107,.4);color:var(--coral)}
+
+/* S10 watch */
+.wl{padding:6px 16px}
+.w{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:center;padding:13px 0}
+.w + .w{border-top:1px solid rgba(255,255,255,.08)}
+.w .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(168,214,58,.12);border:1px solid rgba(168,214,58,.35);font-family:var(--serif);font-size:18px;color:var(--green)}
+.w .dt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--green)}
+.w b{display:block;font-size:14.5px;font-weight:600;margin-top:1px}
+.w p{font-size:12.5px;line-height:1.35;color:var(--muted)}
+
+/* S11 */
+.eqn{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:6px;padding:20px 14px}
+.eqn .t{text-align:center}
+.eqn .t b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.1}
+.eqn .t span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:6px;line-height:1.3}
+.eqn .op{font-family:var(--serif);font-size:22px;color:var(--faint)}
+.eqn .arr{height:58px;display:grid;place-items:center;margin-bottom:6px}
+.eqn .arr svg{height:58px;width:auto;overflow:visible}
+.eqn .t.hot b{color:var(--green)}
+.eqn .t.hot .arr svg{filter:drop-shadow(0 0 10px rgba(168,214,58,.8))}
+.grow{transform-origin:50% 100%;transform:scaleY(.2);opacity:0;transition:transform 1.2s var(--ease) .3s,opacity .6s .3s}
+.on .grow{transform:scaleY(1);opacity:1}
+.take{padding:16px 18px;font-family:var(--serif);font-size:18px;line-height:1.38}
+.take em{color:var(--green)}
+.end{display:flex;gap:8px;margin-top:4px}
+.end button{flex:1;text-align:center;padding:12px;border-radius:14px;font-size:13.5px;font-weight:600;color:var(--cream);background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.end button.pri{background:var(--cream);color:#06193D}
+.disc{font-size:10.5px;line-height:1.45;color:var(--faint);text-align:center;margin-top:6px}
+
+/* sheets */
+.scrim{position:fixed;inset:0;z-index:20;background:rgba(2,10,24,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .4s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:21;left:50%;bottom:0;width:100%;max-width:440px;transform:translate(-50%,105%);transition:transform .55s var(--ease);border-radius:28px 28px 0 0;padding:12px 22px calc(env(safe-area-inset-bottom) + 24px);max-height:86svh;overflow-y:auto;background:linear-gradient(160deg,rgba(14,60,140,.92),rgba(6,25,61,.96));border:1px solid var(--line);border-bottom:0;backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.sheet.open{transform:translate(-50%,0)}
+.grab{width:42px;height:5px;border-radius:5px;background:rgba(255,255,255,.3);margin:0 auto 16px}
+.sheet .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.sheet h3{font-family:var(--serif);font-size:26px;font-weight:500;line-height:1.1;margin-bottom:12px}
+.sheet h3 em{color:var(--green)}
+.sheet .sp{font-size:15px;line-height:1.55;color:var(--muted)}
+.sheet .sp b{color:var(--cream)}
+.sheet .close{margin-top:18px;width:100%;padding:13px;border-radius:14px;background:var(--cream);color:#06193D;font-weight:600}
+.gfx{margin:4px 0 16px;padding:16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.flow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.flow .box{flex:1;text-align:center;padding:12px 8px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.flow .box b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.15}
+.flow .box span{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.3}
+.flow .box.g{background:rgba(168,214,58,.14);border-color:rgba(168,214,58,.45)}
+.flow .op{font-family:var(--serif);font-size:22px;color:var(--green)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair div{text-align:center;padding:12px 8px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.pair b{display:block;font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.1}
+.pair span{font-size:11.5px;color:var(--muted)}
+.tl2 .he{display:grid;grid-template-columns:70px 1fr;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+.tl2 .he b{font-family:var(--mono);font-size:12.5px;color:var(--green)}
+.tl2 .he p{font-size:14px;line-height:1.45;color:var(--muted)}
+
+@media (max-height:720px){
+  .inner{padding-top:calc(env(safe-area-inset-top) + 66px);gap:10px;padding-bottom:calc(env(safe-area-inset-bottom) + 56px)}
+  h1{font-size:30px}h2{font-size:25px}.body{font-size:14px}
+}
+@media (min-width:700px) and (max-width:1019px){.inner,.chrome,.sheet{max-width:560px}}
+@media (min-width:1020px){
+  .chrome{max-width:1200px;padding:20px 40px}
+  .inner{max-width:1200px;padding:110px 40px 56px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:72px;align-items:center}
+  .inner::before,.fillgap{display:none}
+  .copy{display:flex;flex-direction:column;gap:18px;grid-column:1}
+  .v{grid-column:2;grid-row:1;zoom:1.3;max-width:460px;width:100%;justify-self:center}
+  h1{font-size:60px}h2{font-size:50px}
+  .body{font-size:18px}
+  .take{font-size:22px}
+  .sheet{max-width:540px;bottom:50%;border-radius:28px;border-bottom:1px solid var(--line);transform:translate(-50%,calc(50% + 100vh))}
+  .sheet.open{transform:translate(-50%,50%)}
+  .nudge{display:none}
+  .navbtn{display:grid;position:fixed;z-index:6;right:28px;width:48px;height:48px;border-radius:50%;place-items:center;background:rgba(255,255,255,.1);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:18px;transition:background .2s}
+  .navbtn:hover{background:rgba(255,255,255,.2)}
+  .navbtn.up{bottom:92px}.navbtn.dn{bottom:34px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="ambient"><div class="blob a"></div><div class="blob b"></div><div class="blob c"></div></div>
+<div class="grain"></div>
+
+<div class="chrome">
+  <div class="bars" id="bars"></div>
+  <div class="brand"><div class="dd"><b>DD</b>Rabbit hole · Made in India</div><div class="count" id="count">01 / 11</div></div>
+</div>
+<div class="nudge" id="nudge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 15l6-6 6 6"/></svg><span id="nudgeT">Tap or swipe up</span></div>
+<button class="navbtn up" id="navUp" aria-label="Previous">↑</button>
+<button class="navbtn dn" id="navDn" aria-label="Next">↓</button>
+
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gg"><stop offset="0" stop-color="#A8D63A"/><stop offset=".5" stop-color="#F2C46B"/><stop offset="1" stop-color="#FF7A6B"/></linearGradient></defs></svg>
+<main class="deck" id="deck">
+
+<!-- 1 HOOK -->
+<section class="slide" data-tint="#014FA1,#96C61C,#3B82F0">
+ <div class="inner">
+  <div class="copy">
+   <div class="logo rv"><div class="lg"><svg viewBox="0 0 918 793" aria-label="Marico"><path d="M 813.13,8.89 C 827.61,8.09 842.09,6.47 856.61,7.31 C 842.67,15.26 829.28,24.14 815.78,32.8 C 773.03,60.73 731.86,91.09 692.58,123.72 C 647.06,160.86 604.44,201.61 565.91,245.98 C 517.99,299.59 474.93,357.74 439.69,420.47 C 436.25,427.39 432.15,433.96 428.89,440.97 C 424.09,449.17 420.79,458.12 416.45,466.55 C 414.27,471.79 411.9,476.97 410.25,482.41 C 410.18,471.19 412.14,460.13 412.82,448.97 C 414.85,435.25 415.71,421.34 418.86,407.8 C 420.89,394.53 423.46,381.35 426.27,368.23 C 428.92,359.61 430.35,350.66 432.89,342.01 C 435.79,333.3 437.91,324.36 440.72,315.63 C 447.88,294.16 455.91,272.96 465.59,252.49 C 469.14,245.97 471.73,238.94 475.6,232.58 C 507.79,170.83 555.24,116.76 613.68,78.64 C 634.13,64.91 656.14,53.71 678.57,43.6 C 691.66,38.43 704.64,32.96 718.21,29.1 C 728.17,25.16 738.76,23.27 748.94,20.03 C 761.65,17.06 774.48,14.53 787.4,12.61 C 795.81,10.34 804.58,10.38 813.13,8.89 z" style="fill:#96c61c" /><path d="M 142.3,66.75 C 162.24,66.98 182.39,67.58 201.89,72.1 C 218.5,74.78 234.54,80.06 250.29,85.89 C 258.17,89.63 266.5,92.49 274.01,97 C 289.88,105.5 304.98,115.55 318.57,127.41 C 358.39,161.21 386.82,206.7 405.96,254.92 C 410.08,265.07 413.79,275.39 416.78,285.94 C 420.08,294.88 422.15,304.2 424.38,313.44 C 426.88,325.1 430.37,336.66 430.76,348.66 C 429.33,345.7 427.53,342.99 425.54,340.4 C 411.05,318.03 394.14,297.36 376.86,277.1 C 365.88,264.79 354.85,252.49 343.15,240.86 C 336.8,233.56 329.73,226.94 323.32,219.69 C 289.93,185.4 254.08,153.54 216.41,124.02 C 192.09,104.43 167.24,85.53 142.3,66.75 z" style="fill:#96c61c" /><path d="M 216.41,124.02 C 254.08,153.54 289.93,185.4 323.32,219.69 C 329.73,226.94 336.8,233.56 343.15,240.86 C 343.11,321.57 343.15,402.28 343.13,483 C 300.87,483.04 258.62,483.09 216.36,482.97 C 216.43,363.32 216.32,243.67 216.41,124.02 z" style="fill:#014fa1" /><path d="M 565.91,245.98 C 604.44,201.61 647.06,160.86 692.58,123.72 C 692.68,243.47 692.59,363.23 692.62,482.99 C 650.41,483.07 608.19,483.05 565.97,483 C 565.92,403.99 566.05,324.99 565.91,245.98 z" style="fill:#014fa1" /><path d="M 41.35,636.44 C 57.5,624.07 81.5,623.35 98.51,634.42 C 101.59,636.26 103.61,639.31 106,641.9 C 111.8,648.16 113.85,656.68 116.44,664.56 C 121.89,652.84 130.13,642.33 140.59,634.73 C 151.86,627.41 165.98,624.95 179.09,627.83 C 184.91,628.67 190.24,631.57 195.03,634.87 C 204.91,643.38 210.25,656.16 211.68,668.93 C 212.21,674.62 213.06,680.31 213.06,686.04 C 213.04,717.97 213.07,749.9 213.05,781.83 C 208.53,781.84 204.02,781.83 199.51,781.85 C 199.52,753.24 199.52,724.62 199.52,696.01 C 199.65,686.64 199.22,677.22 197.82,667.95 C 195.62,661.13 194.07,653.58 188.71,648.41 C 184.03,642.41 176.16,640.38 168.92,639.77 C 158.65,639.31 147.88,642.18 140,649 C 127.59,659.32 119.1,674.67 118.25,690.92 C 117.37,699.25 117.79,707.63 117.7,716 C 117.71,737.95 117.68,759.9 117.71,781.85 C 113.19,781.84 108.67,781.84 104.15,781.85 C 104.17,755.24 104.16,728.64 104.16,702.03 C 104.08,692.68 104.62,683.27 103.03,674.01 C 102.33,664.64 99.26,655.16 92.98,648.04 C 87.98,642.35 80.25,640.19 72.94,639.75 C 64.9,639.4 56.76,641.08 49.45,644.45 C 34.56,652.65 25.48,668.73 22.76,685.16 C 21.31,698.7 21.76,712.34 21.7,725.94 C 21.7,744.57 21.68,763.21 21.71,781.84 C 17.19,781.84 12.67,781.83 8.15,781.85 C 8.17,731.65 8.15,681.46 8.16,631.26 C 12.67,631.26 17.19,631.26 21.7,631.26 C 21.7,641.65 21.67,652.05 21.72,662.44 C 24.34,657.3 27.47,652.43 30.78,647.71 C 33.66,643.39 37.79,640.16 41.35,636.44 z" style="fill:#014fa1" /><path d="M 295.64,632.75 C 309.61,626.13 325.75,625.47 340.8,628.14 C 346.4,628.74 351.6,631.08 356.68,633.38 C 361.75,635.62 365.13,640.12 368.87,644.01 C 373.1,649.51 375.14,656.29 376.85,662.92 C 378.27,667.15 378.35,671.65 378.36,676.07 C 378.36,701.37 378.36,726.68 378.36,751.99 C 378.49,757.8 378.46,763.86 380.82,769.29 C 383.91,773.71 389.94,773.35 394.73,773.58 C 394.73,777.49 394.74,781.4 394.73,785.31 C 388.97,787.29 382.68,787.02 376.98,784.95 C 374.48,783.57 372.38,781.58 369.96,780.07 C 365.59,774.63 364.17,767.56 363.79,760.75 C 359.61,764.62 356.11,769.28 350.99,772 C 344.13,778.21 335.34,781.37 326.92,784.82 C 316.24,787.36 304.99,787.21 294.32,784.75 C 288,781.9 281.14,779.7 276.12,774.71 C 273.91,771.95 271.26,769.57 269.22,766.68 C 263.21,755.63 260.47,742.4 263.43,730.01 C 264.57,724.79 266.11,719.56 268.99,715.02 C 271.47,711.52 274.44,708.42 277.15,705.11 C 278.37,703.53 280.34,702.94 282.04,702.06 C 286.14,700.27 289.5,696.92 294,696.07 C 303.32,693.9 312.28,690.38 321.7,688.66 C 329.18,686.36 337.08,685.54 344.35,682.53 C 351,679.97 358.19,678.16 364.01,673.93 C 365.02,665.45 362.57,656.54 356.67,650.26 C 350.3,642.94 340.12,641.02 330.95,639.92 C 318.5,639.02 305.13,641.07 294.9,648.66 C 286.74,654.01 280.72,662.07 276.02,670.49 C 273.02,667.83 269.98,665.19 266.5,663.19 C 271.05,656.01 275.14,648.28 281.65,642.64 C 285.92,638.84 290.16,634.73 295.64,632.75 M 354.36,693.22 C 348.42,695.75 341.84,696.09 335.89,698.58 C 325.34,703.01 313.37,701.53 302.79,705.87 C 297.07,708.28 290.72,709.69 285.95,713.9 C 280.91,718.24 277.14,724.24 276.2,730.9 C 275.2,738.87 275.05,747.31 278.01,754.91 C 281.12,760.39 284.55,766.37 290.46,769.21 C 303.65,775.24 318.98,774.29 332.6,770.28 C 340.8,768.49 346.85,762.24 352.88,756.85 C 357.5,753.07 359.34,747.2 361.89,742.04 C 363.19,737.17 363.85,732.1 363.77,727.06 C 363.72,714.24 363.77,701.43 363.74,688.62 C 360.54,690.02 357.59,691.92 354.36,693.22 z" style="fill:#014fa1" /><path d="M 476.66,637.62 C 483.21,630.27 493.21,626.28 503.02,626.74 C 507.11,626.81 511.05,627.98 515.03,628.83 C 515.03,634.18 515.03,639.53 515.04,644.89 C 504.64,641.29 492.26,641.42 482.98,647.86 C 475.03,653.01 469.63,661.05 465.06,669.15 C 460.37,679.54 457.06,690.57 455.64,701.89 C 455.12,709.58 454.1,717.25 454.24,724.97 C 454.27,743.92 454.24,762.88 454.26,781.84 C 449.82,781.84 445.39,781.84 440.96,781.84 C 440.94,731.65 440.94,681.46 440.96,631.27 C 445.38,631.26 449.81,631.26 454.25,631.26 C 454.28,644.13 454.21,657 454.29,669.87 C 454.87,669.8 456.05,669.66 456.64,669.59 C 461.79,658.14 467.41,646.4 476.66,637.62 z" style="fill:#014fa1" /><path d="M 673.86,627.37 C 683.51,625.9 693.42,626.84 702.86,629.22 C 708.79,631.67 715.16,633.67 720.01,638.08 C 724.23,641.78 728.69,645.35 731.9,650.03 C 736.02,656.02 739.93,662.22 742.56,669.03 C 738.35,670.96 734.26,673.12 730.13,675.21 C 724.76,662.54 716.19,650.55 703.81,644.01 C 687.36,636.75 666.3,638.44 652.58,650.61 C 642.85,659.69 636.81,672.16 634.31,685.14 C 631.1,703.64 631.42,723.18 637.88,740.97 C 640.25,745.33 641.97,750.09 644.92,754.12 C 648.56,758.11 651.99,762.33 656.32,765.63 C 659.83,769.09 664.75,770.21 669.29,771.69 C 680.08,774.42 691.69,774.08 702.17,770.19 C 707.25,768.91 710.88,764.96 714.67,761.62 C 718.19,757.72 722.3,754.2 724.6,749.37 C 726.3,745.8 728.61,742.55 730.15,738.91 C 734.19,740.84 738.12,743.07 742.52,744.14 C 740.98,747.94 739.8,751.98 737.34,755.33 C 733.28,760.61 730.68,767.17 725.03,771.07 C 720.15,776.25 713.92,780.01 707.16,782.18 C 700.07,786.04 691.83,786.35 683.96,786.73 C 675.75,786.43 667.2,786.08 659.77,782.2 C 650.95,779.82 644.09,773.51 637.69,767.34 C 635.34,764.28 633.34,760.98 631.14,757.82 C 625.13,750.33 623.13,740.66 620.26,731.72 C 618,718.67 616.8,705.23 618.89,692.07 C 619.41,688.57 619.38,684.98 620.39,681.58 C 622.76,674.63 624.27,667.31 628.01,660.9 C 632.68,653.16 637.76,645.42 645.01,639.82 C 652.79,632.46 663.4,628.75 673.86,627.37 z" style="fill:#014fa1" /><path d="M 839.56,626.88 C 855.14,625.77 872.06,629.14 883.76,640.07 C 891.36,646.39 897,654.73 901.75,663.31 C 905.01,669.84 906.6,676.99 908.72,683.93 C 911.26,698.83 911.31,714.17 908.77,729.08 C 905.94,739.33 903.42,750.15 896.66,758.64 C 891.19,767.61 883.43,775.27 874.1,780.16 C 870.24,781.56 866.47,783.17 862.68,784.73 C 851.65,787.35 840.08,787.19 828.98,785.03 C 825.41,784.17 822.25,782.18 818.73,781.16 C 815.31,780.24 812.56,777.91 809.43,776.38 C 806.69,774.55 804.7,771.81 801.96,769.97 C 798.34,767.54 796.5,763.45 793.79,760.18 C 781.95,743.75 778.52,722.86 779.29,702.99 C 779.22,679.93 787.47,655.74 805.58,640.67 C 814.67,632 827.26,627.98 839.56,626.88 M 835.58,640.7 C 821.16,642.71 809.38,653.3 802.73,665.82 C 796.62,675.79 795.06,687.58 793.49,698.95 C 792.45,710.78 794.05,722.68 796.96,734.15 C 798.6,740.99 802.3,747.03 805.84,753.02 C 810.43,758.74 815.66,764.1 821.76,768.22 C 836.25,775.12 853.88,775.28 868.41,768.35 C 871.68,766.41 874.42,763.69 877.21,761.13 C 880.43,757.32 884.41,754.03 886.51,749.41 C 890.05,742.09 893.38,734.53 894.62,726.43 C 896.42,716.38 896.11,706.06 895.66,695.9 C 895.19,685.28 891.74,675.11 887.24,665.58 C 882.38,656.88 875.57,648.95 866.57,644.4 C 857.01,639.87 845.93,638.56 835.58,640.7 z" style="fill:#014fa1" /><path d="M 553.16,631.26 C 557.81,631.26 562.47,631.26 567.13,631.27 C 567.13,681.46 567.13,731.65 567.13,781.84 C 562.47,781.84 557.81,781.83 553.15,781.84 C 553.17,731.65 553.15,681.46 553.16,631.26 z" style="fill:#014fa1" /></svg></div><span>Decoded</span></div>
+   <h1 class="rv">6 out of every 10 bottles of coconut oil sold in India are <em>Parachute.</em></h1>
+   <p class="body rv">This year the same company bought PVR's popcorn brand (<b>4700BC</b>), a protein brand from the internet (<b>Cosmix</b>), and most of <b>Plix</b>.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="fmcg"><i></i>Concept · FMCG<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="bottles" id="bottles"></div>
+    <div class="big6"><b>₹1.16<small> lakh cr</small></b><span>what the company is worth today</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 2 MONEY -->
+<section class="slide" data-tint="#014FA1,#3B82F0,#96C61C">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">02 · How it makes money</div>
+   <h2 class="rv">Hair oil still <em>pays the bills.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="mix"><i></i>Concept · Revenue mix<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl" style="margin-bottom:8px">Out of every ₹100 of sales</div>
+    <div class="split2"><div style="--w:75%;background:var(--blue);color:#fff">India ₹75</div><div style="--w:25%;background:rgba(255,255,255,.22);transition-delay:.2s">₹25</div></div>
+    <div class="lbl" style="margin:16px 0 2px">Inside India</div>
+    <div class="mx"><div><div class="n">Parachute coconut oil</div><div class="t"><div style="--w:100%;--c:var(--blue)"></div></div></div><div class="r"><small>₹</small>27</div></div>
+    <div class="mx"><div><div class="n">New brands<span>foods, premium, digital</span></div><div class="t"><div style="--w:63%;--c:var(--green)"></div></div></div><div class="r"><small>₹</small>17</div></div>
+    <div class="mx"><div><div class="n">Hair oils<span>Nihar, Parachute Advansed</span></div><div class="t"><div style="--w:48%;--c:var(--cyan)"></div></div></div><div class="r"><small>₹</small>13</div></div>
+    <div class="mx"><div><div class="n">Saffola cooking oil</div><div class="t"><div style="--w:48%;--c:var(--gold)"></div></div></div><div class="r"><small>₹</small>13</div></div>
+    <div class="mx"><div><div class="n">Smaller brands</div><div class="t"><div style="--w:19%;--c:rgba(255,255,255,.35)"></div></div></div><div class="r"><small>₹</small>5</div></div>
+   </div>
+   <div class="glass abroad"><b>₹25</b><p><strong>Abroad:</strong> mostly Parachute in Bangladesh, plus local brands in Vietnam, Egypt and South Africa.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- 3 SEESAW -->
+<section class="slide" data-tint="#FF7A6B,#014FA1,#96C61C">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">03 · The one thing that moves profit</div>
+   <h2 class="rv">When coconuts get expensive, <em>profit drops.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="copra"><i></i>Concept · Raw material cost<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="yt" id="yt"><div class="pl"></div><button class="act" data-y="25">2025</button><button data-y="26">2026</button></div>
+    <svg class="saw" id="saw" viewBox="0 0 320 150">
+     <text x="40" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="rgba(246,242,233,.75)" letter-spacing="1">COPRA PRICE</text><text x="280" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="rgba(246,242,233,.75)" letter-spacing="1">MARGIN</text><path d="M160 96 L136 128 H184 Z" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.3)"/>
+     <g class="beam">
+      <rect x="22" y="88" width="276" height="8" rx="4" fill="#F6F2E9" opacity=".85"/>
+      <g transform="translate(58 62)"><circle r="24" fill="#8B5A2B"/><circle r="17" fill="#F3E7CF"/><circle r="5" cx="-5" cy="-4" fill="#8B5A2B" opacity=".5"/></g>
+      
+      <g transform="translate(262 62)"><rect x="-26" y="-24" width="52" height="48" rx="12" fill="#A8D63A"/><text y="7" text-anchor="middle" font-family="Fraunces,serif" font-size="22" font-weight="600" fill="#06193D">%</text></g>
+      
+     </g>
+    </svg>
+    <div class="ystats fade" id="ystats">
+     <div class="up"><b>3x</b><span>copra price hits its highest in the Tiptur market's 77 years</span></div>
+     <div class="up"><b>−7 pts</b><span>profit margin, even after big price hikes</span></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 4 MOAT -->
+<section class="slide" data-tint="#3B82F0,#96C61C,#014FA1">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">04 · The moat</div>
+   <h2 class="rv">Marico's real moat is <em>the shelf.</em></h2>
+   <p class="body rv">Its brands sit in half of India's shops, and <b>95% of them are #1 or #2</b> in their category. Plug a small brand into that, and it grows fast.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="dist"><i></i>Concept · Distribution<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="shops" id="shops"></div>
+    <div class="shopnum"><b>5.8<small>million shops</small></b><span>out of India's 11.3 million carry Marico</span></div>
+   </div>
+   <div class="glass flywheel">
+    <div><b>Buy</b>a fast-growing online brand</div><span class="ar">→</span>
+    <div><b>Plug in</b>to 5.8 million shops</div><span class="ar">→</span>
+    <div><b>Scale</b>Beardo grew 6x</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 5 NEW MARICO -->
+<section class="slide" data-tint="#96C61C,#3B82F0,#FF8FB8">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">05 · The new Marico</div>
+   <h2 class="rv">Marico has become a <em>brand collector.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="acq"><i></i>Concept · Acquisition<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass target">
+    <div class="lbl">New and premium brands, share of sales</div>
+    <div class="tgbar"><div></div><i></i></div>
+    <div class="tg-row"><b>37% today</b><b class="g">50% goal</b></div>
+    <div class="tg-sub"><span></span><span>by FY30</span></div>
+   </div>
+   <div class="brands">
+    <div class="glass bc st" style="transition-delay:.15s"><div class="nm">Beardo</div><div class="wh">Men's grooming</div><div class="deal">Bought 100%<br>2017 to 2020</div><div class="now">Sales up 6x, now ₹400 cr+</div></div>
+    <div class="glass bc st" style="transition-delay:.3s"><div class="nm">Plix</div><div class="wh">Nutrition and skincare</div><div class="deal">Bought 84%<br>₹1,381 cr · 2023 to 2026</div><div class="now">Sales doubled to ₹864 cr</div></div>
+    <div class="glass bc st" style="transition-delay:.45s"><div class="nm">4700BC</div><div class="wh">Gourmet popcorn</div><div class="deal">Bought 93%<br>₹227 cr · Jan 2026</div><div class="now">Already ahead of Marico's plan</div></div>
+    <div class="glass bc st" style="transition-delay:.6s"><div class="nm">Cosmix</div><div class="wh">Plant protein</div><div class="deal">Bought 60%<br>₹226 cr · Feb 2026</div><div class="now">Already profitable</div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 6 HOW GOOD -->
+<section class="slide" data-tint="#6BE3B0,#014FA1,#F2C46B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">06 · How good is it</div>
+   <h2 class="rv">Brilliant returns. <em>Slower growth</em> than you'd think.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="roe"><i></i>Concept · ROE<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="gr"><div class="gauge"><svg viewBox="0 0 74 44"><path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="8" stroke-linecap="round"/><path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="url(#gg)" stroke-width="8" stroke-linecap="round"/><g class="nd" style="--r:-70deg"><line x1="37" y1="38" x2="37" y2="12" stroke="#F6F2E9" stroke-width="3" stroke-linecap="round"/></g><circle cx="37" cy="38" r="4" fill="#F6F2E9"/></svg></div><div><div class="vd"><span>Returns</span>Excellent</div><p><b>₹43 of profit a year</b> on every ₹100 its shareholders have in it.</p></div></div>
+    <div class="gr"><div class="gauge"><svg viewBox="0 0 74 44"><path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="8" stroke-linecap="round"/><path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="url(#gg)" stroke-width="8" stroke-linecap="round"/><g class="nd" style="--r:-66deg"><line x1="37" y1="38" x2="37" y2="12" stroke="#F6F2E9" stroke-width="3" stroke-linecap="round"/></g><circle cx="37" cy="38" r="4" fill="#F6F2E9"/></svg></div><div><div class="vd"><span>Debt</span>Tiny</div><p>Owes <b>₹1,238 cr</b>, less than one year of profit (₹1,813 cr).</p></div></div>
+    <div class="gr"><div class="gauge"><svg viewBox="0 0 74 44"><path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="8" stroke-linecap="round"/><path d="M6 38 A31 31 0 0 1 68 38" fill="none" stroke="url(#gg)" stroke-width="8" stroke-linecap="round"/><g class="nd" style="--r:4deg"><line x1="37" y1="38" x2="37" y2="12" stroke="#F6F2E9" stroke-width="3" stroke-linecap="round"/></g><circle cx="37" cy="38" r="4" fill="#F6F2E9"/></svg></div><div><div class="vd"><span>Growth</span>Just okay</div><p>Profit grew about <b>9% a year</b> over the last 5 years.</p></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 7 HIDDEN TRUTH -->
+<section class="slide" data-tint="#C8945A,#96C61C,#014FA1">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">07 · The hidden truth</div>
+   <h2 class="rv">Parachute won India <em>because of rats.</em></h2>
+   <p class="body rv">Shops refused plastic bottles because rats chewed through them to get the oil. Marico made the bottle <b>round and tougher</b>, locked it in a cage with rats for two days, and showed shopkeepers the video.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="more" data-sheet="tax">The tax fight <span>↑</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="rats">
+    <div class="glass x">
+     <svg viewBox="0 0 80 130"><path d="M28 6 h24 v14 h6 v100 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 v-100 h6 z" fill="rgba(255,255,255,.1)" stroke="rgba(246,242,233,.6)" stroke-width="2"/><path d="M22 70 v50 h36 v-38" fill="rgba(233,215,180,.35)"/><path d="M58 52 l-7 5 l6 4 l-8 5 l9 3" fill="none" stroke="#FF7A6B" stroke-width="2.5" stroke-linejoin="round"/><g class="nib"><ellipse cx="70" cy="84" rx="9" ry="6" fill="#9A9AA6"/><circle cx="76" cy="80" r="3" fill="#9A9AA6"/><circle cx="78" cy="83" r="1" fill="#06193D"/><path d="M61 86 q-8 4 -12 0" stroke="#9A9AA6" stroke-width="1.5" fill="none"/></g><path d="M40 126 q-8 4 -18 3" stroke="rgba(233,215,180,.6)" stroke-width="3" fill="none"/></svg>
+     <b>Square bottle</b><span>rats chewed through</span>
+    </div>
+    <div class="glass ok">
+     <svg viewBox="0 0 80 130"><rect x="31" y="4" width="18" height="12" rx="3" fill="#1E6FD9"/><path d="M33 16 h14 v10 c14 4 20 14 20 30 v58 a12 12 0 0 1 -12 12 h-30 a12 12 0 0 1 -12 -12 v-58 c0 -16 6 -26 20 -30 z" fill="#1E6FD9" opacity=".25" stroke="#3B82F0" stroke-width="2"/><path d="M15 62 v52 a10 10 0 0 0 10 10 h30 a10 10 0 0 0 10 -10 v-52 z" fill="rgba(233,215,180,.55)"/><path d="M28 86 l8 8 l16 -18" fill="none" stroke="#A8D63A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     <b>Round bottle</b><span>survived two days</span>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 8 PRICED IN -->
+<section class="slide" data-tint="#F2C46B,#014FA1,#96C61C">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">08 · What's priced in</div>
+   <h2 class="rv">You're paying about <em>57 years</em> of today's profit.</h2>
+   <p class="body rv">That price assumes strong growth continues. Marico promises <b>₹20,000 cr of sales by FY29</b>, up from ₹13,611 cr.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="pe"><i></i>Concept · P/E<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl" style="text-align:center">Years of profit you pay for (P/E)</div>
+    <div class="pe3">
+     <div class="pc"><div class="val">33x</div><div class="bar" style="--h:45%;background:rgba(255,255,255,.25)"></div><div class="nm">Dabur</div></div>
+     <div class="pc me"><div class="val">57x</div><div class="bar" style="--h:77%;background:linear-gradient(180deg,var(--green),var(--blue));transition-delay:.15s"></div><div class="nm">Marico</div></div>
+     <div class="pc"><div class="val">74x</div><div class="bar" style="--h:100%;background:rgba(255,255,255,.25);transition-delay:.3s"></div><div class="nm">Nestlé India</div></div>
+    </div>
+   </div>
+   <div class="glass own">
+    <div class="lbl">Who owns it</div>
+    <div class="ownbar"><div style="width:59%;background:var(--green)"></div><div style="width:22%;background:var(--blue)"></div><div style="width:14%;background:var(--violet)"></div><div style="width:5%;background:rgba(255,255,255,.3)"></div></div>
+    <div class="ownk"><span><i style="background:var(--green)"></i>Mariwala family <b>59%</b></span><span><i style="background:var(--blue)"></i>Foreign funds <b>22%</b></span><span><i style="background:var(--violet)"></i>Indian funds <b>14%</b></span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 9 BULL BEAR -->
+<section class="slide" data-tint="#6BE3B0,#FF7A6B,#014FA1">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">09 · Bull vs bear</div>
+   <h2 class="rv">What could go <em>right</em>, and what could go wrong.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="vol"><i></i>Concept · Volume growth<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="toggle" id="toggle"><div class="pl"></div><button class="act" data-v="bull">Bull case</button><button data-v="bear">Bear case</button></div>
+   <div class="views">
+    <div class="view bullv show" id="vbull"><div class="glass case">
+     <div class="cr"><b>Copra stays low</b><div class="sz">margin +6 pts this year</div></div>
+     <div class="cr"><b>New brands hit 50%</b><div class="sz">from 37% today</div></div>
+     <div class="cr"><b>India keeps selling more</b><div class="sz">volumes +10%</div></div>
+    </div></div>
+    <div class="view bearv" id="vbear"><div class="glass case">
+     <div class="cr"><b>The coconut cycle turns</b><div class="sz">last spike: margin −7 pts</div></div>
+     <div class="cr"><b>Saffola keeps shrinking</b><div class="sz">volumes down high single digits</div></div>
+     <div class="cr"><b>Bangladesh unrest</b><div class="sz">~45% of abroad sales</div></div>
+     <div class="cr"><b>Growth slows at 57x</b><div class="sz">little room for a miss</div></div>
+    </div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 10 WATCH -->
+<section class="slide" data-tint="#3B82F0,#96C61C,#F2C46B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">10 · What to watch</div>
+   <h2 class="rv">Four things that <em>move the story.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="copra"><i></i>Concept · Raw material cost<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass wl">
+    <div class="w st" style="transition-delay:.15s"><div class="ic">1</div><div><div class="dt">Every month</div><b>Copra prices</b><p>The single biggest swing in profit.</p></div></div>
+    <div class="w st" style="transition-delay:.3s"><div class="ic">2</div><div><div class="dt">Early Feb 2027 (expected)</div><b>Q3 results</b><p>Is India still selling 10% more each year?</p></div></div>
+    <div class="w st" style="transition-delay:.45s"><div class="ic">3</div><div><div class="dt">Every quarter</div><b>Parachute's price</b><p>As copra falls, does Marico hold prices or cut them?</p></div></div>
+    <div class="w st" style="transition-delay:.6s"><div class="ic">4</div><div><div class="dt">Ongoing</div><b>Bangladesh</b><p>Its biggest market abroad, and politically shaky.</p></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 11 DD TAKE -->
+<section class="slide" data-tint="#96C61C,#014FA1,#3B82F0">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">11 · The DD take</div>
+   <h2 class="rv">A profit story, <em>not a re-rating story.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="rerate"><i></i>Concept · Re-rating<span class="q">?</span></button></div>
+   <div class="end rv"><button class="pri" data-sheet="tax">The tax fight</button><button id="restart">Start again ↺</button></div>
+   <p class="disc rv">Education, not advice. Nothing here is a recommendation to buy, sell or hold. Sources: Marico Q2 FY27 results and call (Nov 2026), Marico investor presentations, Screener (Nov 2026), CompaniesMarketCap, deal filings. DD maths are our own estimates.</p>
+  </div>
+  <div class="v rv">
+   <div class="glass eqn">
+    <div class="t"><div class="arr"></div><b>Share price</b><span>what you pay</span></div>
+    <div class="op">=</div>
+    <div class="t hot"><div class="arr"><svg viewBox="0 0 30 58" class="grow"><path d="M15 56 V10" stroke="#A8D63A" stroke-width="6" stroke-linecap="round"/><path d="M4 20 L15 6 L26 20" fill="none" stroke="#A8D63A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><b>Profit</b><span>the lever</span></div>
+    <div class="op">×</div>
+    <div class="t"><div class="arr"><svg viewBox="0 0 58 30"><path d="M4 15 H48" stroke="rgba(246,242,233,.5)" stroke-width="6" stroke-linecap="round"/><path d="M40 5 L52 15 L40 25" fill="none" stroke="rgba(246,242,233,.5)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><b>P/E 57x</b><span>already high</span></div>
+   </div>
+   <div class="glass take">At 57x, the stock will follow <em>profit.</em> Watch whether the new brands grow fast enough before coconuts get expensive again.</div>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet-concept"><div class="grab"></div><div class="k">Concept</div><h3 id="cTitle"></h3><div class="gfx" id="cGfx"></div><p class="sp" id="cText"></p><button class="close">Got it</button></div>
+
+<div class="sheet" id="sheet-tax">
+ <div class="grab"></div><div class="k">The tax fight</div>
+ <h3>Is Parachute <em>hair oil or cooking oil?</em></h3>
+ <div class="gfx"><div class="pair"><div><b style="color:var(--coral)">18%</b><span>GST if it's hair oil</span></div><div><b style="color:var(--green)">5%</b><span>GST if it's cooking oil</span></div></div></div>
+ <div class="tl2">
+  <div class="he"><b>~15 years</b><p>The tax department argued small bottles of coconut oil were <b style="color:var(--cream)">hair oil.</b> Marico said they were edible oil.</p></div>
+  <div class="he"><b>Dec 2024</b><p>The Supreme Court sided with Marico: pure coconut oil is edible oil, even in a small bottle.</p></div>
+  <div class="he"><b>Sep 2025</b><p>GST cut hair oil to 5% anyway.</p></div>
+ </div>
+ <button class="close">Got it</button>
+</div>
+
+<script>
+(function(){
+  const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],bars=document.getElementById('bars'),count=document.getElementById('count'),root=document.documentElement;
+  slides.forEach(()=>bars.appendChild(document.createElement('i')));const segs=[...bars.children];let cur=0;
+
+  // bottles
+  const bw=document.getElementById('bottles');
+  for(let i=0;i<10;i++){const on=i<6,d=document.createElement('div');d.className='bt';
+    d.innerHTML=`<svg viewBox="0 0 40 78"><defs><clipPath id="cb${i}"><path d="M15 2h10v8h-10z M14 10h12v5c7 2 10 7 10 14v40a7 7 0 0 1-7 7h-18a7 7 0 0 1-7-7v-40c0-7 3-12 10-14z"/></clipPath></defs>
+    <rect x="15" y="2" width="10" height="8" rx="2" fill="${on?'#1E6FD9':'rgba(255,255,255,.18)'}"/>
+    <path d="M14 10h12v5c7 2 10 7 10 14v40a7 7 0 0 1-7 7h-18a7 7 0 0 1-7-7v-40c0-7 3-12 10-14z" fill="rgba(255,255,255,.06)" stroke="${on?'#3B82F0':'rgba(255,255,255,.25)'}" stroke-width="1.5"/>
+    <g clip-path="url(#cb${i})"><rect class="liq" x="0" y="${on?24:40}" width="40" height="${on?56:40}" fill="${on?'url(#lq)':'rgba(233,215,180,.22)'}" style="transition-delay:${.2+i*.09}s"/></g>
+    ${on?'<rect x="9" y="40" width="22" height="14" rx="3" fill="#014FA1" opacity=".9"/><path d="M13 47h14" stroke="#A8D63A" stroke-width="2"/>':''}</svg>`;bw.appendChild(d)}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','svg');g.setAttribute('width','0');g.setAttribute('height','0');g.style.position='absolute';
+  g.innerHTML='<defs><linearGradient id="lq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6EBD3"/><stop offset="1" stop-color="#E2CFA6"/></linearGradient></defs>';document.body.appendChild(g);
+
+  // shops (51 lit of 100)
+  const sh=document.getElementById('shops');
+  for(let i=0;i<100;i++){const s=document.createElement('i');if(i<51)s.className='lit';s.style.transitionDelay=(i*10)+'ms';sh.appendChild(s)}
+
+  // seesaw years
+  const yt=document.getElementById('yt'),saw=document.getElementById('saw'),ys=document.getElementById('ystats');
+  const Y={25:'<div class="up"><b>3x</b><span>copra price hits its highest in the Tiptur market\'s 77 years</span></div><div class="up"><b>−7 pts</b><span>profit margin, even after big price hikes</span></div>',
+           26:'<div class="gd"><b>−35%</b><span>copra price, down from that peak</span></div><div class="gd"><b>+6 pts</b><span>profit margin, and profit up 31% last quarter</span></div>'};
+  yt.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const y=b.dataset.y;yt.classList.toggle('y26',y==='26');saw.classList.toggle('y26',y==='26');yt.querySelectorAll('button').forEach(x=>x.classList.toggle('act',x===b));
+    ys.classList.add('out');setTimeout(()=>{ys.innerHTML=Y[y];ys.classList.remove('out')},250)}));
+
+  function activate(s){if(s.classList.contains('on'))return;s.classList.add('on')}
+  function tint(s){const t=(s.dataset.tint||'').split(',');if(t.length===3){root.style.setProperty('--b1',t[0]);root.style.setProperty('--b2',t[1]);root.style.setProperty('--b3',t[2])}}
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cur=slides.indexOf(e.target);activate(e.target);tint(e.target);segs.forEach((g,i)=>{g.classList.toggle('done',i<=cur);g.classList.toggle('cur',i===cur)});document.getElementById('nudge').classList.toggle('hide',cur===slides.length-1);document.getElementById('nudgeT').textContent=cur===0?'Tap or swipe up':'Next';count.textContent=String(cur+1).padStart(2,'0')+' / '+slides.length}})},{root:deck,threshold:.55});
+  slides.forEach(s=>io.observe(s));
+
+  function go(i){i=Math.max(0,Math.min(slides.length-1,i));deck.scrollTo({top:i*deck.clientHeight,behavior:'smooth'})}
+  deck.addEventListener('click',e=>{if(e.target.closest('button,a,.toggle,.yt,.sheet'))return;if(getSelection&&String(getSelection()).length)return;
+    const x=e.clientX/window.innerWidth;go(x<0.3?cur-1:cur+1)});
+  document.getElementById('navUp').addEventListener('click',()=>go(cur-1));
+  document.getElementById('navDn').addEventListener('click',()=>go(cur+1));
+  document.addEventListener('keydown',e=>{if(document.querySelector('.sheet.open')){if(e.key==='Escape')closeAll();return}
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}});
+
+  const tg=document.getElementById('toggle');
+  tg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const bear=b.dataset.v==='bear';tg.classList.toggle('bear',bear);tg.querySelectorAll('button').forEach(x=>x.classList.toggle('act',x===b));
+    document.getElementById('vbull').classList.toggle('show',!bear);document.getElementById('vbear').classList.toggle('show',bear)}));
+
+  const C={
+   fmcg:{t:'FMCG <em>(fast-moving consumer goods)</em>',g:`<div class="flow"><div class="box"><b>Cheap</b><span>₹10 to ₹200</span></div><div class="op">+</div><div class="box"><b>Often</b><span>bought every month</span></div><div class="op">=</div><div class="box g"><b>FMCG</b><span>oil, soap, snacks</span></div></div>`,x:'Everyday things we buy again and again. The money comes from <b>repeat purchases</b>, so habit and shelf space matter more than anything.'},
+   mix:{t:'Revenue <em>mix</em>',g:`<div class="flow"><div class="box"><b>₹27</b><span>Parachute</span></div><div class="op">+</div><div class="box"><b>₹17</b><span>new brands</span></div><div class="op">+</div><div class="box g"><b>…</b><span>= ₹100</span></div></div>`,x:'How a company\'s sales split across its products. It tells you <b>which product the company really depends on.</b>'},
+   copra:{t:'Raw material <em>cost</em>',g:`<div class="flow"><div class="box"><b>Coconut</b><span>dried into copra</span></div><div class="op">→</div><div class="box"><b>Pressed</b><span>into oil</span></div><div class="op">→</div><div class="box g"><b>Parachute</b><span>on the shelf</span></div></div>`,x:'What a company pays for the stuff it turns into products. When it jumps, profit shrinks <b>until prices on the shelf catch up.</b>'},
+   dist:{t:'Distribution',g:`<div class="flow"><div class="box"><b>Factory</b></div><div class="op">→</div><div class="box"><b>Distributors</b></div><div class="op">→</div><div class="box g"><b>5.8M shops</b></div></div>`,x:'The network that gets a product onto shelves. It takes <b>decades and lots of money</b> to build, which makes it very hard for a new brand to copy.'},
+   acq:{t:'Acquisition',g:`<div class="flow"><div class="box"><b>Build</b><span>slow, risky</span></div><div class="op">vs</div><div class="box g"><b>Buy</b><span>pay for a brand people already love</span></div></div>`,x:'When one company buys control of another. Marico buys brands that are <b>already growing online</b>, then pushes them into shops.'},
+   roe:{t:'ROE <em>(return on equity)</em>',g:`<div class="flow"><div class="box"><b>₹100</b><span>shareholders put in</span></div><div class="op">→</div><div class="box g"><b>₹43</b><span>profit a year</span></div></div>`,x:'Profit a company makes for every ₹100 its shareholders have in it. <b>Above ₹20 is very good.</b> Marico makes more than double that.'},
+   pe:{t:'P/E <em>(price to earnings)</em>',g:`<div class="flow"><div class="box"><b>Share price</b><span>what you pay</span></div><div class="op">÷</div><div class="box"><b>Profit per share</b><span>one year</span></div><div class="op">=</div><div class="box g"><b>57x</b><span>Marico</span></div></div>`,x:'How many years of today\'s profit you pay for upfront. <b>Higher means investors expect more growth.</b>'},
+   vol:{t:'Volume <em>growth</em>',g:`<div class="pair"><div><b>Volume</b><span>how many bottles sold</span></div><div><b>Value</b><span>how many rupees earned</span></div></div>`,x:'Value can grow just from raising prices. <b>Volume growth means more people are actually buying</b>, which is the healthier kind.'},
+   rerate:{t:'Re-rating',g:`<div class="flow"><div class="box"><b>Same profit</b></div><div class="op">×</div><div class="box"><b>Higher P/E</b></div><div class="op">=</div><div class="box g"><b>Higher price</b></div></div>`,x:'When the market decides a company deserves a higher (or lower) P/E. At 57x, Marico already has a high one, so <b>the next move has to come from profit.</b>'}
+  };
+  const scrim=document.getElementById('scrim');
+  function closeAll(){document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));scrim.classList.remove('open')}
+  function open(id){const s=document.getElementById(id);if(!s)return;s.scrollTop=0;s.classList.add('open');scrim.classList.add('open')}
+  document.querySelectorAll('[data-concept]').forEach(b=>b.addEventListener('click',()=>{const c=C[b.dataset.concept];if(!c)return;
+    document.getElementById('cTitle').innerHTML=c.t;document.getElementById('cGfx').innerHTML=c.g;document.getElementById('cText').innerHTML=c.x;open('sheet-concept')}));
+  document.querySelectorAll('[data-sheet]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();open('sheet-'+b.dataset.sheet)}));
+  scrim.addEventListener('click',closeAll);
+  document.querySelectorAll('.sheet .close').forEach(b=>b.addEventListener('click',closeAll));
+  document.querySelectorAll('.sheet').forEach(s=>{let y0=null;s.addEventListener('touchstart',e=>{if(s.scrollTop<=0)y0=e.touches[0].clientY},{passive:true});s.addEventListener('touchmove',e=>{if(y0!==null&&e.touches[0].clientY-y0>70){closeAll();y0=null}},{passive:true});s.addEventListener('touchend',()=>y0=null)});
+
+  function fit(){slides.forEach(s=>{const inn=s.querySelector('.inner'),v=s.querySelector('.v'),h=s.querySelector('h1,h2');if(!v)return;
+    v.style.zoom='';if(h)h.style.fontSize='';const base=parseFloat(getComputedStyle(v).zoom)||1;let z=base,n=0;
+    while(inn.scrollHeight>inn.clientHeight+1&&n<16){z-=.04*base;v.style.zoom=z;n++}
+    if(inn.scrollHeight>inn.clientHeight+1&&h){h.style.fontSize=(parseFloat(getComputedStyle(h).fontSize)*.88)+'px'}})}
+  let ft;window.addEventListener('resize',()=>{clearTimeout(ft);ft=setTimeout(fit,120)});
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(fit);fit();
+  document.getElementById('restart').addEventListener('click',()=>go(0));
+})();
+</script>
+<script src="/reports/dd-rabbit-paywall.js"></script>
+</body>
+</html>
