@@ -5,8 +5,9 @@
 <script>if(location.protocol==='file:'||(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&location.port&&location.port!=='3000'))location.replace('http://localhost:3000/index.html');</script>
 <script>
 window.DD_IS_TESTING_PREVIEW=/^\/testing123(?:\/|$)/.test(location.pathname);
-window.DD_RABBIT_ONLY=true;
-document.documentElement.classList.toggle('rabbit-only',window.DD_RABBIT_ONLY);
+window.DD_STOCK_SPOTLIGHTS_HIDDEN=true;
+document.documentElement.classList.toggle('rabbit-only',window.DD_IS_TESTING_PREVIEW);
+document.documentElement.classList.toggle('stock-spotlights-hidden',window.DD_STOCK_SPOTLIGHTS_HIDDEN);
 </script>
 <title>Daily Dividend</title>
 <script defer src="/js/consent.js" data-posthog-key="phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ" data-posthog-host="https://eu.i.posthog.com"></script>
@@ -1722,6 +1723,8 @@ html.rabbit-only #dtShell .rbh-th{width:74px;height:74px;border-radius:19px}
 </style>
 <style>
 /* The Rabbit Holes redesign is isolated under /testing123. */
+html.stock-spotlights-hidden [data-tab="today"],
+html.stock-spotlights-hidden .tour-replay-btn{display:none!important}
 html.rabbit-only .bottom-nav,
 html.rabbit-only #libModes,
 html.rabbit-only .hint{display:none!important}
@@ -1834,9 +1837,10 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
 <script>
 const IS_DESKTOP = window.matchMedia('(min-width:900px)').matches;
 const IS_TESTING_PREVIEW = Boolean(window.DD_IS_TESTING_PREVIEW);
-// Stock Spotlight remains in this file for a future return, but the live
-// experience is intentionally Rabbit Holes only for now.
-const RABBIT_ONLY = true;
+const RABBIT_ONLY = IS_TESTING_PREVIEW;
+// Company stories remain in the code for a future return. This flag hides
+// only their entry points while preserving navigation, onboarding and account areas.
+const STOCK_SPOTLIGHTS_HIDDEN = Boolean(window.DD_STOCK_SPOTLIGHTS_HIDDEN);
 const APP_ROOT = IS_TESTING_PREVIEW ? '/testing123' : '/';
 const AUTH_ROOT = IS_TESTING_PREVIEW ? '/testing123' : '';
 /* COMPANY DATA */
@@ -2875,7 +2879,7 @@ function setAppUrl(path,replace=false){
 }
 function routeFromLocation(){
  const m=location.pathname.match(/^\/(?:testing123\/)?(companies|rabbit-holes)\/([^/]+)\/?$/);
- if(!m||(RABBIT_ONLY&&m[1]==='companies'))return null;
+ if(!m||((RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN)&&m[1]==='companies'))return null;
  return {kind:m[1],slug:decodeURIComponent(m[2])};
 }
 function applyRabbitOnlyShell(){
@@ -2886,6 +2890,7 @@ function applyRabbitOnlyShell(){
 }
 function goTo(n,preserveUrl=false){
  if(RABBIT_ONLY)n='library';
+ else if(STOCK_SPOTLIGHTS_HIDDEN&&(n==='today'||n==='stack'))n='library';
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
  document.getElementById('screen-'+n).classList.add('active');
  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
@@ -2959,6 +2964,7 @@ ${snips.map(s=>`
  twparse(document.getElementById('todayScroll'));
 }
 async function openStack(slug,source='today',routeMode='push'){
+ if(STOCK_SPOTLIGHTS_HIDDEN){goTo('library');return;}
  if(!CO[slug]||CO[slug].disabled){slug=curCo;}
  trackPostHogEvent('company_opened',{company_id:slug,source});
  trackMetaViewContent(slug,source);
@@ -3505,13 +3511,13 @@ function dbCompanyCard(c){
 /* LIBRARY MODE — 'stocks' (company decks) or 'holes' (rabbit holes).
    Shared by both shells; the markup below is identical in each and only
    differs by CSS scope, so it is built once here. */
-let libMode=RABBIT_ONLY?'holes':'stocks';
+let libMode=(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN)?'holes':'stocks';
 let libRhCat='';
 function renderLibActive(){
  if(IS_DESKTOP&&typeof dtRenderLib==='function')dtRenderLib();else renderLib();
 }
 function setLibMode(m){
- if(RABBIT_ONLY)m='holes';
+ if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN)m='holes';
  if(libMode===m)return;
  libMode=m;libRhCat='';
  trackPostHogEvent('library_mode_changed',{mode:m});
@@ -3531,7 +3537,7 @@ function rhDate(d){
  return isNaN(t)?'':new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric'});
 }
 function libModesHtml(){
- if(RABBIT_ONLY)return '';
+ if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN)return '';
  const n=RH.length;
  return `<div class="lib-modes">
  <button class="lib-mode${libMode==='stocks'?' active':''}" onclick="setLibMode('stocks')"><span class="lib-mode-e">📈</span>Stock Spotlight</button>
@@ -3696,7 +3702,7 @@ function onSearch(){
 
 /* DB COMPANY OVERLAY */
 function openDbCompany(companyId,routeMode='push'){
- if(RABBIT_ONLY){goTo('library');return;}
+ if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){goTo('library');return;}
  const co=dbCos.find(c=>c.companyId===companyId);
  if(!co)return;
  currentDbCo=companyId;
@@ -4008,7 +4014,7 @@ function tourEnd(){
   else goTo('today');
 }
 function startTour(){
-   if(RABBIT_ONLY)return;
+   if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN)return;
    if(document.getElementById('tourOverlay'))return;
   tourIdx=0;
   if(libMode!=='stocks')setLibMode('stocks');
@@ -4040,8 +4046,8 @@ function openCurrentRoute(routeMode='replace'){
  if(dbCos.some(c=>c.companyId===route.slug)){openDbCompany(route.slug,routeMode);return true;}
  return false;
 }
-function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else if(RABBIT_ONLY){renderLib();}else{renderToday();}openCurrentRoute('replace');if(!RABBIT_ONLY&&localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
-function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');applyRabbitOnlyShell();if(IS_DESKTOP){_runDesktopInit();}else if(RABBIT_ONLY){goTo('library',true);}else{renderToday();}_secondary();}
+function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){renderLib();}else{renderToday();}openCurrentRoute('replace');if(!RABBIT_ONLY&&!STOCK_SPOTLIGHTS_HIDDEN&&localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');applyRabbitOnlyShell();if(IS_DESKTOP){_runDesktopInit();}else if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){goTo('library',true);}else{renderToday();}_secondary();}
 function _fullAuth(){ensureSession().then(_boot).catch(error=>{if(/active membership/i.test(error&&error.message||''))return;_releaseGate();_clearStoredSession();window.location.replace(`${AUTH_ROOT}/onboarding`);});}
 window.addEventListener('error',_releaseGate);
 window.addEventListener('unhandledrejection',_releaseGate);
@@ -4067,6 +4073,7 @@ let dtCardIdx=0;
 
 function dtGoTo(tab){
   if(RABBIT_ONLY)tab='library';
+  else if(STOCK_SPOTLIGHTS_HIDDEN&&(tab==='today'||tab==='stack'))tab='library';
   document.querySelectorAll('#dtShell .screen').forEach(s=>s.classList.remove('active'));
   const s=document.getElementById('dt-screen-'+tab);if(s)s.classList.add('active');
   document.querySelectorAll('.sb-item,.dt-nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
@@ -4161,6 +4168,7 @@ function dtRenderToday(){
 }
 
 async function dtOpenStack(slug,source='today',routeMode='push'){
+  if(STOCK_SPOTLIGHTS_HIDDEN){dtGoTo('library');return;}
   if(!CO[slug]||CO[slug].disabled){slug=curCo;}
   trackMetaViewContent(slug,source);
   curCo=slug;dtCardIdx=0;setTheme(slug);
@@ -4699,7 +4707,7 @@ window.openStack=function(slug,source='today',routeMode='push'){
 /* Desktop init */
 function dtInit(){
   applyRabbitOnlyShell();
-  if(RABBIT_ONLY){dtGoTo('library');return;}
+  if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){dtGoTo('library');return;}
   dtBuildTicker();
   dtRenderToday();
   /* populate sidebar soon list */
