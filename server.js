@@ -539,6 +539,11 @@ function makeUser(userId = crypto.randomUUID()) {
     subscriptionCancelAtPeriodEnd: false,
     subscriptionCurrentPeriodEnd: null,
     subscriptionUpdatedAt: null,
+    stripeLastCheckoutSessionId: '',
+    stripeLastPaymentStatus: '',
+    stripeLastPaymentAmount: null,
+    stripeLastPaymentCurrency: '',
+    stripeLastPaymentAt: null,
     personalityScores: { contrarian: 0, operator: 0, patternSpotter: 0, momentumReader: 0 },
     readingPersonality: null
   };
@@ -926,6 +931,15 @@ function applyStripeSubscription(db, subscription, fallbackUserId = '') {
   return user;
 }
 
+function applyStripeCheckout(user, session) {
+  if (!user || !session) return;
+  user.stripeLastCheckoutSessionId = session.id || user.stripeLastCheckoutSessionId || '';
+  user.stripeLastPaymentStatus = normalizeLookup(session.payment_status) || user.stripeLastPaymentStatus || '';
+  user.stripeLastPaymentAmount = Number.isFinite(Number(session.amount_total)) ? Number(session.amount_total) : user.stripeLastPaymentAmount;
+  user.stripeLastPaymentCurrency = normalizeLookup(session.currency) || user.stripeLastPaymentCurrency || '';
+  user.stripeLastPaymentAt = session.created ? new Date(Number(session.created) * 1000).toISOString() : new Date().toISOString();
+}
+
 async function processStripeEvent(event) {
   if (!event || !event.id || !event.type) throw new Error('Stripe event is invalid.');
   const db = await readDb();
@@ -939,7 +953,10 @@ async function processStripeEvent(event) {
     if (subscriptionId) {
       const subscription = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(subscriptionId)}`);
       const user = applyStripeSubscription(db, subscription, session.client_reference_id || normalize(session.metadata && session.metadata.dd_user_id));
-      if (user) user.stripeCustomerId = stripeObjectId(session.customer) || user.stripeCustomerId;
+      if (user) {
+        user.stripeCustomerId = stripeObjectId(session.customer) || user.stripeCustomerId;
+        applyStripeCheckout(user, session);
+      }
     }
   } else if (event.type === 'customer.subscription.created' || event.type === 'customer.subscription.updated') {
     const snapshot = event.data && event.data.object;
@@ -1271,6 +1288,17 @@ function adminSummary(db) {
     authProviders: Array.isArray(user.authProviders) ? user.authProviders : [],
     lastSignInAt: user.lastSignInAt || null,
     signInCount: Number(user.signInCount) || 0,
+    subscriptionActive: ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus),
+    subscriptionStatus: user.subscriptionStatus || 'inactive',
+    subscriptionCancelAtPeriodEnd: Boolean(user.subscriptionCancelAtPeriodEnd),
+    subscriptionCurrentPeriodEnd: user.subscriptionCurrentPeriodEnd || null,
+    subscriptionUpdatedAt: user.subscriptionUpdatedAt || null,
+    stripeCustomerId: user.stripeCustomerId || '',
+    stripeSubscriptionId: user.stripeSubscriptionId || '',
+    stripeLastPaymentStatus: user.stripeLastPaymentStatus || '',
+    stripeLastPaymentAmount: user.stripeLastPaymentAmount,
+    stripeLastPaymentCurrency: user.stripeLastPaymentCurrency || '',
+    stripeLastPaymentAt: user.stripeLastPaymentAt || null,
     onboardingCompleted: Boolean(user.onboardingCompleted),
     status: userStatus(user),
     country: user.country || '',
@@ -1296,6 +1324,7 @@ function adminSummary(db) {
       userCount: users.length,
       googleUserCount: users.filter(user => normalizeLookup(user.authProvider) === 'google').length,
       signupCompleteCount: users.filter(user => user.onboardingCompleted).length,
+      proUserCount: users.filter(user => ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)).length,
       activeStreakCount: users.filter(user => (user.streak || 0) > 0).length,
       totalReads: users.reduce((sum, user) => sum + (Array.isArray(user.readHistory) ? user.readHistory.length : 0), 0),
       savedCompaniesCount: users.reduce((sum, user) => sum + (Array.isArray(user.savedCompanies) ? user.savedCompanies.length : 0), 0),
@@ -1501,6 +1530,7 @@ app.get('/api/billing/status', requireUser, async (req, res, next) => {
           const subscription = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(subscriptionId)}`);
           applyStripeSubscription(db, subscription, req.authUser.id);
           user.stripeCustomerId = stripeObjectId(session.customer) || user.stripeCustomerId;
+          applyStripeCheckout(user, session);
         }
       }
       await writeDb(db);
@@ -1614,7 +1644,7 @@ app.post('/api/dd', async (req, res, next) => {
   }
 });
 
-app.get('/api/user/:userId', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.get('/api/user/:userId', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = requireString(req.params.userId, 'userId', res);
@@ -1629,7 +1659,7 @@ app.get('/api/user/:userId', requireUser, requireActiveSubscription, async (req,
   }
 });
 
-app.post('/api/preferences', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/preferences', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const user = getUser(db, req.authUser.id);
@@ -1646,7 +1676,7 @@ app.post('/api/preferences', requireUser, requireActiveSubscription, async (req,
   }
 });
 
-app.post('/api/read', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/read', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1703,7 +1733,7 @@ app.post('/api/read', requireUser, requireActiveSubscription, async (req, res, n
   }
 });
 
-app.post('/api/save', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/save', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -1725,7 +1755,7 @@ app.post('/api/save', requireUser, requireActiveSubscription, async (req, res, n
   }
 });
 
-app.post('/api/vote', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/vote', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -2041,7 +2071,17 @@ app.get('/api/admin/user/:userId', requireAdmin, async (req, res, next) => {
     const userReads = Array.isArray(user.readHistory) ? user.readHistory : [];
 
     res.json({
-      user: profile(user),
+      user: {
+        ...profile(user),
+        stripeCustomerId: user.stripeCustomerId || '',
+        stripeSubscriptionId: user.stripeSubscriptionId || '',
+        subscriptionUpdatedAt: user.subscriptionUpdatedAt || null,
+        stripeLastCheckoutSessionId: user.stripeLastCheckoutSessionId || '',
+        stripeLastPaymentStatus: user.stripeLastPaymentStatus || '',
+        stripeLastPaymentAmount: user.stripeLastPaymentAmount,
+        stripeLastPaymentCurrency: user.stripeLastPaymentCurrency || '',
+        stripeLastPaymentAt: user.stripeLastPaymentAt || null
+      },
       votes: userVotes,
       saves: userSaves,
       reads: userReads,
@@ -2135,7 +2175,7 @@ app.delete('/api/admin/user/:userId/votes/:companyId', requireAdmin, async (req,
   }
 });
 
-app.post('/api/deep-dive', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/deep-dive', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -2153,7 +2193,7 @@ app.post('/api/deep-dive', requireUser, requireActiveSubscription, async (req, r
   } catch (err) { next(err); }
 });
 
-app.post('/api/story-complete', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/story-complete', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -2178,7 +2218,7 @@ app.post('/api/story-complete', requireUser, requireActiveSubscription, async (r
   } catch (err) { next(err); }
 });
 
-app.post('/api/search-used', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/search-used', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -2194,7 +2234,7 @@ app.post('/api/search-used', requireUser, requireActiveSubscription, async (req,
   } catch (err) { next(err); }
 });
 
-app.post('/api/next-company-click', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.post('/api/next-company-click', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const userId = req.authUser.id;
@@ -2210,7 +2250,7 @@ app.post('/api/next-company-click', requireUser, requireActiveSubscription, asyn
   } catch (err) { next(err); }
 });
 
-app.get('/api/personality/:userId', requireUser, requireActiveSubscription, async (req, res, next) => {
+app.get('/api/personality/:userId', requireUser, async (req, res, next) => {
   try {
     const db = await readDb();
     const targetId = String(req.params.userId || '').trim();

@@ -334,6 +334,7 @@
             <tr>
               <th>User</th>
               <th>Email</th>
+              <th>Membership</th>
               <th>Activity</th>
               <th>Profile</th>
               <th>Preferences</th>
@@ -596,6 +597,12 @@
             <div class="detail-row"><strong>Last sign-in</strong><span id="ovLastSignIn">-</span></div>
             <div class="detail-row"><strong>Sign-in count</strong><span id="ovSignInCount">0</span></div>
             <div class="detail-row"><strong>Status</strong><span id="ovStatus">-</span></div>
+            <div class="detail-row"><strong>Membership</strong><span id="ovMembership">-</span></div>
+            <div class="detail-row"><strong>Billing period ends</strong><span id="ovBillingEnd">-</span></div>
+            <div class="detail-row"><strong>Last payment</strong><span id="ovLastPayment">-</span></div>
+            <div class="detail-row"><strong>Payment status</strong><span id="ovPaymentStatus">-</span></div>
+            <div class="detail-row"><strong>Stripe customer</strong><span class="mono" id="ovStripeCustomer">-</span></div>
+            <div class="detail-row"><strong>Stripe subscription</strong><span class="mono" id="ovStripeSubscription">-</span></div>
             <div class="detail-row"><strong>How heard</strong><span id="ovHeard">-</span></div>
             <div class="detail-row"><strong>Joined</strong><span id="ovJoined">-</span></div>
             <div class="detail-row"><strong>Last active</strong><span id="ovLastActive">-</span></div>
@@ -936,6 +943,18 @@
               </div>
             </td>
             <td>
+              <div class="cell-stack">
+                <div>${u.subscriptionActive
+                  ? '<span class="badge badge-green">PRO</span>'
+                  : '<span class="badge badge-gray">FREE</span>'}</div>
+                <div class="cell-sub">${escapeHtml(u.subscriptionStatus || 'inactive')}</div>
+                ${u.stripeLastPaymentAt
+                  ? `<div class="cell-sub">${escapeHtml(formatMoney(u.stripeLastPaymentAmount, u.stripeLastPaymentCurrency))} · ${escapeHtml(u.stripeLastPaymentStatus || 'checkout')}</div>`
+                  : ''}
+                ${u.subscriptionCancelAtPeriodEnd ? '<div class="cell-sub">Cancels at period end</div>' : ''}
+              </div>
+            </td>
+            <td>
               <div class="act-row">
                 <div class="act-item">
                   <span class="act-n ${(u.streak || 0) > 0 ? 'streak-highlight' : ''}">${u.streak || 0}</span>
@@ -983,7 +1002,7 @@
             </td>
           </tr>
         `).join('')
-        : `<tr><td colspan="7"><div class="empty">No users match your search or filters.</div></td></tr>`;
+        : `<tr><td colspan="8"><div class="empty">No users match your search or filters.</div></td></tr>`;
     }
 
     // -- Votes table with expandable voter rows -------------------------
@@ -1136,6 +1155,16 @@
       $('ovSignInCount').textContent = user.signInCount || 0;
       const st = userStatusLabel(user);
       $('ovStatus').innerHTML = st.html;
+      $('ovMembership').innerHTML = user.subscriptionActive
+        ? '<span class="badge badge-green">PRO</span>'
+        : `<span class="badge badge-gray">${escapeHtml(user.subscriptionStatus || 'FREE')}</span>`;
+      $('ovBillingEnd').textContent = user.subscriptionCurrentPeriodEnd ? formatDate(user.subscriptionCurrentPeriodEnd) : '-';
+      $('ovLastPayment').textContent = user.stripeLastPaymentAt
+        ? `${formatMoney(user.stripeLastPaymentAmount, user.stripeLastPaymentCurrency)} on ${formatDate(user.stripeLastPaymentAt)}`
+        : '-';
+      $('ovPaymentStatus').textContent = user.stripeLastPaymentStatus || '-';
+      $('ovStripeCustomer').textContent = user.stripeCustomerId || '-';
+      $('ovStripeSubscription').textContent = user.stripeSubscriptionId || '-';
       $('ovHeard').textContent     = user.howHeard || '-';
       $('ovJoined').textContent    = formatDate(user.createdAt);
       $('ovLastActive').textContent = user.lastReadDate ? formatDate(user.lastReadDate) : 'Never';
@@ -1252,6 +1281,13 @@
       const d = new Date(value);
       if (Number.isNaN(d.getTime())) return String(value);
       return d.toLocaleString();
+    }
+
+    function formatMoney(amount, currency) {
+      if (amount == null || amount === '') return '-';
+      const code = String(currency || 'GBP').toUpperCase();
+      try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: code }).format(Number(amount) / 100); }
+      catch (error) { return `${(Number(amount) / 100).toFixed(2)} ${code}`; }
     }
 
     function formatDateShort(value) {

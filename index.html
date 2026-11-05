@@ -564,7 +564,8 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 
 .auth-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
 .auth-k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.auth-n{font-family:var(--serif);font-size:20px;line-height:1.15}
+.auth-n{font-family:var(--serif);font-size:20px;line-height:1.15;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pro-badge{display:inline-flex;align-items:center;justify-content:center;padding:3px 7px;border-radius:999px;background:#d7f4df;color:#126b36;border:1px solid #a9ddb8;font-family:var(--mono);font-size:8px;font-weight:800;letter-spacing:.14em;line-height:1;text-transform:uppercase}
 .auth-s{font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
 .auth-actions{display:flex;gap:8px;flex-shrink:0}
 .auth-btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:100px;padding:10px 13px;font-family:var(--sans);font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;background:var(--ink);color:var(--cream)}
@@ -2856,7 +2857,8 @@ function authPanel(){
  const legalLinks=`<nav class="account-legal" aria-label="Account and legal"><a href="/subscribe">Membership &amp; billing</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><button type="button" data-cookie-settings>Cookie settings</button></nav>`;
  if(isRegisteredUser()){
  const _ct=profileState.country&&profileState.country.toLowerCase()!=='unknown'?profileState.country:'';
- return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
+ const proBadge=profileState.subscriptionActive?'<span class="pro-badge">Pro</span>':'';
+ return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
  }
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
 }
