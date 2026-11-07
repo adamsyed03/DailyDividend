@@ -47,9 +47,10 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .screen.active{display:flex}
 .statusbar{height:max(44px,env(safe-area-inset-top));flex-shrink:0}
 .bottom-nav{position:absolute;bottom:0;left:0;right:0;height:calc(78px + env(safe-area-inset-bottom));background:rgba(245,241,232,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;padding-bottom:env(safe-area-inset-bottom);z-index:100}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none}
 .nav-item.active{color:var(--ink)}
 .nav-item svg{width:22px;height:22px}
+.nav-item.game-link{color:var(--brand)}
 
 /* TODAY SCREEN */
 .today-scroll{flex:1;overflow-y:auto;padding:8px 24px calc(100px + env(safe-area-inset-bottom))}
@@ -80,6 +81,8 @@ body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden
 .hero-sc.down{background:rgba(178,58,46,0.25);color:#FCC9C2}
 .hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(245,241,232,0.15);font-family:var(--mono);font-size:11px;color:rgba(245,241,232,0.45)}
 .hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.hero-cta-row{display:flex;align-items:center;gap:7px}
+.hero-game-start{display:inline-flex;align-items:center;border:1px solid rgba(245,241,232,.35);border-radius:100px;padding:8px 12px;color:var(--cream);text-decoration:none;font-family:var(--sans);font-size:12px;font-weight:700}
 .sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
 .sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
 .rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
@@ -1173,7 +1176,7 @@ body{background:var(--ink);overflow:hidden}
 .dt-nav-word{font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
 .dt-nav-sub{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:1px}
 .dt-nav-center{display:flex;align-items:center;gap:4px;padding:3px;background:rgba(245,241,232,.1);border:1px solid rgba(245,241,232,.12);border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:auto}
-.dt-nav-item{border:0;background:transparent;color:rgba(245,241,232,.48);height:30px;padding:0 13px;border-radius:999px;display:flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:-.01em;cursor:pointer;transition:background .16s,color .16s,box-shadow .16s,transform .16s}
+.dt-nav-item{border:0;background:transparent;color:rgba(245,241,232,.48);height:30px;padding:0 13px;border-radius:999px;display:flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:-.01em;cursor:pointer;text-decoration:none;transition:background .16s,color .16s,box-shadow .16s,transform .16s}
 .dt-nav-item svg{width:16px;height:16px;stroke:currentColor}
 .dt-nav-item:hover{color:var(--cream);transform:translateY(-1px)}
 .dt-nav-item.active{background:var(--cream);color:var(--brand);box-shadow:0 8px 22px rgba(0,0,0,.18)}
@@ -1199,7 +1202,7 @@ body{background:var(--ink);overflow:hidden}
 .sb-wordmark{font-family:var(--serif);font-weight:500;font-size:16px;color:rgba(255,255,255,0.85);letter-spacing:-0.02em;line-height:1.1}
 .sb-tagline{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;color:rgba(255,255,255,0.28);text-transform:uppercase;margin-top:1px}
 .sb-nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1}
-.sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,0.4);font-family:var(--sans);font-size:14px;font-weight:500;transition:all 0.18s;border:0;background:none;width:100%;text-align:left}
+.sb-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,0.4);font-family:var(--sans);font-size:14px;font-weight:500;transition:all 0.18s;border:0;background:none;width:100%;text-align:left;text-decoration:none}
 .sb-item svg{width:18px;height:18px;flex-shrink:0}
 .sb-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.75)}
 .sb-item.active{background:rgba(26,61,43,0.35);color:#B5E3C8}
@@ -1231,6 +1234,8 @@ body{background:var(--ink);overflow:hidden}
 .today-hero-bl{font-family:var(--sans);font-size:15px;line-height:1.55;color:rgba(245,241,232,0.6);max-width:520px;margin-bottom:28px}
 .today-hero-cta{background:var(--cream);color:var(--brand);border:0;border-radius:100px;padding:12px 24px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:-0.01em;transition:opacity 0.18s}
 .today-hero-cta:hover{opacity:0.9}
+.today-hero-actions{display:flex;align-items:center;gap:9px}
+.today-game-cta{background:transparent;color:var(--cream);border:1px solid rgba(245,241,232,.35);text-decoration:none}
 .today-hero-right{flex-shrink:0;text-align:right;padding-top:4px}
 .today-stock-price{font-family:var(--mono);font-size:32px;font-weight:600;color:var(--cream);letter-spacing:-0.02em;line-height:1;margin-bottom:6px}
 .today-stock-ch{font-family:var(--mono);font-size:13px;font-weight:600;padding:4px 10px;border-radius:7px;display:inline-block;margin-bottom:18px}
@@ -1765,6 +1770,7 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
  <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
  <button class="nav-item" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
  <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+ <a class="nav-item game-link" href="/game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 10v4M6 12h4"/><circle cx="16" cy="11" r=".8" fill="currentColor"/><circle cx="18" cy="14" r=".8" fill="currentColor"/></svg>Game</a>
  </nav>
 </section>
 
@@ -1811,6 +1817,7 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
  <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
  <button class="nav-item active" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
  <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+ <a class="nav-item game-link" href="/game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 10v4M6 12h4"/><circle cx="16" cy="11" r=".8" fill="currentColor"/><circle cx="18" cy="14" r=".8" fill="currentColor"/></svg>Game</a>
  </nav>
 </section>
 
@@ -1822,6 +1829,7 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
  <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
  <button class="nav-item" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
  <button class="nav-item active" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+ <a class="nav-item game-link" href="/game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 10v4M6 12h4"/><circle cx="16" cy="11" r=".8" fill="currentColor"/><circle cx="18" cy="14" r=".8" fill="currentColor"/></svg>Game</a>
  </nav>
 </section>
 
@@ -2870,18 +2878,19 @@ function callPnlTotals(){let sum=0,counted=0,wins=0,losses=0;calls.forEach(c=>{c
 function pnlSummaryCard(){const t=callPnlTotals();if(!t)return'';const cls=t.avg>0.05?'up':t.avg<-0.05?'down':'flat';const sign=t.avg>=0?'+':'';const total=t.total||calls.length;return`<div class="sh pnl-sum" id="tourPnlEl"><div class="sh-h"><div><div class="sh-l">Total P&amp;L on your calls</div><div class="sh-n pnl-n ${cls}">${sign}${t.avg.toFixed(1)}<span class="u">%</span></div></div><div class="pnl-wl"><span class="w">${t.wins} winning</span><span class="l">${t.losses} losing</span></div></div><div class="sh-f">Average move since the day of each priced call, counted against your call type. <strong>${total} call${total!==1?'s':''} made. ${t.counted} with P&amp;L.</strong></div></div>`;}
 function isRegisteredUser(){return Boolean(profileState.firstName||profileState.lastName||profileState.phoneNumber||profileState.profession);}
 function displayUserName(){return [profileState.firstName,profileState.lastName].filter(Boolean).join(' ')||'Daily Dividend reader';}
+function hasProAccess(user=profileState){return Boolean(user&&user.subscriptionActive)||['active','trialing'].includes(String(user&&user.subscriptionStatus||'').toLowerCase());}
 function authPanel(){
  const legalLinks=`<nav class="account-legal" aria-label="Account and legal"><a href="/subscribe">Membership &amp; billing</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><button type="button" data-cookie-settings>Cookie settings</button></nav>`;
  if(isRegisteredUser()){
  const _ct=profileState.country&&profileState.country.toLowerCase()!=='unknown'?profileState.country:'';
- const proBadge=profileState.subscriptionActive?'<span class="pro-badge">Pro</span>':'';
+ const proBadge=hasProAccess()?'<span class="pro-badge">Pro</span>':'';
  return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
  }
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
 }
 async function api(path,options={}){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),options.timeout||12000);try{const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options,signal:options.signal||controller.signal});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}catch(error){if(error&&error.name==='AbortError')throw new Error('Daily Dividend is taking too long to wake up. Please try again.');throw error;}finally{clearTimeout(timeout);}}
 async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
-function requireArticleSubscription(){if(profileState.subscriptionActive)return true;window.location.href='/subscribe';return false;}
+function requireArticleSubscription(){if(hasProAccess())return true;window.location.href='/subscribe';return false;}
 async function loadProfile(){if(!userId)return;profileState=await api(`/api/user/${encodeURIComponent(userId)}`);syncSavedFromProfile();await loadVoteAggregates();syncCallsFromProfile();identifyPostHog();}
 async function loadVoteAggregates(){
  try{const data=await api('/api/votes');Object.assign(voteAggregates,data.votes||{});}
@@ -2978,7 +2987,7 @@ function renderToday(){
  <span class="hero-sp">${c.sp}</span>
  <span class="hero-sc ${c.scDir}">${c.sc}${c.sc&&c.sc.includes('%')?' ytd':''}</span>
  </div>
- <div class="hero-meta"><span>11 cards - ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack('${key}')">Start &rarr;</button></div>
+ <div class="hero-meta"><span>11 cards - ~2 min</span><div class="hero-cta-row"><a class="hero-game-start" href="/game" onclick="event.stopPropagation()">Play game</a><button class="hero-start" onclick="event.stopPropagation();openStack('${key}')">Start &rarr;</button></div></div>
 </div>
 <div class="sect-t">What you will learn</div>
 <div class="sect-s">${learnSub(c)}</div>
@@ -3644,10 +3653,10 @@ function openRabbitHole(k,routeMode='push'){
 function syncRabbitHoleMembership(){
  const frame=document.getElementById('coOvFrame');
  if(!frame||!frame.contentWindow)return;
- frame.contentWindow.postMessage({type:'dd:membership',subscriptionActive:Boolean(profileState.subscriptionActive),parentManaged:true},location.origin);
+ frame.contentWindow.postMessage({type:'dd:membership',subscriptionActive:hasProAccess(),parentManaged:true},location.origin);
 }
 function showRabbitHolePaywall(){
- if(profileState.subscriptionActive)return;
+ if(hasProAccess())return;
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.add('show');
 }
 function closeRabbitHolePaywall(){
@@ -4214,7 +4223,7 @@ function dtRenderToday(){
         <div class="today-hero-co">${c.sec||''}${c.fl?' · '+c.fl:''}</div>
         <div class="today-hero-h">${c.cards[0].hl}</div>
         <div class="today-hero-bl">${c.bl||''}</div>
-        <button class="today-hero-cta" onclick="openStack('${key}')">Start reading →</button>
+        <div class="today-hero-actions"><button class="today-hero-cta" onclick="openStack('${key}')">Start reading →</button><a class="today-hero-cta today-game-cta" href="/game" onclick="event.stopPropagation()">Play game →</a></div>
       </div>
       <div class="today-hero-right">
         <div class="today-stock-price">${c.sp||'—'}</div>
@@ -4834,6 +4843,9 @@ Object.assign(window,{
     <button class="dt-nav-item" data-tab="you" onclick="dtGoTo('you')">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You
     </button>
+    <a class="dt-nav-item" href="/game">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 10v4M6 12h4"/><circle cx="16" cy="11" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="14" r=".8" fill="currentColor" stroke="none"/></svg>Game
+    </a>
   </div>
   <div class="dt-nav-right">
     <div class="dt-nav-streak"><span class="dt-nav-live"></span><span><span id="dtNavStreakNum">0</span> day streak</span></div>
@@ -4858,6 +4870,9 @@ Object.assign(window,{
       <button class="sb-item" data-tab="you" onclick="dtGoTo('you')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You
       </button>
+      <a class="sb-item" href="/game">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M8 10v4M6 12h4"/><circle cx="16" cy="11" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="14" r=".8" fill="currentColor" stroke="none"/></svg>Game
+      </a>
     </nav>
     <div class="sb-divider"></div>
     <div class="sb-coming">Coming soon</div>

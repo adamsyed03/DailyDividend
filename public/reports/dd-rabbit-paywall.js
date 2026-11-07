@@ -53,9 +53,17 @@
     try{window.scrollTo({top:0,behavior:'auto'});}catch(error){}
   }
 
+  function secondPageIsVisible(){
+    var secondPage=pages[1];
+    var rect=secondPage&&secondPage.getBoundingClientRect?secondPage.getBoundingClientRect():null;
+    var viewportHeight=window.innerHeight||document.documentElement.clientHeight||1;
+    var visibleHeight=rect?Math.max(0,Math.min(rect.bottom,viewportHeight)-Math.max(rect.top,0)):0;
+    var requiredHeight=Math.min((rect&&rect.height)||viewportHeight,viewportHeight)*0.2;
+    return Boolean(rect&&visibleHeight>=requiredHeight);
+  }
+
   function showPaywall(){
-    if(!statusReady||subscriptionActive||!attemptedBeyondPreview)return;
-    returnToPreview();
+    if(!statusReady||subscriptionActive||!attemptedBeyondPreview||!secondPageIsVisible())return;
     if(parentManaged&&window.parent!==window){
       window.parent.postMessage({type:'dd:paywall-request'},window.location.origin);
       return;
@@ -65,11 +73,7 @@
 
   function attemptToContinue(event){
     attemptedBeyondPreview=true;
-    if(statusReady&&!subscriptionActive&&event&&event.cancelable){
-      event.preventDefault();
-      if(event.stopImmediatePropagation)event.stopImmediatePropagation();
-    }
-    showPaywall();
+    setTimeout(checkScrollPosition,0);
   }
 
   wall.querySelector('.dd-pro-button').addEventListener('click',function(){
@@ -101,7 +105,7 @@
 
   deck.addEventListener('wheel',function(event){
     if(event.deltaY>0)attemptToContinue(event);
-  },{passive:false});
+  },{passive:true});
 
   deck.addEventListener('touchstart',function(event){
     touchStartY=event.touches&&event.touches[0]?event.touches[0].clientY:null;
@@ -109,7 +113,7 @@
   deck.addEventListener('touchmove',function(event){
     var current=event.touches&&event.touches[0]?event.touches[0].clientY:null;
     if(touchStartY!==null&&current!==null&&touchStartY-current>12)attemptToContinue(event);
-  },{passive:false});
+  },{passive:true});
 
   document.addEventListener('keydown',function(event){
     if(event.metaKey||event.ctrlKey||event.altKey)return;
@@ -123,7 +127,7 @@
 
   function checkScrollPosition(){
     if(subscriptionActive)return;
-    if(deck.scrollTop>12||window.scrollY>12){
+    if(secondPageIsVisible()){
       attemptedBeyondPreview=true;
       showPaywall();
     }

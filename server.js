@@ -6,6 +6,7 @@ const express = require('express');
 const compression = require('compression');
 const { createClient } = require('@supabase/supabase-js');
 const { createInstagramBotController } = require('./instagram-dd-bot/control');
+const { createTimeMachineRouter } = require('./indian-time-machine/router');
 
 loadEnv();
 
@@ -87,6 +88,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
   }
 });
 app.use(express.json({ limit: '8mb' }));
+app.use('/api/time-machine', createTimeMachineRouter({ rootDir: __dirname }));
 
 app.get('/healthz', (req, res) => {
   res.status(200).json({ ok: true });
@@ -2316,6 +2318,25 @@ app.post('/api/admin/instagram-bot/stop', requireAdmin, requireLocalDevice, asyn
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.use('/game', express.static(path.join(__dirname, 'public', 'time-machine'), {
+  index: false,
+  maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0
+}));
+
+app.get(['/game', '/game/'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'time-machine', 'index.html'));
+});
+
+app.get(['/game/admin', '/game/admin/'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(__dirname, 'public', 'time-machine', 'admin.html'));
+});
+
+app.get(['/time-machine', '/time-machine/', '/time-machine/admin', '/time-machine/admin/'], (req, res) => {
+  res.redirect(301, req.path.includes('/admin') ? '/game/admin' : '/game');
 });
 
 app.get(['/terms', '/terms.html'], (req, res) => {

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171814">
+  <title>Data Health · Indian Time Machine</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23181816'/%3E%3Ctext x='32' y='38' text-anchor='middle' font-family='monospace' font-size='18' font-weight='700' fill='%23f2efe7'%3ETM%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/game/styles.css">
+  <style>
+    body { background: #171814; color: #f4f0e6; }
+    .health-wrap { width: min(1050px, calc(100% - 36px)); margin: 0 auto; padding: 70px 0 110px; }
+    .health-back { color: #aaa89f; font-size: 12px; text-decoration: none; }
+    .health-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 30px; padding: 55px 0 35px; border-bottom: 1px solid rgba(255,255,255,.15); }
+    .health-head h1 { margin: 0; font: 400 clamp(54px, 8vw, 96px)/.9 Georgia, serif; letter-spacing: -.06em; }
+    .health-status { border: 1px solid rgba(255,255,255,.2); border-radius: 80px; padding: 12px 17px; font: 800 10px ui-monospace, monospace; }
+    .health-status.ready { color: #d7ff52; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); margin: 34px 0; border: 1px solid rgba(255,255,255,.15); }
+    .metric-grid article { padding: 22px; border-right: 1px solid rgba(255,255,255,.15); }
+    .metric-grid article:last-child { border: 0; }
+    .metric-grid strong, .metric-grid span { display: block; }
+    .metric-grid strong { font: 400 36px Georgia, serif; }
+    .metric-grid span { color: #aaa89f; font: 700 8px ui-monospace, monospace; letter-spacing: .12em; margin-top: 7px; }
+    .health-card { padding: 28px; margin-top: 18px; border: 1px solid rgba(255,255,255,.15); background: #22231f; }
+    .health-card h2 { margin: 0 0 20px; font: 400 28px Georgia, serif; }
+    .source-row { display: grid; grid-template-columns: 1.2fr .8fr 80px 1fr; gap: 16px; padding: 13px 0; border-top: 1px solid rgba(255,255,255,.12); font-size: 11px; }
+    .source-row span { color: #aaa89f; }
+    .warning-list { display: grid; gap: 10px; }
+    .warning { border-left: 3px solid #f36f45; padding: 13px 15px; background: rgba(243,111,69,.08); font-size: 12px; line-height: 1.5; }
+    .ok { border-color: #78c7a3; background: rgba(120,199,163,.08); }
+    code { color: #d7ff52; }
+    @media (max-width: 700px) { .health-head { grid-template-columns: 1fr; }.metric-grid { grid-template-columns: 1fr 1fr; }.metric-grid article { border-bottom: 1px solid rgba(255,255,255,.15); }.source-row { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="health-wrap">
+    <a class="health-back" href="/game">← Back to the game</a>
+    <header class="health-head"><div><p class="eyebrow">IMPORT CONTROL ROOM</p><h1>Data health.</h1></div><span id="health-status" class="health-status">CHECKING</span></header>
+    <section id="metric-grid" class="metric-grid"></section>
+    <section class="health-card"><h2>Scoring prerequisites</h2><div id="warnings" class="warning-list"></div></section>
+    <section class="health-card"><h2>Imported sources</h2><div id="sources"></div></section>
+    <section class="health-card"><h2>Refresh commands</h2><p style="color:#aaa89f;font-size:12px;line-height:1.7">Run <code>npm run time-machine:fx</code>, then <code>npm run time-machine:import</code>, and finish with <code>npm run time-machine:validate</code>. Gameplay never calls a remote market feed.</p></section>
+  </main>
+  <script src="/game/admin.js" defer></script>
+</body>
+</html>

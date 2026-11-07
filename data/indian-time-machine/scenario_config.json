@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "startingCapitalInr": 1000000,
+  "chipCount": 10,
+  "maxChipsPerAsset": 4,
+  "benchmark": {
+    "id": "NIFTY_50",
+    "name": "Nifty 50",
+    "basis": "price index excluding dividends",
+    "startMonth": "2022-06",
+    "endMonth": "2024-12",
+    "startLevel": 15780.25,
+    "endLevel": 23644.80
+  },
+  "assets": [
+    {
+      "id": "RELIANCE.NS",
+      "shortName": "Reliance",
+      "name": "Reliance Industries",
+      "currency": "INR",
+      "color": "#f36f45",
+      "explanation": "A diversified Indian business spanning energy, retail and digital services."
+    },
+    {
+      "id": "HDFCBANK.NS",
+      "shortName": "HDFC Bank",
+      "name": "HDFC Bank",
+      "currency": "INR",
+      "color": "#6aa8ff",
+      "explanation": "One of India's largest private-sector banks, exposed to credit growth and interest rates."
+    },
+    {
+      "id": "AAPL",
+      "shortName": "Apple",
+      "name": "Apple",
+      "currency": "USD",
+      "color": "#b8b6c7",
+      "explanation": "A US technology company. Your result includes both its adjusted share price and USD/INR."
+    },
+    {
+      "id": "GOLD_UNVERIFIED",
+      "shortName": "Gold",
+      "name": "Gold",
+      "currency": "USD",
+      "color": "#e7b94f",
+      "explanation": "A USD-quoted gold benchmark from the supplied screenshots. The exact instrument is unverified."
+    },
+    {
+      "id": "CASH_INR",
+      "shortName": "Cash",
+      "name": "Cash",
+      "currency": "INR",
+      "color": "#78c7a3",
+      "explanation": "Indian rupees whose purchasing power is reduced using the supplied India CPI inflation data."
+    }
+  ],
+  "rounds": [
+    {
+      "id": "2022-h2",
+      "round": 1,
+      "label": "2022 H2",
+      "decisionMonth": "2022-06",
+      "revealMonth": "2022-12",
+      "dateLine": "30 Jun 2022 → 31 Dec 2022",
+      "context": [
+        "Inflation, interest rates and commodity prices were dominating the market conversation.",
+        "The Reserve Bank of India had begun raising policy rates after a long pause.",
+        "Only information already known at this hidden checkpoint belongs in your decision."
+      ],
+      "knownInflationYear": 2021
+    },
+    {
+      "id": "2023-h1",
+      "round": 2,
+      "label": "2023 H1",
+      "decisionMonth": "2022-12",
+      "revealMonth": "2023-06",
+      "dateLine": "31 Dec 2022 → 30 Jun 2023",
+      "context": [
+        "Global growth fears sat beside stubborn inflation.",
+        "Investors were weighing higher interest rates against resilient company earnings.",
+        "After this result, your positions pass through one automatic hold before the next rebalance."
+      ],
+      "knownInflationYear": 2021,
+      "passiveHold": {
+        "label": "Automatic hold",
+        "startMonth": "2023-06",
+        "endMonth": "2023-12",
+        "description": "No new chips and no rebalance. Each position keeps compounding until the next checkpoint."
+      }
+    },
+    {
+      "id": "2024-h1",
+      "round": 3,
+      "label": "2024 H1",
+      "decisionMonth": "2023-12",
+      "revealMonth": "2024-06",
+      "dateLine": "31 Dec 2023 → 30 Jun 2024",
+      "context": [
+        "Markets debated when major central banks might begin cutting rates.",
+        "India's growth outlook and a national election were prominent domestic themes.",
+        "The automatic hold is complete; you may now rebalance the wealth it produced."
+      ],
+      "knownInflationYear": 2022
+    },
+    {
+      "id": "2024-h2",
+      "round": 4,
+      "label": "2024 H2",
+      "decisionMonth": "2024-06",
+      "revealMonth": "2024-12",
+      "dateLine": "30 Jun 2024 → 31 Dec 2024",
+      "context": [
+        "A new Indian government had taken office after a general election.",
+        "Technology enthusiasm and the future path of interest rates remained global market themes.",
+        "This is the final decision in the story."
+      ],
+      "knownInflationYear": 2023
+    }
+  ]
+}

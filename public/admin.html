@@ -275,6 +275,7 @@
       <div class="card"><div class="k">Users</div><div class="v" id="statUsers">0</div></div>
       <div class="card"><div class="k">Google users</div><div class="v" id="statGoogleUsers">0</div></div>
       <div class="card"><div class="k">Full signups</div><div class="v" id="statSignups">0</div></div>
+      <div class="card"><div class="k">Pro users</div><div class="v" id="statProUsers">0</div></div>
       <div class="card"><div class="k">Active streaks</div><div class="v" id="statStreaks">0</div></div>
       <div class="card"><div class="k">Total reads</div><div class="v" id="statReads">0</div></div>
       <div class="card"><div class="k">Saved items</div><div class="v" id="statSaves">0</div></div>
@@ -317,6 +318,8 @@
           <option value="readers">Has reads</option>
           <option value="google">Google sign-in</option>
           <option value="email">Email sign-in</option>
+          <option value="pro">Pro members</option>
+          <option value="free">Free members</option>
         </select>
         <select id="userSort" class="ctrl-select">
           <option value="newest">Newest first</option>
@@ -862,6 +865,11 @@
 
     // -- Search / filter / sort -----------------------------------------
 
+    function isProUser(user) {
+      return Boolean(user && user.subscriptionActive)
+        || ['active', 'trialing'].includes(String(user && user.subscriptionStatus || '').toLowerCase());
+    }
+
     function getFilteredUsers() {
       if (!latestData) return [];
       let users = [...latestData.users];
@@ -882,6 +890,8 @@
       if (filter === 'readers')   users = users.filter(u => (u.reads || 0) > 0);
       if (filter === 'google')    users = users.filter(u => String(u.authProvider || '').toLowerCase() === 'google');
       if (filter === 'email')     users = users.filter(u => String(u.authProvider || '').toLowerCase() === 'email');
+      if (filter === 'pro')       users = users.filter(isProUser);
+      if (filter === 'free')      users = users.filter(u => !isProUser(u));
 
       activeSort = $('userSort').value;
       users.sort((a, b) => {
@@ -944,7 +954,7 @@
             </td>
             <td>
               <div class="cell-stack">
-                <div>${u.subscriptionActive
+                <div>${isProUser(u)
                   ? '<span class="badge badge-green">PRO</span>'
                   : '<span class="badge badge-gray">FREE</span>'}</div>
                 <div class="cell-sub">${escapeHtml(u.subscriptionStatus || 'inactive')}</div>
@@ -1050,6 +1060,7 @@
       $('statUsers').textContent  = data.stats.userCount;
       $('statGoogleUsers').textContent = data.stats.googleUserCount || 0;
       $('statSignups').textContent = data.stats.signupCompleteCount || 0;
+      $('statProUsers').textContent = data.stats.proUserCount || 0;
       $('statStreaks').textContent = data.stats.activeStreakCount || 0;
       $('statReads').textContent  = data.stats.totalReads;
       $('statSaves').textContent  = data.stats.savedCompaniesCount;
@@ -1155,7 +1166,7 @@
       $('ovSignInCount').textContent = user.signInCount || 0;
       const st = userStatusLabel(user);
       $('ovStatus').innerHTML = st.html;
-      $('ovMembership').innerHTML = user.subscriptionActive
+      $('ovMembership').innerHTML = isProUser(user)
         ? '<span class="badge badge-green">PRO</span>'
         : `<span class="badge badge-gray">${escapeHtml(user.subscriptionStatus || 'FREE')}</span>`;
       $('ovBillingEnd').textContent = user.subscriptionCurrentPeriodEnd ? formatDate(user.subscriptionCurrentPeriodEnd) : '-';

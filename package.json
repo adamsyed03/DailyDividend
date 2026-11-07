@@ -2,12 +2,19 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "test": "npm run test:time-machine",
     "instagram:login": "node instagram-dd-bot/bot.js --login-only",
     "instagram:dry-run": "node instagram-dd-bot/bot.js --dry-run",
     "instagram:dm-preview": "node instagram-dd-bot/bot.js --dm-preview",
     "instagram:live": "node instagram-dd-bot/bot.js --live",
     "stripe:setup": "node scripts/setup-stripe.js",
     "test:legal": "node scripts/test-legal.js",
+    "test:time-machine": "node --test tests/time-machine.test.js",
+    "time-machine:fx": "node scripts/import-usd-inr-fred.js",
+    "time-machine:fx-file": "node scripts/import-usd-inr-file.js",
+    "time-machine:import": "node scripts/import-time-machine-data.js",
+    "time-machine:validate": "node scripts/validate-time-machine-data.js",
+    "time-machine:check": "node --check indian-time-machine/engine.js && node --check indian-time-machine/store.js && node --check indian-time-machine/router.js && node --check scripts/import-usd-inr-fred.js && node --check scripts/import-usd-inr-file.js && node --check scripts/import-time-machine-data.js && node --check scripts/validate-time-machine-data.js && node --check public/time-machine/game.js && node --check public/time-machine/admin.js",
     "supabase:push": "node scripts/push-local-db-to-supabase.js",
     "supabase:logos": "node scripts/setup-supabase-logos.js"
   },
@@ -19,6 +26,7 @@
     "compression": "^1.8.1",
     "express": "^4.18.3",
     "playwright": "^1.63.0",
-    "sql.js": "^1.14.2"
+    "sql.js": "^1.14.2",
+    "xlsx": "^0.18.5"
   }
 }

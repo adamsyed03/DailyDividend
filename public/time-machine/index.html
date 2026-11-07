@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f1eee6">
+  <meta name="description" content="A historical Indian investing game built from real supplied market data.">
+  <title>Investing Game · Daily Dividend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='16' fill='%231a3d2b'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Georgia' font-size='20' font-weight='700' fill='%23f5f1e8'%3EDD%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/game/styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="daily-nav">
+    <a class="daily-brand" href="/" aria-label="Daily Dividend home">
+      <span class="daily-brand-mark"><img src="/api/brand-logo" alt=""></span>
+      <span><strong>Daily Dividend</strong><small>Story behind the stock</small></span>
+    </a>
+    <nav class="daily-nav-links" aria-label="Daily Dividend navigation">
+      <a href="/">Today</a>
+      <a href="/game" class="active" aria-current="page">Game</a>
+    </nav>
+    <a class="daily-home-link" href="/">Back to Daily Dividend <span aria-hidden="true">→</span></a>
+  </header>
+
+  <main>
+    <section id="home-screen" class="screen home-screen is-active">
+      <div class="hero">
+        <div class="hero-copy reveal-in">
+          <p class="eyebrow"><span class="live-dot"></span> A real-data investing game</p>
+          <h1>Beat<br>the <span>past.</span></h1>
+          <p class="hero-lede">You get ₹10 lakh, ten chips and no hindsight. Build a portfolio across four years, see each result, then hold by default or reshuffle.</p>
+          <div class="hero-actions">
+            <button class="button button-primary" data-start-mode="story">Play four-round story <span>→</span></button>
+          </div>
+          <p class="quiet-note">Historical education only. No trading, recommendations or invented prices.</p>
+        </div>
+        <aside class="rule-card reveal-in delay-1">
+          <div class="rule-card-head">
+            <span class="edition">Issue 01</span>
+            <span>THE RULES</span>
+          </div>
+          <div class="capital-display"><small>YOUR STARTING WEALTH</small><strong>₹10,00,000</strong></div>
+          <div class="rule-grid">
+            <div><strong>10</strong><span>allocation chips</span></div>
+            <div><strong>5</strong><span>investable assets</span></div>
+            <div><strong>40%</strong><span>maximum per asset</span></div>
+            <div><strong>4</strong><span>historical decisions</span></div>
+          </div>
+          <p>Each chip puts 10% of your current wealth into one asset. Every chip must be used.</p>
+        </aside>
+      </div>
+
+      <section class="period-section section-pad">
+        <div class="section-heading">
+          <div><p class="eyebrow">THE JOURNEY</p><h2>Four decisions.<br>One unchangeable history.</h2></div>
+          <p>Move through Year 1 to Year 4. After every result, keep the drifted portfolio by default or choose to reshuffle.</p>
+        </div>
+        <div class="period-rail">
+          <article><span>01</span><time>Year 1</time><strong>First decision</strong><small>Build your opening portfolio</small></article>
+          <article><span>02</span><time>Year 2</time><strong>Hold or reshuffle</strong><small>Your existing portfolio is the default</small></article>
+          <article class="hold-card"><span>HOLD</span><time>HIDDEN</time><strong>No rebalance</strong><small>Positions compound untouched</small></article>
+          <article><span>03</span><time>Year 3</time><strong>Hold or reshuffle</strong><small>Let weights drift or reset them</small></article>
+          <article><span>04</span><time>Year 4</time><strong>The final turn</strong><small>See where your choices finish</small></article>
+        </div>
+      </section>
+
+      <section class="proof-section section-pad">
+        <div class="proof-card">
+          <p class="eyebrow">WHAT POWERS THE MACHINE</p>
+          <h2>Real closes.<br>Real FX.<br>No dummy outcomes.</h2>
+          <p>250 owner-supplied monthly price observations, official FRED month-end USD/INR rates and World Bank annual India inflation context.</p>
+          <a href="/game/admin">Inspect the import health →</a>
+        </div>
+        <div class="leaderboard-card">
+          <div class="card-title-row"><div><p class="eyebrow">LIVE RESULTS</p><h3>Story leaderboard</h3></div><span class="verified-pill">SERVER VERIFIED</span></div>
+          <div id="leaderboard" class="leaderboard"><p class="loading-line">Loading genuine completed games…</p></div>
+        </div>
+      </section>
+    </section>
+
+    <section id="game-screen" class="screen game-screen" aria-live="polite">
+      <div class="game-wrap game-page-container">
+        <div class="game-masthead">
+          <button class="back-button" data-go-home>← Exit game</button>
+          <div class="progress-copy"><span id="round-kicker">YEAR 1 OF 4</span><strong id="round-label">Year 1</strong></div>
+          <div class="progress-dots" id="progress-dots" aria-label="Story progress"></div>
+        </div>
+
+        <div class="arrival-grid">
+          <div>
+            <p class="eyebrow">YOU HAVE LANDED IN</p>
+            <h2 id="arrival-label">Year 1</h2>
+            <p class="date-line" id="date-line">BUILD YOUR OPENING PORTFOLIO</p>
+          </div>
+          <div class="wealth-card"><small>WEALTH TO ALLOCATE</small><strong id="wealth-value">₹10,00,000</strong><span>Ten chips · ₹1,00,000 each</span></div>
+        </div>
+
+        <div class="allocation-heading">
+          <div><p class="eyebrow">BUILD YOUR PORTFOLIO</p><h3>Place all ten chips.</h3></div>
+          <button id="equal-split" class="text-button">Start with an equal split</button>
+        </div>
+        <div id="asset-grid" class="asset-grid"></div>
+
+        <div class="chip-dock">
+          <div>
+            <span class="dock-label">ALLOCATION</span>
+            <div id="chip-track" class="chip-track" aria-label="Allocated chips"></div>
+          </div>
+          <div class="dock-total"><strong id="allocated-total">0 / 10</strong><span id="allocation-status">10 chips left</span></div>
+          <button id="cancel-reshuffle" class="text-button cancel-reshuffle" hidden>Cancel reshuffle</button>
+          <button id="lock-button" class="button button-lock" disabled>Lock Year 1 portfolio <span>→</span></button>
+        </div>
+        <p id="game-error" class="error-message" role="alert"></p>
+      </div>
+    </section>
+
+    <section id="reveal-screen" class="screen reveal-screen" aria-live="polite">
+      <div class="reveal-wrap game-page-container">
+        <div class="travel-stamp"><span>HISTORY UNLOCKED</span><strong id="reveal-period"></strong></div>
+        <div class="reveal-hero">
+          <div><p class="eyebrow">YOUR PORTFOLIO ARRIVED AT</p><h2 id="reveal-wealth"></h2><p id="reveal-change" class="big-change"></p></div>
+          <div class="winner-note"><small>BEST ASSET THIS WINDOW</small><strong id="winner-name"></strong><span id="winner-return"></span></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-heading"><div><p class="eyebrow">YEAR-END RESULT</p><h3>Your returns in rupees</h3></div><span>Price return + FX for USD assets</span></div>
+          <div id="return-bars" class="return-bars"></div>
+        </div>
+        <div id="gap-panel" class="gap-panel" hidden></div>
+        <div class="reveal-actions">
+          <button id="continue-button" class="button button-primary">Continue <span>→</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="decision-screen" class="screen decision-screen" aria-live="polite">
+      <div class="decision-wrap game-page-container">
+        <p class="eyebrow">YOUR NEXT MOVE</p>
+        <h2 id="decision-title">Ready for Year 2?</h2>
+        <p class="decision-lede">Your portfolio has drifted with the market. Keep every position exactly as it is, or choose to reshuffle your ten chips.</p>
+        <div class="decision-value"><small>CURRENT PORTFOLIO</small><strong id="decision-wealth"></strong></div>
+        <div id="decision-holdings" class="decision-holdings"></div>
+        <div class="decision-actions">
+          <button id="hold-portfolio" class="button button-primary">Continue with same portfolio <span>→</span></button>
+          <button id="reshuffle-portfolio" class="button button-secondary">Reshuffle my portfolio</button>
+        </div>
+        <p class="decision-note"><strong>Default: continue unchanged.</strong> No trades occur and each position keeps its naturally drifted weight.</p>
+        <div id="chronicle-panel" class="newspaper-wrap inline-newspaper" hidden>
+          <header class="newspaper-masthead">
+            <p id="newspaper-edition">HISTORICAL MARKET EDITION</p>
+            <h2 id="newspaper-masthead">THE MARKET CHRONICLE</h2>
+            <div><span>DAILY DIVIDEND ARCHIVE</span><strong id="newspaper-year">What Just Happened in Year 1</strong><span>PRICE: ONE LESSON</span></div>
+          </header>
+          <div id="newspaper-stories" class="newspaper-stories"></div>
+          <footer class="newspaper-footer">
+            <p>These stories are revealed only after the year’s market result.</p>
+          </footer>
+        </div>
+      </div>
+    </section>
+
+    <section id="final-screen" class="screen final-screen" aria-live="polite">
+      <div class="final-wrap game-page-container">
+        <p class="eyebrow">THE TIMELINE IS COMPLETE</p>
+        <h2 id="final-verdict">You beat the past.</h2>
+        <div class="final-number"><small>FINAL PORTFOLIO VALUE</small><strong id="final-wealth"></strong><span id="final-return"></span></div>
+        <div class="final-grid">
+          <article><small>PROFIT / LOSS</small><strong id="final-profit"></strong><p>Against the ₹10 lakh starting capital.</p></article>
+          <article><small>NIFTY 50 COMPARISON</small><strong id="nifty-comparison"></strong><p id="nifty-benchmark-copy">₹10 lakh invested in the Nifty 50 price index.</p></article>
+          <article><small>SERVER RANK</small><strong id="final-rank"></strong><p>Only completed, server-calculated games count.</p></article>
+        </div>
+        <div class="journey-card">
+          <div><p class="eyebrow">YOUR WEALTH THROUGH TIME</p><h3>Four year-end results</h3></div>
+          <svg id="wealth-chart" viewBox="0 0 720 220" role="img" aria-label="Portfolio wealth at the end of Year 1 through Year 4"></svg>
+          <div id="journey-labels" class="journey-labels"></div>
+        </div>
+        <div class="inflation-card">
+          <div><p class="eyebrow">PURCHASING-POWER CONTEXT</p><h3>Average India CPI inflation</h3><p>Cash is adjusted down as inflation erodes its real purchasing power.</p></div>
+          <div id="inflation-years" class="inflation-years"></div>
+        </div>
+        <details class="assumptions"><summary>Calculation assumptions and source limits</summary><ul id="assumption-list"></ul><p>Gold is a USD-quoted benchmark from the supplied screenshots; the exact instrument is still unverified. Source transcription needs a final visual audit before public claims.</p></details>
+        <div class="final-actions">
+          <button id="share-button" class="button button-primary">Share my result <span>↗</span></button>
+          <button id="replay-button" class="button button-secondary">Play again</button>
+          <button data-go-home class="text-button">Back to the front page</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>Indian Time Machine · historical education only</span><span>Supplied prices · FRED DEXINUS · World Bank WDI</span></footer>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/game/game.js" defer></script>
+</body>
+</html>

@@ -54,6 +54,9 @@
     .splash-tag.show{opacity:1}
     .splash-cta{background:var(--cream);color:var(--brand);border:0;border-radius:999px;padding:15px 36px;font-size:15px;font-weight:700;opacity:0;transform:translateY(16px);transition:opacity .5s 1.1s,transform .5s 1.1s var(--ease)}
     .splash-cta.show{opacity:1;transform:translateY(0)}
+    .splash-game{margin-top:10px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(245,241,232,.34);border-radius:999px;padding:12px 28px;color:var(--cream);font-size:13px;font-weight:700;text-decoration:none;opacity:0;transform:translateY(12px);transition:opacity .4s 1.15s,transform .4s 1.15s var(--ease),background .18s}
+    .splash-game:hover{background:rgba(245,241,232,.08)}
+    .splash-game.show{opacity:1;transform:translateY(0)}
     .splash-login{margin-top:14px;color:rgba(255,255,255,.68);font-size:12px;text-decoration:none;opacity:0;transform:translateY(10px);transition:opacity .4s 1.2s,transform .4s 1.2s var(--ease)}
     .splash-login.show{opacity:1;transform:translateY(0)}
     .splash-login span{color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px}
@@ -264,6 +267,7 @@
         <div class="splash-name" id="splashName">Daily Dividend</div>
         <div class="splash-tag" id="splashTag">Story behind the stock</div>
         <button class="splash-cta" id="splashCta" onclick="goTo('hook')">Get started -></button>
+        <a class="splash-game" id="splashGame" href="/game">Play the investing game -></a>
         <a class="splash-login" id="splashLogin" href="login.html">Already a member? <span>Log in</span></a>
         <div class="splash-bottom" id="splashBottom">One company. Every Monday. The full story.</div>
       </section>
@@ -433,6 +437,7 @@
         setTimeout(() => document.getElementById('splashName').classList.add('show'), 260);
         setTimeout(() => document.getElementById('splashTag').classList.add('show'), 520);
         setTimeout(() => document.getElementById('splashCta').classList.add('show'), 900);
+        setTimeout(() => document.getElementById('splashGame').classList.add('show'), 950);
         setTimeout(() => document.getElementById('splashLogin').classList.add('show'), 1000);
         setTimeout(() => document.getElementById('splashBottom').classList.add('show'), 1120);
       }, 160);

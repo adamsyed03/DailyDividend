@@ -11,6 +11,42 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## Indian Time Machine game
+
+The historical chip-allocation game is available at:
+
+```text
+http://localhost:3000/game
+```
+
+It uses the project owner's supplied 250-row monthly market-price file and audit workbook. Apple and the supplied USD-quoted gold benchmark are converted into rupees with official Federal Reserve `DEXINUS` month-end observations. Gameplay reads the local SQLite import and never calls a live market API.
+
+Build or refresh the data in this order:
+
+```bash
+npm run time-machine:fx
+npm run time-machine:import
+npm run time-machine:validate
+```
+
+`time-machine:fx` downloads the daily FRED series and selects the final valid observation in every month from 2021 through 2024. If automated network access is unavailable, import a validated month-end file with `npm run time-machine:fx-file -- C:\path\to\validated_fx.csv`, then run the database import and validation commands. The file must contain `month`, `inr_per_usd` and `observation_date`; do not use current or annual-average FX as a substitute.
+
+Run the engine tests and JavaScript syntax checks with:
+
+```bash
+npm run test:time-machine
+npm run time-machine:check
+```
+
+The import health screen is at `http://localhost:3000/game/admin`. It reports missing checkpoint months, source row counts, screenshot-audit status and the unverified gold-instrument warning. Scenario dates and editorial context live in `data/indian-time-machine/scenario_config.json`; editing that file changes the periods without changing calculation code, but the validator will block scoring when a required price or FX month is absent.
+
+Important source limits:
+
+- Equity adjusted closes already include corporate actions. The imported dividend and split rows are audit metadata and are not added again.
+- World Bank inflation is annual CPI growth context, not a monthly CPI index and not a precise H1/H2 real-return benchmark.
+- The exact gold instrument is absent from the supplied screenshots. Keep the prototype warning until the owner confirms the benchmark.
+- Screenshot-transcribed prices need a final visual numerical audit and licence review before public redistribution.
+
 ## Deployment uptime
 
 Render's Free web services spin down after idle periods and show a Render loading page while the app wakes back up. To prevent that page in production, run the Daily Dividend web service on a paid Render instance type and set the service health check path to:
