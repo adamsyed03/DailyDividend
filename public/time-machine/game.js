@@ -8,6 +8,7 @@
   const KEY_INTRO = 'dd-btp-intro-v1';
   const KEY_DAILY = 'dd-btp-daily-';
   const SITE = 'dailydividend.info/game';
+  const SITE_URL = `https://${SITE}`;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const local = {
     get(key) { try { return localStorage.getItem(key); } catch (_) { return null; } },
@@ -183,9 +184,11 @@
   }
 
   // ---------- round screen ----------
+  // Rounds are titled by year alone ("Jul–Dec 2022" → "2022"); the kicker already gives the length.
+  const periodYear = period => /(\d{4})$/.exec(period || '')?.[1] || period;
   function periodTitle(period) {
-    const match = /^(.*?)(\d{4})$/.exec(period || '');
-    return match ? `${esc(match[1])}<span>${match[2]}</span>` : esc(period);
+    const year = periodYear(period);
+    return /^\d{4}$/.test(year || '') ? `<span>${year}</span>` : esc(period);
   }
 
   function showRound(current, prefill, moving) {
@@ -322,7 +325,7 @@
     const round = reveal.round;
     setSteps(round, outcome.isFinal ? -1 : round);
     $('#howTo').hidden = true;
-    $('#xKicker').textContent = hidden() ? `After year ${round} · still 20??` : `After round ${round} · ${reveal.period}`;
+    $('#xKicker').textContent = hidden() ? `After year ${round} · still 20??` : `After round ${round} · ${periodYear(reveal.period)}`;
     countUp($('#xValue'), animate ? reveal.startWealth : reveal.endWealth, reveal.endWealth);
     const chips = [
       `<span class="chip ${tone(reveal.returnPercent)}">${pct(reveal.returnPercent)} this ${unit()}</span>`,
@@ -351,7 +354,7 @@
       const direction = asset.returnPercent >= 0 ? 'up' : 'down';
       return `<div class="rrow" style="--c:${esc(asset.color)}"><div class="n"><span class="dot"></span><div>${esc(asset.name)}<small>${asset.chips} chip${asset.chips === 1 ? '' : 's'}</small></div></div><div class="bar" aria-hidden="true">${Math.abs(asset.returnPercent) < 0.05 ? '' : `<i class="${direction}" style="width:${width.toFixed(1)}%"></i>`}</div><div class="p ${tone(asset.returnPercent)}">${pct(asset.returnPercent)}</div></div>`;
     }).join('');
-    // Market Chronicle for the round: lead headline, tap to open every sourced story.
+    // Market Chronicle for the round: lead headline, tap to open every story.
     // (Older servers sent a single `during` headline; show that rather than nothing.)
     const stories = outcome.chronicle || (outcome.during ? [outcome.during] : []);
     const chronicle = $('#xChronicle');
@@ -365,7 +368,7 @@
       $('#xChronLead').innerHTML = `<b>The Market Chronicle · this ${unit()}</b><p><span class="hl">${esc(lead.headline)}</span> · ${esc(lead.outlet)}</p><span class="more" data-closed="${esc(prompt)}" data-open="Hide the Chronicle"></span>`;
       $('#xChronLead').setAttribute('aria-label', `${prompt}. Lead story: ${lead.headline}`);
       // The lead's headline is already in the summary row, so its list entry carries only the detail.
-      $('#xChronList').innerHTML = stories.map((item, index) => `<li>${index ? `<span class="flag">${esc(item.region)}</span><h4>${esc(item.headline)}</h4>` : ''}${item.summary ? `<p>${esc(item.summary)}</p>` : ''}${item.url ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.outlet)} ↗</a>` : `<small>${esc(item.outlet)} · source link in the final reveal</small>`}</li>`).join('');
+      $('#xChronList').innerHTML = stories.map((item, index) => `<li>${index ? `<span class="flag">${esc(item.region)}</span><h4>${esc(item.headline)}</h4>` : ''}${item.summary ? `<p>${esc(item.summary)}</p>` : ''}<small>${esc(item.outlet)}</small></li>`).join('');
     }
     const nextClues = outcome.next?.current?.clues || [];
     $('#xNextClue').hidden = !nextClues.length;
@@ -464,7 +467,6 @@
     countUp($('#fValue'), animate ? final.initialWealth : final.finalWealth, final.finalWealth, money, 1200);
     const chips = [`<span class="chip ${tone(final.returnPercent)}">${pct(final.returnPercent)}</span>`];
     if (Number.isFinite(final.nifty50ReturnPercent)) chips.push(`<span class="chip">Nifty ${pct(final.nifty50ReturnPercent)}</span>`);
-    if (Number.isFinite(final.beatNiftyBy)) chips.push(`<span class="chip g">${final.beatNiftyBy >= 0 ? `Beat it by ${money(final.beatNiftyBy)}` : `Behind by ${money(-final.beatNiftyBy)}`}</span>`);
     $('#fDelta').innerHTML = chips.join('');
     $('#fStamp').hidden = !final.title;
     revealCard.classList.toggle('has-stamp', Boolean(final.title));
@@ -499,7 +501,7 @@
     const rows = final.ledger.filter(row => row.chips.some(Boolean));
     $('#fLedger').innerHTML = `<tr><th>Asset</th>${periods.map(period => `<th>${esc(period)}</th>`).join('')}<th>Chips</th></tr>${rows.map(row => `<tr><td>${esc(row.name)}</td>${row.returns.map(value => `<td class="${value === null ? "" : tone(value, 0)}">${value === null ? '' : pct(value, 0)}</td>`).join('')}<td>${row.chips.join('·')}</td></tr>`).join('')}`;
 
-    $('#fWhy').innerHTML = (final.whyItMoved || []).map(item => `<div class="story"><b>Why it moved · biggest ${item.kind === 'winner' ? 'winner' : 'loser'}</b><p><span class="hl">${esc(item.assetName)} ${pct(item.returnPercent, 0)}.</span> ${esc(item.headline)}${item.summary ? `: ${esc(item.summary)}` : ''} <a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.outlet)} ↗</a>${item.decoded ? ` · <a href="${esc(item.decoded.href)}" data-rabbit-hole-link>${esc(item.decoded.title)} →</a>` : ''}</p></div>`).join('');
+    $('#fWhy').innerHTML = (final.whyItMoved || []).map(item => `<div class="story"><b>Why it moved · biggest ${item.kind === 'winner' ? 'winner' : 'loser'}</b><p><span class="hl">${esc(item.assetName)} ${pct(item.returnPercent, 0)}.</span> ${esc(item.headline)}${item.summary ? `: ${esc(item.summary)}` : ''} <span class="src">· ${esc(item.outlet)}</span>${item.decoded ? ` · <a href="${esc(item.decoded.href)}" data-rabbit-hole-link>${esc(item.decoded.title)} →</a>` : ''}</p></div>`).join('');
 
     $('#fReal').innerHTML = Number.isFinite(final.cashRealWealth)
       ? `${short(final.initialWealth)} kept in cash would be worth <b>${short(final.cashRealWealth)}</b> after inflation.<small>India CPI over ${esc(final.puzzle.windowLabel)}. Cash earns 0% nominal in the game.</small>`
@@ -507,8 +509,8 @@
 
     $('#shareWa').href = `https://wa.me/?text=${encodeURIComponent(shareText(final))}`;
     $('#fNote').textContent = final.puzzle.mode === 'daily' ? 'A new daily puzzle drops at midnight IST.' : 'Unlimited games don’t count towards the daily ranking.';
-    $('#chronCount').textContent = `· ${final.chronicle.length} ${final.chronicle.length === 1 ? 'story' : 'stories'}, with dates and sources`;
-    $('#fChronicle').innerHTML = final.chronicle.map(item => `<li><span class="flag">${esc(item.region)}</span><time datetime="${esc(item.date)}">${fullDate(item.date)}</time><h4>${esc(item.headline)}</h4>${item.summary ? `<p>${esc(item.summary)}</p>` : ''}<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.outlet)} ↗</a></li>`).join('');
+    $('#chronCount').textContent = `· ${final.chronicle.length} ${final.chronicle.length === 1 ? 'story' : 'stories'}, with dates`;
+    $('#fChronicle').innerHTML = final.chronicle.map(item => `<li><span class="flag">${esc(item.region)}</span><time datetime="${esc(item.date)}">${fullDate(item.date)}</time><h4>${esc(item.headline)}</h4>${item.summary ? `<p>${esc(item.summary)}</p>` : ''}<small>${esc(item.outlet)}</small></li>`).join('');
     $('#fRabbit').innerHTML = rabbitHoles.map(item => `<a class="rabbit-card" href="/rabbit-holes/${esc(item.slug)}" data-rabbit-hole-link><small>${esc(item.category)} · ${esc(item.readTime)}</small><h4>${esc(item.title)}</h4><p>${esc(item.summary)}</p><span>Go down the rabbit hole ↗</span></a>`).join('');
     $('#fAssumptions').innerHTML = final.assumptions.map(item => `<li>${esc(item)}</li>`).join('');
     showScreen('screen-final');
@@ -565,13 +567,24 @@
   }
 
   // ---------- sharing ----------
+  const TITLE_EMOJI = { 'Paper Hands': '🧻', 'FD Loyalist': '🏦', 'Index Hugger': '🤗', 'Smart Money': '🧠', 'Dalal Street Sher': '🦁', 'Market Wizard': '🧙' };
+  function resultEmoji(returnPercent) {
+    if (returnPercent >= 50) return '🚀';
+    if (returnPercent > 0.5) return '📈';
+    if (returnPercent >= -0.5) return '😐';
+    return '📉';
+  }
+
+  // Multi-line so WhatsApp shows a little pitch for the game, not just a bare link.
   function shareText(final) {
-    const parts = [final.puzzle.mode === 'daily' ? `DD Beat the Past #${pad3(final.puzzle.number)}` : 'DD Beat the Past · Unlimited'];
-    if (final.title) parts.push(final.title.name);
-    parts.push(`₹10L → ${short(final.finalWealth)} (${pct(final.returnPercent, 0)})`);
-    if (final.rounds.every(round => round.beatNifty !== null)) parts.push(final.rounds.map(round => (round.beatNifty ? '🟩' : '🟥')).join(''));
-    parts.push(SITE);
-    return parts.join(' · ');
+    const lines = [final.puzzle.mode === 'daily' ? `📅 Beat the Past #${pad3(final.puzzle.number)}` : '♾️ Beat the Past · Unlimited'];
+    if (final.title) lines.push(`${TITLE_EMOJI[final.title.name] || resultEmoji(final.returnPercent)} ${final.title.name}`);
+    lines.push(`💰 ₹10L → ${short(final.finalWealth)} (${pct(final.returnPercent, 0)})`);
+    if (final.rounds.every(round => round.beatNifty !== null)) lines.push(final.rounds.map(round => (round.beatNifty ? '🟩' : '🟥')).join(''));
+    lines.push('');
+    lines.push(`📰 Real headlines, real prices, a hidden window. Can you beat the Nifty in ${final.rounds.length} rounds? New puzzle every day 👇`);
+    lines.push(SITE_URL);
+    return lines.join('\n');
   }
 
   async function drawShareCard(final) {
@@ -790,8 +803,8 @@
       target: () => $('#rHead'),
       title: 'Real markets. Real headlines.',
       text: hidden()
-        ? `Everything here really happened. Every price is real monthly market data for ${list}, converted to rupees, and every headline is a real story with its source. The years stay hidden until the end.`
-        : `Everything here really happened${S.puzzle.span ? ` between ${S.puzzle.span.split(' – ').join(' and ')}` : ''}. Every price is real monthly market data for ${list}, converted to rupees, and every headline is a real story with its source.`
+        ? `Everything here really happened. Every price is real monthly market data for ${list}, converted to rupees, and every headline is a real story. The years stay hidden until the end.`
+        : `Everything here really happened${S.puzzle.span ? ` between ${S.puzzle.span.split(' – ').join(' and ')}` : ''}. Every price is real monthly market data for ${list}, converted to rupees, and every headline is a real story.`
     });
     if (!$('#rWire').hidden) {
       steps.push({ target: () => $('#rWire'), title: 'Work out when you are.', text: `These are real headlines from the ${hidden() ? 'year' : 'stretch'} you’ve landed in. Use what you know about the markets to guess what happens next.` });

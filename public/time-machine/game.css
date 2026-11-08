@@ -128,6 +128,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .story p { font-size: 12px; line-height: 1.4; color: var(--ink-2); }
 .story .hl { font-family: var(--serif); font-size: 13.5px; color: var(--ink); }
 .story a { color: var(--ink); font-weight: 600; }
+.story .src { color: var(--muted); font-size: 11.5px; }
 .mini-chron { border: 1px solid rgba(196, 154, 60, .45); }
 .mini-chron summary { list-style: none; cursor: pointer; }
 .mini-chron summary::-webkit-details-marker { display: none; }
@@ -199,6 +200,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .chronicle h4 { font-family: var(--serif); font-size: 15px; font-weight: 600; line-height: 1.25; margin-top: 3px; }
 .chronicle p { font-size: 12px; color: var(--ink-2); line-height: 1.4; margin-top: 3px; }
 .chronicle a { font-size: 11.5px; font-weight: 600; }
+.chronicle li small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
 .assumptions ul, .assumptions p { padding: 0 12px 12px 28px; font-size: 12px; line-height: 1.5; color: var(--ink-2); }
 .assumptions p { padding-left: 12px; color: var(--muted); }
 .rabbit { margin-top: 16px; }
