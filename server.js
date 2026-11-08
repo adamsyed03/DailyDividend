@@ -2325,9 +2325,33 @@ app.use('/game', express.static(path.join(__dirname, 'public', 'time-machine'), 
   maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0
 }));
 
-app.get(['/game', '/game/'], (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache');
-  res.sendFile(path.join(__dirname, 'public', 'time-machine', 'index.html'));
+// The game's JS/CSS are cached for an hour, so the page stamps each asset URL with
+// a hash of the asset files: a deploy changes the URLs and browsers fetch fresh
+// copies instead of pairing the new page with a stale script (which stalls on
+// "Loading today's puzzle…").
+const GAME_DIR = path.join(__dirname, 'public', 'time-machine');
+const GAME_ASSETS = ['game.js', 'game.css', 'rupee-split.js'];
+let gamePageCache = null;
+function gamePage() {
+  const stamp = GAME_ASSETS.map(file => fsSync.statSync(path.join(GAME_DIR, file)).mtimeMs).join(':')
+    + fsSync.statSync(path.join(GAME_DIR, 'index.html')).mtimeMs;
+  if (gamePageCache?.stamp !== stamp) {
+    const hash = crypto.createHash('sha1');
+    for (const file of GAME_ASSETS) hash.update(fsSync.readFileSync(path.join(GAME_DIR, file)));
+    const version = hash.digest('hex').slice(0, 10);
+    const html = fsSync.readFileSync(path.join(GAME_DIR, 'index.html'), 'utf8').replace(/__ASSET_VERSION__/g, version);
+    gamePageCache = { stamp, html };
+  }
+  return gamePageCache.html;
+}
+
+app.get(['/game', '/game/'], (req, res, next) => {
+  try {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.type('html').send(gamePage());
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get(['/game/admin', '/game/admin/'], (req, res) => {

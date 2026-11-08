@@ -62,7 +62,17 @@
   }
 
   async function api(path, options = {}) {
-    const response = await fetch(API + path, { ...options, headers: { 'content-type': 'application/json', ...(options.headers || {}) } });
+    // Never wait forever: a stalled request becomes a visible, retryable error.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    let response;
+    try {
+      response = await fetch(API + path, { ...options, signal: controller.signal, headers: { 'content-type': 'application/json', ...(options.headers || {}) } });
+    } catch (error) {
+      throw new Error(error.name === 'AbortError' ? 'The game server is taking too long to answer.' : 'Couldn’t reach the game server. Check your connection.');
+    } finally {
+      clearTimeout(timer);
+    }
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
       const error = new Error(payload.error || 'The game server did not respond.');
@@ -103,7 +113,26 @@
   }
 
   // ---------- boot / restore ----------
+  function showLoadError(message, retry) {
+    $('#loadingText').textContent = message;
+    const button = $('#retryLoad');
+    button.hidden = false;
+    button.onclick = () => { button.hidden = true; retry(); };
+    showScreen('screen-loading');
+    tray(null);
+  }
+
   async function boot() {
+    try {
+      await bootFlow();
+    } catch (error) {
+      showLoadError(error.message || 'Something went wrong loading the game.', boot);
+    }
+  }
+
+  async function bootFlow() {
+    $('#retryLoad').hidden = true;
+    $('#loadingText').textContent = 'Loading today’s puzzle…';
     try { S.today = await api('/today'); } catch (_) { S.today = null; }
     const wanted = new URLSearchParams(location.search).get('mode') === 'unlimited' ? 'unlimited' : 'daily';
     const saved = local.get(KEY_SESSION);
@@ -149,7 +178,7 @@
       local.set(KEY_SESSION, payload.sessionId);
       applyPayload(payload);
     } catch (error) {
-      $('#loadingText').textContent = error.message;
+      showLoadError(error.message, () => start(mode));
     }
   }
 
