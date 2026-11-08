@@ -162,6 +162,7 @@ function hiddenDateHeadline(headline) {
 function publicPuzzle(puzzle) {
   return {
     mode: puzzle.mode,
+    dateKey: puzzle.mode === 'daily' ? puzzle.dateKey : null,
     number: puzzle.number,
     calendar: puzzle.calendar,
     flags: puzzle.flags,

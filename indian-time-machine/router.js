@@ -50,6 +50,7 @@ function createTimeMachineRouter({ rootDir }) {
     const view = publicRound(data(), pconfig, round, wealth);
     const { flags } = session.puzzle;
     view.period = flags.hiddenYears ? null : periodLabel(round.decisionMonth, round.revealMonth);
+    view.months = (Number(round.revealMonth.slice(0, 4)) - Number(round.decisionMonth.slice(0, 4))) * 12 + Number(round.revealMonth.slice(5)) - Number(round.decisionMonth.slice(5));
     view.clues = flags.clues ? (round.clueIds || []).map(id => hiddenDateHeadline(headlineById(store.dataset, id))).filter(Boolean) : [];
     return view;
   }
@@ -158,7 +159,7 @@ function createTimeMachineRouter({ rootDir }) {
       puzzle: { ...publicPuzzle(session.puzzle), periods, windowLabel, startYear: session.puzzle.startYear },
       chartLabels: session.puzzle.calendar
         ? [String(session.puzzle.startYear - 1), ...rounds.map(round => round.revealMonth.slice(0, 4))]
-        : ['Start', ...periods],
+        : [rounds[0].decisionMonth, ...rounds.map(round => round.revealMonth)].map(month => `${MONTHS[Number(month.slice(5)) - 1]} ’${month.slice(2, 4)}`),
       niftyPath: nifty,
       hindsight: hindsightMax(data(), pconfig),
       title: flags.niftyTitles ? titleFor(store.config, summary.finalWealth, summary.nifty50Wealth) : null,
