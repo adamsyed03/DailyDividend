@@ -323,14 +323,18 @@
       return `<div class="rrow" style="--c:${esc(asset.color)}"><div class="n"><span class="dot"></span><div>${esc(asset.name)}<small>${asset.chips} chip${asset.chips === 1 ? '' : 's'}</small></div></div><div class="bar" aria-hidden="true">${Math.abs(asset.returnPercent) < 0.05 ? '' : `<i class="${direction}" style="width:${width.toFixed(1)}%"></i>`}</div><div class="p ${tone(asset.returnPercent)}">${pct(asset.returnPercent)}</div></div>`;
     }).join('');
     // Market Chronicle for the round: lead headline, tap to open every sourced story.
-    const stories = outcome.chronicle || [];
+    // (Older servers sent a single `during` headline; show that rather than nothing.)
+    const stories = outcome.chronicle || (outcome.during ? [outcome.during] : []);
     const chronicle = $('#xChronicle');
     chronicle.hidden = !stories.length;
     chronicle.open = false;
     if (stories.length) {
       const [lead] = stories;
       const more = stories.length - 1;
-      $('#xChronLead').innerHTML = `<b>The Market Chronicle · this ${unit()}</b><p><span class="hl">${esc(lead.headline)}</span> · ${esc(lead.outlet)}</p>${more ? `<span class="more" data-closed="+${more} more ${more === 1 ? 'story' : 'stories'}, with sources" data-open="Hide stories"></span>` : '<span class="more" data-closed="Read the story and source" data-open="Hide story"></span>'}`;
+      const count = `${stories.length} ${stories.length === 1 ? 'story' : 'stories'}`;
+      const prompt = outcome.isFinal ? `Read ${count} from this ${unit()}` : `Read ${count} before you decide`;
+      $('#xChronLead').innerHTML = `<b>The Market Chronicle · this ${unit()}</b><p><span class="hl">${esc(lead.headline)}</span> · ${esc(lead.outlet)}</p><span class="more" data-closed="${esc(prompt)}" data-open="Hide the Chronicle"></span>`;
+      $('#xChronLead').setAttribute('aria-label', `${prompt}. Lead story: ${lead.headline}`);
       // The lead's headline is already in the summary row, so its list entry carries only the detail.
       $('#xChronList').innerHTML = stories.map((item, index) => `<li>${index ? `<span class="flag">${esc(item.region)}</span><h4>${esc(item.headline)}</h4>` : ''}${item.summary ? `<p>${esc(item.summary)}</p>` : ''}${item.url ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.outlet)} ↗</a>` : `<small>${esc(item.outlet)} · source link in the final reveal</small>`}</li>`).join('');
     }

@@ -127,11 +127,16 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .story p { font-size: 12px; line-height: 1.4; color: var(--ink-2); }
 .story .hl { font-family: var(--serif); font-size: 13.5px; color: var(--ink); }
 .story a { color: var(--ink); font-weight: 600; }
+.mini-chron { border: 1px solid rgba(196, 154, 60, .45); }
 .mini-chron summary { list-style: none; cursor: pointer; }
 .mini-chron summary::-webkit-details-marker { display: none; }
-.mini-chron .more { display: inline-block; margin-top: 5px; font-size: 11.5px; font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 2px; min-height: 24px; }
-.mini-chron .more::after { content: attr(data-closed) " ▾"; }
-.mini-chron[open] .more::after { content: attr(data-open) " ▴"; }
+.mini-chron .more { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; padding: 9px 12px; min-height: 40px; border-radius: 10px; background: var(--ink); color: var(--paper); font-size: 12.5px; font-weight: 700; }
+.mini-chron .more::before { content: attr(data-closed); }
+.mini-chron .more::after { content: "▾"; font-size: 13px; }
+.mini-chron[open] .more { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.mini-chron[open] .more::before { content: attr(data-open); }
+.mini-chron[open] .more::after { content: "▴"; }
+.mini-chron summary:hover .more { filter: brightness(1.15); }
 .mini-chron ol { list-style: none; margin-top: 4px; }
 .mini-chron li { padding: 8px 0 2px; border-top: 1px dashed rgba(23, 58, 42, .2); }
 .mini-chron li .flag { background: rgba(255, 255, 255, .5); }
@@ -233,6 +238,20 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
   .h-year { font-size: 30px; }
   .wealth { margin: 2px 0 6px; }
   .a-desc { display: none; }
+  /* result + next move on short screens */
+  .big { font-size: 30px; }
+  .delta { margin-top: 4px; }
+  .chip { padding: 3px 7px; font-size: 10.5px; }
+  .chart-card { margin-top: 6px; padding: 6px 12px 2px; }
+  #xChart { height: 58px; }
+  .rows { margin-top: 6px; padding: 2px 12px; }
+  .rrow { padding: 3px 0; }
+  .rrow { grid-template-columns: 132px 1fr 58px; }
+  .rrow .n small { display: inline; margin-left: 4px; white-space: nowrap; }
+  .mini-chron { padding: 8px 12px; margin-top: 6px; }
+  .mini-chron .more { margin-top: 6px; padding: 7px 12px; min-height: 36px; }
+  .seg { margin-top: 6px; }
+  .opt { padding: 7px 10px; min-height: 0; }
   .with-wire .h-year { font-size: 26px; }
   .with-wire .wire { padding: 6px 10px; }
   .with-wire .wire-h { margin-bottom: 2px; }
