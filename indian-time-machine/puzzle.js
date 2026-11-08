@@ -58,6 +58,14 @@ function periodLabel(startMonth, endMonth) {
   return `${MONTHS[firstNumber - 1]} ${firstYear} – ${MONTHS[endNumber - 1]} ${endYear}`;
 }
 
+// "2022-06" (decision close) + "2024-12" → "Jul 2022 – Dec 2024"
+function spanLabel(decisionMonth, revealMonth) {
+  const [year, number] = decisionMonth.split('-').map(Number);
+  const first = `${MONTHS[number % 12]} ${number === 12 ? year + 1 : year}`;
+  const last = `${MONTHS[Number(revealMonth.slice(5)) - 1]} ${revealMonth.slice(0, 4)}`;
+  return `${first} – ${last}`;
+}
+
 // Reports depend only on the data files, so compute them once per dataset load.
 const reportCache = new WeakMap();
 function reportsFor(dataset, config) {
@@ -170,6 +178,8 @@ function publicPuzzle(puzzle) {
     startYearRange: puzzle.startYearRange,
     // When years are hidden, round windows are never sent until the reveal.
     periods: puzzle.flags.hiddenYears ? null : puzzle.rounds.map(round => periodLabel(round.decisionMonth, round.revealMonth)),
+    // e.g. "Jul 2022 – Dec 2024": the whole stretch the puzzle plays through (only when years are shown).
+    span: puzzle.flags.hiddenYears ? null : spanLabel(puzzle.rounds[0].decisionMonth, puzzle.rounds.at(-1).revealMonth),
     yearGuessOptions: puzzle.yearGuess ? puzzle.yearGuess.options : null
   };
 }

@@ -783,6 +783,16 @@
   function startIntro() {
     if (!S.current || !$('#screen-round').classList.contains('is-active')) return;
     const steps = [];
+    // Step 1: it's all real. Names the real stretch only when the years aren't hidden.
+    const names = S.current.assets.filter(asset => !asset.isCash).map(asset => asset.shortName);
+    const list = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names.join('');
+    steps.push({
+      target: () => $('#rHead'),
+      title: 'Real markets. Real headlines.',
+      text: hidden()
+        ? `Everything here really happened. Every price is real monthly market data for ${list}, converted to rupees, and every headline is a real story with its source. The years stay hidden until the end.`
+        : `Everything here really happened${S.puzzle.span ? ` between ${S.puzzle.span.split(' – ').join(' and ')}` : ''}. Every price is real monthly market data for ${list}, converted to rupees, and every headline is a real story with its source.`
+    });
     if (!$('#rWire').hidden) {
       steps.push({ target: () => $('#rWire'), title: 'Work out when you are.', text: `These are real headlines from the ${hidden() ? 'year' : 'stretch'} you’ve landed in. Use what you know about the markets to guess what happens next.` });
     }

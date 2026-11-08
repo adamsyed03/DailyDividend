@@ -238,6 +238,7 @@ test('feature flags with the current data: no hidden years, no clues, no per-rou
   assert.deepEqual(dailyPuzzle.flags, { hiddenYears: false, clues: false, roundNifty: false, niftyTitles: true });
   const shown = publicPuzzle(dailyPuzzle);
   assert.deepEqual(shown.periods, ['Jul–Dec 2022', '2023', 'Jan–Jun 2024', 'Jul–Dec 2024']);
+  assert.equal(shown.span, 'Jul 2022 – Dec 2024');
   assert.equal(shown.yearGuessOptions, null);
   const off = structuredClone(config);
   off.featureFlags.niftyTitles.enabled = false;
@@ -321,6 +322,7 @@ test('validator: supplied data turns on hidden years and clues, and catches a cl
   const puzzle = buildPuzzle(test, config, { mode: 'daily', dateKey: '2026-11-08', seed: 'daily:2026-11-08' });
   assert.equal(puzzle.flags.hiddenYears, true);
   assert.equal(publicPuzzle(puzzle).periods, null);
+  assert.equal(publicPuzzle(puzzle).span, null);
   assert.ok(puzzle.yearGuess.options.includes(puzzle.startYear));
   assert.equal(puzzle.yearGuess.options.length, 4);
   // Gap detection: drop one month and the year that needs it stops being playable.
