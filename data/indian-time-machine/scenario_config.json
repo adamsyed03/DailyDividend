@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "startingCapitalInr": 1000000,
   "chipCount": 10,
   "maxChipsPerAsset": 4,
@@ -12,46 +12,115 @@
     "startLevel": 15780.25,
     "endLevel": 23644.8
   },
+  "puzzleEpochIst": "2026-11-08",
+  "puzzle": {
+    "_note": "assets is the pool (any N). Each puzzle draws a seeded subset of non-cash assets that have full data for its window, plus cash.",
+    "assetsPerPuzzle": {
+      "min": 4,
+      "max": 5
+    },
+    "calendarStartYears": {
+      "from": 2009,
+      "to": 2022
+    }
+  },
+  "featureFlags": {
+    "_note": "Each flag switches itself on per puzzle when the data validation for it passes. Set enabled:false to force a flag off.",
+    "hiddenYears": {
+      "enabled": true,
+      "minStartYears": 4
+    },
+    "clues": {
+      "enabled": true,
+      "windowMonths": 3
+    },
+    "roundNifty": {
+      "enabled": true
+    },
+    "niftyTitles": {
+      "enabled": true
+    }
+  },
+  "titles": {
+    "basis": "Final wealth relative to ₹10L in the Nifty 50 over the same window, in %",
+    "tiers": [
+      {
+        "below": -20,
+        "name": "Paper Hands"
+      },
+      {
+        "below": -5,
+        "name": "FD Loyalist"
+      },
+      {
+        "below": 5,
+        "name": "Index Hugger"
+      },
+      {
+        "below": 20,
+        "name": "Smart Money"
+      },
+      {
+        "below": 40,
+        "name": "Dalal Street Sher"
+      },
+      {
+        "name": "Market Wizard"
+      }
+    ]
+  },
   "assets": [
     {
       "id": "RELIANCE.NS",
       "shortName": "Reliance",
       "name": "Reliance Industries",
       "currency": "INR",
-      "color": "#f36f45",
-      "explanation": "A diversified Indian business spanning energy, retail and digital services."
+      "color": "#e8704a",
+      "explanation": "A diversified Indian business spanning energy, retail and digital services.",
+      "market": "NSE",
+      "oneLiner": "Oil-to-telecom conglomerate, Jio’s parent",
+      "decodedSlug": "reliance-decoded",
+      "decodedTitle": "Reliance, decoded"
     },
     {
       "id": "HDFCBANK.NS",
       "shortName": "HDFC Bank",
       "name": "HDFC Bank",
       "currency": "INR",
-      "color": "#6aa8ff",
-      "explanation": "One of India's largest private-sector banks, exposed to credit growth and interest rates."
+      "color": "#5b8fd9",
+      "explanation": "One of India's largest private-sector banks, exposed to credit growth and interest rates.",
+      "market": "NSE",
+      "oneLiner": "India’s largest private-sector bank"
     },
     {
       "id": "AAPL",
       "shortName": "Apple",
       "name": "Apple",
       "currency": "USD",
-      "color": "#b8b6c7",
-      "explanation": "A US technology company. Your result includes both its adjusted share price and USD/INR."
+      "color": "#8c8aa8",
+      "explanation": "A US technology company. Your result includes both its adjusted share price and USD/INR.",
+      "market": "USD→₹",
+      "oneLiner": "iPhone maker; returns shown in rupees"
     },
     {
       "id": "GOLD_UNVERIFIED",
       "shortName": "Gold",
       "name": "Gold",
       "currency": "USD",
-      "color": "#e7b94f",
-      "explanation": "A USD-quoted gold benchmark from the supplied screenshots. The exact instrument is unverified."
+      "color": "#d4a53c",
+      "explanation": "A USD-quoted gold benchmark from the supplied screenshots. The exact instrument is unverified.",
+      "market": "USD→₹",
+      "oneLiner": "USD-quoted gold price, converted to rupees"
     },
     {
       "id": "CASH_INR",
       "shortName": "Cash",
       "name": "Cash",
       "currency": "INR",
-      "color": "#78c7a3",
-      "explanation": "Indian rupees held at 0% nominal. What inflation did to them is shown at the end."
+      "color": "#9aa39b",
+      "explanation": "Indian rupees held at 0% nominal. What inflation did to them is shown at the end.",
+      "market": "₹",
+      "oneLiner": "Rupees at 0% nominal"
     }
   ],
   "rounds": [

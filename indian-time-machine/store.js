@@ -4,31 +4,55 @@ const fs = require('fs');
 const fsp = require('fs/promises');
 const path = require('path');
 const initSqlJs = require('sql.js');
-const { validateRounds } = require('./engine');
+const { validateRounds, ENGINE_VERSION } = require('./engine');
+const { loadDataset } = require('./dataset');
+const { reportsFor } = require('./puzzle');
 
+// Market data comes from the CSV files via dataset.js (the same loader the
+// validator uses). SQLite holds game sessions and results.
 class TimeMachineStore {
   constructor(rootDir) {
     this.rootDir = rootDir;
     this.dataDir = path.join(rootDir, 'data', 'indian-time-machine');
     this.dbFile = path.join(this.dataDir, 'indian-time-machine.sqlite');
     this.config = JSON.parse(fs.readFileSync(path.join(this.dataDir, 'scenario_config.json'), 'utf8'));
-    this.config.news = JSON.parse(fs.readFileSync(path.join(this.dataDir, 'news.json'), 'utf8'));
     validateRounds(this.config);
+    this.dataset = loadDataset(this.dataDir, this.config);
     this.db = null;
-    this.priceMap = new Map();
-    this.fxMap = new Map();
-    this.inflationMap = new Map();
     this.writeQueue = Promise.resolve();
     this.ready = this.initialize();
   }
 
   async initialize() {
     if (!fs.existsSync(this.dbFile)) {
-      throw new Error('Indian Time Machine database is missing. Run npm run time-machine:fx and npm run time-machine:import.');
+      throw new Error('Indian Time Machine database is missing. Run npm run time-machine:import.');
     }
     const SQL = await initSqlJs({ locateFile: file => require.resolve(`sql.js/dist/${file}`) });
     this.db = new SQL.Database(fs.readFileSync(this.dbFile));
-    this.loadMarketCaches();
+    await this.migrate();
+  }
+
+  // v3 results are scored with 0%-nominal cash and continuous rounds. Rows scored
+  // under the old rules are moved (not deleted) to game_results_v1_archive.
+  async migrate() {
+    const columns = this.rows('PRAGMA table_info(game_results)').map(row => row.name);
+    if (columns.includes('engine_version')) return;
+    await this.mutate(() => {
+      this.db.run(`CREATE TABLE IF NOT EXISTS game_results_v1_archive (
+        id INTEGER PRIMARY KEY, session_id TEXT NOT NULL, mode TEXT NOT NULL, display_name TEXT NOT NULL,
+        final_wealth REAL NOT NULL, return_percent REAL NOT NULL, completed_at TEXT NOT NULL,
+        history_json TEXT NOT NULL, archived_at TEXT NOT NULL, archive_reason TEXT NOT NULL)`);
+      this.db.run(`INSERT INTO game_results_v1_archive
+        (id, session_id, mode, display_name, final_wealth, return_percent, completed_at, history_json, archived_at, archive_reason)
+        SELECT id, session_id, mode, display_name, final_wealth, return_percent, completed_at, history_json, ?, ?
+        FROM game_results`, [new Date().toISOString(), 'Scored before engine v3 (cash deflated by CPI; hidden Jun–Dec 2023 hold)']);
+      this.db.run('DELETE FROM game_results');
+      this.db.run('ALTER TABLE game_results ADD COLUMN engine_version INTEGER');
+      this.db.run('ALTER TABLE game_results ADD COLUMN puzzle_id TEXT');
+      this.db.run('ALTER TABLE game_results ADD COLUMN date_key TEXT');
+      this.db.run('ALTER TABLE game_results ADD COLUMN puzzle_no INTEGER');
+      this.db.run('CREATE INDEX IF NOT EXISTS idx_results_puzzle_wealth ON game_results(puzzle_id, final_wealth DESC)');
+    }, { skipReady: true });
   }
 
   rows(sql, params = []) {
@@ -47,35 +71,13 @@ class TimeMachineStore {
     return this.rows(sql, params)[0] || null;
   }
 
-  loadMarketCaches() {
-    for (const row of this.rows('SELECT * FROM prices')) {
-      this.priceMap.set(`${row.asset_id}:${row.month}`, {
-        price: Number(row.price_native),
-        currency: row.native_currency,
-        basis: row.price_basis,
-        partial: Boolean(row.is_partial_month),
-        status: row.verification_status
-      });
-    }
-    for (const row of this.rows('SELECT * FROM fx_month_end')) {
-      this.fxMap.set(row.month, { rate: Number(row.inr_per_usd), date: row.observation_date, series: row.series });
-    }
-    for (const row of this.rows('SELECT * FROM inflation_annual')) {
-      this.inflationMap.set(Number(row.year), { year: Number(row.year), percent: Number(row.inflation_percent), series: row.series });
-    }
-  }
-
   dataAdapter() {
-    return {
-      price: (asset, month) => this.priceMap.get(`${asset}:${month}`) || null,
-      fx: month => this.fxMap.get(month) || null,
-      inflation: year => this.inflationMap.get(Number(year)) || null
-    };
+    return this.dataset.adapter;
   }
 
-  async mutate(callback) {
+  async mutate(callback, { skipReady = false } = {}) {
     const run = this.writeQueue.then(async () => {
-      await this.ready;
+      if (!skipReady) await this.ready;
       const result = await callback();
       const bytes = Buffer.from(this.db.export());
       const tempFile = `${this.dbFile}.tmp`;
@@ -93,12 +95,7 @@ class TimeMachineStore {
         VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET state_json = excluded.state_json,
           completed = excluded.completed, updated_at = excluded.updated_at`, [
-        session.id,
-        session.mode,
-        JSON.stringify(session),
-        session.completed ? 1 : 0,
-        session.createdAt,
-        session.updatedAt
+        session.id, session.mode, JSON.stringify(session), session.completed ? 1 : 0, session.createdAt, session.updatedAt
       ]);
     });
   }
@@ -112,29 +109,36 @@ class TimeMachineStore {
 
   async saveCompletedSession(session, summary) {
     return this.mutate(() => {
-      this.db.run(`UPDATE game_sessions SET state_json = ?, completed = 1, updated_at = ? WHERE id = ?`, [
+      this.db.run('UPDATE game_sessions SET state_json = ?, completed = 1, updated_at = ? WHERE id = ?', [
         JSON.stringify(session), session.updatedAt, session.id
       ]);
       const displayName = `Traveller ${session.id.slice(0, 5).toUpperCase()}`;
       this.db.run(`INSERT OR IGNORE INTO game_results
-        (session_id, mode, display_name, final_wealth, return_percent, completed_at, history_json)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`, [
-        session.id,
-        session.mode,
-        displayName,
-        summary.finalWealth,
-        summary.returnPercent,
-        new Date().toISOString(),
-        JSON.stringify(summary.history)
+        (session_id, mode, display_name, final_wealth, return_percent, completed_at, history_json, engine_version, puzzle_id, date_key, puzzle_no)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+        session.id, session.mode, displayName, summary.finalWealth, summary.returnPercent, new Date().toISOString(),
+        JSON.stringify(summary.history.map(({ round, startWealth, endWealth, allocations }) => ({ round, startWealth, endWealth, allocations }))),
+        ENGINE_VERSION, session.puzzle.id, session.puzzle.dateKey, session.puzzle.number
       ]);
       return displayName;
     });
   }
 
-  async leaderboard(mode = 'story', limit = 10) {
+  // Daily puzzles only: unlimited games never count towards a ranking.
+  async rankFor(session, wealth) {
+    await this.ready;
+    if (session.mode !== 'daily') return null;
+    const puzzleId = session.puzzle.id;
+    const better = Number(this.row('SELECT COUNT(*) AS n FROM game_results WHERE puzzle_id = ? AND final_wealth > ?', [puzzleId, wealth])?.n || 0);
+    const total = Number(this.row('SELECT COUNT(*) AS n FROM game_results WHERE puzzle_id = ?', [puzzleId])?.n || 0);
+    const rank = better + 1;
+    return { rank, total, percentile: total ? Math.max(1, Math.ceil((rank / total) * 100)) : null };
+  }
+
+  async leaderboard(puzzleId, limit = 10) {
     await this.ready;
     return this.rows(`SELECT display_name, final_wealth, return_percent, completed_at
-      FROM game_results WHERE mode = ? ORDER BY final_wealth DESC, completed_at ASC LIMIT ?`, [mode, limit])
+      FROM game_results WHERE puzzle_id = ? ORDER BY final_wealth DESC, completed_at ASC LIMIT ?`, [puzzleId, limit])
       .map((row, index) => ({
         rank: index + 1,
         displayName: row.display_name,
@@ -144,50 +148,36 @@ class TimeMachineStore {
       }));
   }
 
-  async rankFor(sessionId, mode, wealth) {
-    await this.ready;
-    const row = this.row('SELECT COUNT(*) AS better FROM game_results WHERE mode = ? AND final_wealth > ?', [mode, wealth]);
-    const result = this.row('SELECT COUNT(*) AS total FROM game_results WHERE mode = ?', [mode]);
-    const exists = this.row('SELECT 1 AS found FROM game_results WHERE session_id = ?', [sessionId]);
-    return { rank: Number(row?.better || 0) + (exists ? 1 : 0), total: Number(result?.total || 0) };
-  }
-
   async resultForSession(sessionId) {
     await this.ready;
-    const row = this.row(`SELECT display_name, final_wealth, return_percent, completed_at
-      FROM game_results WHERE session_id = ?`, [sessionId]);
-    return row ? {
-      displayName: row.display_name,
-      finalWealth: Number(row.final_wealth),
-      returnPercent: Number(row.return_percent),
-      completedAt: row.completed_at
-    } : null;
+    const row = this.row('SELECT display_name, final_wealth FROM game_results WHERE session_id = ?', [sessionId]);
+    return row ? { displayName: row.display_name, finalWealth: Number(row.final_wealth) } : null;
   }
 
   async health() {
     await this.ready;
-    const requiredMonths = [...new Set(this.config.rounds.flatMap(round => [round.decisionMonth, round.revealMonth]))].sort();
-    const requiredAssets = this.config.assets.filter(asset => asset.id !== 'CASH_INR').map(asset => asset.id);
-    const missingPrices = [];
-    for (const asset of requiredAssets) {
-      for (const month of requiredMonths) if (!this.priceMap.has(`${asset}:${month}`)) missingPrices.push(`${asset} · ${month}`);
-    }
-    const missingFxMonths = requiredMonths.filter(month => !this.fxMap.has(month));
-    const missingInflationYears = [2022, 2023, 2024].filter(year => !this.inflationMap.has(year));
-    const sources = this.rows('SELECT name, source_type, row_count, verification_status, imported_at FROM source_files ORDER BY id');
+    const reports = reportsFor(this.dataset, this.config);
+    const legacy = reports.legacy;
+    const playable = reports.startYears.filter(report => report.playable).map(report => report.startYear);
     return {
-      ready: !missingPrices.length && !missingFxMonths.length && !missingInflationYears.length,
-      priceRows: Number(this.row('SELECT COUNT(*) AS count FROM prices')?.count || 0),
-      fxMonths: Number(this.row('SELECT COUNT(*) AS count FROM fx_month_end')?.count || 0),
-      inflationYears: Number(this.row('SELECT COUNT(*) AS count FROM inflation_annual')?.count || 0),
-      corporateEvents: Number(this.row('SELECT COUNT(*) AS count FROM corporate_events')?.count || 0),
-      availableMonths: requiredMonths,
-      missingPrices,
-      missingFxMonths,
-      missingInflationYears,
-      goldInstrumentVerified: false,
-      screenshotAuditComplete: false,
-      sources
+      ready: legacy.pricesReady,
+      priceRows: this.dataset.prices.size,
+      fxMonths: this.dataset.fx.size,
+      inflationYears: this.dataset.inflation.size,
+      headlines: this.dataset.headlines.length,
+      flaggedHeadlines: this.dataset.headlines.filter(item => !item.usable).map(item => ({ id: item.id, issues: item.issues })),
+      legacyWindow: {
+        rounds: legacy.rounds.map(round => `${round.decisionMonth} → ${round.revealMonth}`),
+        readyAssets: legacy.readyAssets,
+        roundNifty: legacy.roundNiftyReady,
+        overallNifty: legacy.overallNiftyReady,
+        clues: legacy.cluesReady
+      },
+      playableStartYears: playable,
+      archivedV1Results: Number(this.row("SELECT COUNT(*) AS n FROM sqlite_master WHERE name = 'game_results_v1_archive'")?.n)
+        ? Number(this.row('SELECT COUNT(*) AS n FROM game_results_v1_archive')?.n || 0)
+        : 0,
+      goldInstrumentVerified: false
     };
   }
 }

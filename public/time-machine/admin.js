@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const $ = selector => document.querySelector(selector);
+  const escape = value => String(value ?? '').replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
 
   async function load() {
     try {
@@ -11,24 +12,24 @@
       status.textContent = health.ready ? 'READY TO SCORE' : 'BLOCKED';
       status.classList.toggle('ready', health.ready);
       $('#metric-grid').innerHTML = [
-        [health.priceRows, 'SUPPLIED PRICE ROWS'],
+        [health.priceRows, 'MONTHLY PRICE ROWS'],
         [health.fxMonths, 'MONTH-END FX RATES'],
         [health.inflationYears, 'CPI YEARS'],
-        [health.corporateEvents, 'AUDIT-ONLY EVENTS']
+        [health.playableStartYears.length, 'HIDDEN-YEAR START YEARS READY']
       ].map(([value, label]) => `<article><strong>${value}</strong><span>${label}</span></article>`).join('');
+      const legacy = health.legacyWindow;
       const warnings = [];
-      if (health.missingPrices.length) warnings.push(`Missing checkpoint prices: ${health.missingPrices.join(', ')}`);
-      if (health.missingFxMonths.length) warnings.push(`Missing FRED month-end FX: ${health.missingFxMonths.join(', ')}`);
-      if (health.missingInflationYears.length) warnings.push(`Missing annual India CPI context: ${health.missingInflationYears.join(', ')}`);
+      if (!legacy.roundNifty) warnings.push('Per-round Nifty is off: Nifty closes are missing for some round boundaries.');
+      if (!legacy.clues) warnings.push('Pre-decision clues are off: no sourced clue headlines for the current window.');
+      if (!health.playableStartYears.length) warnings.push('Hidden years are off: no start year has full monthly prices yet.');
+      health.flaggedHeadlines.forEach(item => warnings.push(`Flagged headline ${item.id}: ${item.issues.join('; ')}`));
       if (!health.goldInstrumentVerified) warnings.push('Gold source instrument is unverified. Keep the prototype label and do not claim exact spot, futures or ETF ownership.');
-      if (!health.screenshotAuditComplete) warnings.push('The 250 screenshot-transcribed prices still need a final visual numerical audit before public claims.');
-      $('#warnings').innerHTML = `${health.ready ? '<div class="warning ok">All six month-end checkpoints exist for the four priced assets and FRED USD/INR. Server scoring is enabled.</div>' : ''}${warnings.map(item => `<div class="warning">${item}</div>`).join('')}`;
-      $('#sources').innerHTML = health.sources.map(source => `<div class="source-row"><strong>${source.name}</strong><span>${source.source_type}</span><span>${source.row_count} rows</span><span>${source.verification_status}</span></div>`).join('');
+      $('#warnings').innerHTML = `${health.ready ? `<div class="warning ok">Current window (${escape(legacy.rounds.join(', '))}) has prices and FX for ${escape(legacy.readyAssets.join(', '))}. Server scoring is enabled.</div>` : ''}${warnings.map(item => `<div class="warning">${escape(item)}</div>`).join('')}`;
+      $('#sources').innerHTML = `<div class="source-row"><strong>Full gap report</strong><span>Run npm run game:validate-data</span><span>${health.headlines} headlines</span><span>${health.archivedV1Results} archived v1 results</span></div>`;
     } catch (error) {
       $('#health-status').textContent = 'SETUP ERROR';
-      $('#warnings').innerHTML = `<div class="warning">${error.message}</div>`;
+      $('#warnings').innerHTML = `<div class="warning">${escape(error.message)}</div>`;
     }
   }
   load();
 })();
-
