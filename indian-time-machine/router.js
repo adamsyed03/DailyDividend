@@ -8,7 +8,7 @@ const {
   istDateKey, puzzleNumber, buildPuzzle, puzzleConfig, publicPuzzle, periodLabel,
   headlineById, hiddenDateHeadline, hindsightMax, niftyPath, titleFor
 } = require('./puzzle');
-const { shiftMonth, lastDayOfMonth } = require('./dataset');
+const { shiftMonth, lastDayOfMonth, duringFor } = require('./dataset');
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const monthLabel = month => `${MONTHS[Number(month.slice(5, 7)) - 1]} ${month.slice(0, 4)}`;
@@ -76,7 +76,12 @@ function createTimeMachineRouter({ rootDir }) {
         assets: reveal.assets.map(({ id, name, color, chips, startValue, endValue, returnPercent }) => ({ id, name, color, chips, startValue, endValue, returnPercent })),
         holdings: reveal.holdings
       },
-      during: hiddenDateHeadline(headlineById(store.dataset, round.duringId)),
+      // The round's Market Chronicle: the chosen lead first, then every other sourced story
+      // from inside the round. Never dated during play; links are held back when years are
+      // hidden (a source page would give the year away) and shown in the final Chronicle.
+      chronicle: duringFor(store.dataset, round)
+        .sort((a, b) => (b.id === round.duringId) - (a.id === round.duringId))
+        .map(item => ({ ...hiddenDateHeadline(item), summary: item.summary, url: flags.hiddenYears ? null : item.url })),
       chart: {
         you: [initial, ...session.history.map(item => item.endWealth)],
         nifty: nifty ? nifty.slice(0, session.history.length + 1) : null,

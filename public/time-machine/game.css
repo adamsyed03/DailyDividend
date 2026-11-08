@@ -127,6 +127,18 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .story p { font-size: 12px; line-height: 1.4; color: var(--ink-2); }
 .story .hl { font-family: var(--serif); font-size: 13.5px; color: var(--ink); }
 .story a { color: var(--ink); font-weight: 600; }
+.mini-chron summary { list-style: none; cursor: pointer; }
+.mini-chron summary::-webkit-details-marker { display: none; }
+.mini-chron .more { display: inline-block; margin-top: 5px; font-size: 11.5px; font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 2px; min-height: 24px; }
+.mini-chron .more::after { content: attr(data-closed) " ▾"; }
+.mini-chron[open] .more::after { content: attr(data-open) " ▴"; }
+.mini-chron ol { list-style: none; margin-top: 4px; }
+.mini-chron li { padding: 8px 0 2px; border-top: 1px dashed rgba(23, 58, 42, .2); }
+.mini-chron li .flag { background: rgba(255, 255, 255, .5); }
+.mini-chron h4 { font-family: var(--serif); font-size: 14px; font-weight: 600; line-height: 1.25; margin-top: 4px; }
+.mini-chron li p { margin-top: 2px; }
+.mini-chron li a { display: inline-block; font-size: 11.5px; font-weight: 700; margin-top: 3px; min-height: 24px; }
+.mini-chron li small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
 .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .opt { text-align: left; border: 1.5px solid var(--line); background: var(--paper); border-radius: 14px; padding: 10px 12px; min-height: 64px; }
 .opt.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
