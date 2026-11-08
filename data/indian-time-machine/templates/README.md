@@ -52,7 +52,7 @@ Never type in a number or headline that you haven't taken from a source. Every r
 - **`clue`** headlines are shown before a decision, with the date hidden. A clue belongs to the decision point whose three-month lead-up contains its date: Oct–Dec *Y* for the Dec *Y* close. It must not be dated after that month's last close, or the validator flags it and it's never shown. Each decision needs at least one `IN` clue and one `US`/`GLOBAL` clue.
 - **`during`** headlines are dated inside a round. One is shown after the round, with the date still hidden. Its `summary` can feed "Why it moved" when it's tagged with the asset.
 - Any row missing an outlet or URL is flagged and kept out of play. It's never shown to players.
-- The existing Market Chronicle has already been moved to `../supplied/headlines.csv`. Two rows in it are flagged because they have no source: "Indian Inflation Falls to 4.25%" and "Gold Hits Record High". Add an outlet and URL to bring them back.
+- `../supplied/headlines.csv` holds the Market Chronicle: 16 owner-supplied outlet headlines (Nov 2026) plus 7 earlier entries credited to the company or regulator that published them. The two old unsourced rows ("Indian Inflation Falls to 4.25%" and "Gold Hits Record High") have been removed; the gold one is replaced by the Reuters/Kitco story of 12 Apr 2024.
 
 ## Feature flags
 

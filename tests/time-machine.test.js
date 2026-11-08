@@ -11,7 +11,7 @@ const {
 } = require('../indian-time-machine/engine');
 const { splitRupees } = require('../public/time-machine/rupee-split');
 const { parseCsv, rowsToObjects, toCsv } = require('../indian-time-machine/csv');
-const { loadDataset, startYearReports, legacyReport, assignClues } = require('../indian-time-machine/dataset');
+const { loadDataset, startYearReports, legacyReport, assignClues, duringFor } = require('../indian-time-machine/dataset');
 const {
   istDateKey, puzzleNumber, buildPuzzle, puzzleConfig, publicPuzzle, legalSplits, hindsightMax, titleFor
 } = require('../indian-time-machine/puzzle');
@@ -244,11 +244,24 @@ test('feature flags with the current data: no hidden years, no clues, no per-rou
   assert.equal(buildPuzzle(dataset, off, { mode: 'daily', dateKey: '2026-11-08', seed: 'x' }).flags.niftyTitles, false);
 });
 
-test('flagged (unsourced) headlines are never used', () => {
-  const flagged = dataset.headlines.filter(item => !item.usable).map(item => item.headline).sort();
-  assert.deepEqual(flagged, ['Gold Hits Record High', 'Indian Inflation Falls to 4.25%']);
-  const used = dailyPuzzle.rounds.map(round => round.duringId);
-  for (const id of used.filter(Boolean)) assert.ok(dataset.headlines.find(item => item.id === id).usable);
+test('every shipped headline is sourced, and flagged headlines are never used', () => {
+  assert.deepEqual(dataset.headlines.filter(item => !item.usable).map(item => item.id), []);
+  for (const item of dataset.headlines) {
+    assert.ok(item.outlet && /^https:\/\//.test(item.url), `${item.id} needs an outlet and https url`);
+  }
+  // The two unsourced rows were removed / replaced by the owner.
+  assert.ok(!dataset.headlines.some(item => /^(Gold Hits Record High|Indian Inflation Falls to 4\.25%)$/.test(item.headline)));
+  // Every round in the current window has a Chronicle.
+  for (const round of config.rounds) assert.ok(duringFor(dataset, round).length >= 4, `round ${round.round} Chronicle`);
+  // An unsourced row is excluded from play.
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dd-headlines-'));
+  for (const file of ['market_prices_monthly.csv', 'usd_inr_month_end.csv', 'india_inflation_annual.csv']) fs.copyFileSync(path.join(DATA_DIR, file), path.join(dir, file));
+  fs.mkdirSync(path.join(dir, 'supplied'));
+  fs.writeFileSync(path.join(dir, 'supplied', 'headlines.csv'), toCsv(['id', 'date', 'region', 'outlet', 'headline', 'url', 'round_role', 'asset_tags', 'summary'], [['x', '2022-09-01', 'IN', '', 'Unsourced test row', '', 'during', '', '']]));
+  const test = loadDataset(dir, config);
+  assert.equal(test.headlines[0].usable, false);
+  assert.deepEqual(duringFor(test, config.rounds[0]), []);
+  for (const id of dailyPuzzle.rounds.map(round => round.duringId).filter(Boolean)) assert.ok(dataset.headlines.find(item => item.id === id).usable);
 });
 
 test('hindsight max is the true optimum under the rules and replays through valueAt', () => {
