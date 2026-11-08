@@ -2,7 +2,7 @@
 
 const express = require('express');
 const { TimeMachineStore } = require('./store');
-const { createSession, publicRound, lockRound, finishNewspaper, currentPortfolio, finalSummary } = require('./engine');
+const { createSession, publicRound, lockRound, finishNewspaper, currentPortfolio, finalSummary, ENGINE_VERSION } = require('./engine');
 
 function budapestDateKey(date = new Date()) {
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -22,11 +22,7 @@ function publicConfig(config) {
     chipCount: config.chipCount,
     maxChipsPerAsset: config.maxChipsPerAsset,
     assets: config.assets.map(({ id, name, shortName, currency, color, explanation }) => ({ id, name, shortName, currency, color, explanation })),
-    rounds: config.rounds.map(({ round, passiveHold }) => ({
-      round,
-      label: `Year ${round}`,
-      hasPassiveHold: Boolean(passiveHold)
-    }))
+    rounds: config.rounds.map(({ round }) => ({ round, label: `Round ${round}` }))
   };
 }
 
@@ -63,6 +59,7 @@ function createTimeMachineRouter({ rootDir }) {
       if (!validSessionId(req.params.sessionId)) return res.status(404).json({ error: 'Game session not found.' });
       const session = await store.loadSession(req.params.sessionId);
       if (!session) return res.status(404).json({ error: 'Game session not found.' });
+      if (session.engineVersion !== ENGINE_VERSION) return res.status(410).json({ error: 'This game was started on an older version. Start a new one.' });
       if (session.completed) {
         const final = finalSummary(store.dataAdapter(), store.config, session);
         const storedResult = await store.resultForSession(session.id);
@@ -86,7 +83,7 @@ function createTimeMachineRouter({ rootDir }) {
         completed: false,
         stage: session.stage || 'allocation',
         current: publicRound(store.dataAdapter(), store.config, round, session.wealth),
-        portfolio: session.holdings ? currentPortfolio(store.config, session) : null,
+        portfolio: session.positions ? currentPortfolio(store.dataAdapter(), store.config, session) : null,
         prefillAllocations: { ...(session.lastAllocations || {}) },
         newspaper: session.lastNewspaper || null
       });
@@ -102,6 +99,11 @@ function createTimeMachineRouter({ rootDir }) {
         if (!session) {
           const error = new Error('Game session not found.');
           error.status = 404;
+          throw error;
+        }
+        if (session.engineVersion !== ENGINE_VERSION) {
+          const error = new Error('This game was started on an older version. Start a new one.');
+          error.status = 410;
           throw error;
         }
         const outcome = lockRound(store.dataAdapter(), store.config, session, req.body?.allocations || {}, { rebalance: true });
@@ -124,6 +126,11 @@ function createTimeMachineRouter({ rootDir }) {
         if (!session) {
           const error = new Error('Game session not found.');
           error.status = 404;
+          throw error;
+        }
+        if (session.engineVersion !== ENGINE_VERSION) {
+          const error = new Error('This game was started on an older version. Start a new one.');
+          error.status = 410;
           throw error;
         }
         const rebalance = req.body?.action === 'reshuffle';
@@ -153,6 +160,11 @@ function createTimeMachineRouter({ rootDir }) {
         if (!session) {
           const error = new Error('Game session not found.');
           error.status = 404;
+          throw error;
+        }
+        if (session.engineVersion !== ENGINE_VERSION) {
+          const error = new Error('This game was started on an older version. Start a new one.');
+          error.status = 410;
           throw error;
         }
         const result = finishNewspaper(store.dataAdapter(), store.config, session);

@@ -109,7 +109,7 @@
     state.current = current;
     state.isReshuffling = reshuffling;
     state.allocations = Object.fromEntries(current.assets.map(asset => [asset.id, Number(prefill[asset.id] || 0)]));
-    $('#round-kicker').textContent = state.mode === 'daily' ? 'TODAY’S QUICK PUZZLE' : `YEAR ${current.round} OF ${current.totalRounds}`;
+    $('#round-kicker').textContent = state.mode === 'daily' ? 'TODAY’S QUICK PUZZLE' : `ROUND ${current.round} OF ${current.totalRounds}`;
     $('#round-label').textContent = current.label;
     $('#arrival-label').textContent = current.label;
     $('#date-line').textContent = reshuffling ? 'OPTIONAL PORTFOLIO RESHUFFLE' : 'BUILD YOUR OPENING PORTFOLIO';
@@ -117,13 +117,13 @@
     $('#progress-dots').innerHTML = Array.from({ length: current.totalRounds }, (_, index) => {
       const roundNumber = index + 1;
       const status = roundNumber < current.round ? 'done' : roundNumber === current.round ? 'current' : '';
-      return `<i class="${status}" aria-label="Year ${roundNumber}"></i>`;
+      return `<i class="${status}" aria-label="Round ${roundNumber}"></i>`;
     }).join('');
     $('#game-error').textContent = '';
     $('#cancel-reshuffle').hidden = !reshuffling;
     $('#lock-button').innerHTML = reshuffling
-      ? `Confirm reshuffle for Year ${current.round} <span>→</span>`
-      : `Lock Year ${current.round} portfolio <span>→</span>`;
+      ? `Confirm reshuffle for Round ${current.round} <span>→</span>`
+      : `Lock Round ${current.round} portfolio <span>→</span>`;
     renderAllocationCards();
     updateAllocationUi();
   }
@@ -161,14 +161,15 @@
 
   function updateAllocationUi() {
     const total = allocationTotal();
-    const chipValue = state.current.wealth / state.current.chipCount;
+    // Same largest-remainder split the server uses, so the stakes shown always sum to the wealth.
+    const stakes = window.DDRupeeSplit.splitRupees(state.current.wealth, state.allocations, state.current.chipCount);
     state.current.assets.forEach(asset => {
       const chips = state.allocations[asset.id];
       const card = document.querySelector(`[data-asset-card="${CSS.escape(asset.id)}"]`);
       if (!card) return;
       card.classList.toggle('has-chips', chips > 0);
       card.querySelector(`[data-chip-count="${CSS.escape(asset.id)}"]`).textContent = chips;
-      card.querySelector(`[data-amount="${CSS.escape(asset.id)}"]`).textContent = money.format(chips * chipValue);
+      card.querySelector(`[data-amount="${CSS.escape(asset.id)}"]`).textContent = money.format(stakes[asset.id]);
       card.querySelector('[data-chip-action="minus"]').disabled = chips === 0;
       card.querySelector('[data-chip-action="plus"]').disabled = chips >= state.current.maxChipsPerAsset || total >= state.current.chipCount;
     });
@@ -206,8 +207,8 @@
       state.locking = false;
       if (state.current) {
         $('#lock-button').innerHTML = state.isReshuffling
-          ? `Confirm reshuffle for Year ${state.current.round} <span>→</span>`
-          : `Lock Year ${state.current.round} portfolio <span>→</span>`;
+          ? `Confirm reshuffle for Round ${state.current.round} <span>→</span>`
+          : `Lock Round ${state.current.round} portfolio <span>→</span>`;
         updateAllocationUi();
       }
     }
@@ -280,7 +281,7 @@
     $('#chronicle-panel').classList.remove('rabbit-hole-edition');
     $('#newspaper-edition').textContent = newspaper.period ? `${newspaper.period.toUpperCase()} EDITION` : 'HISTORICAL MARKET EDITION';
     $('#newspaper-masthead').textContent = newspaper.masthead;
-    $('#newspaper-year').textContent = (newspaper.label || '').replace(/^Year (\d+) \S+ What Happened$/, 'What Just Happened in Year $1');
+    $('#newspaper-year').textContent = newspaper.label || '';
     $('.newspaper-footer p').textContent = 'These stories are revealed only after the year’s market result.';
     $('#newspaper-stories').className = `newspaper-stories story-count-${stories.length}`;
     $('#newspaper-stories').innerHTML = stories.map((story, index) => {
@@ -348,10 +349,10 @@
       $('#chronicle-panel').hidden = true;
     }
     const nextYear = payload.current.round;
-    $('#decision-title').textContent = `Ready for Year ${nextYear}?`;
+    $('#decision-title').textContent = `Ready for Round ${nextYear}?`;
     $('#decision-wealth').textContent = money.format(payload.current.wealth);
     $('#decision-holdings').innerHTML = payload.portfolio.map(asset => `<article style="--asset-color:${asset.color}"><div><strong>${asset.name}</strong><span>${asset.weightPercent.toFixed(1)}% of portfolio</span></div><b>${money.format(asset.value)}</b></article>`).join('');
-    $('#hold-portfolio').innerHTML = `Continue unchanged into Year ${nextYear} <span>→</span>`;
+    $('#hold-portfolio').innerHTML = `Continue unchanged into Round ${nextYear} <span>→</span>`;
   }
 
   async function continueSamePortfolio() {
@@ -384,35 +385,26 @@
   function renderFinal(final) {
     state.final = final;
     const positive = final.profitLoss >= 0;
-    const initialWealth = final.initialWealth || 1_000_000;
-    const nifty50Wealth = Number.isFinite(final.nifty50Wealth)
-      ? final.nifty50Wealth
-      : Math.round((initialWealth * (23644.80 / 15780.25)) / 10) * 10;
-    const nifty50ReturnPercent = Number.isFinite(final.nifty50ReturnPercent)
-      ? final.nifty50ReturnPercent
-      : (nifty50Wealth / initialWealth - 1) * 100;
-    const beatNiftyBy = Number.isFinite(final.beatNiftyBy) ? final.beatNiftyBy : final.finalWealth - nifty50Wealth;
-    const beatNifty = beatNiftyBy >= 0;
-    $('#final-verdict').textContent = beatNifty ? 'You beat the Nifty.' : 'The Nifty beat you.';
+    // No client-side fallbacks: every number shown comes from the server's summary.
+    const hasNifty = Number.isFinite(final.nifty50Wealth) && Number.isFinite(final.beatNiftyBy);
+    const beatNifty = hasNifty && final.beatNiftyBy >= 0;
+    $('#final-verdict').textContent = !hasNifty ? 'Your four rounds are in.' : (beatNifty ? 'You finished ahead of the Nifty.' : 'You finished behind the Nifty.');
     $('#final-wealth').textContent = money.format(final.finalWealth);
     $('#final-return').className = positive ? 'positive' : 'negative';
     $('#final-return').textContent = `${formatPercent(final.returnPercent)} portfolio return`;
     $('#final-profit').textContent = `${positive ? '+' : '−'}${money.format(Math.abs(final.profitLoss))}`;
-    $('#nifty-comparison').className = beatNifty ? 'positive' : 'negative';
-    $('#nifty-comparison').textContent = `${beatNifty ? '+' : '−'}${money.format(Math.abs(beatNiftyBy))}`;
-    $('#nifty-benchmark-copy').textContent = `${money.format(nifty50Wealth)} benchmark value · ${formatPercent(nifty50ReturnPercent, 2)} price return`;
+    $('#nifty-comparison').className = !hasNifty ? '' : (beatNifty ? 'positive' : 'negative');
+    $('#nifty-comparison').textContent = hasNifty ? `${beatNifty ? '+' : '−'}${money.format(Math.abs(final.beatNiftyBy))}` : 'n.a.';
+    $('#nifty-benchmark-copy').textContent = hasNifty
+      ? `${money.format(final.nifty50Wealth)} benchmark value · ${formatPercent(final.nifty50ReturnPercent, 2)} price return`
+      : 'No Nifty 50 levels on file for this window.';
     $('#final-rank').textContent = final.leaderboard?.total ? `#${final.leaderboard.rank} of ${final.leaderboard.total}` : 'First result';
     const inflationValues = (final.inflationContext || []).map(item => item.percent).filter(Number.isFinite);
     const averageInflation = inflationValues.length
       ? inflationValues.reduce((sum, value) => sum + value, 0) / inflationValues.length
       : null;
-    const inflationFactor = inflationValues.reduce((factor, value) => factor * (1 + value / 100), 1);
-    const realCashValue = Number.isFinite(final.cashRealWealth)
-      ? final.cashRealWealth
-      : (inflationValues.length ? 1_000_000 / inflationFactor : null);
-    const purchasingPowerLoss = Number.isFinite(final.cashPurchasingPowerLoss)
-      ? final.cashPurchasingPowerLoss
-      : (realCashValue === null ? null : 1_000_000 - realCashValue);
+    const realCashValue = Number.isFinite(final.cashRealWealth) ? final.cashRealWealth : null;
+    const purchasingPowerLoss = Number.isFinite(final.cashPurchasingPowerLoss) ? final.cashPurchasingPowerLoss : null;
     $('#inflation-years').innerHTML = `
       <div><strong>${averageInflation === null ? 'n.a.' : `${averageInflation.toFixed(2)}%`}</strong><span>Average CPI</span></div>
       <div class="cash-real-value"><strong>${realCashValue === null ? 'n.a.' : money.format(realCashValue)}</strong><span>₹10 lakh cash after CPI adjustment</span><small>${purchasingPowerLoss === null ? 'Inflation data unavailable' : `${money.format(purchasingPowerLoss)} lost to inflation`}</small></div>`;
@@ -440,9 +432,9 @@
   }
 
   function drawWealthChart(final) {
-    const periods = (final.history || []).filter(item => /^Year [1-4]$/.test(item.label));
-    const values = periods.map(item => item.endWealth);
-    const labels = periods.map(item => item.label);
+    // Chart starts at the ₹10L capital; every later point is a round's closing value.
+    const values = final.chartPoints || [final.initialWealth, ...(final.history || []).map(item => item.endWealth)];
+    const labels = ['Start', ...(final.history || []).map(item => item.label)];
     const width = 720;
     const height = 220;
     const padX = 72;
@@ -462,9 +454,10 @@
   async function shareResult() {
     const final = state.final;
     if (!final) return;
-    const benchmarkDifference = Number.isFinite(final.beatNiftyBy) ? final.beatNiftyBy : final.finalWealth - 1_498_380;
-    const benchmarkResult = benchmarkDifference >= 0 ? 'beat' : 'trailed';
-    const text = `I turned ₹10,00,000 into ${money.format(final.finalWealth)} in the Indian Time Machine (${formatPercent(final.returnPercent)}) and ${benchmarkResult} the Nifty 50 benchmark. Can you beat the past?`;
+    const niftyClause = Number.isFinite(final.beatNiftyBy)
+      ? ` and ${final.beatNiftyBy >= 0 ? 'beat' : 'trailed'} the Nifty 50 benchmark`
+      : '';
+    const text = `I turned ₹10,00,000 into ${money.format(final.finalWealth)} in the Indian Time Machine (${formatPercent(final.returnPercent)})${niftyClause}. Can you beat the past?`;
     try {
       if (navigator.share) await navigator.share({ title: 'Indian Time Machine', text, url: location.origin + '/game' });
       else { await navigator.clipboard.writeText(`${text} ${location.origin}/game`); toast('Result copied to your clipboard.'); }

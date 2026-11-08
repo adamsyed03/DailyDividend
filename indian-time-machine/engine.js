@@ -1,9 +1,11 @@
 'use strict';
 
 const crypto = require('crypto');
+const { splitRupees } = require('../public/time-machine/rupee-split');
 
 const CASH_ID = 'CASH_INR';
 const USD_ASSETS = new Set(['AAPL', 'GOLD_UNVERIFIED']);
+const ENGINE_VERSION = 2;
 
 function roundMoney(value) {
   return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
@@ -25,21 +27,41 @@ function validateAllocations(allocations, config) {
   return clean;
 }
 
-function grossReturn(data, assetId, startMonth, endMonth) {
-  if (assetId === CASH_ID) return cashInflationGross(data, startMonth, endMonth);
-  const startPrice = data.price(assetId, startMonth);
-  const endPrice = data.price(assetId, endMonth);
-  if (!startPrice || !endPrice) throw new Error(`Missing ${assetId} price for ${!startPrice ? startMonth : endMonth}.`);
-  let gross = endPrice.price / startPrice.price;
-  if (USD_ASSETS.has(assetId)) {
-    const startFx = data.fx(startMonth);
-    const endFx = data.fx(endMonth);
-    if (!startFx || !endFx) throw new Error(`Missing USD/INR month-end rate for ${!startFx ? startMonth : endMonth}.`);
-    gross *= endFx.rate / startFx.rate;
-  }
-  return gross;
+// Rounds must form one continuous timeline: each round closes on the exact month
+// the next one opens. A gap lets unseen market drift change the portfolio between
+// "round result" and "next round", which is what caused the ₹48k jump.
+function validateRounds(config) {
+  const rounds = config.rounds || [];
+  if (!rounds.length) throw new Error('Scenario has no rounds.');
+  rounds.forEach((round, index) => {
+    if (round.round !== index + 1) throw new Error(`Round ${index + 1} is out of order.`);
+    if (!(round.decisionMonth < round.revealMonth)) throw new Error(`Round ${round.round} must end after it starts.`);
+    if (round.passiveHold) throw new Error(`Round ${round.round} has a passive hold; rounds must be continuous instead.`);
+    const next = rounds[index + 1];
+    if (next && next.decisionMonth !== round.revealMonth) {
+      throw new Error(`Round ${round.round} ends ${round.revealMonth} but round ${next.round} starts ${next.decisionMonth}. Rounds must be continuous.`);
+    }
+  });
+  return true;
 }
 
+// Rupee value of one unit of an asset at a month-end. Cash is held at 0% nominal;
+// inflation only appears in the final real-value line (see cashInflationGross).
+function priceInr(data, assetId, month) {
+  if (assetId === CASH_ID) return 1;
+  const point = data.price(assetId, month);
+  if (!point) throw new Error(`Missing ${assetId} price for ${month}.`);
+  if (!USD_ASSETS.has(assetId)) return point.price;
+  const fx = data.fx(month);
+  if (!fx) throw new Error(`Missing USD/INR month-end rate for ${month}.`);
+  return point.price * fx.rate;
+}
+
+function grossReturn(data, assetId, startMonth, endMonth) {
+  return priceInr(data, assetId, endMonth) / priceInr(data, assetId, startMonth);
+}
+
+// Real (after-CPI) value multiplier for rupees held between two month-ends.
 function cashInflationGross(data, startMonth, endMonth) {
   const [startYear, startNumber] = startMonth.split('-').map(Number);
   const [endYear, endNumber] = endMonth.split('-').map(Number);
@@ -56,8 +78,26 @@ function cashInflationGross(data, startMonth, endMonth) {
   return gross;
 }
 
-function segmentReturns(data, config, startMonth, endMonth) {
-  return Object.fromEntries(config.assets.map(asset => [asset.id, grossReturn(data, asset.id, startMonth, endMonth)]));
+// Buy positions as units. Stakes are whole rupees that sum exactly to `total`.
+function buyPositions(data, config, total, allocations, month) {
+  const stakes = splitRupees(total, allocations, config.chipCount);
+  return Object.fromEntries(config.assets.map(asset => [asset.id, {
+    chips: allocations[asset.id],
+    units: stakes[asset.id] / priceInr(data, asset.id, month)
+  }]));
+}
+
+// THE single source of truth for portfolio value. The round result, the next
+// round's opening value, the chart and the final score all come from this.
+// Each position is rounded to the rupee and the total is the sum of those
+// rounded positions, so the parts always add up to the displayed total.
+function valueAt(data, config, positions, month) {
+  const values = Object.fromEntries(config.assets.map(asset => {
+    const units = Number(positions?.[asset.id]?.units || 0);
+    return [asset.id, units ? Math.round(units * priceInr(data, asset.id, month)) : 0];
+  }));
+  const total = Object.values(values).reduce((sum, value) => sum + value, 0);
+  return { values, total };
 }
 
 function priceSnapshot(data, asset, month) {
@@ -73,8 +113,10 @@ function monthShift(month, delta) {
   return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
 }
 
+// With the current data the windows are six or twelve months long, so they are
+// called rounds, never years.
 function displayRoundLabel(roundNumber) {
-  return `Year ${roundNumber}`;
+  return `Round ${roundNumber}`;
 }
 
 function publicRound(data, config, round, wealth) {
@@ -106,7 +148,7 @@ function publicRound(data, config, round, wealth) {
     totalRounds: config.rounds.length,
     label: displayRoundLabel(round.round),
     context: round.context,
-    wealth: roundMoney(wealth),
+    wealth: Math.round(wealth),
     chipCount: config.chipCount,
     maxChipsPerAsset: config.maxChipsPerAsset,
     assets,
@@ -114,69 +156,34 @@ function publicRound(data, config, round, wealth) {
   };
 }
 
-function applyAllocation(data, config, wealth, allocations, startMonth, endMonth) {
-  const returns = segmentReturns(data, config, startMonth, endMonth);
-  const holdings = {};
+// Value one set of positions across one round window.
+function runRound(data, config, positions, startMonth, endMonth) {
+  const opening = valueAt(data, config, positions, startMonth);
+  const closing = valueAt(data, config, positions, endMonth);
   const assets = config.assets.map(asset => {
-    const chips = allocations[asset.id];
-    const startValue = wealth * (chips / config.chipCount);
-    const endValue = startValue * returns[asset.id];
-    holdings[asset.id] = endValue;
+    const gross = grossReturn(data, asset.id, startMonth, endMonth);
     const startPoint = priceSnapshot(data, asset, startMonth);
     const endPoint = priceSnapshot(data, asset, endMonth);
-    const fxStart = USD_ASSETS.has(asset.id) ? data.fx(startMonth).rate : null;
-    const fxEnd = USD_ASSETS.has(asset.id) ? data.fx(endMonth).rate : null;
+    const startValue = opening.values[asset.id];
+    const endValue = closing.values[asset.id];
     return {
       id: asset.id,
       name: asset.shortName,
-      chips,
-      startValue: roundMoney(startValue),
-      endValue: roundMoney(endValue),
-      contribution: roundMoney(endValue - startValue),
-      grossReturn: returns[asset.id],
-      returnPercent: (returns[asset.id] - 1) * 100,
+      chips: Number(positions[asset.id]?.chips || 0),
+      startValue,
+      endValue,
+      contribution: endValue - startValue,
+      grossReturn: gross,
+      returnPercent: (gross - 1) * 100,
       startPrice: startPoint.price,
       endPrice: endPoint.price,
       nativeCurrency: asset.currency,
-      fxStart,
-      fxEnd,
+      fxStart: USD_ASSETS.has(asset.id) ? data.fx(startMonth).rate : null,
+      fxEnd: USD_ASSETS.has(asset.id) ? data.fx(endMonth).rate : null,
       color: asset.color
     };
   });
-  const endWealth = Object.values(holdings).reduce((sum, value) => sum + value, 0);
-  return { assets, holdings, startWealth: roundMoney(wealth), endWealth: roundMoney(endWealth) };
-}
-
-function applyPassiveHold(data, config, holdings, startMonth, endMonth) {
-  const returns = segmentReturns(data, config, startMonth, endMonth);
-  const nextHoldings = {};
-  const assets = config.assets.map(asset => {
-    const startValue = Number(holdings[asset.id] || 0);
-    const endValue = startValue * returns[asset.id];
-    nextHoldings[asset.id] = endValue;
-    const startPoint = priceSnapshot(data, asset, startMonth);
-    const endPoint = priceSnapshot(data, asset, endMonth);
-    const fxStart = USD_ASSETS.has(asset.id) ? data.fx(startMonth).rate : null;
-    const fxEnd = USD_ASSETS.has(asset.id) ? data.fx(endMonth).rate : null;
-    return {
-      id: asset.id,
-      name: asset.shortName,
-      startValue: roundMoney(startValue),
-      endValue: roundMoney(endValue),
-      contribution: roundMoney(endValue - startValue),
-      grossReturn: returns[asset.id],
-      returnPercent: (returns[asset.id] - 1) * 100,
-      startPrice: startPoint.price,
-      endPrice: endPoint.price,
-      nativeCurrency: asset.currency,
-      fxStart,
-      fxEnd,
-      color: asset.color
-    };
-  });
-  const startWealth = Object.values(holdings).reduce((sum, value) => sum + Number(value || 0), 0);
-  const endWealth = Object.values(nextHoldings).reduce((sum, value) => sum + value, 0);
-  return { assets, holdings: nextHoldings, startWealth: roundMoney(startWealth), endWealth: roundMoney(endWealth) };
+  return { assets, startWealth: opening.total, endWealth: closing.total, holdings: closing.values };
 }
 
 function dailyRoundIndex(dateKey, roundCount) {
@@ -188,12 +195,13 @@ function createSession(config, mode, dateKey) {
   const selectedRound = mode === 'daily' ? dailyRoundIndex(dateKey, config.rounds.length) : 0;
   return {
     id: crypto.randomBytes(24).toString('hex'),
+    engineVersion: ENGINE_VERSION,
     mode,
     dateKey,
     roundIndex: selectedRound,
     selectedRound,
     wealth: config.startingCapitalInr,
-    holdings: null,
+    positions: null,
     lastAllocations: null,
     stage: 'allocation',
     pendingOutcome: null,
@@ -207,65 +215,71 @@ function createSession(config, mode, dateKey) {
 
 function finalSummary(data, config, session) {
   const initial = config.startingCapitalInr;
-  const wealth = roundMoney(session.wealth);
-  const annualHistory = [];
-  for (const item of session.history) {
-    if (/^Year [1-4]$/.test(item.label)) {
-      annualHistory.push({
-        label: item.label,
-        startWealth: item.startWealth,
-        endWealth: item.endWealth,
-        type: item.type
-      });
-    }
+  const wealth = Math.round(session.wealth);
+  const history = session.history.map(item => ({
+    label: item.label,
+    round: item.round,
+    startMonth: item.startMonth,
+    endMonth: item.endMonth,
+    startWealth: item.startWealth,
+    endWealth: item.endWealth,
+    type: item.type
+  }));
+  const startMonth = history[0]?.startMonth;
+  const endMonth = history.at(-1)?.endMonth;
+  const years = [];
+  if (startMonth && endMonth) {
+    for (let year = Number(startMonth.slice(0, 4)); year <= Number(endMonth.slice(0, 4)); year += 1) years.push(year);
   }
-  const inflationRates = [2022, 2023, 2024]
-    .map(year => data.inflation(year)?.percent)
-    .filter(Number.isFinite);
+  const inflationRates = years.map(year => data.inflation(year)?.percent).filter(Number.isFinite);
   const averageInflation = inflationRates.length
     ? inflationRates.reduce((sum, value) => sum + value, 0) / inflationRates.length
     : null;
-  const nifty50Start = Number(config.benchmark?.startLevel);
-  const nifty50End = Number(config.benchmark?.endLevel);
-  if (!(nifty50Start > 0) || !(nifty50End > 0)) throw new Error('Nifty 50 benchmark levels are missing from the scenario configuration.');
-  const nifty50Gross = nifty50End / nifty50Start;
-  const nifty50Wealth = Math.round((initial * nifty50Gross) / 10) * 10;
-  const cashRealWealth = roundMoney(initial * cashInflationGross(data, config.benchmark.startMonth, config.benchmark.endMonth));
+  // The Nifty comparison is only shown when its levels cover exactly the window played.
+  const benchmark = config.benchmark || {};
+  const benchmarkMatches = benchmark.startMonth === startMonth && benchmark.endMonth === endMonth
+    && Number(benchmark.startLevel) > 0 && Number(benchmark.endLevel) > 0;
+  const nifty50Gross = benchmarkMatches ? Number(benchmark.endLevel) / Number(benchmark.startLevel) : null;
+  const nifty50Wealth = benchmarkMatches ? Math.round(initial * nifty50Gross) : null;
+  const cashRealWealth = startMonth && endMonth ? Math.round(initial * cashInflationGross(data, startMonth, endMonth)) : null;
   return {
     finalWealth: wealth,
     initialWealth: initial,
-    profitLoss: roundMoney(wealth - initial),
+    profitLoss: wealth - initial,
     returnPercent: ((wealth / initial) - 1) * 100,
     nifty50Wealth,
-    nifty50ReturnPercent: (nifty50Gross - 1) * 100,
-    beatNiftyBy: roundMoney(wealth - nifty50Wealth),
-    nifty50StartLevel: nifty50Start,
-    nifty50EndLevel: nifty50End,
+    nifty50ReturnPercent: benchmarkMatches ? (nifty50Gross - 1) * 100 : null,
+    beatNiftyBy: benchmarkMatches ? wealth - nifty50Wealth : null,
+    nifty50StartLevel: benchmarkMatches ? Number(benchmark.startLevel) : null,
+    nifty50EndLevel: benchmarkMatches ? Number(benchmark.endLevel) : null,
     cashRealWealth,
-    cashPurchasingPowerLoss: roundMoney(initial - cashRealWealth),
+    cashPurchasingPowerLoss: cashRealWealth === null ? null : initial - cashRealWealth,
     inflationContext: [{ label: 'Average CPI', percent: averageInflation }],
-    history: annualHistory,
+    history,
+    // Chart points: the starting capital, then each round's closing value.
+    chartPoints: [initial, ...history.map(item => item.endWealth)],
     assumptions: [
       'No fees, taxes, slippage or FX transaction costs',
-      'Cash is reduced by supplied India CPI, compounded monthly from each annual rate',
+      'Cash is held at 0% nominal. Its after-inflation value uses India CPI, compounded monthly from each annual rate',
       'Stock adjusted closes already include corporate actions',
       'Nifty benchmark uses the supplied Nifty 50 price-index levels and excludes dividends'
     ]
   };
 }
 
-function currentPortfolio(config, session) {
-  const wealth = Math.max(0, Number(session.wealth || 0));
-  return config.assets.map(asset => {
-    const value = Number(session.holdings?.[asset.id] || 0);
-    return {
-      id: asset.id,
-      name: asset.shortName,
-      color: asset.color,
-      value: roundMoney(value),
-      weightPercent: wealth ? (value / wealth) * 100 : 0
-    };
-  });
+// Positions going into the current round, valued at that round's opening month,
+// which by continuity is the previous round's closing month.
+function currentPortfolio(data, config, session) {
+  const round = config.rounds[session.roundIndex];
+  const { values, total } = valueAt(data, config, session.positions, round.decisionMonth);
+  return config.assets.map(asset => ({
+    id: asset.id,
+    name: asset.shortName,
+    color: asset.color,
+    chips: Number(session.positions?.[asset.id]?.chips || 0),
+    value: values[asset.id],
+    weightPercent: total ? (values[asset.id] / total) * 100 : 0
+  }));
 }
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -284,7 +298,7 @@ function newspaperForRound(config, roundNumber) {
   const round = (config.rounds || []).find(item => item.round === roundNumber);
   return {
     masthead: 'THE MARKET CHRONICLE',
-    label: `What Just Happened in Year ${roundNumber}`,
+    label: `What Just Happened in Round ${roundNumber}`,
     period: roundPeriodLabel(round),
     stories: (config.news?.[String(roundNumber)] || []).map(story => ({ ...story }))
   };
@@ -297,11 +311,18 @@ function lockRound(data, config, session, allocations, options = {}) {
   }
   const round = config.rounds[session.roundIndex];
   if (!round || session.lockedRoundIds.includes(round.id)) throw new Error('This round has already been locked.');
-  const rebalance = options.rebalance !== false || !session.holdings;
+  const rebalance = options.rebalance !== false || !session.positions;
   const clean = rebalance ? validateAllocations(allocations, config) : null;
-  const reveal = rebalance
-    ? applyAllocation(data, config, session.wealth, clean, round.decisionMonth, round.revealMonth)
-    : applyPassiveHold(data, config, session.holdings, round.decisionMonth, round.revealMonth);
+  // The opening value must equal what the player was just shown: the previous close.
+  const opening = session.positions
+    ? valueAt(data, config, session.positions, round.decisionMonth).total
+    : Math.round(session.wealth);
+  if (opening !== Math.round(session.wealth)) {
+    throw new Error(`Portfolio continuity broken: opening ${opening} differs from previous close ${session.wealth}.`);
+  }
+  // Reshuffle = sell everything at the closing value, then buy 10 chips of closing / 10.
+  const positions = rebalance ? buyPositions(data, config, opening, clean, round.decisionMonth) : session.positions;
+  const reveal = runRound(data, config, positions, round.decisionMonth, round.revealMonth);
   reveal.label = displayRoundLabel(round.round);
   reveal.type = rebalance ? 'rebalance' : 'hold';
   reveal.strategy = rebalance ? 'reshuffled' : 'continued';
@@ -309,35 +330,25 @@ function lockRound(data, config, session, allocations, options = {}) {
   reveal.winner = [...reveal.assets].sort((a, b) => b.returnPercent - a.returnPercent)[0].id;
   reveal.loser = [...reveal.assets].sort((a, b) => a.returnPercent - b.returnPercent)[0].id;
   session.wealth = reveal.endWealth;
-  session.holdings = reveal.holdings;
+  session.positions = positions;
   if (clean) session.lastAllocations = clean;
   session.lockedRoundIds.push(round.id);
   session.history.push({
-    type: reveal.type, label: displayRoundLabel(round.round), startWealth: reveal.startWealth, endWealth: reveal.endWealth,
-    allocations: clean, assets: reveal.assets
+    type: reveal.type,
+    round: round.round,
+    label: reveal.label,
+    startMonth: round.decisionMonth,
+    endMonth: round.revealMonth,
+    startWealth: reveal.startWealth,
+    endWealth: reveal.endWealth,
+    allocations: clean,
+    assets: reveal.assets
   });
 
-  let gapHold = null;
-  if (round.passiveHold) {
-    gapHold = applyPassiveHold(data, config, session.holdings, round.passiveHold.startMonth, round.passiveHold.endMonth);
-    gapHold.label = 'Automatic hold';
-    gapHold.description = round.passiveHold.description;
-    gapHold.type = 'hold';
-    session.wealth = gapHold.endWealth;
-    session.holdings = gapHold.holdings;
-    session.history.push({
-      type: 'hold', label: gapHold.label, startWealth: gapHold.startWealth, endWealth: gapHold.endWealth,
-      assets: gapHold.assets
-    });
-  }
-
   const isFinal = session.mode === 'daily' || session.roundIndex === config.rounds.length - 1;
-  if (!isFinal) {
-    session.roundIndex += 1;
-  }
+  if (!isFinal) session.roundIndex += 1;
   const outcome = {
     reveal,
-    gapHold,
     completed: false,
     isFinal,
     newspaper: newspaperForRound(config, round.round)
@@ -369,7 +380,7 @@ function finishNewspaper(data, config, session) {
     completed: false,
     stage: 'decision',
     current: publicRound(data, config, round, session.wealth),
-    portfolio: currentPortfolio(config, session),
+    portfolio: currentPortfolio(data, config, session),
     prefillAllocations: { ...(session.lastAllocations || {}) },
     newspaper
   };
@@ -378,12 +389,16 @@ function finishNewspaper(data, config, session) {
 module.exports = {
   CASH_ID,
   USD_ASSETS,
+  ENGINE_VERSION,
   validateAllocations,
+  validateRounds,
+  priceInr,
   grossReturn,
-  segmentReturns,
+  cashInflationGross,
+  buyPositions,
+  valueAt,
+  runRound,
   publicRound,
-  applyAllocation,
-  applyPassiveHold,
   dailyRoundIndex,
   createSession,
   lockRound,

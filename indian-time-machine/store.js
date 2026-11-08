@@ -4,6 +4,7 @@ const fs = require('fs');
 const fsp = require('fs/promises');
 const path = require('path');
 const initSqlJs = require('sql.js');
+const { validateRounds } = require('./engine');
 
 class TimeMachineStore {
   constructor(rootDir) {
@@ -12,6 +13,7 @@ class TimeMachineStore {
     this.dbFile = path.join(this.dataDir, 'indian-time-machine.sqlite');
     this.config = JSON.parse(fs.readFileSync(path.join(this.dataDir, 'scenario_config.json'), 'utf8'));
     this.config.news = JSON.parse(fs.readFileSync(path.join(this.dataDir, 'news.json'), 'utf8'));
+    validateRounds(this.config);
     this.db = null;
     this.priceMap = new Map();
     this.fxMap = new Map();
@@ -164,11 +166,7 @@ class TimeMachineStore {
 
   async health() {
     await this.ready;
-    const requiredMonths = [...new Set(this.config.rounds.flatMap(round => [
-      round.decisionMonth,
-      round.revealMonth,
-      ...(round.passiveHold ? [round.passiveHold.startMonth, round.passiveHold.endMonth] : [])
-    ]))].sort();
+    const requiredMonths = [...new Set(this.config.rounds.flatMap(round => [round.decisionMonth, round.revealMonth]))].sort();
     const requiredAssets = this.config.assets.filter(asset => asset.id !== 'CASH_INR').map(asset => asset.id);
     const missingPrices = [];
     for (const asset of requiredAssets) {

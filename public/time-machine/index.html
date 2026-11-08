@@ -32,7 +32,7 @@
         <div class="hero-copy reveal-in">
           <p class="eyebrow"><span class="live-dot"></span> A real-data investing game</p>
           <h1>Beat<br>the <span>past.</span></h1>
-          <p class="hero-lede">You get ₹10 lakh, ten chips and no hindsight. Build a portfolio across four years, see each result, then hold by default or reshuffle.</p>
+          <p class="hero-lede">You get ₹10 lakh, ten chips and no hindsight. Build a portfolio across four rounds, see each result, then hold by default or reshuffle.</p>
           <div class="hero-actions">
             <button class="button button-primary" data-start-mode="story">Play four-round story <span>→</span></button>
           </div>
@@ -57,14 +57,13 @@
       <section class="period-section section-pad">
         <div class="section-heading">
           <div><p class="eyebrow">THE JOURNEY</p><h2>Four decisions.<br>One unchangeable history.</h2></div>
-          <p>Move through Year 1 to Year 4. After every result, keep the drifted portfolio by default or choose to reshuffle.</p>
+          <p>Move through Round 1 to Round 4, one continuous stretch of history. After every result, keep the drifted portfolio by default or choose to reshuffle.</p>
         </div>
         <div class="period-rail">
-          <article><span>01</span><time>Year 1</time><strong>First decision</strong><small>Build your opening portfolio</small></article>
-          <article><span>02</span><time>Year 2</time><strong>Hold or reshuffle</strong><small>Your existing portfolio is the default</small></article>
-          <article class="hold-card"><span>HOLD</span><time>HIDDEN</time><strong>No rebalance</strong><small>Positions compound untouched</small></article>
-          <article><span>03</span><time>Year 3</time><strong>Hold or reshuffle</strong><small>Let weights drift or reset them</small></article>
-          <article><span>04</span><time>Year 4</time><strong>The final turn</strong><small>See where your choices finish</small></article>
+          <article><span>01</span><time>Round 1</time><strong>First decision</strong><small>Build your opening portfolio</small></article>
+          <article><span>02</span><time>Round 2</time><strong>Hold or reshuffle</strong><small>Your existing portfolio is the default</small></article>
+          <article><span>03</span><time>Round 3</time><strong>Hold or reshuffle</strong><small>Let weights drift or reset them</small></article>
+          <article><span>04</span><time>Round 4</time><strong>The final turn</strong><small>See where your choices finish</small></article>
         </div>
       </section>
 
@@ -86,14 +85,14 @@
       <div class="game-wrap game-page-container">
         <div class="game-masthead">
           <button class="back-button" data-go-home>← Exit game</button>
-          <div class="progress-copy"><span id="round-kicker">YEAR 1 OF 4</span><strong id="round-label">Year 1</strong></div>
+          <div class="progress-copy"><span id="round-kicker">ROUND 1 OF 4</span><strong id="round-label">Round 1</strong></div>
           <div class="progress-dots" id="progress-dots" aria-label="Story progress"></div>
         </div>
 
         <div class="arrival-grid">
           <div>
             <p class="eyebrow">YOU HAVE LANDED IN</p>
-            <h2 id="arrival-label">Year 1</h2>
+            <h2 id="arrival-label">Round 1</h2>
             <p class="date-line" id="date-line">BUILD YOUR OPENING PORTFOLIO</p>
           </div>
           <div class="wealth-card"><small>WEALTH TO ALLOCATE</small><strong id="wealth-value">₹10,00,000</strong><span>Ten chips · ₹1,00,000 each</span></div>
@@ -112,7 +111,7 @@
           </div>
           <div class="dock-total"><strong id="allocated-total">0 / 10</strong><span id="allocation-status">10 chips left</span></div>
           <button id="cancel-reshuffle" class="text-button cancel-reshuffle" hidden>Cancel reshuffle</button>
-          <button id="lock-button" class="button button-lock" disabled>Lock Year 1 portfolio <span>→</span></button>
+          <button id="lock-button" class="button button-lock" disabled>Lock Round 1 portfolio <span>→</span></button>
         </div>
         <p id="game-error" class="error-message" role="alert"></p>
       </div>
@@ -126,7 +125,7 @@
           <div class="winner-note"><small>BEST ASSET THIS WINDOW</small><strong id="winner-name"></strong><span id="winner-return"></span></div>
         </div>
         <div class="chart-card">
-          <div class="chart-heading"><div><p class="eyebrow">YEAR-END RESULT</p><h3>Your returns in rupees</h3></div><span>Price return + FX for USD assets</span></div>
+          <div class="chart-heading"><div><p class="eyebrow">ROUND RESULT</p><h3>Your returns in rupees</h3></div><span>Price return + FX for USD assets</span></div>
           <div id="return-bars" class="return-bars"></div>
         </div>
         <div id="gap-panel" class="gap-panel" hidden></div>
@@ -139,7 +138,7 @@
     <section id="decision-screen" class="screen decision-screen" aria-live="polite">
       <div class="decision-wrap game-page-container">
         <p class="eyebrow">YOUR NEXT MOVE</p>
-        <h2 id="decision-title">Ready for Year 2?</h2>
+        <h2 id="decision-title">Ready for Round 2?</h2>
         <p class="decision-lede">Your portfolio has drifted with the market. Keep every position exactly as it is, or choose to reshuffle your ten chips.</p>
         <div class="decision-value"><small>CURRENT PORTFOLIO</small><strong id="decision-wealth"></strong></div>
         <div id="decision-holdings" class="decision-holdings"></div>
@@ -152,11 +151,11 @@
           <header class="newspaper-masthead">
             <p id="newspaper-edition">HISTORICAL MARKET EDITION</p>
             <h2 id="newspaper-masthead">THE MARKET CHRONICLE</h2>
-            <div><span>DAILY DIVIDEND ARCHIVE</span><strong id="newspaper-year">What Just Happened in Year 1</strong><span>PRICE: ONE LESSON</span></div>
+            <div><span>DAILY DIVIDEND ARCHIVE</span><strong id="newspaper-year">What Just Happened in Round 1</strong><span>PRICE: ONE LESSON</span></div>
           </header>
           <div id="newspaper-stories" class="newspaper-stories"></div>
           <footer class="newspaper-footer">
-            <p>These stories are revealed only after the year’s market result.</p>
+            <p>These stories are revealed only after the round’s market result.</p>
           </footer>
         </div>
       </div>
@@ -173,12 +172,12 @@
           <article><small>SERVER RANK</small><strong id="final-rank"></strong><p>Only completed, server-calculated games count.</p></article>
         </div>
         <div class="journey-card">
-          <div><p class="eyebrow">YOUR WEALTH THROUGH TIME</p><h3>Four year-end results</h3></div>
-          <svg id="wealth-chart" viewBox="0 0 720 220" role="img" aria-label="Portfolio wealth at the end of Year 1 through Year 4"></svg>
+          <div><p class="eyebrow">YOUR WEALTH THROUGH TIME</p><h3>Start, then four round closes</h3></div>
+          <svg id="wealth-chart" viewBox="0 0 720 220" role="img" aria-label="Portfolio wealth at the start and at the end of Round 1 through Round 4"></svg>
           <div id="journey-labels" class="journey-labels"></div>
         </div>
         <div class="inflation-card">
-          <div><p class="eyebrow">PURCHASING-POWER CONTEXT</p><h3>Average India CPI inflation</h3><p>Cash is adjusted down as inflation erodes its real purchasing power.</p></div>
+          <div><p class="eyebrow">PURCHASING-POWER CONTEXT</p><h3>Average India CPI inflation</h3><p>Cash earns 0% nominal during the game. This is what inflation did to ₹10 lakh left in cash over the same stretch.</p></div>
           <div id="inflation-years" class="inflation-years"></div>
         </div>
         <details class="assumptions"><summary>Calculation assumptions and source limits</summary><ul id="assumption-list"></ul><p>Gold is a USD-quoted benchmark from the supplied screenshots; the exact instrument is still unverified. Source transcription needs a final visual audit before public claims.</p></details>
@@ -193,6 +192,7 @@
 
   <footer class="site-footer"><span>Indian Time Machine · historical education only</span><span>Supplied prices · FRED DEXINUS · World Bank WDI</span></footer>
   <div id="toast" class="toast" role="status"></div>
+  <script src="/game/rupee-split.js" defer></script>
   <script src="/game/game.js" defer></script>
 </body>
 </html>

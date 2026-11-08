@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const initSqlJs = require('sql.js');
+const { validateRounds } = require('../indian-time-machine/engine');
 
 const ROOT = path.join(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data', 'indian-time-machine');
@@ -13,11 +14,8 @@ async function main() {
   if (!fs.existsSync(DB_FILE)) throw new Error('Database is missing. Run npm run time-machine:import.');
   const SQL = await initSqlJs({ locateFile: file => require.resolve(`sql.js/dist/${file}`) });
   const db = new SQL.Database(fs.readFileSync(DB_FILE));
-  const months = [...new Set(CONFIG.rounds.flatMap(round => [
-    round.decisionMonth,
-    round.revealMonth,
-    ...(round.passiveHold ? [round.passiveHold.startMonth, round.passiveHold.endMonth] : [])
-  ]))].sort();
+  validateRounds(CONFIG);
+  const months = [...new Set(CONFIG.rounds.flatMap(round => [round.decisionMonth, round.revealMonth]))].sort();
   const priceAssets = CONFIG.assets.filter(asset => asset.id !== 'CASH_INR').map(asset => asset.id);
   const missing = [];
   const partial = [];

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "startingCapitalInr": 1000000,
   "chipCount": 10,
   "maxChipsPerAsset": 4,
@@ -10,7 +10,7 @@
     "startMonth": "2022-06",
     "endMonth": "2024-12",
     "startLevel": 15780.25,
-    "endLevel": 23644.80
+    "endLevel": 23644.8
   },
   "assets": [
     {
@@ -51,7 +51,7 @@
       "name": "Cash",
       "currency": "INR",
       "color": "#78c7a3",
-      "explanation": "Indian rupees whose purchasing power is reduced using the supplied India CPI inflation data."
+      "explanation": "Indian rupees held at 0% nominal. What inflation did to them is shown at the end."
     }
   ],
   "rounds": [
@@ -70,24 +70,17 @@
       "knownInflationYear": 2021
     },
     {
-      "id": "2023-h1",
+      "id": "2023",
       "round": 2,
-      "label": "2023 H1",
+      "label": "2023",
       "decisionMonth": "2022-12",
-      "revealMonth": "2023-06",
-      "dateLine": "31 Dec 2022 → 30 Jun 2023",
+      "revealMonth": "2023-12",
+      "dateLine": "31 Dec 2022 → 29 Dec 2023",
       "context": [
         "Global growth fears sat beside stubborn inflation.",
-        "Investors were weighing higher interest rates against resilient company earnings.",
-        "After this result, your positions pass through one automatic hold before the next rebalance."
+        "Investors were weighing higher interest rates against resilient company earnings."
       ],
-      "knownInflationYear": 2021,
-      "passiveHold": {
-        "label": "Automatic hold",
-        "startMonth": "2023-06",
-        "endMonth": "2023-12",
-        "description": "No new chips and no rebalance. Each position keeps compounding until the next checkpoint."
-      }
+      "knownInflationYear": 2021
     },
     {
       "id": "2024-h1",
@@ -98,8 +91,7 @@
       "dateLine": "31 Dec 2023 → 30 Jun 2024",
       "context": [
         "Markets debated when major central banks might begin cutting rates.",
-        "India's growth outlook and a national election were prominent domestic themes.",
-        "The automatic hold is complete; you may now rebalance the wealth it produced."
+        "India's growth outlook and a national election were prominent domestic themes."
       ],
       "knownInflationYear": 2022
     },
