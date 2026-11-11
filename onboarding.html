@@ -269,8 +269,14 @@
     /* Phones (incl. Instagram/Facebook/ChatGPT in-app browsers): the footer
        button must always be on screen. The content area shrinks (and only
        scrolls as a last resort); the footer never moves off the bottom. */
+    button,a,.cc-opt,.cntry-opt{touch-action:manipulation}
     @media(max-width:899px){
       .stage{height:var(--dd-app-height,100dvh)}
+      /* iOS zooms the page when focusing any field under 16px */
+      .acct-input,.cntry-search{font-size:16px}
+      .splash-bottom{bottom:max(28px,calc(env(safe-area-inset-bottom,0px) + 16px))}
+      #s-hook{padding-bottom:max(28px,calc(env(safe-area-inset-bottom,0px) + 16px))}
+      .cntry-sheet{max-height:80%}
       .q-wrap,.phone-inner,.acct-inner{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
       .q-foot,.ph-foot,.acct-foot,.payoff-foot{flex:0 0 auto;position:relative;z-index:40;padding:12px 22px max(16px,calc(env(safe-area-inset-bottom,0px) + 10px))}
       .q-foot{background:var(--paper)}
@@ -291,6 +297,19 @@
       .level-btn{padding:11px 14px}
       .ph-h,.acct-h{font-size:30px}
       .ph-sub,.acct-sub{margin-bottom:22px}
+      .acct-sub{margin-bottom:14px}
+    }
+    /* Shorter phones: pair the account fields two-up so the form fits */
+    @media(max-width:899px) and (min-width:340px) and (max-height:760px){
+      .acct-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 10px;align-items:end}
+      .acct-field{min-width:0}
+      .acct-field.full,.legal-ack,.acct-msg{grid-column:1/-1}
+      .acct-field label{line-height:1.35}
+      .acct-input,.cntry-trigger{padding:11px 12px;min-width:0}
+      .acct-input::placeholder{font-size:14px}
+      .cntry-trigger{font-size:15px}
+      #cntryLabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .legal-ack{margin-top:4px}
     }
     @media(max-width:899px) and (max-height:640px){
       .back-btn{width:34px;height:34px;top:max(14px,calc(env(safe-area-inset-top,0px) + 8px))}
@@ -412,20 +431,20 @@
             </div>
             <div class="acct-field">
               <label for="passwordInput">Password</label>
-              <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Min. 8 characters">
+              <input class="acct-input" id="passwordInput" type="password" autocomplete="new-password" oninput="checkAccount()" placeholder="Min. 8 chars">
             </div>
             <div class="acct-field">
               <label for="professionInput">Profession</label>
-              <input class="acct-input" id="professionInput" autocomplete="organization-title" oninput="checkAccount()" placeholder="Student, founder, analyst...">
+              <input class="acct-input" id="professionInput" autocomplete="organization-title" oninput="checkAccount()" placeholder="e.g. Student">
             </div>
             <div class="acct-field">
               <label for="heardInput">How did you hear about us?</label>
-              <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="Friend, TikTok, LinkedIn...">
+              <input class="acct-input" id="heardInput" oninput="checkAccount()" placeholder="e.g. Instagram">
             </div>
             <div class="acct-field">
               <label>Country</label>
               <input type="hidden" id="countryInput">
-              <button type="button" class="cntry-trigger empty" id="cntryTrigger" onclick="openCountryDD()"><span id="cntryLabel">Select your country</span><span class="cntry-trigger-arrow">▼</span></button>
+              <button type="button" class="cntry-trigger empty" id="cntryTrigger" onclick="openCountryDD()"><span id="cntryLabel">Select country</span><span class="cntry-trigger-arrow">▼</span></button>
             </div>
             <p class="legal-ack">By creating an account, you agree to our <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and acknowledge our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
@@ -477,14 +496,30 @@
   <script>
     /* In-app browsers (Instagram etc.) often report 100dvh/100vh taller than
        what is actually visible; size the stage from the real visible height. */
-    function setAppHeight(){
-      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    /* Ignore resizes while typing: the on-screen keyboard must not squash or
+       jump the layout (iOS pans instead; Android overlays it). */
+    function typing(){
+      const el = document.activeElement;
+      return !!(el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'));
+    }
+    function setAppHeight(force){
+      if(force !== true && typing()) return;
+      const h = window.innerHeight || document.documentElement.clientHeight;
       if(h) document.documentElement.style.setProperty('--dd-app-height', Math.max(320, Math.round(h)) + 'px');
     }
-    setAppHeight();
+    setAppHeight(true);
     window.addEventListener('resize', setAppHeight, {passive:true});
-    window.addEventListener('orientationchange', () => setTimeout(setAppHeight, 120), {passive:true});
-    if(window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight, {passive:true});
+    window.addEventListener('pageshow', () => setAppHeight(true));
+    window.addEventListener('orientationchange', () => { setTimeout(() => setAppHeight(true), 150); setTimeout(() => setAppHeight(true), 500); }, {passive:true});
+    /* iOS scrolls the whole page up to reveal a focused field and can leave
+       it shifted after the keyboard closes; snap it back. */
+    document.addEventListener('focusout', () => setTimeout(() => {
+      if(typing()) return;
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      setAppHeight(true);
+    }, 60));
     let selectedAge = '';
     let selectedLevel = '';
     let emailAddress = '';
@@ -497,8 +532,12 @@
       const cur = document.getElementById('s-' + currentScreen);
       const nxt = document.getElementById('s-' + name);
       if(!nxt || cur === nxt) return;
+      if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
       cur.classList.add('exit');
-      setTimeout(() => cur.classList.remove('active','exit'), 360);
+      /* Fast double taps (Continue then Back) used to let this timer hide the
+         screen the user had already come back to, leaving a blank page. */
+      setTimeout(() => { if(currentScreen !== cur.id.slice(2)) cur.classList.remove('active','exit'); }, 360);
+      nxt.classList.remove('exit');
       nxt.classList.add('active');
       currentScreen = name;
       const legal = document.querySelector('.onboarding-legal');
@@ -698,9 +737,17 @@
         list.innerHTML = '<div class="cntry-empty">No countries found</div>';
         return;
       }
-      list.innerHTML = filtered.map(c =>
-        `<div class="cntry-opt" onclick="selectCountry(${JSON.stringify(c)})">${c}</div>`
-      ).join('');
+      /* Built as real elements: the old inline onclick="selectCountry("India")"
+         had clashing quotes, so tapping a country threw and did nothing. */
+      list.replaceChildren();
+      filtered.forEach(country => {
+        const option = document.createElement('div');
+        option.className = 'cntry-opt';
+        option.setAttribute('role', 'button');
+        option.textContent = country;
+        option.addEventListener('click', event => { event.stopPropagation(); selectCountry(country); });
+        list.appendChild(option);
+      });
     }
     function filterCountries(q){ renderCountryList(q); }
     function selectCountry(name){
@@ -709,6 +756,8 @@
       label.textContent = name;
       document.getElementById('cntryTrigger').classList.remove('empty');
       document.getElementById('cntryOverlay').classList.remove('open');
+      const search = document.getElementById('cntrySearch');
+      if(search) search.blur();
       checkAccount();
     }
 
