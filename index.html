@@ -579,7 +579,7 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 .auth-btn.secondary{background:var(--cream-2);color:var(--ink)}
 .account-legal{display:flex;flex-wrap:wrap;gap:9px 14px;margin:-8px 2px 18px;font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
 .account-legal a,.account-legal button{border:0;background:none;padding:0;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.account-legal a:hover,.account-legal button:hover{color:var(--brand)}
-@media(max-width:560px){.auth-card{align-items:stretch;flex-direction:column}.auth-actions{display:grid;grid-template-columns:1fr 1fr}.auth-btn{width:100%}}
+@media(max-width:560px){.auth-card{align-items:stretch;flex-direction:column}.auth-actions{display:grid;grid-template-columns:1fr 1fr}.auth-btn{width:100%}.auth-actions .auth-btn:first-child:nth-last-child(3){grid-column:1/-1}}
 /* MISC */
 .hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
 @media(max-width:480px){.hint{display:none}}
@@ -1021,6 +1021,13 @@ body{background:var(--ink);overflow:hidden}
 .rbh-free{display:flex;align-items:center;gap:10px;margin:14px 24px 0;padding:11px 14px;border-radius:14px;background:rgba(26,61,43,.07);border:1px solid rgba(26,61,43,.16);font-family:var(--sans);font-size:12.5px;line-height:1.4;color:var(--ink)}
 .rbh-free b{font-weight:700}
 .rbh-free-i{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:13px}
+.rbh-paywall-restore{width:100%;border:0;background:transparent;color:var(--green);font-size:12px;font-weight:700;padding:10px 8px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.membership-check{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(0,0,0,.04);border:1px solid var(--line);font-family:var(--sans);font-size:12.5px;line-height:1.5;color:var(--ink);text-align:left}
+.membership-check[hidden]{display:none}
+.membership-check.ok{background:rgba(46,138,96,.1);border-color:rgba(46,138,96,.3)}
+.membership-check b{font-weight:700}
+.membership-check ul{margin:6px 0 0 16px;padding:0;color:var(--muted)}
+.membership-check li{margin:2px 0}
 .rbh-free.pro{background:linear-gradient(110deg,#1A3D2B,#2A5C3F);border-color:transparent;color:#F5F1E8}
 .rbh-free.pro .rbh-free-i{background:#F2C46B;color:#1A3D2B;font-weight:800}
 .pro-banner{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:14px;background:linear-gradient(110deg,#1A3D2B,#2A5C3F);color:#F5F1E8;font-family:var(--sans);font-size:13px;line-height:1.4}
@@ -1873,6 +1880,8 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
       <button class="rbh-paywall-cta" type="button" onclick="openRabbitHoleMembership()">Go Pro</button>
       <button class="rbh-paywall-free" id="rbhPaywallFree" type="button" hidden></button>
       <button class="rbh-paywall-back" type="button" onclick="closeRabbitHolePaywall()">Back to the first page</button>
+      <button class="rbh-paywall-restore" type="button" onclick="checkMembership(this,'paywall')">Already Pro? Check my membership</button>
+      <div class="membership-check" id="rbhMembershipCheck" hidden></div>
     </div>
   </div>
   <div class="co-ov-vote">
@@ -2917,7 +2926,7 @@ function authPanel(){
  if(isRegisteredUser()){
  const _ct=profileState.country&&profileState.country.toLowerCase()!=='unknown'?profileState.country:'';
  const proBadge=hasProAccess()?'<span class="pro-badge">Pro</span>':'';
- return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div>${hasProAccess()?'<div class="pro-banner"><span class="pro-banner-i">✦</span><span><b>Pro member.</b> Every page of every Rabbit Hole is unlocked. No paywall, no daily limit.</span></div>':''}</div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
+ return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div>${hasProAccess()?'<div class="pro-banner"><span class="pro-banner-i">✦</span><span><b>Pro member.</b> Every page of every Rabbit Hole is unlocked. No paywall, no daily limit.</span></div>':''}<div class="membership-check" data-membership-check hidden></div></div><div class="auth-actions"><button class="auth-btn secondary" type="button" onclick="checkMembership(this,'account')">${hasProAccess()?'Refresh membership':'Check my membership'}</button><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
  }
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
 }
@@ -3725,6 +3734,38 @@ function markProFromServer(){
  if(typeof renderLibActive==='function'&&libMode==='holes')renderLibActive();
  const youM=document.getElementById('screen-you');if(youM&&youM.classList.contains('active')&&typeof renderShelf==='function')renderShelf();
  const youD=document.getElementById('dtYouContent');if(IS_DESKTOP&&youD&&youD.offsetParent&&typeof dtRenderShelf==='function')dtRenderShelf();
+}
+/* "Check my membership": asks the server to look the member up in Stripe right
+   now and shows what each lookup found. Upgrades the whole app if Pro. */
+async function checkMembership(btn,where){
+ const box=where==='paywall'?document.getElementById('rbhMembershipCheck'):(btn&&btn.closest('.auth-card')||document).querySelector('[data-membership-check]');
+ const label=btn?btn.textContent:'';
+ if(btn){btn.disabled=true;btn.textContent='Checking with Stripe…';}
+ const show=(html,ok)=>{if(!box)return;box.hidden=false;box.classList.toggle('ok',!!ok);box.innerHTML=html;};
+ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ try{
+  const res=await fetch('/api/billing/refresh',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok)throw new Error(data.error||'Could not reach the server. Try again.');
+  trackPostHogEvent('membership_check',{where,pro:data.pro,before:data.before,after:data.after});
+  const steps=(data.report||[]).map(s=>`<li>${esc(s.step)}: ${esc(s.result)}</li>`).join('');
+  if(data.pro){
+   profileState={...(profileState||{}),...(data.user||{}),subscriptionActive:true};
+   try{localStorage.setItem('user',JSON.stringify(profileState));}catch(e){}
+   rhFreeState={pro:true};
+   show(`<b>✦ Confirmed with Stripe: you’re Pro.</b> Every Rabbit Hole is unlocked.`,true);
+   const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
+   syncRabbitHoleMembership();
+   if(where==='paywall'&&currentRabbitHole){const k=currentRabbitHole;setTimeout(()=>openRabbitHole(k,'replace'),700);}
+   setTimeout(()=>{if(typeof renderLibActive==='function'&&libMode==='holes')renderLibActive();const youM=document.getElementById('screen-you');if(youM&&youM.classList.contains('active'))renderShelf();const youD=document.getElementById('dtYouContent');if(IS_DESKTOP&&youD&&youD.offsetParent)dtRenderShelf();},1600);
+  }else{
+   show(`<b>Stripe has no active membership for this account yet.</b> Status: ${esc(data.after)} (Stripe ${esc(data.stripeMode)} mode).<ul>${steps}</ul><div style="margin-top:6px">If you’ve paid, check you’re signed in with the same email you used at checkout, or contact us with your Stripe receipt.</div>`,false);
+  }
+ }catch(error){
+  show(`<b>Couldn’t check right now.</b> ${esc(error.message)}`,false);
+ }finally{
+  if(btn){btn.disabled=false;btn.textContent=label;}
+ }
 }
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&userId)loadRabbitHoleFreeState();});
 function rhProBannerHtml(){return `<div class="rbh-free pro"><span class="rbh-free-i">✦</span><span><b>You’re Pro.</b> Every page of every Rabbit Hole is unlocked. Read as many as you like.</span></div>`;}

@@ -1821,61 +1821,106 @@ function stripeSearchValue(value) {
   return String(value || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
 const isActiveSub = sub => Boolean(sub && ACTIVE_SUBSCRIPTION_STATUSES.has(normalizeLookup(sub.status)));
-async function confirmSubscriptionWithStripe(db, user, { search = true } = {}) {
-  if (ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) return;
-  if (!STRIPE_SECRET_KEY) return;
+/* Find the member's active Stripe subscription. Each lookup runs on its own
+   (an error in one — e.g. a saved customer id Stripe no longer knows — must
+   not stop the others) and is recorded in `report` for the "Check my
+   membership" tool. Order: saved subscription → saved customer → subscriptions
+   stamped with this account id → customers with this email. */
+async function confirmSubscriptionWithStripe(db, user, { search = true, force = false, report = null } = {}) {
+  const note = (step, result) => { if (report) report.push({ step, result }); };
+  if (!force && ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) return;
+  if (!STRIPE_SECRET_KEY) { note('Stripe', 'not configured on this server'); return; }
   const hasIds = Boolean(user.stripeSubscriptionId || user.stripeCustomerId);
   if (!hasIds && !search) return;
   const last = Date.parse(user.subscriptionCheckedAt || '') || 0;
-  if (Date.now() - last < STRIPE_RECHECK_MS) return;
+  if (!force && Date.now() - last < STRIPE_RECHECK_MS) return;
   user.subscriptionCheckedAt = new Date().toISOString();
-  try {
-    /* Look for an active subscription, cheapest lookup first, stopping at the
-       first hit. The saved ids can be missing or point at an old customer
-       (lost by a stale write, or the member paid another way), so fall back
-       to the account id we stamp on every subscription, then to the email. */
-    let latest = null; // most relevant non-active subscription, to record e.g. "canceled"
-    const pick = subs => {
-      const list = Array.isArray(subs) ? subs : [];
-      if (!latest && list[0]) latest = list[0];
-      return list.find(isActiveSub) || null;
-    };
-    let active = null;
-    if (user.stripeSubscriptionId) {
-      const sub = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(user.stripeSubscriptionId)}`).catch(error => {
-        if (error.statusCode === 404) return null;
-        throw error;
-      });
-      active = pick(sub ? [sub] : []);
-    }
-    if (!active && user.stripeCustomerId) {
+
+  let latest = null; // newest non-active subscription seen, to record e.g. "canceled"
+  let active = null;
+  const consider = subs => {
+    const list = Array.isArray(subs) ? subs : [];
+    if (!latest && list[0]) latest = list[0];
+    return list.find(isActiveSub) || null;
+  };
+  const describe = subs => {
+    const list = Array.isArray(subs) ? subs : [];
+    return list.length ? list.map(s => s.status).join(', ') : 'nothing found';
+  };
+  const attempt = async (step, run) => {
+    if (active) return;
+    try { active = await run(); } catch (error) { note(step, `error: ${error.message}`); console.warn(`[billing] ${step}:`, error.message); }
+  };
+
+  if (user.stripeSubscriptionId) {
+    await attempt('Saved subscription', async () => {
+      const sub = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(user.stripeSubscriptionId)}`);
+      note('Saved subscription', sub.status);
+      return consider([sub]);
+    });
+  } else note('Saved subscription', 'none saved');
+  if (user.stripeCustomerId) {
+    await attempt('Saved Stripe customer', async () => {
       const list = await stripeRequest('/v1/subscriptions', { params: { customer: user.stripeCustomerId, status: 'all', limit: 10 } });
-      active = pick(list.data);
+      note('Saved Stripe customer', describe(list.data));
+      return consider(list.data);
+    });
+  } else note('Saved Stripe customer', 'none saved');
+  if (search) {
+    await attempt('Subscriptions tagged with this account', async () => {
+      const found = await stripeRequest('/v1/subscriptions/search', { params: { query: `metadata['dd_user_id']:'${stripeSearchValue(user.userId)}'`, limit: 10 } });
+      note('Subscriptions tagged with this account', describe(found.data));
+      return consider(found.data);
+    });
+    if (user.email) {
+      await attempt('Stripe customers with your email', async () => {
+        const customers = await stripeRequest('/v1/customers/search', { params: { query: `email:'${stripeSearchValue(user.email)}'`, limit: 5 } });
+        const statuses = [];
+        for (const customer of customers.data || []) {
+          const list = await stripeRequest('/v1/subscriptions', { params: { customer: customer.id, status: 'all', limit: 10 } });
+          statuses.push(describe(list.data));
+          const hit = consider(list.data);
+          if (hit) { note('Stripe customers with your email', `${customers.data.length} customer(s): ${statuses.join(' | ')}`); return hit; }
+        }
+        note('Stripe customers with your email', customers.data && customers.data.length ? `${customers.data.length} customer(s): ${statuses.join(' | ')}` : 'no customer with this email');
+        return null;
+      });
     }
-    if (!active && search) {
-      const bySub = await stripeRequest('/v1/subscriptions/search', { params: { query: `metadata['dd_user_id']:'${stripeSearchValue(user.userId)}'`, limit: 10 } });
-      active = pick(bySub.data);
-    }
-    if (!active && search && user.email) {
-      const byEmail = await stripeRequest('/v1/customers/search', { params: { query: `email:'${stripeSearchValue(user.email)}'`, limit: 5 } });
-      for (const customer of byEmail.data || []) {
-        if (customer.id === user.stripeCustomerId) continue;
-        const list = await stripeRequest('/v1/subscriptions', { params: { customer: customer.id, status: 'all', limit: 10 } });
-        active = list.data && list.data.find(isActiveSub);
-        if (active) break;
-      }
-    }
-    if (active) {
-      applySubscriptionToUser(user, active);
-      console.log(`[billing] Stripe recheck restored Pro for ${user.userId} (${active.status})`);
-    } else if (latest && hasIds) {
-      applySubscriptionToUser(user, latest);
-    }
-  } catch (error) {
-    console.warn('[billing] Stripe recheck failed:', error.message);
+  }
+
+  if (active) {
+    applySubscriptionToUser(user, active);
+    console.log(`[billing] Stripe recheck confirmed Pro for ${user.userId} (${active.status})`);
+  } else if (latest && hasIds) {
+    applySubscriptionToUser(user, latest);
   }
   await writeDb(db);
 }
+
+app.post('/api/billing/refresh', requireUser, async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    if (!user.email && req.authUser.email) user.email = req.authUser.email;
+    const before = user.subscriptionStatus || 'inactive';
+    const report = [];
+    await confirmSubscriptionWithStripe(db, user, { search: true, force: true, report });
+    const pro = ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus);
+    res.setHeader('Cache-Control', 'no-store');
+    res.json({
+      ok: true,
+      pro,
+      before,
+      after: user.subscriptionStatus || 'inactive',
+      stripeMode: /^(sk|rk)_live_/.test(STRIPE_SECRET_KEY) ? 'live' : /^(sk|rk)_test_/.test(STRIPE_SECRET_KEY) ? 'test' : 'unknown',
+      webhookConfigured: Boolean(STRIPE_WEBHOOK_SECRET),
+      report,
+      user: profile(user)
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.get('/api/rabbit-holes/access', requireUser, async (req, res, next) => {
   try {
