@@ -1016,6 +1016,22 @@ body{background:var(--ink);overflow:hidden}
 .rbh-paywall-p{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:22px}
 .rbh-paywall-cta{width:100%;border:0;border-radius:999px;padding:14px 18px;background:var(--ink);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
 .rbh-paywall-back{width:100%;border:0;background:transparent;color:var(--muted);font-size:12px;padding:13px 8px 0;cursor:pointer}
+.rbh-paywall-free{width:100%;margin-top:10px;border:1.5px solid var(--line);border-radius:999px;padding:12px 16px;background:transparent;color:var(--ink);font-size:13.5px;font-weight:700;cursor:pointer}
+.rbh-paywall-free[hidden]{display:none}
+.rbh-free{display:flex;align-items:center;gap:10px;margin:14px 24px 0;padding:11px 14px;border-radius:14px;background:rgba(26,61,43,.07);border:1px solid rgba(26,61,43,.16);font-family:var(--sans);font-size:12.5px;line-height:1.4;color:var(--ink)}
+.rbh-free b{font-weight:700}
+.rbh-free-i{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:13px}
+.rbh-free.pro{background:linear-gradient(110deg,#1A3D2B,#2A5C3F);border-color:transparent;color:#F5F1E8}
+.rbh-free.pro .rbh-free-i{background:#F2C46B;color:#1A3D2B;font-weight:800}
+.pro-banner{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:14px;background:linear-gradient(110deg,#1A3D2B,#2A5C3F);color:#F5F1E8;font-family:var(--sans);font-size:13px;line-height:1.4}
+.pro-banner b{font-weight:700}
+.pro-banner-i{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#F2C46B;color:#1A3D2B;font-weight:800}
+.auth-n .pro-badge{margin-left:8px;vertical-align:middle;font-size:9px;padding:4px 8px}
+.rbh-free.used{background:rgba(0,0,0,.035);border-color:var(--line);color:var(--muted)}
+.rbh-free.used .rbh-free-i{background:var(--mute-2)}
+.rbh-card .rbh-free-tag{display:table;margin-top:7px;padding:3px 8px;border-radius:999px;background:rgba(26,61,43,.09);font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);font-weight:700}
+#dtShell .rbh-free{margin:0 0 18px}
+@media(min-width:900px){.rbh-free{margin:0 0 16px}}
 .co-ov-vote{flex-shrink:0;background:#fff;border-top:1px solid #eee;padding:14px 16px;display:flex;align-items:center;gap:12px}
 .co-ov-label{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;flex-shrink:0}
 .co-vb{flex:1;border:1px solid #ddd;background:#fff;border-radius:8px;padding:8px 6px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.06em}
@@ -1852,9 +1868,10 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
   <div id="rbhPaywall" class="rbh-paywall" role="dialog" aria-modal="true" aria-label="Daily Dividend Pro membership required">
     <div class="rbh-paywall-card">
       <div class="rbh-paywall-k">Daily Dividend Pro</div>
-      <div class="rbh-paywall-h">Keep going down the rabbit hole.</div>
-      <div class="rbh-paywall-p">The first page is free. Become a PRO member to unlock every page of every Rabbit Hole.</div>
-      <button class="rbh-paywall-cta" type="button" onclick="openRabbitHoleMembership()">View membership</button>
+      <div class="rbh-paywall-h">You’ve had today’s free read.</div>
+      <div class="rbh-paywall-p" id="rbhPaywallP">Every day you can read one Rabbit Hole in full. On the rest you get the first page. Come back tomorrow for another free one, or go Pro to unlock every page of every Rabbit Hole.</div>
+      <button class="rbh-paywall-cta" type="button" onclick="openRabbitHoleMembership()">Go Pro</button>
+      <button class="rbh-paywall-free" id="rbhPaywallFree" type="button" hidden></button>
       <button class="rbh-paywall-back" type="button" onclick="closeRabbitHolePaywall()">Back to the first page</button>
     </div>
   </div>
@@ -2723,6 +2740,10 @@ const DD_RH_CAT={k:"rabbit-holes",label:"Rabbit Holes",emoji:"🕳️",c:"#4A3B8
    `cats` must use DD_CATS labels so the category chips filter correctly.
    `date` is ISO yyyy-mm-dd and drives ordering — newest becomes the hero. */
 const RH=[
+{k:"nvidia-unravelled",title:"Nvidia, unravelled",
+ dek:"Nvidia's founder just resigned after 33 years. How it unravelled in two weeks, and who is running the world's most important AI company now, in 10 swipes.",
+ cats:["Big Tech","Made in USA"],mins:7,date:"2026-11-12",
+ bg:"#143D14",art:"nvidia",emoji:"🟩",url:"/reports/nvidia-unravelled.html"},
 {k:"lenskart-decoded",title:"Lenskart, decoded",
  dek:"The most criticised IPO of 2025 is up 80%. How Lenskart turned glasses into one of India's best retail machines, in 13 swipes.",
  cats:["Made in India"],mins:9,date:"2026-11-11",
@@ -2896,7 +2917,7 @@ function authPanel(){
  if(isRegisteredUser()){
  const _ct=profileState.country&&profileState.country.toLowerCase()!=='unknown'?profileState.country:'';
  const proBadge=hasProAccess()?'<span class="pro-badge">Pro</span>':'';
- return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div></div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
+ return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div>${hasProAccess()?'<div class="pro-banner"><span class="pro-banner-i">✦</span><span><b>Pro member.</b> Every page of every Rabbit Hole is unlocked. No paywall, no daily limit.</span></div>':''}</div><div class="auth-actions"><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
  }
  return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
 }
@@ -3613,6 +3634,7 @@ function rhArtHtml(r){
   portfolio:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M23 29C31 19 45 19 56 29S66 48 57 57" stroke="rgba(255,255,255,.42)" stroke-width="2" stroke-dasharray="3 5"/><circle cx="20" cy="32" r="13" fill="rgba(255,255,255,.16)" stroke-width="2"/><circle cx="59" cy="53" r="15" fill="#ffb400" stroke="none"/><path d="m34 33 11 8m-4-9 5 9-9 2" stroke="#fff" stroke-width="3"/></g><text x="20" y="36" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" font-family="Arial">SG</text><text x="59" y="57" text-anchor="middle" fill="#114453" font-size="10" font-weight="800" font-family="Arial">IN</text></svg>`,
   solar:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="58" cy="19" r="8" fill="#ffbf3f" stroke="none"/><path d="M58 6v5M58 27v5M45 19h5M66 19h5" stroke="#ffbf3f" stroke-width="2.5"/><path d="m17 31 38 5-8 23-39-5z" fill="rgba(71,170,213,.28)" stroke-width="2"/><path d="m27 32-7 24m19-22-7 24m-20-16 39 5" stroke-width="1.6" opacity=".8"/><path d="M9 64c7-5 13 5 20 0s13 5 20 0 13 5 20 0" stroke="#67d5e8" stroke-width="3"/></g></svg>`,
   marico:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M37 14h13v8l5 5v35H30V27l7-5z" fill="rgba(255,255,255,.18)" stroke-width="2.2"/><path d="M37 14h13M38 33h9M34 45c8-7 16-7 17 1-7 8-14 9-17-1Z" fill="#96C61C" stroke="none"/><path d="M51 18c8-8 14-6 17-3-5 7-10 9-17 3Z" fill="#96C61C" stroke="none"/><circle cx="20" cy="54" r="11" fill="#f4e5c8" stroke-width="2"/><path d="M13 57c4-7 10-10 17-7" stroke="#8b5a34" stroke-width="2.5"/></g></svg>`,
+  nvidia:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><rect x="22" y="22" width="36" height="36" rx="6" fill="rgba(118,185,0,.22)" stroke-width="2.4"/><rect x="31" y="31" width="18" height="18" rx="3" fill="#76B900" stroke="none"/><path d="M30 22v-8M40 22v-8M50 22v-8M30 58v8M40 58v8M50 58v8M22 30h-8M22 40h-8M22 50h-8M58 30h8M58 40h8M58 50h8" stroke-width="2.4"/><path d="M58 66l10-10" stroke="#F2C46B" stroke-width="3"/><path d="M62 70l4-4" stroke="#F2C46B" stroke-width="3" opacity=".7"/></g></svg>`,
   nykaa:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><path d="M30 34h14v30H30z" fill="rgba(255,255,255,.16)" stroke-width="2.2"/><path d="M32 34V22l10-6v18z" fill="#FC2778" stroke-width="2"/><path d="M30 44h14" stroke-width="2" opacity=".6"/><path d="M50 58c4-9 12-13 22-12-4 7-11 12-22 12Z" fill="#B79CFF" stroke="none"/><path d="M50 58c6-2 12-6 16-10" stroke="#4A0D33" stroke-width="2"/></g></svg>`,
   lenskart:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="24" cy="46" r="12" fill="rgba(63,224,197,.22)" stroke-width="2.6"/><circle cx="56" cy="46" r="12" fill="rgba(63,224,197,.22)" stroke-width="2.6"/><path d="M36 44c2-3 6-3 8 0M12 42l-4-8M68 42l4-8" stroke-width="2.6"/><path d="M18 24l8-8 6 5 10-10" stroke="#3FE0C5" stroke-width="3"/><path d="M36 11h6v6" stroke="#3FE0C5" stroke-width="3"/></g></svg>`,
   reliance:`<svg viewBox="0 0 80 80" aria-hidden="true"><g ${common}><circle cx="40" cy="40" r="15" fill="#F2C46B" stroke="none"/><circle cx="40" cy="12" r="6" fill="#6BE3B0" stroke="none"/><circle cx="66" cy="31" r="6" fill="#FF9F43" stroke="none"/><circle cx="56" cy="64" r="6" fill="#A796FF" stroke="none"/><circle cx="24" cy="64" r="6" fill="#6BE3B0" stroke="none"/><circle cx="14" cy="31" r="6" fill="#FF7A6B" stroke="none"/><path d="M40 25V18M54 35l6-2M49 52l4 7M31 52l-4 7M26 35l-6-2" stroke="#fff" stroke-width="2.5"/><path d="M35 49V31h7c9 0 9 10 0 10h-7m7 0 7 8" stroke="#273D8F" stroke-width="2.8"/></g></svg>`
@@ -3629,7 +3651,7 @@ function rhCardHtml(r,isNew){
   <div class="rbh-cats" style="--rc:${cc}">${(r.cats||[]).join(' · ')}</div>
   <div class="rbh-t">${r.title}</div>
   <div class="rbh-dek">${r.dek||''}</div>
-  <div class="rbh-meta">${meta}</div>
+  <div class="rbh-meta">${meta}${rhIsTodaysFree(r)?'<span class="rbh-free-tag">✓ Today’s free read</span>':''}</div>
  </div>
 </div>`;
 }
@@ -3640,13 +3662,13 @@ function rhBodyHtml(){
   rhCatsPresent().map(c=>`<button class="cat-chip${libRhCat===c.label?' active':''}" style="--cc:${c.c}" onclick="setRhCat('${c.k}')">${c.label}</button>`).join('')+`</div>`;
  if(libRhCat){
   const f=all.filter(r=>(r.cats||[]).includes(libRhCat));
-  return chips+(f.length
+  return chips+rhFreeBannerHtml()+(f.length
    ?`<div class="rbh-sect">${f.length} in ${libRhCat}</div><div class="rbh-list">${f.map(rhCardHtml).join('')}</div>`
    :`<div class="rbh-empty"><strong>Nothing here yet.</strong>No rabbit holes filed under ${libRhCat}.</div>`);
  }
  /* One grid, newest first: a new rabbit hole lands top-left and every older
     one shifts one slot along (right, then down onto the next row). */
- return chips
+ return chips+rhFreeBannerHtml()
   +`<div class="rbh-sect">${all.length} rabbit holes · newest first</div><div class="rbh-list rbh-all">${all.map((r,i)=>rhCardHtml(r,i===0)).join('')}</div>`
   +`<div class="rbh-foot">New rabbit holes land every few weeks</div>`;
 }
@@ -3670,9 +3692,65 @@ function syncRabbitHoleMembership(){
  if(!frame||!frame.contentWindow)return;
  frame.contentWindow.postMessage({type:'dd:membership',subscriptionActive:hasProAccess(),parentManaged:true},location.origin);
 }
-function showRabbitHolePaywall(){
+/* Daily free read: one full rabbit hole per local day for non-Pro readers.
+   Source of truth is the server (/api/rabbit-holes/access); this mirror only
+   drives the library banner and paywall copy. */
+let rhFreeState=null; // {date, freeSlug, freeAvailable, pro}
+function rhSlug(r){const m=/\/([a-z0-9-]+)\.html$/i.exec((r&&r.url)||'');return m?m[1].toLowerCase():(r&&r.k)||'';}
+function rhBySlug(slug){return RH.find(r=>rhSlug(r)===slug)||null;}
+let rhFreeLoading=false,rhFreeLoadedAt=0;
+async function loadRabbitHoleFreeState(force){
+ if(hasProAccess()){rhFreeState={pro:true};return;}
+ if(rhFreeLoading||(!force&&Date.now()-rhFreeLoadedAt<30000))return;
+ rhFreeLoading=true;rhFreeLoadedAt=Date.now();
+ try{
+  const date=localReadDateKey();
+  const res=await fetch('/api/rabbit-holes/access?date='+encodeURIComponent(date),{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+  if(!res.ok)return;
+  const prev=JSON.stringify(rhFreeState);
+  rhFreeState=await res.json();
+  if(rhFreeState&&rhFreeState.pro)markProFromServer();
+  if(JSON.stringify(rhFreeState)!==prev&&libMode==='holes'&&typeof renderLibActive==='function')renderLibActive();
+ }catch(e){}
+ finally{rhFreeLoading=false;}
+}
+/* Server (re-checked against Stripe) says this reader is Pro but the profile
+   the app booted with didn't: trust the server everywhere from now on. */
+function markProFromServer(){
  if(hasProAccess())return;
+ profileState={...(profileState||{}),subscriptionActive:true,subscriptionStatus:'active'};
+ try{localStorage.setItem('user',JSON.stringify(profileState));}catch(e){}
+ const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
+ syncRabbitHoleMembership();
+ if(typeof renderLibActive==='function'&&libMode==='holes')renderLibActive();
+ const youM=document.getElementById('screen-you');if(youM&&youM.classList.contains('active')&&typeof renderShelf==='function')renderShelf();
+ const youD=document.getElementById('dtYouContent');if(IS_DESKTOP&&youD&&youD.offsetParent&&typeof dtRenderShelf==='function')dtRenderShelf();
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&userId)loadRabbitHoleFreeState();});
+function rhProBannerHtml(){return `<div class="rbh-free pro"><span class="rbh-free-i">✦</span><span><b>You’re Pro.</b> Every page of every Rabbit Hole is unlocked. Read as many as you like.</span></div>`;}
+function rhFreeBannerHtml(){
+ if(hasProAccess())return rhProBannerHtml();
+ if(!rhFreeState){if(userId)loadRabbitHoleFreeState();return '';}
+ if(rhFreeState.pro)return rhProBannerHtml();
+ if(rhFreeState.date&&rhFreeState.date!==localReadDateKey()){loadRabbitHoleFreeState();return '';}
+ if(rhFreeState.freeAvailable)return `<div class="rbh-free"><span class="rbh-free-i">🎁</span><span><b>1 free full read today.</b> Pick any rabbit hole and read it start to finish. The rest show their first page.</span></div>`;
+ const r=rhBySlug(rhFreeState.freeSlug);
+ return `<div class="rbh-free used"><span class="rbh-free-i">✓</span><span>Today’s free read${r?`: <b>${r.title}</b>`:' is used'}. Your next one unlocks tomorrow, or go Pro for everything.</span></div>`;
+}
+function rhIsTodaysFree(r){return Boolean(!hasProAccess()&&rhFreeState&&!rhFreeState.pro&&rhFreeState.freeSlug&&rhFreeState.freeSlug===rhSlug(r));}
+function showRabbitHolePaywall(data){
+ if(hasProAccess())return;
+ const freeSlug=data&&data.freeSlug||(rhFreeState&&rhFreeState.freeSlug)||null;
+ const r=freeSlug?rhBySlug(freeSlug):null;
+ const p=document.getElementById('rbhPaywallP');
+ if(p)p.innerHTML=`Every day you can read one Rabbit Hole in full${r?`, and today’s was <b>${r.title}</b>`:''}. On the rest you get the first page. Come back tomorrow for another free one, or go Pro to unlock every page of every Rabbit Hole.`;
+ const free=document.getElementById('rbhPaywallFree');
+ if(free){
+  if(r&&rhSlug(r)!==(currentRabbitHole&&rhSlug(RH.find(x=>x.k===currentRabbitHole))||'')){free.hidden=false;free.textContent=`Keep reading ${r.title}`;free.onclick=()=>openRabbitHole(r.k,'replace');}
+  else free.hidden=true;
+ }
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.add('show');
+ trackPostHogEvent('rabbit_hole_paywall_shown',{rabbit_hole_id:currentRabbitHole,free_read_used_on:freeSlug});
 }
 function closeRabbitHolePaywall(){
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
@@ -3701,7 +3779,8 @@ window.addEventListener('message',event=>{
  const frame=document.getElementById('coOvFrame');
  if(!frame||event.source!==frame.contentWindow||!event.data)return;
  if(event.data.type==='dd:reader-ready')syncRabbitHoleMembership();
- if(event.data.type==='dd:paywall-request')showRabbitHolePaywall();
+ if(event.data.type==='dd:paywall-request')showRabbitHolePaywall(event.data);
+ if(event.data.type==='dd:free-read-claimed'&&!hasProAccess()){rhFreeState={...(rhFreeState||{}),date:localReadDateKey(),freeSlug:event.data.slug,freeAvailable:false,pro:false};if(libMode==='holes')renderLibActive();}
 });
 function renderLib(){
  const featured=CO[curCo];setTheme(curCo);

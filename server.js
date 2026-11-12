@@ -304,9 +304,43 @@ async function readDb() {
   }
 }
 
+/* Every server instance (production, a local dev server pointed at the same
+   Supabase row, …) caches the whole state and writes the whole state back. A
+   write from a stale copy used to silently revert billing changes another
+   instance had just saved (e.g. the Stripe webhook marking someone Pro), so a
+   paying member could fall back to "inactive". Before each write, pull the
+   stored copy and keep whichever billing record is newer, per user. */
+const BILLING_FIELDS = ['subscriptionStatus', 'subscriptionCancelAtPeriodEnd', 'subscriptionCurrentPeriodEnd', 'subscriptionUpdatedAt',
+  'stripeCustomerId', 'stripeSubscriptionId', 'stripeLastCheckoutSessionId', 'stripeLastPaymentStatus'];
+async function keepNewerBillingFromStore(normalized) {
+  const { data, error } = await supabase
+    .from('daily_dividend_state')
+    .select('data')
+    .eq('id', SUPABASE_STATE_ID)
+    .maybeSingle();
+  if (error || !data || !data.data || !data.data.users) return;
+  for (const [userId, stored] of Object.entries(data.data.users)) {
+    const local = normalized.users[userId];
+    if (!local || !stored) continue; // never resurrect users deleted locally
+    const storedAt = Date.parse(stored.subscriptionUpdatedAt || '') || 0;
+    const localAt = Date.parse(local.subscriptionUpdatedAt || '') || 0;
+    if (storedAt > localAt) {
+      BILLING_FIELDS.forEach(field => { if (field in stored) local[field] = stored[field]; });
+    } else {
+      if (!local.stripeCustomerId && stored.stripeCustomerId) local.stripeCustomerId = stored.stripeCustomerId;
+      if (!local.stripeSubscriptionId && stored.stripeSubscriptionId) local.stripeSubscriptionId = stored.stripeSubscriptionId;
+    }
+  }
+}
+
 async function writeDb(db) {
   const normalized = normalizeDb(db);
   if (supabase) {
+    try {
+      await keepNewerBillingFromStore(normalized);
+    } catch (error) {
+      console.warn('[db] billing merge skipped:', error.message);
+    }
     const { error } = await supabase
       .from('daily_dividend_state')
       .upsert({
@@ -1506,6 +1540,9 @@ app.get('/api/auth/session', requireUser, async (req, res, next) => {
     const changed = !existed || user.email !== authEmail;
     user.email = authEmail;
     if (changed) await writeDb(db);
+    // Quick id-based Stripe confirmation so a paid member boots as Pro even if
+    // the saved status missed a webhook (full search runs on rabbit-hole calls).
+    await confirmSubscriptionWithStripe(db, user, { search: false });
     res.json({ ok: true, user: profile(user) });
   } catch (error) {
     next(error);
@@ -1732,6 +1769,142 @@ app.post('/api/read', requireUser, async (req, res, next) => {
     await writeDb(db);
     if (isNewRead) analytics.capture({ distinctId: userId, event: 'company_read', properties: { company_id: companyId, source, date: today } });
     res.json(profile(user));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* Rabbit Holes free tier: every signed-in reader gets ONE full rabbit hole per
+   (local) day; beyond that only page 1 of each is readable. Pro readers get
+   everything. The free read is only spent when the reader actually moves past
+   page 1 (POST /unlock), so browsing covers costs nothing. Stored per user as
+   user.rabbitHoleFreeReads = { 'YYYY-MM-DD': slug } (last 14 days kept). */
+const RABBIT_HOLE_SLUG_RE = /^[a-z0-9-]{1,80}$/;
+async function rabbitHoleExists(slug) {
+  if (!RABBIT_HOLE_SLUG_RE.test(slug)) return false;
+  try {
+    await fs.access(path.join(__dirname, 'public', 'reports', `${slug}.html`));
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+function rabbitHoleAccess(user, slug, date) {
+  const pro = ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus);
+  const reads = user.rabbitHoleFreeReads && typeof user.rabbitHoleFreeReads === 'object' ? user.rabbitHoleFreeReads : {};
+  const freeSlug = typeof reads[date] === 'string' ? reads[date] : null;
+  return {
+    ok: true,
+    date,
+    pro,
+    freeSlug,
+    freeAvailable: !pro && !freeSlug,
+    fullAccess: pro || (Boolean(slug) && freeSlug === slug)
+  };
+}
+/* Before treating someone as a FREE reader (free-read banner, spending their
+   free read, paywall), confirm with Stripe when they have a Stripe customer or
+   subscription on file. The saved status only updates via webhook or the
+   /subscribe page, so a missed/late webhook would otherwise show a paying
+   member the free-tier UI. Throttled to one Stripe check per user per 5 min. */
+const STRIPE_RECHECK_MS = 5 * 60 * 1000;
+function applySubscriptionToUser(user, subscription) {
+  if (!user || !subscription) return;
+  user.stripeCustomerId = stripeObjectId(subscription.customer) || user.stripeCustomerId || '';
+  user.stripeSubscriptionId = subscription.id || user.stripeSubscriptionId || '';
+  user.subscriptionStatus = normalizeLookup(subscription.status) || 'inactive';
+  user.subscriptionCancelAtPeriodEnd = Boolean(subscription.cancel_at_period_end);
+  user.subscriptionCurrentPeriodEnd = subscriptionPeriodEnd(subscription);
+  user.subscriptionUpdatedAt = new Date().toISOString();
+}
+function stripeSearchValue(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+const isActiveSub = sub => Boolean(sub && ACTIVE_SUBSCRIPTION_STATUSES.has(normalizeLookup(sub.status)));
+async function confirmSubscriptionWithStripe(db, user, { search = true } = {}) {
+  if (ACTIVE_SUBSCRIPTION_STATUSES.has(user.subscriptionStatus)) return;
+  if (!STRIPE_SECRET_KEY) return;
+  const hasIds = Boolean(user.stripeSubscriptionId || user.stripeCustomerId);
+  if (!hasIds && !search) return;
+  const last = Date.parse(user.subscriptionCheckedAt || '') || 0;
+  if (Date.now() - last < STRIPE_RECHECK_MS) return;
+  user.subscriptionCheckedAt = new Date().toISOString();
+  try {
+    /* Look for an active subscription, cheapest lookup first, stopping at the
+       first hit. The saved ids can be missing or point at an old customer
+       (lost by a stale write, or the member paid another way), so fall back
+       to the account id we stamp on every subscription, then to the email. */
+    let latest = null; // most relevant non-active subscription, to record e.g. "canceled"
+    const pick = subs => {
+      const list = Array.isArray(subs) ? subs : [];
+      if (!latest && list[0]) latest = list[0];
+      return list.find(isActiveSub) || null;
+    };
+    let active = null;
+    if (user.stripeSubscriptionId) {
+      const sub = await stripeRequest(`/v1/subscriptions/${encodeURIComponent(user.stripeSubscriptionId)}`).catch(error => {
+        if (error.statusCode === 404) return null;
+        throw error;
+      });
+      active = pick(sub ? [sub] : []);
+    }
+    if (!active && user.stripeCustomerId) {
+      const list = await stripeRequest('/v1/subscriptions', { params: { customer: user.stripeCustomerId, status: 'all', limit: 10 } });
+      active = pick(list.data);
+    }
+    if (!active && search) {
+      const bySub = await stripeRequest('/v1/subscriptions/search', { params: { query: `metadata['dd_user_id']:'${stripeSearchValue(user.userId)}'`, limit: 10 } });
+      active = pick(bySub.data);
+    }
+    if (!active && search && user.email) {
+      const byEmail = await stripeRequest('/v1/customers/search', { params: { query: `email:'${stripeSearchValue(user.email)}'`, limit: 5 } });
+      for (const customer of byEmail.data || []) {
+        if (customer.id === user.stripeCustomerId) continue;
+        const list = await stripeRequest('/v1/subscriptions', { params: { customer: customer.id, status: 'all', limit: 10 } });
+        active = list.data && list.data.find(isActiveSub);
+        if (active) break;
+      }
+    }
+    if (active) {
+      applySubscriptionToUser(user, active);
+      console.log(`[billing] Stripe recheck restored Pro for ${user.userId} (${active.status})`);
+    } else if (latest && hasIds) {
+      applySubscriptionToUser(user, latest);
+    }
+  } catch (error) {
+    console.warn('[billing] Stripe recheck failed:', error.message);
+  }
+  await writeDb(db);
+}
+
+app.get('/api/rabbit-holes/access', requireUser, async (req, res, next) => {
+  try {
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    await confirmSubscriptionWithStripe(db, user);
+    const slug = RABBIT_HOLE_SLUG_RE.test(String(req.query.slug || '')) ? String(req.query.slug) : '';
+    res.setHeader('Cache-Control', 'no-store');
+    res.json(rabbitHoleAccess(user, slug, clientReadDate(String(req.query.date || ''))));
+  } catch (error) {
+    next(error);
+  }
+});
+app.post('/api/rabbit-holes/unlock', requireUser, async (req, res, next) => {
+  try {
+    const slug = String((req.body && req.body.slug) || '');
+    if (!(await rabbitHoleExists(slug))) return res.status(404).json({ error: 'Rabbit hole not found.' });
+    const date = clientReadDate(req.body && req.body.date);
+    const db = await readDb();
+    const user = getUser(db, req.authUser.id);
+    await confirmSubscriptionWithStripe(db, user);
+    const before = rabbitHoleAccess(user, slug, date);
+    if (before.fullAccess || !before.freeAvailable) return res.json({ ...before, claimed: false });
+    const reads = user.rabbitHoleFreeReads && typeof user.rabbitHoleFreeReads === 'object' ? user.rabbitHoleFreeReads : {};
+    reads[date] = slug;
+    user.rabbitHoleFreeReads = Object.fromEntries(Object.entries(reads).sort(([a], [b]) => b.localeCompare(a)).slice(0, 14));
+    await writeDb(db);
+    analytics.capture({ distinctId: user.userId, event: 'rabbit_hole_free_read_used', properties: { rabbit_hole_id: slug, date } });
+    res.json({ ...rabbitHoleAccess(user, slug, date), claimed: true });
   } catch (error) {
     next(error);
   }
