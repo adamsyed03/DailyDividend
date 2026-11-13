@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Daily Dividend: Netflix V8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6F2E9;--cream-2:#EFEADE;--paper:#FAF7F0;
+  --ink:#100F0E;--ink-2:#2A2A28;--muted:#6B6B66;--mute-2:#A8A39A;--line:#DDD5C4;
+  --red:#E50914;--red-deep:#B20710;--red-dark:#5A0B10;
+  --red-lite:#FF5F57;
+  --green-deep:#16543A;--green-lite:#8FD8AF;--green-soft:#D6E7DC;
+  --red-soft:#F2D9D3;
+  --gold:#C49A3E;--gold-soft:#F2E5C2;
+  --charcoal:#221F1F;
+  --accent:var(--red);--accent-soft:rgba(229,9,20,0.10);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.055'/></svg>");
+  --co-bg:radial-gradient(circle at 85% -5%,rgba(229,9,20,0.48),transparent 55%),radial-gradient(circle at -10% 110%,rgba(90,11,16,0.6),transparent 55%),linear-gradient(160deg,#191414,#080505 60%,#000);
+  --co-logo-bg:#E50914;--co-logo-color:#fff
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:#141110;overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+
+/* ── STAGE + PHONE FRAME ── */
+.stage{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at top,rgba(229,9,20,0.09),transparent 60%),#141110}
+.phone{width:100%;max-width:400px;height:100%;max-height:860px;background:var(--cream);border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.5)}
+@media(max-width:480px){.stage{padding:0}.phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}}
+@media(min-width:481px) and (max-height:900px){.phone{max-height:calc(100vh - 48px)}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex}
+.statusbar{height:44px;flex-shrink:0}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(246,242,233,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+
+/* ── TODAY ── */
+.today-scroll{flex:1;overflow-y:auto;padding:8px 24px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 22px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 12px}
+.today-hero{background:var(--grain),var(--co-bg);color:var(--cream);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:26px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;padding:5px 10px;background:rgba(246,242,233,0.14);border-radius:100px;margin-bottom:18px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;background:var(--red-lite);border-radius:50%;box-shadow:0 0 8px var(--red-lite);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:rgba(246,242,233,0.55);text-transform:uppercase;margin-bottom:8px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:27px;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px}
+.hero-h em{font-style:italic;color:var(--red-lite);font-weight:300}
+.hero-stock{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hero-sp{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--cream)}
+.hero-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.hero-sc.up{background:rgba(46,138,96,0.28);color:#8FD8AF}
+.hero-sc.down{background:rgba(209,74,61,0.28);color:#FFA79F}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(246,242,233,0.15);font-family:var(--mono);font-size:11px;color:rgba(246,242,233,0.45)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.rcard:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.rl{display:flex;align-items:center;gap:12px;min-width:0}
+.rthumb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── STACK SHELL ── */
+#screen-stack{background:#000}
+.shell{position:absolute;inset:0;overflow:hidden}
+.prog{position:absolute;top:50px;left:16px;right:16px;display:flex;gap:4px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.22);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.9)}
+.prog.dark .tick{background:rgba(0,0,0,0.14)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.8)}
+.topbar{position:absolute;top:64px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.co-logo{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:8px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tbtn svg{width:15px;height:15px}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:#fff}
+
+/* ── CARD BASE (top aligned) ── */
+.track{position:absolute;inset:0}
+.card{position:absolute;inset:0;padding:104px 22px 96px;display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card.active{display:flex;animation:cardIn 0.36s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card.entered .a1{animation:slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1) both}
+.card.entered .a2{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.07s both}
+.card.entered .a3{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.15s both}
+.card.entered .a4{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.24s both}
+
+/* ── CARD BACKGROUNDS (Netflix red & black, grainy) ── */
+.card.bg-cover{background:var(--grain),var(--co-bg);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-dkred{background:var(--grain),radial-gradient(circle at 80% 0%,rgba(229,9,20,0.32),transparent 55%),linear-gradient(165deg,#33090B,#140404 70%,#0C0202);color:var(--cream)}
+.card.bg-green{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(143,216,175,0.18),transparent 50%),linear-gradient(160deg,#16543A,#0A2C1D 70%,#072115);color:var(--cream)}
+.card.bg-red{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(255,95,87,0.22),transparent 50%),linear-gradient(160deg,#8E1F14,#430B06 70%,#2E0603);color:var(--cream)}
+.card.bg-gold{background:var(--grain),linear-gradient(165deg,#F7EDD4,#ECDAAB);color:var(--ink)}
+.card.bg-brand{background:var(--grain),var(--co-bg);color:var(--cream)}
+
+/* ── TYPOGRAPHY ── */
+.eb-c{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px;opacity:0.6}
+.card.bg-cover .eb-c,.card.bg-brand .eb-c,.card.bg-dkred .eb-c{color:var(--red-lite);opacity:1}
+.card.bg-green .eb-c{color:var(--green-lite);opacity:1}
+.card.bg-red .eb-c{color:#FFC9C0;opacity:1}
+.card.bg-gold .eb-c{color:#8a6a1e;opacity:1}
+.hl{font-family:var(--serif);font-weight:400;font-size:clamp(29px,8.2vw,35px);line-height:1.08;letter-spacing:-0.025em;margin-bottom:16px}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-cover .hl em,.card.bg-brand .hl em,.card.bg-dkred .hl em{color:var(--red-lite)}
+.card.bg-cream .hl em{color:var(--red-deep)}
+.card.bg-gold .hl em{color:var(--red-deep)}
+.card.bg-green .hl em{color:var(--green-lite)}
+.card.bg-red .hl em{color:#FFD3CB}
+.bd{font-family:var(--sans);font-size:16px;line-height:1.6;opacity:0.9}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+.card.bg-gold .bd{color:var(--ink-2)}
+.kick{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.45;color:var(--ink-2)}
+.kick strong{font-style:normal;font-weight:600;color:var(--red-deep)}
+.card.bg-cover .kick,.card.bg-brand .kick,.card.bg-dkred .kick,.card.bg-green .kick,.card.bg-red .kick{border-top-color:rgba(255,255,255,0.16);color:rgba(246,242,233,0.85)}
+.card.bg-dkred .kick strong,.card.bg-cover .kick strong{color:var(--red-lite)}
+
+/* ── COVER ── */
+.cv-top{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.cv-mark{width:52px;height:52px;border-radius:14px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:26px;box-shadow:0 8px 24px rgba(229,9,20,0.35);flex-shrink:0}
+.cv-name{font-family:var(--serif);font-weight:500;font-size:19px;letter-spacing:-0.01em;margin-bottom:5px}
+.cv-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75)}
+.cv-stock{display:flex;align-items:baseline;gap:10px;margin-bottom:22px}
+.cv-sp{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--cream)}
+.cv-sc{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px}
+.cv-sc.up{background:rgba(46,138,96,0.28);color:#8FD8AF}
+.cv-sc.down{background:rgba(209,74,61,0.28);color:#FFA79F}
+.cv-pill{display:inline-flex;align-items:center;gap:10px;margin-top:22px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.2);border-radius:100px;padding:11px 16px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cv-pill svg{width:16px;height:16px;color:var(--red-lite);flex-shrink:0}
+.cv-pill span{font-family:var(--sans);font-size:13px;line-height:1.4;color:var(--cream);opacity:0.92}
+.cv-pill strong{font-weight:600;color:#fff}
+
+/* ── MONEY: 3 glass rows ── */
+.mn-rows{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.mn-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:16px;padding:14px 16px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.mn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.mn-name{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink)}
+.mn-pct{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-0.02em;color:var(--red-deep)}
+.mn-pct.sm{font-size:15px;font-family:var(--mono);letter-spacing:0.1em;font-weight:600}
+.mn-bar{height:9px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.mn-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12)}
+.mn-desc{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.45}
+
+/* ── MODEL: 3-step flow + callout ── */
+.md-vault{background:rgba(178,7,16,0.06);border:1.5px solid rgba(178,7,16,0.28);border-radius:14px;padding:12px 14px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;box-shadow:0 4px 18px rgba(178,7,16,0.06)}
+.md-vault-ic{font-size:18px;line-height:1;flex-shrink:0;margin-top:2px}
+.md-vault-tx{font-family:var(--serif);font-size:15px;line-height:1.4;letter-spacing:-0.01em;color:var(--ink)}
+.md-vault-tx strong{font-weight:700;color:var(--red-deep)}
+.md-flow{display:flex;flex-direction:column}
+.md-step{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:15px;padding:13px 16px;opacity:0;transform:translateY(6px);transition:opacity 0.4s ease,transform 0.4s ease;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.md-step.visible{opacity:1;transform:translateY(0)}
+.md-n{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red-deep);font-weight:600;margin-bottom:4px}
+.md-t{font-family:var(--serif);font-size:17.5px;font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-0.01em;margin-bottom:3px}
+.md-s{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.45}
+.md-arrow{text-align:center;padding:2px 0;font-size:15px;opacity:0;transition:opacity 0.3s;color:var(--red-deep)}
+.md-arrow.visible{opacity:0.7}
+
+/* ── RIVALS: glass boxes ── */
+.rv-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
+.rv-rows{display:flex;flex-direction:column;gap:7px}
+.rv-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:14px;padding:10px 13px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.rv-row.hero{background:rgba(178,7,16,0.06);border-color:rgba(178,7,16,0.32);box-shadow:0 4px 18px rgba(178,7,16,0.07)}
+.rv-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.rv-n{font-family:var(--sans);font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.rv-n .rv-emoji{font-size:14px}
+.rv-row.hero .rv-n{color:var(--red-deep)}
+.rv-val{font-family:var(--mono);font-size:14.5px;font-weight:600;color:var(--ink)}
+.rv-bar{height:7px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:6px}
+.rv-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12)}
+.rv-tag{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.35}
+
+/* ── HIDDEN TRUTH: giant number + survival ladder ── */
+.ht-myth{font-family:var(--serif);font-size:17px;font-style:italic;font-weight:300;text-decoration:line-through;text-decoration-color:rgba(255,255,255,0.5);text-decoration-thickness:1.5px;opacity:0.6;line-height:1.35;margin-bottom:18px}
+.ht-num{font-family:var(--serif);font-weight:300;font-size:clamp(58px,17vw,76px);line-height:0.95;letter-spacing:-0.04em;color:#fff;margin-bottom:6px}
+.ht-num span{font-size:0.36em;font-style:italic;font-weight:300;color:var(--red-lite);letter-spacing:-0.01em}
+.ht-sub{font-family:var(--serif);font-size:18.5px;font-weight:400;line-height:1.3;letter-spacing:-0.01em;color:var(--cream);margin-bottom:14px}
+.ht-sub em{font-style:italic;color:var(--red-lite)}
+.ht-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#FFC9C0;margin:18px 0 12px}
+.htv{display:flex;align-items:flex-end;gap:12px;height:130px}
+.htv-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.htv-val{font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;white-space:nowrap}
+.htv-bar{width:100%;max-width:44px;background:linear-gradient(180deg,var(--red-lite),#B21C15);border-radius:8px 8px 3px 3px;height:0;transition:height 0.9s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:0 0 18px rgba(255,95,87,0.25)}
+.htv-cn{font-family:var(--sans);font-size:10.5px;color:var(--cream);opacity:0.8;text-align:center;line-height:1.2}
+
+/* ── BULL / BEAR ACCORDIONS ── */
+.nf-acc-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.nf-acc-item{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.18);border-radius:16px;overflow:hidden;position:relative}
+.nf-acc-btn{width:100%;border:0;background:none;padding:15px 15px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation}
+.nf-acc-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;line-height:1;margin-top:1px}
+.card.bg-green .nf-acc-icon{color:var(--green-deep)}
+.card.bg-red .nf-acc-icon{color:#8E1F14}
+.nf-acc-title{flex:1;font-family:var(--serif);font-size:15.5px;font-weight:600;line-height:1.35;letter-spacing:-0.01em;padding-top:3px}
+.nf-acc-title strong{font-weight:700;color:#fff}
+.nf-acc-chevron{font-size:11px;opacity:0.5;transition:transform 0.25s;flex-shrink:0;margin-top:7px}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.nf-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.2,0.8,0.2,1)}
+  .nf-acc-text{font-family:var(--sans);font-size:14.5px;line-height:1.6;opacity:0.95;padding:4px 16px 15px 55px;border-top:1px solid rgba(255,255,255,0.12);text-align:justify;text-justify:inter-word;}
+  .no-break{white-space:nowrap;}
+.acc-ctx{display:block;margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.5;opacity:0.85}
+
+/* ── OWNERSHIP: spotlight ── */
+.ow-spot{background:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.9);border-radius:20px;padding:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 6px 24px rgba(0,0,0,0.07);margin-top:6px}
+.ow-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ow-face{width:52px;height:52px;border-radius:14px;background:var(--red-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0;box-shadow:0 6px 16px rgba(178,7,16,0.3)}
+.ow-name{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.ow-role{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--red-deep);font-weight:600;margin-top:3px}
+.ow-math{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ow-cell{flex:1}
+.ow-cv{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1}
+.ow-cl{font-family:var(--sans);font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.ow-arr{font-size:20px;color:var(--red-deep);flex-shrink:0}
+.ow-note{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.5;padding-top:13px;border-top:1px solid var(--line)}
+.ow-note strong{font-weight:600}
+
+/* ── DEBATE ── */
+.dis-pullquote{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px;box-shadow:0 6px 24px rgba(0,0,0,0.05);margin-bottom:18px;position:relative}
+.dis-pullquote-mark{font-family:var(--serif);font-size:54px;color:var(--red);opacity:0.16;line-height:1;position:absolute;top:6px;left:14px;font-weight:300;pointer-events:none}
+.dis-pullquote-text{font-family:var(--serif);font-size:19.5px;font-weight:400;color:var(--ink);line-height:1.35;letter-spacing:-0.01em;padding-left:8px;position:relative;z-index:1}
+.dis-pullquote-text em{font-style:italic;font-weight:300;color:var(--red-deep)}
+.dis-chip-section{margin-bottom:14px}
+.dis-chip-section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.dis-chip-section-label.works{color:#1F6B4A}
+.dis-chip-section-label.notyet{color:var(--red-deep)}
+.dis-chip-row{display:flex;flex-wrap:wrap;gap:7px}
+.dis-chip{font-family:var(--sans);font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:100px;line-height:1.2}
+.dis-chip.works{background:var(--green-soft);color:#1F6B4A;border:1px solid rgba(46,138,96,0.2)}
+.dis-chip.notyet{background:var(--red-soft);color:var(--red-deep);border:1px solid rgba(178,58,46,0.2)}
+
+/* ── VOTE ── */
+.cv-sent-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cv-sent{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border-radius:100px;font-weight:600}
+.cv-sent.bull{background:rgba(46,138,96,0.22);color:#8FD8AF;border:1px solid rgba(46,138,96,0.28)}
+.cv-vb{font-family:var(--mono);font-size:10px;color:rgba(246,242,233,0.45);letter-spacing:0.08em}
+.cv-vb .vb-num{color:var(--cream);font-weight:600}
+.cv-opts{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.co-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);border-radius:15px;padding:16px 17px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;touch-action:manipulation}
+.co-opt .ico{font-size:23px;flex-shrink:0;z-index:2}
+.co-opt .lbl{font-family:var(--serif);font-size:18px;font-weight:500;z-index:2}
+.co-opt .sub{font-family:var(--sans);font-size:11.5px;opacity:0.6;z-index:2;margin-left:auto;text-align:right}
+.cf{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 0.7s cubic-bezier(0.2,0.8,0.2,1);z-index:1}
+.co-opt.bull .cf{background:rgba(46,138,96,0.4)}
+.co-opt.neutral .cf{background:rgba(196,154,62,0.4)}
+.co-opt.bear .cf{background:rgba(209,74,61,0.4)}
+.cp{font-family:var(--mono);font-size:14px;font-weight:600;opacity:0;transition:opacity 0.4s 0.3s;z-index:2;margin-left:auto}
+.co-opt.revealed .sub{display:none}
+.co-opt.revealed .cp{opacity:1}
+.co-opt.you{border-color:var(--red-lite);border-width:2px}
+.cr{font-family:var(--sans);font-size:13.5px;text-align:center;margin-top:16px;opacity:0;transition:opacity 0.4s 0.5s;line-height:1.5}
+.cr.show{opacity:0.9}
+.cr strong{font-weight:600;opacity:1}
+
+/* ── NEXT ── */
+.np{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:15px;display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:pointer;transition:transform 0.18s}
+.np:hover{transform:translateX(4px)}
+.nthumb{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0}
+.nco{font-family:var(--serif);font-size:17px;font-weight:600}
+.ntag{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;opacity:0.65;text-transform:uppercase;margin-top:2px}
+.ea{display:flex;flex-direction:column;gap:9px}
+.btn-p{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:14px 18px;font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+.btn-g{background:transparent;color:var(--cream);border:1px solid rgba(255,255,255,0.25);border-radius:100px;padding:13px 18px;font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+
+/* ── SWIPE ZONES + PILLS ── */
+.tz{position:absolute;top:100px;bottom:88px;width:22%;z-index:5;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+.pills{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:20}
+.pill{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);padding:9px 15px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
+.pills.dark .pill{background:rgba(0,0,0,0.07);color:var(--ink);border-color:rgba(0,0,0,0.12)}
+
+/* ── DRAWER (deep dive) ── */
+.dw-bd{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dw-bd.open{opacity:1;pointer-events:auto}
+.dw{position:absolute;left:0;right:0;bottom:0;height:80%;background:var(--paper);border-radius:24px 24px 0 0;z-index:210;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,0.3)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:40px;height:4px;background:var(--mute-2);border-radius:4px;margin:10px auto 0;flex-shrink:0}
+.dw-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-eb{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--red-deep);text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.dw-t{font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:-0.01em}
+.dw-x{background:rgba(0,0,0,0.06);border:0;width:30px;height:30px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.dw-b{overflow-y:auto;padding:20px 22px 44px}
+.d-hero{font-family:var(--serif);font-size:23px;font-weight:400;line-height:1.2;letter-spacing:-0.02em;color:var(--ink);margin-bottom:14px}
+.d-hero em{font-style:italic;font-weight:300;color:var(--red-deep)}
+.d-p{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--ink-2);margin:0 0 13px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-big{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 19px;margin:18px 0;display:flex;align-items:center;gap:17px;box-shadow:0 3px 14px rgba(0,0,0,0.04)}
+.d-bignum{font-family:var(--serif);font-size:40px;font-weight:400;letter-spacing:-0.03em;color:var(--red-deep);line-height:1;flex-shrink:0}
+.d-biglbl{font-family:var(--sans);font-size:13.5px;color:var(--muted);line-height:1.45}
+.d-q{border-left:3px solid var(--red);padding:4px 0 4px 15px;margin:16px 0;font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink)}
+.d-k{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red-deep);font-weight:600;margin:20px 0 8px}
+.d-fine{font-family:var(--sans);font-size:11.5px;color:var(--mute-2);font-style:italic;margin-top:16px;line-height:1.5}
+
+/* ── TLDR ── */
+.tl-bd{position:absolute;inset:0;background:rgba(10,10,9,0.75);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.tl-bd.open{opacity:1;pointer-events:auto}
+.tl-c{background:var(--grain),var(--co-bg);border-radius:24px;width:100%;max-width:340px;padding:26px 24px;position:relative;transform:scale(0.94);transition:transform 0.3s;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.tl-bd.open .tl-c{transform:scale(1)}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tl-l{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.tl-co{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--cream)}
+.tl-co .s{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:rgba(246,242,233,0.45);text-transform:uppercase;display:block;margin-top:1px}
+.tl-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--red-lite);text-transform:uppercase;margin-bottom:14px}
+.tl-pts{display:flex;flex-direction:column}
+.tl-p{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tl-p:last-child{border-bottom:0}
+.tl-n{font-family:var(--mono);font-size:10px;color:var(--red-lite);flex-shrink:0;padding-top:3px;width:16px}
+.tl-tx{font-family:var(--sans);font-size:13px;line-height:1.45;color:var(--cream)}
+.tl-tx strong{font-weight:700;color:#fff}
+.tl-f{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.tl-br{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--cream)}
+.tl-br .dd{color:var(--red-lite)}
+.tl-u{font-family:var(--mono);font-size:9px;color:rgba(246,242,233,0.35);letter-spacing:0.1em}
+.tl-acts{display:flex;gap:8px;margin-top:14px}
+.tl-btn{flex:1;border:0;border-radius:100px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--red);color:#fff}
+.tl-btn.c{background:rgba(255,255,255,0.12);color:var(--cream)}
+.tl-hint{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(246,242,233,0.3);text-transform:uppercase;margin-top:10px}
+
+/* ── TOAST + HINT ── */
+.toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+</style></head><body>
+
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<!-- TODAY -->
+<section class="screen active" id="screen-today">
+  <div class="statusbar"></div>
+  <div class="today-scroll" id="todayScroll"></div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+<!-- STACK -->
+<section class="screen" id="screen-stack">
+  <div class="shell" id="shell">
+    <div class="prog" id="prog"></div>
+    <div class="topbar" id="topbar">
+      <div class="co"><div class="co-logo" id="cologo">N</div><div><div class="co-name">Netflix</div><div class="co-sub">NFLX · NASDAQ</div></div></div>
+      <div class="tactions">
+        <button class="tbtn" onclick="openTldr()">&#8801;</button>
+        <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+        <button class="tbtn" onclick="closeStack()">&#215;</button>
+      </div>
+    </div>
+    <div class="tz l" onclick="prevCard()"></div>
+    <div class="tz r" onclick="nextCard()"></div>
+    <div class="track" id="track"></div>
+    <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">&#8593; Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
+  </div>
+  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+  <div class="dw" id="dw">
+    <div class="dw-hn"></div>
+    <div class="dw-h"><div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div><button class="dw-x" onclick="closeDrawer()">&#215;</button></div>
+    <div class="dw-b" id="dwB"></div>
+  </div>
+  <div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()"><div class="tl-c" id="tlC"></div></div>
+  <div class="toast" id="toast">Saved</div>
+</section>
+
+<!-- YOU -->
+<section class="screen" id="screen-you">
+  <div class="statusbar"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center">
+    <div>
+      <div style="font-family:var(--serif);font-size:28px;letter-spacing:-0.02em;margin-bottom:8px">Your shelf.</div>
+      <div style="font-family:var(--sans);font-size:14px;color:var(--muted)">Read Netflix, then vote. Your call appears here.</div>
+      <button onclick="goTo('today')" style="margin-top:20px;background:var(--ink);color:var(--cream);border:0;border-radius:100px;padding:12px 24px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer">Back to today</button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item active" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+</div></div>
+<div class="hint">desktop preview · tap edges to swipe · ↑ deeper · ≡ TL;DR</div>
+
+<script>
+/* PRICE PLACEHOLDER. Dev: wire live price + change into id="livePrice" / id="liveChange" */
+const PRICE="$77.65", CHANGE="-1.9% today", CHANGE_DIR="down";
+
+/* ONE POINT PER CARD. ONE VISUAL. EVERYTHING ELSE GOES TO THE DEEP DIVE. NO EM DASHES. */
+const CARDS=[
+  /* 01 COVER */
+  {type:"cover",bg:"cover",deep:"cover",
+   hl:"Netflix spends <em>$55 million a day</em>. And still profits.",
+   bd:"$20 billion on shows and films this year, more than any studio or streamer on Earth. Most of it goes into making its own shows, which Netflix keeps forever.",
+   kick:"$55 million a day is enough to build a <strong>brand-new Burj Khalifa every month</strong>."},
+
+  /* 02 MONEY */
+  {type:"money",bg:"cream",deep:"money",
+   hl:"Netflix makes <em>$50 billion</em> a year. Here's where it comes from.",
+   rows:[
+     {name:"💳 Subscriptions",pct:"94%",sm:false,w:100,fill:"#B20710",desc:"325 million households pay monthly, whether they watch or not. That's the magic."},
+     {name:"📺 Advertising",pct:"6%",sm:false,w:9,fill:"#221F1F",desc:"Didn't exist four years ago. $3 billion this year, doubling every year."},
+     {name:"🏟️ Sports & live TV",pct:"NEW",sm:true,w:3,fill:"rgba(34,31,31,0.35)",desc:"Live wrestling every Monday, football on Christmas, boxing nights. Streamed live, like TV used to be."}
+   ],
+   kick:"About <strong>$137 million</strong> flowing in every single day."},
+
+  /* 03 MODEL */
+  {type:"model",bg:"cream",deep:"model",
+   hl:"Netflix makes a show once. <em>The whole planet pays for it.</em>",
+   steps:[
+     {n:"Step 1 · The bet",t:"One show, made once",s:"Streaming it to 1 million or 100 million people costs the same."},
+     {n:"Step 2 · The brain",t:"325 million people train it",s:"Every skip and binge teaches it what to make next. 80% of viewing comes from its picks."},
+     {n:"Step 3 · The lock",t:"You never have to think",s:"Your next show in seconds. You stay another month."}
+   ],
+   vault:"The ta-dum, the artwork, the app that knows you: <strong>Netflix wins on feel.</strong>"},
+
+  /* 04 RIVALS */
+  {type:"rivals",bg:"cream",deep:"rivals",
+   hl:"Netflix wins the wallet. <em>YouTube wins the clock.</em>",
+   lbl:"Share of all US TV screen time",
+   rows:[
+     {emoji:"▶️",n:"YouTube",val:"13.4%",pct:100,fill:"#F2E8CF",tag:"Free, endless, made by creators. Netflix's own bosses call it the real competition."},
+     {emoji:"🔴",n:"Netflix",val:"7.8%",pct:58,fill:"#B20710",tag:"The only pure streamer making serious money from streaming.",h:true},
+     {emoji:"📦",n:"Prime Video",val:"4.2%",pct:31,fill:"#1F8A4C",tag:"Comes bundled with your shopping."},
+     {emoji:"🏰",n:"Disney+",val:"~2%",pct:15,fill:"#1565C0",tag:"Marvel and Star Wars, priced cheap in 2019, stuck cheap since."}
+   ],
+   kick:"Yet only <strong>2 in 100</strong> members cancel Netflix in a month, the lowest in streaming. YouTube steals hours, not wallets. Yet."},
+
+  /* 05 HIDDEN TRUTH */
+  {type:"hidden",bg:"dkred",deep:"hidden",
+   myth:"Netflix cancels shows because nobody watched.",
+   num:"1 in 3 <span>shows survive</span>",
+   sub:"That's how many make it to season 3.",
+   bd:"By season 3, unknown actors have become stars with agents and pay demands. Three brand-new shows can cost less than one more season of a hit. So Netflix resets the machine.",
+   lbl:"Shows that reach each season",
+   world:[
+     {c:"Season 2",v:"2 in 3",h:100},
+     {c:"Season 3",v:"1 in 3",h:50},
+     {c:"Season 4",v:"1 in 5",h:30},
+     {c:"Season 8",v:"1 in 50",h:4}
+   ]},
+
+  /* 06 BULL */
+  {type:"bull",bg:"green",deep:"bull",
+   eb:"06 · How it could win",
+   hl:"Three reasons this stock could <em>double.</em>",
+   panels:[
+     {icon:"↑",title:"The ad business is <strong>doubling every year</strong>",
+      body:"$3 billion this year, twice last year's. And because Netflix knows exactly what its 250 million ad-plan viewers love watching, brands pay extra for ads aimed at precisely the right people.<span class='acc-ctx'>How big is this? YouTube earns three times more from TV ads. That whole gap is money Netflix can chase from viewers it already has.</span>"},
+     {icon:"↑",title:"The password crackdown turned <strong>freeloaders into payers</strong>",
+      body:"Over 100 million households were watching free on someone else's account. Netflix said: pay or leave. Most paid, kicking off the biggest growth wave in its history, and millions of holdouts are still converting.<span class='acc-ctx'>How big is this? It flipped Netflix's scariest year ever into record growth, without making a single new show.</span>"},
+     {icon:"↑",title:"Netflix keeps <strong>more of every dollar</strong><span class='no-break'>, every year</span>",
+      body:"In 2024 it kept about 27 cents of each dollar as profit. This year it's targeting more than 31. Money grows 16% a year; costs grow slower.<span class='acc-ctx'>How big is this? Same subscribers, fatter profits. That quiet math is how stocks double without headlines.</span>"}
+   ]},
+
+  /* 07 BEAR */
+  {type:"bear",bg:"red",deep:"bear",
+   eb:"07 · What could sink it",
+   hl:"Three things that could <em>cut the stock in half.</em>",
+   panels:[
+     {icon:"↓",title:"Asia is the future, and <strong>Netflix hasn't cracked it</strong>",
+      body:"India's JioHotstar signed up roughly 300 million paying members in about a year, close to Netflix's worldwide total after 28 years, by bundling with cheap Jio mobile plans and owning IPL cricket.<span class='acc-ctx'>How big is this? The next billion viewers live exactly where Netflix earns the least.</span>"},
+     {icon:"↓",title:"Every rival has a safety net. <strong>Netflix doesn't.</strong>",
+      body:"Apple loses money on TV and doesn't care: it sells iPhones. Amazon streams to keep you shopping. YouTube has Google. If streaming stumbles, they all survive. Netflix IS streaming.<span class='acc-ctx'>How big is this? Rivals can lose money here forever. Netflix can't afford one bad stretch.</span>"},
+     {icon:"↓",title:"The $20 billion spending <strong>can never stop</strong>",
+      body:"The moment Netflix spends less, shows get worse, people leave, and rivals with deeper pockets catch up. And the next global hit is never guaranteed: Squid Game surprised even Netflix.<span class='acc-ctx'>How big is this? The bill runs $55 million a day, hit or no hit.</span>"}
+   ]},
+
+  /* 08 THE MONEY BEHIND IT */
+  {type:"own",bg:"gold",deep:"own",
+   hl:"A billionaire panic-sold Netflix at the bottom. <em>It has tripled since.</em>",
+   math:{a:"$1.1B",al:"His bet on Netflix, January 2022",b:"-$430M",bl:"The loss when he sold everything, 3 months later"},
+   note:"Bill Ackman sold at Netflix's scariest moment: first subscriber loss in a decade, stock down 75%. It has tripled since. <strong>This stock punishes panic.</strong>"},
+
+  /* 09 MARKET DEBATE */
+  {type:"debate",bg:"cream",deep:"debate",
+   hl:"Netflix won the streaming war. <em>The new war is for your attention.</em>",
+   quote:"Netflix wins the wallet. YouTube wins the clock. <em>Which one decides the future?</em>",
+   works:["Most profitable streamer alive","Ads doubling every year","Raises prices, nobody leaves"],
+   worry:["YouTube has 2× the screen time","Rich world nearly full","Under-25s live with creators"]},
+
+  /* 10 VOTE */
+  {type:"conv",bg:"brand",deep:"conv",
+   hl:"Now you decide. <em>Netflix in 5 years?</em>",
+   opts:[{k:"bull",p:68},{k:"neutral",p:22},{k:"bear",p:10}]},
+
+  /* 11 NEXT */
+  {type:"next",bg:"brand",deep:"next",
+   hl:"That was Netflix.",
+   bd:"Next up: Disney. The opposite playbook. Its movies don't make the money. They're advertisements for the places that do."}
+];
+
+/* DEEP DIVES: hero, max 2 paragraphs, one big stat, fun fact */
+const DEEP={
+  cover:{t:"Why the spending never stops",e:"From the cover",h:`
+<div class="d-hero">Netflix learned the hard way: <em>rent shows, and the owner takes them back.</em></div>
+<div class="d-p">Netflix was built on borrowed hits. Then the studios pulled them back for their own apps.</div>
+<div class="d-p">So Netflix started making its own, and it keeps them forever, in 190 countries. Today roughly <strong>half of everything watched</strong> on Netflix is Netflix-made.</div>
+<div class="d-big"><div class="d-bignum">63%</div><div class="d-biglbl">of new Netflix content last year was made outside America, in Hindi, Korean, Spanish, Japanese and more.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">In 1997, the founders' working name for the company was <strong>"Kibble."</strong> As in dog food.</div>`},
+
+  money:{t:"Paid twice for the same viewer",e:"From the money",h:`
+<div class="d-hero">6 in 10 new members pick the cheaper plan with ads. <em>Netflix loves it.</em></div>
+<div class="d-p">It sounds like a discount. It's a double payday: your monthly fee, plus brands paying to reach you. <strong>Two incomes, one viewer.</strong></div>
+<div class="d-p">And subscriptions make the money predictable. Netflix knows in January what arrives in February.</div>
+<div class="d-p">That certainty is how it can promise <strong>$20 billion</strong> on shows years before they exist.</div>
+<div class="d-big"><div class="d-bignum">1 in 3</div><div class="d-biglbl">subscribers doesn't even watch in a given week. They still pay.</div></div>`},
+
+  model:{t:"Engineered to feel premium",e:"From the model",h:`
+<div class="d-hero">You choose what to watch in 1.8 seconds. <em>Netflix designed for that.</em></div>
+<div class="d-p">Artwork gets <strong>82% of your attention</strong> while you browse. So Netflix personalizes the poster itself: romantics see the couple, action fans see the chase. Same film, different image, per person.</div>
+<div class="d-p">Even the ta-dum was crafted like a film: an Oscar-winning sound designer made it from <strong>his wedding ring knocking on a bedroom cabinet</strong>. Hans Zimmer composed the cinema version.</div>
+<div class="d-big"><div class="d-bignum">1.8s</div><div class="d-biglbl">The average time you give each title while browsing. Netflix wins or loses you in that window.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">The ta-dum almost lost the job to another finalist sound: <strong>a goat bleating.</strong></div>`},
+
+  rivals:{t:"The premium trap",e:"From the rivals",h:`
+<div class="d-hero">Disney trained the world to pay $7. <em>Netflix trained the world to pay $17.</em></div>
+<div class="d-p">Disney+ launched cheap in 2019 and taught everyone it was the budget option. Budget brands can't raise prices. Netflix built a premium feel first, so prices rise and people stay. It now earns <strong>more than double per member</strong> what Disney+ does.</div>
+<div class="d-p">And it's raiding YouTube's own turf: from 2026, Netflix streams <strong>14 iHeart video podcasts</strong> plus The Ringer's biggest shows.</div>
+<div class="d-big"><div class="d-bignum">2×</div><div class="d-biglbl">YouTube's lead over Netflix in TV screen time. The gap widened this year.</div></div>`},
+
+  hidden:{t:"Netflix doesn't track ratings",e:"From the hidden truth",h:`
+<div class="d-hero">Reviews mean nothing here. <em>Netflix only tracks whether you finish.</em></div>
+<div class="d-p">A show critics adore but viewers abandon is a flop inside Netflix. A show everyone binges in a weekend is a hit. <strong>Finish rates decide everything.</strong></div>
+<div class="d-p">Each cancellation funds cheap new bets. One was a Korean drama studios had rejected for years: <strong>Squid Game</strong>, now the most-watched show in Netflix history.</div>
+<div class="d-big"><div class="d-bignum">$21M</div><div class="d-biglbl">What Squid Game season 1 cost. Less than half of one single day of Netflix's spending.</div></div>`},
+
+  bull:{t:"The quiet compounding machine",e:"From the bull case",h:`
+<div class="d-hero">The loudest bull case is ads. <em>The strongest one is discipline.</em></div>
+<div class="d-p">Prices keep rising, and the cancel rate stays the lowest in streaming. That's <strong>pricing power</strong>, and it converts straight into profit every year.</div>
+<div class="d-p">Since 2025 Netflix also owns its own ad technology, controlling everything from your watchlist to the advertiser's bill.</div>
+<div class="d-big"><div class="d-bignum">$4B</div><div class="d-biglbl">Profit from operations in just the first three months of 2026, up 18% in a year.</div></div>`},
+
+  bear:{t:"The rich world is full",e:"From the bear case",h:`
+<div class="d-hero">Nearly everyone who can afford Netflix already pays. <em>Growth means winning Asia.</em></div>
+<div class="d-p">In America and Europe, Netflix is close to the ceiling. Growth there now comes from charging more, not adding people.</div>
+<div class="d-p">Asia has the volume: India alone will overtake China in streaming subscriptions by 2030. But Netflix's cheapest Indian plan is about <strong>$1.80 a month</strong>, against rivals giving cricket away free.</div>
+<div class="d-big"><div class="d-bignum">9</div><div class="d-biglbl">Indian mobile-plan members needed to equal one US member's monthly payment.</div></div>`},
+
+  own:{t:"The 2022 near-death experience",e:"From the money behind it",h:`
+<div class="d-hero">Netflix went from unstoppable to written off. <em>Then it tripled.</em></div>
+<div class="d-p">In 2022, hedge funds fled together, Ackman loudest among them. The shares he dumped for $700 million would be worth roughly <strong>$2.4 billion today</strong>.</div>
+<div class="d-p">Two CEOs now split the job: <strong>Ted Sarandos</strong> picks the shows, <strong>Greg Peters</strong> runs tech and ads. Founder Reed Hastings left the board in June 2026, with profits at records.</div>
+<div class="d-big"><div class="d-bignum">-75%</div><div class="d-biglbl">The 2022 crash. Everything since has been the comeback.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">Co-CEO Ted Sarandos never went to film school. He started as a <strong>video store clerk</strong> who memorized every tape in the shop.</div>`},
+
+  debate:{t:"Our honest read",e:"The Daily Dividend take",h:`
+<div class="d-hero">Even Netflix asked if Netflix was enough. <em>Then it walked away.</em></div>
+<div class="d-p">In late 2025, Netflix agreed to buy Warner Bros' studios for <strong>$82.7 billion</strong>: in streaming, whoever has the most content wins. When Paramount overbid in February 2026, Netflix walked away. The stock jumped.</div>
+<div class="d-p">Our read: <strong>watch minutes, not money.</strong> If screen time steadies while ads double, bulls win. If YouTube keeps climbing, the premium slowly fades.</div>
+<div class="d-big"><div class="d-bignum">$82.7B</div><div class="d-biglbl">The deal Netflix walked away from. Sometimes the best purchase is the one you don't make.</div></div>
+<div class="d-fine">Not financial advice. For educational purposes only.</div>`},
+
+  conv:{t:"What the crowd is saying",e:"From the vote",h:`
+<div class="d-hero">8,412 readers have taken a side.</div>
+<div class="d-p"><strong>68% bullish · 22% neutral · 10% bearish.</strong></div>
+<div class="d-p">The most common neutral take: the ad business must grow faster than YouTube steals attention, and that race isn't decided yet.</div>
+<div class="d-q">Your call gets tracked on your shelf. You'll see exactly how right (or wrong) you were.</div>`},
+
+  next:{t:"The opposite playbook",e:"From what's next",h:`
+<div class="d-hero">Netflix is 100% digital. <em>Disney is mostly castles, cruises and toys.</em></div>
+<div class="d-p">When a Disney film flops, the parks still print money. When a Netflix bet misses, there is no parachute. Same industry, completely different risk.</div>
+<div class="d-q">Which would you rather own: the machine with no safety net, or the castle that moves slowly?</div>`}
+};
+
+const TLDR=[
+  "Netflix spends <strong>$55M a day</strong> on shows: a new Burj Khalifa every month. Still keeps billions.",
+  "<strong>325M households</strong> pay monthly, watch or not. A third don't even watch weekly.",
+  "One show, made <strong>once</strong>, streamed to the planet. Every extra viewer is nearly pure profit.",
+  "Only <strong>1 in 3 shows</strong> reaches season 3. Cancellation is cost control, not failure.",
+  "YouTube owns <strong>2×</strong> Netflix's TV screen time. The wallet vs the clock.",
+  "Billionaire Bill Ackman panic-sold in 2022 at a <strong>$430M loss</strong>. Netflix has tripled since."
+];
+
+const saved=new Set();
+
+/* ═══ RENDER CARD ═══ */
+function renderCard(card,idx){
+  const total=CARDS.length;
+  const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
+  switch(card.type){
+
+  case 'cover': return `
+<div class="eb-c a1">01 · The company</div>
+<div class="cv-top a1">
+  <div class="cv-mark">N</div>
+  <div>
+    <div class="cv-name">Netflix, Inc.</div>
+    <div class="cv-chips"><div class="cv-chip">NFLX · NASDAQ</div><div class="cv-chip">Streaming · 190 countries</div></div>
+  </div>
+</div>
+<div class="cv-stock a1">
+  <span class="cv-sp" id="livePrice">${PRICE}</span>
+  <span class="cv-sc ${CHANGE_DIR}" id="liveChange">${CHANGE}</span>
+</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3">${card.bd}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'money': return `
+<div class="eb-c a1">02 · The money</div>
+<div class="hl a2">${card.hl}</div>
+<div class="mn-rows a3">${card.rows.map(r=>`
+<div class="mn-row">
+  <div class="mn-head"><span class="mn-name">${r.name}</span><span class="mn-pct${r.sm?' sm':''}">${r.pct}</span></div>
+  <div class="mn-bar"><div class="mn-fill" data-w="${r.w}" style="background:${r.fill}"></div></div>
+  <div class="mn-desc">${r.desc}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'model': return `
+<div class="eb-c a1">03 · The model</div>
+<div class="hl a2">${card.hl}</div>
+<div class="md-flow a3">${card.steps.map((s,i)=>`${i>0?'<div class="md-arrow">↓</div>':''}
+<div class="md-step">
+  <div class="md-n">${s.n}</div>
+  <div class="md-t">${s.t}</div>
+  <div class="md-s">${s.s}</div>
+</div>`).join('')}</div>
+<div class="md-vault a4"><span class="md-vault-ic">🎬</span><span class="md-vault-tx">${card.vault}</span></div>`;
+
+  case 'rivals': return `
+<div class="eb-c a1">04 · The rivals</div>
+<div class="hl a2">${card.hl}</div>
+<div class="rv-lbl a3">${card.lbl}</div>
+<div class="rv-rows a3">${card.rows.map(r=>`
+<div class="rv-row${r.h?' hero':''}">
+  <div class="rv-head"><span class="rv-n"><span class="rv-emoji">${r.emoji}</span>${r.n}</span><span class="rv-val">${r.val}</span></div>
+  <div class="rv-bar"><div class="rv-fill" data-w="${r.pct}" style="background:${r.fill}"></div></div>
+  <div class="rv-tag">${r.tag}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'hidden': return `
+<div class="eb-c a1">05 · The hidden truth</div>
+<div class="ht-myth a1">${card.myth}</div>
+<div class="ht-num a2">${card.num}</div>
+<div class="ht-sub a2">${card.sub}</div>
+<div class="bd a3" style="font-size:14.5px">${card.bd}</div>
+<div class="ht-lbl a4">${card.lbl}</div>
+<div class="htv a4">${card.world.map(r=>`
+<div class="htv-col">
+  <span class="htv-val">${r.v}</span>
+  <div class="htv-bar" data-h="${r.h}"></div>
+  <span class="htv-cn">${r.c}</span>
+</div>`).join('')}</div>`;
+
+  case 'bull': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bull-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'bear': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bear-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'own': return `
+<div class="eb-c a1">08 · The money behind it</div>
+<div class="hl a2">${card.hl}</div>
+<div class="ow-spot a3">
+  <div class="ow-head">
+    <div class="ow-face">BA</div>
+    <div><div class="ow-name">Bill Ackman</div><div class="ow-role">Pershing Square · Hedge fund billionaire</div></div>
+  </div>
+  <div class="ow-math">
+    <div class="ow-cell"><div class="ow-cv">${card.math.a}</div><div class="ow-cl">${card.math.al}</div></div>
+    <div class="ow-arr">→</div>
+    <div class="ow-cell"><div class="ow-cv" style="color:var(--red-deep)">${card.math.b}</div><div class="ow-cl">${card.math.bl}</div></div>
+  </div>
+  <div class="ow-note">${card.note}</div>
+</div>`;
+
+  case 'debate': return `
+<div class="eb-c a1">09 · The market debate</div>
+<div class="hl a2">${card.hl}</div>
+<div class="dis-pullquote a3">
+  <div class="dis-pullquote-mark">"</div>
+  <div class="dis-pullquote-text">${card.quote}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label works">✓ Going for it</div>
+  <div class="dis-chip-row">${card.works.map(c=>`<div class="dis-chip works">${c}</div>`).join('')}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label notyet">✗ Going against it</div>
+  <div class="dis-chip-row">${card.worry.map(c=>`<div class="dis-chip notyet">${c}</div>`).join('')}</div>
+</div>`;
+
+  case 'conv':{
+    return `
+<div class="eb-c a1">10 · Your call</div>
+<div class="hl a2">${card.hl}</div>
+<div class="cv-sent-row a3">
+  <div class="cv-sent bull">Bullish crowd</div>
+  <div class="cv-vb"><span class="vb-num">8,412</span> voted today</div>
+</div>
+<div class="cv-opts a3" id="cvO-${idx}">${card.opts.map(o=>`
+<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}',${idx})">
+  <div class="cf"></div>
+  <span class="ico">${o.k==='bull'?'📈':o.k==='bear'?'📉':'😐'}</span>
+  <span class="lbl">${o.k==='bull'?'Bullish':o.k==='bear'?'Bearish':'Neutral'}</span>
+  <span class="sub">${o.k==='bull'?'The algorithm keeps winning':o.k==='bear'?'YouTube eats everything':'Wait on the ad bet'}</span>
+  <span class="cp">${o.p}%</span>
+</div>`).join('')}</div>
+<div class="cr" id="cvR-${idx}"></div>`;}
+
+  case 'next': return `
+<div class="eb-c a1">11 · Done in ~90 seconds</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3" style="margin-bottom:18px">${card.bd}</div>
+<div class="np a4" onclick="showToast('Disney coming soon!')">
+  <div class="nthumb" style="background:#113CCF;color:#fff">D</div>
+  <div><div class="nco">Disney</div><div class="ntag">Coming soon</div></div>
+  <div style="opacity:.6;margin-left:auto">→</div>
+</div>
+<div class="ea a4">
+  <button class="btn-p" onclick="openTldr()"><span>≡ See the TL;DR card</span><span>→</span></button>
+  <button class="btn-g" onclick="showToast('Saved to your shelf')"><span>★ Save Netflix to your shelf</span><span></span></button>
+  <button class="btn-g" onclick="closeStack()" style="opacity:.7"><span>↓ Back to today</span><span></span></button>
+</div>`;
+  }
+  return '';
+}
+
+/* ═══ STACK ═══ */
+let cardIdx=0;
+function openStack(){
+  cardIdx=0;
+  renderCards();buildProg();showCard(0);renderTldr();
+  goTo('stack');
+}
+function renderCards(){
+  const tr=document.getElementById('track');tr.innerHTML='';
+  CARDS.forEach((card,i)=>{
+    const el=document.createElement('div');
+    el.className='card bg-'+(card.bg||'cover');
+    el.dataset.deep=card.deep;
+    el.innerHTML=renderCard(card,i);
+    tr.appendChild(el);
+  });
+  initAccordions();
+}
+function initAccordions(){
+  document.querySelectorAll('.nf-acc-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>togglePanel(btn));
+    btn.addEventListener('touchend',e=>{e.preventDefault();togglePanel(btn);},{passive:false});
+  });
+}
+function togglePanel(btn){
+  const item=btn.closest('.nf-acc-item');
+  const body=item.querySelector('.nf-acc-body');
+  const isOpen=item.classList.contains('open');
+  const card=item.closest('.card');
+  card.querySelectorAll('.nf-acc-item.open').forEach(p=>{
+    p.classList.remove('open');
+    p.querySelector('.nf-acc-body').style.maxHeight='0';
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    body.style.maxHeight=body.scrollHeight+'px';
+  }
+}
+
+/* ═══ PROG + SHOW ═══ */
+function buildProg(){
+  const w=document.getElementById('prog');w.innerHTML='';
+  for(let i=0;i<CARDS.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}
+}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));}
+function updProg(){
+  document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
+  const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
+  if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}
+  else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
+  bp.style.display=(cardIdx===CARDS.length-1)?'none':'flex';
+  const sb=document.getElementById('saveBtn');
+  saved.has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
+}
+function showCard(i){
+  if(i<0||i>=CARDS.length)return;
+  cardIdx=i;
+  const cards=document.querySelectorAll('#track .card');
+  cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
+  updProg();
+  setTimeout(()=>{const ac=cards[cardIdx];if(ac){ac.classList.add('entered');animateCard(i);}},30);
+}
+function nextCard(){if(cardIdx<CARDS.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function closeStack(){closeDrawer();closeTldr();goTo('today');}
+function toggleSave(){
+  const b=document.getElementById('saveBtn');
+  if(saved.has(cardIdx)){saved.delete(cardIdx);b.classList.remove('saved');showToast("Removed");}
+  else{saved.add(cardIdx);b.classList.add('saved');showToast("★ Saved");}
+}
+
+/* ═══ ANIMATIONS ═══ */
+function animateCard(idx){
+  const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
+  card.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width='0';
+    setTimeout(()=>{el.style.width=el.dataset.w+'%';},80);
+  });
+  card.querySelectorAll('[data-h]').forEach(el=>{
+    el.style.height='0';
+    setTimeout(()=>{el.style.height=el.dataset.h+'%';},120);
+  });
+  card.querySelectorAll('.md-step,.md-arrow').forEach((el,i)=>{
+    el.classList.remove('visible');
+    setTimeout(()=>el.classList.add('visible'),200+i*200);
+  });
+}
+
+/* ═══ VOTE ═══ */
+function vote(el,type,idx){
+  const wrap=document.getElementById('cvO-'+idx);if(wrap.classList.contains('voted'))return;
+  wrap.classList.add('voted');el.classList.add('you');
+  wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+  const msgs={bull:"You're <strong>bullish</strong> with the crowd. The algorithm keeps winning.",neutral:"You're <strong>neutral</strong>. Waiting to see if ads outgrow the attention drift.",bear:"You're <strong>bearish</strong>. Betting the minutes keep flowing to YouTube."};
+  const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');
+}
+
+/* ═══ DRAWER ═══ */
+function openDrawer(){
+  const cards=document.querySelectorAll('#track .card');
+  const k=cards[cardIdx]?cards[cardIdx].dataset.deep:null;
+  const d=DEEP[k];if(!d)return;
+  document.getElementById('dwT').textContent=d.t;
+  document.getElementById('dwEb').textContent=d.e;
+  document.getElementById('dwB').innerHTML=d.h;
+  document.getElementById('dwBd').classList.add('open');
+  document.getElementById('dw').classList.add('open');
+}
+function closeDrawer(){document.getElementById('dwBd').classList.remove('open');document.getElementById('dw').classList.remove('open');}
+
+/* ═══ TLDR ═══ */
+function renderTldr(){
+  document.getElementById('tlC').innerHTML=`
+<div class="tl-h"><div class="tl-l">N</div><div class="tl-co">Netflix<span class="s">NFLX · NASDAQ · Streaming</span></div></div>
+<div class="tl-tag">Everything, in 6 lines</div>
+<div class="tl-pts">${TLDR.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
+<div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
+<div class="tl-acts"><button class="tl-btn s" onclick="showToast('Screenshot ready!')">Share</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div>
+<div class="tl-hint">Screenshot and send to a friend</div>`;
+}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* ═══ TODAY ═══ */
+function renderToday(){
+  const h=new Date().getHours();
+  const g=h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+  document.getElementById('todayScroll').innerHTML=`
+<div class="today-head">
+  <div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div>
+  <div class="streak"><span class="flame">🔥</span> 3 day streak</div>
+</div>
+<div class="greeting">${g} <em>Today's drop is ready.</em></div>
+<div class="eb">This week</div>
+<div class="today-hero" onclick="openStack()">
+  <div class="hero-tag"><span class="live-dot"></span>Netflix · NFLX</div>
+  <div class="hero-co">Streaming · 🇺🇸</div>
+  <div class="hero-h">Netflix spends $55 million a day making shows. <em>And still profits.</em></div>
+  <div class="hero-stock"><span class="hero-sp">${PRICE}</span><span class="hero-sc ${CHANGE_DIR}">${CHANGE}</span></div>
+  <div class="hero-meta"><span>11 cards · ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack()">Start →</button></div>
+</div>
+<div class="sect-t">What you will learn</div>
+<div class="sect-s">The prediction machine behind the world's biggest studio.</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#E50914">📺</div><div><div class="rname">Only 1 in 3 shows survives to season 3</div><div class="rsub">And it has nothing to do with viewers</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#B20710">⏱️</div><div><div class="rname">YouTube wins the clock. Netflix wins the wallet.</div><div class="rsub">The attention war, in one chart</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#5A0B10">💸</div><div><div class="rname">The billionaire who panic-sold at the bottom</div><div class="rsub">A $430M lesson in conviction</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>`;
+}
+
+/* ═══ TOAST ═══ */
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
+
+/* ═══ NAV ═══ */
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const map={today:'screen-today',stack:'screen-stack',you:'screen-you'};
+  document.getElementById(map[n]||'screen-today').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+  if(n==='today')renderToday();
+}
+
+/* ═══ TOUCH ═══ */
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{
+  if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
+  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
+},{passive:true});
+shell.addEventListener('touchend',e=>{
+  if(!trk)return;trk=false;
+  const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax<30&&ay<30)return;
+  if(stg&&stg.closest('.nf-acc-btn,.nf-acc-item,button,.np,.co-opt'))return;
+  if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
+  else{if(dx<-40)nextCard();else if(dx>40)prevCard();}
+});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-stack').classList.contains('active'))return;
+  if(e.key==='ArrowRight')nextCard();
+  if(e.key==='ArrowLeft')prevCard();
+  if(e.key==='ArrowUp')openDrawer();
+  if(e.key==='Escape'){
+    if(document.getElementById('tlBd').classList.contains('open'))closeTldr();
+    else if(document.getElementById('dw').classList.contains('open'))closeDrawer();
+    else closeStack();
+  }
+});
+
+/* ═══ INIT ═══ */
+renderToday();
+</script>
+</body></html>

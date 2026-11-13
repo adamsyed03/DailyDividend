@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Daily Dividend: Spotify V1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F4F1EA;--cream-2:#EAE6DC;--paper:#FAF8F2;
+  --ink:#0A0A09;--ink-2:#26261F;--muted:#6B6B62;--mute-2:#A5A399;--line:#DCD8CB;
+  --sp:#1DB954;--sp-deep:#0B6B34;--sp-dark:#04361C;
+  --sp-lite:#4EE07C;
+  --forest:#0E5C34;--mint-lite:#8FE3AE;--mint-soft:#D5EDDD;
+  --warn:#C4433A;--warn-soft:#F3DCD7;--warn-lite:#FF8C7E;
+  --sage:#5E7A66;--sage-soft:#DCE8DE;
+  --accent:var(--sp);--accent-soft:rgba(29,185,84,0.12);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.055'/></svg>");
+  --co-bg:radial-gradient(circle at 85% -5%,rgba(29,185,84,0.42),transparent 55%),radial-gradient(circle at -10% 110%,rgba(4,54,28,0.75),transparent 55%),linear-gradient(160deg,#131613,#080A08 60%,#000);
+  --co-logo-bg:#1DB954;--co-logo-color:#04150B
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:#0D100E;overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+
+/* ── STAGE + PHONE FRAME ── */
+.stage{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at top,rgba(29,185,84,0.10),transparent 60%),#0D100E}
+.phone{width:100%;max-width:400px;height:100%;max-height:860px;background:var(--cream);border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.5)}
+@media(max-width:480px){.stage{padding:0}.phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}}
+@media(min-width:481px) and (max-height:900px){.phone{max-height:calc(100vh - 48px)}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex}
+.statusbar{height:44px;flex-shrink:0}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(246,242,233,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+
+/* ── TODAY ── */
+.today-scroll{flex:1;overflow-y:auto;padding:8px 24px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 22px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 12px}
+.today-hero{background:var(--grain),var(--co-bg);color:var(--cream);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:26px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;padding:5px 10px;background:rgba(246,242,233,0.14);border-radius:100px;margin-bottom:18px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;background:var(--sp-lite);border-radius:50%;box-shadow:0 0 8px var(--sp-lite);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:rgba(246,242,233,0.55);text-transform:uppercase;margin-bottom:8px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:27px;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px}
+.hero-h em{font-style:italic;color:var(--sp-lite);font-weight:300}
+.hero-stock{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hero-sp{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--cream)}
+.hero-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.hero-sc.up{background:rgba(29,185,84,0.26);color:var(--mint-lite)}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(246,242,233,0.15);font-family:var(--mono);font-size:11px;color:rgba(246,242,233,0.45)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.rcard:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.rl{display:flex;align-items:center;gap:12px;min-width:0}
+.rthumb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── STACK SHELL ── */
+#screen-stack{background:#000}
+.shell{position:absolute;inset:0;overflow:hidden}
+.prog{position:absolute;top:50px;left:16px;right:16px;display:flex;gap:4px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.22);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.9)}
+.prog.dark .tick{background:rgba(0,0,0,0.14)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.8)}
+.topbar{position:absolute;top:64px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.co-logo{width:30px;height:30px;border-radius:50%;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:8px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tbtn svg{width:15px;height:15px}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:#fff}
+
+/* ── CARD BASE (top aligned) ── */
+.track{position:absolute;inset:0}
+.card{position:absolute;inset:0;padding:104px 22px 96px;display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card.active{display:flex;animation:cardIn 0.36s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card.entered .a1{animation:slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1) both}
+.card.entered .a2{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.07s both}
+.card.entered .a3{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.15s both}
+.card.entered .a4{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.24s both}
+
+/* ── CARD BACKGROUNDS (Spotify green & black, grainy) ── */
+.card.bg-cover{background:var(--grain),var(--co-bg);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-deep{background:var(--grain),radial-gradient(circle at 80% 0%,rgba(29,185,84,0.30),transparent 55%),linear-gradient(165deg,#0B2417,#04120A 70%,#020806);color:var(--cream)}
+.card.bg-green{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(78,224,124,0.20),transparent 50%),linear-gradient(160deg,#0E5C34,#06301B 70%,#042113);color:var(--cream)}
+.card.bg-bear{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(255,140,126,0.18),transparent 50%),linear-gradient(160deg,#5E1A15,#2A0A07 70%,#1A0503);color:var(--cream)}
+.card.bg-mint{background:var(--grain),linear-gradient(165deg,#EAF6EE,#D2E8DA);color:var(--ink)}
+.card.bg-brand{background:var(--grain),var(--co-bg);color:var(--cream)}
+
+/* ── TYPOGRAPHY ── */
+.eb-c{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px;opacity:0.6}
+.card.bg-cover .eb-c,.card.bg-brand .eb-c,.card.bg-deep .eb-c{color:var(--sp-lite);opacity:1}
+.card.bg-green .eb-c{color:var(--mint-lite);opacity:1}
+.card.bg-bear .eb-c{color:#FFC1B8;opacity:1}
+.card.bg-mint .eb-c{color:var(--sp-deep);opacity:1}
+.hl{font-family:var(--serif);font-weight:400;font-size:clamp(29px,8.2vw,35px);line-height:1.08;letter-spacing:-0.025em;margin-bottom:16px}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-cover .hl em,.card.bg-brand .hl em,.card.bg-deep .hl em{color:var(--sp-lite)}
+.card.bg-cream .hl em{color:var(--sp-deep)}
+.card.bg-mint .hl em{color:var(--sp-deep)}
+.card.bg-green .hl em{color:var(--mint-lite)}
+.card.bg-bear .hl em{color:#FFD3CB}
+.bd{font-family:var(--sans);font-size:16px;line-height:1.6;opacity:0.9}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+.card.bg-mint .bd{color:var(--ink-2)}
+.kick{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.45;color:var(--ink-2)}
+.kick strong{font-style:normal;font-weight:600;color:var(--sp-deep)}
+.card.bg-cover .kick,.card.bg-brand .kick,.card.bg-deep .kick,.card.bg-green .kick,.card.bg-bear .kick{border-top-color:rgba(255,255,255,0.16);color:rgba(246,242,233,0.85)}
+.card.bg-deep .kick strong,.card.bg-cover .kick strong{color:var(--sp-lite)}
+
+/* ── COVER ── */
+.cv-top{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.cv-mark{width:52px;height:52px;border-radius:50%;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:26px;box-shadow:0 8px 26px rgba(29,185,84,0.42);flex-shrink:0}
+.cv-name{font-family:var(--serif);font-weight:500;font-size:19px;letter-spacing:-0.01em;margin-bottom:5px}
+.cv-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75)}
+.cv-stock{display:flex;align-items:baseline;gap:10px;margin-bottom:22px}
+.cv-sp{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--cream)}
+.cv-sc{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px}
+.cv-sc.up{background:rgba(29,185,84,0.26);color:var(--mint-lite)}
+
+/* ── MONEY: 3 glass rows ── */
+.mn-rows{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.mn-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:16px;padding:12px 15px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.mn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.mn-name{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink)}
+.mn-pct{font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:-0.02em;color:var(--sp-deep)}
+.mn-bar{height:9px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.mn-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12)}
+.mn-desc{font-family:var(--sans);font-size:12.6px;color:var(--muted);line-height:1.42}
+
+/* ── MODEL: vault callout + 3-step flow ── */
+.md-vault{background:rgba(11,107,52,0.06);border:1.5px solid rgba(11,107,52,0.26);border-radius:14px;padding:12px 14px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;box-shadow:0 4px 18px rgba(11,107,52,0.07)}
+.md-vault-ic{font-size:18px;line-height:1;flex-shrink:0;margin-top:2px}
+.md-vault-tx{font-family:var(--serif);font-size:15px;line-height:1.4;letter-spacing:-0.01em;color:var(--ink)}
+.md-vault-tx strong{font-weight:700;color:var(--sp-deep)}
+.md-flow{display:flex;flex-direction:column}
+.md-step{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:15px;padding:12px 15px;opacity:0;transform:translateY(6px);transition:opacity 0.4s ease,transform 0.4s ease;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.md-step.visible{opacity:1;transform:translateY(0)}
+.md-n{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--sp-deep);font-weight:600;margin-bottom:4px}
+.md-t{font-family:var(--serif);font-size:17.5px;font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-0.01em;margin-bottom:3px}
+.md-s{font-family:var(--sans);font-size:12.6px;color:var(--muted);line-height:1.42}
+.md-arrow{text-align:center;padding:2px 0;font-size:15px;opacity:0;transition:opacity 0.3s;color:var(--sp-deep)}
+.md-arrow.visible{opacity:0.7}
+
+/* ── RIVALS: glass boxes ── */
+.sub-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--sp-deep);font-weight:600;margin:0 0 8px}
+.card.tight .hl{font-size:clamp(26px,7vw,29px);margin-bottom:12px}
+.card.tight .kick{margin-top:16px;padding-top:12px;font-size:15px}
+.rv-rows{display:flex;flex-direction:column;gap:7px;margin-top:0}
+.rv-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:14px;padding:10px 14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.rv-row.hero{background:rgba(29,185,84,0.09);border-color:rgba(11,107,52,0.32);box-shadow:0 4px 18px rgba(11,107,52,0.08)}
+.rv-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.rv-n{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.rv-n .rv-emoji{font-size:14px}
+.rv-row.hero .rv-n{color:var(--sp-deep)}
+.rv-val{font-family:var(--mono);font-size:14.5px;font-weight:600;color:var(--ink)}
+.rv-bar{height:6px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:5px}
+.rv-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s}
+.rv-tag{font-family:var(--sans);font-size:11.5px;color:var(--muted);line-height:1.35}
+
+/* ── HIDDEN TRUTH: one giant number + world mini-chart ── */
+.ht-myth{font-family:var(--serif);font-size:17px;font-style:italic;font-weight:300;text-decoration:line-through;text-decoration-color:rgba(255,255,255,0.5);text-decoration-thickness:1.5px;opacity:0.6;line-height:1.35;margin-bottom:18px}
+.ht-num{font-family:var(--serif);font-weight:300;font-size:clamp(58px,17vw,76px);line-height:0.95;letter-spacing:-0.04em;color:#fff;margin-bottom:6px}
+.ht-num span{font-size:0.34em;font-style:italic;font-weight:300;color:var(--sp-lite);letter-spacing:-0.01em}
+.ht-sub{font-family:var(--serif);font-size:18.5px;font-weight:400;line-height:1.3;letter-spacing:-0.01em;color:var(--cream);margin-bottom:14px}
+.ht-sub em{font-style:italic;color:var(--sp-lite)}
+.ht-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--mint-lite);margin:18px 0 12px}
+.htv{display:flex;align-items:flex-end;gap:10px;height:138px}
+.htv-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.htv-val{font-family:var(--mono);font-size:12.5px;font-weight:600;color:#fff}
+.htv-bar{width:100%;max-width:36px;background:linear-gradient(180deg,var(--sp-lite),#0B6B34);border-radius:8px 8px 3px 3px;height:0;transition:height 0.9s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:0 0 18px rgba(29,185,84,0.28)}
+.htv-cn{font-family:var(--sans);font-size:10.5px;color:var(--cream);opacity:0.8;text-align:center;line-height:1.2}
+
+/* ── BULL / BEAR ACCORDIONS ── */
+.nf-acc-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.nf-acc-item{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.18);border-radius:16px;overflow:hidden;position:relative}
+.nf-acc-btn{width:100%;border:0;background:none;padding:15px 15px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation}
+.nf-acc-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;line-height:1;margin-top:1px}
+.card.bg-green .nf-acc-icon{color:var(--forest)}
+.card.bg-bear .nf-acc-icon{color:#8C2A22}
+.nf-acc-title{flex:1;font-family:var(--serif);font-size:15.5px;font-weight:600;line-height:1.35;letter-spacing:-0.01em;padding-top:3px}
+.nf-acc-title strong{font-weight:700;color:#fff}
+.nf-acc-chevron{font-size:11px;opacity:0.5;transition:transform 0.25s;flex-shrink:0;margin-top:7px}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.nf-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.2,0.8,0.2,1)}
+.nf-acc-text{font-family:var(--sans);font-size:14.5px;line-height:1.6;opacity:0.95;padding:4px 16px 15px 55px;border-top:1px solid rgba(255,255,255,0.12)}
+.nf-acc-text strong{font-weight:600;opacity:1}
+.acc-ctx{display:block;margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.5;opacity:0.85}
+
+/* ── OWNERSHIP: Buffett spotlight ── */
+.ow-spot{background:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.9);border-radius:20px;padding:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 6px 24px rgba(0,0,0,0.07);margin-top:6px}
+.ow-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ow-face{width:52px;height:52px;border-radius:50%;background:var(--sp-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:19px;flex-shrink:0;box-shadow:0 6px 16px rgba(11,107,52,0.32)}
+.ow-name{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.ow-role{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--sp-deep);font-weight:600;margin-top:3px}
+.ow-math{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ow-cell{flex:1}
+.ow-cv{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1}
+.ow-cl{font-family:var(--sans);font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.ow-arr{font-size:20px;color:var(--sp-deep);flex-shrink:0}
+.ow-note{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.5;padding-top:13px;border-top:1px solid var(--line)}
+.ow-note strong{font-weight:600}
+
+/* ── DEBATE ── */
+.dis-pullquote{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px;box-shadow:0 6px 24px rgba(0,0,0,0.05);margin-bottom:18px;position:relative}
+.dis-pullquote-mark{font-family:var(--serif);font-size:54px;color:var(--sp);opacity:0.28;line-height:1;position:absolute;top:6px;left:14px;font-weight:300;pointer-events:none}
+.dis-pullquote-text{font-family:var(--serif);font-size:19.5px;font-weight:400;color:var(--ink);line-height:1.35;letter-spacing:-0.01em;padding-left:8px;position:relative;z-index:1}
+.dis-pullquote-text em{font-style:italic;font-weight:300;color:var(--sp-deep)}
+.dis-chip-section{margin-bottom:14px}
+.dis-chip-section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.dis-chip-section-label.works{color:var(--sp-deep)}
+.dis-chip-section-label.notyet{color:#9C332A}
+.dis-chip-row{display:flex;flex-wrap:wrap;gap:7px}
+.dis-chip{font-family:var(--sans);font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:100px;line-height:1.2}
+.dis-chip.works{background:var(--mint-soft);color:var(--sp-deep);border:1px solid rgba(11,107,52,0.22)}
+.dis-chip.notyet{background:var(--warn-soft);color:#9C332A;border:1px solid rgba(156,51,42,0.2)}
+
+/* ── VOTE ── */
+.cv-sent-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cv-sent{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border-radius:100px;font-weight:600}
+.cv-sent.bull{background:rgba(29,185,84,0.20);color:var(--mint-lite);border:1px solid rgba(29,185,84,0.30)}
+.cv-vb{font-family:var(--mono);font-size:10px;color:rgba(246,242,233,0.45);letter-spacing:0.08em}
+.cv-vb .vb-num{color:var(--cream);font-weight:600}
+.cv-opts{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.co-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);border-radius:15px;padding:16px 17px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;touch-action:manipulation}
+.co-opt .ico{font-size:23px;flex-shrink:0;z-index:2}
+.co-opt .lbl{font-family:var(--serif);font-size:18px;font-weight:500;z-index:2}
+.co-opt .sub{font-family:var(--sans);font-size:11.5px;opacity:0.6;z-index:2;margin-left:auto;text-align:right}
+.cf{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 0.7s cubic-bezier(0.2,0.8,0.2,1);z-index:1}
+.co-opt.bull .cf{background:rgba(29,185,84,0.42)}
+.co-opt.neutral .cf{background:rgba(94,122,102,0.45)}
+.co-opt.bear .cf{background:rgba(196,67,58,0.42)}
+.cp{font-family:var(--mono);font-size:14px;font-weight:600;opacity:0;transition:opacity 0.4s 0.3s;z-index:2;margin-left:auto}
+.co-opt.revealed .sub{display:none}
+.co-opt.revealed .cp{opacity:1}
+.co-opt.you{border-color:var(--sp-lite);border-width:2px}
+.cr{font-family:var(--sans);font-size:13.5px;text-align:center;margin-top:16px;opacity:0;transition:opacity 0.4s 0.5s;line-height:1.5}
+.cr.show{opacity:0.9}
+.cr strong{font-weight:600;opacity:1}
+
+/* ── NEXT ── */
+.np{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:15px;display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:pointer;transition:transform 0.18s}
+.np:hover{transform:translateX(4px)}
+.nthumb{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0}
+.nco{font-family:var(--serif);font-size:17px;font-weight:600}
+.ntag{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;opacity:0.65;text-transform:uppercase;margin-top:2px}
+.ea{display:flex;flex-direction:column;gap:9px}
+.btn-p{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:14px 18px;font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+.btn-g{background:transparent;color:var(--cream);border:1px solid rgba(255,255,255,0.25);border-radius:100px;padding:13px 18px;font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+
+/* ── SWIPE ZONES + PILLS ── */
+.tz{position:absolute;top:100px;bottom:88px;width:22%;z-index:5;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+.pills{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:20}
+.pill{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);padding:9px 15px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
+.pills.dark .pill{background:rgba(0,0,0,0.07);color:var(--ink);border-color:rgba(0,0,0,0.12)}
+
+/* ── DRAWER (deep dive) ── */
+.dw-bd{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dw-bd.open{opacity:1;pointer-events:auto}
+.dw{position:absolute;left:0;right:0;bottom:0;height:80%;background:var(--paper);border-radius:24px 24px 0 0;z-index:210;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,0.3)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:40px;height:4px;background:var(--mute-2);border-radius:4px;margin:10px auto 0;flex-shrink:0}
+.dw-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-eb{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--sp-deep);text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.dw-t{font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:-0.01em}
+.dw-x{background:rgba(0,0,0,0.06);border:0;width:30px;height:30px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.dw-b{overflow-y:auto;padding:20px 22px 44px}
+.d-hero{font-family:var(--serif);font-size:23px;font-weight:400;line-height:1.2;letter-spacing:-0.02em;color:var(--ink);margin-bottom:14px}
+.d-hero em{font-style:italic;font-weight:300;color:var(--sp-deep)}
+.d-p{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--ink-2);margin:0 0 13px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-big{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 19px;margin:18px 0;display:flex;align-items:center;gap:17px;box-shadow:0 3px 14px rgba(0,0,0,0.04)}
+.d-bignum{font-family:var(--serif);font-size:38px;font-weight:400;letter-spacing:-0.03em;color:var(--sp-deep);line-height:1;flex-shrink:0}
+.d-biglbl{font-family:var(--sans);font-size:13.5px;color:var(--muted);line-height:1.45}
+.d-q{border-left:3px solid var(--sp);padding:4px 0 4px 15px;margin:16px 0;font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink)}
+.d-k{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--sp-deep);font-weight:600;margin:20px 0 8px}
+.d-fine{font-family:var(--sans);font-size:11.5px;color:var(--mute-2);font-style:italic;margin-top:16px;line-height:1.5}
+
+/* ── DRAWER: animated share bars ── */
+.d-vbars{display:flex;flex-direction:column;gap:12px;margin:18px 0 6px}
+.d-vrow{display:flex;flex-direction:column;gap:6px}
+.d-vhead{display:flex;justify-content:space-between;align-items:baseline}
+.d-vname{font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink)}
+.d-vname span{font-weight:400;color:var(--muted);font-size:12px}
+.d-vval{font-family:var(--mono);font-size:13.5px;font-weight:600;color:var(--sp-deep)}
+.d-vtrack{height:10px;background:var(--sage-soft);border-radius:6px;overflow:hidden}
+.d-vfill{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--sp-deep),var(--sp));transition:width 0.9s cubic-bezier(0.2,0.8,0.2,1)}
+.d-vfill.muted{background:linear-gradient(90deg,#8E938C,#B6BBB3)}
+.d-vcap{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.4}
+
+/* ── TLDR ── */
+.tl-bd{position:absolute;inset:0;background:rgba(10,10,9,0.75);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.tl-bd.open{opacity:1;pointer-events:auto}
+.tl-c{background:var(--grain),var(--co-bg);border-radius:24px;width:100%;max-width:340px;padding:26px 24px;position:relative;transform:scale(0.94);transition:transform 0.3s;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.tl-bd.open .tl-c{transform:scale(1)}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tl-l{width:30px;height:30px;border-radius:50%;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.tl-co{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--cream)}
+.tl-co .s{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:rgba(246,242,233,0.45);text-transform:uppercase;display:block;margin-top:1px}
+.tl-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--sp-lite);text-transform:uppercase;margin-bottom:14px}
+.tl-pts{display:flex;flex-direction:column}
+.tl-p{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tl-p:last-child{border-bottom:0}
+.tl-n{font-family:var(--mono);font-size:10px;color:var(--sp-lite);flex-shrink:0;padding-top:3px;width:16px}
+.tl-tx{font-family:var(--sans);font-size:13px;line-height:1.45;color:var(--cream)}
+.tl-tx strong{font-weight:700;color:#fff}
+.tl-f{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.tl-br{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--cream)}
+.tl-br .dd{color:var(--sp-lite)}
+.tl-u{font-family:var(--mono);font-size:9px;color:rgba(246,242,233,0.35);letter-spacing:0.1em}
+.tl-acts{display:flex;gap:8px;margin-top:14px}
+.tl-btn{flex:1;border:0;border-radius:100px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--sp);color:#04150B}
+.tl-btn.c{background:rgba(255,255,255,0.12);color:var(--cream)}
+.tl-hint{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(246,242,233,0.3);text-transform:uppercase;margin-top:10px}
+
+/* ── TOAST + HINT ── */
+.toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+</style></head><body>
+
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<!-- TODAY -->
+<section class="screen active" id="screen-today">
+  <div class="statusbar"></div>
+  <div class="today-scroll" id="todayScroll"></div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+<!-- STACK -->
+<section class="screen" id="screen-stack">
+  <div class="shell" id="shell">
+    <div class="prog" id="prog"></div>
+    <div class="topbar" id="topbar">
+      <div class="co"><div class="co-logo" id="cologo">S</div><div><div class="co-name">Spotify</div><div class="co-sub">SPOT · NYSE</div></div></div>
+      <div class="tactions">
+        <button class="tbtn" onclick="openTldr()">&#8801;</button>
+        <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+        <button class="tbtn" onclick="closeStack()">&#215;</button>
+      </div>
+    </div>
+    <div class="tz l" onclick="prevCard()"></div>
+    <div class="tz r" onclick="nextCard()"></div>
+    <div class="track" id="track"></div>
+    <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">&#8593; Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
+  </div>
+  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+  <div class="dw" id="dw">
+    <div class="dw-hn"></div>
+    <div class="dw-h"><div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div><button class="dw-x" onclick="closeDrawer()">&#215;</button></div>
+    <div class="dw-b" id="dwB"></div>
+  </div>
+  <div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()"><div class="tl-c" id="tlC"></div></div>
+  <div class="toast" id="toast">Saved</div>
+</section>
+
+<!-- YOU -->
+<section class="screen" id="screen-you">
+  <div class="statusbar"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center">
+    <div>
+      <div style="font-family:var(--serif);font-size:28px;letter-spacing:-0.02em;margin-bottom:8px">Your shelf.</div>
+      <div style="font-family:var(--sans);font-size:14px;color:var(--muted)">Read Spotify, then vote. Your call appears here.</div>
+      <button onclick="goTo('today')" style="margin-top:20px;background:var(--ink);color:var(--cream);border:0;border-radius:100px;padding:12px 24px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer">Back to today</button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item active" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+</div></div>
+<div class="hint">desktop preview · tap edges to swipe · ↑ deeper · ≡ TL;DR</div>
+
+<script>
+/* PRICE PLACEHOLDER. Dev: wire live price + change into id="livePrice" / id="liveChange" */
+const PRICE="$524.00", CHANGE="+0.8% today";
+
+/* ONE POINT PER CARD. ONE VISUAL. EVERYTHING ELSE GOES TO THE DEEP DIVE. NO EM DASHES. */
+const CARDS=[
+  /* 01 COVER */
+  {type:"cover",bg:"cover",deep:"cover",
+   hl:"Spotify has 250 million songs. <em>It owns exactly none of them.</em>",
+   bd:"When Spotify launched, the library held 2 million tracks. It is <strong>125 times bigger</strong> now, and every single song is borrowed. To keep them playing, Spotify hands back roughly two thirds of every dollar it collects.",
+   kick:"<strong>$70 billion</strong> paid out since 2008. Roughly two thirds of what the entire company is worth today."},
+
+  /* 02 MONEY */
+  {type:"money",bg:"cream",deep:"money",
+   hl:"Spotify made <em>€17 billion</em> last year. Here's where it comes from.",
+   rows:[
+     {name:"💳 Subscriptions",pct:"92%",w:100,fill:"#1DB954",desc:"293 million people pay a monthly fee, whether they listen that month or not. This is almost the whole business."},
+     {name:"📻 Adverts",pct:"8%",w:9,fill:"#26261F",desc:"483 million people listen free and hear adverts instead. That crowd is bigger than the European Union, and it produces one twelfth of the money."},
+     {name:"📚 Add-ons",pct:"NEW",w:4,fill:"#A8D8B9",desc:"Extra audiobook hours, bought on top of a subscription. Tiny today, and the first genuinely new way Spotify has found to charge people in years."}
+   ],
+   kick:"That works out at about <strong>€50 million</strong> arriving every single day."},
+
+  /* 03 MODEL */
+  {type:"model",bg:"cream",deep:"model",
+   hl:"Every rival sells the same songs. <em>Spotify sells knowing which one you want next.</em>",
+   vault:"Everyone licenses the same songs. What Spotify actually owns is <strong>20 years of knowing what people played next.</strong>",
+   steps:[
+     {n:"Step 1 · The way in",t:"Anyone can listen for nothing",s:"You get the entire catalogue free, interrupted by adverts. Apple Music has no free version at all. YouTube Music does, which is why it is the rival Spotify watches most closely."},
+     {n:"Step 2 · The habit",t:"Eventually the adverts wear you down",s:"So you pay the monthly fee and they stop. By then Spotify has learned enough about you that leaving means starting from scratch somewhere else."},
+     {n:"Step 3 · The obsessives",t:"A few people want far more than music",s:"They buy extra audiobook hours on top of their subscription. Podcasts, video and now fitness classes live in the same app, so there is always another reason to stay."}
+   ]},
+
+  /* 04 RIVALS */
+  {type:"rivals",bg:"cream",deep:"rivals",tight:true,
+   hl:"Spotify has more paying listeners than Apple and Amazon put together. <em>And music is the only thing it does.</em>",
+   bd:"Everyone here sells the same songs at roughly the same price. Only one of them would disappear without music.",
+   lbl:"Share of the world's paying music subscribers",
+   rows:[
+     {emoji:"🎧",n:"Spotify",val:"31.4%",pct:100,fill:"#1DB954",tag:"293 million paying subscribers, and the only number on this list a company actually publishes.",h:true},
+     {emoji:"💬",n:"Tencent Music",val:"13.8%",pct:44,fill:"rgba(0,0,0,0.3)",tag:"Enormous inside China, almost invisible outside it."},
+     {emoji:"🍎",n:"Apple Music",val:"12.6%",pct:40,fill:"rgba(0,0,0,0.3)",tag:"Comes built into every iPhone. Apple has not published a subscriber count in years."},
+     {emoji:"📦",n:"Amazon Music",val:"11.1%",pct:35,fill:"rgba(0,0,0,0.3)",tag:"Bundled in with Prime delivery. Most of these people did not choose it."},
+     {emoji:"▶️",n:"YouTube Music",val:"10.3%",pct:33,fill:"rgba(0,0,0,0.3)",tag:"Free by default, paid for by Google's adverts. Growing fastest of all of them."}
+   ],
+   kick:"Nobody else is above 14%. Spotify is not winning because it has better songs. It is winning because it is <strong>the only one that has to.</strong>"},
+
+  /* 05 HIDDEN TRUTH */
+  {type:"hidden",bg:"deep",deep:"hidden",
+   myth:"The money you pay goes to the artists you listen to.",
+   num:"1,000 <span>plays</span>",
+   sub:"What a song needs in a year, <em>before it earns anything at all.</em>",
+   bd:"Spotify does not pay artists for your plays. Every month it pours all the subscription money and all the advert money into one giant pot. Then it splits that pot by who got the most plays worldwide. So you can spend an entire month listening to one small band, and your money still ends up mostly with Bad Bunny and Taylor Swift.",
+   lbl:"Artists earning from Spotify in 2025",
+   world:[
+     {c:"earned anything",v:"3.5M",h:100},
+     {c:"$100k or more",v:"13,800",h:64},
+     {c:"$1M or more",v:"1,500",h:49},
+     {c:"$10M or more",v:"80",h:29}
+   ]},
+
+  /* 06 BULL */
+  {type:"bull",bg:"green",deep:"bull",
+   eb:"06 · How it could win",
+   hl:"Three reasons this stock could <em>double.</em>",
+   panels:[
+     {icon:"↑",title:"Spotify keeps <strong>more of every dollar</strong> than it ever has",
+      body:"Four years ago Spotify kept 25 cents out of every dollar. It now keeps 32. Some of that came from renegotiating its contracts with the record companies, which it has now done twice. The rest came from audiobooks and podcasts, where Spotify deals directly with publishers and creators instead of going through three giant labels, so far more of what you pay stays in the building.<span class='acc-ctx'>How big is this? On last year's revenue, every extra cent kept is worth about €170 million of pure profit. Management has promised investors another eight cents by 2030.</span>"},
+     {icon:"↑",title:"<strong>483 million people</strong> use Spotify without paying a thing",
+      body:"In the US and Canada, the share of listeners who pay has climbed from 32% in 2016 to 60% today. India, now one of Spotify's biggest markets by users, has multiplied its paying subscribers sevenfold since 2022. The stated target is a billion users by 2030.<span class='acc-ctx'>How big is this? Spotify has already turned free listeners into paying ones once, in the rich world, and it worked. Doing it again across Asia is what the entire 2030 plan rests on.</span>"},
+     {icon:"↑",title:"Spotify is finding <strong>new things to sell</strong> to people it already has",
+      body:"Extra audiobook hours came first. Since then: concert tickets held back for an artist's biggest fans, launched in June with Live Nation, a fitness section built with Peloton, and a deal with Universal that will let fans make AI remixes of real songs and pay for the privilege.<span class='acc-ctx'>How big is this? None of these needs a single new customer. Spotify is just selling more to the 293 million people already paying, which is the cheapest money a company can make.</span>"}
+   ]},
+
+  /* 07 BEAR */
+  {type:"bear",bg:"bear",deep:"bear",
+   eb:"07 · What could sink it",
+   hl:"Three things that could <em>cut the stock in half.</em>",
+   panels:[
+     {icon:"↓",title:"Spotify beat every forecast in April, and the stock <strong>fell 12% in a day</strong>",
+      body:"The problem was what came next. Management said it would spend an extra €200 million or so on marketing and on new AI features through the middle of the year, which means less profit for a couple of quarters. Investors did not want to hear it.<span class='acc-ctx'>How big is this? AI features are expensive to build and expensive to run, and Spotify is buying a lot of computing power. Investors have been trained to expect profits to rise every single year here. Even a deliberate, temporary pause got punished this hard.</span>"},
+     {icon:"↓",title:"There are more listeners than ever, but the <strong>advertising business barely grew</strong>",
+      body:"People are listening more, and every extra hour costs Spotify money in royalties. The adverts meant to pay for that grew only 3%, while the company as a whole grew 14%. Spotify spent 18 months rebuilding the technology behind its adverts and says the payoff arrives later in 2026.<span class='acc-ctx'>How big is this? Adverts are only 8% of revenue, but they are the entire reason the free version can exist. Right now, more listening is making that side less profitable, not more. If that does not flip, 483 million free users stop being an opportunity and start being a bill.</span>"},
+     {icon:"↓",title:"<strong>Half of all new songs</strong> are now made by machines",
+      body:"Deezer, a rival that publishes the figure, counted about 90,000 fully AI-generated tracks arriving every day in June, more than half of everything uploaded. Spotify has never published its own number. Every one of those tracks takes a slice of the same royalty pot.<span class='acc-ctx'>How big is this? Spotify's bosses say more songs is good news, because it makes recommendation more valuable. The worry is simpler. If anyone can make endless music for nothing, it gets harder to explain why anyone should pay €12 a month to hear it.</span>"}
+   ]},
+
+  /* 08 OWNERSHIP */
+  {type:"own",bg:"mint",deep:"own",
+   hl:"Daniel Ek stopped running Spotify in January. <em>He still controls it completely.</em>",
+   face:"DE",who:"Daniel Ek",role:"Executive Chairman · Co-founder, 2006",
+   math:{a:"24%",al:"What the two founders own of the company",b:"70.7%",bl:"The share of all votes they control"},
+   note:"Two men founded Spotify in 2006, and between them they still decide everything. Spotify is registered in <strong>Luxembourg</strong>, which lets it hand out certificates that carry votes without carrying ownership. In January 2026 Ek became Executive Chairman, and the two new co-CEOs report to him. <strong>No other shareholder, no matter how much stock they buy, can outvote the pair.</strong>"},
+
+  /* 09 MARKET DEBATE */
+  {type:"debate",bg:"cream",deep:"debate",
+   hl:"Spotify's profits did not come from a better app. <em>They came from a better deal.</em>",
+   quote:"To hit its own 2030 promise, Spotify has to keep 40 cents of every dollar instead of 33. <em>Every one of those cents has to come out of somebody else's pocket.</em>",
+   works:["Already renegotiated twice","Pays the industry more every year","Audiobooks and podcasts pay better"],
+   worry:["The labels own what it sells","Artists are already angry","Every contract runs out eventually"]},
+
+  /* 10 VOTE */
+  {type:"conv",bg:"brand",deep:"conv",
+   hl:"Now you decide. <em>Spotify in 5 years?</em>",
+   opts:[{k:"bull",p:58},{k:"neutral",p:27},{k:"bear",p:15}]},
+
+  /* 11 NEXT */
+  {type:"next",bg:"brand",deep:"next",
+   hl:"That was Spotify.",
+   bd:"Next up: <strong>Universal Music Group.</strong> Spotify rents. Universal owns. Roughly a third of all the money the world spends on recorded music ends up at one company, and it has never had to build an app."}
+];
+
+/* DEEP DIVES */
+const DEEP={
+  cover:{t:"It took 17 years to keep anything",e:"From the cover",h:`
+<div class="d-hero">Spotify collected billions for 17 years and kept nothing. <em>Not one profitable year.</em></div>
+<div class="d-p">Spotify launched in 2008 with one argument: piracy cannot be beaten by lawyers, only by something <strong>more convenient than stealing</strong>. It worked on listeners immediately, and on the accounts not at all.</div>
+<div class="d-big"><div class="d-bignum">€1.1B</div><div class="d-biglbl">Profit in 2024, its first ever. Spotify had lost money in every single year before it.</div></div>
+<div class="d-k">What actually changed</div>
+<div class="d-p">Not the music. The arithmetic. Spotify cut about a fifth of its staff, raised US prices three times, and renegotiated its contracts with the record companies. Twice.</div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">Spotify is a <strong>Swedish idea, a Luxembourg company, and listed in New York</strong>. It has never fitted anywhere neatly.</div>`},
+
+  money:{t:"Where your €10 actually goes",e:"From the money",h:`
+<div class="d-hero">Spotify collects about €50 million a day. <em>Almost none of it stays.</em></div>
+<div class="d-p">Out of every €10 that comes in, roughly <strong>€6.70</strong> goes straight back out to the people who own the music, plus the cost of getting the sound onto your phone. All of that happens before Spotify pays a single employee.</div>
+<div class="d-p">Another <strong>€1.70</strong> runs the company: every engineer, every advert, every office, all 7,258 staff. What is left is <strong>€1.60</strong>.</div>
+<div class="d-big"><div class="d-bignum">2 of 20</div><div class="d-biglbl">Spotify has existed for twenty years. It has made a profit in two of them. The company only worked out how to keep money in 2024.</div></div>
+<div class="d-k">How it turned around</div>
+<div class="d-p">Not by selling more music. Spotify cut about a fifth of its staff, raised US prices three times since 2023, and renegotiated its deals with the record companies. Twice. Bad Bunny was played <strong>19.8 billion times</strong> last year, and none of that moved the profit line as much as those three decisions did.</div>`},
+
+  model:{t:"Three kinds of listener",e:"From the model",h:`
+<div class="d-hero">There are three kinds of listener. <em>Until recently, Spotify could only charge two of them.</em></div>
+<div class="d-p">Some people listen occasionally and would never pay for it. The free version exists for them, and keeping them costs Spotify very little.</div>
+<div class="d-p">Most people listen often enough that the adverts become annoying, so they pay. <strong>This is where nearly all the money comes from.</strong></div>
+<div class="d-p">Then there is a small group who listen obsessively. For years Spotify had no way to take more from them, however much they wanted to spend. Audiobook add-ons were the first product that let them, and it worked. The most-played audiobook on Spotify is a fantasy series, <strong>A Court of Thorns and Roses</strong>, which is not what anyone building a music app expected.</div>
+<div class="d-big"><div class="d-bignum">94M</div><div class="d-biglbl">Subscribers using the AI DJ, which picks songs and talks between them. Three years ago it did not exist.</div></div>
+<div class="d-k">Why rivals cannot simply copy this</div>
+<div class="d-p">Anyone can license the same catalogue. Nobody can copy 20 years of listening history.</div>
+<div class="d-q">Co-CEO Gustav Söderström puts it well: taste is not a fact, it is an opinion, and it changes every week. Even if a rival stole all of Spotify's data tomorrow, the model would be out of date within weeks.</div>`},
+
+  rivals:{t:"The smallest company in the fight",e:"From the rivals",h:`
+<div class="d-hero">Spotify is winning. <em>It is also, by an enormous distance, the smallest company in the room.</em></div>
+<div class="d-p">Apple is worth about <strong>$4.5 trillion</strong>. Alphabet, which owns YouTube, about $4.3 trillion. Spotify is worth around $108 billion. If Apple Music shut down tomorrow, Apple would barely notice on its own accounts. If Spotify's music stopped, there would be no Spotify.</div>
+<div class="d-big"><div class="d-bignum">2%</div><div class="d-biglbl">Spotify's value compared with Apple's. Being the specialist is the strength and the danger at the same time.</div></div>
+<div class="d-p">That is why everybody is bolting things on. Amazon has shopping, YouTube has video, Apple has phones. Spotify is doing the same thing in reverse: <strong>700,000 audiobooks</strong>, video podcasts, and from 2026 a fitness section built with Peloton, because roughly 70% of its paying users say they exercise every month.</div>
+<div class="d-q">The uncomfortable version: if Apple, Google or Amazon ever decided music genuinely mattered to them, any one of them could outspend Spotify without feeling it. None has yet.</div>`},
+
+  hidden:{t:"5.4 billion at one end, nothing at the other",e:"From the hidden truth",h:`
+<div class="d-hero">The most played song in history has been streamed 5.4 billion times. <em>Tens of millions of songs have never reached a thousand.</em></div>
+<div class="d-p">The song is <strong>Blinding Lights</strong> by The Weeknd, the first ever to pass five billion plays. At the going rate of roughly a third of a cent a play, it has generated somewhere around $20 million. One song.</div>
+<div class="d-p">At the other end, Spotify decided in April 2024 that a track must be played <strong>1,000 times in a year</strong> before it earns anything. Its defence is arithmetic: those songs were earning about three cents a month, and payments under $2 often never reach the artist anyway. Critics point out that the plays were real, and the money did not vanish. It moved upward.</div>
+<div class="d-big"><div class="d-bignum">0.5%</div><div class="d-biglbl">Share of all plays that come from songs below the cutoff. Out of an $11 billion pot, that is tens of millions of dollars, redirected every year.</div></div>
+<div class="d-k">There is another way to do it</div>
+<div class="d-p">SoundCloud and Deezer split each listener's fee among the artists that listener <strong>actually played</strong>. Spotify has studied that model and kept the pot. In June 2026 an independent artist sued over the threshold.</div>`},
+
+  bull:{t:"Fewer people, more everything",e:"From the bull case",h:`
+<div class="d-hero">Spotify shipped more new features last year than in any year of its life. <em>It did it with fewer staff than it had in 2023.</em></div>
+<div class="d-p">Spotify laid off about a fifth of its people in 2023. Headcount has been roughly flat ever since, while the company added <strong>83 million listeners in a single year</strong>.</div>
+<div class="d-p">What replaced the hiring was computing power. Söderström says Spotify now spends far more on compute per employee and ships several times as much: the AI DJ reached 94 million subscribers, and SongDNA, which shows you who actually made a track, reached 52 million people in four weeks.</div>
+<div class="d-big"><div class="d-bignum">7,258</div><div class="d-biglbl">Employees at the end of March 2026, serving 761 million listeners. That is one member of staff for every 105,000 people.</div></div>
+<div class="d-k">What they have promised</div>
+<div class="d-p">By 2030: revenue growing in the mid teens every year, 35 to 40 cents kept out of every dollar, and more than 20 cents of every dollar as profit. <strong>Deliver that and profit roughly triples.</strong></div>`},
+
+  bear:{t:"All three risks are the same risk",e:"From the bear case",h:`
+<div class="d-hero">Spotify sells something it does not own. <em>Everything else follows from that.</em></div>
+<div class="d-p">Its own filings say it plainly: Spotify depends on licences from other companies for most of what it plays, and those companies are few, and can change its access on their own. <strong>Universal, Sony and Warner</strong> control roughly two thirds of recorded music between them.</div>
+<div class="d-p">That is why the spending scare landed as hard as it did. Investors are not really worried about €200 million. They are worried that Spotify's improving profits came from <strong>winning negotiations, not from owning anything</strong>.</div>
+<div class="d-big"><div class="d-bignum">33¢</div><div class="d-biglbl">Kept out of every dollar today. Every extra cent promised by 2030 has to come out of somebody else's share.</div></div>
+<div class="d-k">The one to watch</div>
+<div class="d-p">Advertising. Management has been promising improvement in the second half of 2026 for six months now. If it does not arrive, the free version turns from Spotify's best idea into its most expensive one.</div>`},
+
+  own:{t:"The record labels used to own Spotify",e:"From who owns it",h:`
+<div class="d-hero">The companies Spotify pays were once its shareholders. <em>They sold, and made a fortune.</em></div>
+<div class="d-p">When Spotify was starting out and had almost no money, it paid for its first licences partly in shares. Sony, Warner and Universal all ended up owning pieces of the company they were supplying.</div>
+<div class="d-p">When Spotify listed in 2018, they cashed in. Warner sold its entire stake for <strong>$504 million</strong> and credited artists $126 million, though much of that was set against money artists already owed. Sony sold half its stake for <strong>$768 million</strong> and paid artists over $250 million with no such conditions. Universal held on.</div>
+<div class="d-big"><div class="d-bignum">$504M</div><div class="d-biglbl">What Warner made from selling shares in the company it licenses to. Spotify would not turn a profit for another six years.</div></div>
+<div class="d-k">The quiet one</div>
+<div class="d-p">The largest block of votes at Spotify does not belong to Ek. <strong>Martin Lorentzon</strong> co-founded the company and then stayed out of view. He sits on the board, and says very little.</div>
+<div class="d-vbars">
+  <div class="d-vrow"><div class="d-vhead"><div class="d-vname">Martin Lorentzon <span>· co-founder</span></div><div class="d-vval">41.6%</div></div><div class="d-vtrack"><div class="d-vfill" data-w="41.6"></div></div></div>
+  <div class="d-vrow"><div class="d-vhead"><div class="d-vname">Daniel Ek <span>· executive chairman</span></div><div class="d-vval">29.1%</div></div><div class="d-vtrack"><div class="d-vfill" data-w="29.1"></div></div></div>
+  <div class="d-vrow"><div class="d-vhead"><div class="d-vname">Everyone else <span>· all other shareholders</span></div><div class="d-vval">29.3%</div></div><div class="d-vtrack"><div class="d-vfill muted" data-w="29.3"></div></div></div>
+</div>
+<div class="d-vcap">Share of all votes. Between them the two founders hold 70.7%, so no combination of outside investors can outvote them.</div>
+<div class="d-fine">And Ek's attention has moved. In 2025 his investment firm put €600 million into Helsing, a German military AI company that builds drones. He is its chairman. Massive Attack, King Gizzard and the Lizard Wizard, Deerhoof and dozens of others have pulled their music off Spotify over it.</div>`},
+
+  debate:{t:"Our honest read",e:"The Daily Dividend take",h:`
+<div class="d-hero">Everyone is arguing about AI. <em>The real fight is over a number.</em></div>
+<div class="d-p"><strong>What the bulls say:</strong> Spotify paid the music industry more than 10% more last year, while the industry's other sources of income grew about 4%. A partner making the pie bigger has room to ask for more. And Spotify can find its extra cents outside music entirely, in audiobooks, podcasts, adverts and fitness, where the record companies are not in the room.</div>
+<div class="d-p"><strong>What the bears say:</strong> Spotify's own filings warn that its suppliers are few and can change its access whenever they choose. Universal, Sony and Warner have watched Spotify's share of every dollar climb from 25 cents to 33 while artists complained loudly. Every contract runs out eventually, and the next one gets negotiated in that mood.</div>
+<div class="d-big"><div class="d-bignum">7¢</div><div class="d-biglbl">The gap between what Spotify keeps now and what it has promised by 2030.</div></div>
+<div class="d-k">Our read</div>
+<div class="d-p">The turnaround was real and it is not reversing. But the next seven cents are far harder than the last seven, because they cannot come from firing people again.</div>
+<div class="d-q">Watch the parts of Spotify that are not music. If audiobooks, adverts and add-ons carry the extra profit, Spotify never has to fight for it. If they do not, it walks back to the record companies, and this time the record companies will be ready.</div>
+<div class="d-fine">Not financial advice. For educational purposes only.</div>`},
+
+  conv:{t:"Where people land",e:"From the vote",h:`
+<div class="d-hero">This splits on one question: <em>do you trust a company's own five-year forecast?</em></div>
+<div class="d-p"><strong>Longer-term holders point at the record.</strong> Spotify said it would reach 30 cents kept per dollar and got to 32. It said it would become profitable and did. On that record, 2026's extra spending looks like the price of the next stretch of growth.</div>
+<div class="d-p"><strong>Shorter-term holders point at the price.</strong> Investors are paying roughly $33 for every $1 of profit while margins dip and adverts stall.</div>
+<div class="d-q">The most common neutral position: wait two quarters. If the rebuilt advertising business grows in the second half of 2026 as promised, the argument is settled. If it does not, the free version becomes a very expensive habit.</div>`},
+
+  next:{t:"The other side of the table",e:"From what's next",h:`
+<div class="d-hero">Spotify has 761 million users and no catalogue. <em>Universal has the catalogue and no users.</em></div>
+<div class="d-p">One of them carries all the technology cost, all the marketing, and the competition from Apple and Google. The other signs a contract and collects.</div>
+<div class="d-q">Which would you rather own: the shop everyone visits, or the shelf everything sits on?</div>`}
+};
+
+const TLDR=[
+  "<strong>250 million songs</strong>, 761 million listeners, and Spotify owns none of the music.",
+  "Free tier hooks you, subscriptions pay the bills, add-ons let superfans spend more.",
+  "Nobody else has more than <strong>14%</strong> of paying listeners, and nobody else does only music.",
+  "Your money goes into <strong>one global pot</strong>. It never reaches the artists you actually play.",
+  "Spotify now keeps <strong>32 cents</strong> of every dollar, up from 25 four years ago.",
+  "Listening surged and advert revenue grew <strong>3%</strong>. The free tier is not paying for itself."
+];
+
+const saved=new Set();
+
+/* ═══ RENDER CARD ═══ */
+function renderCard(card,idx){
+  const total=CARDS.length;
+  const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
+  switch(card.type){
+
+  case 'cover': return `
+<div class="eb-c a1">01 · The company</div>
+<div class="cv-top a1">
+  <div class="cv-mark">S</div>
+  <div>
+    <div class="cv-name">Spotify Technology</div>
+    <div class="cv-chips"><div class="cv-chip">SPOT · NYSE</div><div class="cv-chip">Music · 761M listeners</div></div>
+  </div>
+</div>
+<div class="cv-stock a1">
+  <span class="cv-sp" id="livePrice">${PRICE}</span>
+  <span class="cv-sc up" id="liveChange">${CHANGE}</span>
+</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3">${card.bd}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'money': return `
+<div class="eb-c a1">02 · The money</div>
+<div class="hl a2">${card.hl}</div>
+<div class="mn-rows a3">${card.rows.map(r=>`
+<div class="mn-row">
+  <div class="mn-head"><span class="mn-name">${r.name}</span><span class="mn-pct">${r.pct}</span></div>
+  <div class="mn-bar"><div class="mn-fill" data-w="${r.w}" style="background:${r.fill}"></div></div>
+  <div class="mn-desc">${r.desc}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'model': return `
+<div class="eb-c a1">03 · The model</div>
+<div class="hl a2">${card.hl}</div>
+<div class="md-flow a3">${card.steps.map((s,i)=>`${i>0?'<div class="md-arrow">↓</div>':''}
+<div class="md-step">
+  <div class="md-n">${s.n}</div>
+  <div class="md-t">${s.t}</div>
+  <div class="md-s">${s.s}</div>
+</div>`).join('')}</div>
+<div class="md-vault a4"><span class="md-vault-ic">🔒</span><span class="md-vault-tx">${card.vault}</span></div>`;
+
+  case 'rivals': return `
+<div class="eb-c a1">04 · The rivals</div>
+<div class="hl a2">${card.hl}</div>
+<div class="sub-lbl a2">${card.lbl}</div>
+<div class="rv-rows a3">${card.rows.map(r=>`
+<div class="rv-row${r.h?' hero':''}">
+  <div class="rv-head"><span class="rv-n"><span class="rv-emoji">${r.emoji}</span>${r.n}</span><span class="rv-val">${r.val}</span></div>
+  <div class="rv-bar"><div class="rv-fill" data-w="${r.pct}" style="background:${r.fill}"></div></div>
+  <div class="rv-tag">${r.tag}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'hidden': return `
+<div class="eb-c a1">05 · The hidden truth</div>
+<div class="ht-myth a1">${card.myth}</div>
+<div class="ht-num a2">${card.num}</div>
+<div class="ht-sub a2">${card.sub}</div>
+<div class="bd a3" style="font-size:14.5px">${card.bd}</div>
+<div class="ht-lbl a4">${card.lbl}</div>
+<div class="htv a4">${card.world.map(r=>`
+<div class="htv-col">
+  <span class="htv-val">${r.v}</span>
+  <div class="htv-bar" data-h="${r.h}"></div>
+  <span class="htv-cn">${r.c}</span>
+</div>`).join('')}</div>`;
+
+  case 'bull': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bull-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'bear': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bear-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'own': return `
+<div class="eb-c a1">08 · Who owns it</div>
+<div class="hl a2">${card.hl}</div>
+<div class="ow-spot a3">
+  <div class="ow-head">
+    <div class="ow-face">${card.face}</div>
+    <div><div class="ow-name">${card.who}</div><div class="ow-role">${card.role}</div></div>
+  </div>
+  <div class="ow-math">
+    <div class="ow-cell"><div class="ow-cv">${card.math.a}</div><div class="ow-cl">${card.math.al}</div></div>
+    <div class="ow-arr">→</div>
+    <div class="ow-cell"><div class="ow-cv" style="color:var(--sp-deep);font-weight:600">${card.math.b}</div><div class="ow-cl">${card.math.bl}</div></div>
+  </div>
+  <div class="ow-note">${card.note}</div>
+</div>`;
+
+  case 'debate': return `
+<div class="eb-c a1">09 · The market debate</div>
+<div class="hl a2">${card.hl}</div>
+<div class="dis-pullquote a3">
+  <div class="dis-pullquote-mark">"</div>
+  <div class="dis-pullquote-text">${card.quote}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label works">✓ Going for it</div>
+  <div class="dis-chip-row">${card.works.map(c=>`<div class="dis-chip works">${c}</div>`).join('')}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label notyet">✗ Going against it</div>
+  <div class="dis-chip-row">${card.worry.map(c=>`<div class="dis-chip notyet">${c}</div>`).join('')}</div>
+</div>`;
+
+  case 'conv':{
+    return `
+<div class="eb-c a1">10 · Your call</div>
+<div class="hl a2">${card.hl}</div>
+<div class="cv-sent-row a3">
+  <div class="cv-sent bull">Bullish crowd</div>
+  <div class="cv-vb"><span class="vb-num">9,412</span> voted today</div>
+</div>
+<div class="cv-opts a3" id="cvO-${idx}">${card.opts.map(o=>`
+<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}',${idx})">
+  <div class="cf"></div>
+  <span class="ico">${o.k==='bull'?'🎧':o.k==='bear'?'📉':'😐'}</span>
+  <span class="lbl">${o.k==='bull'?'Bullish':o.k==='bear'?'Bearish':'Neutral'}</span>
+  <span class="sub">${o.k==='bull'?'It keeps more every year':o.k==='bear'?'It rents everything it sells':'Wait for the adverts'}</span>
+  <span class="cp">${o.p}%</span>
+</div>`).join('')}</div>
+<div class="cr" id="cvR-${idx}"></div>`;}
+
+  case 'next': return `
+<div class="eb-c a1">11 · Done in ~90 seconds</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3" style="margin-bottom:18px">${card.bd}</div>
+<div class="np a4" onclick="showToast('Universal Music Group coming soon!')">
+  <div class="nthumb" style="background:#0B2545;color:#fff">U</div>
+  <div><div class="nco">Universal Music</div><div class="ntag">Coming soon</div></div>
+  <div style="opacity:.6;margin-left:auto">→</div>
+</div>
+<div class="ea a4">
+  <button class="btn-p" onclick="openTldr()"><span>≡ See the TL;DR card</span><span>→</span></button>
+  <button class="btn-g" onclick="showToast('Saved to your shelf')"><span>★ Save Spotify to your shelf</span><span></span></button>
+  <button class="btn-g" onclick="closeStack()" style="opacity:.7"><span>↓ Back to today</span><span></span></button>
+</div>`;
+  }
+  return '';
+}
+
+/* ═══ STACK ═══ */
+let cardIdx=0;
+function openStack(){
+  cardIdx=0;
+  renderCards();buildProg();showCard(0);renderTldr();
+  goTo('stack');
+}
+function renderCards(){
+  const tr=document.getElementById('track');tr.innerHTML='';
+  CARDS.forEach((card,i)=>{
+    const el=document.createElement('div');
+    el.className='card bg-'+(card.bg||'cover')+(card.tight?' tight':'');
+    el.dataset.deep=card.deep;
+    el.innerHTML=renderCard(card,i);
+    tr.appendChild(el);
+  });
+  initAccordions();
+}
+function initAccordions(){
+  document.querySelectorAll('.nf-acc-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>togglePanel(btn));
+    btn.addEventListener('touchend',e=>{e.preventDefault();togglePanel(btn);},{passive:false});
+  });
+}
+function togglePanel(btn){
+  const item=btn.closest('.nf-acc-item');
+  const body=item.querySelector('.nf-acc-body');
+  const isOpen=item.classList.contains('open');
+  const card=item.closest('.card');
+  card.querySelectorAll('.nf-acc-item.open').forEach(p=>{
+    p.classList.remove('open');
+    p.querySelector('.nf-acc-body').style.maxHeight='0';
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    body.style.maxHeight=body.scrollHeight+'px';
+  }
+}
+
+/* ═══ PROG + SHOW ═══ */
+function buildProg(){
+  const w=document.getElementById('prog');w.innerHTML='';
+  for(let i=0;i<CARDS.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}
+}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-mint'));}
+function updProg(){
+  document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
+  const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
+  if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}
+  else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
+  bp.style.display=(cardIdx===CARDS.length-1)?'none':'flex';
+  const sb=document.getElementById('saveBtn');
+  saved.has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
+}
+function showCard(i){
+  if(i<0||i>=CARDS.length)return;
+  cardIdx=i;
+  const cards=document.querySelectorAll('#track .card');
+  cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
+  updProg();
+  setTimeout(()=>{const ac=cards[cardIdx];if(ac){ac.classList.add('entered');animateCard(i);}},30);
+}
+function nextCard(){if(cardIdx<CARDS.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function closeStack(){closeDrawer();closeTldr();goTo('today');}
+function toggleSave(){
+  const b=document.getElementById('saveBtn');
+  if(saved.has(cardIdx)){saved.delete(cardIdx);b.classList.remove('saved');showToast("Removed");}
+  else{saved.add(cardIdx);b.classList.add('saved');showToast("★ Saved");}
+}
+
+/* ═══ ANIMATIONS ═══ */
+function animateCard(idx){
+  const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
+  card.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width='0';
+    setTimeout(()=>{el.style.width=el.dataset.w+'%';},80);
+  });
+  card.querySelectorAll('[data-h]').forEach(el=>{
+    el.style.height='0';
+    setTimeout(()=>{el.style.height=el.dataset.h+'%';},120);
+  });
+  card.querySelectorAll('.md-step,.md-arrow').forEach((el,i)=>{
+    el.classList.remove('visible');
+    setTimeout(()=>el.classList.add('visible'),200+i*200);
+  });
+}
+
+/* ═══ VOTE ═══ */
+function vote(el,type,idx){
+  const wrap=document.getElementById('cvO-'+idx);if(wrap.classList.contains('voted'))return;
+  wrap.classList.add('voted');el.classList.add('you');
+  wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+  const msgs={bull:"You're <strong>bullish</strong> with the crowd. It keeps more of every dollar every year.",neutral:"You're <strong>neutral</strong>. Waiting for the advertising business to show up.",bear:"You're <strong>bearish</strong>. It rents everything it sells."};
+  const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');
+}
+
+/* ═══ DRAWER ═══ */
+function openDrawer(){
+  const cards=document.querySelectorAll('#track .card');
+  const k=cards[cardIdx]?cards[cardIdx].dataset.deep:null;
+  const d=DEEP[k];if(!d)return;
+  document.getElementById('dwT').textContent=d.t;
+  document.getElementById('dwEb').textContent=d.e;
+  document.getElementById('dwB').innerHTML=d.h;
+  document.getElementById('dwBd').classList.add('open');
+  document.getElementById('dw').classList.add('open');
+  const bars=document.querySelectorAll('#dwB .d-vfill');
+  bars.forEach(b=>b.style.width='0');
+  setTimeout(()=>bars.forEach(b=>{b.style.width=b.dataset.w+'%';}),160);
+}
+function closeDrawer(){document.getElementById('dwBd').classList.remove('open');document.getElementById('dw').classList.remove('open');}
+
+/* ═══ TLDR ═══ */
+function renderTldr(){
+  document.getElementById('tlC').innerHTML=`
+<div class="tl-h"><div class="tl-l">S</div><div class="tl-co">Spotify<span class="s">SPOT · NYSE · Music streaming</span></div></div>
+<div class="tl-tag">Everything, in 6 lines</div>
+<div class="tl-pts">${TLDR.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
+<div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
+<div class="tl-acts"><button class="tl-btn s" onclick="showToast('Screenshot ready!')">Share</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div>
+<div class="tl-hint">Screenshot and send to a friend</div>`;
+}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* ═══ TODAY ═══ */
+function renderToday(){
+  const h=new Date().getHours();
+  const g=h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+  document.getElementById('todayScroll').innerHTML=`
+<div class="today-head">
+  <div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div>
+  <div class="streak"><span class="flame">🔥</span> 3 day streak</div>
+</div>
+<div class="greeting">${g} <em>Today's drop is ready.</em></div>
+<div class="eb">This week</div>
+<div class="today-hero" onclick="openStack()">
+  <div class="hero-tag"><span class="live-dot"></span>Spotify · SPOT</div>
+  <div class="hero-co">Music streaming · 🇸🇪</div>
+  <div class="hero-h">Spotify has 250 million songs. <em>It owns exactly none of them.</em></div>
+  <div class="hero-stock"><span class="hero-sp">${PRICE}</span><span class="hero-sc up">${CHANGE}</span></div>
+  <div class="hero-meta"><span>11 cards · ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack()">Start →</button></div>
+</div>
+<div class="sect-t">What you will learn</div>
+<div class="sect-s">How a company that owns no music ended up running it.</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#1DB954">🎧</div><div><div class="rname">Every rival sells the same songs</div><div class="rsub">Spotify sells knowing which one you want next</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#0B6B34">💸</div><div><div class="rname">Your money never reaches your artists</div><div class="rsub">It all goes into one giant global pot</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#04361C">🗳️</div><div><div class="rname">He quit as CEO and still runs it</div><div class="rsub">24% of the company, 70.7% of the votes</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>`;
+}
+
+/* ═══ TOAST ═══ */
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
+
+/* ═══ NAV ═══ */
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const map={today:'screen-today',stack:'screen-stack',you:'screen-you'};
+  document.getElementById(map[n]||'screen-today').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+  if(n==='today')renderToday();
+}
+
+/* ═══ TOUCH ═══ */
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{
+  if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
+  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
+},{passive:true});
+shell.addEventListener('touchend',e=>{
+  if(!trk)return;trk=false;
+  const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax<30&&ay<30)return;
+  if(stg&&stg.closest('.nf-acc-btn,.nf-acc-item,button,.np,.co-opt'))return;
+  if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
+  else{if(dx<-40)nextCard();else if(dx>40)prevCard();}
+});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-stack').classList.contains('active'))return;
+  if(e.key==='ArrowRight')nextCard();
+  if(e.key==='ArrowLeft')prevCard();
+  if(e.key==='ArrowUp')openDrawer();
+  if(e.key==='Escape'){
+    if(document.getElementById('tlBd').classList.contains('open'))closeTldr();
+    else if(document.getElementById('dw').classList.contains('open'))closeDrawer();
+    else closeStack();
+  }
+});
+
+/* ═══ INIT ═══ */
+renderToday();
+</script>
+</body></html>

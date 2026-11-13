@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Daily Dividend: Disney V3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6F2E9;--cream-2:#EFEADE;--paper:#FAF7F0;
+  --ink:#100F0E;--ink-2:#2A2A28;--muted:#6B6B66;--mute-2:#A8A39A;--line:#DDD5C4;
+  --blue:#1B4FE8;--blue-deep:#1440CC;--blue-dark:#0A2480;
+  --blue-lite:#8AB8FF;
+  --green-deep:#16543A;--green-lite:#8FD8AF;--green-soft:#D6E7DC;
+  --red-deep:#B20710;--red-soft:#F2D9D3;
+  --charcoal:#221F1F;
+  --accent:var(--blue);--accent-soft:rgba(17,60,207,0.10);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.055'/></svg>");
+  --co-bg:radial-gradient(circle at 85% -5%,rgba(48,100,255,0.5),transparent 55%),radial-gradient(circle at -10% 110%,rgba(14,47,166,0.6),transparent 55%),linear-gradient(160deg,#131E40,#070C20 60%,#02040C);
+  --co-logo-bg:#1B4FE8;--co-logo-color:#fff
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:#101322;overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+
+/* ── STAGE + PHONE FRAME ── */
+.stage{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at top,rgba(38,88,255,0.10),transparent 60%),#101322}
+.phone{width:100%;max-width:400px;height:100%;max-height:860px;background:var(--cream);border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.5)}
+@media(max-width:480px){.stage{padding:0}.phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}}
+@media(min-width:481px) and (max-height:900px){.phone{max-height:calc(100vh - 48px)}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex}
+.statusbar{height:44px;flex-shrink:0}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(246,242,233,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+
+/* ── TODAY ── */
+.today-scroll{flex:1;overflow-y:auto;padding:8px 24px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 22px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 12px}
+.today-hero{background:var(--grain),var(--co-bg);color:var(--cream);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:26px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;padding:5px 10px;background:rgba(246,242,233,0.14);border-radius:100px;margin-bottom:18px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;background:var(--blue-lite);border-radius:50%;box-shadow:0 0 8px var(--blue-lite);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:rgba(246,242,233,0.55);text-transform:uppercase;margin-bottom:8px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:27px;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px}
+.hero-h em{font-style:italic;color:var(--blue-lite);font-weight:300}
+.hero-stock{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hero-sp{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--cream)}
+.hero-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.hero-sc.up{background:rgba(46,138,96,0.28);color:#8FD8AF}
+.hero-sc.down{background:rgba(209,74,61,0.28);color:#FFA79F}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(246,242,233,0.15);font-family:var(--mono);font-size:11px;color:rgba(246,242,233,0.45)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.rcard:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.rl{display:flex;align-items:center;gap:12px;min-width:0}
+.rthumb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── STACK SHELL ── */
+#screen-stack{background:#000}
+.shell{position:absolute;inset:0;overflow:hidden}
+.prog{position:absolute;top:50px;left:16px;right:16px;display:flex;gap:4px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.22);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.9)}
+.prog.dark .tick{background:rgba(0,0,0,0.14)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.8)}
+.topbar{position:absolute;top:64px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.co-logo{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:8px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tbtn svg{width:15px;height:15px}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:#fff}
+
+/* ── CARD BASE (top aligned) ── */
+.track{position:absolute;inset:0}
+.card{position:absolute;inset:0;padding:104px 22px 96px;display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card.active{display:flex;animation:cardIn 0.36s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card.entered .a1{animation:slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1) both}
+.card.entered .a2{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.07s both}
+.card.entered .a3{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.15s both}
+.card.entered .a4{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.24s both}
+
+/* ── CARD BACKGROUNDS (Disney blue & white, grainy) ── */
+.card.bg-cover{background:var(--grain),var(--co-bg);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-dkblue{background:var(--grain),radial-gradient(circle at 80% 0%,rgba(38,88,255,0.32),transparent 55%),linear-gradient(165deg,#0D1834,#050A1C 70%,#02040C);color:var(--cream)}
+.card.bg-green{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(143,216,175,0.18),transparent 50%),linear-gradient(160deg,#16543A,#0A2C1D 70%,#072115);color:var(--cream)}
+.card.bg-red{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(255,107,94,0.2),transparent 50%),linear-gradient(160deg,#8E1F14,#430B06 70%,#2E0603);color:var(--cream)}
+.card.bg-own{background:var(--grain),linear-gradient(165deg,#EDF3FE,#D9E6FB);color:var(--ink)}
+.card.bg-brand{background:var(--grain),var(--co-bg);color:var(--cream)}
+
+/* ── TYPOGRAPHY ── */
+.eb-c{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px;opacity:0.6}
+.card.bg-cover .eb-c,.card.bg-brand .eb-c,.card.bg-dkblue .eb-c{color:var(--blue-lite);opacity:1}
+.card.bg-green .eb-c{color:var(--green-lite);opacity:1}
+.card.bg-red .eb-c{color:#FFC9C0;opacity:1}
+.card.bg-own .eb-c{color:var(--blue-deep);opacity:1}
+.hl{font-family:var(--serif);font-weight:400;font-size:clamp(29px,8.2vw,35px);line-height:1.08;letter-spacing:-0.025em;margin-bottom:16px}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-cover .hl em,.card.bg-brand .hl em,.card.bg-dkblue .hl em{color:var(--blue-lite)}
+.card.bg-cream .hl em{color:var(--blue-deep)}
+.card.bg-own .hl em{color:var(--blue-deep)}
+.card.bg-green .hl em{color:var(--green-lite)}
+.card.bg-red .hl em{color:#FFD3CB}
+.bd{font-family:var(--sans);font-size:16px;line-height:1.6;opacity:0.9}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+.card.bg-own .bd{color:var(--ink-2)}
+.kick{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.45;color:var(--ink-2)}
+.kick strong{font-style:normal;font-weight:600;color:var(--blue-deep)}
+.card.bg-cover .kick,.card.bg-brand .kick,.card.bg-dkblue .kick,.card.bg-green .kick,.card.bg-red .kick{border-top-color:rgba(255,255,255,0.16);color:rgba(246,242,233,0.85)}
+.card.bg-dkblue .kick strong,.card.bg-cover .kick strong,.card.bg-brand .kick strong{color:var(--blue-lite)}
+
+/* ── COVER ── */
+.cv-top{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.cv-mark{width:52px;height:52px;border-radius:14px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:26px;box-shadow:0 8px 24px rgba(17,60,207,0.4);flex-shrink:0}
+.cv-name{font-family:var(--serif);font-weight:500;font-size:19px;letter-spacing:-0.01em;margin-bottom:5px}
+.cv-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75)}
+.cv-stock{display:flex;align-items:baseline;gap:10px;margin-bottom:22px}
+.cv-sp{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--cream)}
+.cv-sc{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px}
+.cv-sc.up{background:rgba(46,138,96,0.28);color:#8FD8AF}
+.cv-sc.down{background:rgba(209,74,61,0.28);color:#FFA79F}
+
+/* ── MONEY: glass rows ── */
+.mn-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
+.mn-rows{display:flex;flex-direction:column;gap:10px}
+.mn-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:16px;padding:14px 16px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.mn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.mn-name{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink)}
+.mn-pct{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-0.02em;color:var(--blue-deep)}
+.mn-bar{height:9px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.mn-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12)}
+.mn-desc{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.45}
+
+/* ── MODEL: 3-step flow + callout ── */
+.md-vault{background:rgba(17,60,207,0.06);border:1.5px solid rgba(17,60,207,0.28);border-radius:14px;padding:12px 14px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;box-shadow:0 4px 18px rgba(17,60,207,0.06)}
+.md-vault-ic{font-size:18px;line-height:1;flex-shrink:0;margin-top:2px}
+.md-vault-tx{font-family:var(--serif);font-size:15px;line-height:1.4;letter-spacing:-0.01em;color:var(--ink)}
+.md-vault-tx strong{font-weight:700;color:var(--blue-deep)}
+.md-flow{display:flex;flex-direction:column}
+.md-step{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:15px;padding:13px 16px;opacity:0;transform:translateY(6px);transition:opacity 0.4s ease,transform 0.4s ease;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.md-step.visible{opacity:1;transform:translateY(0)}
+.md-n{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;margin-bottom:4px}
+.md-t{font-family:var(--serif);font-size:17.5px;font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-0.01em;margin-bottom:3px}
+.md-s{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.45}
+.md-arrow{text-align:center;padding:2px 0;font-size:15px;opacity:0;transition:opacity 0.3s;color:var(--blue-deep)}
+.md-arrow.visible{opacity:0.7}
+
+/* ── RIVALS: glass boxes ── */
+.rv-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
+.rv-rows{display:flex;flex-direction:column;gap:7px}
+.rv-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:14px;padding:10px 13px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.rv-row.hero{background:rgba(17,60,207,0.06);border-color:rgba(17,60,207,0.32);box-shadow:0 4px 18px rgba(17,60,207,0.07)}
+.rv-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.rv-n{font-family:var(--sans);font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.rv-n .rv-emoji{font-size:14px}
+.rv-row.hero .rv-n{color:var(--blue-deep)}
+.rv-val{font-family:var(--mono);font-size:14.5px;font-weight:600;color:var(--ink)}
+.rv-bar{height:7px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:6px}
+.rv-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12)}
+.rv-tag{font-family:var(--sans);font-size:12px;color:var(--muted);line-height:1.35}
+
+/* ── HIDDEN TRUTH ── */
+.ht-myth{font-family:var(--serif);font-size:21px;font-style:italic;font-weight:300;text-decoration:line-through;text-decoration-color:rgba(255,255,255,0.55);text-decoration-thickness:2px;opacity:0.65;line-height:1.3;margin-bottom:20px}
+.ht-num{font-family:var(--serif);font-weight:300;font-size:clamp(58px,17vw,76px);line-height:0.95;letter-spacing:-0.04em;color:#fff;margin-bottom:6px}
+.ht-num span{font-size:0.36em;font-style:italic;font-weight:300;color:var(--blue-lite);letter-spacing:-0.01em}
+.ht-sub{font-family:var(--serif);font-size:18.5px;font-weight:400;line-height:1.3;letter-spacing:-0.01em;color:var(--cream);margin-bottom:14px}
+.ht-sub em{font-style:italic;color:var(--blue-lite)}
+
+/* ── BULL / BEAR ACCORDIONS ── */
+.nf-acc-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.nf-acc-item{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.18);border-radius:16px;overflow:hidden;position:relative}
+.nf-acc-btn{width:100%;border:0;background:none;padding:15px 15px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation}
+.nf-acc-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;line-height:1;margin-top:1px}
+.card.bg-green .nf-acc-icon{color:var(--green-deep)}
+.card.bg-red .nf-acc-icon{color:#8E1F14}
+.nf-acc-title{flex:1;font-family:var(--serif);font-size:15.5px;font-weight:600;line-height:1.35;letter-spacing:-0.01em;padding-top:3px}
+.nf-acc-title strong{font-weight:700;color:#fff}
+.nf-acc-chevron{font-size:11px;opacity:0.5;transition:transform 0.25s;flex-shrink:0;margin-top:7px}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.nf-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.2,0.8,0.2,1)}
+.nf-acc-text{font-family:var(--sans);font-size:14.5px;line-height:1.6;opacity:0.95;padding:4px 16px 15px 55px;border-top:1px solid rgba(255,255,255,0.12)}
+.nf-acc-text strong{font-weight:600;opacity:1}
+.acc-ctx{display:block;margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.5;opacity:0.85}
+
+/* ── OWNERSHIP: spotlight ── */
+.ow-spot{background:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.9);border-radius:20px;padding:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 6px 24px rgba(0,0,0,0.07);margin-top:6px}
+.ow-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ow-face{width:52px;height:52px;border-radius:14px;background:var(--blue-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0;box-shadow:0 6px 16px rgba(17,60,207,0.3)}
+.ow-name{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.ow-role{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;margin-top:3px}
+.ow-chips{display:flex;gap:7px;margin-bottom:14px}
+.ow-chip{flex:1;background:rgba(20,64,204,0.07);border:1px solid rgba(20,64,204,0.25);border-radius:10px;padding:9px 4px;text-align:center;font-family:var(--sans);font-size:11px;font-weight:600;color:var(--blue-deep);white-space:nowrap}
+.ow-math{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ow-cell{flex:1}
+.ow-cv{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1}
+.ow-cl{font-family:var(--sans);font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.ow-arr{font-size:20px;color:var(--blue-deep);flex-shrink:0}
+.ow-note{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.5;padding-top:13px;border-top:1px solid var(--line)}
+.ow-note strong{font-weight:600}
+
+/* ── DEBATE ── */
+.dis-pullquote{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px;box-shadow:0 6px 24px rgba(0,0,0,0.05);margin-bottom:18px;position:relative}
+.dis-pullquote-mark{font-family:var(--serif);font-size:54px;color:var(--blue);opacity:0.16;line-height:1;position:absolute;top:6px;left:14px;font-weight:300;pointer-events:none}
+.dis-pullquote-text{font-family:var(--serif);font-size:19.5px;font-weight:400;color:var(--ink);line-height:1.35;letter-spacing:-0.01em;padding-left:8px;position:relative;z-index:1}
+.dis-pullquote-text em{font-style:italic;font-weight:300;color:var(--blue-deep)}
+.dis-chip-section{margin-bottom:14px}
+.dis-chip-section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.dis-chip-section-label.works{color:#1F6B4A}
+.dis-chip-section-label.notyet{color:var(--red-deep)}
+.dis-chip-row{display:flex;flex-wrap:wrap;gap:7px}
+.dis-chip{font-family:var(--sans);font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:100px;line-height:1.2}
+.dis-chip.works{background:var(--green-soft);color:#1F6B4A;border:1px solid rgba(46,138,96,0.2)}
+.dis-chip.notyet{background:var(--red-soft);color:var(--red-deep);border:1px solid rgba(178,58,46,0.2)}
+
+/* ── VOTE ── */
+.cv-sent-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cv-sent{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border-radius:100px;font-weight:600}
+.cv-sent.bull{background:rgba(46,138,96,0.22);color:#8FD8AF;border:1px solid rgba(46,138,96,0.28)}
+.cv-vb{font-family:var(--mono);font-size:10px;color:rgba(246,242,233,0.45);letter-spacing:0.08em}
+.cv-vb .vb-num{color:var(--cream);font-weight:600}
+.cv-opts{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.co-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);border-radius:15px;padding:16px 17px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;touch-action:manipulation}
+.co-opt .ico{font-size:23px;flex-shrink:0;z-index:2}
+.co-opt .lbl{font-family:var(--serif);font-size:18px;font-weight:500;z-index:2}
+.co-opt .sub{font-family:var(--sans);font-size:11.5px;opacity:0.6;z-index:2;margin-left:auto;text-align:right}
+.cf{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 0.7s cubic-bezier(0.2,0.8,0.2,1);z-index:1}
+.co-opt.bull .cf{background:rgba(46,138,96,0.4)}
+.co-opt.neutral .cf{background:rgba(127,176,255,0.35)}
+.co-opt.bear .cf{background:rgba(209,74,61,0.4)}
+.cp{font-family:var(--mono);font-size:14px;font-weight:600;opacity:0;transition:opacity 0.4s 0.3s;z-index:2;margin-left:auto}
+.co-opt.revealed .sub{display:none}
+.co-opt.revealed .cp{opacity:1}
+.co-opt.you{border-color:var(--blue-lite);border-width:2px}
+.cr{font-family:var(--sans);font-size:13.5px;text-align:center;margin-top:16px;opacity:0;transition:opacity 0.4s 0.5s;line-height:1.5}
+.cr.show{opacity:0.9}
+.cr strong{font-weight:600;opacity:1}
+
+/* ── NEXT ── */
+.np{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:15px;display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:pointer;transition:transform 0.18s}
+.np:hover{transform:translateX(4px)}
+.nthumb{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0}
+.nco{font-family:var(--serif);font-size:17px;font-weight:600}
+.ntag{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;opacity:0.65;text-transform:uppercase;margin-top:2px}
+.ea{display:flex;flex-direction:column;gap:9px}
+.btn-p{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:14px 18px;font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+.btn-g{background:transparent;color:var(--cream);border:1px solid rgba(255,255,255,0.25);border-radius:100px;padding:13px 18px;font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+
+/* ── SWIPE ZONES + PILLS ── */
+.tz{position:absolute;top:100px;bottom:88px;width:22%;z-index:5;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+.pills{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:20}
+.pill{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);padding:9px 15px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
+.pills.dark .pill{background:rgba(0,0,0,0.07);color:var(--ink);border-color:rgba(0,0,0,0.12)}
+
+/* ── DRAWER (deep dive) ── */
+.dw-bd{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dw-bd.open{opacity:1;pointer-events:auto}
+.dw{position:absolute;left:0;right:0;bottom:0;height:80%;background:var(--paper);border-radius:24px 24px 0 0;z-index:210;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,0.3)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:40px;height:4px;background:var(--mute-2);border-radius:4px;margin:10px auto 0;flex-shrink:0}
+.dw-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-eb{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--blue-deep);text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.dw-t{font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:-0.01em}
+.dw-x{background:rgba(0,0,0,0.06);border:0;width:30px;height:30px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.dw-b{overflow-y:auto;padding:20px 22px 44px}
+.d-hero{font-family:var(--serif);font-size:23px;font-weight:400;line-height:1.2;letter-spacing:-0.02em;color:var(--ink);margin-bottom:14px}
+.d-hero em{font-style:italic;font-weight:300;color:var(--blue-deep)}
+.d-p{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--ink-2);margin:0 0 13px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-big{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 19px;margin:18px 0;display:flex;align-items:center;gap:17px;box-shadow:0 3px 14px rgba(0,0,0,0.04)}
+.d-bignum{font-family:var(--serif);font-size:40px;font-weight:400;letter-spacing:-0.03em;color:var(--blue-deep);line-height:1;flex-shrink:0}
+.d-biglbl{font-family:var(--sans);font-size:13.5px;color:var(--muted);line-height:1.45}
+.d-q{border-left:3px solid var(--blue);padding:4px 0 4px 15px;margin:16px 0;font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink)}
+.d-k{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;margin:20px 0 8px}
+.d-fine{font-family:var(--sans);font-size:11.5px;color:var(--mute-2);font-style:italic;margin-top:16px;line-height:1.5}
+
+/* ── TLDR ── */
+.tl-bd{position:absolute;inset:0;background:rgba(10,10,9,0.75);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.tl-bd.open{opacity:1;pointer-events:auto}
+.tl-c{background:var(--grain),var(--co-bg);border-radius:24px;width:100%;max-width:340px;padding:26px 24px;position:relative;transform:scale(0.94);transition:transform 0.3s;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.tl-bd.open .tl-c{transform:scale(1)}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tl-l{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.tl-co{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--cream)}
+.tl-co .s{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:rgba(246,242,233,0.45);text-transform:uppercase;display:block;margin-top:1px}
+.tl-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--blue-lite);text-transform:uppercase;margin-bottom:14px}
+.tl-pts{display:flex;flex-direction:column}
+.tl-p{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tl-p:last-child{border-bottom:0}
+.tl-n{font-family:var(--mono);font-size:10px;color:var(--blue-lite);flex-shrink:0;padding-top:3px;width:16px}
+.tl-tx{font-family:var(--sans);font-size:13px;line-height:1.45;color:var(--cream)}
+.tl-tx strong{font-weight:700;color:#fff}
+.tl-f{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.tl-br{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--cream)}
+.tl-br .dd{color:var(--blue-lite)}
+.tl-u{font-family:var(--mono);font-size:9px;color:rgba(246,242,233,0.35);letter-spacing:0.1em}
+.tl-acts{display:flex;gap:8px;margin-top:14px}
+.tl-btn{flex:1;border:0;border-radius:100px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--blue);color:#fff}
+.tl-btn.c{background:rgba(255,255,255,0.12);color:var(--cream)}
+.tl-hint{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(246,242,233,0.3);text-transform:uppercase;margin-top:10px}
+
+/* ── TOAST + HINT ── */
+.toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+</style></head><body>
+
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<!-- TODAY -->
+<section class="screen active" id="screen-today">
+  <div class="statusbar"></div>
+  <div class="today-scroll" id="todayScroll"></div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+<!-- STACK -->
+<section class="screen" id="screen-stack">
+  <div class="shell" id="shell">
+    <div class="prog" id="prog"></div>
+    <div class="topbar" id="topbar">
+      <div class="co"><div class="co-logo" id="cologo">D</div><div><div class="co-name">Disney</div><div class="co-sub">DIS · NYSE</div></div></div>
+      <div class="tactions">
+        <button class="tbtn" onclick="openTldr()">&#8801;</button>
+        <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+        <button class="tbtn" onclick="closeStack()">&#215;</button>
+      </div>
+    </div>
+    <div class="tz l" onclick="prevCard()"></div>
+    <div class="tz r" onclick="nextCard()"></div>
+    <div class="track" id="track"></div>
+    <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">&#8593; Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
+  </div>
+  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+  <div class="dw" id="dw">
+    <div class="dw-hn"></div>
+    <div class="dw-h"><div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div><button class="dw-x" onclick="closeDrawer()">&#215;</button></div>
+    <div class="dw-b" id="dwB"></div>
+  </div>
+  <div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()"><div class="tl-c" id="tlC"></div></div>
+  <div class="toast" id="toast">Saved</div>
+</section>
+
+<!-- YOU -->
+<section class="screen" id="screen-you">
+  <div class="statusbar"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center">
+    <div>
+      <div style="font-family:var(--serif);font-size:28px;letter-spacing:-0.02em;margin-bottom:8px">Your shelf.</div>
+      <div style="font-family:var(--sans);font-size:14px;color:var(--muted)">Read Disney, then vote. Your call appears here.</div>
+      <button onclick="goTo('today')" style="margin-top:20px;background:var(--ink);color:var(--cream);border:0;border-radius:100px;padding:12px 24px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer">Back to today</button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item active" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+</div></div>
+<div class="hint">desktop preview · tap edges to swipe · ↑ deeper · ≡ TL;DR</div>
+
+<script>
+/* PRICE PLACEHOLDER. Dev: wire live price + change into id="livePrice" / id="liveChange" */
+const PRICE="$95.00", CHANGE="-1.2% today", CHANGE_DIR="down";
+
+/* ONE POINT PER CARD. ONE VISUAL. EVERYTHING ELSE GOES TO THE DEEP DIVE. NO EM DASHES. */
+const CARDS=[
+  /* 01 COVER */
+  {type:"cover",bg:"cover",deep:"cover",
+   hl:"Disney's movies aren't the business. <em>The theme parks are.</em>",
+   bd:"Mickey Mouse is the most successful advertisement in human history. Every Marvel film, every Pixar sequel is a very expensive billboard for the places that actually print money.",
+   kick:"A century ago two brothers drew a mouse. That mouse now earns more every year than <strong>the entire GDP of Croatia</strong>."},
+
+  /* 02 MONEY */
+  {type:"money",bg:"cream",deep:"money",
+   hl:"Disney makes <em>$94 billion</em> a year. Watch the profit, not the revenue.",
+   lbl:"Share of Disney's profit",
+   rows:[
+     {name:"🏰 Parks & cruises",pct:"57%",w:100,fill:"#1B4FE8",desc:"From just 38% of the revenue. The engine of everything."},
+     {name:"🎬 Entertainment",pct:"28%",w:49,fill:"#6C93E8",desc:"Movies, streaming, TV. Half the revenue, a quarter of the profit."},
+     {name:"🏈 ESPN & sports",pct:"15%",w:26,fill:"#F2E8CF",desc:"Live sports. Expensive rights, shrinking cable."}
+   ],
+   kick:"When streaming was losing $1 billion a quarter, <strong>the parks kept the lights on</strong>."},
+
+  /* 03 MODEL */
+  {type:"model",bg:"cream",deep:"model",
+   hl:"Disney invents a character once. <em>Then charges you for 50 years.</em>",
+   steps:[
+     {n:"Step 1 · The film",t:"A character is born",s:"Zootopia 2 earned $1.87 billion in cinemas. That's just the introduction."},
+     {n:"Step 2 · The stream",t:"Same story, second payday",s:"196 million subscribers rewatch it at home."},
+     {n:"Step 3 · The park & the merch",t:"Where the real money lives",s:"A ride, a land, a plush toy in 180 countries."}
+   ],
+   vault:"That's why Disney buys franchises: Pixar, Marvel, Star Wars. <strong>Not for the films. For everything after.</strong>"},
+
+  /* 04 RIVALS */
+  {type:"rivals",bg:"cream",deep:"rivals",
+   hl:"Bigger than Netflix. <em>Worth half as much.</em>",
+   lbl:"What the market says each is worth",
+   rows:[
+     {emoji:"🎬",n:"Netflix",val:"$360B",pct:100,fill:"#B20710",tag:"One business, done perfectly. Markets pay for focus."},
+     {emoji:"🏰",n:"Disney",val:"$180B",pct:50,fill:"#1B4FE8",tag:"Five businesses: films, streaming, parks, ships, sports.",h:true},
+     {emoji:"🎡",n:"Comcast",val:"$100B",pct:28,fill:"#1F8A4C",tag:"Owns Universal, which built Epic Universe 15 minutes from Disney World."},
+     {emoji:"🎮",n:"Nintendo",val:"$67B",pct:19,fill:"#221F1F",tag:"Doesn't build parks. It rents Mario to Universal. Mario's movie made $1.36B."}
+   ],
+   kick:"One word explains the gap between Disney's and Netflix's market value: <strong>focus</strong>. Netflix does one thing. Disney does five."},
+
+  /* 05 HIDDEN TRUTH */
+  {type:"hidden",bg:"dkblue",deep:"hidden",
+   myth:"Disney is for children.",
+   num:"40%",
+   sub:"of Disney park guests have <em>no kids</em>. And they spend the most.",
+   bd:"It goes far beyond the parks. In 2024, adults became the toy industry's biggest age group, overtaking 3-to-5-year-olds. Nearly half of adults bought a toy for themselves last year.",
+   kick:"Disney sells <strong>$63 billion</strong> of merchandise a year. Nearly 10 times its record box office."},
+
+  /* 06 BULL */
+  {type:"bull",bg:"green",deep:"bull",
+   eb:"06 · How it could win",
+   hl:"Three reasons this stock could <em>double.</em>",
+   panels:[
+     {icon:"↑",title:"The movies are <strong>hits again</strong>",
+      body:"Disney was 2025's biggest studio on Earth, the first past $6 billion at the box office since 2019. Zootopia 2 became the biggest animated film ever.<span class='acc-ctx'>How big is this? Every hit feeds parks, merch and streaming for decades. The flywheel just got fuel.</span>"},
+     {icon:"↑",title:"Streaming finally <strong>makes money</strong>",
+      body:"Three years ago, streaming lost $4 billion a year. Now it makes a profit. One problem left: Netflix's profit margin is 31%. Disney's is 10%.<span class='acc-ctx'>How big is this? If Disney reaches even half of Netflix's margin, it adds billions to Disney's profit.</span>"},
+     {icon:"↑",title:"The cruise bet is <strong>just beginning</strong>",
+      body:"Disney's new ship sails from Singapore, with halal menus and Shah Rukh Khan narrating the fireworks, built to win Asian families who have never met Disney. Over 90% of early passengers were first-timers.<span class='acc-ctx'>How big is this? The fleet grows from 8 to 13 ships by 2031. The ships reach a billion people in Asia years before any new park could be built.</span>"}
+   ]},
+
+  /* 07 BEAR */
+  {type:"bear",bg:"red",deep:"bear",
+   eb:"07 · What could break it",
+   hl:"Three things that could <em>break the magic.</em>",
+   panels:[
+     {icon:"↓",title:"The man who built modern Disney <strong>leaves in December</strong>",
+      body:"Bob Iger ran Disney for two decades and made it what it is. When he retired in 2020, his replacement lasted 22 months and nearly broke the company; the board begged him back. Now a brand-new CEO takes over, carrying $38.5 billion of debt.<span class='acc-ctx'>How big is this? For 20 years, the answer to \"why will Disney be fine?\" was one man. From January, it can't be.</span>"},
+     {icon:"↓",title:"Universal finally built <strong>a real rival</strong>",
+      body:"Epic Universe opened 15 minutes from Disney World with Harry Potter, Mario and Dragons inside. Disney's attendance dipped the very next quarter.<span class='acc-ctx'>How big is this? The parks pay for everything else at Disney. That engine is under attack for the first time in 50 years.</span>"},
+     {icon:"↓",title:"Disney+ trained the world <strong>to expect cheap</strong>",
+      body:"It launched at $6.99 to grow fast, and taught everyone it's the budget option. Netflix charges more than double per member, and every Disney price rise risks cancellations Netflix never sees.<span class='acc-ctx'>How big is this? Streaming is supposed to replace the dying cable TV money. A budget brand can't carry that weight.</span>"}
+   ]},
+
+  /* 08 THE MAN BEHIND IT */
+  {type:"own",bg:"own",deep:"own",
+   hl:"One man made modern Disney. <em>He leaves on December 31.</em>",
+   math:{a:"$4B",al:"What he paid for Marvel in 2009",b:"$30B+",bl:"What Marvel films have earned since"},
+   buys:["🧸 Bought Pixar","🦸 Bought Marvel","⚔️ Bought Star Wars"],
+   note:"He also bought Fox and built Disney+. Disney tried life without him once. It lasted 22 months. <strong>The biggest question in this stock: can Disney survive without Bob Iger?</strong>"},
+
+  /* 09 MARKET DEBATE */
+  {type:"debate",bg:"cream",deep:"debate",
+   hl:"Disney owned your childhood. <em>Can it own your future?</em>",
+   quote:"Netflix is worth double Disney. The market is betting memories don't grow. <em>Disney is betting they never die.</em>",
+   works:["Biggest studio again","Streaming profitable","Adults buying childhood"],
+   worry:["Life after Iger","10 years of flat profits","Universal at the gates"]},
+
+  /* 10 VOTE */
+  {type:"conv",bg:"brand",deep:"conv",
+   hl:"Now you decide. <em>Disney in 5 years?</em>",
+   opts:[{k:"bull",p:58},{k:"neutral",p:27},{k:"bear",p:15}]},
+
+  /* 11 NEXT */
+  {type:"next",bg:"brand",deep:"next",
+   hl:"That was Disney.",
+   bd:"Next up: Reliance. The Indian giant you probably paid today without realising it. Your phone bill, your IPL stream, the store down the road."}
+];
+
+/* DEEP DIVES: hero, max 2 short paragraphs, one big stat, fun fact */
+const DEEP={
+  cover:{t:"The drawing that explains everything",e:"From the cover",h:`
+<div class="d-hero">In 1957, Walt drew the whole business plan by hand. <em>One page. Still running today.</em></div>
+<div class="d-p">At the center of his drawing: the films. Around them: the park, the toys, TV, music, books, all connected by arrows. The films create the characters. <strong>Everything else charges for them, forever.</strong></div>
+<div class="d-p">That's why the movies are the ads. A film plays once. A park charges every single day, for decades.</div>
+<div class="d-big"><div class="d-bignum">69 yrs</div><div class="d-biglbl">How long Disney has run the exact play on Walt's one-page drawing.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">Mickey was almost named <strong>Mortimer</strong>. Walt's wife Lillian hated it and talked him out of it on the spot.</div>`},
+
+  money:{t:"Why castles print money",e:"From the money",h:`
+<div class="d-hero">Build the castle once. <em>Then everything inside it has a price tag.</em></div>
+<div class="d-p">A Disney World day costs a family around <strong>$233 per person</strong>: tickets, food, merch. Families even pay $15 to $45 extra, per person, just to skip the queues.</div>
+<div class="d-p">A film has to be remade every time. The castle doesn't. Last year attendance dipped 1% and parks revenue still hit a record, because prices rise and people keep paying.</div>
+<div class="d-big"><div class="d-bignum">$1,000</div><div class="d-biglbl">What one Magic Kingdom day can cost a family of four. Paid happily. That's the moat.</div></div>`},
+
+  model:{t:"The $7.4 billion admission",e:"From the model",h:`
+<div class="d-hero">In 2006, Disney's animation was dying. <em>So Disney bought the future: Pixar.</em></div>
+<div class="d-p">Bob Iger's first move as CEO was paying <strong>$7.4 billion for Pixar</strong>, a price everyone called crazy. He knew the flywheel starves without new characters, and Pixar made the best ones: Woody, Nemo, The Incredibles.</div>
+<div class="d-p">It set the playbook Disney still runs: <strong>Marvel for $4 billion, Star Wars for $4 billion.</strong> Buy the characters. The flywheel does the rest.</div>
+<div class="d-big"><div class="d-bignum">$7.4B</div><div class="d-biglbl">The "crazy" Pixar price. It saved Disney animation and bought the next 20 years of hits.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">Pixar's owner was <strong>Steve Jobs</strong>. Selling it made the Apple founder Disney's largest shareholder, with a seat on the board.</div>`},
+
+  rivals:{t:"The 50-year monopoly just ended",e:"From the rivals",h:`
+<div class="d-hero">For half a century, nobody could touch Disney's parks. <em>Then Epic Universe opened.</em></div>
+<div class="d-p">Universal's trick is simple: it doesn't own enough characters, so it borrows them. <strong>Harry Potter from Warner. Mario from Nintendo.</strong> Dragons from DreamWorks, which it owns. All in one park, next door to Disney World.</div>
+<div class="d-p">Disney's attendance dipped the very next quarter, and a Universal park in the UK is coming. Watch Nintendo especially: across Asia, Mario out-recognizes Mickey.</div>
+<div class="d-big"><div class="d-bignum">15 min</div><div class="d-biglbl">The distance between Disney World and its first real rival in 50 years.</div></div>`},
+
+  hidden:{t:"Childhood, sold back to you",e:"From the hidden truth",h:`
+<div class="d-hero">Disney's real product isn't films. <em>It's your own childhood, with a price tag.</em></div>
+<div class="d-p">The "kidult" wave is the entertainment story of the decade: grown-ups buying Lego sets, Stitch plushies and park tickets for themselves. <strong>Lego doubled its revenue</strong> chasing them.</div>
+<div class="d-p">Disney is the world's #1 merchandise company, and nobody is close: $63 billion in product sales against Pokémon's $12 billion and Mattel's $9 billion.</div>
+<div class="d-big"><div class="d-bignum">#1</div><div class="d-biglbl">Disney tops the global merchandise rankings every single year. The mouse out-sells everyone.</div></div>`},
+
+  bull:{t:"Disney's next land is in Fortnite",e:"From the bull case",h:`
+<div class="d-hero">The boldest bet isn't a ride. <em>It's a video game.</em></div>
+<div class="d-p">Disney paid <strong>$1.5 billion</strong> for a piece of Epic Games and is building a whole Disney universe inside Fortnite. The test run, a Simpsons season, pulled 80 million players and 750 million hours in one month.</div>
+<div class="d-p">And in February 2027, the Super Bowl airs on Disney for the first time ever. Over 100 million viewers, every ad dollar Disney's.</div>
+<div class="d-big"><div class="d-bignum">80M</div><div class="d-biglbl">People who played Disney's Fortnite test in a single month. That's teenagers, the audience Disney+ struggles to reach.</div></div>`},
+
+  bear:{t:"The lost decade",e:"From the bear case",h:`
+<div class="d-hero">Fans love the parks. <em>Shareholders got nothing for ten years.</em></div>
+<div class="d-p">$10,000 invested in Disney in 2015 is worth about <strong>$12,000 today</strong>. The same money in the S&P 500: about $33,000. The stock still sits far below its 2021 peak.</div>
+<div class="d-p">The reason is simple: profits barely grew for a decade. Cable money melted, the $71 billion Fox deal added debt, the pandemic shut the parks, streaming burned billions. <strong>The magic never left. The earnings did.</strong></div>
+<div class="d-big"><div class="d-bignum">1%</div><div class="d-biglbl">Disney's average yearly stock return over the past decade. The market averaged 15%.</div></div>`},
+
+  own:{t:"The 22-month warning",e:"From the man behind it",h:`
+<div class="d-hero">Disney already tried replacing Iger. <em>It nearly broke the company.</em></div>
+<div class="d-p">In 2020 Iger handed the job to Bob Chapek. Prices rose, fans revolted, a public feud with Florida's government erupted, and the stock sank. <strong>22 months in, the board fired Chapek</strong> and begged Iger back.</div>
+<div class="d-p">This time the handover took a three-year audition. Parks boss <strong>Josh D'Amaro</strong> won in March 2026; creative power stays with Dana Walden. Iger's desk empties December 31.</div>
+<div class="d-big"><div class="d-bignum">22 mo</div><div class="d-biglbl">How long Disney survived without Iger last time.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">The board picked the parks man over the studio chief. That tells you exactly what Disney thinks the next decade is.</div>`},
+
+  debate:{t:"Our honest read",e:"The Daily Dividend take",h:`
+<div class="d-hero">The comeback is real. <em>Now the stock has to notice.</em></div>
+<div class="d-p">The pipeline is Disney's strongest in years: The Mandalorian and Grogu in May, Toy Story 5 in June, live-action Moana in July, Avengers: Doomsday in December. Then 2027: <strong>the first Super Bowl on Disney, and Frozen 3.</strong></div>
+<div class="d-p">Our read: the films, parks and merch are already winning. The stock only moves when profits grow for years in a row, something Disney hasn't managed in a decade. <strong>Watch whether the new CEO turns hits into habit.</strong></div>
+<div class="d-big"><div class="d-bignum">2027</div><div class="d-biglbl">Super Bowl, Frozen 3, new ships at sea, and a full year of the new CEO. The year of answers.</div></div>
+<div class="d-fine">Not financial advice. For educational purposes only.</div>`},
+
+  conv:{t:"What the crowd is saying",e:"From the vote",h:`
+<div class="d-hero">9,241 readers have taken a side.</div>
+<div class="d-p"><strong>58% bullish · 27% neutral · 15% bearish.</strong></div>
+<div class="d-p">The most common neutral take: wait for a full year of the new CEO, then decide.</div>
+<div class="d-q">Your call gets tracked on your shelf. You'll see exactly how right (or wrong) you were.</div>`},
+
+  next:{t:"The giant you already pay",e:"From what's next",h:`
+<div class="d-hero">You probably paid Reliance today. <em>Without knowing.</em></div>
+<div class="d-p">Your phone bill. Your IPL stream. The store down the road. One family, one bet on India itself.</div>
+<div class="d-q">Same flywheel idea as Disney, built around a billion Indian consumers instead of a mouse.</div>`}
+};
+
+const TLDR=[
+  "Parks made <strong>$10B profit</strong> last year, more than movies, streaming and sports combined.",
+  "<strong>40% of park guests</strong> are adults with no kids, and they spend the most.",
+  "Disney sells <strong>$63B of merchandise</strong> a year, nearly 10× its record box office.",
+  "$10,000 in Disney stock in 2015 became <strong>$12,000</strong>. In the S&P 500: $33,000.",
+  "Universal built a rival <strong>15 minutes</strong> from Disney World. First one in 50 years.",
+  "Bob Iger leaves Dec 31. Last time Disney tried without him: <strong>22 months</strong>."
+];
+
+const saved=new Set();
+
+/* ═══ RENDER CARD ═══ */
+function renderCard(card,idx){
+  const total=CARDS.length;
+  const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
+  switch(card.type){
+
+  case 'cover': return `
+<div class="eb-c a1">01 · The company</div>
+<div class="cv-top a1">
+  <div class="cv-mark">D</div>
+  <div>
+    <div class="cv-name">The Walt Disney Co.</div>
+    <div class="cv-chips"><div class="cv-chip">DIS · NYSE</div><div class="cv-chip">Entertainment · 100+ years</div></div>
+  </div>
+</div>
+<div class="cv-stock a1">
+  <span class="cv-sp" id="livePrice">${PRICE}</span>
+  <span class="cv-sc ${CHANGE_DIR}" id="liveChange">${CHANGE}</span>
+</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3">${card.bd}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'money': return `
+<div class="eb-c a1">02 · The money</div>
+<div class="hl a2">${card.hl}</div>
+<div class="mn-lbl a3">${card.lbl}</div>
+<div class="mn-rows a3">${card.rows.map(r=>`
+<div class="mn-row">
+  <div class="mn-head"><span class="mn-name">${r.name}</span><span class="mn-pct">${r.pct}</span></div>
+  <div class="mn-bar"><div class="mn-fill" data-w="${r.w}" style="background:${r.fill}"></div></div>
+  <div class="mn-desc">${r.desc}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'model': return `
+<div class="eb-c a1">03 · The model</div>
+<div class="hl a2">${card.hl}</div>
+<div class="md-flow a3">${card.steps.map((s,i)=>`${i>0?'<div class="md-arrow">↓</div>':''}
+<div class="md-step">
+  <div class="md-n">${s.n}</div>
+  <div class="md-t">${s.t}</div>
+  <div class="md-s">${s.s}</div>
+</div>`).join('')}</div>
+<div class="md-vault a4"><span class="md-vault-ic">🎢</span><span class="md-vault-tx">${card.vault}</span></div>`;
+
+  case 'rivals': return `
+<div class="eb-c a1">04 · The rivals</div>
+<div class="hl a2">${card.hl}</div>
+<div class="rv-lbl a3">${card.lbl}</div>
+<div class="rv-rows a3">${card.rows.map(r=>`
+<div class="rv-row${r.h?' hero':''}">
+  <div class="rv-head"><span class="rv-n"><span class="rv-emoji">${r.emoji}</span>${r.n}</span><span class="rv-val">${r.val}</span></div>
+  <div class="rv-bar"><div class="rv-fill" data-w="${r.pct}" style="background:${r.fill}"></div></div>
+  <div class="rv-tag">${r.tag}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'hidden': return `
+<div class="eb-c a1">05 · The hidden truth</div>
+<div class="ht-myth a1">${card.myth}</div>
+<div class="ht-num a2">${card.num}</div>
+<div class="ht-sub a2">${card.sub}</div>
+<div class="bd a3" style="font-size:14.5px">${card.bd}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'bull': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bull-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'bear': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bear-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'own': return `
+<div class="eb-c a1">08 · The man behind it</div>
+<div class="hl a2">${card.hl}</div>
+<div class="ow-spot a3">
+  <div class="ow-head">
+    <div class="ow-face">BI</div>
+    <div><div class="ow-name">Bob Iger</div><div class="ow-role">CEO 2005 to 2020, and again 2022 to 2026</div></div>
+  </div>
+  <div class="ow-chips">${card.buys.map(b=>`<div class="ow-chip">${b}</div>`).join('')}</div>
+  <div class="ow-math">
+    <div class="ow-cell"><div class="ow-cv">${card.math.a}</div><div class="ow-cl">${card.math.al}</div></div>
+    <div class="ow-arr">→</div>
+    <div class="ow-cell"><div class="ow-cv" style="color:var(--blue-deep)">${card.math.b}</div><div class="ow-cl">${card.math.bl}</div></div>
+  </div>
+  <div class="ow-note">${card.note}</div>
+</div>`;
+
+  case 'debate': return `
+<div class="eb-c a1">09 · The market debate</div>
+<div class="hl a2">${card.hl}</div>
+<div class="dis-pullquote a3">
+  <div class="dis-pullquote-mark">"</div>
+  <div class="dis-pullquote-text">${card.quote}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label works">✓ Going for it</div>
+  <div class="dis-chip-row">${card.works.map(c=>`<div class="dis-chip works">${c}</div>`).join('')}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label notyet">✗ Going against it</div>
+  <div class="dis-chip-row">${card.worry.map(c=>`<div class="dis-chip notyet">${c}</div>`).join('')}</div>
+</div>`;
+
+  case 'conv':{
+    return `
+<div class="eb-c a1">10 · Your call</div>
+<div class="hl a2">${card.hl}</div>
+<div class="cv-sent-row a3">
+  <div class="cv-sent bull">Bullish crowd</div>
+  <div class="cv-vb"><span class="vb-num">9,241</span> voted today</div>
+</div>
+<div class="cv-opts a3" id="cvO-${idx}">${card.opts.map(o=>`
+<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}',${idx})">
+  <div class="cf"></div>
+  <span class="ico">${o.k==='bull'?'🏰':o.k==='bear'?'📉':'😐'}</span>
+  <span class="lbl">${o.k==='bull'?'Bullish':o.k==='bear'?'Bearish':'Neutral'}</span>
+  <span class="sub">${o.k==='bull'?'The mouse always wins':o.k==='bear'?'A beautiful museum':'Wait for life after Iger'}</span>
+  <span class="cp">${o.p}%</span>
+</div>`).join('')}</div>
+<div class="cr" id="cvR-${idx}"></div>`;}
+
+  case 'next': return `
+<div class="eb-c a1">11 · Done in ~90 seconds</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3" style="margin-bottom:18px">${card.bd}</div>
+<div class="np a4" onclick="showToast('Reliance coming soon!')">
+  <div class="nthumb" style="background:#24407A;color:#fff">R</div>
+  <div><div class="nco">Reliance</div><div class="ntag">Coming soon</div></div>
+  <div style="opacity:.6;margin-left:auto">→</div>
+</div>
+<div class="ea a4">
+  <button class="btn-p" onclick="openTldr()"><span>≡ See the TL;DR card</span><span>→</span></button>
+  <button class="btn-g" onclick="showToast('Saved to your shelf')"><span>★ Save Disney to your shelf</span><span></span></button>
+  <button class="btn-g" onclick="closeStack()" style="opacity:.7"><span>↓ Back to today</span><span></span></button>
+</div>`;
+  }
+  return '';
+}
+
+/* ═══ STACK ═══ */
+let cardIdx=0;
+function openStack(){
+  cardIdx=0;
+  renderCards();buildProg();showCard(0);renderTldr();
+  goTo('stack');
+}
+function renderCards(){
+  const tr=document.getElementById('track');tr.innerHTML='';
+  CARDS.forEach((card,i)=>{
+    const el=document.createElement('div');
+    el.className='card bg-'+(card.bg||'cover');
+    el.dataset.deep=card.deep;
+    el.innerHTML=renderCard(card,i);
+    tr.appendChild(el);
+  });
+  initAccordions();
+}
+function initAccordions(){
+  document.querySelectorAll('.nf-acc-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>togglePanel(btn));
+    btn.addEventListener('touchend',e=>{e.preventDefault();togglePanel(btn);},{passive:false});
+  });
+}
+function togglePanel(btn){
+  const item=btn.closest('.nf-acc-item');
+  const body=item.querySelector('.nf-acc-body');
+  const isOpen=item.classList.contains('open');
+  const card=item.closest('.card');
+  card.querySelectorAll('.nf-acc-item.open').forEach(p=>{
+    p.classList.remove('open');
+    p.querySelector('.nf-acc-body').style.maxHeight='0';
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    body.style.maxHeight=body.scrollHeight+'px';
+  }
+}
+
+/* ═══ PROG + SHOW ═══ */
+function buildProg(){
+  const w=document.getElementById('prog');w.innerHTML='';
+  for(let i=0;i<CARDS.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}
+}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-own'));}
+function updProg(){
+  document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
+  const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
+  if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}
+  else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
+  bp.style.display=(cardIdx===CARDS.length-1)?'none':'flex';
+  const sb=document.getElementById('saveBtn');
+  saved.has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
+}
+function showCard(i){
+  if(i<0||i>=CARDS.length)return;
+  cardIdx=i;
+  const cards=document.querySelectorAll('#track .card');
+  cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
+  updProg();
+  setTimeout(()=>{const ac=cards[cardIdx];if(ac){ac.classList.add('entered');animateCard(i);}},30);
+}
+function nextCard(){if(cardIdx<CARDS.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function closeStack(){closeDrawer();closeTldr();goTo('today');}
+function toggleSave(){
+  const b=document.getElementById('saveBtn');
+  if(saved.has(cardIdx)){saved.delete(cardIdx);b.classList.remove('saved');showToast("Removed");}
+  else{saved.add(cardIdx);b.classList.add('saved');showToast("★ Saved");}
+}
+
+/* ═══ ANIMATIONS ═══ */
+function animateCard(idx){
+  const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
+  card.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width='0';
+    setTimeout(()=>{el.style.width=el.dataset.w+'%';},80);
+  });
+  card.querySelectorAll('[data-h]').forEach(el=>{
+    el.style.height='0';
+    setTimeout(()=>{el.style.height=el.dataset.h+'%';},120);
+  });
+  card.querySelectorAll('.md-step,.md-arrow').forEach((el,i)=>{
+    el.classList.remove('visible');
+    setTimeout(()=>el.classList.add('visible'),200+i*200);
+  });
+}
+
+/* ═══ VOTE ═══ */
+function vote(el,type,idx){
+  const wrap=document.getElementById('cvO-'+idx);if(wrap.classList.contains('voted'))return;
+  wrap.classList.add('voted');el.classList.add('you');
+  wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+  const msgs={bull:"You're <strong>bullish</strong> with the crowd. The mouse always wins.",neutral:"You're <strong>neutral</strong>. Waiting for life after Iger.",bear:"You're <strong>bearish</strong>. Betting the museum keeps fading."};
+  const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');
+}
+
+/* ═══ DRAWER ═══ */
+function openDrawer(){
+  const cards=document.querySelectorAll('#track .card');
+  const k=cards[cardIdx]?cards[cardIdx].dataset.deep:null;
+  const d=DEEP[k];if(!d)return;
+  document.getElementById('dwT').textContent=d.t;
+  document.getElementById('dwEb').textContent=d.e;
+  document.getElementById('dwB').innerHTML=d.h;
+  document.getElementById('dwBd').classList.add('open');
+  document.getElementById('dw').classList.add('open');
+}
+function closeDrawer(){document.getElementById('dwBd').classList.remove('open');document.getElementById('dw').classList.remove('open');}
+
+/* ═══ TLDR ═══ */
+function renderTldr(){
+  document.getElementById('tlC').innerHTML=`
+<div class="tl-h"><div class="tl-l">D</div><div class="tl-co">Disney<span class="s">DIS · NYSE · Entertainment</span></div></div>
+<div class="tl-tag">Everything, in 6 lines</div>
+<div class="tl-pts">${TLDR.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
+<div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
+<div class="tl-acts"><button class="tl-btn s" onclick="showToast('Screenshot ready!')">Share</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div>
+<div class="tl-hint">Screenshot and send to a friend</div>`;
+}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* ═══ TODAY ═══ */
+function renderToday(){
+  const h=new Date().getHours();
+  const g=h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+  document.getElementById('todayScroll').innerHTML=`
+<div class="today-head">
+  <div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div>
+  <div class="streak"><span class="flame">🔥</span> 3 day streak</div>
+</div>
+<div class="greeting">${g} <em>Today's drop is ready.</em></div>
+<div class="eb">This week</div>
+<div class="today-hero" onclick="openStack()">
+  <div class="hero-tag"><span class="live-dot"></span>Disney · DIS</div>
+  <div class="hero-co">Entertainment · 🇺🇸</div>
+  <div class="hero-h">Disney's movies aren't the business. <em>The theme parks are.</em></div>
+  <div class="hero-stock"><span class="hero-sp">${PRICE}</span><span class="hero-sc ${CHANGE_DIR}">${CHANGE}</span></div>
+  <div class="hero-meta"><span>11 cards · ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack()">Start →</button></div>
+</div>
+<div class="sect-t">What you will learn</div>
+<div class="sect-s">The business behind the magic.</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#1B4FE8">🏰</div><div><div class="rname">Why the parks make the real money</div><div class="rsub">Castles are built once. Everyone pays forever</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#0E2FA6">🎢</div><div><div class="rname">Universal built a rival 15 minutes away</div><div class="rsub">Disney's first real park fight in 50 years</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#0A2480">👑</div><div><div class="rname">The man who made Disney leaves this year</div><div class="rsub">Last time they tried without him: 22 months</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>`;
+}
+
+/* ═══ TOAST ═══ */
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
+
+/* ═══ NAV ═══ */
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const map={today:'screen-today',stack:'screen-stack',you:'screen-you'};
+  document.getElementById(map[n]||'screen-today').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+  if(n==='today')renderToday();
+}
+
+/* ═══ TOUCH ═══ */
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{
+  if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
+  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
+},{passive:true});
+shell.addEventListener('touchend',e=>{
+  if(!trk)return;trk=false;
+  const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax<30&&ay<30)return;
+  if(stg&&stg.closest('.nf-acc-btn,.nf-acc-item,button,.np,.co-opt'))return;
+  if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
+  else{if(dx<-40)nextCard();else if(dx>40)prevCard();}
+});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-stack').classList.contains('active'))return;
+  if(e.key==='ArrowRight')nextCard();
+  if(e.key==='ArrowLeft')prevCard();
+  if(e.key==='ArrowUp')openDrawer();
+  if(e.key==='Escape'){
+    if(document.getElementById('tlBd').classList.contains('open'))closeTldr();
+    else if(document.getElementById('dw').classList.contains('open'))closeDrawer();
+    else closeStack();
+  }
+});
+
+/* ═══ INIT ═══ */
+renderToday();
+</script>
+</body></html>

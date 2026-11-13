@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en" style="--accent:#0866FF;--accent-soft:rgba(8,102,255,0.18);--co-bg:linear-gradient(160deg,#0D1B3E 0%,#0A0F2E 50%,#060C1A 100%);--co-logo-bg:#0866FF;--co-logo-color:#fff"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Daily Dividend: Meta Platforms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F5F1E8;--cream-2:#EFEADE;--paper:#FAF7F0;
+  --ink:#0F0F0E;--ink-2:#2A2A28;--muted:#6B6B66;--mute-2:#A8A39A;--line:#D9D2C2;
+  --brand:#0D1B3E;--brand-2:#162d66;--brand-soft:rgba(13,27,62,0.10);
+  --green:#2E8A60;--green-2:#3DA873;--green-soft:#D6E7DC;
+  --red:#B23A2E;--red-2:#D14A3D;--red-soft:#F2D9D3;
+  --gold:#C49A3E;--gold-2:#E0B450;--gold-soft:#F2E5C2;
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --accent:#0866FF;--accent-soft:rgba(8,102,255,0.18);
+  --co-bg:linear-gradient(160deg,#0D1B3E,#0A0F2E,#060C1A);
+  --co-logo-bg:#0866FF;--co-logo-color:#fff
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:#1a1a1a;overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+.stage{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at top,rgba(8,102,255,0.07),transparent 60%),#141413}
+.phone{width:100%;max-width:400px;height:100%;max-height:860px;background:var(--cream);border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.5)}
+@media(max-width:480px){.stage{padding:0}.phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}}
+@media(min-width:481px) and (max-height:900px){.phone{max-height:calc(100vh - 48px)}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex}
+.statusbar{height:44px;flex-shrink:0}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(245,241,232,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+/* TODAY */
+.today-scroll{flex:1;overflow-y:auto;padding:8px 24px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 22px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--brand);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 12px}
+.today-hero{background:var(--co-bg);color:var(--cream);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:26px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
+.today-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(8,102,255,0.28),transparent 55%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;padding:5px 10px;background:rgba(245,241,232,0.15);border-radius:100px;margin-bottom:18px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:rgba(245,241,232,0.55);text-transform:uppercase;margin-bottom:8px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.12;letter-spacing:-0.02em;margin-bottom:12px}
+.hero-h em{font-style:italic;color:#90c8ff;font-weight:300}
+.hero-stock{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hero-sp{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--cream)}
+.hero-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.hero-sc.up{background:rgba(46,138,96,0.25);color:#7EC8A0}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(245,241,232,0.15);font-family:var(--mono);font-size:11px;color:rgba(245,241,232,0.45)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.rcard:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.rl{display:flex;align-items:center;gap:12px;min-width:0}
+.rthumb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:17px;color:#fff;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+/* STACK */
+#screen-stack{background:#000}
+.shell{
+  position:absolute;inset:0;overflow:hidden;
+  /* Single source of truth for top/bottom chrome — .card padding, .tz swipe
+     zones, and this are all calc()'d off these vars so they can't drift out
+     of sync; short-screen media queries below only ever touch these five. */
+  --prog-top:50px;--topbar-top:64px;--topbar-clear:36px;--pills-bottom:20px;--pills-clear:68px;
+}
+.prog{position:absolute;top:var(--prog-top);left:16px;right:16px;display:flex;gap:4px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.22);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.9)}
+.prog.dark .tick{background:rgba(0,0,0,0.16)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.85)}
+.topbar{position:absolute;top:var(--topbar-top);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.co-logo{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:8px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tbtn svg{width:15px;height:15px}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:#fff}
+/* CARD BASE */
+.track{position:absolute;inset:0}
+.card{
+  position:absolute;inset:0;
+  padding-top:calc(var(--topbar-top) + var(--topbar-clear));
+  padding-left:20px;padding-right:20px;
+  padding-bottom:calc(var(--pills-bottom) + var(--pills-clear));
+  display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none
+}
+.card::-webkit-scrollbar{display:none}
+.card.active{display:flex;animation:cardIn 0.36s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card.entered .eb-c{animation:slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1) both}
+.card.entered .hl{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.07s both}
+.card.entered .bd{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.14s both}
+.card.entered .cv-top{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.05s both}
+.card.entered .cv-stock{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.1s both}
+.card.entered .cv-ks{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.18s both}
+.card.entered .cv-callout{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.22s both}
+.card.entered .mt-money-big{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.08s both}
+.card.entered .mt-rev-tiles{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.18s both}
+.card.entered .nf-model-pills{animation:slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1) 0.04s both}
+.card.entered .nf-flow{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.1s both}
+.card.entered .nf-bar-rows{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.14s both}
+.card.entered .nf-mt-box{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.08s both}
+.card.entered .mt-timeline{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.18s both}
+.card.entered .nf-acc-list{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.1s both}
+.card.entered .mt-own-section{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.14s both}
+.card.entered .cv-sent-row{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.1s both}
+.card.entered .cv-opts{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.16s both}
+/* BACKGROUNDS */
+.card.bg-cover{background:var(--co-bg);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-green{background:linear-gradient(160deg,#1F6B4A,#144B33);color:var(--cream)}
+.card.bg-red{background:linear-gradient(160deg,#B23A2E,#7E2820);color:var(--cream)}
+.card.bg-gold{background:linear-gradient(160deg,#F2E5C2,#E6D199);color:var(--ink)}
+.card.bg-dkblue{background:linear-gradient(160deg,#0D1B3E,#060C1A);color:var(--cream)}
+.card.bg-brand{background:linear-gradient(160deg,#0D1B3E,#060C1A);color:var(--cream)}
+/* TYPOGRAPHY */
+.eb-c{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.55;margin-bottom:5px;flex-shrink:0}
+.card.bg-brand .eb-c,.card.bg-dkblue .eb-c,.card.bg-cover .eb-c{color:#90c8ff;opacity:1}
+.card.bg-green .eb-c{color:#B5E3C8;opacity:1}
+.card.bg-red .eb-c{color:#FCC9C2;opacity:1}
+.card.bg-gold .eb-c{color:var(--muted);opacity:0.9}
+.hl{font-family:var(--serif);font-weight:400;font-size:clamp(20px,3dvh,26px);line-height:1.12;letter-spacing:-0.02em;margin-bottom:8px;flex-shrink:0}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-brand .hl em,.card.bg-dkblue .hl em,.card.bg-cover .hl em{color:#90c8ff}
+.card.bg-cream .hl em{color:var(--accent)}
+.card.bg-gold .hl em{color:var(--red)}
+.card.bg-green .hl em{color:#E5F5EB;font-weight:400}
+.card.bg-red .hl em{color:#FFE5E0;font-weight:400}
+.bd{font-family:var(--sans);font-size:clamp(11.5px,1.63dvh,14px);line-height:1.55;opacity:0.85;flex-shrink:0}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+/* COVER */
+.cv-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;flex-shrink:0}
+.cv-mark{width:56px;height:56px;border-radius:14px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:28px;box-shadow:0 8px 24px rgba(0,0,0,0.3);flex-shrink:0}
+.cv-co-info{flex:1;padding-top:4px}
+.cv-name{font-family:var(--serif);font-weight:500;font-size:clamp(16px,2.33dvh,20px);letter-spacing:-0.01em;margin-bottom:6px}
+.cv-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.75)}
+.cv-stock{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-shrink:0}
+.cv-sp{font-family:var(--mono);font-size:clamp(18px,2.56dvh,22px);font-weight:600;color:var(--cream)}
+.cv-sc{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px}
+.cv-sc.up{background:rgba(46,138,96,0.25);color:#7EC8A0}
+.cv-ks{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:16px;flex-shrink:0}
+.cv-k{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 8px;text-align:center}
+.cv-kv{font-family:var(--serif);font-size:clamp(12px,1.63dvh,14px);font-weight:500;line-height:1;margin-bottom:4px}
+.cv-kl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;line-height:1.3}
+.cv-callout{background:rgba(255,255,255,0.07);border-left:2px solid #90c8ff;border-radius:0 8px 8px 0;padding:10px 12px;margin-top:auto;flex-shrink:0;font-family:var(--sans);font-size:12.5px;line-height:1.45;opacity:0.88;font-style:italic;color:var(--cream)}
+/* CARD 2: MONEY */
+.mt-money-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.mt-money-big{display:flex;align-items:flex-start;gap:12px;margin:10px 0 14px;flex-shrink:0}
+.mt-money-num{font-family:var(--serif);font-size:clamp(42px,6.74dvh,58px);font-weight:300;letter-spacing:-0.04em;color:var(--accent);line-height:1}
+.mt-money-meta{display:flex;flex-direction:column;gap:6px;padding-top:12px}
+.mt-money-chip{display:inline-flex;align-items:center;background:rgba(8,102,255,0.1);color:var(--accent);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 10px;border-radius:100px;border:1px solid rgba(8,102,255,0.22)}
+.mt-money-sub{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.4}
+.mt-rev-tiles{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.mt-rev-tile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.mt-rev-tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.mt-rev-tile-left{display:flex;align-items:center;gap:8px}
+.mt-rev-icon{font-size:17px;line-height:1}
+.mt-rev-name{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink)}
+.mt-rev-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.mt-rev-amt{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink)}
+.mt-rev-tag{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 7px;border-radius:100px}
+.mt-rev-tag.high{background:rgba(8,102,255,0.12);color:var(--accent)}
+.mt-rev-tag.low{background:var(--cream-2);color:var(--muted)}
+.mt-rev-tag.grow{background:var(--green-soft);color:#1F6B4A}
+.mt-rev-desc{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.35}
+.mt-callout-note{background:rgba(8,102,255,0.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:11px 13px;margin-top:auto;flex-shrink:0;font-family:var(--sans);font-size:12px;color:var(--ink-2);line-height:1.45}
+/* CARD 3: MODEL */
+.nf-model-pills{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none;flex-shrink:0}
+.nf-model-pills::-webkit-scrollbar{display:none}
+.nf-model-pill{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:6px 12px;border-radius:100px;border:1px solid var(--line);background:var(--cream-2);color:var(--muted);white-space:nowrap;flex-shrink:0}
+.nf-flow{display:flex;flex-direction:column;gap:0;flex:1 0 auto;justify-content:space-evenly}
+.nf-flow-step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 13px;opacity:0;transform:translateY(8px);transition:opacity 0.4s ease,transform 0.4s ease}
+.nf-flow-step.visible{opacity:1;transform:translateY(0)}
+.nf-flow-step-n{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;font-weight:600}
+.nf-flow-step-t{font-family:var(--serif);font-size:clamp(13px,1.74dvh,15px);font-weight:600;color:var(--ink);line-height:1.25;letter-spacing:-0.01em}
+.nf-flow-step-s{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35}
+.nf-flow-arrow{text-align:center;padding:3px 0;font-size:13px;opacity:0;transition:opacity 0.3s;color:var(--mute-2)}
+.nf-flow-arrow.visible{opacity:1}
+.mt-model-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(8,102,255,0.08);border:1px solid rgba(8,102,255,0.16);border-radius:100px;padding:7px 13px;margin-top:auto;flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent)}
+/* CARD 4: RIVALS */
+.nf-bar-rows{display:flex;flex-direction:column;gap:8px;flex:1 0 auto;justify-content:space-evenly}
+.nf-rival-card{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:14px;padding:11px 14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 3px 16px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.nf-rival-card.hero{background:rgba(8,102,255,0.06);border-color:rgba(8,102,255,0.3)}
+.nf-bar-row-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px}
+.nf-bar-n{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink)}
+.nf-bar-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink)}
+.nf-bar-tag{font-family:var(--sans);font-size:10.5px;color:var(--muted);margin-bottom:4px;line-height:1.3}
+.nf-bar-track{height:6px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden}
+.nf-bar-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.1s}
+.nf-kicker{background:var(--brand-soft);border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:10px 13px;margin-top:auto;flex-shrink:0;font-family:var(--sans);font-size:12px;color:var(--ink-2);line-height:1.45}
+/* CARD 5: HIDDEN */
+.nf-hidden-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.nf-mt-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;margin-bottom:12px;flex-shrink:0}
+.nf-myth{font-family:var(--serif);font-size:14px;font-weight:400;text-decoration:line-through;text-decoration-color:rgba(255,100,100,0.55);text-decoration-thickness:2px;opacity:0.45;line-height:1.3;margin-bottom:8px;font-style:italic}
+.nf-truth{font-family:var(--serif);font-size:clamp(16px,2.21dvh,19px);font-weight:500;color:#90c8ff;line-height:1.22;letter-spacing:-0.01em}
+.mt-timeline{display:flex;flex-direction:column;gap:0;flex-shrink:0}
+.mt-tl-row{display:flex;gap:11px;position:relative}
+.mt-tl-row:not(:last-child)::before{content:"";position:absolute;left:14px;top:28px;bottom:-2px;width:1px;background:rgba(255,255,255,0.12)}
+.mt-tl-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px;font-weight:600}
+.mt-tl-dot.buy{background:rgba(8,102,255,0.25);border:1px solid rgba(8,102,255,0.4);color:#90c8ff}
+.mt-tl-dot.warn{background:rgba(196,154,62,0.25);border:1px solid rgba(196,154,62,0.4);color:var(--gold)}
+.mt-tl-dot.win{background:rgba(46,138,96,0.25);border:1px solid rgba(46,138,96,0.4);color:#7EC8A0}
+.mt-tl-content{padding:2px 0 14px}
+.mt-tl-year{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:1px}
+.mt-tl-title{font-family:var(--serif);font-size:clamp(11.5px,1.57dvh,13.5px);font-weight:600;color:var(--cream);line-height:1.25}
+.mt-tl-sub{font-family:var(--sans);font-size:10.5px;color:rgba(255,255,255,0.5);margin-top:2px;line-height:1.3}
+.mt-h5-callout{background:rgba(8,102,255,0.15);border:1px solid rgba(8,102,255,0.3);border-radius:12px;padding:12px 14px;margin-top:auto;flex-shrink:0;font-family:var(--sans);font-size:12px;color:rgba(255,255,255,0.88);line-height:1.5}
+.mt-h5-callout strong{color:#90c8ff;font-weight:700}
+/* CARDS 6+7: ACCORDIONS */
+.nf-acc-list{display:flex;flex-direction:column;gap:9px;flex:1 0 auto;justify-content:space-evenly}
+.nf-acc-item{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:15px;overflow:hidden;position:relative}
+.nf-acc-btn{width:100%;background:none;padding:14px 13px;display:flex;align-items:center;gap:11px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;color:inherit;touch-action:manipulation}
+.nf-acc-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;line-height:1}
+.card.bg-green .nf-acc-icon{color:#1F6B4A}
+.card.bg-red .nf-acc-icon{color:var(--red)}
+.nf-acc-title{flex:1;font-family:var(--serif);font-size:clamp(13px,1.74dvh,15px);font-weight:600;line-height:1.25;letter-spacing:-0.01em}
+.nf-acc-chevron{font-size:11px;opacity:0.5;transition:transform 0.25s;flex-shrink:0}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.nf-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+.nf-acc-text{font-family:var(--sans);font-size:13px;line-height:1.52;opacity:0.9;padding:8px 14px 14px 50px;border-top:1px solid rgba(255,255,255,0.12)}
+.nf-acc-text strong{font-weight:600;opacity:1}
+/* CARD 8: OWNERSHIP */
+.mt-own-section{display:flex;flex-direction:column;gap:12px;flex:1 0 auto;justify-content:space-evenly}
+.mt-own-rows{display:flex;flex-direction:column;gap:9px}
+.mt-own-row{display:flex;align-items:center;gap:10px}
+.mt-own-l{display:flex;flex-direction:column;width:110px;flex-shrink:0}
+.mt-own-name{font-family:var(--sans);font-size:12px;font-weight:600;color:var(--ink);line-height:1.2}
+.mt-own-desc{font-family:var(--sans);font-size:10px;color:var(--muted);line-height:1.3;margin-top:1px}
+.mt-own-track{flex:1;height:24px;background:rgba(0,0,0,0.09);border-radius:7px;overflow:hidden}
+.card.bg-gold .mt-own-track{background:rgba(0,0,0,0.1)}
+.mt-own-fill{height:100%;border-radius:7px;display:flex;align-items:center;padding-left:9px;font-family:var(--mono);font-size:10.5px;font-weight:600;color:#fff;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s}
+.mt-control-box{background:rgba(0,0,0,0.06);border-radius:12px;padding:13px 15px}
+.mt-ctrl-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.mt-ctrl-num{font-family:var(--serif);font-size:clamp(24px,3.49dvh,30px);font-weight:400;letter-spacing:-0.03em;color:var(--ink);line-height:1}
+.mt-ctrl-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);line-height:1.4}
+.mt-ctrl-arrow{font-family:var(--mono);font-size:14px;color:var(--mute-2);padding:0 4px}
+.mt-ctrl-sub{font-family:var(--sans);font-size:11.5px;color:var(--ink-2);line-height:1.45}
+.mt-own-insight{background:rgba(8,102,255,0.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:10px 13px;font-family:var(--sans);font-size:12px;color:var(--ink-2);line-height:1.45}
+/* CARD 9: DEBATE */
+.mt-debate-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.mt-pullquote{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:18px;padding:18px 18px 16px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 6px 28px rgba(0,0,0,0.07),inset 0 1px 0 rgba(255,255,255,0.9);margin-bottom:12px;position:relative;flex-shrink:0}
+.mt-pullquote-mark{font-family:var(--serif);font-size:52px;color:var(--accent);opacity:0.18;line-height:1;position:absolute;top:6px;left:14px;font-weight:300;pointer-events:none}
+.mt-pullquote-text{font-family:var(--serif);font-size:clamp(14px,1.98dvh,17px);font-weight:400;color:var(--ink);line-height:1.38;letter-spacing:-0.01em;padding-left:6px;position:relative;z-index:1}
+.mt-pullquote-text em{font-style:italic;font-weight:300;color:var(--accent)}
+.mt-chip-section{margin-bottom:10px;flex-shrink:0}
+.mt-chip-section-label{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.mt-chip-section-label.works{color:#1F6B4A}
+.mt-chip-section-label.notyet{color:var(--red)}
+.mt-chip-row{display:flex;flex-wrap:wrap;gap:6px}
+.mt-chip{font-family:var(--sans);font-size:11.5px;font-weight:500;padding:6px 11px;border-radius:100px;line-height:1.2}
+.mt-chip.works{background:var(--green-soft);color:#1F6B4A;border:1px solid rgba(46,138,96,0.2)}
+.mt-chip.notyet{background:var(--red-soft);color:var(--red);border:1px solid rgba(178,58,46,0.2)}
+.mt-debate-callout{background:var(--ink);border-radius:12px;padding:12px 14px;font-family:var(--serif);font-size:13px;font-weight:400;color:var(--cream);line-height:1.45;font-style:italic;margin-top:auto;flex-shrink:0}
+/* CARD 10: VOTE */
+.cv-sent-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-shrink:0}
+.cv-sent{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border-radius:100px;font-weight:600}
+.cv-sent.bull{background:rgba(46,138,96,0.22);color:#7EC8A0;border:1px solid rgba(46,138,96,0.28)}
+.cv-vb{font-family:var(--mono);font-size:10px;color:rgba(245,241,232,0.45);letter-spacing:0.08em}
+.cv-vb .vb-num{color:var(--cream);font-weight:600}
+.cv-opts{display:flex;flex-direction:column;gap:10px;flex:1 0 auto;justify-content:space-evenly}
+.co-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);border-radius:14px;padding:14px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;touch-action:manipulation}
+.co-opt .ico{font-size:22px;flex-shrink:0;z-index:2}
+.co-opt .lbl{font-family:var(--serif);font-size:17px;font-weight:500;z-index:2}
+.co-opt .sub{font-family:var(--sans);font-size:11px;opacity:0.6;z-index:2;margin-left:auto}
+.cf{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 0.7s cubic-bezier(0.2,0.8,0.2,1);z-index:1}
+.co-opt.bull .cf{background:rgba(46,138,96,0.4)}
+.co-opt.neutral .cf{background:rgba(196,154,62,0.4)}
+.co-opt.bear .cf{background:rgba(209,74,61,0.4)}
+.cp{font-family:var(--mono);font-size:14px;font-weight:600;opacity:0;transition:opacity 0.4s 0.3s;z-index:2;margin-left:auto}
+.co-opt.revealed .sub{display:none}
+.co-opt.revealed .cp{opacity:1}
+.co-opt.you{border-color:var(--accent);border-width:2px}
+.cr{font-family:var(--sans);font-size:13px;text-align:center;margin-top:14px;opacity:0;transition:opacity 0.4s 0.5s;line-height:1.5;color:rgba(245,241,232,0.88)}
+.cr.show{opacity:0.9}
+.cr strong{font-weight:600;opacity:1}
+/* SWIPE + PILLS + DRAWER + TLDR */
+.tz{position:absolute;top:calc(var(--topbar-top) + var(--topbar-clear));bottom:calc(var(--pills-bottom) + var(--pills-clear));width:22%;z-index:5;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+.pills{position:absolute;bottom:var(--pills-bottom);left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:20}
+.pill{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);padding:9px 15px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
+.pills.dark .pill{background:rgba(0,0,0,0.08);color:var(--ink);border-color:rgba(0,0,0,0.12)}
+.dw-bd{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dw-bd.open{opacity:1;pointer-events:auto}
+.dw{position:absolute;left:0;right:0;bottom:0;height:78%;background:var(--paper);border-radius:24px 24px 0 0;z-index:210;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,0.3)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:40px;height:4px;background:var(--mute-2);border-radius:4px;margin:10px auto 0;flex-shrink:0}
+.dw-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-eb{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.dw-t{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:-0.01em}
+.dw-x{background:rgba(0,0,0,0.06);border:0;width:30px;height:30px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.dw-b{overflow-y:auto;padding:18px 22px 40px}
+.d-sub{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--accent);text-transform:uppercase;margin:0 0 8px;font-weight:600}
+.d-p{font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 10px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-call{background:rgba(8,102,255,0.08);border-left:3px solid var(--accent);padding:13px 15px;border-radius:0 10px 10px 0;margin:6px 0 12px;font-family:var(--serif);font-size:14.5px;line-height:1.4;font-style:italic;color:var(--ink)}
+.d-st{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 0 12px}
+.d-s{background:#fff;border:1px solid var(--line);padding:11px 8px;border-radius:10px;text-align:center}
+.d-s-n{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-0.02em;line-height:1;color:var(--ink)}
+.d-s-l{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-top:6px;line-height:1.3}
+.tl-bd{position:absolute;inset:0;background:rgba(10,10,9,0.75);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.tl-bd.open{opacity:1;pointer-events:auto}
+.tl-c{background:var(--co-bg);border-radius:24px;width:100%;max-width:340px;padding:26px 24px;position:relative;transform:scale(0.94);transition:transform 0.3s;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.tl-bd.open .tl-c{transform:scale(1)}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tl-l{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.tl-co{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--cream)}
+.tl-co .s{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:rgba(245,241,232,0.45);text-transform:uppercase;display:block;margin-top:1px}
+.tl-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:#90c8ff;text-transform:uppercase;margin-bottom:14px}
+.tl-pts{display:flex;flex-direction:column}
+.tl-p{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tl-p:last-child{border-bottom:0}
+.tl-n{font-family:var(--mono);font-size:10px;color:#90c8ff;flex-shrink:0;padding-top:3px;width:16px}
+.tl-tx{font-family:var(--sans);font-size:13px;line-height:1.4;color:var(--cream)}
+.tl-tx strong{font-weight:700;color:#90c8ff}
+.tl-f{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.tl-br{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--cream)}
+.tl-br .dd{color:#90c8ff}
+.tl-u{font-family:var(--mono);font-size:9px;color:rgba(245,241,232,0.35);letter-spacing:0.1em}
+.tl-acts{display:flex;gap:8px;margin-top:14px}
+.tl-btn{flex:1;border:0;border-radius:100px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--accent);color:#fff}
+.tl-btn.c{background:rgba(255,255,255,0.12);color:var(--cream)}
+.tl-hint{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(245,241,232,0.3);text-transform:uppercase;margin-top:10px}
+.toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.4);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+
+/* ═══ SHORT SCREENS: reclaim chrome + tighten gaps so cards never need to scroll ═══
+   Structure only (padding/margin/gap) — text sizing is already handled by the dvh
+   clamps above. Chrome position is set ONLY via the --prog-top/--topbar-top/
+   --topbar-clear/--pills-bottom/--pills-clear vars on .shell — .card/.tz's padding
+   is a calc() off those, so it can never drift out of sync at any tier. */
+@media(max-height:760px){
+  .shell{--prog-top:44px;--topbar-top:56px;--topbar-clear:34px;--pills-bottom:14px;--pills-clear:56px}
+  .pill{padding:7px 13px}
+  .eb-c{margin-bottom:4px}
+  .hl{margin-bottom:6px}
+  .cv-top{margin-bottom:12px}
+  .cv-stock{margin-bottom:10px}
+  .cv-ks{margin-top:12px}
+  .nf-flow-step{padding:5px 10px}
+  .nf-flow-step-t{font-size:clamp(12.5px,1.8dvh,15px)}
+  .nf-flow-arrow{padding:0}
+  .mt-model-chip{padding:6px 12px}
+  .mt-money-num{font-size:clamp(32px,5dvh,58px)}
+  .mt-money-big{margin:6px 0 9px}
+  .mt-rev-tiles{gap:5px}
+  .mt-rev-tile{padding:7px 10px}
+  .mt-rev-tile-top{margin-bottom:2px}
+  .mt-rev-desc{font-size:10.5px}
+  .nf-bar-rows{gap:4px}
+  .nf-rival-card{padding:6px 9px}
+  .nf-bar-n{font-size:clamp(11.5px,1.6dvh,13px)}
+  .nf-bar-val{font-size:clamp(11px,1.5dvh,12px)}
+  .nf-bar-tag{font-size:9.5px;margin-bottom:2px;line-height:1.2}
+  .nf-bar-track{height:4px}
+  .nf-mt-box{padding:10px;margin-bottom:8px}
+  .mt-tl-content{padding:1px 0 6px}
+  .mt-tl-dot{width:24px;height:24px}
+  .nf-acc-list{gap:7px}
+  .nf-acc-btn{padding:11px 12px}
+  .mt-own-section{gap:9px}
+  .mt-own-rows{gap:7px}
+  .mt-control-box{padding:11px 13px}
+  .mt-pullquote{padding:11px 12px 9px;margin-bottom:7px}
+  .mt-pullquote-mark{font-size:40px}
+  .mt-chip{padding:4px 8px}
+  .mt-chip-row{gap:4px}
+  .mt-chip-section{margin-bottom:5px}
+  .mt-chip-section-label{margin-bottom:4px}
+  .cv-opts{gap:8px}
+  .co-opt{padding:11px 14px}
+}
+@media(max-height:660px){
+  .shell{--prog-top:38px;--topbar-top:50px;--topbar-clear:32px;--pills-bottom:11px;--pills-clear:48px}
+  .hl{font-size:clamp(18px,3dvh,26px);margin-bottom:5px}
+  .bd{font-size:clamp(11px,1.63dvh,14px)}
+  .nf-flow-step{padding:6px 11px}
+  .nf-flow-step-t{font-size:clamp(12px,1.74dvh,15px)}
+  .mt-rev-tile{padding:4px 7px}
+  .mt-rev-desc{font-size:10px;line-height:1.25}
+  .mt-money-big{margin:2px 0 5px}
+  .mt-money-num{font-size:clamp(24px,5dvh,58px)}
+  .nf-mt-box{padding:10px;margin-bottom:8px}
+  .mt-tl-content{padding:2px 0 7px}
+  .mt-pullquote{padding:12px 13px 9px;margin-bottom:7px}
+  .mt-control-box{padding:10px 12px}
+  .mt-ctrl-num{font-size:clamp(21px,3.49dvh,30px)}
+}
+@media(max-height:600px){
+  .shell{--prog-top:33px;--topbar-top:44px;--topbar-clear:29px;--pills-bottom:8px;--pills-clear:40px}
+  .hl{font-size:clamp(16px,3dvh,26px);margin-bottom:4px}
+  .eb-c{margin-bottom:2px}
+  .nf-flow-step{padding:5px 10px}
+  .nf-flow-step-n{margin-bottom:1px}
+  .nf-flow-step-s{margin-top:1px}
+  .nf-flow-arrow{font-size:11px;padding:0}
+  .mt-rev-tile{padding:5px 8px}
+  .mt-rev-desc{margin-top:2px;font-size:10px}
+  .mt-rev-name{font-size:12px}
+  .mt-rev-amt{font-size:12px}
+  .mt-money-sub{font-size:10px}
+  .nf-bar-rows{gap:3px}
+  .nf-rival-card{padding:5px 8px}
+  .nf-mt-box{padding:8px;margin-bottom:6px}
+  .mt-tl-content{padding:1px 0 5px}
+  .mt-tl-year{font-size:8px}
+  .mt-tl-sub{font-size:10px}
+  .mt-tl-dot{width:22px;height:22px;font-size:10px}
+  .mt-pullquote{padding:10px 11px 8px;margin-bottom:6px}
+  .mt-pullquote-text{padding-top:2px;font-size:clamp(12.5px,1.98dvh,17px)}
+  .mt-chip-section{margin-bottom:5px}
+  .mt-chip-section-label{margin-bottom:4px}
+}
+@media(max-height:580px){
+  .shell{--prog-top:26px;--topbar-top:36px;--topbar-clear:33px;--pills-bottom:5px;--pills-clear:38px}
+  .nf-model-pills{display:none}
+  .nf-flow-step{padding:3px 8px}
+  .mt-money-num{font-size:clamp(26px,5dvh,58px)}
+  .mt-rev-tile{padding:4px 7px}
+  .mt-rev-desc{display:none}
+  .nf-bar-rows{gap:2px}
+  .nf-rival-card{padding:4px 7px}
+  .nf-truth{font-size:clamp(14px,2.21dvh,19px)}
+  .mt-tl-sub{display:none}
+  .mt-tl-dot{width:18px;height:18px;font-size:9px}
+  .mt-model-chip{padding:5px 11px}
+  .mt-pullquote{padding:8px 9px 7px;margin-bottom:5px}
+  .mt-pullquote-mark{font-size:32px}
+  .mt-pullquote-text{font-size:clamp(11.5px,1.98dvh,17px);padding-top:0}
+  .pill{padding:6px 11px}
+  .mt-chip{padding:3px 7px;font-size:10.5px}
+  .mt-chip-row{gap:4px}
+  .mt-chip-section{margin-bottom:4px}
+  .mt-chip-section-label{margin-bottom:4px}
+  .mt-debate-callout{padding:9px 11px}
+  .mt-own-section{gap:7px}
+  .mt-control-box{padding:9px 11px}
+  .mt-tl-content{padding:2px 0 6px}
+  .nf-mt-box{padding:8px;margin-bottom:6px}
+}
+</style></head><body>
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<!-- TODAY -->
+<section class="screen active" id="screen-today">
+  <div class="statusbar"></div>
+  <div class="today-scroll" id="todayScroll"></div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+<!-- STACK -->
+<section class="screen" id="screen-stack">
+  <div class="shell" id="shell">
+    <div class="prog" id="prog"></div>
+    <div class="topbar" id="topbar">
+      <div class="co"><div class="co-logo">M</div><div><div class="co-name">Meta</div><div class="co-sub">META &middot; NASDAQ</div></div></div>
+      <div class="tactions">
+        <button class="tbtn" onclick="openTldr()">&#8801;</button>
+        <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+        <button class="tbtn" onclick="closeStack()">&#215;</button>
+      </div>
+    </div>
+    <div class="tz l" onclick="prevCard()"></div>
+    <div class="tz r" onclick="nextCard()"></div>
+    <div class="track" id="track"></div>
+    <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">&#8593; Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
+  </div>
+  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+  <div class="dw" id="dw">
+    <div class="dw-hn"></div>
+    <div class="dw-h"><div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div><button class="dw-x" onclick="closeDrawer()">&#215;</button></div>
+    <div class="dw-b" id="dwB"></div>
+  </div>
+  <div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()"><div class="tl-c" id="tlC"></div></div>
+  <div class="toast" id="toast">Saved</div>
+</section>
+
+<section class="screen" id="screen-you">
+  <div class="statusbar"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center">
+    <div>
+      <div style="font-family:var(--serif);font-size:28px;letter-spacing:-0.02em;margin-bottom:8px">Your shelf.</div>
+      <div style="font-family:var(--sans);font-size:14px;color:var(--muted)">Read Meta, then vote. Your call appears here.</div>
+      <button onclick="goTo('today')" style="margin-top:20px;background:var(--ink);color:var(--cream);border:0;border-radius:100px;padding:12px 24px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer">Back to today</button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item active" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+</div></div>
+<div class="hint">desktop preview &middot; tap edges to swipe &middot; &uarr; deeper &middot; &#8801; TL;DR</div>
+
+<script>
+const CARDS=[
+/* 01 COVER */
+{type:"cover",bg:"cover",deep:"cover",
+ hl:"The app is free. You are the product. <em>And it made $201 billion.</em>",
+ bd:"You have never paid Meta a single dollar. Neither has anyone you know. And yet Meta made $201 billion last year. The money came from every brand, retailer, and political campaign that paid for the right to reach you. Precisely you. At exactly the right moment.",
+ callout:"3.58 billion people open a Meta app every single day. The apps are free. The attention is not. This is the most profitable advertising machine ever built. And you built it for them every time you scrolled.",
+ ks:[{v:"$201B",l:"2025 Revenue"},{v:"3.58B",l:"Daily Users"},{v:"$0",l:"Charged to You"}]},
+
+/* 02 MONEY */
+{type:"money",bg:"cream",deep:"money",
+ hl:"$201 billion a year. <em>Almost all of it from one thing.</em>",
+ bigNum:98,bigSuffix:"%",
+ bigLabel:"of revenue comes from advertising",
+ bigSub:"one revenue stream, one bet, working since 2007",
+ tiles:[
+   {icon:"📱",name:"Advertising",amt:"$196B",tag:"high",tagLabel:"98%",desc:"Targeted ads across Facebook, Instagram, WhatsApp and Messenger. Every scroll is inventory. Meta sells all of it."},
+   {icon:"🥽",name:"Reality Labs",amt:"$4.8B",tag:"low",tagLabel:"2%",desc:"Quest headsets and Ray-Ban AI glasses. Lost $19B in 2025. Possibly the most important $5B in the company's next five years."},
+   {icon:"💬",name:"WhatsApp Business",amt:"Growing",tag:"grow",tagLabel:"New",desc:"Paid messaging to businesses. Approaching $2B annual run rate. WhatsApp was ad-free for its first ten years. That era is over."}
+ ],
+ callout:"For every $100 that comes in, Meta keeps $41. Apple keeps $30. Netflix keeps $26. More users. Almost no extra cost to serve them. The machine scales."},
+
+/* 03 MODEL */
+{type:"model",bg:"cream",deep:"model",
+ hl:"Meta does not sell ads. <em>It sells knowing what you want before you do.</em>",
+ pills:["Scroll","Learn","Target","Flywheel"],
+ steps:[
+   {n:"01",pill:"Scroll",t:"You scroll. Meta learns.",s:"Every pause, rewatch, and abandoned search teaches it something new about you."},
+   {n:"02",pill:"Learn",t:"A model of who you are.",s:"Not your name. Your desires. What you look at when nobody is watching."},
+   {n:"03",pill:"Target",t:"Advertisers pay for that precision.",s:"The more precise, the higher the price. That model is rented in milliseconds, every time a post loads."},
+   {n:"04",pill:"Flywheel",t:"Revenue funds better AI.",s:"Better AI improves targeting. Better targeting attracts more advertisers. The loop runs again."}
+ ],
+ chip:"US user generates $233/year for Meta. They pay nothing."},
+
+/* 04 RIVALS */
+{type:"rivals",bg:"cream",deep:"rivals",
+ hl:"Snap is worth $7 billion. <em>Meta earns that in eleven days.</em>",
+ rows:[
+   {emoji:"&#127482;&#127480;",n:"Alphabet",val:"$3.84T",pct:100,tag:"Google plus YouTube. The biggest advertising business on earth. Competing for every ad dollar Meta wants."},
+   {emoji:"&#128309;",n:"Meta",val:"$1.43T",pct:37,tag:"3.58 billion daily users across 4 apps. $57 per user per year in ad revenue.",h:true},
+   {emoji:"&#127926;",n:"ByteDance",val:"$550B",pct:14,tag:"TikTok's parent. Private. Forced Meta to rebuild Instagram around Reels. Biggest competitive threat."},
+   {emoji:"&#128204;",n:"Pinterest",val:"$11B",pct:0.3,tag:"High-intent shopping users. 1/45th of Meta's scale."},
+   {emoji:"&#128123;",n:"Snap",val:"$7B",pct:0.18,tag:"$4 per user per year versus Meta's $57. Same users. Completely different businesses."}
+ ],
+ kicker:"Meta earns $57 per user per year globally. Snap earns $4. The gap is not the apps. The gap is the data those apps have collected over twenty years."},
+
+/* 05 HIDDEN TRUTH */
+{type:"hidden",bg:"dkblue",deep:"hidden",
+ myth:"Meta paid $1 billion for a photo app nobody had heard of.",
+ truth:"That photo app is now estimated to be worth over $500 billion.",
+ bd:"In 2012, Zuckerberg bought Instagram for $1 billion. Thirteen employees. Thirty million users. No revenue. In 2014, he bought WhatsApp for $19 billion. Fifty-five employees. Zero revenue.",
+ timeline:[
+   {dot:"buy",yr:"2012",title:"Instagram: $1 billion",sub:"13 employees. 30 million users. Called reckless."},
+   {dot:"buy",yr:"2014",title:"WhatsApp: $19 billion",sub:"55 employees. Zero revenue. Also called reckless."},
+   {dot:"warn",yr:"2019",title:"Government sues",sub:"FTC demands Meta return both apps."},
+   {dot:"win",yr:"Nov 2025",title:"Meta wins in court",sub:"Judge rules the FTC failed to prove its case."}
+ ],
+ callout:"<strong>Instagram alone</strong> is now estimated to be worth over $500 billion. The government tried to unwind the best deal in business history. They failed."},
+
+/* 06 BULL */
+{type:"bull",bg:"green",deep:"bull",
+ eb:"06 &middot; How it could double",
+ hl:"The machine is accelerating. <em>Three reasons why.</em>",
+ panels:[
+   {icon:"&#8593;",title:"AI is lifting both levers at once",body:"Earlier this year, the price advertisers paid rose <strong>+12%</strong> and the number of ads shown rose <strong>+19%</strong>. Both at once. That only happens when targeting sharpens. The same users become more valuable without adding a single new one."},
+   {icon:"&#8593;",title:"Meta AI reached 1 billion users in 18 months",body:"ChatGPT needed nearly two years. Meta needed 18 months by placing the assistant inside apps people were already opening every day. <strong>No download required.</strong> The distribution cost was paid twenty years ago."},
+   {icon:"&#8593;",title:"Ray-Ban AI glasses tripled",body:"<strong>7 million pairs sold in 2025.</strong> Three times more than in 2023 and 2024 combined. The next computing platform after the smartphone might already be in production. Meta is the only company selling it at scale."}
+ ]},
+
+/* 07 BEAR */
+{type:"bear",bg:"red",deep:"bear",
+ eb:"07 &middot; What could sink it",
+ hl:"Three things that keep <em>the bears up at night.</em>",
+ panels:[
+   {icon:"&#8595;",title:"$130 billion with no proven return yet",body:"Meta is spending <strong>$125 to $145 billion</strong> on AI this year. More than it earned in all of 2022. Between 2020 and 2025 it spent $80 billion building virtual worlds nobody wanted. History here is not encouraging."},
+   {icon:"&#8595;",title:"The legal calendar is full",body:"Youth safety lawsuits active across the US. EU found Meta in breach of digital rules on children: potential fine <strong>$12 billion</strong>. One government case just closed. New ones keep opening."},
+   {icon:"&#8595;",title:"The whole business sits on platforms Meta doesn't control",body:"Apple changed one privacy setting in 2021 and Meta lost <strong>$10 billion</strong> in revenue in a year. Both Apple and Google are now building their own AI assistants. If the next shift goes against Meta, twenty years of data advantage could become irrelevant overnight."}
+ ]},
+
+/* 08 OWNERSHIP */
+{type:"own",bg:"gold",deep:"own",
+ hl:"He owns 13%. <em>He controls everything.</em>",
+ bars:[
+   {l:"Mark Zuckerberg",d2:"Founder, CEO, Chairman",p:61,d:"61%",c:"#0866FF"},
+   {l:"Index funds",d2:"Vanguard, BlackRock, State Street",p:28,d:"28%",c:"#C49A3E"},
+   {l:"Public shareholders",d2:"Everyone else",p:11,d:"11%",c:"rgba(0,0,0,0.3)"}
+ ],
+ ctrl:{sub:"Class B shares carry 10 votes each. He holds 99.7% of them. The biggest investment funds in the world vote against him at every annual meeting. They lose every time."},
+ insight:"When Zuckerberg decides something, it happens. Full stop."},
+
+/* 09 DEBATE */
+{type:"debate",bg:"cream",deep:"debate",
+ hl:"Is this the smartest bet ever made? <em>Or the metaverse again?</em>"},
+
+/* 10 VOTE */
+{type:"conv",bg:"brand",deep:"conv",
+ hl:"Now you decide. <em>Meta in 5 years?</em>",
+ opts:[{k:"bull",p:61},{k:"neutral",p:24},{k:"bear",p:15}]}
+];
+
+const DEEP={
+ cover:{t:"The number that makes it real",e:"From the cover",h:`<div class="d-sub">How free becomes $201 billion</div><div class="d-p">The average person on Meta's apps generates $57 in advertising revenue for Meta every year. They pay nothing. A shoe brand, a car dealership, or a local dentist pays $57 for the right to show that person an ad. In the US, that number is $233 per person per year.</div><div class="d-p">Netflix charges you $17 a month. You feel good about it because you get shows. Meta charges you nothing and still makes almost four times more per American than Netflix does per subscriber. Netflix needs you to keep paying. Meta needs you to keep scrolling.</div><div class="d-call">$201 billion in annual revenue. More than Toyota. More than Samsung. More than the entire advertising industry of India, Brazil, and the UK combined. And it was essentially zero until 2007.</div>`},
+ money:{t:"The dip that tells the story",e:"From the money",h:`<div class="d-sub">Why 2022 is the most important year on the chart</div><div class="d-p">Revenue fell for the first time ever. Apple had made a single change to iPhone settings, blocking apps from tracking users around the web. Meta's targeting data weakened overnight. Advertisers pulled back. $10 billion in revenue evaporated in a year.</div><div class="d-p">Meta spent two years rebuilding the targeting system using AI that works entirely on what you do inside its own apps. By 2025, revenue was $201 billion and accelerating. The machine adapted. But the underlying vulnerability: an empire built on someone else's platform, never went away.</div><div class="d-st"><div class="d-s"><div class="d-s-n">$83B</div><div class="d-s-l">Op. income 2025</div></div><div class="d-s"><div class="d-s-n">41%</div><div class="d-s-l">Op. margin</div></div><div class="d-s"><div class="d-s-n">22%</div><div class="d-s-l">Revenue growth</div></div></div><div class="d-call">The Family of Apps generated $102.5 billion in operating profit in 2025. More than the combined operating profit of Disney, Netflix, and Comcast.</div>`},
+ model:{t:"The TikTok test",e:"From the business model",h:`<div class="d-sub">Proof the flywheel is real</div><div class="d-p">When TikTok exploded, every analyst predicted a Meta user exodus. It did not happen. Meta copied the format, embedded the same AI recommendation engine into Reels, and kept the users. Ad prices rose 12% and ad volumes rose 19% in the same quarter earlier this year. Both at once. That only happens when the model is getting meaningfully smarter.</div><div class="d-p">Nobody can buy their way into this. It has to be built one scroll at a time. Meta has had twenty years. The moat is not the apps. The moat is what those apps know about you.</div><div class="d-call">A weaker machine could not lift prices and volumes simultaneously. That is the clearest signal that the AI investment is working.</div>`},
+ rivals:{t:"The ByteDance problem",e:"From the rivals",h:`<div class="d-sub">The one competitor that actually landed a punch</div><div class="d-p">ByteDance disrupted Meta more than any competitor since Google in the search era. Meta's response: copy the format, not acquire. It worked. Reels now drives a meaningful portion of Instagram's advertising revenue. But with TikTok's US operations now majority American-owned in early 2026, the ban threat has cleared. A more stable TikTok is a more dangerous competitor, specifically among users aged 13 to 24.</div><div class="d-call">In 2016, Snap had Stories before Meta. Meta copied the feature to Instagram within months. Snap's momentum never recovered. ByteDance is a harder problem. They have the algorithm, the content culture, and now the regulatory clarity to stay.</div>`},
+ hidden:{t:"The FTC case",e:"From the hidden truth",h:`<div class="d-sub">Why the judge ruled against the government</div><div class="d-p">The FTC defined the social media market narrowly: Facebook, Instagram, Snapchat, and a minor player called MeWe. Under that definition, Meta dominated. Meta's defence was simpler: the world changed. TikTok and YouTube now compete for the same users and the same advertising budgets. You cannot define a market by what it looked like in 2012. The judge agreed.</div><div class="d-p">If the FTC had won, Instagram and WhatsApp would be separate companies today. Instagram is now Meta's primary advertising growth engine. WhatsApp, acquired with zero revenue, now has 3.3 billion users and paid business messaging approaching $2 billion annually. Both nearly taken away. Both legally protected.</div><div class="d-call">"Whether or not Meta enjoyed monopoly power in the past, the agency must show that it continues to hold such power now." Judge James Boasberg, November 18, 2025.</div>`},
+ bull:{t:"Why the glasses matter most",e:"From the bull case",h:`<div class="d-sub">The least obvious but potentially largest argument</div><div class="d-p">At 20 million pairs annually at $300 to $800 per pair, Ray-Ban glasses approach $6 to $16 billion in hardware revenue from a product that barely existed two years ago. But the more important possibility is what the glasses collect. Every conversation. Every place visited. Every object seen. Meta's data has always been limited to what you do on a screen.</div><div class="d-p">If the glasses scale, the model extends into the physical world for the first time. That would be a genuinely new kind of advertising business. Nobody has built it before. OpenAI must convince you to download ChatGPT. Google must convince you to open Gemini. Meta places its AI inside the apps 4 billion people already use every day.</div><div class="d-call">The distribution advantage that grew Meta AI to a billion users in 18 months cannot be replicated. That is what makes this AI bet structurally different from every competitor.</div>`},
+ bear:{t:"The $80 billion lesson",e:"From the bear case",h:`<div class="d-sub">Why the precedent matters</div><div class="d-p">Reality Labs cost $19 billion in 2025 alone. Cumulative losses exceed $80 billion since 2020. The board cannot remove Zuckerberg. Shareholders cannot outvote him. If the AI bet fails, there is no institutional mechanism to stop it before the damage is done.</div><div class="d-p">Meta's free cash flow in 2025 was $43.6 billion, down from $52.1 billion in 2024, despite record revenue. Meta earns $201 billion a year on infrastructure it does not own, running on devices it did not make, distributed through app stores it cannot control.</div><div class="d-call">That is the risk that does not get solved by spending $130 billion on AI. When Apple's 2021 change hit, Meta's market value fell by more than $700 billion in under a year. The structural exposure is unchanged.</div>`},
+ own:{t:"How one person controls $1.4 trillion",e:"From who owns it",h:`<div class="d-sub">The dual-class structure</div><div class="d-p">Before the 2012 IPO, Zuckerberg structured Meta with two classes of shares. Class A shares carry one vote each. Class B shares, held almost entirely by Zuckerberg, carry ten votes each. You can buy a share of Meta. You cannot buy a voice in how it is run.</div><div class="d-p">Between 2020 and 2025, Meta spent over $80 billion building virtual worlds nobody wanted. Shareholders hated it. They could not stop it. Eventually Zuckerberg stopped it himself and pivoted to AI. Now he is spending $130 billion in a single year on that pivot. Same structure. Same single person deciding. Last year he personally texted AI researchers at rivals. He offered some $100 million to switch. He spent $14.3 billion to hire Alexandr Wang, 28, to run the new AI division.</div><div class="d-st"><div class="d-s"><div class="d-s-n">13%</div><div class="d-s-l">His shares</div></div><div class="d-s"><div class="d-s-n">61%</div><div class="d-s-l">His votes</div></div><div class="d-s"><div class="d-s-n">10x</div><div class="d-s-l">Class B weight</div></div></div><div class="d-call">The question of whether that concentration of power is reassuring or terrifying is exactly what Card 9 is about.</div>`},
+ debate:{t:"Daily Dividend's read",e:"The Daily Dividend take",h:`<div class="d-sub">What makes this different from the metaverse</div><div class="d-p">The metaverse was a new product with no connection to the money machine. The AI bet is running inside it. When Meta's targeting gets better, revenue goes up immediately. That already happened: ad prices and volumes both rose in the same quarter earlier this year. The metaverse never did that.</div><div class="d-p">Meta guided $58 to $61 billion for Q2 2026. If that holds, annualised 2026 revenue approaches $230 billion, nearly double what it was three years ago, while simultaneously making the largest infrastructure bet in corporate history.</div><div class="d-call">$130 billion equals roughly 17 times the entire market value of Snap. That is not a feature investment. That is a civilizational bet. The bet is enormous. The early signs are real. Both things are true.</div>`},
+ conv:{t:"What the crowd is saying",e:"From the vote",h:`<div class="d-sub">14,283 readers have voted</div><div class="d-p">61% of Daily Dividend readers are bullish on Meta. The bull thesis: the AI flywheel is already showing up in the numbers, the distribution advantage is unmatched, and the company that survived the government's attempt to break it apart can survive anything.</div><div class="d-call">The most common bear argument: $130 billion is a lot to spend before the return is proven. The most common neutral: wait for another two quarters of data. Then decide.</div>`}
+};
+
+const TLDR=[
+ "Meta's apps are free. The business made <strong>$201 billion</strong> last year by selling access to your attention.",
+ "<strong>3.58 billion people</strong> open a Meta app every single day. No company in history has owned this much human attention.",
+ "In 2025, the US government tried to force Meta to give back Instagram and WhatsApp. After a six-week trial, they failed.",
+ "Meta AI reached <strong>1 billion monthly users in 18 months</strong>, the fastest product growth in history, by placing it inside apps people already used.",
+ "The bull case: AI is already making every ad more valuable. Ad prices and volumes rising at the same time is the proof.",
+ "The bear case: Meta is spending <strong>$130 billion</strong> on AI this year. More than it earned in all of 2022. The return is not yet proven."
+];
+
+let cardIdx=0;
+const saved=new Set();
+
+function renderCard(card,idx){
+ const total=CARDS.length;
+ const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
+ switch(card.type){
+
+ case 'cover':return `
+<div class="eb-c">01 &middot; The company</div>
+<div class="cv-top">
+  <div class="cv-mark">M</div>
+  <div class="cv-co-info">
+    <div class="cv-name">Meta Platforms</div>
+    <div class="cv-chips"><div class="cv-chip">META &middot; NASDAQ</div><div class="cv-chip">Social &middot; AI &middot; Advertising</div></div>
+  </div>
+</div>
+<div class="cv-stock"><span class="cv-sp">$707</span><span class="cv-sc up">+1.4% today</span></div>
+<div class="hl">${card.hl}</div>
+<div class="bd">${card.bd}</div>
+<div class="cv-ks">${card.ks.map(k=>`<div class="cv-k"><div class="cv-kv">${k.v}</div><div class="cv-kl">${k.l}</div></div>`).join('')}</div>
+<div class="cv-callout">${card.callout}</div>`;
+
+ case 'money':return `
+<div class="eb-c">02 &middot; The money</div>
+<div class="hl">${card.hl}</div>
+<div class="mt-money-fill">
+<div class="mt-money-big">
+  <div class="mt-money-num" data-countup="${card.bigNum}" data-suffix="${card.bigSuffix}">0%</div>
+  <div class="mt-money-meta">
+    <div class="mt-money-chip">${card.bigLabel}</div>
+    <div class="mt-money-sub">${card.bigSub}</div>
+  </div>
+</div>
+<div class="mt-rev-tiles">${card.tiles.map(t=>`
+<div class="mt-rev-tile">
+  <div class="mt-rev-tile-top">
+    <div class="mt-rev-tile-left"><span class="mt-rev-icon">${t.icon}</span><span class="mt-rev-name">${t.name}</span></div>
+    <div class="mt-rev-right"><span class="mt-rev-amt">${t.amt}</span><span class="mt-rev-tag ${t.tag}">${t.tagLabel}</span></div>
+  </div>
+  <div class="mt-rev-desc">${t.desc}</div>
+</div>`).join('')}</div>
+</div>
+<div class="mt-callout-note">${card.callout}</div>`;
+
+ case 'model':return `
+<div class="eb-c">03 &middot; The model</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-model-pills">${card.pills.map(p=>`<div class="nf-model-pill">${p}</div>`).join('')}</div>
+<div class="nf-flow">${card.steps.map((s,i)=>`${i>0?'<div class="nf-flow-arrow">&#8595;</div>':''}<div class="nf-flow-step"><div class="nf-flow-step-n">${s.n} &middot; ${s.pill}</div><div class="nf-flow-step-t">${s.t}</div><div class="nf-flow-step-s">${s.s}</div></div>`).join('')}</div>
+<div class="mt-model-chip">&#128100; ${card.chip}</div>`;
+
+ case 'rivals':return `
+<div class="eb-c">04 &middot; The landscape</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-bar-rows">${card.rows.map(r=>`
+<div class="nf-rival-card${r.h?' hero':''}">
+  <div class="nf-bar-row-head"><span class="nf-bar-n">${r.emoji} ${r.n}</span><span class="nf-bar-val">${r.val}</span></div>
+  <div class="nf-bar-tag">${r.tag}</div>
+  <div class="nf-bar-track"><div class="nf-bar-fill" data-w="${r.pct}" style="background:${r.h?'var(--accent)':'rgba(0,0,0,0.28)'}"></div></div>
+</div>`).join('')}</div>
+<div class="nf-kicker">${card.kicker}</div>`;
+
+ case 'hidden':return `
+<div class="eb-c">05 &middot; The hidden truth</div>
+<div class="nf-hidden-fill">
+<div class="nf-mt-box">
+  <div class="nf-myth">${card.myth}</div>
+  <div class="nf-truth">${card.truth}</div>
+</div>
+<div class="bd" style="margin-bottom:12px;font-size:clamp(10.5px,1.51dvh,13px);flex-shrink:0">${card.bd}</div>
+<div class="mt-timeline">${card.timeline.map(t=>`<div class="mt-tl-row">
+  <div class="mt-tl-dot ${t.dot}">&#10003;</div>
+  <div class="mt-tl-content"><div class="mt-tl-year">${t.yr}</div><div class="mt-tl-title">${t.title}</div><div class="mt-tl-sub">${t.sub}</div></div>
+</div>`).join('')}</div>
+</div>
+<div class="mt-h5-callout">${card.callout}</div>`;
+
+ case 'bull':return `
+<div class="eb-c">${eb}</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-acc-list">${card.panels.map(p=>`
+<div class="nf-acc-item">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">&#9660;</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+ case 'bear':return `
+<div class="eb-c">${eb}</div>
+<div class="hl">${card.hl}</div>
+<div class="nf-acc-list">${card.panels.map(p=>`
+<div class="nf-acc-item">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">&#9660;</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+ case 'own':return `
+<div class="eb-c">08 &middot; Who owns it</div>
+<div class="hl">${card.hl}</div>
+<div class="mt-own-section">
+  <div class="mt-own-rows">${card.bars.map(b=>`
+  <div class="mt-own-row">
+    <div class="mt-own-l"><div class="mt-own-name">${b.l}</div><div class="mt-own-desc">${b.d2}</div></div>
+    <div class="mt-own-track"><div class="mt-own-fill" data-w="${Math.max(b.p,8)}" style="background:${b.c}">${b.d}</div></div>
+  </div>`).join('')}</div>
+  <div class="mt-control-box">
+    <div class="mt-ctrl-row">
+      <div><div class="mt-ctrl-num">13%</div><div class="mt-ctrl-label">of shares</div></div>
+      <div class="mt-ctrl-arrow">&#8594;</div>
+      <div><div class="mt-ctrl-num">61%</div><div class="mt-ctrl-label">of votes</div></div>
+    </div>
+    <div class="mt-ctrl-sub">${card.ctrl.sub}</div>
+  </div>
+  <div class="mt-own-insight">${card.insight}</div>
+</div>`;
+
+ case 'debate':return `
+<div class="eb-c">09 &middot; The market debate</div>
+<div class="hl">${card.hl}</div>
+<div class="mt-debate-fill">
+<div class="mt-pullquote">
+  <div class="mt-pullquote-mark">"</div>
+  <div class="mt-pullquote-text">Meta is spending $130 billion this year on AI. That is more than it earned in the entire year of 2022. The same man. The same unchecked control. A <em>bigger</em> bet.</div>
+</div>
+<div class="mt-chip-section">
+  <div class="mt-chip-section-label works">&#10003; Signs it is working</div>
+  <div class="mt-chip-row">
+    <div class="mt-chip works">Revenue +33% in Q1 2026</div>
+    <div class="mt-chip works">AI already in the ad engine</div>
+    <div class="mt-chip works">1B Meta AI users in 18 months</div>
+  </div>
+</div>
+<div class="mt-chip-section">
+  <div class="mt-chip-section-label notyet">&#10007; Not yet proven</div>
+  <div class="mt-chip-row">
+    <div class="mt-chip notyet">AI monetisation at scale</div>
+    <div class="mt-chip notyet">No check on one person's bet</div>
+    <div class="mt-chip notyet">Platform dependency unfixed</div>
+  </div>
+</div>
+</div>
+<div class="mt-debate-callout">The metaverse was a new product with no connection to the money machine. This bet is running inside it. When targeting gets better, revenue goes up immediately. That already happened. The metaverse never did that.</div>`;
+
+ case 'conv':return `
+<div class="eb-c">10 &middot; Your call</div>
+<div class="hl">${card.hl}</div>
+<div class="cv-sent-row">
+  <div class="cv-sent bull">Bullish crowd</div>
+  <div class="cv-vb"><span class="vb-num">14,283</span> voted today</div>
+</div>
+<div class="cv-opts" id="cvO-${idx}">${card.opts.map(o=>`
+<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}',${idx})">
+  <div class="cf"></div>
+  <span class="ico">${o.k==='bull'?'&#128200;':o.k==='bear'?'&#128201;':'&#128528;'}</span>
+  <span class="lbl">${o.k==='bull'?'Bullish':o.k==='bear'?'Bearish':'Neutral'}</span>
+  <span class="sub">${o.k==='bull'?'The flywheel wins':o.k==='bear'?'$130B is the new $80B':'Great business, terrifying bet'}</span>
+  <span class="cp">${o.p}%</span>
+</div>`).join('')}</div>
+<div class="cr" id="cvR-${idx}"></div>`;
+ }
+ return '';
+}
+
+/* STACK */
+let cardIdx2=0;
+function openStack(){cardIdx=0;renderCards();buildProg();showCard(0);renderTldr();goTo('stack');}
+function renderCards(){
+ const tr=document.getElementById('track');tr.innerHTML='';
+ CARDS.forEach((card,i)=>{
+   const el=document.createElement('div');
+   el.className='card bg-'+(card.bg||'cream');
+   el.dataset.deep=card.deep||'';
+   el.innerHTML=renderCard(card,i);
+   tr.appendChild(el);
+ });
+ initAccordions();
+}
+function initAccordions(){
+ document.querySelectorAll('.nf-acc-btn').forEach(btn=>{
+   btn.addEventListener('click',()=>togglePanel(btn));
+   btn.addEventListener('touchend',e=>{e.preventDefault();togglePanel(btn);},{passive:false});
+ });
+}
+function togglePanel(btn){
+ const item=btn.closest('.nf-acc-item');
+ const body=item.querySelector('.nf-acc-body');
+ const isOpen=item.classList.contains('open');
+ const card=item.closest('.card');
+ card.querySelectorAll('.nf-acc-item.open').forEach(p=>{p.classList.remove('open');p.querySelector('.nf-acc-body').style.maxHeight='0';});
+ if(!isOpen){item.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+}
+function buildProg(){
+ const w=document.getElementById('prog');w.innerHTML='';
+ for(let i=0;i<CARDS.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}
+}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));}
+function updProg(){
+ document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
+ const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
+ if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}
+ else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
+ bp.style.display=(cardIdx===CARDS.length-1)?'none':'flex';
+ document.getElementById('saveBtn').classList.toggle('saved',saved.has(cardIdx));
+}
+function showCard(i){
+ if(i<0||i>=CARDS.length)return;
+ cardIdx=i;
+ const cards=document.querySelectorAll('#track .card');
+ cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
+ updProg();
+ setTimeout(()=>{const ac=cards[cardIdx];if(ac){ac.classList.add('entered');animateCard(i);}},30);
+}
+function nextCard(){if(cardIdx<CARDS.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function closeStack(){closeDrawer();closeTldr();goTo('today');}
+function toggleSave(){const b=document.getElementById('saveBtn');if(saved.has(cardIdx)){saved.delete(cardIdx);b.classList.remove('saved');showToast("Removed");}else{saved.add(cardIdx);b.classList.add('saved');showToast("&#9733; Saved");}}
+
+/* ANIMATIONS */
+function animateCard(idx){
+ const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
+ card.querySelectorAll('[data-w]').forEach(el=>{el.style.width='0';setTimeout(()=>{el.style.width=el.dataset.w+'%';},80);});
+ card.querySelectorAll('[data-countup]').forEach(el=>{
+   const target=parseFloat(el.dataset.countup);const suffix=el.dataset.suffix||'';
+   const dur=900;const start=performance.now();
+   function tick(now){const t2=Math.min((now-start)/dur,1);const ease=1-Math.pow(1-t2,3);el.textContent=Math.floor(target*ease)+suffix;if(t2<1)requestAnimationFrame(tick);else el.textContent=target+suffix;}
+   requestAnimationFrame(tick);
+ });
+ card.querySelectorAll('.nf-flow-step,.nf-flow-arrow').forEach((el,i)=>{el.classList.remove('visible');setTimeout(()=>el.classList.add('visible'),180+i*190);});
+}
+
+/* VOTE */
+function vote(el,type,idx){
+ const wrap=document.getElementById('cvO-'+idx);if(wrap.classList.contains('voted'))return;
+ wrap.classList.add('voted');el.classList.add('you');
+ wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+ const msgs={bull:"You're <strong>bullish</strong> with the crowd. The flywheel bet.",neutral:"You're <strong>neutral</strong>. Watching the capex numbers.",bear:"You're <strong>bearish</strong>. Bold call on Zuckerberg."};
+ const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');
+}
+
+/* DRAWER */
+function openDrawer(){
+ const cards=document.querySelectorAll('#track .card');
+ const k=cards[cardIdx]?cards[cardIdx].dataset.deep:null;
+ const d=DEEP[k];if(!d)return;
+ document.getElementById('dwT').textContent=d.t;
+ document.getElementById('dwEb').textContent=d.e;
+ document.getElementById('dwB').innerHTML=d.h;
+ document.getElementById('dwBd').classList.add('open');
+ document.getElementById('dw').classList.add('open');
+}
+function closeDrawer(){document.getElementById('dwBd').classList.remove('open');document.getElementById('dw').classList.remove('open');}
+
+/* TLDR */
+function renderTldr(){
+ document.getElementById('tlC').innerHTML=`
+<div class="tl-h"><div class="tl-l">M</div><div class="tl-co">Meta Platforms<span class="s">META &middot; Social Media &middot; AI</span></div></div>
+<div class="tl-tag">Everything, in 6 lines</div>
+<div class="tl-pts">${TLDR.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
+<div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
+<div class="tl-acts"><button class="tl-btn s" onclick="showToast('Screenshot ready!')">Share</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div>
+<div class="tl-hint">Screenshot and send to a friend</div>`;
+}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* TODAY */
+function renderToday(){
+ const h=new Date().getHours();
+ const g=h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+ document.getElementById('todayScroll').innerHTML=`
+<div class="today-head">
+  <div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div>
+  <div class="streak"><span class="flame">&#128293;</span> 3 day streak</div>
+</div>
+<div class="greeting">${g} <em>Today's drop is ready.</em></div>
+<div class="eb">This week</div>
+<div class="today-hero" onclick="openStack()">
+  <div class="hero-tag"><span class="live-dot"></span>Meta Platforms &middot; META</div>
+  <div class="hero-co">Social Media &middot; &#127482;&#127480;</div>
+  <div class="hero-h">The app is free. <em>The business is worth $1.4 trillion.</em></div>
+  <div class="hero-stock"><span class="hero-sp">$707</span><span class="hero-sc up">+1.4% today</span></div>
+  <div class="hero-meta"><span>10 cards &middot; ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack()">Start &rarr;</button></div>
+</div>
+<div class="sect-t">What you will learn</div>
+<div class="sect-s">The business behind the attention machine.</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#0866FF">&#128200;</div><div><div class="rname">Why $201B comes from nothing you paid</div><div class="rsub">The advertising flywheel explained</div></div></div>
+  <div style="opacity:.5;font-size:18px">&rarr;</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#1a3d8f">&#9878;</div><div><div class="rname">The $1B deal worth $500B today</div><div class="rsub">And the government that tried to undo it</div></div></div>
+  <div style="opacity:.5;font-size:18px">&rarr;</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#0d2b6e">&#129302;</div><div><div class="rname">Is the $130B AI bet genius or reckless?</div><div class="rsub">The one question moving the stock</div></div></div>
+  <div style="opacity:.5;font-size:18px">&rarr;</div>
+</div>`;
+}
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
+
+function goTo(n){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ const map={today:'screen-today',stack:'screen-stack',you:'screen-you'};
+ document.getElementById(map[n]||'screen-today').classList.add('active');
+ document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+ if(n==='today')renderToday();
+}
+
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{
+ if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
+ const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
+},{passive:true});
+shell.addEventListener('touchend',e=>{
+ if(!trk)return;trk=false;
+ const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
+ if(ax<30&&ay<30)return;
+ if(stg&&stg.closest('.nf-acc-btn,.nf-acc-item,button,.np,.co-opt'))return;
+ if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
+ else{if(dx<-40)nextCard();else if(dx>40)prevCard();}
+});
+document.addEventListener('keydown',e=>{
+ if(!document.getElementById('screen-stack').classList.contains('active'))return;
+ if(e.key==='ArrowRight')nextCard();
+ if(e.key==='ArrowLeft')prevCard();
+ if(e.key==='ArrowUp')openDrawer();
+ if(e.key==='Escape'){
+   if(document.getElementById('tlBd').classList.contains('open'))closeTldr();
+   else if(document.getElementById('dw').classList.contains('open'))closeDrawer();
+   else closeStack();
+ }
+});
+
+renderToday();
+</script>
+</body></html>

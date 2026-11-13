@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nykaa Decoded · Daily Dividend</title>
+<meta name="description" content="How Nykaa went from beauty app to beauty and fashion house, in 13 swipes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#0B0309;--bg1:#1E0617;--bg2:#4A0D33;
+  --pink:#FC2778;--rose:#FF6FA8;--blush:#FFB3CF;--plum:#8E2D6B;--gold:#F2C46B;--mint:#6BE3B0;--coral:#FF7A6B;--violet:#B79CFF;--cyan:#5FD4FF;
+  --cream:#FFF4F7;--muted:rgba(255,244,247,.72);--faint:rgba(255,244,247,.44);--line:rgba(255,255,255,.14);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --b1:#FC2778;--b2:#B79CFF;--b3:#8E2D6B;--ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg0);color:var(--cream);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,var(--bg2) 0%,var(--bg1) 45%,var(--bg0) 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.42;transition:background 1.2s var(--ease)}
+.blob.a{width:70vmax;height:70vmax;left:-25vmax;top:-22vmax;background:var(--b1);animation:d1 22s ease-in-out infinite alternate}
+.blob.b{width:55vmax;height:55vmax;right:-22vmax;top:25vh;background:var(--b2);opacity:.2;animation:d2 26s ease-in-out infinite alternate}
+.blob.c{width:60vmax;height:60vmax;left:-10vmax;bottom:-35vmax;background:var(--b3);opacity:.35;animation:d3 30s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(12vmax,10vmax) scale(1.12)}}
+@keyframes d2{to{transform:translate(-14vmax,-8vmax) scale(.9)}}
+@keyframes d3{to{transform:translate(10vmax,-12vmax) scale(1.08)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.deck{position:fixed;inset:0;z-index:2;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.deck::-webkit-scrollbar{display:none}
+.slide{height:100svh;min-height:100svh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;justify-content:center;position:relative}
+.inner{width:100%;max-width:440px;height:100%;padding:calc(env(safe-area-inset-top) + 74px) max(18px,env(safe-area-inset-left)) calc(env(safe-area-inset-bottom) + 58px) max(18px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.inner::before{content:"";order:0;flex:1 1 0;min-height:0}
+.copy{display:contents}
+.logo,.eyebrow{order:1}
+h1,h2{order:2}
+.v{order:3;display:flex;flex-direction:column;gap:10px}
+.body,.chips{order:4}
+.fillgap{order:5;flex:1 1 0;min-height:6px}
+.foot{order:6}.end{order:7}.disc{order:8}
+.chrome{position:fixed;z-index:5;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;padding:calc(env(safe-area-inset-top) + 10px) 16px 14px;pointer-events:none;background:linear-gradient(180deg,rgba(11,3,9,.75),rgba(11,3,9,.35) 70%,transparent)}
+.bars{display:flex;gap:4px}
+.bars i{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.22);overflow:hidden;position:relative}
+.bars i::after{content:"";position:absolute;inset:0;background:var(--cream);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.bars i.done::after{transform:scaleX(1)}
+.bars i.cur::after{background:linear-gradient(90deg,var(--cream),var(--pink),var(--cream));background-size:200% 100%;animation:shim 2s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.brand{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.dd{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dd b{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--cream);color:#1E0617;font-family:var(--serif);font-size:12px;letter-spacing:0}
+.count{font-family:var(--mono);font-size:10.5px;color:var(--cream);letter-spacing:.08em;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid var(--line)}
+.navbtn{display:none}
+.nudge{position:fixed;z-index:4;left:50%;bottom:calc(env(safe-area-inset-bottom) + 10px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);pointer-events:none;transition:opacity .4s}
+.nudge svg{animation:bob 1.6s ease-in-out infinite}
+.nudge.hide{opacity:0}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--rose);display:flex;gap:8px;align-items:center}
+.eyebrow::before{content:"";width:16px;height:1px;background:currentColor;opacity:.7}
+h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05;letter-spacing:-.02em}
+h1{font-size:clamp(34px,10vw,44px)}
+h2{font-size:clamp(27px,7.8vw,35px)}
+h1 em,h2 em{font-style:italic;color:var(--rose);font-weight:400}
+.body{font-size:15px;line-height:1.5;color:var(--muted)}
+.body b{color:var(--cream);font-weight:600}
+.lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:6px 10px;border-radius:10px;font-size:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--muted)}
+.chip b{color:var(--cream);font-weight:600}
+.glass{position:relative;border-radius:24px;background:linear-gradient(140deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 60%);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 24px 60px -20px rgba(0,0,0,.55);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);overflow:hidden}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 60% at 10% 0%,rgba(255,255,255,.16),transparent 50%)}
+.viz{padding:18px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.concept{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .2s,background .2s}
+.concept:hover{background:rgba(255,255,255,.16)}
+.concept:active{transform:scale(.96)}
+.concept i{width:6px;height:6px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink);animation:glow 2.4s ease-in-out infinite}
+.concept .q{font-family:var(--sans);font-size:11px;letter-spacing:0;opacity:.7;margin-left:2px}
+@keyframes glow{50%{box-shadow:0 0 2px var(--pink)}}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.on .rv{opacity:1;transform:none}
+.on .v.rv{transition-delay:.12s}.on .body.rv,.on .chips.rv{transition-delay:.24s}.on .foot.rv{transition-delay:.34s}
+.st{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.on .st{opacity:1;transform:none}
+
+/* logo */
+.logo{align-self:flex-start;display:flex;align-items:center;gap:10px}
+.logo img{width:46px;height:46px;border-radius:14px;box-shadow:0 10px 30px -8px rgba(252,39,120,.6)}
+.logo span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* 1 browser */
+.browser{padding:0}
+.bbar{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.05)}
+.bbar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25)}
+.url{flex:1;margin-left:6px;padding:7px 12px;border-radius:10px;background:rgba(0,0,0,.25);font-family:var(--mono);font-size:13px;color:var(--cream);display:flex;align-items:center;gap:6px}
+.url svg{opacity:.6}
+.bbody{padding:22px 18px 20px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.shoe{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:-.02em;text-align:center;line-height:1.1}
+.shoe small{display:block;font-family:var(--sans);font-size:12px;font-weight:500;color:var(--faint);margin-top:6px;letter-spacing:0}
+.runby{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;background:var(--pink);color:#fff;font-size:13px;font-weight:600;box-shadow:0 10px 30px -8px rgba(252,39,120,.8);transform:scale(.7);opacity:0;transition:transform .7s var(--ease) .6s,opacity .5s .6s}
+.on .runby{transform:none;opacity:1}
+.runby img{width:24px;height:24px;border-radius:7px}
+.alsof{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.alsof div{padding:11px 8px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--line);text-align:center}
+.alsof b{display:block;font-size:13px;font-weight:600}
+.alsof span{font-size:11px;color:var(--rose)}
+
+/* 2 founder */
+.tl3{display:grid;grid-template-columns:1fr 1fr 1fr;position:relative;padding-top:6px}
+.tl3::before{content:"";position:absolute;left:16%;right:16%;top:18px;height:2px;background:rgba(255,255,255,.15)}
+.tl3 div{text-align:center;position:relative}
+.tl3 i{display:block;width:16px;height:16px;border-radius:50%;margin:5px auto 10px;background:var(--pink);box-shadow:0 0 14px var(--pink)}
+.tl3 div.amz i{background:rgba(255,255,255,.35);box-shadow:none}
+.tl3 b{display:block;font-family:var(--mono);font-size:13px}
+.tl3 span{font-size:12px;color:var(--muted);line-height:1.3;display:block;margin-top:2px}
+.fam{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.fam .top{display:flex;justify-content:center}
+.pp{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
+.pp .av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:18px;font-weight:600;background:linear-gradient(135deg,var(--pink),var(--plum));border:2px solid rgba(255,255,255,.3)}
+.pp b{font-size:13px}
+.pp span{font-size:11px;color:var(--muted);line-height:1.25}
+.kids{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;position:relative}
+.kids::before{content:"";position:absolute;left:25%;right:25%;top:-6px;height:10px;border:2px solid rgba(255,255,255,.15);border-bottom:0;border-radius:8px 8px 0 0}
+.kids .av{background:linear-gradient(135deg,var(--violet),var(--plum))}
+.own52{text-align:center;margin-top:12px;font-size:12px;color:var(--muted)}
+.own52 b{color:var(--cream)}
+
+/* 3 equations */
+.eq{padding:14px 16px}
+.eq + .eq{margin-top:0}
+.eq .h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.eq .h b{font-family:var(--serif);font-size:19px;font-weight:600}
+.eq .h span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.math{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:6px;align-items:center}
+.math .t{text-align:center;padding:9px 4px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.math .t b{display:block;font-family:var(--serif);font-size:18px;font-weight:600;line-height:1.1}
+.math .t span{display:block;font-size:10.5px;color:var(--muted);line-height:1.25;margin-top:2px}
+.math .t.k{background:rgba(252,39,120,.18);border-color:rgba(252,39,120,.5)}
+.math .o{font-family:var(--serif);font-size:18px;color:var(--rose)}
+.eq p{font-size:11.5px;color:var(--faint);margin-top:8px;line-height:1.35}
+.eq p b{color:var(--cream);font-weight:600}
+
+/* 4 flows */
+.flowc{padding:14px 16px}
+.flowc .h{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between}
+.chain{display:grid;grid-template-columns:1fr 16px 1fr 16px 1fr;gap:4px;align-items:center}
+.chain .n{text-align:center;padding:10px 4px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);font-size:11.5px;line-height:1.25;color:var(--muted)}
+.chain .n b{display:block;color:var(--cream);font-size:12.5px;margin-bottom:1px}
+.chain .ar{text-align:center;color:var(--faint)}
+.chain .n.q{border-style:dashed}
+.chain .n.ok{background:rgba(252,39,120,.16);border-color:rgba(252,39,120,.5)}
+.res{display:flex;justify-content:center;margin-top:10px;font-size:12.5px;font-weight:600;gap:6px;align-items:center}
+.res.bad{color:var(--coral)}.res.good{color:var(--mint)}
+
+/* 5 hats */
+.hats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hat{padding:15px 13px;display:flex;flex-direction:column;gap:6px}
+.hat .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(252,39,120,.16);border:1px solid rgba(252,39,120,.4)}
+.hat .ic svg{width:20px;height:20px;stroke:var(--rose);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hat b{font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.1;margin-top:4px}
+.hat span{font-size:12px;color:var(--muted);line-height:1.35}
+.hat.new{border-color:rgba(252,39,120,.5)}
+.hat .tag{align-self:flex-start;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--pink);padding:3px 7px;border-radius:999px}
+
+/* 6 glasses */
+.glz{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:6px 10px 2px}
+.gl{display:flex;flex-direction:column;align-items:center;gap:8px}
+.gl .cup{position:relative;width:78px;height:110px;border:2px solid rgba(255,255,255,.35);border-top:0;border-radius:0 0 18px 18px;overflow:hidden}
+.gl .cup div{position:absolute;left:0;right:0;bottom:0;height:0;transition:height 1.4s var(--ease)}
+.on .gl .cup div{height:var(--h)}
+.gl b{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1}
+.gl span{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.3}
+.gl.mine b{color:var(--rose)}
+.bl{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.br{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:6px 0}
+.br .n{font-size:13.5px;font-weight:600}
+.br .n span{font-size:11px;color:var(--faint);font-weight:400;margin-left:6px}
+.br .t{grid-column:1/-1;height:6px;border-radius:6px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:-2px}
+.br .t div{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--pink),var(--rose));transition:width 1.2s var(--ease)}
+.on .br .t div{width:var(--w)}
+.br .bv{font-family:var(--mono);font-size:12px;font-weight:600}
+.more-b{font-size:11.5px;color:var(--faint);margin-top:6px}
+
+/* 7 dot & key */
+.dk{display:flex;align-items:flex-end;justify-content:center;gap:40px;height:200px;padding-top:6px}
+.dkc{display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end;width:100px}
+.dkc .val{white-space:nowrap}
+.dkc .val{font-family:var(--serif);font-size:24px;font-weight:600}
+.dkc .bar{width:100%;height:0;border-radius:14px 14px 6px 6px;transition:height 1.5s var(--ease)}
+.on .dkc .bar{height:var(--h)}
+.dkc .yr{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.x13{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-family:var(--serif);font-style:italic;font-size:15px;color:var(--rose)}
+.steps{display:flex;flex-direction:column}
+.sp3{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:10px 0;align-items:baseline}
+.sp3 + .sp3{border-top:1px solid rgba(255,255,255,.08)}
+.sp3 b{font-family:var(--mono);font-size:12.5px;color:var(--rose)}
+.sp3 p{font-size:13px;line-height:1.4;color:var(--muted)}
+.sp3 p strong{color:var(--cream);font-weight:600}
+
+/* 8 engines */
+.eng{display:flex;flex-direction:column;gap:8px}
+.en{display:grid;grid-template-columns:98px 1fr;gap:12px;align-items:center;padding:12px 14px}
+.en .k{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.05;color:var(--rose)}
+.en .k small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:400;margin-bottom:3px}
+.en p{font-size:12.5px;line-height:1.38;color:var(--muted)}
+.en p b{color:var(--cream);font-weight:600}
+
+/* 9 rivals */
+.rv2{display:flex;flex-direction:column;gap:8px}
+.rvr{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:13px 15px}
+.rvr .n b{display:block;font-size:15px;font-weight:600}
+.rvr .n span{font-size:12px;color:var(--muted);line-height:1.3}
+.rvr .m{text-align:right;font-family:var(--mono);font-size:12px;font-weight:600;line-height:1.25}
+.rvr .m small{display:block;font-size:9.5px;color:var(--faint);font-weight:400}
+.rvr.me{border-color:rgba(252,39,120,.55);background:linear-gradient(140deg,rgba(252,39,120,.22),rgba(255,255,255,.04))}
+.rvr .lock{color:var(--faint)}
+
+/* 10 PE */
+.pr{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;margin-top:9px}
+.pr span{font-size:12.5px;color:var(--muted);line-height:1.15}
+.pr span small{display:block;font-size:10px;color:var(--faint)}
+.pr .tr{height:22px;border-radius:7px;background:rgba(255,255,255,.06);position:relative}
+.pr .tr div{height:100%;width:0;border-radius:7px;transition:width 1.4s var(--ease);background:rgba(255,255,255,.3)}
+.on .pr .tr div{width:var(--w)}
+.pr .tr em{position:absolute;left:calc(var(--w) + 6px);top:50%;transform:translateY(-50%);font-style:normal;font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap}
+.pr.me span{color:var(--rose);font-weight:700}
+.pr.me .tr div{background:linear-gradient(90deg,var(--pink),var(--rose));box-shadow:0 0 18px rgba(252,39,120,.6)}
+.pr.me .tr em{color:var(--rose)}
+.pnote{font-size:12.5px;line-height:1.45;color:var(--muted);padding:13px 15px}
+.pnote b{color:var(--cream)}
+
+/* 11 stock */
+.stk svg{width:100%;height:auto;display:block;overflow:visible}
+.stk .path{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 2s var(--ease) .2s}
+.on .stk .path{stroke-dashoffset:0}
+.stk3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.stk3 div{text-align:center}
+.stk3 b{display:block;font-family:var(--serif);font-size:24px;font-weight:600}
+.stk3 span{font-size:11px;color:var(--muted);line-height:1.3;display:block}
+.stk3 .lo b{color:var(--coral)}.stk3 .nw b{color:var(--rose)}
+
+/* 12 bull bear */
+.toggle{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.toggle button{position:relative;z-index:1;padding:10px;font-size:14px;font-weight:600;color:var(--muted);transition:color .3s}
+.toggle button.act{color:#1E0617}
+.toggle .pl{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--mint);box-shadow:0 6px 20px -6px var(--mint);transition:transform .5s var(--ease),background .5s}
+.toggle.bear .pl{transform:translateX(100%);background:var(--coral);box-shadow:0 6px 20px -6px var(--coral)}
+.views{display:grid}
+.view{grid-area:1/1;opacity:0;transform:translateX(-20px) scale(.98);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
+.view.show{opacity:1;transform:none;pointer-events:auto}
+.view.bearv{transform:translateX(20px) scale(.98)}
+.view.bearv.show{transform:none}
+.case{padding:4px 16px}
+.cr{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:13px 0}
+.cr + .cr{border-top:1px solid rgba(255,255,255,.08)}
+.cr b{display:block;font-size:14.5px;font-weight:600}
+.cr p{font-size:12px;line-height:1.35;color:var(--muted);margin-top:2px}
+.sz{padding:6px 9px;border-radius:10px;font-family:var(--mono);font-size:11px;font-weight:600;text-align:center;line-height:1.25;max-width:120px}
+.bullv .sz{background:rgba(107,227,176,.14);border:1px solid rgba(107,227,176,.4);color:var(--mint)}
+.bearv .sz{background:rgba(255,122,107,.12);border:1px solid rgba(255,122,107,.4);color:var(--coral)}
+.ddm{display:inline-flex;align-self:flex-start;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);padding:5px 9px;border-radius:999px;border:1px dashed rgba(255,111,168,.5)}
+
+/* 13 take */
+.eqn{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:end;gap:6px;padding:22px 14px 18px}
+.eqn .t{text-align:center}
+.eqn .t b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.1}
+.eqn .t span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:6px;line-height:1.3}
+.eqn .op{font-family:var(--serif);font-size:22px;color:var(--faint);padding-bottom:22px}
+.eqn .arr{height:64px;display:grid;place-items:end center;margin-bottom:8px}
+.eqn .hot b{color:var(--rose)}
+.eqn .peak b{color:var(--gold)}
+.mult{display:flex;gap:4px;align-items:flex-end}
+.mult i{width:10px;border-radius:3px;background:var(--pink);box-shadow:0 0 10px rgba(252,39,120,.6);transform-origin:bottom;transform:scaleY(0);transition:transform .7s var(--ease)}
+.on .mult i{transform:scaleY(1)}
+.take{padding:16px 18px;font-family:var(--serif);font-size:18px;line-height:1.38}
+.take em{color:var(--rose)}
+.end{display:flex;gap:8px;margin-top:4px}
+.end button{flex:1;text-align:center;padding:12px;border-radius:14px;font-size:13.5px;font-weight:600;color:var(--cream);background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.end button.pri{background:var(--cream);color:#1E0617}
+.disc{font-size:10.5px;line-height:1.45;color:var(--faint);text-align:center;margin-top:6px}
+
+/* sheets */
+.scrim{position:fixed;inset:0;z-index:20;background:rgba(11,3,9,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .4s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:21;left:50%;bottom:0;width:100%;max-width:440px;transform:translate(-50%,105%);transition:transform .55s var(--ease);border-radius:28px 28px 0 0;padding:12px 22px calc(env(safe-area-inset-bottom) + 24px);max-height:86svh;overflow-y:auto;background:linear-gradient(160deg,rgba(110,20,72,.94),rgba(30,6,23,.97));border:1px solid var(--line);border-bottom:0;backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.sheet.open{transform:translate(-50%,0)}
+.grab{width:42px;height:5px;border-radius:5px;background:rgba(255,255,255,.3);margin:0 auto 16px}
+.sheet .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
+.sheet h3{font-family:var(--serif);font-size:26px;font-weight:500;line-height:1.1;margin-bottom:12px}
+.sheet h3 em{color:var(--rose)}
+.sheet .sp{font-size:15px;line-height:1.55;color:var(--muted)}
+.sheet .sp b{color:var(--cream)}
+.sheet .close{margin-top:18px;width:100%;padding:13px;border-radius:14px;background:var(--cream);color:#1E0617;font-weight:600}
+.gfx{margin:4px 0 16px;padding:16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.flow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.flow .box{flex:1;text-align:center;padding:12px 8px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.flow .box b{display:block;font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.15}
+.flow .box span{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.3}
+.flow .box.g{background:rgba(252,39,120,.16);border-color:rgba(252,39,120,.5)}
+.flow .op{font-family:var(--serif);font-size:22px;color:var(--rose)}
+
+@media (max-height:720px){
+  .inner{padding-top:calc(env(safe-area-inset-top) + 66px);gap:10px;padding-bottom:calc(env(safe-area-inset-bottom) + 56px)}
+  h1{font-size:31px}h2{font-size:25px}.body{font-size:14px}
+}
+@media (min-width:700px) and (max-width:1019px){.inner,.chrome,.sheet{max-width:560px}}
+@media (min-width:1020px){
+  .chrome{max-width:1200px;padding:20px 40px}
+  .inner{max-width:1200px;padding:110px 40px 56px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:72px;align-items:center}
+  .inner::before,.fillgap{display:none}
+  .copy{display:flex;flex-direction:column;gap:18px;grid-column:1}
+  .v{grid-column:2;grid-row:1;zoom:1.3;max-width:460px;width:100%;justify-self:center}
+  h1{font-size:60px}h2{font-size:50px}
+  .body{font-size:18px}
+  .take{font-size:21px}
+  .sheet{max-width:540px;bottom:50%;border-radius:28px;border-bottom:1px solid var(--line);transform:translate(-50%,calc(50% + 100vh))}
+  .sheet.open{transform:translate(-50%,50%)}
+  .nudge{display:none}
+  .navbtn{display:grid;position:fixed;z-index:6;right:28px;width:48px;height:48px;border-radius:50%;place-items:center;background:rgba(255,255,255,.1);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:18px;transition:background .2s}
+  .navbtn:hover{background:rgba(255,255,255,.2)}
+  .navbtn.up{bottom:92px}.navbtn.dn{bottom:34px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient"><div class="blob a"></div><div class="blob b"></div><div class="blob c"></div></div>
+<div class="grain"></div>
+<div class="chrome">
+  <div class="bars" id="bars"></div>
+  <div class="brand"><div class="dd"><b>DD</b>Rabbit hole · Made in India</div><div class="count" id="count">01 / 13</div></div>
+</div>
+<div class="nudge" id="nudge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 15l6-6 6 6"/></svg><span id="nudgeT">Tap or swipe up</span></div>
+<button class="navbtn up" id="navUp" aria-label="Previous">↑</button>
+<button class="navbtn dn" id="navDn" aria-label="Next">↓</button>
+
+<main class="deck" id="deck">
+
+<!-- 1 HOOK -->
+<section class="slide" data-tint="#FC2778,#B79CFF,#8E2D6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="logo rv"><img src="data:image/png;base64,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" alt="Nykaa"><span>Decoded</span></div>
+   <h1 class="rv">Nykaa now runs <em>Nike India's</em> website.</h1>
+   <p class="body rv">Your beauty app is quietly becoming a <b>beauty and fashion house.</b></p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="partner"><i></i>Concept · Brand partner<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass browser">
+    <div class="bbar"><i></i><i></i><i></i><div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>nike.in</div></div>
+    <div class="bbody">
+     <div class="shoe">Sneakers, delivered<small>orders, warehouses and delivery since Feb 2026</small></div>
+     <div class="runby"><img src="data:image/png;base64,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" alt="">run by Nykaa</div>
+    </div>
+   </div>
+   <div class="lbl" style="text-align:center;margin-top:2px">It does this for others too</div>
+   <div class="alsof">
+    <div class="st" style="transition-delay:.9s"><b>Kiehl's</b><span>runs it in India</span></div>
+    <div class="st" style="transition-delay:1.05s"><b>La Roche-Posay</b><span>exclusive</span></div>
+    <div class="st" style="transition-delay:1.2s"><b>NYX</b><span>exclusive</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 2 FOUNDER -->
+<section class="slide" data-tint="#B79CFF,#FC2778,#8E2D6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">02 · The founder</div>
+   <h2 class="rv">She started Nykaa <em>before Amazon</em> came to India.</h2>
+   <p class="body rv">Falguni Nayar left Kotak after 18 years and started it at <b>nearly 50.</b> Her children already run the two biggest businesses.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="promoter"><i></i>Concept · Promoter<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="tl3">
+     <div><i></i><b>2012</b><span>Nykaa starts</span></div>
+     <div class="amz"><i></i><b>2013</b><span>Amazon enters India</span></div>
+     <div><i></i><b>2021</b><span>Nykaa lists</span></div>
+    </div>
+    <div class="fam">
+     <div class="top"><div class="pp"><div class="av">F</div><b>Falguni Nayar</b><span>Founder and CEO</span></div></div>
+     <div class="kids">
+      <div class="pp"><div class="av">Ad</div><b>Adwaita Nayar</b><span>runs Fashion and<br>Nykaa's own brands</span></div>
+      <div class="pp"><div class="av">An</div><b>Anchit Nayar</b><span>runs Beauty</span></div>
+     </div>
+     <div class="own52">The family owns <b>52%</b> of Nykaa</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 3 HOW IT MAKES MONEY -->
+<section class="slide" data-tint="#FC2778,#F2C46B,#8E2D6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">03 · How it makes money</div>
+   <h2 class="rv">Two ways to make money, <em>one big one.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="gm"><i></i>Concept · Gross margin<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass eq st" style="transition-delay:.15s">
+    <div class="h"><b>Beauty</b><span>84% of revenue</span></div>
+    <div class="math">
+     <div class="t"><b>₹100</b><span>you pay for a L'Oréal lipstick</span></div><div class="o">−</div>
+     <div class="t"><b>₹54</b><span>Nykaa paid L'Oréal</span></div><div class="o">=</div>
+     <div class="t k"><b>₹46</b><span>Nykaa's cut</span></div>
+    </div>
+    <p>Then delivery, ads and stores come out. Nykaa keeps about <b>₹10.</b></p>
+   </div>
+   <div class="glass eq st" style="transition-delay:.3s">
+    <div class="h"><b>Fashion</b><span>17% of revenue</span></div>
+    <div class="math">
+     <div class="t"><b>₹100</b><span>you pay for a brand's dress</span></div><div class="o">→</div>
+     <div class="t"><b>Brand</b><span>keeps most of it</span></div><div class="o">+</div>
+     <div class="t k"><b>Fee</b><span>Nykaa's commission</span></div>
+    </div>
+    <p>Plus in both: <b>brands pay Nykaa for ads</b> and top spots in the app.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 4 WHY IT OWNS THE STOCK -->
+<section class="slide" data-tint="#6BE3B0,#FC2778,#8E2D6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">04 · Why it owns the stock</div>
+   <h2 class="rv">Nykaa buys the lipstick <em>before you do.</em></h2>
+   <p class="body rv">It buys straight from the brand and keeps it in its own warehouses, so nothing fake gets in. It can take that risk because only <b>3–6% of beauty orders come back</b>, against 30–35% for clothes.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="inv"><i></i>Concept · Inventory model<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass flowc">
+    <div class="h"><span style="color:var(--coral)">A marketplace</span><span class="lbl">anyone can sell</span></div>
+    <div class="chain"><div class="n q"><b>Any seller</b>could be anyone</div><span class="ar">→</span><div class="n q"><b>Their stock</b>real or fake?</div><span class="ar">→</span><div class="n"><b>You</b>hope it's real</div></div>
+    <div class="res bad">✕ Fakes can slip in</div>
+   </div>
+   <div class="glass flowc">
+    <div class="h"><span style="color:var(--rose)">Nykaa beauty</span><span class="lbl">Nykaa is the seller</span></div>
+    <div class="chain"><div class="n ok"><b>The brand</b>sells to Nykaa</div><span class="ar">→</span><div class="n ok"><b>Nykaa</b>stores it</div><span class="ar">→</span><div class="n ok"><b>You</b>get the real thing</div></div>
+    <div class="res good">✓ No fakes</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 5 FOUR HATS -->
+<section class="slide" data-tint="#FC2778,#B79CFF,#F2C46B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">05 · The shift</div>
+   <h2 class="rv">Nykaa now wears <em>four hats.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="omni"><i></i>Concept · Omnichannel<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="hats">
+    <div class="glass hat st" style="transition-delay:.15s"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l2-5h14l2 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg></div><b>Store</b><span>Sells 8,600+ brands, online and in 338 shops</span></div>
+    <div class="glass hat new st" style="transition-delay:.3s"><span class="tag">fastest growing</span><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 3h6v4H9z"/><path d="M8 7h8l1 14H7z"/></svg></div><b>Brand maker</b><span>Owns brands like Dot &amp; Key and Kay Beauty</span></div>
+    <div class="glass hat new st" style="transition-delay:.45s"><span class="tag">new</span><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg></div><b>Brand operator</b><span>Runs Nike and Kiehl's in India for them</span></div>
+    <div class="glass hat st" style="transition-delay:.6s"><div class="ic"><svg viewBox="0 0 24 24"><path d="M1 16h13V6H1z"/><path d="M14 10h5l4 4v2h-9"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></div><b>Supplier</b><span>Stocks 5.5 lakh small shops across India</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 6 BRAND FACTORY -->
+<section class="slide" data-tint="#FC2778,#F2C46B,#B79CFF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">06 · The brand factory</div>
+   <h2 class="rv">Its own brands earn <em>far more</em> per sale.</h2>
+   <p class="body rv">House of Nykaa now sells <b>₹4,000 crore+ a year</b>, growing 40%.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="pl"><i></i>Concept · Private label<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl" style="text-align:center;margin-bottom:12px">What Nykaa keeps from a ₹100 sale, before costs</div>
+    <div class="glz">
+     <div class="gl"><div class="cup"><div style="--h:44%;background:rgba(255,255,255,.3)"></div></div><b>₹44</b><span>someone else's brand</span></div>
+     <div class="gl mine"><div class="cup"><div style="--h:65%;background:linear-gradient(180deg,var(--rose),var(--pink));transition-delay:.2s"></div></div><b>~₹65</b><span>Nykaa's own brand</span></div>
+    </div>
+    <div class="bl">
+     <div class="lbl" style="margin-bottom:4px">Its biggest brands · net sales a year</div>
+     <div class="br"><div class="n">Dot &amp; Key<span>skincare</span></div><div class="bv">₹1,300 cr</div><div class="t"><div style="--w:100%"></div></div></div>
+     <div class="br"><div class="n">Kay Beauty<span>makeup, with Katrina Kaif</span></div><div class="bv">₹350 cr+</div><div class="t"><div style="--w:27%"></div></div></div>
+     <div class="br"><div class="n">Nykaa Cosmetics<span>makeup</span></div><div class="bv">₹300 cr+</div><div class="t"><div style="--w:23%"></div></div></div>
+     <div class="more-b">Plus Earth Rhythm, Kica, Nykaa Naturals and fashion labels like Twenty Dresses.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 7 DOT & KEY -->
+<section class="slide" data-tint="#F2C46B,#FC2778,#6BE3B0">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">07 · Spotlight</div>
+   <h2 class="rv">Dot &amp; Key grew <em>13x in three years.</em></h2>
+   <p class="body rv">It's now about <b>5x the size of Katrina Kaif's Kay Beauty.</b></p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="val"><i></i>Concept · Valuation<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz" style="position:relative">
+    <div class="lbl" style="text-align:center">Dot &amp; Key orders a year (GMV, before returns)</div>
+    <div class="dk">
+     <div class="dkc"><div class="val">~₹140 cr</div><div class="bar" style="--h:8%;background:rgba(255,255,255,.3)"></div><div class="yr">FY23</div></div>
+     <div class="dkc"><div class="val" style="color:var(--rose)">₹1,790 cr</div><div class="bar" style="--h:100%;background:linear-gradient(180deg,var(--rose),var(--pink));transition-delay:.2s"></div><div class="yr">FY26</div></div>
+    </div>
+   </div>
+   <div class="glass viz" style="padding:6px 16px">
+    <div class="steps">
+     <div class="sp3"><b>2021</b><p>Nykaa buys <strong>51%</strong> of a small online skincare brand.</p></div>
+     <div class="sp3"><b>2024</b><p>Pays <strong>₹265 crore for 39% more</strong>. The whole brand is valued at about ₹680 crore.</p></div>
+     <div class="sp3"><b>Today</b><p>It takes <strong>₹1,790 crore of orders a year</strong>, more than double that valuation.</p></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 8 GROWTH ENGINES -->
+<section class="slide" data-tint="#B79CFF,#FC2778,#5FD4FF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">08 · Where growth comes from</div>
+   <h2 class="rv">Five engines, <em>all running.</em></h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="gmv"><i></i>Concept · GMV<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="eng">
+    <div class="glass en st" style="transition-delay:.1s"><div class="k"><small>Luxury</small>Chanel</div><p>Chanel and Armani Beauty launched online in India through Nykaa. <b>Two-thirds of store sales</b> are premium brands.</p></div>
+    <div class="glass en st" style="transition-delay:.2s"><div class="k"><small>Fashion</small>+42%</div><p>Its fastest-growing business. Now runs Nike, sells H&amp;M, and just <b>broke even.</b></p></div>
+    <div class="glass en st" style="transition-delay:.3s"><div class="k"><small>Stores</small>338 → 600</div><p>Now in <b>111 cities</b>, double two years ago.</p></div>
+    <div class="glass en st" style="transition-delay:.4s"><div class="k"><small>Nykaa Now</small>15 → 25</div><p>Delivery in <b>30 min to 2 hours</b>, straight from its own stores. 25 cities by March.</p></div>
+    <div class="glass en st" style="transition-delay:.5s"><div class="k"><small>Small shops</small>5.5 lakh</div><p>Chemists and beauty shops that restock from Nykaa, <b>up 27%</b> in a year.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 9 RIVALS -->
+<section class="slide" data-tint="#FF7A6B,#FC2778,#8E2D6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">09 · Rivals</div>
+   <h2 class="rv">Everyone wants <em>Nykaa's shopper.</em></h2>
+   <p class="body rv">Most rivals hide their beauty numbers inside bigger companies. Nykaa is the only big <b>pure beauty business</b> you can buy on the stock market.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="moat"><i></i>Concept · Moat<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="lbl">Beauty sales a year</div>
+   <div class="rv2">
+    <div class="glass rvr me st" style="transition-delay:.1s"><div class="n"><b>Nykaa</b><span>the leader</span></div><div class="m">~₹10,000 cr<small>FY27 pace</small></div></div>
+    <div class="glass rvr st" style="transition-delay:.2s"><div class="n"><b>Tira (Reliance)</b><span>bought Sephora's 26 India stores</span></div><div class="m lock">hidden<small>inside Reliance Retail</small></div></div>
+    <div class="glass rvr st" style="transition-delay:.3s"><div class="n"><b>Blinkit</b><span>kajal and shampoo in 10 minutes</span></div><div class="m lock">hidden<small>inside Eternal</small></div></div>
+    <div class="glass rvr st" style="transition-delay:.4s"><div class="n"><b>Myntra</b><span>fashion shoppers, adding beauty</span></div><div class="m lock">hidden<small>inside Flipkart</small></div></div>
+    <div class="glass rvr st" style="transition-delay:.5s"><div class="n"><b>Purplle</b><span>cheaper, smaller towns</span></div><div class="m">₹680 cr<small>FY24, latest public</small></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 10 PRICED IN -->
+<section class="slide" data-tint="#F2C46B,#FC2778,#8E2D6B">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">10 · What's priced in</div>
+   <h2 class="rv">You're paying <em>300 years</em> of today's profit.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="pe"><i></i>Concept · P/E<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz">
+    <div class="lbl">Years of profit you pay for (P/E)</div>
+    <div class="pr"><span>Ulta Beauty<small>US beauty chain</small></span><div class="tr" style="--w:3.4%"><div></div><em>24x</em></div></div>
+    <div class="pr"><span>Mamaearth<small>beauty brand</small></span><div class="tr" style="--w:8.7%"><div></div><em>62x</em></div></div>
+    <div class="pr"><span>Trent<small>Zudio, Westside</small></span><div class="tr" style="--w:12%"><div></div><em>85x</em></div></div>
+    <div class="pr me"><span>Nykaa</span><div class="tr" style="--w:42.5%"><div></div><em>302x</em></div></div>
+    <div class="pr"><span>Eternal<small>Blinkit, Zomato</small></span><div class="tr" style="--w:100%"><div></div><em style="left:auto;right:8px;color:#1E0617">711x</em></div></div>
+   </div>
+   <div class="glass pnote">Even if profit grows <b>50% a year for 3 years</b>, Nykaa would still cost about <b>90x</b> at today's price.</div>
+  </div>
+ </div>
+</section>
+
+<!-- 11 STOCK -->
+<section class="slide" data-tint="#FF7A6B,#FC2778,#6BE3B0">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">11 · The stock, simply</div>
+   <h2 class="rv">It fell 70% <em>before it doubled.</em></h2>
+   <p class="body rv">The low came in April 2023, the month <b>Reliance launched Tira.</b></p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="ipo"><i></i>Concept · IPO price<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="glass viz stk">
+    <svg viewBox="0 0 300 120">
+     <line x1="10" y1="62" x2="290" y2="62" stroke="rgba(255,255,255,.18)" stroke-dasharray="4 5"/>
+     <text x="290" y="56" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(255,244,247,.5)">IPO PRICE</text>
+     <path class="path" d="M20 62 C 60 10, 80 8, 100 40 S 140 108, 150 108 S 230 40, 280 22" fill="none" stroke="url(#sg)" stroke-width="4" stroke-linecap="round"/>
+     <defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0" stop-color="#FFF4F7"/><stop offset=".45" stop-color="#FF7A6B"/><stop offset="1" stop-color="#FC2778"/></linearGradient></defs>
+     <circle cx="20" cy="62" r="6" fill="#FFF4F7"/><circle cx="150" cy="108" r="6" fill="#FF7A6B"/><circle cx="280" cy="22" r="7" fill="#FC2778"/>
+    </svg>
+    <div class="stk3">
+     <div><b>₹188</b><span>IPO, Nov 2021</span></div>
+     <div class="lo"><b>₹115</b><span>low, Apr 2023</span></div>
+     <div class="nw"><b>₹350</b><span>today</span></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 12 BULL BEAR -->
+<section class="slide" data-tint="#6BE3B0,#FF7A6B,#FC2778">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">12 · Bull vs bear</div>
+   <h2 class="rv">What could go <em>right</em>, and what could go wrong.</h2>
+   <p class="body rv">For scale: Nykaa made about <b>₹323 crore</b> of profit in the last 12 months.</p>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="op"><i></i>Concept · Operating leverage<span class="q">?</span></button></div>
+  </div>
+  <div class="v rv">
+   <div class="toggle" id="toggle"><div class="pl"></div><button class="act" data-v="bull">Bull case</button><button data-v="bear">Bear case</button></div>
+   <span class="ddm">DD maths</span>
+   <div class="views">
+    <div class="view bullv show" id="vbull"><div class="glass case">
+     <div class="cr"><div><b>Fashion margins rise</b><p>From 0.2% today to ~8%, its FY30 goal</p></div><div class="sz">+₹160 cr profit a year</div></div>
+     <div class="cr"><div><b>More sales go to own brands</b><p>Earns ~₹21 more per ₹100 sold</p></div><div class="sz">+₹210 cr per ₹1,000 cr shifted</div></div>
+     <div class="cr"><div><b>Stores nearly double</b><p>338 → 600</p></div><div class="sz">+₹1,200 cr sales a year</div></div>
+    </div></div>
+    <div class="view bearv" id="vbear"><div class="glass case">
+     <div class="cr"><div><b>No room to stumble</b><p>Profit tripled last quarter, and the stock still fell</p></div><div class="sz">priced at 302x</div></div>
+     <div class="cr"><div><b>Deep-pocketed rivals</b><p>Reliance and Blinkit can spend for years</p></div><div class="sz">Tira + Sephora stores</div></div>
+     <div class="cr"><div><b>Margins are still thin</b><p>Small slips wipe out a lot of profit</p></div><div class="sz">₹3.40 profit per ₹100</div></div>
+    </div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 13 DD TAKE -->
+<section class="slide" data-tint="#FC2778,#F2C46B,#B79CFF">
+ <div class="inner">
+  <div class="copy">
+   <div class="eyebrow rv">13 · The DD take</div>
+   <h2 class="rv">Profit has to grow <em>in multiples,</em> not percentages.</h2>
+   <i class="fillgap"></i>
+   <div class="foot rv"><button class="concept" data-concept="rerate"><i></i>Concept · Re-rating<span class="q">?</span></button></div>
+   <div class="end rv"><button class="pri" id="restart">Start again ↺</button></div>
+   <p class="disc rv">Education, not advice. Nothing here is a recommendation to buy, sell or hold. Sources: Nykaa Q2 FY27 results (4 Nov 2026), FY26 annual results, Screener and CompaniesMarketCap (Nov 2026), Inc42, MediaNama, company filings. DD maths are our own estimates.</p>
+  </div>
+  <div class="v rv">
+   <div class="glass eqn">
+    <div class="t"><div class="arr"></div><b>Share price</b><span>₹350</span></div>
+    <div class="op">=</div>
+    <div class="t hot"><div class="arr"><div class="mult"><i style="height:12px;transition-delay:.3s"></i><i style="height:24px;transition-delay:.45s"></i><i style="height:40px;transition-delay:.6s"></i><i style="height:62px;transition-delay:.75s"></i></div></div><b>Profit</b><span>has to multiply</span></div>
+    <div class="op">×</div>
+    <div class="t peak"><div class="arr"><svg width="54" height="58" viewBox="0 0 54 58"><path d="M4 54 L27 6 L50 54 Z" fill="rgba(242,196,107,.18)" stroke="#F2C46B" stroke-width="3" stroke-linejoin="round"/></svg></div><b>P/E 302x</b><span>already sky-high</span></div>
+   </div>
+   <div class="glass take">The business is getting better fast: <em>own brands, fashion turning profitable, more stores.</em> But at 302x, the price already expects it. From here, profit has to multiply.</div>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet-concept"><div class="grab"></div><div class="k">Concept</div><h3 id="cTitle"></h3><div class="gfx" id="cGfx"></div><p class="sp" id="cText"></p><button class="close">Got it</button></div>
+
+<script>
+(function(){
+  const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],bars=document.getElementById('bars'),count=document.getElementById('count'),root=document.documentElement;
+  slides.forEach(()=>bars.appendChild(document.createElement('i')));const segs=[...bars.children];let cur=0;
+  function activate(s){if(!s.classList.contains('on'))s.classList.add('on')}
+  function tint(s){const t=(s.dataset.tint||'').split(',');if(t.length===3){root.style.setProperty('--b1',t[0]);root.style.setProperty('--b2',t[1]);root.style.setProperty('--b3',t[2])}}
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cur=slides.indexOf(e.target);activate(e.target);tint(e.target);segs.forEach((g,i)=>{g.classList.toggle('done',i<=cur);g.classList.toggle('cur',i===cur)});document.getElementById('nudge').classList.toggle('hide',cur===slides.length-1);document.getElementById('nudgeT').textContent=cur===0?'Tap or swipe up':'Next';count.textContent=String(cur+1).padStart(2,'0')+' / '+slides.length}})},{root:deck,threshold:.55});
+  slides.forEach(s=>io.observe(s));
+  function go(i){i=Math.max(0,Math.min(slides.length-1,i));deck.scrollTo({top:i*deck.clientHeight,behavior:'smooth'})}
+  deck.addEventListener('click',e=>{if(e.target.closest('button,a,.toggle,.sheet'))return;if(getSelection&&String(getSelection()).length)return;
+    const x=e.clientX/window.innerWidth;go(x<0.3?cur-1:cur+1)});
+  document.getElementById('navUp').addEventListener('click',()=>go(cur-1));
+  document.getElementById('navDn').addEventListener('click',()=>go(cur+1));
+  document.addEventListener('keydown',e=>{if(document.querySelector('.sheet.open')){if(e.key==='Escape')closeAll();return}
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}});
+  const tg=document.getElementById('toggle');
+  tg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const bear=b.dataset.v==='bear';tg.classList.toggle('bear',bear);tg.querySelectorAll('button').forEach(x=>x.classList.toggle('act',x===b));
+    document.getElementById('vbull').classList.toggle('show',!bear);document.getElementById('vbear').classList.toggle('show',bear)}));
+  const C={
+   partner:{t:'Brand <em>partner</em>',g:`<div class="flow"><div class="box"><b>Global brand</b><span>owns the name</span></div><div class="op">+</div><div class="box g"><b>Nykaa</b><span>runs the shop, stock and delivery</span></div></div>`,x:'Big global brands often find India hard to run alone. They hand the day-to-day job to a local company that <b>already knows Indian shoppers.</b>'},
+   promoter:{t:'Promoter',g:`<div class="flow"><div class="box g"><b>Nayar family</b><span>promoter</span></div><div class="op">=</div><div class="box"><b>52%</b><span>controls big decisions</span></div></div>`,x:'The founder family that <b>controls</b> a listed company. Investors watch what promoters do with their own shares.'},
+   gm:{t:'Gross <em>margin</em>',g:`<div class="flow"><div class="box"><b>₹100</b><span>selling price</span></div><div class="op">−</div><div class="box"><b>₹54</b><span>cost of product</span></div><div class="op">=</div><div class="box g"><b>46%</b><span>gross margin</span></div></div>`,x:'What\'s left from a sale after paying for the product itself, <b>before</b> rent, salaries, delivery and ads.'},
+   inv:{t:'Inventory <em>model</em>',g:`<div class="flow"><div class="box"><b>Marketplace</b><span>connects sellers and buyers</span></div><div class="op">vs</div><div class="box g"><b>Inventory</b><span>buys and resells itself</span></div></div>`,x:'Owning the stock means <b>more control and more profit per sale</b>, but money gets locked up in products sitting in warehouses.'},
+   omni:{t:'Omnichannel',g:`<div class="flow"><div class="box"><b>App</b></div><div class="op">+</div><div class="box"><b>Stores</b></div><div class="op">+</div><div class="box g"><b>Other apps</b><span>and small shops</span></div></div>`,x:'Selling everywhere a customer might shop, so <b>one brand reaches them online, offline and on other apps.</b>'},
+   pl:{t:'Private <em>label</em>',g:`<div class="flow"><div class="box"><b>Store</b><span>sells others' products</span></div><div class="op">→</div><div class="box g"><b>Own brand</b><span>keeps the brand's profit too</span></div></div>`,x:'A store\'s own brand. The store keeps <b>both the shop\'s cut and the brand\'s cut</b>, and knows exactly what customers want from its sales data.'},
+   val:{t:'Valuation',g:`<div class="flow"><div class="box"><b>₹265 cr</b><span>paid</span></div><div class="op">÷</div><div class="box"><b>39%</b><span>stake bought</span></div><div class="op">=</div><div class="box g"><b>~₹680 cr</b><span>whole brand</span></div></div>`,x:'What a whole company is worth, worked out from the price someone pays for a piece of it.'},
+   gmv:{t:'GMV <em>(gross merchandise value)</em>',g:`<div class="flow"><div class="box g"><b>GMV</b><span>total value of everything ordered</span></div><div class="op">≠</div><div class="box"><b>Revenue</b><span>what Nykaa books</span></div></div>`,x:'The total value of all orders, before returns and discounts. For a platform, it shows <b>how much shopping happens</b> through it.'},
+   moat:{t:'Moat',g:`<div class="flow"><div class="box"><b>Trust</b><span>no fakes</span></div><div class="op">+</div><div class="box"><b>Luxury</b><span>brands choose it</span></div><div class="op">+</div><div class="box g"><b>Own brands</b><span>sold everywhere</span></div></div>`,x:'Whatever makes a business <b>hard to copy.</b> Rivals can match prices, but trust takes years to build.'},
+   pe:{t:'P/E <em>(price to earnings)</em>',g:`<div class="flow"><div class="box"><b>Share price</b></div><div class="op">÷</div><div class="box"><b>Profit per share</b><span>one year</span></div><div class="op">=</div><div class="box g"><b>302x</b><span>Nykaa</span></div></div>`,x:'How many years of today\'s profit you pay for upfront. <b>Higher means investors expect much faster growth.</b>'},
+   ipo:{t:'IPO <em>price</em>',g:`<div class="flow"><div class="box"><b>₹1,125</b><span>original price</span></div><div class="op">÷</div><div class="box"><b>6</b><span>5 bonus shares per 1</span></div><div class="op">=</div><div class="box g"><b>₹188</b><span>today's terms</span></div></div>`,x:'The price a company first sells shares at. Nykaa later gave 5 free shares for every 1 held, so the old price is <b>divided by 6</b> to compare fairly.'},
+   op:{t:'Operating <em>leverage</em>',g:`<div class="flow"><div class="box"><b>Sales +30%</b></div><div class="op">→</div><div class="box g"><b>Profit +200%</b><span>costs grow slower</span></div></div>`,x:'When rent, staff and tech costs grow slower than sales, <b>profit grows much faster than sales.</b> It\'s why Nykaa\'s profit tripled on 28% more revenue.'},
+   rerate:{t:'Re-rating',g:`<div class="flow"><div class="box"><b>Same profit</b></div><div class="op">×</div><div class="box"><b>Lower P/E</b></div><div class="op">=</div><div class="box g"><b>Lower price</b></div></div>`,x:'When the market changes how many years of profit it will pay for. At 302x, Nykaa\'s P/E is <b>more likely to fall than rise</b>, so profit has to do the work.'}
+  };
+  const scrim=document.getElementById('scrim');
+  function closeAll(){document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));scrim.classList.remove('open')}
+  function open(id){const s=document.getElementById(id);if(!s)return;s.scrollTop=0;s.classList.add('open');scrim.classList.add('open')}
+  document.querySelectorAll('[data-concept]').forEach(b=>b.addEventListener('click',()=>{const c=C[b.dataset.concept];if(!c)return;
+    document.getElementById('cTitle').innerHTML=c.t;document.getElementById('cGfx').innerHTML=c.g;document.getElementById('cText').innerHTML=c.x;open('sheet-concept')}));
+  scrim.addEventListener('click',closeAll);
+  document.querySelectorAll('.sheet .close').forEach(b=>b.addEventListener('click',closeAll));
+  document.querySelectorAll('.sheet').forEach(s=>{let y0=null;s.addEventListener('touchstart',e=>{if(s.scrollTop<=0)y0=e.touches[0].clientY},{passive:true});s.addEventListener('touchmove',e=>{if(y0!==null&&e.touches[0].clientY-y0>70){closeAll();y0=null}},{passive:true});s.addEventListener('touchend',()=>y0=null)});
+  function fit(){slides.forEach(s=>{const inn=s.querySelector('.inner'),v=s.querySelector('.v'),h=s.querySelector('h1,h2');if(!v)return;
+    v.style.zoom='';if(h)h.style.fontSize='';const base=parseFloat(getComputedStyle(v).zoom)||1;let z=base,n=0;
+    while(inn.scrollHeight>inn.clientHeight+1&&n<16){z-=.04*base;v.style.zoom=z;n++}
+    if(inn.scrollHeight>inn.clientHeight+1&&h){h.style.fontSize=(parseFloat(getComputedStyle(h).fontSize)*.88)+'px'}})}
+  let ft;window.addEventListener('resize',()=>{clearTimeout(ft);ft=setTimeout(fit,120)});
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(fit);fit();
+  document.getElementById('restart').addEventListener('click',()=>go(0));
+})();
+</script>
+</body>
+</html>

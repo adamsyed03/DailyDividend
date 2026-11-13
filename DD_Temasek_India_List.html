@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Daily Dividend — Temasek India Portfolio</title>
+<style>
+  :root{
+    --ink:#0b4858;
+    --teal:#0e4e60;
+    --paper:#f4f0e6;
+    --muted:#6a6a63;
+    --gold:#b08a3f;
+    --blue:#b9dce8;
+    --blue2:#dbeaf0;
+    --line:#d8d1c3;
+    --white:#f8f5ed;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#ddd8cf;color:#203136;font-family:Georgia,"Times New Roman",serif;line-height:1.34}
+  .deck{display:flex;flex-direction:column;gap:28px;padding:28px 12px 56px}
+  .page{width:min(100%,760px);min-height:1075px;margin:0 auto;background:var(--paper);position:relative;overflow:hidden;padding:42px 54px 46px;box-shadow:0 8px 28px rgba(0,0,0,.14)}
+  .page.dark{background:var(--teal);color:var(--white)}
+  .eyebrow{font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.34em;text-transform:uppercase;color:#608b94;margin:0 0 28px}
+  .dark .eyebrow{color:#90bbc5}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:var(--ink);margin:0}
+  .dark h1,.dark h2,.dark h3{color:var(--white)}
+  h1{font-size:58px;line-height:.94;letter-spacing:-.025em}
+  h2{font-size:38px;line-height:.98;letter-spacing:-.02em}
+  h3{font-size:19px;line-height:1.08}
+  p{margin:0 0 15px}
+  .muted{color:var(--muted)}
+  .dark .muted{color:#b9ced3}
+  .accent{color:#8bd0e0}
+  .lede{font-size:17px;max-width:530px;color:#cad9dc;margin-top:22px}
+  .big-stat{margin-top:36px;font:700 27px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8fd0dd}
+  .big-stat small{display:block;font:400 12px/1.4 Georgia,serif;color:#9fbcc3;margin-top:6px}
+  .folio{position:absolute;left:54px;right:54px;bottom:34px;display:flex;justify-content:space-between;align-items:end;font:700 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.24em;text-transform:uppercase;color:#87a8af}
+  .page:not(.dark) .folio{color:#b4ab9a;justify-content:center;font-family:Georgia,serif;letter-spacing:0;font-weight:400}
+  .rule{height:1px;background:rgba(128,128,128,.25);margin:0 0 30px}
+  .dark .rule{background:rgba(255,255,255,.17)}
+  .intro-copy{font-size:16px;max-width:620px}
+  .section-label{font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.28em;text-transform:uppercase;color:#608b94;margin:28px 0 10px}
+  .barrow{display:grid;grid-template-columns:48px 1fr 58px;gap:10px;align-items:center;margin:10px 0;font-size:12px}
+  .bar{height:14px;background:#d8e3e6;position:relative}.bar > i{display:block;height:100%;background:#58a6ba}
+  .footnote{font-size:12px;color:#81796f;font-style:italic;margin-top:11px}
+  .glossary{margin-top:28px}.glossary h3{font-size:12px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:6px}.glossary p{font-size:14px}
+  .list-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px}.list-head small{color:#76867f}
+  .holding{display:grid;grid-template-columns:28px 1fr auto;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);align-items:start}
+  .holding .num{font:700 9px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#b39d68;padding-top:2px}
+  .holding h3{font-size:17px}.holding p{font-size:12px;color:#6d6b64;margin:4px 0 0}.badge{font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;background:#deebef;color:#477383;padding:4px 7px;white-space:nowrap}
+  .badge.gold{background:#eee6d2;color:#8a6c2e}.dark .badge{background:#174f5e;color:#cbe6ec}
+  .dark .holding{border-color:rgba(255,255,255,.18)}.dark .holding p{color:#c1d3d6}.dark .holding h3{color:#fff}
+  .dark-card{background:rgba(255,255,255,.055);padding:24px 28px;margin:22px 0}.dark-card p{color:#d6e2e4;font-size:14px}
+  .returns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.returns div{background:rgba(255,255,255,.055);padding:14px 7px;text-align:center}.returns strong{display:block;color:#9ad3df;font:700 18px/1 ui-monospace,SFMono-Regular,Menlo,monospace}.returns span{font-size:11px;color:#c6d8db}
+  .pattern-row{display:grid;grid-template-columns:135px 1fr 20px;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}.pattern-row strong{color:var(--ink)}.squares{font-family:monospace;color:var(--gold);letter-spacing:5px}.pattern-row em{font-style:normal;color:#858078;text-align:right}
+  .quote-box{background:#e6e0d5;padding:30px 34px;margin-top:24px;font-size:17px}.quote-box strong{color:var(--ink)}
+  .quote-strip{background:#d6e8ee;margin:0 -34px -30px;padding:22px 34px;font:700 16px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;color:#275b68}.quote-strip small{display:block;margin-top:10px;font:italic 12px Georgia,serif;color:#647983}
+  .sell{grid-template-columns:16px 1fr auto}.bullet{color:var(--gold);font-size:16px;line-height:1}.callout{background:#ece7db;padding:20px 24px;margin-top:22px;font-size:13px}.callout strong{color:var(--ink)}
+  .final-box{background:var(--teal);color:white;padding:30px 34px;margin-bottom:28px}.final-box h2{color:white;font-size:33px}.final-box p{color:#d4e1e3;font-size:14px}.final-box strong{color:white}
+  .handle{font:700 14px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);margin:20px 0 8px}
+  .sources{font-size:12px;color:#5d5f5b}.sources h3{font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.28em;text-transform:uppercase;color:#608b94;margin:25px 0 12px}.legal{font-size:9.5px;line-height:1.45;color:#858078;margin-top:16px}
+  @media(max-width:700px){.deck{padding:0;gap:0}.page{min-height:auto;width:100%;padding:34px 24px 62px;box-shadow:none;border-bottom:1px solid #cfc9be}.folio{left:24px;right:24px}.page:not(.dark) .folio{display:none}h1{font-size:48px}h2{font-size:34px}.holding{grid-template-columns:25px 1fr auto}.returns{grid-template-columns:repeat(2,1fr)}.pattern-row{grid-template-columns:105px 1fr 18px}}
+  @media print{body{background:white}.deck{padding:0;gap:0}.page{width:210mm;min-height:297mm;box-shadow:none;break-after:page}.page:last-child{break-after:auto}}
+</style>
+</head>
+<body>
+<main class="deck">
+
+<section class="page dark">
+  <div class="eyebrow">The Daily Dividend</div><div class="rule"></div>
+  <div style="margin-top:145px">
+    <h1>Everyone<br>Sold India.<br><span class="accent">Except Them.</span></h1>
+    <p class="lede">Singapore's state investor owns pieces of Haldiram's, Manipal, the NSE and Milky Mist. Here is every holding we could find.</p>
+    <div class="big-stat">$42 billion<small>Temasek's India exposure, August 2026</small></div>
+  </div>
+  <div class="folio"><span>A portfolio list · twenty-eight names</span><span></span></div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">Read this first</div><div class="rule"></div>
+  <h2>Temasek only<br>admits to two<br>of these.</h2>
+  <div class="intro-copy" style="margin-top:18px">
+    <p>Their official portfolio names exactly two Indian companies.<br><strong>ICICI Bank and Manipal.</strong></p>
+    <p>Everything else here was pulled from stock exchange filings, IPO documents and block deal disclosures. Accurate as at the dates shown, not live.</p>
+  </div>
+  <div class="section-label">Their India money, three years</div>
+  <div class="barrow"><span>FY24</span><div class="bar"><i style="width:74%"></i></div><strong>$37bn</strong></div>
+  <div class="barrow"><span>FY25</span><div class="bar"><i style="width:100%"></i></div><strong>$50bn</strong></div>
+  <div class="barrow"><span>FY26</span><div class="bar"><i style="width:84%"></i></div><strong>$42bn</strong></div>
+  <p class="footnote">That drop is not them losing faith. It is one sale. They sold their Schneider Electric India stake for 5.5 billion euros.</p>
+  <div class="section-label">Two words you need</div>
+  <div class="glossary"><h3>Listed</h3><p>The company trades on the stock market. Its ownership is public.</p><h3>Unlisted</h3><p>Still private. This is where big investors get in first, long before an IPO.</p></div>
+  <div class="folio">2</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">What they own · part one</div><div class="rule"></div>
+  <div class="list-head"><div><h2>The listed ones</h2><small>Eleven companies on the Indian public markets.</small></div></div>
+  <div class="holding"><div class="num">01</div><div><h3>Manipal Health</h3><p>One of India's largest hospital chains. Their biggest India bet.</p></div><span class="badge">51%</span></div>
+  <div class="holding"><div class="num">02</div><div><h3>Molbio Diagnostics</h3><p>Portable TB and disease testing machines for rural clinics.</p></div><span class="badge">8.74%</span></div>
+  <div class="holding"><div class="num">03</div><div><h3>Global Health (Medanta)</h3><p>Premium hospitals. In before the IPO, still holding.</p></div><span class="badge">~17%</span></div>
+  <div class="holding"><div class="num">04</div><div><h3>Shiprocket</h3><p>The shipping software behind India's small online sellers.</p></div><span class="badge">5.29%</span></div>
+  <div class="holding"><div class="num">05</div><div><h3>Milky Mist</h3><p>Paneer, curd and cheese. Bought in months before the IPO.</p></div><span class="badge">5.16%</span></div>
+  <div class="holding"><div class="num">06</div><div><h3>Dr Agarwal's Health Care</h3><p>Eye hospitals. They just halved this one. See page 6.</p></div><span class="badge">~5%</span></div>
+  <div class="holding"><div class="num">07</div><div><h3>ICICI Bank</h3><p>A private bank. Held quietly for years.</p></div><span class="badge">2%</span></div>
+  <div class="holding"><div class="num">08</div><div><h3>AU Small Finance Bank</h3><p>The RBI has cleared them to go up to 7%. Watch this one.</p></div><span class="badge">1.37%</span></div>
+  <div class="holding"><div class="num">09</div><div><h3>HDFC Bank</h3><p>India's largest private bank.</p></div><span class="badge">minority</span></div>
+  <div class="holding"><div class="num">10</div><div><h3>Pine Labs</h3><p>The card machine in the shop. Listed November 2025.</p></div><span class="badge">minority</span></div>
+  <div class="holding"><div class="num">11</div><div><h3>Adani Ports</h3><p>Ports and logistics. Bought in 2018.</p></div><span class="badge">small</span></div>
+  <div class="folio">3</div>
+</section>
+
+<section class="page dark">
+  <div class="eyebrow">The tell</div><div class="rule"></div>
+  <h2>Four IPOs.<br>Four weeks.<br><span class="accent">Almost no selling.</span></h2>
+  <p class="lede" style="margin-top:16px">Four Temasek companies listed in India this month. Here is what they actually did with them.</p>
+  <div style="margin-top:18px">
+    <div class="holding"><div class="num">05 Aug</div><div><h3>Manipal Health</h3></div><span class="badge">SOLD A SLICE</span></div>
+    <div class="holding"><div class="num">17 Aug</div><div><h3>Molbio</h3></div><span class="badge">HELD</span></div>
+    <div class="holding"><div class="num">18 Aug</div><div><h3>Milky Mist</h3></div><span class="badge">HELD</span></div>
+    <div class="holding"><div class="num">19 Aug</div><div><h3>Shiprocket</h3></div><span class="badge">HELD</span></div>
+  </div>
+  <div class="dark-card"><p>In Shiprocket, six other investors and both founders sold. Temasek did not.</p><p>In Milky Mist, they bought a stake four months before the IPO, which made the company shrink the issue.</p><p><strong style="color:white">Manipal was the only one they trimmed. They kept control.</strong></p></div>
+  <div class="section-label" style="color:#89b6c0">Where those four trade now</div>
+  <div class="returns"><div><strong>+25%</strong><span>Manipal</span></div><div><strong>+26%</strong><span>Molbio</span></div><div><strong>+40%</strong><span>Milky Mist</span></div><div><strong>+50%</strong><span>Shiprocket</span></div></div>
+  <p class="footnote" style="color:#abc1c6">Above IPO price, week of 20 August 2026. Early prices move fast and mean little on their own.</p>
+  <p style="margin-top:16px"><strong>They are not here for the listing pop.</strong></p>
+  <div class="folio"><span></span><span>4</span></div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">What they own · part two</div><div class="rule"></div>
+  <div class="list-head"><div><h2>The unlisted ones</h2><small>This is where the money goes in early.</small></div></div>
+  <div class="holding"><div class="num">12</div><div><h3>Haldiram's</h3><p>Bhujia and sweets. About $1bn for 10%, at a $10bn valuation.</p></div><span class="badge gold">~15%</span></div>
+  <div class="holding"><div class="num">13</div><div><h3>National Stock Exchange</h3><p>India's main exchange. Bought in 2010. Now heading to IPO.</p></div><span class="badge gold">~5%</span></div>
+  <div class="holding"><div class="num">14</div><div><h3>Cult.fit</h3><p>Gyms and fitness. Added ₹440 crore in March 2026. Has now filed to list.</p></div><span class="badge gold">11.88%</span></div>
+  <div class="holding"><div class="num">15</div><div><h3>Rebel Foods</h3><p>Cloud kitchens. Faasos and Behrouz Biryani.</p></div><span class="badge gold">20 to 25%</span></div>
+  <div class="holding"><div class="num">16</div><div><h3>O2 Power</h3><p>Solar and wind. A $500m platform they built from scratch.</p></div><span class="badge gold">50% JV</span></div>
+  <div class="holding"><div class="num">17</div><div><h3>Lenskart</h3><p>Eyewear. In since 2021.</p></div><span class="badge gold">minority</span></div>
+  <div class="holding"><div class="num">18</div><div><h3>Cloudnine</h3><p>Maternity hospitals. Healthcare again.</p></div><span class="badge gold">minority</span></div>
+  <div class="holding"><div class="num">19</div><div><h3>Skyroot Aerospace</h3><p>Private rockets.</p></div><span class="badge gold">minority</span></div>
+  <div class="holding"><div class="num">20</div><div><h3>PharmEasy</h3><p>Online pharmacy. Valuation collapsed. Stake not verifiable.</p></div><span class="badge gold">unclear</span></div>
+  <div class="holding"><div class="num">21</div><div><h3>Info Edge Ventures</h3><p>The startup fund run by Naukri's parent company.</p></div><span class="badge gold">biggest backer</span></div>
+  <div class="holding"><div class="num">22</div><div><h3>Vertex, InnoVen, EvolutionX</h3><p>Their own venture funds and startup lenders in India.</p></div><span class="badge gold">owned</span></div>
+  <div class="folio">5</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">The pattern</div><div class="rule"></div>
+  <h2>They buy the<br>same idea<br>over and over.</h2>
+  <p class="intro-copy" style="margin-top:18px">Twenty-two holdings. Sort them by what the business actually does.</p>
+  <div style="margin-top:18px">
+    <div class="pattern-row"><strong>Healthcare</strong><span class="squares">■■■■■■</span><em>6</em></div>
+    <div class="pattern-row"><strong>Consumer</strong><span class="squares">■■■■■</span><em>5</em></div>
+    <div class="pattern-row"><strong>Financial</strong><span class="squares">■■■■</span><em>4</em></div>
+    <div class="pattern-row"><strong>Tech and<br>logistics</strong><span class="squares">■■■■</span><em>4</em></div>
+    <div class="pattern-row"><strong>Energy</strong><span class="squares">■■</span><em>2</em></div>
+    <div class="pattern-row"><strong>Space</strong><span class="squares">■</span><em>1</em></div>
+  </div>
+  <div class="quote-box">
+    <p>Hospitals and household spending are more than half the list.</p>
+    <p>The bet underneath every one of them is the same.<br><strong>Indians earn more, so Indians spend more.</strong> On food, on doctors, on gyms, on deliveries.</p>
+    <p>They are not picking sectors. They are picking one idea and buying it eleven different ways.</p>
+    <div class="quote-strip">India is our best-performing<br>market on a 10-year basis.<small>Temasek, August 2026</small></div>
+  </div>
+  <div class="folio">6</div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">The other half</div><div class="rule"></div>
+  <h2>They sell too.</h2>
+  <p class="intro-copy" style="margin-top:8px">A list of buys with no sells is a fan page, not research.</p>
+  <div style="margin-top:18px">
+    <div class="holding sell"><div class="bullet">■</div><div><h3>Schneider Electric India</h3><p>Electrical equipment. Their biggest India cash out ever, July 2025. This was the private joint venture, not the listed Schneider stock.</p></div><span class="badge">€5.5bn</span></div>
+    <div class="holding sell"><div class="bullet">■</div><div><h3>PB Fintech (PolicyBazaar)</h3><p>Insurance comparison site. A clean, complete exit for ₹2,425 crore.</p></div><span class="badge">sold all</span></div>
+    <div class="holding sell"><div class="bullet">■</div><div><h3>Dr Agarwal's</h3><p>Sold ₹797 crore worth on 12 August 2026, in the same month three other bets listed.</p></div><span class="badge">cut by half</span></div>
+    <div class="holding sell"><div class="bullet">■</div><div><h3>Devyani International</h3><p>KFC and Pizza Hut in India. Sold down twice. Close to fully out.</p></div><span class="badge">sold down</span></div>
+    <div class="holding sell"><div class="bullet">■</div><div><h3>Eternal (Zomato)</h3><p>Bought 1.14% in 2020. No longer shows up as a major holder.</p></div><span class="badge">gone</span></div>
+    <div class="holding sell"><div class="bullet">■</div><div><h3>Godrej Agrovet</h3><p>Animal feed. Trimmed a small position in 2024.</p></div><span class="badge">cut 1.4%</span></div>
+    <div class="holding sell"><div class="bullet">■</div><div><h3>Medreich</h3><p>Generic pharma manufacturing. An older, completed exit.</p></div><span class="badge">sold</span></div>
+  </div>
+  <div class="callout">Schneider alone is worth more than everything else on this page put together. It is also why the headline looks worse than the story is.<br><br>India exposure fell from about $50bn to $42bn. <strong>That is one cheque coming in, not conviction going out.</strong></div>
+  <div class="folio">7</div>
+</section>
+
+<section class="page">
+  <div class="final-box">
+    <div class="eyebrow" style="color:#8bb4bd;margin-bottom:18px">The one thing to remember</div>
+    <h2>They are not trading<br>India. They are owning it.</h2>
+    <p style="margin-top:18px">They bought the stock exchange in 2010 and are only selling now. Sixteen years.</p>
+    <p>They held three of this month's four IPOs while other investors cashed out.</p>
+    <p><strong>The signal is not what they buy. It is how long they refuse to sell.</strong></p>
+  </div>
+  <div class="handle">@dailydividend.official</div>
+  <p>For more stories behind the stocks you actually want to understand.</p>
+  <div class="sources"><h3>Where this came from</h3><p>Temasek Review 2026<br>BSE and NSE filings and block deal disclosures<br>IPO prospectuses and abridged prospectuses<br>Competition Commission of India approvals<br>CNBC, Business Standard, Reuters, Entrackr</p></div>
+  <div class="legal">Not investment advice. For educational purposes only. This is a record of one investor's disclosed positions, not a recommendation to buy or sell anything.<br><br>Temasek officially discloses only two Indian holdings, ICICI Bank and Manipal Health, as at 31 March 2026 in Temasek Review 2026. Every other holding here is compiled from Indian stock exchange filings, IPO prospectuses, competition authority approvals and block deal disclosures. Figures are accurate as at the dates shown and are subject to change. Do your own research before making any financial decision.</div>
+  <div class="folio">8</div>
+</section>
+
+</main>
+</body>
+</html>

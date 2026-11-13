@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Daily Dividend: Coca-Cola V6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6F2E9;--cream-2:#EFEADE;--paper:#FAF7F0;
+  --ink:#100F0E;--ink-2:#2A2A28;--muted:#6B6B66;--mute-2:#A8A39A;--line:#DDD5C4;
+  --red:#ED232A;--red-deep:#B3151A;--red-dark:#7A0C10;
+  --red-lite:#FF6B5E;
+  --green-deep:#16543A;--green-lite:#8FD8AF;--green-soft:#D6E7DC;
+  --red-soft:#F2D9D3;
+  --gold:#C49A3E;--gold-soft:#F2E5C2;
+  --accent:var(--red);--accent-soft:rgba(237,35,42,0.10);
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.055'/></svg>");
+  --co-bg:radial-gradient(circle at 85% -5%,rgba(237,35,42,0.50),transparent 55%),radial-gradient(circle at -10% 110%,rgba(122,12,16,0.55),transparent 55%),linear-gradient(160deg,#181413,#070505 60%,#000);
+  --co-logo-bg:#ED232A;--co-logo-color:#fff
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:#141110;overflow:hidden;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+
+/* ── STAGE + PHONE FRAME ── */
+.stage{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at top,rgba(237,35,42,0.09),transparent 60%),#141110}
+.phone{width:100%;max-width:400px;height:100%;max-height:860px;background:var(--cream);border-radius:44px;overflow:hidden;position:relative;box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.5)}
+@media(max-width:480px){.stage{padding:0}.phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}}
+@media(min-width:481px) and (max-height:900px){.phone{max-height:calc(100vh - 48px)}}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex}
+.statusbar{height:44px;flex-shrink:0}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(246,242,233,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 16px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+
+/* ── TODAY ── */
+.today-scroll{flex:1;overflow-y:auto;padding:8px 24px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 22px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 12px}
+.today-hero{background:var(--grain),var(--co-bg);color:var(--cream);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:26px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;padding:5px 10px;background:rgba(246,242,233,0.14);border-radius:100px;margin-bottom:18px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;background:var(--red-lite);border-radius:50%;box-shadow:0 0 8px var(--red-lite);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:rgba(246,242,233,0.55);text-transform:uppercase;margin-bottom:8px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:27px;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px}
+.hero-h em{font-style:italic;color:var(--red-lite);font-weight:300}
+.hero-stock{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hero-sp{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--cream)}
+.hero-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.hero-sc.up{background:rgba(46,138,96,0.28);color:#8FD8AF}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(246,242,233,0.15);font-family:var(--mono);font-size:11px;color:rgba(246,242,233,0.45)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:9px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:13px;color:var(--muted);margin-bottom:14px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s}
+.rcard:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+.rl{display:flex;align-items:center;gap:12px;min-width:0}
+.rthumb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── STACK SHELL ── */
+#screen-stack{background:#000}
+.shell{position:absolute;inset:0;overflow:hidden}
+.prog{position:absolute;top:50px;left:16px;right:16px;display:flex;gap:4px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.22);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.9)}
+.prog.dark .tick{background:rgba(0,0,0,0.14)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.8)}
+.topbar{position:absolute;top:64px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.co-logo{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.55);font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:8px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:32px;height:32px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tbtn svg{width:15px;height:15px}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:#fff}
+
+/* ── CARD BASE (top aligned) ── */
+.track{position:absolute;inset:0}
+.card{position:absolute;inset:0;padding:104px 22px 96px;display:none;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card.active{display:flex;animation:cardIn 0.36s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card.entered .a1{animation:slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1) both}
+.card.entered .a2{animation:slideUp 0.4s cubic-bezier(0.2,0.8,0.2,1) 0.07s both}
+.card.entered .a3{animation:slideUp 0.45s cubic-bezier(0.2,0.8,0.2,1) 0.15s both}
+.card.entered .a4{animation:slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1) 0.24s both}
+
+/* ── CARD BACKGROUNDS (Coke red & black, grainy) ── */
+.card.bg-cover{background:var(--grain),var(--co-bg);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-dkred{background:var(--grain),radial-gradient(circle at 80% 0%,rgba(237,35,42,0.35),transparent 55%),linear-gradient(165deg,#340C09,#150404 70%,#0C0202);color:var(--cream)}
+.card.bg-green{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(143,216,175,0.18),transparent 50%),linear-gradient(160deg,#16543A,#0A2C1D 70%,#072115);color:var(--cream)}
+.card.bg-red{background:var(--grain),radial-gradient(circle at 85% -5%,rgba(255,107,94,0.22),transparent 50%),linear-gradient(160deg,#8E1F14,#430B06 70%,#2E0603);color:var(--cream)}
+.card.bg-gold{background:var(--grain),linear-gradient(165deg,#F7EDD4,#ECDAAB);color:var(--ink)}
+.card.bg-brand{background:var(--grain),var(--co-bg);color:var(--cream)}
+
+/* ── TYPOGRAPHY ── */
+.eb-c{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px;opacity:0.6}
+.card.bg-cover .eb-c,.card.bg-brand .eb-c,.card.bg-dkred .eb-c{color:var(--red-lite);opacity:1}
+.card.bg-green .eb-c{color:var(--green-lite);opacity:1}
+.card.bg-red .eb-c{color:#FFC9C0;opacity:1}
+.card.bg-gold .eb-c{color:#8a6a1e;opacity:1}
+.hl{font-family:var(--serif);font-weight:400;font-size:clamp(29px,8.2vw,35px);line-height:1.08;letter-spacing:-0.025em;margin-bottom:16px}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-cover .hl em,.card.bg-brand .hl em,.card.bg-dkred .hl em{color:var(--red-lite)}
+.card.bg-cream .hl em{color:var(--red-deep)}
+.card.bg-gold .hl em{color:var(--red-deep)}
+.card.bg-green .hl em{color:var(--green-lite)}
+.card.bg-red .hl em{color:#FFD3CB}
+.bd{font-family:var(--sans);font-size:16px;line-height:1.6;opacity:0.9}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+.card.bg-gold .bd{color:var(--ink-2)}
+.kick{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.45;color:var(--ink-2)}
+.kick strong{font-style:normal;font-weight:600;color:var(--red-deep)}
+.card.bg-cover .kick,.card.bg-brand .kick,.card.bg-dkred .kick,.card.bg-green .kick,.card.bg-red .kick{border-top-color:rgba(255,255,255,0.16);color:rgba(246,242,233,0.85)}
+.card.bg-dkred .kick strong,.card.bg-cover .kick strong{color:var(--red-lite)}
+
+/* ── COVER ── */
+.cv-top{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.cv-mark{width:52px;height:52px;border-radius:14px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:26px;box-shadow:0 8px 24px rgba(237,35,42,0.35);flex-shrink:0}
+.cv-name{font-family:var(--serif);font-weight:500;font-size:19px;letter-spacing:-0.01em;margin-bottom:5px}
+.cv-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75)}
+.cv-stock{display:flex;align-items:baseline;gap:10px;margin-bottom:22px}
+.cv-sp{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--cream)}
+.cv-sc{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px}
+.cv-sc.up{background:rgba(46,138,96,0.28);color:#8FD8AF}
+
+/* ── MONEY: 3 glass rows ── */
+.mn-rows{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.mn-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:16px;padding:14px 16px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.mn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.mn-name{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink)}
+.mn-pct{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-0.02em;color:var(--red-deep)}
+.mn-bar{height:9px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.mn-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12)}
+.mn-desc{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.45}
+
+/* ── MODEL: vault callout + 3-step flow ── */
+.md-vault{background:rgba(179,21,26,0.06);border:1.5px solid rgba(179,21,26,0.28);border-radius:14px;padding:12px 14px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;box-shadow:0 4px 18px rgba(179,21,26,0.06)}
+.md-vault-ic{font-size:18px;line-height:1;flex-shrink:0;margin-top:2px}
+.md-vault-tx{font-family:var(--serif);font-size:15px;line-height:1.4;letter-spacing:-0.01em;color:var(--ink)}
+.md-vault-tx strong{font-weight:700;color:var(--red-deep)}
+.md-flow{display:flex;flex-direction:column}
+.md-step{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:15px;padding:13px 16px;opacity:0;transform:translateY(6px);transition:opacity 0.4s ease,transform 0.4s ease;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.md-step.visible{opacity:1;transform:translateY(0)}
+.md-n{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red-deep);font-weight:600;margin-bottom:4px}
+.md-t{font-family:var(--serif);font-size:17.5px;font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-0.01em;margin-bottom:3px}
+.md-s{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.45}
+.md-arrow{text-align:center;padding:2px 0;font-size:15px;opacity:0;transition:opacity 0.3s;color:var(--red-deep)}
+.md-arrow.visible{opacity:0.7}
+
+/* ── RIVALS: glass boxes ── */
+.rv-rows{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.rv-row{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:15px;padding:12px 15px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 18px rgba(0,0,0,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+.rv-row.hero{background:rgba(179,21,26,0.06);border-color:rgba(179,21,26,0.32);box-shadow:0 4px 18px rgba(179,21,26,0.07)}
+.rv-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.rv-n{font-family:var(--sans);font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.rv-n .rv-emoji{font-size:14px}
+.rv-row.hero .rv-n{color:var(--red-deep)}
+.rv-val{font-family:var(--mono);font-size:14.5px;font-weight:600;color:var(--ink)}
+.rv-bar{height:7px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;margin-bottom:6px}
+.rv-fill{height:100%;border-radius:6px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.15s}
+.rv-tag{font-family:var(--sans);font-size:12.5px;color:var(--muted);line-height:1.4}
+
+/* ── HIDDEN TRUTH: one giant number + world mini-chart ── */
+.ht-myth{font-family:var(--serif);font-size:17px;font-style:italic;font-weight:300;text-decoration:line-through;text-decoration-color:rgba(255,255,255,0.5);text-decoration-thickness:1.5px;opacity:0.6;line-height:1.35;margin-bottom:18px}
+.ht-num{font-family:var(--serif);font-weight:300;font-size:clamp(58px,17vw,76px);line-height:0.95;letter-spacing:-0.04em;color:#fff;margin-bottom:6px}
+.ht-num span{font-size:0.36em;font-style:italic;font-weight:300;color:var(--red-lite);letter-spacing:-0.01em}
+.ht-sub{font-family:var(--serif);font-size:18.5px;font-weight:400;line-height:1.3;letter-spacing:-0.01em;color:var(--cream);margin-bottom:14px}
+.ht-sub em{font-style:italic;color:var(--red-lite)}
+.ht-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#FFC9C0;margin:18px 0 12px}
+.htv{display:flex;align-items:flex-end;gap:12px;height:140px}
+.htv-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.htv-val{font-family:var(--mono);font-size:12.5px;font-weight:600;color:#fff}
+.htv-bar{width:100%;max-width:36px;background:linear-gradient(180deg,var(--red-lite),#B3251C);border-radius:8px 8px 3px 3px;height:0;transition:height 0.9s cubic-bezier(0.2,0.8,0.2,1) 0.15s;box-shadow:0 0 18px rgba(255,107,94,0.25)}
+.htv-cn{font-family:var(--sans);font-size:10.5px;color:var(--cream);opacity:0.8;text-align:center;line-height:1.2}
+
+/* ── BULL / BEAR ACCORDIONS ── */
+.nf-acc-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.nf-acc-item{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.18);border-radius:16px;overflow:hidden;position:relative}
+.nf-acc-btn{width:100%;border:0;background:none;padding:15px 15px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation}
+.nf-acc-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;line-height:1;margin-top:1px}
+.card.bg-green .nf-acc-icon{color:var(--green-deep)}
+.card.bg-red .nf-acc-icon{color:#8E1F14}
+.nf-acc-title{flex:1;font-family:var(--serif);font-size:15.5px;font-weight:600;line-height:1.35;letter-spacing:-0.01em;padding-top:3px}
+.nf-acc-title strong{font-weight:700;color:#fff}
+.nf-acc-chevron{font-size:11px;opacity:0.5;transition:transform 0.25s;flex-shrink:0;margin-top:7px}
+.nf-acc-item.open .nf-acc-chevron{transform:rotate(180deg)}
+.nf-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.2,0.8,0.2,1)}
+.nf-acc-text{font-family:var(--sans);font-size:14.5px;line-height:1.6;opacity:0.95;padding:4px 16px 15px 55px;border-top:1px solid rgba(255,255,255,0.12)}
+.nf-acc-text strong{font-weight:600;opacity:1}
+.acc-ctx{display:block;margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.5;opacity:0.85}
+
+/* ── OWNERSHIP: Buffett spotlight ── */
+.ow-spot{background:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.9);border-radius:20px;padding:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 6px 24px rgba(0,0,0,0.07);margin-top:6px}
+.ow-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ow-face{width:52px;height:52px;border-radius:14px;background:var(--red-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0;box-shadow:0 6px 16px rgba(179,21,26,0.3)}
+.ow-name{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.ow-role{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--red-deep);font-weight:600;margin-top:3px}
+.ow-math{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ow-cell{flex:1}
+.ow-cv{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1}
+.ow-cl{font-family:var(--sans);font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.ow-arr{font-size:20px;color:var(--red-deep);flex-shrink:0}
+.ow-note{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.5;padding-top:13px;border-top:1px solid var(--line)}
+.ow-note strong{font-weight:600}
+
+/* ── DEBATE ── */
+.dis-pullquote{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px;box-shadow:0 6px 24px rgba(0,0,0,0.05);margin-bottom:18px;position:relative}
+.dis-pullquote-mark{font-family:var(--serif);font-size:54px;color:var(--red);opacity:0.16;line-height:1;position:absolute;top:6px;left:14px;font-weight:300;pointer-events:none}
+.dis-pullquote-text{font-family:var(--serif);font-size:19.5px;font-weight:400;color:var(--ink);line-height:1.35;letter-spacing:-0.01em;padding-left:8px;position:relative;z-index:1}
+.dis-pullquote-text em{font-style:italic;font-weight:300;color:var(--red-deep)}
+.dis-chip-section{margin-bottom:14px}
+.dis-chip-section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.dis-chip-section-label.works{color:#1F6B4A}
+.dis-chip-section-label.notyet{color:var(--red-deep)}
+.dis-chip-row{display:flex;flex-wrap:wrap;gap:7px}
+.dis-chip{font-family:var(--sans);font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:100px;line-height:1.2}
+.dis-chip.works{background:var(--green-soft);color:#1F6B4A;border:1px solid rgba(46,138,96,0.2)}
+.dis-chip.notyet{background:var(--red-soft);color:var(--red-deep);border:1px solid rgba(178,58,46,0.2)}
+
+/* ── VOTE ── */
+.cv-sent-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cv-sent{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border-radius:100px;font-weight:600}
+.cv-sent.bull{background:rgba(46,138,96,0.22);color:#8FD8AF;border:1px solid rgba(46,138,96,0.28)}
+.cv-vb{font-family:var(--mono);font-size:10px;color:rgba(246,242,233,0.45);letter-spacing:0.08em}
+.cv-vb .vb-num{color:var(--cream);font-weight:600}
+.cv-opts{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+.co-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);border-radius:15px;padding:16px 17px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;display:flex;align-items:center;gap:13px;touch-action:manipulation}
+.co-opt .ico{font-size:23px;flex-shrink:0;z-index:2}
+.co-opt .lbl{font-family:var(--serif);font-size:18px;font-weight:500;z-index:2}
+.co-opt .sub{font-family:var(--sans);font-size:11.5px;opacity:0.6;z-index:2;margin-left:auto;text-align:right}
+.cf{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 0.7s cubic-bezier(0.2,0.8,0.2,1);z-index:1}
+.co-opt.bull .cf{background:rgba(46,138,96,0.4)}
+.co-opt.neutral .cf{background:rgba(196,154,62,0.4)}
+.co-opt.bear .cf{background:rgba(209,74,61,0.4)}
+.cp{font-family:var(--mono);font-size:14px;font-weight:600;opacity:0;transition:opacity 0.4s 0.3s;z-index:2;margin-left:auto}
+.co-opt.revealed .sub{display:none}
+.co-opt.revealed .cp{opacity:1}
+.co-opt.you{border-color:var(--red-lite);border-width:2px}
+.cr{font-family:var(--sans);font-size:13.5px;text-align:center;margin-top:16px;opacity:0;transition:opacity 0.4s 0.5s;line-height:1.5}
+.cr.show{opacity:0.9}
+.cr strong{font-weight:600;opacity:1}
+
+/* ── NEXT ── */
+.np{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:15px;display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:pointer;transition:transform 0.18s}
+.np:hover{transform:translateX(4px)}
+.nthumb{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:20px;flex-shrink:0}
+.nco{font-family:var(--serif);font-size:17px;font-weight:600}
+.ntag{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;opacity:0.65;text-transform:uppercase;margin-top:2px}
+.ea{display:flex;flex-direction:column;gap:9px}
+.btn-p{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:14px 18px;font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+.btn-g{background:transparent;color:var(--cream);border:1px solid rgba(255,255,255,0.25);border-radius:100px;padding:13px 18px;font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;touch-action:manipulation}
+
+/* ── SWIPE ZONES + PILLS ── */
+.tz{position:absolute;top:100px;bottom:88px;width:22%;z-index:5;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+.pills{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:20}
+.pill{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);padding:9px 15px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
+.pills.dark .pill{background:rgba(0,0,0,0.07);color:var(--ink);border-color:rgba(0,0,0,0.12)}
+
+/* ── DRAWER (deep dive) ── */
+.dw-bd{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.dw-bd.open{opacity:1;pointer-events:auto}
+.dw{position:absolute;left:0;right:0;bottom:0;height:80%;background:var(--paper);border-radius:24px 24px 0 0;z-index:210;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);display:flex;flex-direction:column;box-shadow:0 -20px 60px rgba(0,0,0,0.3)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:40px;height:4px;background:var(--mute-2);border-radius:4px;margin:10px auto 0;flex-shrink:0}
+.dw-h{padding:16px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dw-eb{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--red-deep);text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.dw-t{font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:-0.01em}
+.dw-x{background:rgba(0,0,0,0.06);border:0;width:30px;height:30px;border-radius:50%;color:var(--ink);font-size:16px;cursor:pointer}
+.dw-b{overflow-y:auto;padding:20px 22px 44px}
+.d-hero{font-family:var(--serif);font-size:23px;font-weight:400;line-height:1.2;letter-spacing:-0.02em;color:var(--ink);margin-bottom:14px}
+.d-hero em{font-style:italic;font-weight:300;color:var(--red-deep)}
+.d-p{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--ink-2);margin:0 0 13px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-big{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 19px;margin:18px 0;display:flex;align-items:center;gap:17px;box-shadow:0 3px 14px rgba(0,0,0,0.04)}
+.d-bignum{font-family:var(--serif);font-size:40px;font-weight:400;letter-spacing:-0.03em;color:var(--red-deep);line-height:1;flex-shrink:0}
+.d-biglbl{font-family:var(--sans);font-size:13.5px;color:var(--muted);line-height:1.45}
+.d-q{border-left:3px solid var(--red);padding:4px 0 4px 15px;margin:16px 0;font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink)}
+.d-k{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red-deep);font-weight:600;margin:20px 0 8px}
+.d-fine{font-family:var(--sans);font-size:11.5px;color:var(--mute-2);font-style:italic;margin-top:16px;line-height:1.5}
+
+/* ── TLDR ── */
+.tl-bd{position:absolute;inset:0;background:rgba(10,10,9,0.75);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.tl-bd.open{opacity:1;pointer-events:auto}
+.tl-c{background:var(--grain),var(--co-bg);border-radius:24px;width:100%;max-width:340px;padding:26px 24px;position:relative;transform:scale(0.94);transition:transform 0.3s;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+.tl-bd.open .tl-c{transform:scale(1)}
+.tl-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.tl-l{width:30px;height:30px;border-radius:8px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px}
+.tl-co{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--cream)}
+.tl-co .s{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:rgba(246,242,233,0.45);text-transform:uppercase;display:block;margin-top:1px}
+.tl-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--red-lite);text-transform:uppercase;margin-bottom:14px}
+.tl-pts{display:flex;flex-direction:column}
+.tl-p{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tl-p:last-child{border-bottom:0}
+.tl-n{font-family:var(--mono);font-size:10px;color:var(--red-lite);flex-shrink:0;padding-top:3px;width:16px}
+.tl-tx{font-family:var(--sans);font-size:13px;line-height:1.45;color:var(--cream)}
+.tl-tx strong{font-weight:700;color:#fff}
+.tl-f{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.tl-br{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--cream)}
+.tl-br .dd{color:var(--red-lite)}
+.tl-u{font-family:var(--mono);font-size:9px;color:rgba(246,242,233,0.35);letter-spacing:0.1em}
+.tl-acts{display:flex;gap:8px;margin-top:14px}
+.tl-btn{flex:1;border:0;border-radius:100px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--red);color:#fff}
+.tl-btn.c{background:rgba(255,255,255,0.12);color:var(--cream)}
+.tl-hint{text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(246,242,233,0.3);text-transform:uppercase;margin-top:10px}
+
+/* ── TOAST + HINT ── */
+.toast{position:absolute;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:11px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.42);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+</style></head><body>
+
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<!-- TODAY -->
+<section class="screen active" id="screen-today">
+  <div class="statusbar"></div>
+  <div class="today-scroll" id="todayScroll"></div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+<!-- STACK -->
+<section class="screen" id="screen-stack">
+  <div class="shell" id="shell">
+    <div class="prog" id="prog"></div>
+    <div class="topbar" id="topbar">
+      <div class="co"><div class="co-logo" id="cologo">C</div><div><div class="co-name">Coca-Cola</div><div class="co-sub">KO · NYSE</div></div></div>
+      <div class="tactions">
+        <button class="tbtn" onclick="openTldr()">&#8801;</button>
+        <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+        <button class="tbtn" onclick="closeStack()">&#215;</button>
+      </div>
+    </div>
+    <div class="tz l" onclick="prevCard()"></div>
+    <div class="tz r" onclick="nextCard()"></div>
+    <div class="track" id="track"></div>
+    <div class="pills" id="pills"><div class="pill" onclick="openDrawer()">&#8593; Go deeper</div><div class="pill" onclick="openTldr()">&#8801; TL;DR</div></div>
+  </div>
+  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+  <div class="dw" id="dw">
+    <div class="dw-hn"></div>
+    <div class="dw-h"><div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div><button class="dw-x" onclick="closeDrawer()">&#215;</button></div>
+    <div class="dw-b" id="dwB"></div>
+  </div>
+  <div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()"><div class="tl-c" id="tlC"></div></div>
+  <div class="toast" id="toast">Saved</div>
+</section>
+
+<!-- YOU -->
+<section class="screen" id="screen-you">
+  <div class="statusbar"></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center">
+    <div>
+      <div style="font-family:var(--serif);font-size:28px;letter-spacing:-0.02em;margin-bottom:8px">Your shelf.</div>
+      <div style="font-family:var(--sans);font-size:14px;color:var(--muted)">Read Coca-Cola, then vote. Your call appears here.</div>
+      <button onclick="goTo('today')" style="margin-top:20px;background:var(--ink);color:var(--cream);border:0;border-radius:100px;padding:12px 24px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer">Back to today</button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"></path></svg>Today</button>
+    <button class="nav-item" data-tab="stack" onclick="openStack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Read</button>
+    <button class="nav-item active" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-7 8-7s8 3 8 7"></path></svg>You</button>
+  </nav>
+</section>
+
+</div></div>
+<div class="hint">desktop preview · tap edges to swipe · ↑ deeper · ≡ TL;DR</div>
+
+<script>
+/* PRICE PLACEHOLDER. Dev: wire live price + change into id="livePrice" / id="liveChange" */
+const PRICE="$84.00", CHANGE="+0.6% today";
+
+/* ONE POINT PER CARD. ONE VISUAL. EVERYTHING ELSE GOES TO THE DEEP DIVE. NO EM DASHES. */
+const CARDS=[
+  /* 01 COVER */
+  {type:"cover",bg:"cover",deep:"cover",
+   hl:"The original Coca-Cola had real cocaine in it. <em>That was the ad.</em>",
+   bd:"In 1886, pharmacies sold it as a brain tonic and headache cure. The man who invented it, a pharmacist hooked on morphine, sold the recipe for <strong>$2,300</strong>.",
+   kick:"Today that recipe is worth <strong>$355 billion</strong>."},
+
+  /* 02 MONEY */
+  {type:"money",bg:"cream",deep:"money",
+   hl:"Coke makes <em>$48 billion</em> a year. Here's where it comes from.",
+   rows:[
+     {name:"🥤 Sparkling drinks",pct:"60%",w:100,fill:"#B3151A",desc:"Coke, Thums Up, Sprite, Fanta. The classics."},
+     {name:"💧 Water, sports & coffee",pct:"25%",w:42,fill:"#1565C0",desc:"Smartwater, Powerade, Costa Coffee. Growing fastest."},
+     {name:"🥛 Juice & milk",pct:"10%",w:17,fill:"#F2E8CF",desc:"Minute Maid, Maaza, Fairlife. The surprise star."}
+   ],
+   kick:"That's about <strong>$130 million</strong> flowing in every single day."},
+
+  /* 03 MODEL */
+  {type:"model",bg:"cream",deep:"model",
+   hl:"Coke doesn't own a single bottle. <em>It only owns the recipe.</em>",
+   vault:"Only <strong>2 people on Earth</strong> know the full recipe. They are <strong>never allowed on the same plane.</strong>",
+   steps:[
+     {n:"Step 1 · The recipe",t:"Coke makes only the syrup",s:"Cheap to ship, impossible to copy, paid for the moment it leaves the plant."},
+     {n:"Step 2 · The partners",t:"225 bottlers do the rest",s:"All the expensive parts, the factories, trucks and fridges, belong to separate partner companies. Coke bears none of that cost."},
+     {n:"Step 3 · You",t:"2.2 billion drinks a day",s:"In 200 countries. Nearly every human, every few days."}
+   ]},
+
+  /* 04 RIVALS */
+  {type:"rivals",bg:"cream",deep:"rivals",
+   hl:"Pepsi sells more. <em>Coke is worth double.</em>",
+   bd:"Pepsi brings in almost double the revenue. So why is Coke worth twice as much? One word: focus. Coke does only drinks. Pepsi juggles Doritos, Cheetos and oats too.",
+   rows:[
+     {emoji:"🔴",n:"Coca-Cola",val:"$355B",pct:100,fill:"#B3151A",tag:"All drinks, nothing else. One job for 140 years.",h:true},
+     {emoji:"🔵",n:"PepsiCo",val:"$197B",pct:55,fill:"rgba(0,0,0,0.3)",tag:"Earns more revenue than Coke. Valued at barely half."},
+     {emoji:"🟢",n:"Monster",val:"$88B",pct:25,fill:"rgba(0,0,0,0.3)",tag:"Coke quietly owns 19% of it. When Monster wins, Coke wins."},
+     {emoji:"☕",n:"Keurig Dr Pepper",val:"$38B",pct:11,fill:"rgba(0,0,0,0.3)",tag:"Owns Dr Pepper, 7UP and Snapple. The quiet third player."}
+   ],
+   kick:"Markets pay double for focus. That's the whole <strong>$158 billion</strong> gap."},
+
+  /* 05 HIDDEN TRUTH */
+  {type:"hidden",bg:"dkred",deep:"hidden",
+   myth:"Nobody drinks that much Coke.",
+   num:"2.2 <span>litres a day</span>",
+   sub:"That's the average person in Chiapas, Mexico. <em>Six cans. Every day.</em>",
+   bd:"A third of homes there lack safe running water. Bottled water costs the same as Coke, and Coke owns both. So people pick the Coke, and kids grow up drinking it from the time they're babies.",
+   lbl:"Cokes per person, per month",
+   world:[
+     {c:"Mexico",v:"62",h:100},
+     {c:"USA",v:"33",h:53},
+     {c:"Brazil",v:"19",h:31},
+     {c:"World",v:"8",h:13},
+     {c:"India",v:"1",h:4}
+   ]},
+
+  /* 06 BULL */
+  {type:"bull",bg:"green",deep:"bull",
+   eb:"06 · How it could win",
+   hl:"Three reasons this stock could <em>double.</em>",
+   panels:[
+     {icon:"↑",title:"Coke Zero is growing <strong>13× faster</strong> than regular Coke",
+      body:"People quitting sugar aren't quitting Coke. They just switch inside the brand. Zero Sugar grew 14% worldwide last year, in every region at once.<span class='acc-ctx'>How big is this? The health trend that was supposed to kill Coke became its fastest-growing product.</span>"},
+     {icon:"↑",title:"Coke's <strong>$7.4 billion</strong> milk brand sells faster than it can be made",
+      body:"Fairlife is a high-protein milk growing 28% a year, the biggest purchase in Coke's history. Demand is so high Coke is spending $650 million more just to build enough factories.<span class='acc-ctx'>How big is this? In a world obsessed with protein, Coke accidentally owns the milk everyone wants.</span>"},
+     {icon:"↑",title:"<strong>64 years</strong> of dividends, raised every single year",
+      body:"Since 1962, through wars, crashes and Covid, Coke has paid shareholders more every year. Today that payout is about <strong>$8.8 billion a year</strong>, over $100 billion since 2010 alone.<span class='acc-ctx'>How big is this? Almost no company on Earth has a streak this long. Investors treat Coke like a savings account that grows.</span>"}
+   ]},
+
+  /* 07 BEAR */
+  {type:"bear",bg:"red",deep:"bear",
+   eb:"07 · What could sink it",
+   hl:"Three things that could <em>cut the stock in half.</em>",
+   panels:[
+     {icon:"↓",title:"Ozempic doesn't just kill hunger. <strong>It kills sugar cravings</strong>",
+      body:"Weight-loss drugs switch off the exact craving Coke is built on. Among people who drank soda daily, 77% cut back or quit after starting them. One in five US households now has someone on these drugs.<span class='acc-ctx'>How big is this? By 2030, those households could control a third of all food and drink spending.</span>"},
+     {icon:"↓",title:"A <strong>$20 billion tax bill</strong> is hanging over the company",
+      body:"The US tax office says Coke booked its profits in low-tax countries to pay less at home. Coke has already paid $6 billion, and could owe $14 billion more if it loses the final appeal, which is being decided right now.<span class='acc-ctx'>How big is this? $20 billion is about two full years of profit. It could even threaten the 64-year dividend streak.</span>"},
+     {icon:"↓",title:"One faraway war made Diet Coke <strong>vanish from India</strong>",
+      body:"In 2026, conflict between Iran and the US shut the Strait of Hormuz, a shipping lane that carries 9% of the world's aluminium. Cans are made of aluminium. Diet Coke in India comes only in cans. So it simply disappeared from shelves.<span class='acc-ctx'>How big is this? One distant war emptied shelves in a country of 1.4 billion people. That's the risk of running one machine across 200 countries.</span>"}
+   ]},
+
+  /* 08 OWNERSHIP */
+  {type:"own",bg:"gold",deep:"own",
+   hl:"Warren Buffett owns 9%, and hasn't sold a share <em>since 1994.</em>",
+   math:{a:"$1.3B",al:"What he paid for his stake, 1988 to 1994",b:"$816M",bl:"What it pays him every year, in dividends alone"},
+   note:"His stake pays for itself again <strong>every year and a half</strong>, without selling anything. His logic: people drink Coke in booms, busts, wars and pandemics. It may be the <strong>most resilient business ever built</strong>, and that's exactly why he never sells."},
+
+  /* 09 MARKET DEBATE */
+  {type:"debate",bg:"cream",deep:"debate",
+   hl:"Coke barely sells more drinks than before. <em>It just charges more.</em>",
+   quote:"The whole debate is one question: <em>how long can Coke keep raising prices</em> before the world says no?",
+   works:["People keep paying","32 billion-dollar brands","Always owns the next thing"],
+   worry:["Volumes barely growing","$4 Coke fatigue","Sugar taxes spreading"]},
+
+  /* 10 VOTE */
+  {type:"conv",bg:"brand",deep:"conv",
+   hl:"Now you decide. <em>Coca-Cola in 5 years?</em>",
+   opts:[{k:"bull",p:65},{k:"neutral",p:22},{k:"bear",p:13}]},
+
+  /* 11 NEXT */
+  {type:"next",bg:"brand",deep:"next",
+   hl:"That was Coca-Cola.",
+   bd:"Next up: PepsiCo. It out-earns Coke every single year, and is still worth $158 billion less. Doritos, Cheetos and Quaker Oats explain the gap."}
+];
+
+/* DEEP DIVES */
+const DEEP={
+  cover:{t:"So where was the cocaine?",e:"From the cover",h:`
+<div class="d-hero">The cocaine wasn't added to the recipe. <em>It was in the leaf.</em></div>
+<div class="d-p">John Pemberton, a Civil War veteran hooked on morphine, built his drink from two natural stimulants: <strong>coca leaf</strong> (the plant cocaine comes from) and <strong>kola nut</strong> (natural caffeine). Coca plus kola. That's the name.</div>
+<div class="d-p">One glass carried roughly <strong>9 milligrams of cocaine</strong>, and nobody blinked. In the 1880s, pharmacies sold cocaine openly as medicine. As the laws turned, Coke quietly removed it in 1903. The caffeine stayed.</div>
+<div class="d-big"><div class="d-bignum">$2,300</div><div class="d-biglbl">What Pemberton, still addicted and broke, sold the recipe for in 1888. He died two years later.</div></div>
+<div class="d-p">Coca leaf is <strong>still in Coke today</strong>, legally. One factory in New Jersey is the only place in America allowed to import coca leaves. It strips out the cocaine for medical use, and ships the flavour to Coke.</div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">Coke's own research found <strong>"Coca-Cola" is the second most recognized word on Earth</strong>, in any language. The only word that beats it is "OK".</div>`},
+
+  money:{t:"The brand collector",e:"From the money",h:`
+<div class="d-hero">Coke isn't one drink. It's <em>32 brands</em> that each make over a billion dollars a year.</div>
+<div class="d-p">Half were invented inside Coke. The rest were small local brands Coke spotted early, bought cheap, and pushed through its giant delivery machine: India's mango drink <strong>Maaza</strong>, Mexican sparkling water <strong>Topo Chico</strong> (bought for just $220 million), and protein milk <strong>Fairlife</strong>.</div>
+<div class="d-big"><div class="d-bignum">13×</div><div class="d-biglbl">How much faster Coke Zero Sugar is growing than regular Coca-Cola right now.</div></div>
+<div class="d-k">Why the profits are so fat</div>
+<div class="d-p">From every dollar of syrup it sells, Coke keeps about <strong>60 cents</strong>. The bottling partners who do the heavy lifting keep around 30. Selling flavoured syrup is one of the best businesses ever invented.</div>`},
+
+  model:{t:"The country Coke walked away from",e:"From the model",h:`
+<div class="d-hero">In 1977, India told Coke: <em>share the recipe or leave.</em> Coke left.</div>
+<div class="d-p">Rather than hand over the formula to a local partner, Coke abandoned an entire country of 600 million people, and stayed away for 16 years. A local copycat, <strong>Thums Up</strong>, took 85% of the market.</div>
+<div class="d-big"><div class="d-bignum">#1</div><div class="d-biglbl">Coke's first move when it returned in 1993: buy Thums Up. It still outsells Coca-Cola itself in India today.</div></div>
+<div class="d-k">The reach this model buys</div>
+<div class="d-p">Coke products are sold in <strong>33 million stores</strong>, about a thousand times the number of McDonald's on the planet. Coke owns almost none of them.</div>`},
+
+  rivals:{t:"Worth double on half the sales",e:"From the rivals",h:`
+<div class="d-hero">Pepsi collects almost twice the money. <em>Coke still takes home more actual profit.</em></div>
+<div class="d-p">Here's the trick: revenue is what customers hand over. Profit is what's left after all the work is paid for. Last year Pepsi collected about <strong>$94 billion</strong> and kept roughly $8 billion. Coke collected <strong>$48 billion</strong> and kept about $13 billion.</div>
+<div class="d-big"><div class="d-bignum">23¢</div><div class="d-biglbl">What Coke keeps from every $1 of sales. Pepsi keeps about 9 cents, because making, shipping and shelving chips is expensive work.</div></div>
+<div class="d-p">Investors don't pay for how much money passes through a company. They pay for how much sticks. And they pay extra when a company does one thing brilliantly, because that's easier to trust than five things done okay.</div>
+<div class="d-p">The market does this everywhere: <strong>Netflix is worth more than Disney</strong>, even though Disney sells more. Focus plus fat margins beats size.</div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">In 2006, a Coke insider tried to sell the secret formula to Pepsi for $1.5 million. Pepsi called Coke, then the FBI. She got 8 years in prison.</div>`},
+
+  hidden:{t:"Engineered to be everywhere",e:"From the hidden truth",h:`
+<div class="d-hero">Nobody accidentally drinks six cans a day. <em>That took a century of design.</em></div>
+<div class="d-p">In 1923, Coke's legendary boss Robert Woodruff set the strategy the company still runs on: Coke must always be <strong>"within an arm's reach of desire."</strong> Cold fridges in every shop on Earth, priced low enough that nobody has to think twice. In places where clean water is scarce, Coke simply got there first.</div>
+<div class="d-p">Even the product is engineered for craving. The contour bottle was designed so you could <strong>recognize it by touch alone</strong>, in the dark, even from a broken piece. The ice-cold serve, the hiss of the cap, the burn of the first sip: Coke studies all of it, because every cue trains your brain to want the next one.</div>
+<div class="d-big"><div class="d-bignum">5¢</div><div class="d-biglbl">The price of a Coke for over 70 years, from 1886 into the 1950s. Possibly the longest price freeze in business history. Being effortless to afford was the whole strategy.</div></div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">In San Juan Chamula, Mexico, there's a church where families pray while passing bottles of Coke, believing the burp it causes expels bad spirits.</div>`},
+
+  bull:{t:"The full case for doubling",e:"From the bull case",h:`
+<div class="d-hero">The stock isn't loved because Coke grows fast. <em>It's loved because Coke never stops.</em></div>
+<div class="d-p">Start with the machine: Coke keeps <strong>23 cents of every sales dollar</strong> as pure profit, has raised its dividend for 64 straight years, and owns 32 billion-dollar brands. Whatever the world switches to next, Coke's playbook is to already own it.</div>
+<div class="d-p">Then there's the runway. The average Indian drinks about <strong>1 Coke a month</strong>. The average Mexican drinks 62. Coke is pouring money into India: tiny affordable bottles, village-by-village distribution, cricket sponsorships. Closing even a fraction of that gap means decades of growth.</div>
+<div class="d-big"><div class="d-bignum">3%</div><div class="d-biglbl">Actual volume growth in early 2026, led by China, the US and India. Not just higher prices: more real drinks sold.</div></div>
+<div class="d-p">Add pricing power, the superpower of a brand people refuse to give up: Coke can raise prices with inflation and customers keep buying. That's how it targets <strong>7 to 8% profit growth every single year</strong>, on top of a 3% dividend.</div>
+<div class="d-q">The bull case in one line: a machine that compounds every year is how you double. Just not overnight.</div>`},
+
+  bear:{t:"The cracks in the machine",e:"From the bear case",h:`
+<div class="d-hero">Coke's quiet secret: it barely sells more drinks than a decade ago. <em>It mostly charges more.</em></div>
+<div class="d-p">Most of Coke's growth in recent years came from <strong>raising prices, not selling more cans</strong>. That works until customers push back, and they're starting to: shoppers in the US and Europe are balking at $4 Cokes.</div>
+<div class="d-p">Governments are squeezing from the other side. Sugary drinks are now taxed in over 100 countries and cities, and the math is brutal: <strong>every 10% price rise from a sugar tax cuts demand by about 6%</strong>. In some taxed cities, sales of sugary drinks fell by a third.</div>
+<div class="d-big"><div class="d-bignum">#1</div><div class="d-biglbl">Coke has been named the world's biggest branded plastic polluter for years running. Serious regulation, or a serious clean-up bill, may be coming.</div></div>
+<div class="d-q">Now stack Ozempic on top. The bear case is one question: what happens to pricing power when fewer people want the product at all?</div>`},
+
+  own:{t:"“Pepsi Warren” switches sides",e:"From who owns it",h:`
+<div class="d-hero">Warren Buffett drank Pepsi for 48 years. <em>His own son called him "Pepsi Warren."</em></div>
+<div class="d-p">In 1985, a friend mailed him an early sample of the brand-new Cherry Coke. He switched on the spot. Three years later he bet <strong>$1 billion</strong> on Coca-Cola stock, about 30% of everything Berkshire Hathaway had. The biggest bet of his life, triggered by a free sample.</div>
+<div class="d-p">He has never sold a single share, and still drinks <strong>five cans a day</strong>, well into his nineties.</div>
+<div class="d-big"><div class="d-bignum">18 mo</div><div class="d-biglbl">Roughly how often Buffett's dividends alone repay his entire original investment. Again and again, forever.</div></div>
+<div class="d-q">"I've been drinking Coke since I was six. I'm now one quarter Coca-Cola," he says, and he means it literally: five cans a day is a real quarter of his calories.</div>
+<div class="d-k">Fun fact</div>
+<div class="d-p">The new CEO, <strong>Henrique Braun</strong>, joined Coke 30 years ago as a trainee engineer in Brazil, and worked his way through China and Latin America all the way to the top job in 2026. A 140-year-old company, run by lifers.</div>`},
+
+  debate:{t:"Our honest read",e:"The Daily Dividend take",h:`
+<div class="d-hero">The real question isn't sugar. <em>It's pricing power.</em></div>
+<div class="d-p"><strong>The bulls say:</strong> a brand this loved can raise prices with inflation forever. People grumble and pay anyway. And with 32 billion-dollar brands, Coke has a proven machine for spotting the next thing (Zero Sugar, Fairlife, Topo Chico) and owning it before you've heard of it.</div>
+<div class="d-p"><strong>The bears say:</strong> you can't out-price shrinking demand. Sugar taxes in 100+ markets, Ozempic switching off cravings, and shoppers already balking at $4 bottles. If volumes ever fall while prices are maxed out, the machine stalls.</div>
+<div class="d-big"><div class="d-bignum">-6%</div><div class="d-biglbl">How much demand drops for every 10% sugar-tax price rise. This is the math the whole debate hangs on.</div></div>
+<div class="d-k">Why it matters so much</div>
+<div class="d-p">Millions of retirees and pension funds own Coke for one thing: a dividend that has grown every year since 1962. That dividend is funded by pricing power. Lose one, and the other follows.</div>
+<div class="d-q">Our read: watch volumes, not prices. The year Coke can't sell more actual drinks and can't charge more for them is the year this debate ends badly.</div>
+<div class="d-fine">Not financial advice. For educational purposes only.</div>`},
+
+  conv:{t:"What the crowd is saying",e:"From the vote",h:`
+<div class="d-hero">11,284 readers have taken a side.</div>
+<div class="d-p"><strong>65% bullish · 22% neutral · 13% bearish.</strong></div>
+<div class="d-p">The most common neutral take: wait and see whether Zero Sugar and Fairlife can outgrow the sugar problem before it bites.</div>
+<div class="d-q">Your call gets tracked on your shelf. You'll see exactly how right (or wrong) you were.</div>`},
+
+  next:{t:"Same war, different weapons",e:"From what's next",h:`
+<div class="d-hero">Pepsi earns more than Coke almost every year, <em>and is worth $158 billion less.</em></div>
+<div class="d-p">Doritos, Cheetos and Quaker Oats explain the gap. Half of Pepsi isn't even a drinks company.</div>
+<div class="d-q">Smart safety net for when soda slows, or the exact reason it keeps losing the cola war to a company that does one thing only?</div>`}
+};
+
+const TLDR=[
+  "The original Coke had <strong>real cocaine</strong> in it. Sold for $2,300 in 1888. Worth <strong>$355B</strong> today.",
+  "Coke owns <strong>zero bottles</strong>. 225 partners do the work; Coke keeps ~60¢ of every syrup dollar.",
+  "Coke Zero is growing <strong>13× faster</strong> than regular Coke. Health trends feed it, not kill it.",
+  "In Chiapas, Mexico, people average <strong>2.2 litres of Coke a day</strong>, 7 times the US.",
+  "The big risk: a possible <strong>$20B tax bill</strong>, about two years of profit.",
+  "Buffett's $1.3B stake pays him <strong>$816M a year</strong>. He's never sold a share."
+];
+
+const saved=new Set();
+
+/* ═══ RENDER CARD ═══ */
+function renderCard(card,idx){
+  const total=CARDS.length;
+  const eb=card.eb||`${String(idx+1).padStart(2,'0')} / ${total}`;
+  switch(card.type){
+
+  case 'cover': return `
+<div class="eb-c a1">01 · The company</div>
+<div class="cv-top a1">
+  <div class="cv-mark">C</div>
+  <div>
+    <div class="cv-name">Coca-Cola Co.</div>
+    <div class="cv-chips"><div class="cv-chip">KO · NYSE</div><div class="cv-chip">Beverages · 200 countries</div></div>
+  </div>
+</div>
+<div class="cv-stock a1">
+  <span class="cv-sp" id="livePrice">${PRICE}</span>
+  <span class="cv-sc up" id="liveChange">${CHANGE}</span>
+</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3">${card.bd}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'money': return `
+<div class="eb-c a1">02 · The money</div>
+<div class="hl a2">${card.hl}</div>
+<div class="mn-rows a3">${card.rows.map(r=>`
+<div class="mn-row">
+  <div class="mn-head"><span class="mn-name">${r.name}</span><span class="mn-pct">${r.pct}</span></div>
+  <div class="mn-bar"><div class="mn-fill" data-w="${r.w}" style="background:${r.fill}"></div></div>
+  <div class="mn-desc">${r.desc}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'model': return `
+<div class="eb-c a1">03 · The model</div>
+<div class="hl a2">${card.hl}</div>
+<div class="md-flow a3">${card.steps.map((s,i)=>`${i>0?'<div class="md-arrow">↓</div>':''}
+<div class="md-step">
+  <div class="md-n">${s.n}</div>
+  <div class="md-t">${s.t}</div>
+  <div class="md-s">${s.s}</div>
+</div>`).join('')}</div>
+<div class="md-vault a4"><span class="md-vault-ic">🔒</span><span class="md-vault-tx">${card.vault}</span></div>`;
+
+  case 'rivals': return `
+<div class="eb-c a1">04 · The rivals</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a2" style="font-size:14px;margin-bottom:14px">${card.bd}</div>
+<div class="rv-rows a3">${card.rows.map(r=>`
+<div class="rv-row${r.h?' hero':''}">
+  <div class="rv-head"><span class="rv-n"><span class="rv-emoji">${r.emoji}</span>${r.n}</span><span class="rv-val">${r.val}</span></div>
+  <div class="rv-bar"><div class="rv-fill" data-w="${r.pct}" style="background:${r.fill}"></div></div>
+  <div class="rv-tag">${r.tag}</div>
+</div>`).join('')}</div>
+<div class="kick a4">${card.kick}</div>`;
+
+  case 'hidden': return `
+<div class="eb-c a1">05 · The hidden truth</div>
+<div class="ht-myth a1">${card.myth}</div>
+<div class="ht-num a2">${card.num}</div>
+<div class="ht-sub a2">${card.sub}</div>
+<div class="bd a3" style="font-size:14.5px">${card.bd}</div>
+<div class="ht-lbl a4">${card.lbl}</div>
+<div class="htv a4">${card.world.map(r=>`
+<div class="htv-col">
+  <span class="htv-val">${r.v}</span>
+  <div class="htv-bar" data-h="${r.h}"></div>
+  <span class="htv-cn">${r.c}</span>
+</div>`).join('')}</div>`;
+
+  case 'bull': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bull-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'bear': return `
+<div class="eb-c a1">${eb}</div>
+<div class="hl a2">${card.hl}</div>
+<div class="nf-acc-list a3">${card.panels.map((p,i)=>`
+<div class="nf-acc-item" id="acc-bear-${i}">
+  <div class="nf-acc-btn" role="button" tabindex="0">
+    <div class="nf-acc-icon">${p.icon}</div>
+    <div class="nf-acc-title">${p.title}</div>
+    <div class="nf-acc-chevron">▾</div>
+  </div>
+  <div class="nf-acc-body"><div class="nf-acc-text">${p.body}</div></div>
+</div>`).join('')}</div>`;
+
+  case 'own': return `
+<div class="eb-c a1">08 · Who owns it</div>
+<div class="hl a2">${card.hl}</div>
+<div class="ow-spot a3">
+  <div class="ow-head">
+    <div class="ow-face">WB</div>
+    <div><div class="ow-name">Warren Buffett</div><div class="ow-role">Berkshire Hathaway · 9.3% of Coke</div></div>
+  </div>
+  <div class="ow-math">
+    <div class="ow-cell"><div class="ow-cv">${card.math.a}</div><div class="ow-cl">${card.math.al}</div></div>
+    <div class="ow-arr">→</div>
+    <div class="ow-cell"><div class="ow-cv" style="color:var(--red-deep)">${card.math.b}</div><div class="ow-cl">${card.math.bl}</div></div>
+  </div>
+  <div class="ow-note">${card.note}</div>
+</div>`;
+
+  case 'debate': return `
+<div class="eb-c a1">09 · The market debate</div>
+<div class="hl a2">${card.hl}</div>
+<div class="dis-pullquote a3">
+  <div class="dis-pullquote-mark">"</div>
+  <div class="dis-pullquote-text">${card.quote}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label works">✓ Going for it</div>
+  <div class="dis-chip-row">${card.works.map(c=>`<div class="dis-chip works">${c}</div>`).join('')}</div>
+</div>
+<div class="dis-chip-section a4">
+  <div class="dis-chip-section-label notyet">✗ Going against it</div>
+  <div class="dis-chip-row">${card.worry.map(c=>`<div class="dis-chip notyet">${c}</div>`).join('')}</div>
+</div>`;
+
+  case 'conv':{
+    return `
+<div class="eb-c a1">10 · Your call</div>
+<div class="hl a2">${card.hl}</div>
+<div class="cv-sent-row a3">
+  <div class="cv-sent bull">Bullish crowd</div>
+  <div class="cv-vb"><span class="vb-num">11,284</span> voted today</div>
+</div>
+<div class="cv-opts a3" id="cvO-${idx}">${card.opts.map(o=>`
+<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}',${idx})">
+  <div class="cf"></div>
+  <span class="ico">${o.k==='bull'?'🥤':o.k==='bear'?'📉':'😐'}</span>
+  <span class="lbl">${o.k==='bull'?'Bullish':o.k==='bear'?'Bearish':'Neutral'}</span>
+  <span class="sub">${o.k==='bull'?'The machine keeps printing':o.k==='bear'?'Sugar’s days are numbered':'Wait and watch Zero Sugar'}</span>
+  <span class="cp">${o.p}%</span>
+</div>`).join('')}</div>
+<div class="cr" id="cvR-${idx}"></div>`;}
+
+  case 'next': return `
+<div class="eb-c a1">11 · Done in ~90 seconds</div>
+<div class="hl a2">${card.hl}</div>
+<div class="bd a3" style="margin-bottom:18px">${card.bd}</div>
+<div class="np a4" onclick="showToast('PepsiCo coming soon!')">
+  <div class="nthumb" style="background:#004B93;color:#fff">P</div>
+  <div><div class="nco">PepsiCo</div><div class="ntag">Coming soon</div></div>
+  <div style="opacity:.6;margin-left:auto">→</div>
+</div>
+<div class="ea a4">
+  <button class="btn-p" onclick="openTldr()"><span>≡ See the TL;DR card</span><span>→</span></button>
+  <button class="btn-g" onclick="showToast('Saved to your shelf')"><span>★ Save Coca-Cola to your shelf</span><span></span></button>
+  <button class="btn-g" onclick="closeStack()" style="opacity:.7"><span>↓ Back to today</span><span></span></button>
+</div>`;
+  }
+  return '';
+}
+
+/* ═══ STACK ═══ */
+let cardIdx=0;
+function openStack(){
+  cardIdx=0;
+  renderCards();buildProg();showCard(0);renderTldr();
+  goTo('stack');
+}
+function renderCards(){
+  const tr=document.getElementById('track');tr.innerHTML='';
+  CARDS.forEach((card,i)=>{
+    const el=document.createElement('div');
+    el.className='card bg-'+(card.bg||'cover');
+    el.dataset.deep=card.deep;
+    el.innerHTML=renderCard(card,i);
+    tr.appendChild(el);
+  });
+  initAccordions();
+}
+function initAccordions(){
+  document.querySelectorAll('.nf-acc-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>togglePanel(btn));
+    btn.addEventListener('touchend',e=>{e.preventDefault();togglePanel(btn);},{passive:false});
+  });
+}
+function togglePanel(btn){
+  const item=btn.closest('.nf-acc-item');
+  const body=item.querySelector('.nf-acc-body');
+  const isOpen=item.classList.contains('open');
+  const card=item.closest('.card');
+  card.querySelectorAll('.nf-acc-item.open').forEach(p=>{
+    p.classList.remove('open');
+    p.querySelector('.nf-acc-body').style.maxHeight='0';
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    body.style.maxHeight=body.scrollHeight+'px';
+  }
+}
+
+/* ═══ PROG + SHOW ═══ */
+function buildProg(){
+  const w=document.getElementById('prog');w.innerHTML='';
+  for(let i=0;i<CARDS.length;i++){const t=document.createElement('div');t.className='tick';w.appendChild(t);}
+}
+function isLight(i){const c=document.querySelectorAll('#track .card')[i];return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));}
+function updProg(){
+  document.querySelectorAll('.tick').forEach((t,i)=>{t.classList.remove('done','current');if(i<cardIdx)t.classList.add('done');else if(i===cardIdx)t.classList.add('current');});
+  const p=document.getElementById('prog'),tb=document.getElementById('topbar'),bp=document.getElementById('pills');
+  if(isLight(cardIdx)){p.classList.add('dark');tb.classList.add('dark');bp.classList.add('dark');}
+  else{p.classList.remove('dark');tb.classList.remove('dark');bp.classList.remove('dark');}
+  bp.style.display=(cardIdx===CARDS.length-1)?'none':'flex';
+  const sb=document.getElementById('saveBtn');
+  saved.has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
+}
+function showCard(i){
+  if(i<0||i>=CARDS.length)return;
+  cardIdx=i;
+  const cards=document.querySelectorAll('#track .card');
+  cards.forEach((c,k)=>{c.classList.remove('entered');c.classList.toggle('active',k===i);});
+  updProg();
+  setTimeout(()=>{const ac=cards[cardIdx];if(ac){ac.classList.add('entered');animateCard(i);}},30);
+}
+function nextCard(){if(cardIdx<CARDS.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+function closeStack(){closeDrawer();closeTldr();goTo('today');}
+function toggleSave(){
+  const b=document.getElementById('saveBtn');
+  if(saved.has(cardIdx)){saved.delete(cardIdx);b.classList.remove('saved');showToast("Removed");}
+  else{saved.add(cardIdx);b.classList.add('saved');showToast("★ Saved");}
+}
+
+/* ═══ ANIMATIONS ═══ */
+function animateCard(idx){
+  const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
+  card.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width='0';
+    setTimeout(()=>{el.style.width=el.dataset.w+'%';},80);
+  });
+  card.querySelectorAll('[data-h]').forEach(el=>{
+    el.style.height='0';
+    setTimeout(()=>{el.style.height=el.dataset.h+'%';},120);
+  });
+  card.querySelectorAll('.md-step,.md-arrow').forEach((el,i)=>{
+    el.classList.remove('visible');
+    setTimeout(()=>el.classList.add('visible'),200+i*200);
+  });
+}
+
+/* ═══ VOTE ═══ */
+function vote(el,type,idx){
+  const wrap=document.getElementById('cvO-'+idx);if(wrap.classList.contains('voted'))return;
+  wrap.classList.add('voted');el.classList.add('you');
+  wrap.querySelectorAll('.co-opt').forEach(o=>{o.classList.add('revealed');o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;});
+  const msgs={bull:"You're <strong>bullish</strong> with the crowd. The recipe keeps printing money.",neutral:"You're <strong>neutral</strong>. Waiting to see if Zero Sugar wins the race.",bear:"You're <strong>bearish</strong>. Worried sugar's days are numbered."};
+  const r=document.getElementById('cvR-'+idx);r.innerHTML=msgs[type];r.classList.add('show');
+}
+
+/* ═══ DRAWER ═══ */
+function openDrawer(){
+  const cards=document.querySelectorAll('#track .card');
+  const k=cards[cardIdx]?cards[cardIdx].dataset.deep:null;
+  const d=DEEP[k];if(!d)return;
+  document.getElementById('dwT').textContent=d.t;
+  document.getElementById('dwEb').textContent=d.e;
+  document.getElementById('dwB').innerHTML=d.h;
+  document.getElementById('dwBd').classList.add('open');
+  document.getElementById('dw').classList.add('open');
+}
+function closeDrawer(){document.getElementById('dwBd').classList.remove('open');document.getElementById('dw').classList.remove('open');}
+
+/* ═══ TLDR ═══ */
+function renderTldr(){
+  document.getElementById('tlC').innerHTML=`
+<div class="tl-h"><div class="tl-l">C</div><div class="tl-co">Coca-Cola<span class="s">KO · NYSE · Beverages</span></div></div>
+<div class="tl-tag">Everything, in 6 lines</div>
+<div class="tl-pts">${TLDR.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
+<div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
+<div class="tl-acts"><button class="tl-btn s" onclick="showToast('Screenshot ready!')">Share</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div>
+<div class="tl-hint">Screenshot and send to a friend</div>`;
+}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* ═══ TODAY ═══ */
+function renderToday(){
+  const h=new Date().getHours();
+  const g=h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+  document.getElementById('todayScroll').innerHTML=`
+<div class="today-head">
+  <div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div>
+  <div class="streak"><span class="flame">🔥</span> 3 day streak</div>
+</div>
+<div class="greeting">${g} <em>Today's drop is ready.</em></div>
+<div class="eb">This week</div>
+<div class="today-hero" onclick="openStack()">
+  <div class="hero-tag"><span class="live-dot"></span>Coca-Cola · KO</div>
+  <div class="hero-co">Beverages · 🇺🇸</div>
+  <div class="hero-h">The original Coca-Cola had real cocaine in it. <em>That was the ad.</em></div>
+  <div class="hero-stock"><span class="hero-sp">${PRICE}</span><span class="hero-sc up">${CHANGE}</span></div>
+  <div class="hero-meta"><span>11 cards · ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack()">Start →</button></div>
+</div>
+<div class="sect-t">What you will learn</div>
+<div class="sect-s">The secret recipe behind the world's biggest drink.</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#ED232A">🥤</div><div><div class="rname">Coke doesn't own a single bottle</div><div class="rsub">It only owns the recipe. Partners do the rest</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#B3151A">💧</div><div><div class="rname">2.2 litres of Coke. Every day.</div><div class="rsub">A hidden truth from rural Mexico</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>
+<div class="rcard" onclick="openStack()">
+  <div class="rl"><div class="rthumb" style="background:#7A0C10">📈</div><div><div class="rname">Buffett's 64-year dividend machine</div><div class="rsub">$1.3B that now pays $816M a year</div></div></div>
+  <div style="opacity:.5;font-size:18px">→</div>
+</div>`;
+}
+
+/* ═══ TOAST ═══ */
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);}
+
+/* ═══ NAV ═══ */
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const map={today:'screen-today',stack:'screen-stack',you:'screen-you'};
+  document.getElementById(map[n]||'screen-today').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+  if(n==='today')renderToday();
+}
+
+/* ═══ TOUCH ═══ */
+const shell=document.getElementById('shell');let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{
+  if(document.getElementById('dw').classList.contains('open')||document.getElementById('tlBd').classList.contains('open'))return;
+  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
+},{passive:true});
+shell.addEventListener('touchend',e=>{
+  if(!trk)return;trk=false;
+  const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax<30&&ay<30)return;
+  if(stg&&stg.closest('.nf-acc-btn,.nf-acc-item,button,.np,.co-opt'))return;
+  if(ay>ax){if(dy>60)closeStack();if(dy<-60)openDrawer();}
+  else{if(dx<-40)nextCard();else if(dx>40)prevCard();}
+});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-stack').classList.contains('active'))return;
+  if(e.key==='ArrowRight')nextCard();
+  if(e.key==='ArrowLeft')prevCard();
+  if(e.key==='ArrowUp')openDrawer();
+  if(e.key==='Escape'){
+    if(document.getElementById('tlBd').classList.contains('open'))closeTldr();
+    else if(document.getElementById('dw').classList.contains('open'))closeDrawer();
+    else closeStack();
+  }
+});
+
+/* ═══ INIT ═══ */
+renderToday();
+</script>
+</body></html>

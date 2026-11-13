@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en" style="--accent:#76B900;--accent-soft:rgba(118,185,0,0.2);--co-bg:linear-gradient(180deg,#1A1A14,#0A0A08);--co-logo-bg:#76B900;--co-logo-color:#0A0A08"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Daily Dividend: NVIDIA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══ TOKENS ═══ */
+:root{
+  --cream:#F5F1E8;--cream-2:#EFEADE;--paper:#FAF7F0;
+  --ink:#0F0F0E;--ink-2:#2A2A28;--muted:#6B6B66;--mute-2:#A8A39A;--line:#D9D2C2;
+  --brand:#1A2A00;--brand-2:#2A4000;--brand-soft:rgba(26,42,0,0.12);
+  --green:#2E8A60;--green-soft:#D6E7DC;
+  --red:#B23A2E;--red-soft:#F2D9D3;
+  --gold:#C49A3E;--gold-soft:#F2E5C2;
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter",-apple-system,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --accent:#76B900;--accent-soft:rgba(118,185,0,0.2);
+  --co-bg:linear-gradient(180deg,#1A1A14,#0A0A08);
+  --co-logo-bg:#76B900;--co-logo-color:#0A0A08
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);color:var(--ink);background:#141413;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+
+/* ═══ STAGE + PHONE FRAME ═══ */
+.stage{
+  height:100vh;height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  background:radial-gradient(ellipse at top,rgba(255,255,255,0.04),transparent 60%),#141413
+}
+.phone{
+  width:100%;max-width:390px;
+  height:100%;max-height:844px;
+  background:var(--cream);
+  border-radius:44px;overflow:hidden;position:relative;
+  box-shadow:0 0 0 8px #0a0a0a,0 0 0 9px #2a2a2a,0 30px 80px rgba(0,0,0,0.55)
+}
+/* Small phones: fill full screen */
+@media(max-width:480px){
+  .stage{padding:0}
+  .phone{max-width:100%;max-height:100%;height:100dvh;border-radius:0;box-shadow:none}
+}
+/* Short desktop screens: prevent phone overflowing viewport */
+@media(min-width:481px) and (max-height:900px){
+  .phone{max-height:calc(100vh - 40px)}
+}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0a0a0a;border-radius:20px;z-index:1000;pointer-events:none}
+@media(max-width:480px){.notch{display:none}}
+
+/* ═══ SCREENS ═══ */
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
+.screen.active{display:flex}
+
+/* ═══ STATUS BAR ═══ */
+.statusbar{height:44px;flex-shrink:0}
+
+/* ═══ BOTTOM NAV ═══ */
+.bottom-nav{
+  position:absolute;bottom:0;left:0;right:0;height:78px;
+  background:rgba(245,241,232,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100
+}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 14px;cursor:pointer;color:var(--mute-2);font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.nav-item.active{color:var(--ink)}
+.nav-item svg{width:22px;height:22px}
+
+/* ═══ TODAY SCREEN ═══ */
+#screen-today{background:var(--cream)}
+.today-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 20px 100px}
+.today-head{display:flex;align-items:center;justify-content:space-between;padding:8px 0 20px}
+.today-logo{font-family:var(--serif);font-weight:600;font-size:17px;display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--brand);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;background:var(--ink);color:var(--cream);padding:5px 11px;border-radius:100px}
+.flame{display:inline-block;transform-origin:center bottom;animation:flicker 2.4s infinite ease-in-out}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}33%{transform:scale(1.08) rotate(-3deg)}66%{transform:scale(0.96) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.flame{animation:none}}
+.greeting{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-0.01em;margin-bottom:4px;line-height:1.2}
+.greeting em{font-style:italic;color:var(--muted);font-weight:300}
+.eb-label{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin:14px 0 10px}
+.today-hero{background:var(--co-bg);color:var(--cream);border-radius:22px;padding:20px;position:relative;overflow:hidden;cursor:pointer;margin-bottom:24px;box-shadow:0 8px 30px rgba(0,0,0,0.28)}
+.today-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(118,185,0,0.18),transparent 55%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;padding:5px 10px;background:rgba(245,241,232,0.12);border-radius:100px;margin-bottom:14px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero-co{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:rgba(245,241,232,0.5);text-transform:uppercase;margin-bottom:7px}
+.hero-h{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.13;letter-spacing:-0.02em;margin-bottom:12px}
+.hero-h em{font-style:italic;color:var(--accent);font-weight:300}
+.hero-stock{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.hero-sp{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--cream)}
+.hero-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.hero-sc.up{background:rgba(46,138,96,0.25);color:#7EC8A0}
+.hero-meta{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(245,241,232,0.14);font-family:var(--mono);font-size:10px;color:rgba(245,241,232,0.42)}
+.hero-start{background:var(--cream);color:var(--ink);border:0;border-radius:100px;padding:8px 14px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer}
+.sect-t{font-family:var(--serif);font-weight:400;font-size:20px;letter-spacing:-0.01em;margin-bottom:4px}
+.sect-s{font-family:var(--sans);font-size:12px;color:var(--muted);margin-bottom:12px}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.rl{display:flex;align-items:center;gap:11px;min-width:0}
+.rthumb{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px;flex-shrink:0}
+.rname{font-family:var(--serif);font-size:15px;font-weight:500;letter-spacing:-0.01em}
+.rsub{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ═══ STACK SCREEN ═══ */
+#screen-stack{background:#000}
+.shell{
+  position:absolute;inset:0;overflow:hidden;
+  /* Single source of truth for top/bottom chrome so .card padding can never
+     drift out of sync with where .prog/.topbar/.pills actually sit (only these
+     three vars are touched by the short-screen media queries below). */
+  --prog-top:50px;--topbar-top:62px;--topbar-clear:34px;--pills-bottom:10px;--pills-clear:50px;
+}
+.prog{position:absolute;top:var(--prog-top);left:16px;right:16px;display:flex;gap:3px;z-index:30}
+.tick{flex:1;height:2.5px;background:rgba(255,255,255,0.2);border-radius:2px}
+.tick.done,.tick.current{background:rgba(255,255,255,0.88)}
+.prog.dark .tick{background:rgba(0,0,0,0.14)}
+.prog.dark .tick.done,.prog.dark .tick.current{background:rgba(0,0,0,0.8)}
+.topbar{position:absolute;top:var(--topbar-top);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:25;pointer-events:none}
+.co{display:flex;align-items:center;gap:9px;pointer-events:auto}
+.co-logo{width:28px;height:28px;border-radius:7px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px}
+.co-name{color:#fff;font-family:var(--sans);font-size:13px;font-weight:600}
+.co-sub{color:rgba(255,255,255,0.5);font-family:var(--mono);font-size:9px;letter-spacing:0.13em;text-transform:uppercase;margin-top:1px}
+.topbar.dark .co-name{color:var(--ink)}
+.topbar.dark .co-sub{color:var(--muted)}
+.tactions{display:flex;gap:7px;pointer-events:auto}
+.tbtn{background:rgba(255,255,255,0.12);border:0;width:30px;height:30px;border-radius:50%;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar.dark .tbtn{background:rgba(0,0,0,0.08);color:var(--ink)}
+.tbtn.saved{background:var(--accent);color:#0A0A08}
+.tbtn svg{width:14px;height:14px}
+
+/* ═══ CARD BASE ═══ */
+.track{position:absolute;inset:0}
+.card{
+  position:absolute;inset:0;
+  /* top padding is tied to --topbar-top (co-logo is 28px tall + 6px breathing room)
+     and bottom padding to --pills-bottom (pill height ~44px + 6px), so short-screen
+     media queries only ever need to touch the vars on .shell, never these directly. */
+  padding-top:calc(var(--topbar-top) + var(--topbar-clear));
+  padding-left:18px;padding-right:18px;
+  padding-bottom:calc(var(--pills-bottom) + var(--pills-clear));
+  display:none;flex-direction:column;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  /* Critical: hide scrollbar but allow scroll */
+  scrollbar-width:none
+}
+.card::-webkit-scrollbar{display:none}
+.card.active{display:flex;animation:cardIn 0.34s cubic-bezier(0.2,0.85,0.25,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px) scale(0.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.card.active{animation:none}}
+
+/* Card backgrounds - every one defines explicit color */
+.card.bg-cover{background:var(--co-bg);color:var(--cream)}
+.card.bg-cream{background:var(--paper);color:var(--ink)}
+.card.bg-green{background:linear-gradient(160deg,#1F6B4A,#124030);color:var(--cream)}
+.card.bg-red{background:linear-gradient(160deg,#B23A2E,#7A2318);color:var(--cream)}
+.card.bg-gold{background:linear-gradient(160deg,#F2E5C2,#E4CF98);color:var(--ink)}
+.card.bg-dkblue{background:linear-gradient(160deg,#0D1F00,#040C00);color:var(--cream)}
+.card.bg-brand{background:linear-gradient(160deg,#1A2A00,#0D1700);color:var(--cream)}
+
+/* Eyebrow */
+.eb-c{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:5px;flex-shrink:0}
+.card.bg-cover .eb-c,.card.bg-brand .eb-c,.card.bg-dkblue .eb-c{color:var(--accent);opacity:1}
+.card.bg-cream .eb-c{color:var(--muted);opacity:1}
+.card.bg-green .eb-c{color:#B5E3C8;opacity:1}
+.card.bg-red .eb-c{color:#FCC9C2;opacity:1}
+.card.bg-gold .eb-c{color:var(--muted);opacity:1}
+
+/* Headline */
+.hl{font-family:var(--serif);font-weight:400;font-size:clamp(20px,3dvh,25px);line-height:1.13;letter-spacing:-0.02em;margin-bottom:10px;flex-shrink:0}
+.hl em{font-style:italic;font-weight:300}
+.card.bg-cover .hl em,.card.bg-brand .hl em,.card.bg-dkblue .hl em{color:var(--accent)}
+.card.bg-cream .hl em{color:#3D6600}
+.card.bg-gold .hl em{color:var(--red)}
+.card.bg-green .hl em,.card.bg-red .hl em{color:rgba(255,255,255,0.75);font-weight:400}
+
+/* Body text */
+.bd{font-family:var(--sans);font-size:clamp(11.5px,1.6dvh,13.5px);line-height:1.56;opacity:0.86;flex-shrink:0}
+.bd strong{font-weight:600;opacity:1}
+.card.bg-cream .bd{color:var(--ink-2)}
+
+/* Touch zones */
+.tz{position:absolute;top:0;bottom:0;width:38%;z-index:20;cursor:pointer}
+.tz.l{left:0}.tz.r{right:0}
+
+/* Pills */
+.pills{
+  position:absolute;bottom:var(--pills-bottom);left:50%;transform:translateX(-50%);
+  display:flex;gap:7px;z-index:30;white-space:nowrap
+}
+.pill{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;padding:7px 14px;background:rgba(255,255,255,0.13);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:100px;color:#fff;cursor:pointer;text-transform:uppercase}
+.pills.dark .pill{background:rgba(0,0,0,0.07);border-color:rgba(0,0,0,0.11);color:var(--ink)}
+
+/* ═══ COVER CARD ═══ */
+.cv-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px;flex-shrink:0}
+.cv-mark{width:52px;height:52px;border-radius:13px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:26px;box-shadow:0 6px 20px rgba(0,0,0,0.25);flex-shrink:0}
+.cv-co-info{flex:1;padding-top:3px}
+.cv-name{font-family:var(--serif);font-weight:500;font-size:clamp(16px,2.25dvh,19px);letter-spacing:-0.01em;margin-bottom:5px}
+.cv-chips{display:flex;gap:5px;flex-wrap:wrap}
+.cv-chip{font-family:var(--mono);font-size:8.5px;letter-spacing:0.13em;text-transform:uppercase;padding:4px 8px;border-radius:100px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.72)}
+.cv-stock{display:flex;align-items:baseline;gap:9px;margin-bottom:12px;flex-shrink:0}
+.cv-sp{font-family:var(--mono);font-size:clamp(17px,2.37dvh,20px);font-weight:600;color:var(--cream)}
+.cv-sc{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.cv-sc.up{background:rgba(46,138,96,0.25);color:#7EC8A0}
+.cv-ks{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:auto;padding-top:14px;flex-shrink:0}
+.cv-k{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 7px;text-align:center}
+.cv-kv{font-family:var(--serif);font-size:clamp(12px,1.66dvh,14px);font-weight:500;line-height:1;margin-bottom:3px}
+.cv-kl{font-family:var(--mono);font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.52;line-height:1.3}
+
+/* ═══ MONEY CARD ═══ */
+.nv-money-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.nv-two-blocks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;flex-shrink:0}
+.nv-block{border-radius:14px;padding:14px 13px}
+.nv-block.gaming{background:#fff;border:1px solid var(--line)}
+.nv-block.ai{background:linear-gradient(145deg,rgba(118,185,0,0.14),rgba(118,185,0,0.06));border:1.5px solid rgba(118,185,0,0.28)}
+.nv-block-label{font-family:var(--mono);font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.nv-block-num{font-family:var(--serif);font-size:clamp(22px,3.3dvh,28px);font-weight:300;letter-spacing:-0.03em;color:var(--ink);line-height:1}
+.nv-block.ai .nv-block-num{color:var(--accent);font-size:clamp(26px,4dvh,34px)}
+.nv-block-sub{font-family:var(--sans);font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.35}
+.nv-margin-row{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.nv-margin-big{font-family:var(--serif);font-size:clamp(40px,6.16dvh,52px);font-weight:300;letter-spacing:-0.04em;color:var(--accent);line-height:1;flex-shrink:0}
+.nv-margin-right{flex:1}
+.nv-margin-chip{display:inline-block;background:rgba(118,185,0,0.12);color:#3D6600;font-family:var(--mono);font-size:8.5px;letter-spacing:0.13em;text-transform:uppercase;padding:4px 9px;border-radius:100px;border:1px solid rgba(118,185,0,0.22);margin-bottom:5px}
+.nv-margin-sub{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.4}
+.nv-kicker{background:rgba(118,185,0,0.1);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 9px 9px 0;font-family:var(--sans);font-size:12px;color:var(--ink-2);line-height:1.44;flex-shrink:0;margin-top:auto}
+
+/* ═══ MODEL CARD (flywheel) ═══ */
+.nv-model-pills{display:flex;gap:5px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;flex-shrink:0}
+.nv-model-pills::-webkit-scrollbar{display:none}
+.nv-model-pill{font-family:var(--mono);font-size:8.5px;letter-spacing:0.11em;text-transform:uppercase;padding:6px 11px;border-radius:100px;border:1px solid var(--line);background:var(--cream-2);color:var(--muted);white-space:nowrap;flex-shrink:0}
+.nv-flow{display:flex;flex-direction:column;gap:0;flex:1 0 auto;justify-content:space-evenly}
+.nv-flow-step{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 12px;opacity:0;transform:translateY(6px);transition:opacity 0.38s ease,transform 0.38s ease}
+.nv-flow-step.visible{opacity:1;transform:translateY(0)}
+.nv-flow-step-n{font-family:var(--mono);font-size:8.5px;letter-spacing:0.13em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;font-weight:600}
+.nv-flow-step-t{font-family:var(--serif);font-size:clamp(12.5px,1.72dvh,14.5px);font-weight:600;color:var(--ink);line-height:1.2;letter-spacing:-0.01em}
+.nv-flow-step-s{font-family:var(--sans);font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.32}
+.nv-flow-arrow{text-align:center;padding:1px 0;font-size:13px;opacity:0;transition:opacity 0.28s;color:var(--muted)}
+.nv-flow-arrow.visible{opacity:1}
+.nv-loop-strip{background:rgba(118,185,0,0.1);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 9px 9px 0;margin-top:auto;font-family:var(--sans);font-size:11.5px;color:var(--ink-2);line-height:1.42;flex-shrink:0}
+
+/* ═══ RIVALS CARD ═══ */
+.nv-rival-rows{display:flex;flex-direction:column;gap:8px;flex:1 0 auto;justify-content:space-evenly}
+.nv-rival-card{background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:15px;padding:11px 13px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.nv-rival-card.hero{background:rgba(118,185,0,0.09);border-color:rgba(118,185,0,0.38)}
+.nv-rival-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:3px}
+.nv-rival-n{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink)}
+.nv-rival-val{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--ink)}
+.nv-rival-desc{font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.34}
+.nv-rival-track{height:6px;background:rgba(0,0,0,0.07);border-radius:5px;overflow:hidden}
+.nv-rival-fill{height:100%;border-radius:5px;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.1s}
+.nv-rival-kicker{background:rgba(118,185,0,0.1);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 8px 8px 0;margin-top:auto;font-family:var(--sans);font-size:11.5px;color:var(--ink-2);line-height:1.42;flex-shrink:0}
+
+/* ═══ HIDDEN TRUTH CARD ═══ */
+.nv-hidden-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.nv-hidden-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;margin-bottom:10px;flex-shrink:0}
+.nv-myth{font-family:var(--serif);font-size:15px;font-weight:400;text-decoration:line-through;text-decoration-color:rgba(255,80,80,0.55);text-decoration-thickness:2px;opacity:0.42;line-height:1.3;margin-bottom:8px;font-style:italic}
+.nv-truth{font-family:var(--serif);font-size:clamp(16px,2.25dvh,19px);font-weight:500;color:var(--accent);line-height:1.22;letter-spacing:-0.01em}
+.nv-hidden-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;flex-shrink:0}
+.nv-hcell{border-radius:12px;padding:12px 12px;display:flex;flex-direction:column;gap:3px}
+.nv-hcell.red{background:rgba(178,58,46,0.38);border:1px solid rgba(178,58,46,0.52)}
+.nv-hcell.green{background:rgba(118,185,0,0.32);border:1px solid rgba(118,185,0,0.48)}
+.nv-hcell-lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(245,241,232,0.62);font-weight:600}
+.nv-hcell-arrow{font-size:15px;line-height:1}
+.nv-hcell-val{font-family:var(--serif);font-size:clamp(19px,2.84dvh,24px);font-weight:400;color:var(--cream);line-height:1;letter-spacing:-0.02em}
+.nv-hcell-desc{font-family:var(--sans);font-size:10.5px;color:rgba(245,241,232,0.72);line-height:1.34}
+.nv-callout-dark{background:rgba(118,185,0,0.12);border:1px solid rgba(118,185,0,0.22);border-radius:12px;padding:12px 13px;font-family:var(--sans);font-size:12px;color:rgba(245,241,232,0.9);line-height:1.46;flex-shrink:0;margin-top:auto}
+.nv-callout-dark strong{color:var(--accent)}
+
+/* ═══ ACCORDION CARDS (bull/bear) ═══ */
+.nv-acc-list{display:flex;flex-direction:column;gap:9px;flex:1 0 auto;justify-content:space-evenly}
+.nv-acc-item{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.17);border-radius:15px;overflow:hidden}
+.nv-acc-btn{width:100%;border:0;background:none;padding:14px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;color:inherit}
+.nv-acc-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;line-height:1}
+.card.bg-green .nv-acc-icon{color:#1F6B4A}
+.card.bg-red .nv-acc-icon{color:var(--red)}
+.nv-acc-title{flex:1;font-family:var(--serif);font-size:clamp(12.5px,1.72dvh,14.5px);font-weight:600;line-height:1.25;letter-spacing:-0.01em}
+.nv-acc-chev{font-size:10px;opacity:0.5;transition:transform 0.25s;flex-shrink:0}
+.nv-acc-item.open .nv-acc-chev{transform:rotate(180deg)}
+.nv-acc-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+.nv-acc-text{font-family:var(--sans);font-size:12.5px;line-height:1.52;opacity:0.9;padding:8px 13px 14px 51px;border-top:1px solid rgba(255,255,255,0.11)}
+.nv-acc-text strong{font-weight:600}
+
+/* ═══ OWNERSHIP CARD ═══ */
+.nv-own-wrap{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.nv-own-rows{display:flex;flex-direction:column;gap:9px;margin-bottom:12px;flex-shrink:0}
+.nv-own-row{display:flex;align-items:center;gap:9px}
+.nv-own-l{width:90px;flex-shrink:0}
+.nv-own-l-name{font-family:var(--sans);font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.2}
+.nv-own-l-desc{font-family:var(--sans);font-size:10px;color:var(--muted);line-height:1.25}
+.nv-own-track{flex:1;height:26px;background:rgba(0,0,0,0.08);border-radius:7px;overflow:hidden}
+.nv-own-fill{height:100%;border-radius:7px;display:flex;align-items:center;padding-left:9px;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;width:0;transition:width 1s cubic-bezier(0.2,0.8,0.2,1) 0.18s}
+.nv-pm-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;flex-shrink:0}
+.nv-pm-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 11px}
+.nv-pm-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:14px;color:#fff;margin-bottom:7px}
+.nv-pm-name{font-family:var(--serif);font-size:clamp(11.5px,1.6dvh,13.5px);font-weight:600;color:var(--ink);letter-spacing:-0.01em;line-height:1.1;margin-bottom:2px}
+.nv-pm-role{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.nv-pm-note{font-family:var(--sans);font-size:10.5px;color:var(--ink-2);line-height:1.38}
+.nv-own-strip{background:var(--accent-soft);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 9px 9px 0;font-family:var(--sans);font-size:11.5px;color:var(--ink-2);line-height:1.42;flex-shrink:0;margin-top:auto}
+
+/* ═══ DEBATE CARD ═══ */
+.nv-debate-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.nv-pullquote{position:relative;background:rgba(255,255,255,0.82);border:1.5px solid rgba(255,255,255,0.95);border-radius:17px;padding:18px 15px 14px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:11px;flex-shrink:0}
+.nv-pq-mark{position:absolute;top:2px;left:10px;font-family:var(--serif);font-size:50px;color:var(--accent);opacity:0.16;font-weight:300;line-height:1;pointer-events:none}
+.nv-pq-text{font-family:var(--serif);font-size:clamp(13.5px,1.9dvh,16px);font-weight:400;line-height:1.43;color:var(--ink);position:relative;z-index:1;padding-top:6px}
+.nv-chip-section{margin-bottom:9px;flex-shrink:0}
+.nv-chip-lbl{font-family:var(--mono);font-size:8.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.nv-chip-row{display:flex;flex-wrap:wrap;gap:5px}
+.nv-chip{font-family:var(--sans);font-size:11px;padding:5px 10px;border-radius:100px;line-height:1}
+.nv-chip.go{background:var(--green-soft);color:#1F6B4A}
+.nv-chip.wait{background:var(--red-soft);color:var(--red)}
+.nv-debate-close{background:var(--ink);border-radius:11px;padding:12px 14px;font-family:var(--serif);font-size:13.5px;font-style:italic;color:var(--cream);line-height:1.46;flex-shrink:0;margin-top:auto}
+
+/* ═══ CONVICTION VOTE ═══ */
+.cv-sent-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex-shrink:0}
+.cv-sent{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border-radius:100px;font-weight:600;background:rgba(46,138,96,0.22);color:#7EC8A0;border:1px solid rgba(46,138,96,0.28)}
+.cv-vb{font-family:var(--mono);font-size:10px;color:rgba(245,241,232,0.42)}
+.vb-num{color:var(--cream);font-weight:600}
+.cv-opts{display:flex;flex-direction:column;gap:9px;flex:1 0 auto;justify-content:space-evenly}
+.co-opt{position:relative;overflow:hidden;border-radius:13px;padding:13px 15px;border:1px solid rgba(255,255,255,0.14);cursor:pointer;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,0.07);-webkit-tap-highlight-color:transparent}
+.co-opt .cf{position:absolute;left:0;top:0;height:100%;background:rgba(255,255,255,0.1);width:0;transition:width 0.8s cubic-bezier(0.2,0.8,0.2,1);border-radius:13px}
+.co-opt .ico{font-size:19px;flex-shrink:0;position:relative;z-index:1}
+.co-opt .lbl-wrap{flex:1;position:relative;z-index:1}
+.co-opt .lbl{font-family:var(--serif);font-size:14.5px;font-weight:500;color:var(--cream);display:block}
+.co-opt .sub{font-family:var(--sans);font-size:11px;color:rgba(245,241,232,0.52);display:block;margin-top:1px}
+.co-opt .cp{font-family:var(--mono);font-size:12px;font-weight:600;color:rgba(245,241,232,0.42);position:relative;z-index:1;display:none;flex-shrink:0}
+.cv-opts.voted .cp{display:block}
+.co-opt.you{border-color:var(--accent);background:rgba(118,185,0,0.13)}
+.co-opt.you .lbl{color:var(--accent)}
+.cv-result{font-family:var(--sans);font-size:12.5px;line-height:1.5;color:rgba(245,241,232,0.85);margin-top:11px;display:none;padding:11px 13px;background:rgba(255,255,255,0.06);border-radius:10px;border-left:2px solid var(--accent);flex-shrink:0}
+.cv-result.show{display:block}
+
+/* ═══ NEXT CARD ═══ */
+.nv-next-fill{display:flex;flex-direction:column;flex:1 0 auto;justify-content:space-evenly}
+.nv-next-preview{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.13);border-radius:15px;padding:13px 15px;display:flex;align-items:center;gap:11px;cursor:pointer;margin-bottom:13px;flex-shrink:0}
+.nv-next-thumb{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:15px;flex-shrink:0}
+.nv-next-co{font-family:var(--serif);font-size:clamp(12.5px,1.72dvh,14.5px);font-weight:500;color:var(--cream)}
+.nv-next-tag{font-family:var(--sans);font-size:11px;color:rgba(245,241,232,0.55);margin-top:2px}
+.nv-next-acts{display:flex;flex-direction:column;gap:7px;flex-shrink:0;margin-top:auto}
+.nv-btn-p{border:0;border-radius:100px;padding:11px 17px;font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:rgba(118,185,0,0.2);color:var(--accent)}
+.nv-btn-g{border:0;border-radius:100px;padding:11px 17px;font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.08);color:var(--cream)}
+
+/* ═══ DRAWER ═══ */
+.dw-bd{position:absolute;inset:0;z-index:40;background:transparent;pointer-events:none;transition:background 0.3s}
+.dw-bd.open{background:rgba(0,0,0,0.42);pointer-events:auto}
+.dw{position:absolute;bottom:0;left:0;right:0;max-height:76%;background:var(--cream);border-radius:22px 22px 0 0;z-index:50;transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.2,0.85,0.25,1)}
+.dw.open{transform:translateY(0)}
+.dw-hn{width:34px;height:4px;background:var(--line);border-radius:2px;margin:12px auto 0}
+.dw-h{display:flex;align-items:flex-start;justify-content:space-between;padding:13px 18px 7px}
+.dw-eb{font-family:var(--mono);font-size:9px;letter-spacing:0.17em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.dw-t{font-family:var(--serif);font-size:19px;font-weight:400;letter-spacing:-0.01em;line-height:1.2}
+.dw-x{border:0;background:none;font-size:19px;color:var(--muted);cursor:pointer;padding:0}
+.dw-b{padding:0 18px 30px;overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:calc(76vh - 90px)}
+.d-sub{font-family:var(--mono);font-size:9px;letter-spacing:0.17em;text-transform:uppercase;color:var(--accent);margin-bottom:9px;margin-top:4px}
+.d-p{font-family:var(--sans);font-size:13px;line-height:1.58;color:var(--ink-2);margin-bottom:11px}
+.d-p strong{font-weight:600;color:var(--ink)}
+.d-call{font-family:var(--serif);font-size:14.5px;font-weight:400;font-style:italic;background:var(--accent-soft);border-left:3px solid var(--accent);padding:10px 13px;border-radius:0 9px 9px 0;margin-bottom:11px;line-height:1.46;color:var(--ink)}
+
+/* ═══ TLDR PANEL ═══ */
+.tl-bd{position:absolute;inset:0;z-index:60;background:transparent;pointer-events:none;transition:background 0.3s;display:flex;align-items:flex-end}
+.tl-bd.open{background:rgba(0,0,0,0.5);pointer-events:auto}
+.tl-c{width:100%;background:var(--cream);border-radius:22px 22px 0 0;padding:18px 18px 30px;transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.2,0.85,0.25,1)}
+.tl-bd.open .tl-c{transform:translateY(0)}
+.tl-h{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.tl-l{width:26px;height:26px;border-radius:7px;background:var(--co-logo-bg);color:var(--co-logo-color);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:12px}
+.tl-co{font-family:var(--serif);font-size:15px;font-weight:500}
+.tl-co .s{display:block;font-family:var(--mono);font-size:8.5px;color:var(--muted);letter-spacing:0.11em;text-transform:uppercase;font-weight:400;font-style:normal}
+.tl-tag{font-family:var(--mono);font-size:8.5px;letter-spacing:0.17em;text-transform:uppercase;color:var(--muted);margin:9px 0 11px}
+.tl-pts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.tl-p{display:flex;gap:9px;align-items:flex-start}
+.tl-n{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--accent);min-width:20px}
+.tl-tx{font-family:var(--sans);font-size:12px;line-height:1.5;color:var(--ink-2)}
+.tl-tx strong{color:var(--ink);font-weight:600}
+.tl-f{display:flex;align-items:center;justify-content:space-between;padding-top:11px;border-top:1px solid var(--line);margin-bottom:11px}
+.tl-br{font-family:var(--serif);font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:5px}
+.dd{background:var(--ink);color:var(--cream);padding:2px 5px;border-radius:3px;font-size:10px;font-weight:700;font-family:var(--mono)}
+.tl-u{font-family:var(--mono);font-size:8.5px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+.tl-acts{display:flex;gap:7px}
+.tl-btn{flex:1;padding:10px;border-radius:100px;border:0;font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer}
+.tl-btn.s{background:var(--ink);color:var(--cream)}
+.tl-btn.c{background:var(--cream-2);color:var(--ink)}
+
+/* ═══ TOAST ═══ */
+.toast{position:absolute;bottom:82px;left:50%;transform:translateX(-50%) translateY(18px);background:var(--ink);color:var(--cream);padding:10px 16px;border-radius:100px;font-family:var(--sans);font-size:12.5px;font-weight:500;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══ DESKTOP HINT ═══ */
+.hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.38);font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;pointer-events:none;z-index:9999;text-align:center;line-height:1.6}
+@media(max-width:480px){.hint{display:none}}
+
+/* ═══ SHORT SCREENS: reclaim chrome + tighten gaps so cards never need to scroll ═══
+   Structure only (padding/margin/gap) — text sizing is already handled by the dvh clamps
+   above. Chrome position is set ONLY via the --prog-top/--topbar-top/--topbar-clear/
+   --pills-bottom/--pills-clear vars on .shell — .card's padding is a calc() off those
+   (see .card rule), so it can never drift out of sync with where .topbar/.pills actually
+   render, at any tier. */
+@media(max-height:760px){
+  .shell{--prog-top:42px;--topbar-top:54px;--topbar-clear:32px;--pills-bottom:8px;--pills-clear:42px}
+  .pill{padding:6px 12px}
+  .eb-c{margin-bottom:3px}
+  .hl{margin-bottom:6px}
+  .nv-flow-step{padding:5px 10px}
+  .nv-flow-arrow{padding:0}
+  .nv-loop-strip{padding:7px 11px}
+  .nv-rival-rows{gap:6px}
+  .nv-rival-card{padding:9px 12px}
+  .nv-rival-kicker{padding:7px 11px}
+  .nv-two-blocks{gap:7px;margin-bottom:9px}
+  .nv-block{padding:11px 10px}
+  .nv-margin-row{padding:11px;gap:11px;margin-bottom:8px}
+  .nv-hidden-box{padding:11px;margin-bottom:8px}
+  .nv-hidden-grid{gap:6px;margin-bottom:8px}
+  .nv-hcell{padding:9px 10px}
+  .nv-callout-dark{padding:10px 11px}
+  .nv-own-rows{gap:7px;margin-bottom:9px}
+  .nv-pm-row{gap:6px;margin-bottom:8px}
+  .nv-pm-card{padding:10px 9px}
+  .nv-own-strip{padding:7px 11px}
+  .nv-pullquote{padding:14px 13px 10px;margin-bottom:8px}
+  .nv-chip-section{margin-bottom:7px}
+  .nv-debate-close{padding:10px 12px}
+  .nv-next-preview{padding:11px 13px;margin-bottom:10px}
+  .nv-next-acts{gap:6px}
+  .cv-opts{gap:7px}
+  .co-opt{padding:11px 14px}
+}
+@media(max-height:660px){
+  .shell{--prog-top:38px;--topbar-top:50px;--topbar-clear:30px;--pills-bottom:7px;--pills-clear:38px}
+  .hl{font-size:clamp(18px,3dvh,25px);margin-bottom:5px}
+  .bd{font-size:clamp(10.5px,1.6dvh,13.5px)}
+  .nv-flow-step{padding:5px 10px}
+  .nv-flow-step-t{font-size:clamp(11.5px,1.72dvh,14.5px)}
+  .nv-rival-rows{gap:5px}
+  .nv-two-blocks{gap:6px;margin-bottom:7px}
+  .nv-margin-row{padding:9px;margin-bottom:7px}
+  .nv-margin-big{font-size:clamp(34px,6.16dvh,52px)}
+  .nv-hidden-grid{gap:5px;margin-bottom:7px}
+  .nv-own-rows{gap:6px;margin-bottom:7px}
+  .nv-pm-row{margin-bottom:7px}
+  .nv-pullquote{padding:12px 12px 9px;margin-bottom:7px}
+}
+@media(max-height:600px){
+  .shell{--prog-top:33px;--topbar-top:44px;--topbar-clear:28px;--pills-bottom:6px;--pills-clear:34px}
+  .hl{font-size:clamp(16px,3dvh,25px);margin-bottom:4px}
+  .eb-c{margin-bottom:2px}
+  .nv-flow-step{padding:4px 9px}
+  .nv-flow-step-n{margin-bottom:1px}
+  .nv-flow-step-s{margin-top:1px}
+  .nv-flow-arrow{font-size:11px}
+  .nv-rival-rows{gap:4px}
+  .nv-rival-card{padding:8px 11px}
+  .nv-rival-desc{margin-bottom:3px}
+  .nv-pullquote{padding:11px 11px 8px;margin-bottom:6px}
+  .nv-pq-text{padding-top:3px}
+  .nv-chip-section{margin-bottom:5px}
+  .nv-chip-lbl{margin-bottom:3px}
+}
+@media(max-height:580px){
+  .shell{--prog-top:26px;--topbar-top:36px;--topbar-clear:29px;--pills-bottom:4px;--pills-clear:35px}
+  .nv-model-pills{display:none}
+  .nv-flow-step{padding:2px 7px}
+  .nv-loop-strip{padding:4px 8px}
+  .nv-pullquote{padding:7px 9px 6px;margin-bottom:4px}
+  .nv-pq-mark{font-size:32px}
+  .pill{padding:5px 10px}
+  .nv-chip{padding:3px 7px}
+  .nv-chip-row{gap:4px}
+  .nv-chip-lbl{margin-bottom:3px}
+  .nv-chip-section{margin-bottom:3px}
+  .nv-debate-close{padding:6px 9px}
+}
+</style></head><body>
+
+<div class="stage"><div class="phone">
+<div class="notch"></div>
+
+<!-- ══ TODAY ══ -->
+<section class="screen active" id="screen-today" style="background:var(--cream)">
+  <div class="statusbar"></div>
+  <div class="today-scroll">
+    <div class="today-head">
+      <div class="today-logo"><span class="logo-mark">DD</span>Daily Dividend</div>
+      <div class="streak"><span class="flame">🔥</span> 3 day streak</div>
+    </div>
+    <div class="greeting" id="greeting">Good morning. <em>Today's drop is ready.</em></div>
+    <div class="eb-label">This week</div>
+    <div class="today-hero" onclick="openStack()">
+      <div class="hero-tag"><span class="live-dot"></span>NVIDIA · NVDA</div>
+      <div class="hero-co">Semiconductors · 🇺🇸</div>
+      <div class="hero-h">Selling shovels in <em>the AI gold rush.</em></div>
+      <div class="hero-stock">
+        <span class="hero-sp">$135</span>
+        <span class="hero-sc up">+1.8% today</span>
+      </div>
+      <div class="hero-meta"><span>11 cards · ~2 min</span><button class="hero-start" onclick="event.stopPropagation();openStack()">Start →</button></div>
+    </div>
+    <div class="sect-t">Coming soon</div>
+    <div class="sect-s">A new company drops every Monday.</div>
+    <div class="rcard">
+      <div class="rl">
+        <div class="rthumb" style="background:#FF9900;color:#fff">A</div>
+        <div><div class="rname">Amazon</div><div class="rsub">AWS quietly funds everything else.</div></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Soon</div>
+    </div>
+    <div class="rcard">
+      <div class="rl">
+        <div class="rthumb" style="background:#4285F4;color:#fff">G</div>
+        <div><div class="rname">Google</div><div class="rsub">Sells your attention 8.5 billion times a day.</div></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Soon</div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
+    <button class="nav-item" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+  </nav>
+</section>
+
+<!-- ══ LIBRARY ══ -->
+<section class="screen" id="screen-library" style="background:var(--cream)">
+  <div class="statusbar"></div>
+  <div style="padding:20px 20px 100px;flex:1;overflow-y:auto">
+    <div style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:6px">The library.</div>
+    <div style="font-family:var(--sans);font-size:12.5px;color:var(--muted);margin-bottom:22px">One company. Every Monday.</div>
+    <div class="rcard" onclick="openStack()">
+      <div class="rl">
+        <div class="rthumb" style="background:#76B900;color:#0A0A08">N</div>
+        <div><div class="rname">NVIDIA</div><div class="rsub">Selling shovels in the AI gold rush.</div></div>
+      </div>
+      <div style="font-size:16px">→</div>
+    </div>
+    <div class="rcard" style="opacity:0.45">
+      <div class="rl">
+        <div class="rthumb" style="background:#FF9900;color:#fff">A</div>
+        <div><div class="rname">Amazon</div><div class="rsub">AWS quietly funds everything else.</div></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Soon</div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
+    <button class="nav-item active" data-tab="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
+    <button class="nav-item" data-tab="you" onclick="goTo('you')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+  </nav>
+</section>
+
+<!-- ══ YOU ══ -->
+<section class="screen" id="screen-you" style="background:var(--cream)">
+  <div class="statusbar"></div>
+  <div style="padding:20px 20px 100px;flex:1;overflow-y:auto">
+    <div style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:4px">Your shelf. <em style="font-style:italic;color:var(--muted)">Your calls.</em></div>
+    <div style="font-family:var(--sans);font-size:12.5px;color:var(--muted);margin-top:8px">Read a company and vote to see your calls here.</div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-tab="today" onclick="goTo('today')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 4l9 8M5 10v10h14V10"/></svg>Today</button>
+    <button class="nav-item" data-tab="library" onclick="goTo('library')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Library</button>
+    <button class="nav-item active" data-tab="you"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>You</button>
+  </nav>
+</section>
+
+<!-- ══ STACK ══ -->
+<section class="screen" id="screen-stack" style="background:#000">
+  <div class="shell" id="shell">
+    <div class="prog" id="prog"></div>
+    <div class="topbar" id="topbar">
+      <div class="co">
+        <div class="co-logo" style="background:#76B900;color:#0A0A08">N</div>
+        <div><div class="co-name">NVIDIA</div><div class="co-sub">NVDA · Semiconductors</div></div>
+      </div>
+      <div class="tactions">
+        <button class="tbtn" onclick="openTldr()" title="TL;DR">&#8801;</button>
+        <button class="tbtn" id="saveBtn" onclick="toggleSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        <button class="tbtn" onclick="closeStack()">&#215;</button>
+      </div>
+    </div>
+    <div class="tz l" onclick="prevCard()"></div>
+    <div class="tz r" onclick="nextCard()"></div>
+    <div class="track" id="track"></div>
+    <div class="pills" id="pills">
+      <div class="pill" onclick="openDrawer()">&#8593; Go deeper</div>
+      <div class="pill" onclick="openTldr()">&#8801; TL;DR</div>
+    </div>
+  </div>
+  <div class="dw-bd" id="dwBd" onclick="closeDrawer()"></div>
+  <div class="dw" id="dw">
+    <div class="dw-hn"></div>
+    <div class="dw-h">
+      <div><div class="dw-eb" id="dwEb">From the deep dive</div><div class="dw-t" id="dwT">More</div></div>
+      <button class="dw-x" onclick="closeDrawer()">&#215;</button>
+    </div>
+    <div class="dw-b" id="dwB"></div>
+  </div>
+  <div class="tl-bd" id="tlBd" onclick="if(event.target===this)closeTldr()">
+    <div class="tl-c" id="tlC"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+</section>
+</div></div>
+
+<div class="hint">tap edges to swipe &middot; &uarr; go deeper &middot; &#8801; TL;DR &middot; esc to close</div>
+
+<script>
+/* ════════════════════════════════════
+   CARD DATA
+════════════════════════════════════ */
+const CARDS=[
+{/* 0 — COVER */
+  type:"cover",bg:"cover",deep:"cover",
+  chips:["NVDA · NASDAQ","$3.3T market cap"],
+  hl:"NVIDIA: the company selling shovels while <em>the whole world digs for AI gold.</em>",
+  bd:"Every time you use ChatGPT, every time a hospital uses AI to read an X-ray, every time a bank detects fraud with AI, there is an almost certain chance a single company's chip is doing the work. That company is NVIDIA. In the last three months alone, NVIDIA earned <strong>$58 billion in profit.</strong>",
+  ks:[{v:"$58B",l:"Profit this quarter"},{v:"+85%",l:"Revenue growth"},{v:"$91B",l:"Next quarter guided"}]
+},
+{/* 1 — THE MONEY */
+  type:"money",bg:"cream",deep:"money",
+  hl:"Two businesses. One is gaming. <em>The other is rewriting history.</em>"
+},
+{/* 2 — THE MODEL */
+  type:"model",bg:"cream",deep:"model",
+  hl:"The chip is the door. <em>The software is the lock.</em> NVIDIA owns both.",
+  pills:["Chip","CUDA","Developers","Lock-in","Flywheel"],
+  steps:[
+    {n:"01",t:"Build a better chip",s:"Each generation faster. More powerful. No ceiling in sight."},
+    {n:"02",t:"Build the software",s:"CUDA: the language developers use to talk to the chip. Started 2006."},
+    {n:"03",t:"4M developers build on it",s:"AI tools, medical systems, research. All written in CUDA."},
+    {n:"04",t:"Tools only run on NVIDIA",s:"Companies must buy NVIDIA to run what their teams built."},
+    {n:"05",t:"Revenue funds the next chip",s:"Repeat. The moat gets deeper every cycle."}
+  ],
+  loop:"AMD and Intel have competing chips. Neither has a competing ecosystem anywhere near CUDA's scale."
+},
+{/* 3 — RIVALS */
+  type:"rivals",bg:"cream",deep:"rivals",
+  hl:"Every tech giant is trying to replace NVIDIA. <em>The market does not believe them.</em>",
+  rows:[
+    {n:"🟩 NVIDIA",val:"$3.3T",pct:100,desc:"Dominates AI chips and owns the only ecosystem developers actually use.",h:true},
+    {n:"🟣 Broadcom",val:"~$900B",pct:27,desc:"Makes custom AI chips for specific clients. A different game."},
+    {n:"🔴 AMD",val:"~$200B",pct:6,desc:"The only real rival. Competitive hardware. No ecosystem to match."},
+    {n:"🔵 Intel",val:"~$90B",pct:3,desc:"A decade trying to re-enter AI chips. Still struggling."}
+  ],
+  kicker:"Google, Amazon, and Microsoft are all building their own chips. All three still buy NVIDIA by the billions."
+},
+{/* 4 — HIDDEN TRUTH */
+  type:"hidden",bg:"dkblue",deep:"hidden",
+  hl:"The US banned NVIDIA from China. <em>NVIDIA barely flinched.</em>",
+  myth:"Losing China destroyed NVIDIA's growth.",
+  truth:"NVIDIA lost China's entire AI chip market. Then grew 85%.",
+  cells:[
+    {cls:"red",lbl:"China AI chip sales",arrow:"↓",val:"$0",desc:"Banned. No H100, no Blackwell. Nothing."},
+    {cls:"green",lbl:"Growth without China",arrow:"↑",val:"+85%",desc:"The rest of the world more than filled the gap."}
+  ],
+  callout:"China was <strong>17% of NVIDIA revenue</strong> two years ago. Today it is a rounding error. The AI buildout outside China is that large."
+},
+{/* 5 — BULL CASE */
+  type:"bull",bg:"green",deep:"bull",
+  eb:"06 · How it could keep winning",
+  hl:"Three reasons NVIDIA's best <em>years may still be ahead.</em>",
+  panels:[
+    {i:"↑",t:"The next chip has not shipped yet",b:"Blackwell is inside every major AI company's servers right now. Vera Rubin, the next generation, starts shipping later this year. Each new chip forces an entire system upgrade. <strong>Networking, connectors, everything.</strong> Every Rubin chip sold pulls through more NVIDIA hardware."},
+    {i:"↑",t:"$119 billion is already ordered",b:"Customers have made contractual commitments to buy $119 billion of NVIDIA products. $95 billion of that is due within the next nine months. <strong>These chips are already spoken for before they are built.</strong> The demand is not speculative. It is signed."},
+    {i:"↑",t:"AI is moving from answering to acting",b:"Current AI answers questions. The next wave, called agentic AI, takes actions on your behalf over long tasks. That requires vastly more computing power. <strong>If agentic AI scales as expected, NVIDIA's demand does not plateau. It accelerates.</strong>"}
+  ]
+},
+{/* 6 — BEAR CASE */
+  type:"bear",bg:"red",deep:"bear",
+  eb:"07 · What could hurt it",
+  hl:"Three risks that could <em>change the numbers overnight.</em>",
+  panels:[
+    {i:"↓",t:"Three customers are 54% of revenue",b:"Three unnamed companies represented 21%, 17%, and 16% of NVIDIA's revenue this quarter. Combined, that is over half of everything NVIDIA sold. They are almost certainly three of the four biggest cloud companies. <strong>If any one of them shifts 20% of spending to their in-house chip, the effect is immediate and significant.</strong>"},
+    {i:"↓",t:"Export rules can change overnight",b:"In April 2025, the US government banned a chip NVIDIA had specifically designed to comply with existing rules. <strong>NVIDIA had to write off $4.5 billion of inventory overnight.</strong> One policy memo. $4.5 billion gone. The rules could change again tomorrow."},
+    {i:"↓",t:"Five continents of regulators",b:"The EU, US, UK, South Korea, France, and China all have active investigations into NVIDIA's business right now. China's regulator published a finding that NVIDIA's compliance with US export law amounts to discrimination against Chinese customers. <strong>NVIDIA is now so dominant that governments treat it as a problem to solve.</strong>"}
+  ]
+},
+{/* 7 — OWNERSHIP */
+  type:"own",bg:"gold",deep:"own",
+  hl:"He started it in a Denny's diner. <em>He still runs it. No plan B.</em>",
+  bars:[
+    {l:"Index funds",desc:"Vanguard, BlackRock, others",p:20,d:"~20%",c:"#C49A3E"},
+    {l:"Other institutions",desc:"Hedge funds, pensions",p:55,d:"~55%",c:"#76B900"},
+    {l:"Jensen Huang",desc:"Founder and CEO",p:3,d:"~3%",c:"#1A2A00"}
+  ],
+  people:[
+    {initials:"JH",bg:"#1A2A00",name:"Jensen Huang",role:"Founder and CEO",note:"61 years old. At NVIDIA since 1993. Made the CUDA bet in 2006 when most thought it was a distraction."},
+    {initials:"CK",bg:"#76B900",name:"Colette Kress",role:"CFO",note:"Signs all financial certifications. Set up a share sale plan in December 2025. Cancelled it in April 2026. No reason given."}
+  ],
+  strip:"Jensen Huang holds tens of billions in NVIDIA stock. His interests and shareholder interests are aligned. The filing names no successor."
+},
+{/* 8 — DEBATE */
+  type:"debate",bg:"cream",deep:"debate",
+  hl:"Is the AI building boom a permanent shift, <em>or the biggest bubble since dot-com?</em>",
+  pq:"The bubble comparison misses something crucial. In 1999, the internet was a promise. In 2026, AI is already in your pocket, your hospital, and your bank.",
+  go:["$119B committed orders","$91B guided next quarter","Rubin not yet shipped","Customers earning from chips now"],
+  wait:["54% revenue from 3 customers","All 3 building own chips","Export rules unpredictable","Regulators on 5 continents"],
+  close:"NVIDIA just guided $91 billion for next quarter, assuming zero AI chip revenue from China. The order book is real. The question is what happens in 2027."
+},
+{/* 9 — CONVICTION VOTE */
+  type:"conv",bg:"brand",deep:"conv",
+  hl:"The whole world is racing to build AI. Only one company makes the engine. <em>What is that worth?</em>",
+  opts:[
+    {k:"bull",p:61,sub:"The AI era is just beginning"},
+    {k:"neutral",p:26,sub:"Great business, price reflects it"},
+    {k:"bear",p:13,sub:"Concentration risk is too real"}
+  ]
+},
+{/* 10 — NEXT */
+  type:"next",bg:"brand",deep:"next",
+  hl:"NVIDIA makes the engine. <em>The next company built the road.</em>",
+  bd:"Every NVIDIA chip ends up inside a very large, very expensive building filled with servers, cooled around the clock, powered by the grid. Somebody built that building. Somebody charges every AI company on earth to use it. Next up: the company that turned storing your data into one of the most quietly powerful businesses in history."
+}
+];
+
+const DEEP={
+  cover:{t:"The shovel analogy",e:"From the cover",h:`<div class="d-sub">Why NVIDIA wins when everyone else competes</div><div class="d-p">During the California Gold Rush of 1849, most prospectors lost money. The people who got reliably rich were selling picks, shovels, and jeans to the miners. NVIDIA is in exactly that position today.</div><div class="d-call">OpenAI competes with Google. Google competes with Meta. Meta competes with Amazon. All of them buy their shovels from NVIDIA. The competition that matters is not who wins the AI race. It is whether anyone can build a shovel good enough to replace NVIDIA's. So far, nobody has.</div>`},
+  money:{t:"Who is the other half",e:"From the money",h:`<div class="d-sub">The customer base is changing</div><div class="d-p">Inside the $75 billion AI business, something important is quietly happening. A year ago, roughly half the money came from four giant companies: Amazon, Google, Microsoft, and Meta. The other half came from everyone else.</div><div class="d-p">That split still holds, but the other half has changed character dramatically. It now includes sovereign governments building national AI systems, hospitals deploying medical AI, car manufacturers training self-driving systems, and financial institutions running risk models.</div><div class="d-call">The customer base is no longer four tech giants and a long tail. It is four tech giants and a rapidly growing second economy.</div>`},
+  model:{t:"Why CUDA took 18 years to matter",e:"From the model",h:`<div class="d-sub">The patience behind the moat</div><div class="d-p">The CUDA decision in 2006 looked strange at the time. NVIDIA was a gaming chip company investing heavily in software that scientists might use for weather modelling. Most analysts thought it was a distraction.</div><div class="d-call">When AI training exploded around 2012 and again after 2022, the researchers doing that training had spent years learning CUDA. Switching to a competitor chip would mean rewriting every line of code. The ecosystem built in obscurity is now the most valuable moat in technology.</div>`},
+  rivals:{t:"Why in-house chips are not a threat",e:"From the rivals",h:`<div class="d-sub">A cost-reduction strategy, not a replacement</div><div class="d-p">Amazon's Trainium, Google's TPU, Microsoft's Maia: these are real, capable chips. But they are built for one purpose: running those companies' own internal AI workloads as cheaply as possible. They are not available to the outside world.</div><div class="d-call">When a university research lab, a pharmaceutical company, or a national government wants to build AI, they cannot buy an Amazon chip. NVIDIA is the only general-purpose option at scale. The hyperscalers building their own chips nibbles at NVIDIA's business. It does not threaten the foundation.</div>`},
+  hidden:{t:"The $4.5B lesson",e:"From the hidden truth",h:`<div class="d-sub">What happens when policy changes overnight</div><div class="d-p">In April 2025, the US government decided that even the downgraded chip NVIDIA had specifically designed to comply with earlier restrictions needed a special licence to enter China. NVIDIA was caught with billions of dollars of H20 chips it could no longer sell.</div><div class="d-call">$4.5 billion of inventory, written off overnight. That is more than Netflix spends on content in a typical quarter. Gone. Because of a government policy change. NVIDIA absorbed the hit and kept growing.</div>`},
+  bull:{t:"The $119B is contractual",e:"From the bull case",h:`<div class="d-sub">Why the order book is different from demand signals</div><div class="d-p">$119 billion in supply commitments are not a wish list. These are contractual obligations NVIDIA has made with its manufacturers, backed by customer demand signals. $95 billion is due in the remaining three quarters of this fiscal year alone.</div><div class="d-call">NVIDIA also committed $30 billion to buying cloud computing capacity for its own internal research. A company preparing for a slowdown does not sign $30 billion in research commitments. They are betting on the next five years requiring even more of everything.</div>`},
+  bear:{t:"The H20 write-down as warning",e:"From the bear case",h:`<div class="d-sub">What regulatory risk looks like in practice</div><div class="d-p">The $4.5 billion H20 inventory charge is the clearest demonstration of what concentration risk looks like for NVIDIA. One chip. One policy change. Overnight. $4.5 billion gone.</div><div class="d-call">NVIDIA's $119 billion in manufacturing commitments means they are exposed to exactly this kind of event again. If export policy shifts and a large order is cancelled, the financial hit is not hypothetical. The company has already lived through a version of it.</div>`},
+  own:{t:"Power without legal control",e:"From ownership",h:`<div class="d-sub">The governance gap at $3.3 trillion</div><div class="d-p">Mark Zuckerberg at Meta holds special voting shares that give him permanent legal authority regardless of what other shareholders think. Jensen Huang holds ordinary shares. His authority rests entirely on belief: every employee, customer, and investor believes he is the irreplaceable mind behind NVIDIA.</div><div class="d-call">That is a more fragile kind of power. If that belief ever wavers, there is no structural mechanism to protect his position. For a $3.3 trillion company, the filing names no successor. That is a remarkable governance gap.</div>`},
+  debate:{t:"NVIDIA's $30B internal bet",e:"From the debate",h:`<div class="d-sub">The clearest signal of what NVIDIA thinks is coming</div><div class="d-p">NVIDIA has committed $30 billion to buying cloud computing capacity for its own internal research over the coming years. This is the company spending extraordinary sums to build the next generation of chips that will power the generation after that.</div><div class="d-call">Companies preparing for a slowdown cut their research spending. They do not sign $30 billion research commitments. NVIDIA is behaving like a company that believes the next five years will require even more of everything. The internal bet matches the external guidance.</div>`},
+  conv:{t:"Our honest read",e:"The Daily Dividend take",h:`<div class="d-sub">What we actually think</div><div class="d-p">NVIDIA's growth will slow eventually. That moment is not visible in the numbers yet. The Q2 guidance of $91 billion assumes zero AI chip revenue from China. If any China revenue materialises, it is additive upside on top of that number.</div><div class="d-call">The companies placing these orders are deploying the chips immediately to generate revenue. Until that stops, the cycle continues. The question is not whether NVIDIA is extraordinary. It is what that is worth when extraordinary becomes expected.</div><div class="d-p" style="font-size:11px;color:var(--mute-2);font-style:italic;margin-top:14px">Not investment advice. We are storytellers, not advisors.</div>`},
+  next:{t:"The infrastructure behind NVIDIA",e:"From what's next",h:`<div class="d-sub">Where every chip ends up</div><div class="d-p">Every NVIDIA chip sold ends up inside a data centre. Somebody built that data centre. Somebody is cooling it, powering it, and charging companies by the hour to use it.</div><div class="d-call">The cloud companies running these chips are earning billions from the same AI buildout driving NVIDIA's growth. The next story is the other side of that trade.</div>`}
+};
+
+const TLDR=[
+  "NVIDIA makes the chips that power almost <strong>every AI system on earth.</strong> It has no serious rival.",
+  "In three months, it earned more profit than the entire GDP of <strong>many small countries.</strong>",
+  "The real product is not the chip. It is <strong>CUDA software</strong> that makes only NVIDIA chips work for AI.",
+  "The US banned NVIDIA from selling to China. <strong>It barely noticed.</strong> Revenue grew 85%.",
+  "<strong>$119 billion in committed orders</strong> already placed. The next chip has not even shipped yet.",
+  "More than half its sales come from <strong>just three companies.</strong> If one walks away, the numbers change overnight."
+];
+
+/* ════════════════════════════════════
+   STATE
+════════════════════════════════════ */
+let cardIdx=0;
+const saved=new Set();
+
+/* ════════════════════════════════════
+   RENDER ENGINE
+════════════════════════════════════ */
+function buildCards(){
+  const tr=document.getElementById('track');tr.innerHTML='';
+  CARDS.forEach((card,i)=>{
+    const el=document.createElement('div');
+    el.className='card bg-'+(card.bg==='dkblue'?'dkblue':card.bg);
+    el.dataset.deep=card.deep;
+    el.innerHTML=buildCard(card,i);
+    tr.appendChild(el);
+  });
+  initAccordions();
+}
+
+function buildCard(c,i){
+  const total=CARDS.length;
+  const n=String(i+1).padStart(2,'0');
+
+  if(c.type==='cover')return `
+<div class="eb-c">01 · The cover</div>
+<div class="cv-top">
+  <div class="cv-mark">N</div>
+  <div class="cv-co-info">
+    <div class="cv-name">NVIDIA</div>
+    <div class="cv-chips">${c.chips.map(x=>`<span class="cv-chip">${x}</span>`).join('')}</div>
+  </div>
+</div>
+<div class="cv-stock"><span class="cv-sp">$135</span><span class="cv-sc up">+1.8% today</span></div>
+<div class="hl">${c.hl}</div>
+<div class="bd">${c.bd}</div>
+<div class="cv-ks">${c.ks.map(k=>`<div class="cv-k"><div class="cv-kv">${k.v}</div><div class="cv-kl">${k.l}</div></div>`).join('')}</div>`;
+
+  if(c.type==='money')return `
+<div class="eb-c">02 · The money</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-money-fill">
+<div class="nv-two-blocks">
+  <div class="nv-block gaming">
+    <div class="nv-block-label">Gaming chips</div>
+    <div class="nv-block-num">$7B</div>
+    <div class="nv-block-sub">Healthy, growing, and entirely unremarkable by NVIDIA's current standards.</div>
+  </div>
+  <div class="nv-block ai">
+    <div class="nv-block-label">AI chips</div>
+    <div class="nv-block-num" data-countup="75" data-prefix="$" data-suffix="B">$75B</div>
+    <div class="nv-block-sub">Ten times the size. Growing faster every quarter.</div>
+  </div>
+</div>
+<div class="nv-margin-row">
+  <div class="nv-margin-big" data-countup="74.9" data-suffix="%" data-decimals="1">74.9%</div>
+  <div class="nv-margin-right">
+    <div class="nv-margin-chip">kept as gross profit</div>
+    <div class="nv-margin-sub">Apple keeps ~30%. Most manufacturers keep 5 to 10 cents. NVIDIA keeps 75 cents of every dollar it earns.</div>
+  </div>
+</div>
+</div>
+<div class="nv-kicker">The gaming business kept NVIDIA alive for 30 years. The AI business has made it one of the most valuable companies in human history.</div>`;
+
+  if(c.type==='model')return `
+<div class="eb-c">03 · The model</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-model-pills">${c.pills.map(p=>`<div class="nv-model-pill">${p}</div>`).join('')}</div>
+<div class="nv-flow">${c.steps.map((s,i)=>`${i>0?'<div class="nv-flow-arrow">↓</div>':''}<div class="nv-flow-step"><div class="nv-flow-step-n">${s.n}</div><div class="nv-flow-step-t">${s.t}</div><div class="nv-flow-step-s">${s.s}</div></div>`).join('')}</div>
+<div class="nv-loop-strip">${c.loop}</div>`;
+
+  if(c.type==='rivals')return `
+<div class="eb-c">04 · The competition</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-rival-rows">${c.rows.map(r=>`<div class="nv-rival-card${r.h?' hero':''}">
+  <div class="nv-rival-head"><span class="nv-rival-n">${r.n}</span><span class="nv-rival-val">${r.val}</span></div>
+  <div class="nv-rival-desc">${r.desc}</div>
+  <div class="nv-rival-track"><div class="nv-rival-fill" data-w="${r.pct}" style="background:${r.h?'var(--accent)':'rgba(0,0,0,0.28)'}"></div></div>
+</div>`).join('')}</div>
+<div class="nv-rival-kicker">${c.kicker}</div>`;
+
+  if(c.type==='hidden')return `
+<div class="eb-c">05 · The hidden truth</div>
+<div class="nv-hidden-fill">
+<div class="nv-hidden-box">
+  <div class="nv-myth">${c.myth}</div>
+  <div class="nv-truth">${c.truth}</div>
+</div>
+<div class="nv-hidden-grid">${c.cells.map(x=>`<div class="nv-hcell ${x.cls}">
+  <div class="nv-hcell-lbl">${x.lbl}</div>
+  <div class="nv-hcell-arrow">${x.arrow}</div>
+  <div class="nv-hcell-val">${x.val}</div>
+  <div class="nv-hcell-desc">${x.desc}</div>
+</div>`).join('')}</div>
+</div>
+<div class="nv-callout-dark">${c.callout}</div>`;
+
+  if(c.type==='bull'||c.type==='bear')return `
+<div class="eb-c">${c.eb}</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-acc-list">${c.panels.map(p=>`<div class="nv-acc-item">
+  <button class="nv-acc-btn">
+    <div class="nv-acc-icon">${p.i}</div>
+    <div class="nv-acc-title">${p.t}</div>
+    <div class="nv-acc-chev">▾</div>
+  </button>
+  <div class="nv-acc-body"><div class="nv-acc-text">${p.b}</div></div>
+</div>`).join('')}</div>`;
+
+  if(c.type==='own')return `
+<div class="eb-c">08 · Who owns it</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-own-wrap">
+<div class="nv-own-rows">${c.bars.map(b=>`<div class="nv-own-row">
+  <div class="nv-own-l"><div class="nv-own-l-name">${b.l}</div><div class="nv-own-l-desc">${b.desc}</div></div>
+  <div class="nv-own-track"><div class="nv-own-fill" data-w="${Math.max(b.p,4)}" style="background:${b.c}">${b.d}</div></div>
+</div>`).join('')}</div>
+<div class="nv-pm-row">${c.people.map(p=>`<div class="nv-pm-card">
+  <div class="nv-pm-icon" style="background:${p.bg}">${p.initials}</div>
+  <div class="nv-pm-name">${p.name}</div>
+  <div class="nv-pm-role">${p.role}</div>
+  <div class="nv-pm-note">${p.note}</div>
+</div>`).join('')}</div>
+</div>
+<div class="nv-own-strip">${c.strip}</div>`;
+
+  if(c.type==='debate')return `
+<div class="eb-c">09 · The market debate</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-debate-fill">
+<div class="nv-pullquote"><div class="nv-pq-mark">"</div><div class="nv-pq-text">${c.pq}</div></div>
+<div class="nv-chip-section">
+  <div class="nv-chip-lbl">✓ Working now</div>
+  <div class="nv-chip-row">${c.go.map(x=>`<div class="nv-chip go">${x}</div>`).join('')}</div>
+</div>
+<div class="nv-chip-section">
+  <div class="nv-chip-lbl">✗ Not resolved yet</div>
+  <div class="nv-chip-row">${c.wait.map(x=>`<div class="nv-chip wait">${x}</div>`).join('')}</div>
+</div>
+</div>
+<div class="nv-debate-close">${c.close}</div>`;
+
+  if(c.type==='conv')return `
+<div class="eb-c">10 · Your call</div>
+<div class="hl">${c.hl}</div>
+<div class="cv-sent-row">
+  <div class="cv-sent">Bullish crowd</div>
+  <div class="cv-vb"><span class="vb-num">14,628</span> voted today</div>
+</div>
+<div class="cv-opts" id="cvOpts">${c.opts.map(o=>`<div class="co-opt ${o.k}" onclick="vote(this,'${o.k}')">
+  <div class="cf"></div>
+  <span class="ico">${o.k==='bull'?'📈':o.k==='bear'?'📉':'😐'}</span>
+  <div class="lbl-wrap"><span class="lbl">${o.k.charAt(0).toUpperCase()+o.k.slice(1)}ish</span><span class="sub">${o.sub}</span></div>
+  <span class="cp">${o.p}%</span>
+</div>`).join('')}</div>
+<div class="cv-result" id="cvResult"></div>`;
+
+  if(c.type==='next')return `
+<div class="eb-c">11 · Done</div>
+<div class="hl">${c.hl}</div>
+<div class="nv-next-fill">
+<div class="bd" style="margin-bottom:16px">${c.bd}</div>
+<div class="nv-next-preview">
+  <div class="nv-next-thumb" style="background:#FF9900;color:#fff">A</div>
+  <div><div class="nv-next-co">Amazon</div><div class="nv-next-tag">AWS quietly funds everything else.</div></div>
+  <div style="opacity:.55;margin-left:auto;color:var(--cream)">→</div>
+</div>
+</div>
+<div class="nv-next-acts">
+  <button class="nv-btn-p" onclick="openTldr()"><span>&#8801; See the TL;DR card</span><span>→</span></button>
+  <button class="nv-btn-g" onclick="showToast('★ Saved to your shelf')"><span>★ Save NVIDIA to shelf</span></button>
+  <button class="nv-btn-g" onclick="closeStack()" style="opacity:.65"><span>↓ Back to today</span></button>
+</div>`;
+
+  return '';
+}
+
+/* ════════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════════ */
+function buildProg(){
+  const w=document.getElementById('prog');w.innerHTML='';
+  CARDS.forEach(()=>{const t=document.createElement('div');t.className='tick';w.appendChild(t);});
+}
+
+function isLight(i){
+  const c=document.querySelectorAll('#track .card')[i];
+  return c&&(c.classList.contains('bg-cream')||c.classList.contains('bg-gold'));
+}
+
+function updProg(){
+  document.querySelectorAll('.tick').forEach((t,i)=>{
+    t.classList.remove('done','current');
+    if(i<cardIdx)t.classList.add('done');
+    else if(i===cardIdx)t.classList.add('current');
+  });
+  const light=isLight(cardIdx);
+  const p=document.getElementById('prog');
+  const tb=document.getElementById('topbar');
+  const bp=document.getElementById('pills');
+  light?p.classList.add('dark'):p.classList.remove('dark');
+  light?tb.classList.add('dark'):tb.classList.remove('dark');
+  light?bp.classList.add('dark'):bp.classList.remove('dark');
+  bp.style.display=(cardIdx===CARDS.length-1)?'none':'flex';
+  const sb=document.getElementById('saveBtn');
+  saved.has(cardIdx)?sb.classList.add('saved'):sb.classList.remove('saved');
+}
+
+/* ════════════════════════════════════
+   SHOW CARD
+════════════════════════════════════ */
+function showCard(i){
+  if(i<0||i>=CARDS.length)return;
+  cardIdx=i;
+  const cards=document.querySelectorAll('#track .card');
+  cards.forEach((c,k)=>{
+    c.classList.remove('active');
+    c.style.display='none';
+  });
+  const ac=cards[cardIdx];
+  if(!ac)return;
+  ac.style.display='flex';
+  // Force reflow before adding active for animation
+  ac.offsetHeight;
+  ac.classList.add('active');
+  // Scroll to top
+  ac.scrollTop=0;
+  updProg();
+  setTimeout(()=>animateCard(cardIdx),40);
+}
+
+function nextCard(){if(cardIdx<CARDS.length-1)showCard(cardIdx+1);}
+function prevCard(){if(cardIdx>0)showCard(cardIdx-1);}
+
+/* ════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════ */
+function animateCard(idx){
+  const card=document.querySelectorAll('#track .card')[idx];if(!card)return;
+
+  // Bar fills
+  card.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width='0';
+    setTimeout(()=>{el.style.width=el.dataset.w+'%';},80);
+  });
+
+  // Count-up numbers
+  card.querySelectorAll('[data-countup]').forEach(el=>{
+    const target=parseFloat(el.dataset.countup);
+    const prefix=el.dataset.prefix||'';
+    const suffix=el.dataset.suffix||'';
+    const dec=parseInt(el.dataset.decimals||'0');
+    const dur=950;const t0=performance.now();
+    (function tick(now){
+      const t=Math.min((now-t0)/dur,1);
+      const ease=1-Math.pow(1-t,3);
+      const val=target*ease;
+      el.textContent=prefix+(dec?val.toFixed(dec):Math.floor(val))+suffix;
+      if(t<1)requestAnimationFrame(tick);
+      else el.textContent=prefix+(dec?target.toFixed(dec):target)+suffix;
+    })(performance.now());
+  });
+
+  // Flow step stagger
+  card.querySelectorAll('.nv-flow-step,.nv-flow-arrow').forEach((el,i)=>{
+    el.classList.remove('visible');
+    setTimeout(()=>el.classList.add('visible'),160+i*170);
+  });
+}
+
+/* ════════════════════════════════════
+   ACCORDIONS (iOS-safe)
+════════════════════════════════════ */
+function initAccordions(){
+  document.querySelectorAll('.nv-acc-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>toggleAcc(btn));
+    btn.addEventListener('touchend',e=>{
+      e.preventDefault();
+      toggleAcc(btn);
+    },{passive:false});
+  });
+}
+
+function toggleAcc(btn){
+  const item=btn.closest('.nv-acc-item');
+  const body=item.querySelector('.nv-acc-body');
+  const isOpen=item.classList.contains('open');
+  // Close all siblings
+  const card=item.closest('.card');
+  card.querySelectorAll('.nv-acc-item.open').forEach(p=>{
+    p.classList.remove('open');
+    p.querySelector('.nv-acc-body').style.maxHeight='0';
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    body.style.maxHeight=body.scrollHeight+'px';
+  }
+}
+
+/* ════════════════════════════════════
+   VOTE
+════════════════════════════════════ */
+function vote(el,type){
+  const wrap=document.getElementById('cvOpts');
+  if(wrap.classList.contains('voted'))return;
+  wrap.classList.add('voted');
+  el.classList.add('you');
+  wrap.querySelectorAll('.co-opt').forEach(o=>{
+    o.querySelector('.cf').style.width=o.querySelector('.cp').textContent;
+  });
+  const msgs={
+    bull:"You're <strong>bullish</strong>, with the majority. NVIDIA's order book backs you up.",
+    neutral:"You're <strong>neutral</strong>. A fair read of a very complex picture.",
+    bear:"You're <strong>bearish</strong>. Bold call against 61% of readers today."
+  };
+  const r=document.getElementById('cvResult');
+  r.innerHTML=msgs[type];r.classList.add('show');
+}
+
+/* ════════════════════════════════════
+   DRAWER
+════════════════════════════════════ */
+function openDrawer(){
+  const cards=document.querySelectorAll('#track .card');
+  const k=cards[cardIdx]?cards[cardIdx].dataset.deep:null;
+  const d=DEEP[k];if(!d)return;
+  document.getElementById('dwT').textContent=d.t;
+  document.getElementById('dwEb').textContent=d.e;
+  document.getElementById('dwB').innerHTML=d.h;
+  document.getElementById('dwBd').classList.add('open');
+  document.getElementById('dw').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('dwBd').classList.remove('open');
+  document.getElementById('dw').classList.remove('open');
+}
+
+/* ════════════════════════════════════
+   TLDR
+════════════════════════════════════ */
+function renderTldr(){
+  document.getElementById('tlC').innerHTML=`
+<div class="tl-h"><div class="tl-l">N</div><div class="tl-co">NVIDIA<span class="s">NVDA · Semiconductors</span></div></div>
+<div class="tl-tag">Everything, in 6 lines</div>
+<div class="tl-pts">${TLDR.map((p,i)=>`<div class="tl-p"><div class="tl-n">${String(i+1).padStart(2,'0')}</div><div class="tl-tx">${p}</div></div>`).join('')}</div>
+<div class="tl-f"><div class="tl-br"><span class="dd">DD</span> Daily Dividend</div><div class="tl-u">story behind the stock</div></div>
+<div class="tl-acts"><button class="tl-btn s" onclick="showToast('Copied to share')">Share ↗</button><button class="tl-btn c" onclick="closeTldr()">Close</button></div>`;
+}
+function openTldr(){document.getElementById('tlBd').classList.add('open');}
+function closeTldr(){document.getElementById('tlBd').classList.remove('open');}
+
+/* ════════════════════════════════════
+   STACK OPEN / CLOSE
+════════════════════════════════════ */
+function openStack(){
+  buildCards();buildProg();showCard(0);renderTldr();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-stack').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+}
+function closeStack(){
+  closeDrawer();closeTldr();
+  goTo('today');
+}
+
+/* ════════════════════════════════════
+   NAV
+════════════════════════════════════ */
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+  if(n==='today'){
+    const h=new Date().getHours();
+    const g=h<6?"Up late?":h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+    const el=document.getElementById('greeting');
+    if(el)el.innerHTML=`${g} <em>Today's drop is ready.</em>`;
+  }
+}
+
+/* ════════════════════════════════════
+   SAVE
+════════════════════════════════════ */
+function toggleSave(){
+  const b=document.getElementById('saveBtn');
+  if(saved.has(cardIdx)){saved.delete(cardIdx);b.classList.remove('saved');showToast("Removed");}
+  else{saved.add(cardIdx);b.classList.add('saved');showToast("★ Card saved");}
+}
+
+/* ════════════════════════════════════
+   TOAST
+════════════════════════════════════ */
+function showToast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('show');
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1600);
+}
+
+/* ════════════════════════════════════
+   TOUCH GESTURES
+════════════════════════════════════ */
+const shell=document.getElementById('shell');
+let sx=0,sy=0,trk=false,stg=null;
+shell.addEventListener('touchstart',e=>{
+  if(document.getElementById('dw').classList.contains('open'))return;
+  if(document.getElementById('tlBd').classList.contains('open'))return;
+  const t=e.touches[0];sx=t.clientX;sy=t.clientY;trk=true;stg=e.target;
+},{passive:true});
+shell.addEventListener('touchend',e=>{
+  if(!trk)return;trk=false;
+  const t=e.changedTouches[0];
+  const dx=t.clientX-sx,dy=t.clientY-sy;
+  const ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax<28&&ay<28)return;
+  if(stg&&stg.closest('.nv-acc-item,button,.nv-next-preview,.co-opt'))return;
+  if(ay>ax){if(dy>55)closeStack();if(dy<-55)openDrawer();}
+  else{if(dx<-35)nextCard();else if(dx>35)prevCard();}
+});
+
+/* ════════════════════════════════════
+   KEYBOARD (desktop)
+════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('screen-stack').classList.contains('active'))return;
+  if(e.key==='ArrowRight')nextCard();
+  if(e.key==='ArrowLeft')prevCard();
+  if(e.key==='ArrowUp')openDrawer();
+  if(e.key==='Escape'||e.key==='ArrowDown'){
+    if(document.getElementById('tlBd').classList.contains('open'))closeTldr();
+    else if(document.getElementById('dw').classList.contains('open'))closeDrawer();
+    else closeStack();
+  }
+});
+
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
+(()=>{
+  const h=new Date().getHours();
+  const g=h<6?"Up late?":h<12?"Good morning.":h<18?"Good afternoon.":"Good evening.";
+  const el=document.getElementById('greeting');
+  if(el)el.innerHTML=`${g} <em>Today's drop is ready.</em>`;
+})();
+</script>
+</body></html>
