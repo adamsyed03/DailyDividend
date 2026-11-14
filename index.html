@@ -16,8 +16,8 @@ document.documentElement.classList.toggle('stock-spotlights-hidden',window.DD_ST
 <style id="auth-gate">html.auth-pending{background:#0f0f0e}html.auth-pending body{visibility:hidden}html.auth-pending body::before{content:"Daily Dividend";visibility:visible;position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#0f0f0e;color:#F5F1E8;font:600 18px Georgia,serif;letter-spacing:.01em}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Code:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Code:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 <script defer src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
 <style>
 /* TOKENS */
@@ -28,7 +28,7 @@ document.documentElement.classList.toggle('stock-spotlights-hidden',window.DD_ST
  --green:#2E8A60;--green-2:#3DA873;--green-soft:#D6E7DC;
  --red:#B23A2E;--red-2:#D14A3D;--red-soft:#F2D9D3;
  --gold:#C49A3E;--gold-2:#E0B450;--gold-soft:#F2E5C2;
- --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+ --serif:"Google Sans",-apple-system,system-ui,sans-serif;--sans:"Google Sans",-apple-system,system-ui,sans-serif;--mono:"Google Sans Code",ui-monospace,monospace;
  --accent:#1A3D2B;--accent-soft:rgba(26,61,43,0.15);
  --co-bg:linear-gradient(180deg,#1A1918,#0A0A09);
  --co-logo-bg:#E50914;--co-logo-color:#fff
@@ -440,6 +440,136 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 .rbh-empty strong{display:block;font-family:var(--serif);font-size:17px;color:var(--ink);font-weight:500;margin-bottom:6px}
 .rbh-foot{margin:30px 24px 0;padding:18px 0 8px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mute-2);text-align:center}
 .co-overlay.rbh-reading .co-ov-vote{display:none}
+/* EXPERIMENT: newspaper front page for Rabbit Holes (fp-*) — Google Sans, picture-led, no paragraphs */
+.fp{padding:0 24px;color:var(--ink)}
+.fp-navbar{display:flex;align-items:center;gap:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:10px 0 0}
+.fp-nav{display:flex;flex-wrap:wrap;gap:4px 22px;flex:1;min-width:0;padding:2px 0}
+.fp-nav button{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink);background:none;border:0;padding:12px 0 9px;border-bottom:3px solid transparent;cursor:pointer;transition:color .15s}
+.fp-nav button:hover{color:var(--kc,var(--brand))}
+.fp-nav button.on{color:var(--brand);border-bottom-color:var(--brand)}
+.fp-status{flex-shrink:0;font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--brand);background:rgba(26,61,43,.08);border:1px solid rgba(26,61,43,.16);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.fp-status.used{color:var(--muted);background:rgba(0,0,0,.04);border-color:var(--line)}
+.fp-status.pro{color:#1A3D2B;background:#F2C46B;border-color:transparent}
+@media(max-width:899px){
+ .fp-navbar{flex-wrap:wrap;gap:0 10px}
+ .fp-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-right:-24px;padding-right:24px;flex-basis:100%}
+ .fp-nav::-webkit-scrollbar{display:none}
+ .fp-nav button{flex:0 0 auto;white-space:nowrap}
+ .fp-status{margin:10px 0}
+}
+.fp-hero{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;padding:24px 0 8px}
+.fp-col{min-width:0}
+.fp-kicker{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--kc,var(--brand));margin-bottom:8px}
+.fp-kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--kc,var(--brand))}
+.fp-lead-h,.fp-centre-h,.fp-side-h,.fp-card-h{font-family:var(--sans);font-weight:500;color:var(--ink);letter-spacing:-.025em;cursor:pointer;margin:0;text-wrap:balance}
+.fp-lead-h{font-size:clamp(34px,9vw,42px);line-height:1.04}
+.fp-lead-h:hover,.fp-centre-h:hover,.fp-side-h:hover,.fp-card-h:hover,.fp-rel:hover .fp-rel-t{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+.fp-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute-2);margin-top:10px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.fp-free{font-family:var(--sans);font-weight:600;letter-spacing:0;text-transform:none;color:var(--brand);background:rgba(26,61,43,.09);border-radius:999px;padding:2px 9px}
+.fp-lead-pic{margin-top:18px}
+.fp-related{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.fp-rel{display:flex;align-items:center;gap:12px;cursor:pointer;padding:10px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid var(--line);transition:transform .2s,box-shadow .2s}
+.fp-rel:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.fp-rel-th{flex-shrink:0;width:52px;height:52px;border-radius:12px;background:var(--pbg);display:grid;place-items:center;color:#fff;padding:7px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.fp-rel-th svg{width:100%;height:100%}
+.fp-rel-th>span{font-size:24px}
+.fp-rel-t{font-family:var(--sans);font-size:16px;font-weight:500;line-height:1.25;color:var(--ink);letter-spacing:-.01em}
+.fp-rel-t b{display:block;font-size:11.5px;font-weight:600;color:var(--kc);letter-spacing:.01em;margin-bottom:2px}
+.fp-img{position:relative;aspect-ratio:16/10;background:var(--pbg);overflow:hidden;cursor:pointer;display:grid;place-items:center;isolation:isolate;border-radius:14px}
+.fp-img::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.26),transparent 50%),radial-gradient(circle at 0% 100%,rgba(0,0,0,.35),transparent 58%),radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.2px) 0 0/14px 14px}
+.fp-img-ghost{position:absolute;right:-14%;bottom:-26%;width:78%;aspect-ratio:1;color:#fff;opacity:.09;transform:rotate(-12deg);z-index:-1;pointer-events:none}
+.fp-img-ghost svg{width:100%;height:100%}
+.fp-img-ghost>span{font-size:240px;line-height:1}
+.fp-img-art{width:34%;max-width:200px;aspect-ratio:1;color:#fff;filter:drop-shadow(0 16px 28px rgba(0,0,0,.28));transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.fp-img-art svg{display:block;width:100%;height:100%}
+.fp-img-art>span{display:grid;place-items:center;width:100%;height:100%;font-size:clamp(44px,7vw,96px)}
+.fp-img:hover .fp-img-art{transform:scale(1.06) rotate(-2deg)}
+.fp-img-tags{position:absolute;top:12px;left:12px;right:70px;display:flex;flex-wrap:wrap;gap:6px}
+.fp-img-tags span{font-family:var(--sans);font-size:11px;font-weight:600;color:#fff;background:rgba(0,0,0,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 9px}
+.fp-img-time{position:absolute;bottom:12px;right:12px;font-family:var(--mono);font-size:10.5px;font-weight:600;color:#fff;background:rgba(0,0,0,.32);border-radius:999px;padding:4px 9px}
+.fp-img-free{position:absolute;bottom:12px;left:12px;font-family:var(--sans);font-size:11.5px;font-weight:700;color:#1A3D2B;background:#F2C46B;border-radius:999px;padding:4px 10px}
+.fp-img-hero{aspect-ratio:16/10}
+.fp-img-wide{aspect-ratio:21/9}
+.fp-img-wide .fp-img-art{width:22%}
+.fp-centre-h{font-size:clamp(26px,6.5vw,32px);line-height:1.12;margin-top:16px}
+.fp-side{display:flex;flex-direction:column;gap:18px}
+.fp-side-item+.fp-side-item{border-top:1px solid var(--line);padding-top:18px}
+.fp-side-h{font-size:21px;line-height:1.18;margin-top:12px}
+.fp-dots{height:9px;margin:34px 0 0;background-image:radial-gradient(var(--mute-2) .9px,transparent 1.1px);background-size:4px 4px;opacity:.55}
+.fp-top-label{font-family:var(--sans);font-size:14px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;text-align:center;margin:16px 0 22px}
+.fp-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+.fp-grid-cat{padding-top:24px}
+.fp-card .fp-img{margin-bottom:12px}
+.fp-card-h{font-size:20px;line-height:1.2}
+.fp-empty{font-family:var(--sans);font-size:16px;color:var(--muted);text-align:center;padding:40px 0}
+@media(max-width:619px){
+ .fp-grid{gap:0}
+ .fp-card{display:grid;grid-template-columns:96px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:14px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+ .fp-card:first-child{border-top:0;padding-top:0}
+ .fp-card .fp-img{grid-row:1/span 3;aspect-ratio:1;margin:0;border-radius:12px}
+ .fp-card .fp-img-art{width:62%}
+ .fp-card .fp-img-tags,.fp-card .fp-img-ghost,.fp-card .fp-img-free{display:none}
+ .fp-card .fp-img-time{bottom:6px;right:6px;font-size:9px;padding:2px 6px}
+ .fp-card .fp-kicker{font-size:12px;margin:2px 0 4px}
+ .fp-card-h{font-size:17px}
+ .fp-card .fp-meta{margin-top:6px}
+}
+@media(min-width:620px){
+ .fp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 24px}
+}
+@media(min-width:900px){
+ .fp-hero{grid-template-columns:minmax(0,3.6fr) minmax(0,5.2fr) minmax(0,2.6fr);gap:0;padding:28px 24px 28px;background:rgba(26,61,43,.035);margin:0 -24px}
+ .fp-hero>.fp-col{padding:0 22px}
+ .fp-hero>.fp-col:first-child{padding-left:0}
+ .fp-hero>.fp-col:last-child{padding-right:0}
+ .fp-hero>.fp-col+.fp-col{border-left:1px solid var(--line)}
+ .fp-lead-h{font-size:clamp(40px,3.5vw,56px)}
+ .fp-centre-h{font-size:clamp(28px,2.4vw,38px);text-align:center;margin-left:12px;margin-right:12px}
+ .fp-center-meta{justify-content:center}
+ .fp-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+ .fp-card{padding:0 18px}
+ .fp-card:nth-child(4n+1){padding-left:0}
+ .fp-card:nth-child(4n){padding-right:0}
+ .fp-card+.fp-card:not(:nth-child(4n+1)){border-left:1px solid var(--line)}
+ .fp-card:nth-child(n+5){margin-top:30px}
+}
+/* hero: newspaper layout */
+.fp-lead-kicker{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--kc,var(--brand));margin-bottom:10px}
+.fp-dek{font-family:var(--sans);font-size:17px;line-height:1.5;color:var(--muted);margin:16px 0 0}
+.fp-lead .fp-meta{margin-top:16px}
+.fp-related-ft{border-left:1px solid var(--line);margin-top:26px;padding-left:18px;display:flex;flex-direction:column;gap:14px}
+.fp-related-ft a{font-family:var(--sans);font-size:19px;font-weight:500;line-height:1.3;letter-spacing:-.01em;color:var(--ink);cursor:pointer}
+.fp-related-ft a:hover{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+.fp-related-ft b{font-weight:700}
+.fp-img-ft{border-radius:0}
+.fp-img-capft{position:absolute;top:18px;right:20px;max-width:60%;text-align:right;font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.45;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+.fp-img-capft span{font-weight:500;letter-spacing:.02em}
+.fp-img-thumb{aspect-ratio:16/9}
+.fp-img-thumb .fp-img-capft{display:none}
+.fp-img-thumb .fp-img-art{width:30%}
+.fp-img-hero .fp-img-art{width:30%}
+.fp-centre-h{font-weight:500}
+/* fill: columns end level */
+@media(min-width:900px){.fp-centre{display:flex;flex-direction:column}.fp-centre .fp-img-hero{flex:1 1 auto;min-height:320px}.fp-side{display:flex;flex-direction:column}.fp-side-item{display:flex;flex-direction:column;flex:1 1 0}.fp-side-item .fp-img-thumb{flex:1 1 auto;min-height:120px;aspect-ratio:auto}}
+.fp-centre-dek{font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--muted);margin:12px auto 0;max-width:560px}
+@media(min-width:900px){.fp-centre-dek{text-align:center}}
+.fp-lead-photo{margin-top:20px;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:var(--cream-2)}
+.fp-lead-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block;transition:transform .4s ease}
+.fp-lead-photo:hover img{transform:scale(1.03)}
+.fp-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.fp-img.has-photo::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(200deg,rgba(0,0,0,.45),transparent 38%),linear-gradient(0deg,rgba(0,0,0,.25),transparent 30%);pointer-events:none}
+.fp-img.has-photo .fp-img-art,.fp-img.has-photo .fp-img-ghost{display:none}
+/* logos: shown whole on their own background, no dark overlay, dark caption */
+.fp-photo-logo{object-fit:contain;padding:7% 9%;box-sizing:border-box;background:var(--logo-bg,#fff)}
+.fp-img.has-logo::after{display:none}
+.fp-img.has-logo{box-shadow:inset 0 0 0 1px var(--line)}
+.fp-img.has-logo .fp-img-capft{color:var(--ink);text-shadow:none;opacity:.7}
+.fp-img.has-logo .fp-img-tags span,.fp-img.has-logo .fp-img-time{background:rgba(15,15,14,.72)}
+.fp-img-capft,.fp-img-tags,.fp-img-time,.fp-img-free{z-index:1}
+.fp-side-dek{font-family:var(--sans);font-size:14.5px;line-height:1.45;color:var(--muted);margin:10px 0 0;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:900px){.fp-lead-h{font-size:clamp(44px,3.9vw,62px);line-height:1.06}.fp-hero{grid-template-columns:minmax(0,4fr) minmax(0,6fr) minmax(0,2.6fr)}.fp-centre-h{margin-top:22px}}
+#dtShell .fp{padding:0}
+#dtShell .fp-hero{margin:0 -32px;padding-left:32px;padding-right:32px}
 .sr .rbh-list,.lib-sr .rbh-list{padding-left:0;padding-right:0}
 .nudge-btn{margin-top:8px;width:100%;border:1px solid rgba(26,61,43,0.3);background:#fff;color:#1A3D2B;font-family:var(--mono);font-size:8px;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;border-radius:9px;padding:6px 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;line-height:1.35;text-align:center;transition:transform 0.15s,background 0.15s,color 0.15s}
 .nudge-btn:active{transform:scale(0.94)}
@@ -2749,43 +2879,43 @@ const DD_RH_CAT={k:"rabbit-holes",label:"Rabbit Holes",emoji:"🕳️",c:"#4A3B8
    `cats` must use DD_CATS labels so the category chips filter correctly.
    `date` is ISO yyyy-mm-dd and drives ordering — newest becomes the hero. */
 const RH=[
-{k:"nvidia-unravelled",title:"Nvidia, unravelled",
+{k:"nvidia-unravelled",img:"/images/stories/nvidia.jpg",title:"Nvidia, unravelled",
  dek:"Nvidia's founder just resigned after 33 years. How it unravelled in two weeks, and who is running the world's most important AI company now, in 10 swipes.",
  cats:["Big Tech","Made in USA"],mins:7,date:"2026-11-12",
  bg:"#143D14",art:"nvidia",emoji:"🟩",url:"/reports/nvidia-unravelled.html"},
-{k:"lenskart-decoded",title:"Lenskart, decoded",
+{k:"lenskart-decoded",img:"/images/stories/lenskart.jpg",imgFit:"contain",imgBg:"#ffffff",title:"Lenskart, decoded",
  dek:"The most criticised IPO of 2025 is up 80%. How Lenskart turned glasses into one of India's best retail machines, in 13 swipes.",
  cats:["Made in India"],mins:9,date:"2026-11-11",
  bg:"#1F2C93",art:"lenskart",emoji:"👓",url:"/reports/lenskart-decoded.html"},
-{k:"nykaa-decoded",title:"Nykaa now runs Nike India's website",
+{k:"nykaa-decoded",img:"/images/stories/nykaa.jpg",imgFit:"contain",imgBg:"#ffffff",title:"Nykaa now runs Nike India's website",
  dek:"Your beauty app is quietly becoming a beauty and fashion house. How Nykaa got here, in 13 swipes.",
  cats:["Made in India"],mins:9,date:"2026-11-10",
  bg:"#4A0D33",art:"nykaa",emoji:"💄",url:"/reports/nykaa-decoded.html"},
-{k:"marico-decoded",title:"Marico, decoded",
+{k:"marico-decoded",img:"/images/stories/marico.jpg",imgBg:"#aae1ec",title:"Marico, decoded",
  dek:"The Parachute company in 11 swipes: coconut oil dominance, Saffola's second act, the overseas bet, and what could break the story.",
  cats:["Made in India"],mins:8,date:"2026-11-05",
  bg:"#014FA1",art:"marico",emoji:"🥥",url:"/reports/marico-decoded.html"},
-{k:"reliance-decoded",title:"Reliance, decoded",
+{k:"reliance-decoded",img:"/images/stories/reliance-decoded.jpg",title:"Reliance, decoded",
  dek:"India's most valuable company in 11 swipes: oil, retail, telecom, media, and the machine connecting all of it.",
  cats:["Made in India","Big Tech","Energy & Oil","Entertainment"],mins:8,date:"2026-11-05",
  bg:"#273D8F",art:"reliance",emoji:"🕸️",url:"/reports/reliance-decoded.html"},
-{k:"jio-ipo-decoded",title:"Jio IPO, decoded",
+{k:"jio-ipo-decoded",img:"/images/stories/jio-ipo-decoded.jpg",title:"Jio IPO, decoded",
  dek:"India's biggest IPO, unpacked in 11 swipes: the business, the valuation, the risks, and the number that decides everything.",
  cats:["Made in India","Big Tech","Banks & Money"],mins:8,date:"2026-10-27",
  bg:"#071B57",art:"signal",emoji:"📶",url:"/reports/jio-ipo-decoded.html"},
-{k:"trump-june-trades",title:"1,051 trades in one month",
+{k:"trump-june-trades",img:"/images/stories/trump-june-trades.jpg",title:"1,051 trades in one month",
  dek:"Every name we could identify from Donald Trump's June filing. What was bought, what was sold, and what each company actually does.",
  cats:["Banks & Money","Big Tech"],mins:7,date:"2026-10-07",
  bg:"#163D4D",art:"filing",emoji:"💼",url:"/reports/trump-june-trades.html"},
-{k:"top-10-upcoming-indian-ipos",title:"Top 10 upcoming Indian IPOs",
+{k:"top-10-upcoming-indian-ipos",img:"/images/stories/top-10-upcoming-indian-ipos.jpg",title:"Top 10 upcoming Indian IPOs",
  dek:"Ten companies preparing to go public. What they do, how they make money, their valuations, and what could go wrong.",
  cats:["Made in India","Banks & Money"],mins:10,date:"2026-10-07",
  bg:"#184D3E",art:"ipo",emoji:"🇮🇳",url:"/reports/top-10-upcoming-indian-ipos.html"},
-{k:"temasek-india-portfolio",title:"Everyone sold India. Except them.",
+{k:"temasek-india-portfolio",img:"/images/stories/temasek-india-portfolio.jpg",title:"Everyone sold India. Except them.",
  dek:"Singapore's state investor owns pieces of Haldiram's, Manipal, the NSE and Milky Mist. Here is every holding we could find.",
  cats:["Made in India","Banks & Money"],mins:6,date:"2026-10-06",
  bg:"#0E4E60",art:"portfolio",emoji:"🇮🇳",url:"/reports/temasek-india-portfolio.html"},
-{k:"solar-panels-on-water",title:"Solar panels on water",
+{k:"solar-panels-on-water",img:"/images/stories/solar-panels-on-water.jpg",title:"Solar panels on water",
  dek:"India is about to put 5,000 megawatts of solar panels on its lakes and dams. Seven companies already doing the work.",
  cats:["Made in India","Energy & Oil"],mins:6,date:"2026-08-27",
  bg:"#0B3140",art:"solar",emoji:"☀️",url:"/reports/solar-panels-on-water.html"}
@@ -3664,6 +3794,78 @@ function rhCardHtml(r,isNew){
  </div>
 </div>`;
 }
+/* EXPERIMENT (branch library-front-page): newspaper front-page layout for the Rabbit Holes "All" view.
+   Newest first: lead story (left) · big picture story (centre) · side column (right) · "Top stories" grid.
+   Set RH_FRONT_PAGE=false to go back to the plain grid. */
+const RH_FRONT_PAGE=true;
+function rhAgo(d){
+ const t=Date.parse(String(d||'')+'T00:00:00');if(!Number.isFinite(t))return '';
+ const today=new Date();today.setHours(0,0,0,0);
+ const days=Math.round((today.getTime()-t)/86400000);
+ if(days<=0)return 'Today';if(days===1)return 'Yesterday';if(days<7)return `${days} days ago`;
+ return rhDate(d);
+}
+function rhCatColor(r){const first=(r.cats||[])[0]||'';return (DD_CATS.find(c=>c.label===first)||DD_RH_CAT).c;}
+function rhMeta(r){return [rhAgo(r.date),r.mins?`${r.mins} min read`:''].filter(Boolean).join(' · ');}
+function rhOpen(r){return `onclick="openRabbitHole('${r.k}')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')openRabbitHole('${r.k}')"`;}
+// Picture panel: layered illustration (big faded echo behind the main art), category tags, read-time badge.
+function rhPicture(r,cls=''){
+ const art=rhArtHtml(r);
+ const cats=(r.cats||[]).slice(0,2);
+ return `<div class="fp-img ${cls}" style="--pbg:${r.bg||DD_RH_CAT.c}" ${rhOpen(r)}>
+  <div class="fp-img-ghost" aria-hidden="true">${art}</div>
+  <div class="fp-img-art">${art}</div>${rhPhoto(r)}
+  ${cats.length?`<div class="fp-img-tags">${cats.map(c=>`<span>${c}</span>`).join('')}</div>`:''}
+  ${r.mins?`<div class="fp-img-time">${r.mins} min</div>`:''}
+  ${rhIsTodaysFree(r)?'<div class="fp-img-free">✓ Free today</div>':''}
+ </div>`;
+}
+// Story photo from public/images/stories/ (RH[].img). Missing file → the <img> removes itself and the
+// illustration underneath stays visible, so cards never show a broken image.
+function rhPhoto(r){if(!r.img)return '';const logo=r.imgFit==='contain';return `<img class="fp-photo${logo?' fp-photo-logo':''}" src="${r.img}" alt="" loading="lazy" decoding="async"${logo?` style="--logo-bg:${r.imgBg||'#ffffff'}"`:''} onload="this.parentNode.classList.add('has-photo'${logo?",'has-logo'":''})" onerror="this.remove()">`;}
+// Newspaper-style picture: square corners, uppercase caption top-right (like a photo credit line).
+function rhPictureFt(r,cls=''){
+ const art=rhArtHtml(r);
+ const cap=(r.cats||[]).slice(0,2).join(' · ');
+ return `<div class="fp-img fp-img-ft ${cls}" style="--pbg:${r.bg||DD_RH_CAT.c}" ${rhOpen(r)}>
+  <div class="fp-img-ghost" aria-hidden="true">${art}</div>
+  <div class="fp-img-art">${art}</div>${rhPhoto(r)}
+  ${cap?`<div class="fp-img-capft">${cap}<br><span>${rhAgo(r.date)}</span></div>`:''}
+ </div>`;
+}
+// Short status pill instead of the explanatory banner.
+function rhStatusChip(){
+ if(hasProAccess()||(rhFreeState&&rhFreeState.pro))return '<span class="fp-status pro">✦ Pro</span>';
+ if(!rhFreeState||(rhFreeState.date&&rhFreeState.date!==localReadDateKey())){if(userId)loadRabbitHoleFreeState();return '';}
+ return rhFreeState.freeAvailable?'<span class="fp-status">🎁 1 free read today</span>':'<span class="fp-status used">✓ Free read used</span>';
+}
+function rhNavHtml(){
+ return `<div class="fp-navbar"><nav class="fp-nav" aria-label="Rabbit hole sections"><button class="${libRhCat?'':'on'}" onclick="setRhCat('')">All</button>`
+  +rhCatsPresent().map(c=>`<button class="${libRhCat===c.label?'on':''}" style="--kc:${c.c}" onclick="setRhCat('${c.k}')">${c.label}</button>`).join('')+`</nav>${rhStatusChip()}</div>`;
+}
+const rhKicker=r=>r?`<div class="fp-kicker" style="--kc:${rhCatColor(r)}">${(r.cats||[])[0]||'Rabbit hole'}</div>`:'';
+const rhWhen=r=>`<div class="fp-meta">${rhAgo(r.date)}</div>`;
+function rhCardFp(r){return `<article class="fp-card">${rhPicture(r)}${rhKicker(r)}<h3 class="fp-card-h" ${rhOpen(r)}>${r.title}</h3>${rhWhen(r)}</article>`;}
+function rhFrontPageHtml(all){
+ const [lead,centre,side1,side2,rel1,rel2,...rest]=all;
+ const related=[rel1,rel2].filter(Boolean);
+ // Hero = newspaper layout: text lead | big picture story | small picture + headline-only item.
+ const leadHtml=lead?`<article class="fp-col fp-lead">
+   <div class="fp-lead-kicker" style="--kc:${rhCatColor(lead)}">${(lead.cats||[])[0]||'Rabbit hole'}</div>
+   <h2 class="fp-lead-h" ${rhOpen(lead)}>${lead.title}</h2>
+   ${lead.dek?`<p class="fp-dek">${lead.dek}</p>`:''}
+   <div class="fp-meta">${rhAgo(lead.date)}${rhIsTodaysFree(lead)?'<span class="fp-free">✓ Free today</span>':''}</div>
+   ${lead.img?`<div class="fp-lead-photo" ${rhOpen(lead)}><img src="${lead.img}" alt="" decoding="async" onerror="this.parentNode.remove()"></div>`:''}
+   ${related.length?`<div class="fp-related-ft">${related.map((r,i)=>`<a ${rhOpen(r)}>${i===0?`<b>${(r.cats||[])[0]||'Rabbit hole'}.</b> `:''}${r.title}</a>`).join('')}</div>`:''}
+  </article>`:'';
+ const centreHtml=centre?`<article class="fp-col fp-centre">${rhPictureFt(centre,'fp-img-hero')}<h2 class="fp-centre-h" ${rhOpen(centre)}>${centre.title}</h2>${centre.dek?`<p class="fp-centre-dek">${centre.dek}</p>`:''}${rhWhen(centre).replace('fp-meta','fp-meta fp-center-meta')}</article>`:'';
+ const sideHtml=(side1||side2)?`<aside class="fp-col fp-side">
+   ${side1?`<article class="fp-side-item">${rhPictureFt(side1,'fp-img-thumb')}<h3 class="fp-side-h" ${rhOpen(side1)}>${side1.title}</h3>${rhWhen(side1)}</article>`:''}
+   ${side2?`<article class="fp-side-item">${rhPictureFt(side2,'fp-img-thumb')}<h3 class="fp-side-h" ${rhOpen(side2)}>${side2.title}</h3>${side2.dek?`<p class="fp-side-dek">${side2.dek}</p>`:''}${rhWhen(side2)}</article>`:''}
+  </aside>`:'';
+ const topHtml=rest.length?`<div class="fp-dots" aria-hidden="true"></div><h2 class="fp-top-label">Top stories</h2><div class="fp-grid">${rest.map(rhCardFp).join('')}</div>`:'';
+ return `<div class="fp">${rhNavHtml()}<section class="fp-hero">${leadHtml}${centreHtml}${sideHtml}</section>${topHtml}</div>`;
+}
 function rhBodyHtml(){
  const all=rhSorted();
  if(!all.length)return `<div class="rbh-empty"><strong>No rabbit holes yet.</strong>Long reads on the themes behind the market — the first one lands soon.</div>`;
@@ -3671,10 +3873,12 @@ function rhBodyHtml(){
   rhCatsPresent().map(c=>`<button class="cat-chip${libRhCat===c.label?' active':''}" style="--cc:${c.c}" onclick="setRhCat('${c.k}')">${c.label}</button>`).join('')+`</div>`;
  if(libRhCat){
   const f=all.filter(r=>(r.cats||[]).includes(libRhCat));
+  if(RH_FRONT_PAGE)return `<div class="fp">${rhNavHtml()}<div class="fp-grid fp-grid-cat">${f.map(rhCardFp).join('')}</div>${f.length?'':'<div class="fp-empty">Nothing here yet.</div>'}</div>`;
   return chips+rhFreeBannerHtml()+(f.length
    ?`<div class="rbh-sect">${f.length} in ${libRhCat}</div><div class="rbh-list">${f.map(rhCardHtml).join('')}</div>`
    :`<div class="rbh-empty"><strong>Nothing here yet.</strong>No rabbit holes filed under ${libRhCat}.</div>`);
  }
+ if(RH_FRONT_PAGE)return rhFrontPageHtml(all);
  /* One grid, newest first: a new rabbit hole lands top-left and every older
     one shifts one slot along (right, then down onto the next row). */
  return chips+rhFreeBannerHtml()
