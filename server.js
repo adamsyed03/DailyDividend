@@ -2595,8 +2595,9 @@ app.get(['/cookies', '/cookies.html'], (req, res) => {
 });
 
 // Serve root-level HTML files explicitly so edits to root are always live
-app.get('/', requireAuthenticatedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
-app.get('/index.html', requireAuthenticatedPage, (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+// Public: guests can browse the library; reading a Rabbit Hole (/reports/*) still requires an account.
+app.get('/', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
+app.get('/index.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 // Keep the Rabbit Holes redesign isolated under /testing123.
 app.get([
   '/testing123',
@@ -2612,11 +2613,11 @@ app.get('/testing123/rabbit-holes/:reportId', requireAuthenticatedPage, (req, re
 });
 app.get('/testing123/companies/:companyId', (req, res) => res.redirect(302, '/testing123'));
 // The original full product remains the normal public site.
-app.get('/companies/:companyId', requireAuthenticatedPage, (req, res) => {
+app.get('/companies/:companyId', (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/rabbit-holes/:reportId', requireAuthenticatedPage, (req, res) => {
+app.get('/rabbit-holes/:reportId', (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });

@@ -345,6 +345,13 @@
     .about-block.needs-answer .about-label{color:#B3261E}
     .about-block.needs-answer .age-grid,.about-block.needs-answer .level-grid{animation:dd-nudge .42s ease;border-radius:14px;box-shadow:0 0 0 2px rgba(179,38,30,.35)}
     @keyframes dd-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    /* Account step: persistent alert + field highlights (replaces the faint auto-hiding message) */
+    .acct-alert{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:rgba(252,201,194,.14);border:1px solid rgba(252,201,194,.55);color:#FFE3DE;font-family:var(--sans);font-size:14px;line-height:1.45}
+    .acct-alert[hidden]{display:none}
+    .acct-alert a{color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+    .acct-input.field-bad,.cntry-trigger.field-bad{border-color:#FF8A7A;box-shadow:0 0 0 2px rgba(255,138,122,.25)}
+    #accountNext.is-incomplete,#phoneNext.is-incomplete{opacity:.6}
+    @media(min-width:900px){.acct-foot .acct-alert{grid-column:2}}
   </style>
 </head>
 <body>
@@ -421,7 +428,7 @@
           <div class="ph-privacy">We never sell your data or send spam.</div>
           <div class="flow-msg" id="flowMsg" role="status"></div>
         </div>
-        <div class="ph-foot"><button class="btn-full-dark" id="phoneNext" onclick="goToAccount()" disabled>Continue -></button></div>
+        <div class="ph-foot"><button class="btn-full-dark is-incomplete" id="phoneNext" type="button" onclick="goToAccount()">Continue -></button></div>
       </section>
 
       <section class="screen" id="s-account">
@@ -457,7 +464,7 @@
             <div class="flow-msg acct-msg" id="acctMsg" role="status"></div>
           </div>
         </div>
-        <div class="acct-foot"><button class="btn-full-dark" id="accountNext" onclick="completeOnboarding()" disabled>Create account -></button></div>
+        <div class="acct-foot"><div class="acct-alert" id="acctAlert" role="alert" hidden></div><button class="btn-full-dark is-incomplete" id="accountNext" type="button" onclick="completeOnboarding()">Create account -></button></div>
       </section>
 
       <section class="screen" id="s-payoff">
@@ -599,9 +606,10 @@
     }
     function onEmailInput(){
       emailAddress = document.getElementById('emailInput').value.trim().toLowerCase();
-      document.getElementById('phoneNext').disabled = !/^\S+@\S+\.\S+$/.test(emailAddress);
+      document.getElementById('phoneNext').classList.toggle('is-incomplete', !/^\S+@\S+\.\S+$/.test(emailAddress));
     }
     function goToAccount(){
+      onEmailInput();
       if(!/^\S+@\S+\.\S+$/.test(emailAddress)){
         showError('Enter a valid email address.', 'flowMsg');
         return;
@@ -631,12 +639,33 @@
         country: fieldValue('countryInput')
       };
     }
-    function checkAccount(){
-      const details = accountDetails();
-      const complete = Object.values(details).every(Boolean);
-      document.getElementById('accountNext').disabled = !complete;
-      return complete;
+    const ACCOUNT_FIELDS = { name: 'fullNameInput', password: 'passwordInput', profession: 'professionInput', howHeard: 'heardInput', country: 'cntryTrigger' };
+    function accountProblems(){
+      const d = accountDetails();
+      const problems = [];
+      if (!d.name) problems.push(['name', 'Enter your full name.']);
+      else if (d.name.includes('@')) problems.push(['name', 'That looks like an email. Enter your name in the Full name box.']);
+      if (!d.password) problems.push(['password', 'Choose a password.']);
+      else if (d.password.length < 8) problems.push(['password', 'Your password needs at least 8 characters.']);
+      if (!d.profession) problems.push(['profession', 'Add your profession (e.g. Student).']);
+      if (!d.howHeard) problems.push(['howHeard', 'Tell us how you heard about us.']);
+      if (!d.country) problems.push(['country', 'Pick your country.']);
+      return problems;
     }
+    function checkAccount(){
+      const problems = accountProblems();
+      document.getElementById('accountNext').classList.toggle('is-incomplete', problems.length > 0);
+      const bad = new Set(problems.map(p => p[0]));
+      Object.entries(ACCOUNT_FIELDS).forEach(([key, id]) => { if (!bad.has(key)) document.getElementById(id).classList.remove('field-bad'); });
+      if (!problems.length) hideAccountAlert();
+      return problems.length === 0;
+    }
+    function showAccountAlert(html){
+      const el = document.getElementById('acctAlert');
+      el.innerHTML = html;
+      el.hidden = false;
+    }
+    function hideAccountAlert(){ const el = document.getElementById('acctAlert'); el.hidden = true; el.innerHTML = ''; }
     function openCC(){document.getElementById('ccOverlay').classList.add('open');}
     function closeCC(event){if(event.target === document.getElementById('ccOverlay')) document.getElementById('ccOverlay').classList.remove('open');}
     function pickCC(code, name){
@@ -657,13 +686,20 @@
       let digits = String(rawPhone || '').replace(/\D/g,'');
       return digits;
     }
-    async function api(path, options = {}){
+    async function api(path, options = {}, timeoutMs = 30000){
       let response;
-      try{ response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options}); }
-      catch(netErr){ throw new Error('No connection to server. Check your network.'); }
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try{ response = await fetch(path, {headers:{'Content-Type':'application/json'}, signal: controller.signal, ...options}); }
+      catch(netErr){
+        const error = new Error(netErr.name === 'AbortError' ? 'This is taking longer than usual. Please tap Create account again.' : 'No connection to server. Check your network and try again.');
+        error.network = true;
+        throw error;
+      }
+      finally{ clearTimeout(timer); }
       let data = {};
       try{data = await response.json();}catch(e){}
-      if(!response.ok) throw new Error(data.error || `Server error ${response.status}. Try again.`);
+      if(!response.ok){ const error = new Error(data.error || `Server error ${response.status}. Try again.`); error.status = response.status; throw error; }
       return data;
     }
     function onboardingPayload(){
@@ -681,24 +717,42 @@
         onboardingCompleted: true
       };
     }
+    let creatingAccount = false;
     async function completeOnboarding(){
+      if (creatingAccount) return false;
+      onEmailInput();
       const payload = onboardingPayload();
       if(!payload.email){
         showError('Enter a valid email address.', 'flowMsg');
         goTo('phone');
         return false;
       }
-      if(!checkAccount()){
-        showError('Fill out every account field.', 'acctMsg');
-        goTo('account');
+      const problems = accountProblems();
+      if (problems.length){
+        problems.forEach(([key]) => document.getElementById(ACCOUNT_FIELDS[key]).classList.add('field-bad'));
+        showAccountAlert(problems.map(p => p[1]).join('<br>'));
+        document.getElementById(ACCOUNT_FIELDS[problems[0][0]]).focus?.();
         return false;
       }
+      hideAccountAlert();
       const button = document.getElementById('accountNext');
-      button.disabled = true;
+      creatingAccount = true;
       button.classList.add('loading');
       button.textContent = 'Creating account...';
       try{
-        const data = await api('/api/onboarding', {method:'POST', body:JSON.stringify(payload)});
+        let data;
+        try{
+          data = await api('/api/onboarding', {method:'POST', body:JSON.stringify(payload)});
+        }catch(error){
+          // Someone who signed up before (e.g. got stuck earlier): log them in with what they just typed.
+          if (error.status === 409){
+            try{ data = await api('/api/login', {method:'POST', body:JSON.stringify({ email: payload.email, password: payload.password })}); }
+            catch(loginError){
+              showAccountAlert(`You already have an account with <b>${payload.email.replace(/[<>&"]/g, '')}</b>. <a href="/login">Log in here</a> or use <a href="#" onclick="startGoogleAuth();return false;">Google</a>.`);
+              return false;
+            }
+          } else throw error;
+        }
         const user = data.user || {};
         if(user.userId){
           localStorage.setItem('dailyDividendUserId', user.userId);
@@ -708,12 +762,14 @@
         goTo('payoff');
         return true;
       }catch(error){
-        showError(error.message, 'acctMsg');
+        showAccountAlert(error.message || 'Something went wrong. Please try again.');
         return false;
       }finally{
+        creatingAccount = false;
         button.classList.remove('loading');
         button.textContent = 'Create account ->';
-        checkAccount();
+        // Only refresh the button look here; checkAccount() would hide the error we just showed.
+        button.classList.toggle('is-incomplete', accountProblems().length > 0);
       }
     }
     function buildPayoff(){}
@@ -776,6 +832,7 @@
       label.textContent = name;
       document.getElementById('cntryTrigger').classList.remove('empty');
       document.getElementById('cntryOverlay').classList.remove('open');
+      document.getElementById('cntryTrigger').classList.remove('field-bad');
       const search = document.getElementById('cntrySearch');
       if(search) search.blur();
       checkAccount();

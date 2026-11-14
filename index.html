@@ -449,6 +449,8 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 .fp-nav button.on{color:var(--brand);border-bottom-color:var(--brand)}
 .fp-status{flex-shrink:0;font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--brand);background:rgba(26,61,43,.08);border:1px solid rgba(26,61,43,.16);border-radius:999px;padding:6px 12px;white-space:nowrap}
 .fp-status.used{color:var(--muted);background:rgba(0,0,0,.04);border-color:var(--line)}
+.fp-status.fp-login{cursor:pointer;color:#fff;background:var(--brand);border-color:var(--brand);font-size:13px;padding:7px 16px}
+.fp-status.fp-login:hover{filter:brightness(1.12)}
 .fp-status.pro{color:#1A3D2B;background:#F2C46B;border-color:transparent}
 @media(max-width:899px){
  .fp-navbar{flex-wrap:wrap;gap:0 10px}
@@ -3058,7 +3060,7 @@ function authPanel(){
  const proBadge=hasProAccess()?'<span class="pro-badge">Pro</span>':'';
  return `<div class="auth-card"><div><div class="auth-k">Signed in</div><div class="auth-n">${displayUserName()}${proBadge}</div><div class="auth-s">${_ct||'Your profile'}${profileState.profession?' - '+profileState.profession:''}</div>${hasProAccess()?'<div class="pro-banner"><span class="pro-banner-i">✦</span><span><b>Pro member.</b> Every page of every Rabbit Hole is unlocked. No paywall, no daily limit.</span></div>':''}<div class="membership-check" data-membership-check hidden></div></div><div class="auth-actions"><button class="auth-btn secondary" type="button" onclick="checkMembership(this,'account')">${hasProAccess()?'Refresh membership':'Check my membership'}</button><a class="auth-btn" href="/subscribe">Manage billing</a><button class="auth-btn secondary" onclick="signOut()">Sign out</button></div></div>${legalLinks}`;
  }
- return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/login">Log in</a></div></div>${legalLinks}`;
+ return `<div class="auth-card"><div><div class="auth-k">Account</div><div class="auth-n">Save your shelf properly.</div><div class="auth-s">Create an account or log in to keep your reads, votes, and saves tied to you.</div></div><div class="auth-actions"><a class="auth-btn" href="${AUTH_ROOT}/onboarding">Sign up</a><a class="auth-btn secondary" href="${AUTH_ROOT}/onboarding">Log in</a></div></div>${legalLinks}`;
 }
 async function api(path,options={}){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),options.timeout||12000);try{const response=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...options,signal:options.signal||controller.signal});let data={};try{data=await response.json();}catch(e){}if(!response.ok)throw new Error(data.error||'Daily Dividend could not save that yet.');return data;}catch(error){if(error&&error.name==='AbortError')throw new Error('Daily Dividend is taking too long to wake up. Please try again.');throw error;}finally{clearTimeout(timeout);}}
 async function ensureSession(){const data=await api('/api/auth/session');profileState=data.user||{};userId=profileState.userId;if(!userId)throw new Error('Please log in to continue.');localStorage.setItem('dailyDividendUserId',userId);localStorage.setItem('user',JSON.stringify(profileState));syncSavedFromProfile();syncCallsFromProfile();identifyPostHog();}
@@ -3835,6 +3837,7 @@ function rhPictureFt(r,cls=''){
 }
 // Short status pill instead of the explanatory banner.
 function rhStatusChip(){
+ if(IS_GUEST)return '<button class="fp-status fp-login" type="button" onclick="goToOnboarding()">Log in</button>';
  if(hasProAccess()||(rhFreeState&&rhFreeState.pro))return '<span class="fp-status pro">✦ Pro</span>';
  if(!rhFreeState||(rhFreeState.date&&rhFreeState.date!==localReadDateKey())){if(userId)loadRabbitHoleFreeState();return '';}
  return rhFreeState.freeAvailable?'<span class="fp-status">🎁 1 free read today</span>':'<span class="fp-status used">✓ Free read used</span>';
@@ -3885,8 +3888,23 @@ function rhBodyHtml(){
   +`<div class="rbh-sect">${all.length} rabbit holes · newest first</div><div class="rbh-list rbh-all">${all.map((r,i)=>rhCardHtml(r,i===0)).join('')}</div>`
   +`<div class="rbh-foot">New rabbit holes land every few weeks</div>`;
 }
+/* Guests (no session) can browse the library. Reading, or tapping Log in, goes to onboarding; the Rabbit Hole they
+   wanted is remembered and opened straight after they sign up / log in. */
+let IS_GUEST=false;
+const PENDING_RH_KEY='dd_pending_rabbit_hole';
+function goToOnboarding(pendingKey){
+ try{if(pendingKey)localStorage.setItem(PENDING_RH_KEY,pendingKey);}catch(e){}
+ trackPostHogEvent('guest_sent_to_onboarding',{rabbit_hole_id:pendingKey||null});
+ window.location.href=`${AUTH_ROOT}/onboarding`;
+}
+function openPendingRabbitHole(){
+ if(IS_GUEST)return;
+ let k=null;try{k=localStorage.getItem(PENDING_RH_KEY);localStorage.removeItem(PENDING_RH_KEY);}catch(e){}
+ if(k&&RH.some(r=>r.k===k&&r.url))openRabbitHole(k,'replace');
+}
 function openRabbitHole(k,routeMode='push'){
  const r=RH.find(x=>x.k===k);if(!r)return;
+ if(IS_GUEST&&r.url){goToOnboarding(k);return;}
  if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
  const ov=document.getElementById('coOverlay');if(!ov)return;
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
@@ -4466,9 +4484,9 @@ function openCurrentRoute(routeMode='replace'){
  if(dbCos.some(c=>c.companyId===route.slug)){openDbCompany(route.slug,routeMode);return true;}
  return false;
 }
-function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){renderLib();}else{renderToday();}openCurrentRoute('replace');if(!RABBIT_ONLY&&!STOCK_SPOTLIGHTS_HIDDEN&&localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
+function _secondary(){Promise.allSettled([loadDbCompanies(),loadLivePrices(),loadVoteAggregates(),loadNudges()]).then(()=>{syncCallsFromProfile();if(IS_DESKTOP){_refreshDesktopShell();}else if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){renderLib();}else{renderToday();}openCurrentRoute('replace');openPendingRabbitHole();if(!RABBIT_ONLY&&!STOCK_SPOTLIGHTS_HIDDEN&&localStorage.getItem('ddTour')==='1'){localStorage.removeItem('ddTour');setTimeout(startTour,500);}}).catch(()=>{});}
 function _boot(){if(_booted)return;_booted=true;localizeAudienceCopy(CO);identifyPostHog();_releaseGate();trackMetaViewContent(curCo,'home');applyRabbitOnlyShell();if(IS_DESKTOP){_runDesktopInit();}else if(RABBIT_ONLY||STOCK_SPOTLIGHTS_HIDDEN){goTo('library',true);}else{renderToday();}_secondary();}
-function _fullAuth(){ensureSession().then(_boot).catch(error=>{if(/active membership/i.test(error&&error.message||''))return;_releaseGate();_clearStoredSession();window.location.replace(`${AUTH_ROOT}/onboarding`);});}
+function _fullAuth(){ensureSession().then(_boot).catch(error=>{if(/active membership/i.test(error&&error.message||''))return;_releaseGate();_clearStoredSession();IS_GUEST=true;profileState={streak:0,savedCompanies:[],previousVotes:{},readHistory:[]};userId=null;document.documentElement.classList.add('dd-guest');_boot();});}
 window.addEventListener('error',_releaseGate);
 window.addEventListener('unhandledrejection',_releaseGate);
 setTimeout(()=>{if(!_booted)_releaseGate();},5000);
