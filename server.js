@@ -1508,6 +1508,8 @@ app.get('/api/auth/google', async (req, res, next) => {
     if (error || !data || !data.url) {
       return res.status(503).json({ error: (error && error.message) || 'Google login is not available yet.' });
     }
+    // Onboarding asks for JSON so it can show errors inline instead of navigating to an error page.
+    if (normalize(req.query.format) === 'json') return res.json({ url: data.url });
     return res.redirect(302, data.url);
   } catch (error) {
     next(error);

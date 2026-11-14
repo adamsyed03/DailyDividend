@@ -352,6 +352,26 @@
     .acct-input.field-bad,.cntry-trigger.field-bad{border-color:#FF8A7A;box-shadow:0 0 0 2px rgba(255,138,122,.25)}
     #accountNext.is-incomplete,#phoneNext.is-incomplete{opacity:.6}
     @media(min-width:900px){.acct-foot .acct-alert{grid-column:2}}
+
+    /* Every step, every screen size: the content area scrolls when it is taller than the window, and the
+       footer (with the step's main button) is a fixed-height row below it, so the button can't be pushed off screen. */
+    .stage{height:var(--dd-app-height,100dvh)}
+    .q-wrap,.phone-inner,.acct-inner,.payoff-inner,.feat-inner{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+    .hook-inner{flex:0 1 auto;min-height:0;max-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+    .q-foot,.ph-foot,.acct-foot,.payoff-foot{flex:0 0 auto;position:relative;z-index:40}
+    /* A long list of problems can't grow the footer past the button */
+    .acct-alert{max-height:calc(var(--dd-app-height,100dvh) * .3);overflow-y:auto;overscroll-behavior:contain}
+    /* Inactive steps are hidden (not just unclickable); JS also marks them inert */
+    .screen{visibility:hidden}
+    .screen.active{visibility:visible}
+    .screen.exit{pointer-events:none}
+    @media(min-width:900px){
+      /* Same column as before, but the scroll area spans the window so the scrollbar sits at the edge */
+      #s-about,#s-phone,#s-account,#s-payoff{padding:0}
+      .q-wrap,.phone-inner,.acct-inner,.payoff-inner{width:auto;margin:0;padding-left:max(90px,calc((100% - 1120px) / 2));padding-right:max(90px,calc((100% - 1120px) / 2))}
+      .payoff-inner{overflow-y:auto}
+      .q-foot,.ph-foot,.acct-foot,.payoff-foot{padding-bottom:max(28px,calc(env(safe-area-inset-bottom,0px) + 20px))}
+    }
   </style>
 </head>
 <body>
@@ -516,15 +536,52 @@
       const el = document.activeElement;
       return !!(el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'));
     }
-    function setAppHeight(force){
-      if(force !== true && typing()) return;
-      const h = window.innerHeight || document.documentElement.clientHeight;
-      if(h) document.documentElement.style.setProperty('--dd-app-height', Math.max(320, Math.round(h)) + 'px');
+    /* While typing, the on-screen keyboard only shrinks the visual viewport (iOS, and Chrome on Android
+       since v108). Fit the stage to what is actually visible, so the footer button sits above the
+       keyboard and the focused field can be scrolled into view. */
+    function keyboardOpen(){
+      const vv = window.visualViewport;
+      return !!(vv && typing() && (window.innerHeight - vv.height) > 80);
     }
-    setAppHeight(true);
-    window.addEventListener('resize', setAppHeight, {passive:true});
-    window.addEventListener('pageshow', () => setAppHeight(true));
-    window.addEventListener('orientationchange', () => { setTimeout(() => setAppHeight(true), 150); setTimeout(() => setAppHeight(true), 500); }, {passive:true});
+    function setAppHeight(){
+      const vv = window.visualViewport;
+      const kb = keyboardOpen();
+      const h = kb ? vv.height : (window.innerHeight || document.documentElement.clientHeight);
+      if(h) document.documentElement.style.setProperty('--dd-app-height', Math.max(kb ? 200 : 320, Math.round(h)) + 'px');
+      /* iOS pans the page to show the field; keep the stage inside the visible area */
+      const stage = document.querySelector('.stage');
+      const top = kb ? Math.max(0, Math.round(vv.pageTop || vv.offsetTop || 0)) : 0;
+      if(stage) stage.style.transform = top ? 'translateY(' + top + 'px)' : '';
+    }
+    /* Scroll an element into view inside its step's scroll area only (scrollIntoView would also
+       scroll the hidden-overflow containers and shift the whole layout). */
+    const SCROLLERS = '.q-wrap,.phone-inner,.acct-inner,.payoff-inner,.feat-inner,.hook-inner';
+    function revealInStep(el, pad = 20){
+      if(!el || !el.closest) return;
+      const scroller = el.closest(SCROLLERS);
+      if(!scroller) return;
+      const r = el.getBoundingClientRect(), box = scroller.getBoundingClientRect();
+      if(r.bottom > box.bottom - pad) scroller.scrollTop += r.bottom - (box.bottom - pad);
+      else if(r.top < box.top + pad) scroller.scrollTop -= (box.top + pad) - r.top;
+    }
+    let viewportFrame = 0;
+    function onViewportChange(){
+      cancelAnimationFrame(viewportFrame);
+      viewportFrame = requestAnimationFrame(() => { setAppHeight(); if(typing()) revealInStep(document.activeElement); });
+    }
+    setAppHeight();
+    window.addEventListener('resize', onViewportChange, {passive:true});
+    if(window.visualViewport){
+      window.visualViewport.addEventListener('resize', onViewportChange, {passive:true});
+      window.visualViewport.addEventListener('scroll', onViewportChange, {passive:true});
+    }
+    document.addEventListener('focusin', event => {
+      if(!event.target.matches || !event.target.matches('input,textarea')) return;
+      revealInStep(event.target);
+      setTimeout(onViewportChange, 320); // after the keyboard has animated in
+    });
+    window.addEventListener('pageshow', () => { setAppHeight(); resetGoogleButton(); });
+    window.addEventListener('orientationchange', () => { setTimeout(setAppHeight, 150); setTimeout(setAppHeight, 500); }, {passive:true});
     /* iOS scrolls the whole page up to reveal a focused field and can leave
        it shifted after the keyboard closes; snap it back. */
     document.addEventListener('focusout', () => setTimeout(() => {
@@ -532,7 +589,7 @@
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      setAppHeight(true);
+      setAppHeight();
     }, 60));
     let selectedAge = '';
     let selectedLevel = '';
@@ -542,11 +599,27 @@
     let selectedCountryName = '';
     let currentScreen = 'splash';
 
+    /* PostHog funnel (only sent when the visitor has allowed analytics). */
+    const STEP_ORDER = ['splash','hook','about','phone','account','payoff'];
+    function track(event, props = {}){
+      try{
+        if(window.DDConsent && DDConsent.allows('analytics') && window.posthog && posthog.capture)
+          posthog.capture(event, { ...props, viewport: window.innerWidth + 'x' + window.innerHeight });
+      }catch(e){}
+    }
+    function trackStepCompleted(step, extra = {}){ track('onboarding_step_completed', { step, ...extra }); }
+    function trackError(message, extra = {}){ track('onboarding_error', { step: currentScreen, message: String(message || '').replace(/<[^>]+>/g, ''), ...extra }); }
+
+    document.querySelectorAll('.screen').forEach(screen => { screen.inert = !screen.classList.contains('active'); });
+
     function goTo(name){
       const cur = document.getElementById('s-' + currentScreen);
       const nxt = document.getElementById('s-' + name);
       if(!nxt || cur === nxt) return;
       if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      if(STEP_ORDER.indexOf(name) > STEP_ORDER.indexOf(currentScreen)) trackStepCompleted(currentScreen);
+      cur.inert = true;
+      nxt.inert = false;
       cur.classList.add('exit');
       /* Fast double taps (Continue then Back) used to let this timer hide the
          screen the user had already come back to, leaving a blank page. */
@@ -559,9 +632,11 @@
       const scroller = nxt.querySelector('.q-wrap,.phone-inner,.acct-inner,.payoff-inner,.feat-inner');
       if(scroller) scroller.scrollTop = 0;
       if(name === 'payoff') buildPayoff();
+      track('onboarding_step_viewed', { step: name });
     }
 
     window.addEventListener('load', () => {
+      track('onboarding_step_viewed', { step: currentScreen });
       setTimeout(() => {
         document.getElementById('splashMark').classList.add('show');
         setTimeout(() => document.getElementById('splashName').classList.add('show'), 260);
@@ -597,9 +672,11 @@
     function aboutContinue(){
       if (selectedAge && selectedLevel) { goTo('phone'); return; }
       const missing = !selectedAge ? document.getElementById('ageBlock') : document.getElementById('levelBlock');
-      document.getElementById('aboutHint').textContent = !selectedAge ? 'Pick your age to continue' : 'Pick where you are with investing';
+      const hint = !selectedAge ? 'Pick your age to continue' : 'Pick where you are with investing';
+      document.getElementById('aboutHint').textContent = hint;
       missing.classList.remove('needs-answer'); void missing.offsetWidth; missing.classList.add('needs-answer');
-      missing.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      revealInStep(missing);
+      trackError(hint, { kind: 'validation' });
     }
     function hasAnyPhoneDigits(value){
       return /\d/.test(String(value || ''));
@@ -612,20 +689,47 @@
       onEmailInput();
       if(!/^\S+@\S+\.\S+$/.test(emailAddress)){
         showError('Enter a valid email address.', 'flowMsg');
+        trackError('Enter a valid email address.', { kind: 'validation' });
+        revealInStep(document.getElementById('emailInput'));
         return;
       }
       goTo('account');
       setTimeout(() => document.getElementById('fullNameInput').focus(), 420);
     }
-    function startGoogleAuth(){
+    /* Asks the server for the Google sign-in link first, so a failure shows a message here instead of
+       a blank error page, and the button never stays stuck. */
+    let googleStarting = false;
+    function resetGoogleButton(){
+      googleStarting = false;
+      document.querySelectorAll('.google-btn').forEach(button => { button.classList.remove('loading'); button.disabled = false; });
+    }
+    async function startGoogleAuth(){
+      if(googleStarting) return false;
       const onboarding=JSON.stringify({
         marketPreferences:[],
         sectorPreferences:[],
         ageRange:selectedAge,
         investorLevel:selectedLevel
       });
-      const params=new URLSearchParams({onboarding,returnTo:'/'});
-      window.location.href = '/api/auth/google?'+params.toString();
+      const params=new URLSearchParams({onboarding,returnTo:'/',format:'json'});
+      googleStarting = true;
+      document.querySelectorAll('.google-btn').forEach(button => button.classList.add('loading'));
+      try{
+        const data = await api('/api/auth/google?'+params.toString(), {method:'GET'}, 15000);
+        if(!data || !data.url) throw new Error('Google sign-in is not available right now. Use your email instead.');
+        trackStepCompleted(currentScreen, { method: 'google' });
+        window.location.href = data.url;
+        // If the browser doesn't navigate (blocked / cancelled), make the button usable again.
+        setTimeout(resetGoogleButton, 8000);
+        return true;
+      }catch(error){
+        const message = error.message || 'Google sign-in could not start. Please try again or use your email.';
+        if(currentScreen === 'account') showAccountAlert(message);
+        else showError(message, 'flowMsg', true);
+        trackError(message, { kind: 'google', status: error.status || null });
+        resetGoogleButton();
+        return false;
+      }
     }
     function fieldValue(id){
       return document.getElementById(id).value.trim();
@@ -664,6 +768,9 @@
       const el = document.getElementById('acctAlert');
       el.innerHTML = html;
       el.hidden = false;
+      el.scrollTop = 0;
+      // The alert sits in the footer, just above Create account, so both stay on screen.
+      requestAnimationFrame(() => revealInStep(document.activeElement));
     }
     function hideAccountAlert(){ const el = document.getElementById('acctAlert'); el.hidden = true; el.innerHTML = ''; }
     function openCC(){document.getElementById('ccOverlay').classList.add('open');}
@@ -674,13 +781,14 @@
       dialCode = code;
       document.getElementById('ccOverlay').classList.remove('open');
     }
-    function showError(message, id = 'flowMsg'){
+    function showError(message, id = 'flowMsg', persist = false){
       const el = document.getElementById(id);
       if(!el) return;
       el.textContent = message;
       el.classList.add('show');
       clearTimeout(el._timer);
-      el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+      if(!persist) el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+      revealInStep(el);
     }
     function cleanPhone(rawPhone, rawCode){
       let digits = String(rawPhone || '').replace(/\D/g,'');
@@ -692,7 +800,7 @@
       const timer = setTimeout(() => controller.abort(), timeoutMs);
       try{ response = await fetch(path, {headers:{'Content-Type':'application/json'}, signal: controller.signal, ...options}); }
       catch(netErr){
-        const error = new Error(netErr.name === 'AbortError' ? 'This is taking longer than usual. Please tap Create account again.' : 'No connection to server. Check your network and try again.');
+        const error = new Error(netErr.name === 'AbortError' ? 'This is taking longer than usual. Check your connection and tap again.' : 'No connection to server. Check your network and try again.');
         error.network = true;
         throw error;
       }
@@ -730,8 +838,11 @@
       const problems = accountProblems();
       if (problems.length){
         problems.forEach(([key]) => document.getElementById(ACCOUNT_FIELDS[key]).classList.add('field-bad'));
+        const firstBad = document.getElementById(ACCOUNT_FIELDS[problems[0][0]]);
+        revealInStep(firstBad);
+        firstBad.focus?.({ preventScroll: true });
         showAccountAlert(problems.map(p => p[1]).join('<br>'));
-        document.getElementById(ACCOUNT_FIELDS[problems[0][0]]).focus?.();
+        trackError(problems.map(p => p[1]).join(' '), { kind: 'validation', fields: problems.map(p => p[0]) });
         return false;
       }
       hideAccountAlert();
@@ -749,6 +860,7 @@
             try{ data = await api('/api/login', {method:'POST', body:JSON.stringify({ email: payload.email, password: payload.password })}); }
             catch(loginError){
               showAccountAlert(`You already have an account with <b>${payload.email.replace(/[<>&"]/g, '')}</b>. <a href="/login">Log in here</a> or use <a href="#" onclick="startGoogleAuth();return false;">Google</a>.`);
+              trackError('Account already exists, password did not match', { kind: 'existing_account' });
               return false;
             }
           } else throw error;
@@ -762,7 +874,9 @@
         goTo('payoff');
         return true;
       }catch(error){
-        showAccountAlert(error.message || 'Something went wrong. Please try again.');
+        const message = error.message || 'Something went wrong. Please try again.';
+        showAccountAlert(message);
+        trackError(message, { kind: error.network ? 'network' : 'server', status: error.status || null });
         return false;
       }finally{
         creatingAccount = false;
@@ -773,7 +887,7 @@
       }
     }
     function buildPayoff(){}
-    function goToApp(){localStorage.setItem('ddTour','1');window.location.href='/';}
+    function goToApp(){trackStepCompleted('payoff');localStorage.setItem('ddTour','1');window.location.href='/';}
 
     const COUNTRIES = [
       'India','United States','United Kingdom','UAE','Singapore','Australia','Canada',
@@ -865,6 +979,6 @@
     if(!forwardOAuthError())loadCatalogStats();
     if(window.twemoji)twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
   </script>
-  <script defer src="/js/consent.js" data-defer-banner></script>
+  <script defer src="/js/consent.js" data-defer-banner data-posthog-key="phc_tmexDac8jqLLNe6HQf2UEg2BX7m4dDHM3hwMgMzrQYHJ" data-posthog-host="https://eu.i.posthog.com"></script>
 </body>
 </html>
