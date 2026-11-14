@@ -338,6 +338,13 @@
       .q-h{margin-bottom:10px}
       .q-wrap{padding-top:max(56px,calc(env(safe-area-inset-top,0px) + 50px))}
     }
+    /* About step: Continue always responds; missing question is highlighted */
+    #abtNext.is-incomplete{opacity:.55}
+    .about-hint{min-height:0;margin:0 0 8px;text-align:center;font-family:var(--sans);font-size:13px;font-weight:600;color:#B3261E}
+    .about-hint:empty{display:none}
+    .about-block.needs-answer .about-label{color:#B3261E}
+    .about-block.needs-answer .age-grid,.about-block.needs-answer .level-grid{animation:dd-nudge .42s ease;border-radius:14px;box-shadow:0 0 0 2px rgba(179,38,30,.35)}
+    @keyframes dd-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   </style>
 </head>
 <body>
@@ -375,7 +382,7 @@
           <div class="q-tag">1.1</div>
           <div class="q-h">A little about <em>you.</em></div>
           <div class="q-sub">Two quick ones.</div>
-          <div class="about-block">
+          <div class="about-block" id="ageBlock">
             <div class="about-label">How old are you?</div>
             <div class="age-grid">
               <button class="age-btn" data-a="18-24" onclick="selAge(this)" type="button"><span class="ab-n">18-24</span></button>
@@ -384,7 +391,7 @@
               <button class="age-btn" data-a="45+" onclick="selAge(this)" type="button"><span class="ab-n">45+</span></button>
             </div>
           </div>
-          <div class="about-block">
+          <div class="about-block" id="levelBlock">
             <div class="about-label">Where are you with investing?</div>
             <div class="level-grid">
               <button class="level-btn" data-l="curious" onclick="selLevel(this)" type="button"><span class="lb-info"><span class="lb-name">Just curious</span><span class="lb-sub">I want to understand, not necessarily invest</span></span><span class="lb-dot"></span></button>
@@ -393,7 +400,7 @@
             </div>
           </div>
         </div>
-        <div class="q-foot"><button class="btn-full btn-primary" id="abtNext" onclick="goTo('phone')" disabled>Continue -></button></div>
+        <div class="q-foot"><p class="about-hint" id="aboutHint" role="status" aria-live="polite"></p><button class="btn-full btn-primary is-incomplete" id="abtNext" type="button" onclick="aboutContinue()">Continue -></button></div>
       </section>
 
       <section class="screen" id="s-phone">
@@ -571,8 +578,21 @@
       selectedLevel = el.dataset.l;
       checkAbout();
     }
+    // Continue is never disabled: a disabled button ignores taps, so people who had picked only their age
+    // tapped it and nothing happened. Now it points at whatever is still missing.
     function checkAbout(){
-      document.getElementById('abtNext').disabled = !(selectedAge && selectedLevel);
+      const done = Boolean(selectedAge && selectedLevel);
+      document.getElementById('abtNext').classList.toggle('is-incomplete', !done);
+      if (selectedAge) document.getElementById('ageBlock').classList.remove('needs-answer');
+      if (selectedLevel) document.getElementById('levelBlock').classList.remove('needs-answer');
+      if (done) document.getElementById('aboutHint').textContent = '';
+    }
+    function aboutContinue(){
+      if (selectedAge && selectedLevel) { goTo('phone'); return; }
+      const missing = !selectedAge ? document.getElementById('ageBlock') : document.getElementById('levelBlock');
+      document.getElementById('aboutHint').textContent = !selectedAge ? 'Pick your age to continue' : 'Pick where you are with investing';
+      missing.classList.remove('needs-answer'); void missing.offsetWidth; missing.classList.add('needs-answer');
+      missing.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
     function hasAnyPhoneDigits(value){
       return /\d/.test(String(value || ''));
@@ -788,6 +808,6 @@
     if(!forwardOAuthError())loadCatalogStats();
     if(window.twemoji)twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
   </script>
-  <script defer src="/js/consent.js"></script>
+  <script defer src="/js/consent.js" data-defer-banner></script>
 </body>
 </html>
