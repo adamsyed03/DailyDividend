@@ -2881,11 +2881,11 @@ const DD_RH_CAT={k:"rabbit-holes",label:"Rabbit Holes",emoji:"🕳️",c:"#4A3B8
    `cats` must use DD_CATS labels so the category chips filter correctly.
    `date` is ISO yyyy-mm-dd and drives ordering — newest becomes the hero. */
 const RH=[
-{k:"stock-behind-ramayana",img:"/images/stories/ramayana.jpg",title:"The stock behind Ramayana",
+{k:"stock-behind-ramayana",pinPhone:1,img:"/images/stories/ramayana.jpg",title:"The stock behind Ramayana",
  dek:"The Indian company behind Dune, Oppenheimer and Ramayana, in 14 swipes. Who made India's most expensive film, has it paid for itself, and what it means for the stock.",
  cats:["Made in India","Entertainment"],mins:10,date:"2026-11-16",
  bg:"#4E1422",art:"film",emoji:"🎬",url:"/reports/stock-behind-ramayana.html"},
-{k:"nvidia-unravelled",pin:1,img:"/images/stories/nvidia.jpg",title:"Nvidia, unravelled",
+{k:"nvidia-unravelled",pin:1,pinPhone:2,img:"/images/stories/nvidia.jpg",title:"Nvidia, unravelled",
  dek:"Nvidia's founder just resigned after 33 years. How it unravelled in two weeks, and who is running the world's most important AI company now, in 10 swipes.",
  cats:["Big Tech","Made in USA"],mins:7,date:"2026-11-12",
  bg:"#143D14",art:"nvidia",emoji:"🟩",url:"/reports/nvidia-unravelled.html"},
@@ -3742,7 +3742,8 @@ function setRhCat(k){
  renderLibActive();
 }
 // pin:1, pin:2 ... puts a story first on the front page regardless of date; everything else is newest first.
-function rhSorted(){const p=r=>r.pin||Infinity;return RH.slice().sort((a,b)=>(p(a)-p(b))||String(b.date||'').localeCompare(String(a.date||'')));}
+// pinPhone does the same on phones only (falls back to pin).
+function rhSorted(){const p=r=>(IS_DESKTOP?r.pin:(r.pinPhone||r.pin))||Infinity;return RH.slice().sort((a,b)=>(p(a)-p(b))||String(b.date||'').localeCompare(String(a.date||'')));}
 function rhCatsPresent(){return DD_CATS.filter(c=>RH.some(r=>(r.cats||[]).includes(c.label)));}
 function rhMatches(q){return RH.filter(r=>(r.title||'').toLowerCase().includes(q)||(r.dek||'').toLowerCase().includes(q)||(r.cats||[]).some(c=>c.toLowerCase().includes(q)));}
 function rhDate(d){
