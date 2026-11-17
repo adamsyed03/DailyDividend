@@ -1776,9 +1776,11 @@ app.post('/api/read', requireUser, async (req, res, next) => {
   }
 });
 
-/* Rabbit Holes free tier: every signed-in reader gets ONE full rabbit hole per
-   (local) day; beyond that only page 1 of each is readable. Pro readers get
-   everything. The free read is only spent when the reader actually moves past
+/* Rabbit Holes free tier: every signed-in reader gets the first HALF of ONE
+   rabbit hole per (local) day; beyond that only page 1 of each is readable.
+   Pro readers get everything. The half is enforced by dd-rabbit-paywall.js;
+   freeRead below just means "this slug is today's free read". The free read
+   is only spent when the reader actually moves past
    page 1 (POST /unlock), so browsing covers costs nothing. Stored per user as
    user.rabbitHoleFreeReads = { 'YYYY-MM-DD': slug } (last 14 days kept). */
 const RABBIT_HOLE_SLUG_RE = /^[a-z0-9-]{1,80}$/;
@@ -1801,7 +1803,8 @@ function rabbitHoleAccess(user, slug, date) {
     pro,
     freeSlug,
     freeAvailable: !pro && !freeSlug,
-    fullAccess: pro || (Boolean(slug) && freeSlug === slug)
+    freeRead: !pro && Boolean(slug) && freeSlug === slug,
+    fullAccess: pro
   };
 }
 /* Before treating someone as a FREE reader (free-read banner, spending their
@@ -1945,7 +1948,7 @@ app.post('/api/rabbit-holes/unlock', requireUser, async (req, res, next) => {
     const user = getUser(db, req.authUser.id);
     await confirmSubscriptionWithStripe(db, user);
     const before = rabbitHoleAccess(user, slug, date);
-    if (before.fullAccess || !before.freeAvailable) return res.json({ ...before, claimed: false });
+    if (before.fullAccess || before.freeRead || !before.freeAvailable) return res.json({ ...before, claimed: false });
     const reads = user.rabbitHoleFreeReads && typeof user.rabbitHoleFreeReads === 'object' ? user.rabbitHoleFreeReads : {};
     reads[date] = slug;
     user.rabbitHoleFreeReads = Object.fromEntries(Object.entries(reads).sort(([a], [b]) => b.localeCompare(a)).slice(0, 14));
@@ -2597,7 +2600,7 @@ app.get(['/cookies', '/cookies.html'], (req, res) => {
 });
 
 // Serve root-level HTML files explicitly so edits to root are always live
-// Public: guests can browse the library; reading a Rabbit Hole (/reports/*) still requires an account.
+// Public: guests can browse the library and read page 1 of a Rabbit Hole (see the /reports route below).
 app.get('/', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/index.html', (req, res) => { res.setHeader('Cache-Control','private, no-cache'); res.sendFile(path.join(__dirname, 'index.html')); });
 // Keep the Rabbit Holes redesign isolated under /testing123.
@@ -2623,11 +2626,129 @@ app.get('/rabbit-holes/:reportId', (req, res) => {
   res.setHeader('Cache-Control', 'private, no-cache');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-app.get('/reports/:reportFile', requireAuthenticatedPage, (req, res) => {
-  const reportFile = String(req.params.reportFile || '');
-  if (!/^[a-z0-9-]+\.(?:html|css|js)$/i.test(reportFile)) return res.status(404).send('Not found.');
-  res.setHeader('Cache-Control', 'private, no-cache');
-  res.sendFile(path.join(__dirname, 'public', 'reports', reportFile));
+/* Rabbit Hole pages are cut on the SERVER, so locked pages never reach the
+   browser (not even in "view source"):
+     guest (not logged in)          -> page 1
+     signed in, not Pro             -> page 1, or the first half on today's free read
+     Pro                            -> every page
+   Locked <section>s are swapped for an empty placeholder (same tag/classes, so
+   the deck keeps its page count and layout), and any pop-up sheet that only a
+   locked page links to (data-sheet="x" -> id="sheet-x") is emptied too.
+   dd-rabbit-paywall.js reads window.DD_REPORT_ACCESS and reloads the page once
+   the free read is claimed. The reader's local date comes in as ?d=YYYY-MM-DD. */
+function freeHalfPageCount(total) {
+  return Math.min(total, Math.max(2, Math.ceil(total / 2)));
+}
+function elementCloseIndex(html, from, tag) {
+  const re = new RegExp(`<${tag}\\b|</${tag}\\s*>`, 'gi');
+  re.lastIndex = from;
+  let depth = 1;
+  let match;
+  while ((match = re.exec(html))) {
+    if (match[0][1] === '/') {
+      depth -= 1;
+      if (depth === 0) return match.index;
+    } else {
+      depth += 1;
+    }
+  }
+  return -1;
+}
+function redactReportHtml(html, allowedFor, access) {
+  const deckMatch = /(<main\b[^>]*\bid="deck"[^>]*>)([\s\S]*?)(<\/main>)/i.exec(html);
+  if (!deckMatch) return null;
+  const sections = [...deckMatch[2].matchAll(/<section\b[^>]*>[\s\S]*?<\/section>/gi)];
+  const total = sections.length;
+  const allowed = Math.max(1, Math.min(total, allowedFor(total)));
+  const keptSheets = new Set();
+  const lockedSheets = new Set();
+  let index = 0;
+  const body = deckMatch[2].replace(/(<section\b[^>]*>)([\s\S]*?)(<\/section>)/gi, (all, open, inner, close) => {
+    const sheets = [...inner.matchAll(/data-sheet="([^"]+)"/gi)].map(match => match[1]);
+    const locked = index >= allowed;
+    index += 1;
+    sheets.forEach(id => (locked ? lockedSheets : keptSheets).add(id));
+    if (!locked) return all;
+    const tag = open
+      .replace(/\sdata-title="[^"]*"/i, ' data-title="Locked"')
+      .replace(/\bclass="/i, 'class="dd-locked ');
+    // The report's own script looks some elements up by id (vote toggle, restart
+    // button…). Leave empty hidden stand-ins so it doesn't crash on a locked page.
+    const stubs = [...inner.matchAll(/\sid="([^"]+)"/gi)]
+      .map(match => match[1].replace(/[^\w:.-]/g, ''))
+      .filter(Boolean)
+      .map(id => `<div id="${id}" hidden></div>`)
+      .join('');
+    return `${tag}<div class="inner dd-locked-slide"><div class="dd-locked-ico" aria-hidden="true">&#128274;</div>${stubs}</div>${close}`;
+  });
+  let out = html.slice(0, deckMatch.index) + deckMatch[1] + body + deckMatch[3] + html.slice(deckMatch.index + deckMatch[0].length);
+  for (const id of lockedSheets) {
+    if (keptSheets.has(id)) continue;
+    const safeId = id.replace(/[^a-z0-9_-]/gi, '');
+    const openMatch = new RegExp(`<(div|aside|section)\\b[^>]*\\bid="sheet-${safeId}"[^>]*>`, 'i').exec(out);
+    if (!openMatch) continue;
+    const innerStart = openMatch.index + openMatch[0].length;
+    const innerEnd = elementCloseIndex(out, innerStart, openMatch[1]);
+    if (innerEnd < 0) continue;
+    out = out.slice(0, innerStart) + out.slice(innerEnd);
+  }
+  const state = JSON.stringify({ ...access, allowed, total }).replace(/</g, '\\u003c');
+  const inject = `<script>window.DD_REPORT_ACCESS=${state};</script>`;
+  out = /<\/head>/i.test(out) ? out.replace(/<\/head>/i, `${inject}</head>`) : inject + out;
+  return out;
+}
+async function reportAccessForRequest(req, res, slug) {
+  let authUser = null;
+  try {
+    authUser = await authenticatedUser(req, res);
+  } catch (error) {
+    authUser = null;
+  }
+  if (!authUser) return { guest: true, pro: false, freeRead: false, freeAvailable: false, freeSlug: null };
+  const db = await readDb();
+  const user = getUser(db, authUser.id);
+  await confirmSubscriptionWithStripe(db, user);
+  const access = rabbitHoleAccess(user, slug, clientReadDate(String(req.query.d || '')));
+  return { guest: false, pro: access.pro, freeRead: access.freeRead, freeAvailable: access.freeAvailable, freeSlug: access.freeSlug, date: access.date };
+}
+app.get('/reports/:reportFile', async (req, res, next) => {
+  try {
+    const reportFile = String(req.params.reportFile || '');
+    if (!/^[a-z0-9-]+\.(?:html|css|js)$/i.test(reportFile)) return res.status(404).send('Not found.');
+    const filePath = path.join(__dirname, 'public', 'reports', reportFile);
+    if (!/\.html$/i.test(reportFile)) {
+      res.setHeader('Cache-Control', 'private, no-cache');
+      return res.sendFile(filePath);
+    }
+    let html;
+    try {
+      html = await fs.readFile(filePath, 'utf8');
+    } catch (error) {
+      if (error.code === 'ENOENT') return res.status(404).send('Not found.');
+      throw error;
+    }
+    const slug = reportFile.replace(/\.html$/i, '').toLowerCase();
+    const access = await reportAccessForRequest(req, res, slug);
+    const allowedFor = total => (access.pro ? total : access.freeRead ? freeHalfPageCount(total) : 1);
+    const out = redactReportHtml(html, allowedFor, access);
+    if (out === null) return res.status(404).send('Not found.'); // unknown layout: never send it unredacted
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('Vary', 'Cookie');
+    res.type('html').send(out);
+  } catch (error) {
+    next(error);
+  }
+});
+/* Report HTML must only ever be served by the route above (it cuts locked
+   pages). Stop odd paths like //reports/x.html or /reports%2Fx.html reaching
+   the public static handler with the uncut file. */
+app.use((req, res, next) => {
+  let decoded = req.path;
+  try { decoded = decodeURIComponent(req.path); } catch (error) {}
+  if (/(^|[\\/])reports([\\/]|$)/i.test(decoded)) {
+    return res.status(404).send('Not found.');
+  }
+  next();
 });
 app.get('/login', redirectAuthenticatedToApp, (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/login.html', redirectAuthenticatedToApp, (req, res) => res.sendFile(path.join(__dirname, 'login.html')));

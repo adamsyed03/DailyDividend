@@ -2008,7 +2008,7 @@ html.rabbit-only #screen-library .lib-top{padding-top:12px}
     <div class="rbh-paywall-card">
       <div class="rbh-paywall-k">Daily Dividend Pro</div>
       <div class="rbh-paywall-h">You’ve had today’s free read.</div>
-      <div class="rbh-paywall-p" id="rbhPaywallP">Every day you can read one Rabbit Hole in full. On the rest you get the first page. Come back tomorrow for another free one, or go Pro to unlock every page of every Rabbit Hole.</div>
+      <div class="rbh-paywall-p" id="rbhPaywallP">Every day you can read the first half of one Rabbit Hole. On the rest you get the first page. Come back tomorrow for another free one, or go Pro to unlock every page of every Rabbit Hole.</div>
       <button class="rbh-paywall-cta" type="button" onclick="openRabbitHoleMembership()">Go Pro</button>
       <button class="rbh-paywall-free" id="rbhPaywallFree" type="button" hidden></button>
       <button class="rbh-paywall-back" type="button" onclick="closeRabbitHolePaywall()">Back to the first page</button>
@@ -3891,8 +3891,8 @@ function rhBodyHtml(){
   +`<div class="rbh-sect">${all.length} rabbit holes · newest first</div><div class="rbh-list rbh-all">${all.map((r,i)=>rhCardHtml(r,i===0)).join('')}</div>`
   +`<div class="rbh-foot">New rabbit holes land every few weeks</div>`;
 }
-/* Guests (no session) can browse the library. Reading, or tapping Log in, goes to onboarding; the Rabbit Hole they
-   wanted is remembered and opened straight after they sign up / log in. */
+/* Guests (no session) can browse the library and read page 1 of any Rabbit Hole. Going further, or tapping Log in,
+   goes to onboarding; the Rabbit Hole they were reading is remembered and opened straight after they sign up / log in. */
 let IS_GUEST=false;
 const PENDING_RH_KEY='dd_pending_rabbit_hole';
 function goToOnboarding(pendingKey){
@@ -3907,7 +3907,6 @@ function openPendingRabbitHole(){
 }
 function openRabbitHole(k,routeMode='push'){
  const r=RH.find(x=>x.k===k);if(!r)return;
- if(IS_GUEST&&r.url){goToOnboarding(k);return;}
  if(!r.url){(IS_DESKTOP&&typeof dtShowToast==='function'?dtShowToast:showToast)('🕳️ This rabbit hole lands soon.');return;}
  const ov=document.getElementById('coOverlay');if(!ov)return;
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
@@ -3915,7 +3914,8 @@ function openRabbitHole(k,routeMode='push'){
  currentRabbitHole=k;
  ov.classList.add('rbh-reading');
  document.getElementById('coOvName').textContent=r.title;
- document.getElementById('coOvFrame').src=r.url;
+ // The server cuts locked pages out of the report; it needs the reader's local date to know today's free read.
+ document.getElementById('coOvFrame').src=r.url+(r.url.includes('?')?'&':'?')+'d='+encodeURIComponent(localReadDateKey());
  ov.style.display='flex';
  setAppUrl(detailPath('rabbit-holes',k),routeMode==='replace');
  updateRabbitHoleSave();
@@ -3924,9 +3924,9 @@ function openRabbitHole(k,routeMode='push'){
 function syncRabbitHoleMembership(){
  const frame=document.getElementById('coOvFrame');
  if(!frame||!frame.contentWindow)return;
- frame.contentWindow.postMessage({type:'dd:membership',subscriptionActive:hasProAccess(),parentManaged:true},location.origin);
+ frame.contentWindow.postMessage({type:'dd:membership',subscriptionActive:hasProAccess(),guest:IS_GUEST,parentManaged:true},location.origin);
 }
-/* Daily free read: one full rabbit hole per local day for non-Pro readers.
+/* Daily free read: the first half of one rabbit hole per local day for non-Pro readers.
    Source of truth is the server (/api/rabbit-holes/access); this mirror only
    drives the library banner and paywall copy. */
 let rhFreeState=null; // {date, freeSlug, freeAvailable, pro}
@@ -3996,10 +3996,11 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 function rhProBannerHtml(){return `<div class="rbh-free pro"><span class="rbh-free-i">✦</span><span><b>You’re Pro.</b> Every page of every Rabbit Hole is unlocked. Read as many as you like.</span></div>`;}
 function rhFreeBannerHtml(){
  if(hasProAccess())return rhProBannerHtml();
+ if(IS_GUEST)return `<div class="rbh-free"><span class="rbh-free-i">📖</span><span><b>Read the first page of any rabbit hole.</b> <a href="#" onclick="goToOnboarding();return false">Sign up free</a> to read half of one every day.</span></div>`;
  if(!rhFreeState){if(userId)loadRabbitHoleFreeState();return '';}
  if(rhFreeState.pro)return rhProBannerHtml();
  if(rhFreeState.date&&rhFreeState.date!==localReadDateKey()){loadRabbitHoleFreeState();return '';}
- if(rhFreeState.freeAvailable)return `<div class="rbh-free"><span class="rbh-free-i">🎁</span><span><b>1 free full read today.</b> Pick any rabbit hole and read it start to finish. The rest show their first page.</span></div>`;
+ if(rhFreeState.freeAvailable)return `<div class="rbh-free"><span class="rbh-free-i">🎁</span><span><b>1 free read today.</b> Pick any rabbit hole and read the first half. The rest show their first page.</span></div>`;
  const r=rhBySlug(rhFreeState.freeSlug);
  return `<div class="rbh-free used"><span class="rbh-free-i">✓</span><span>Today’s free read${r?`: <b>${r.title}</b>`:' is used'}. Your next one unlocks tomorrow, or go Pro for everything.</span></div>`;
 }
@@ -4008,15 +4009,31 @@ function showRabbitHolePaywall(data){
  if(hasProAccess())return;
  const freeSlug=data&&data.freeSlug||(rhFreeState&&rhFreeState.freeSlug)||null;
  const r=freeSlug?rhBySlug(freeSlug):null;
+ const guest=IS_GUEST||Boolean(data&&data.reason==='guest');
+ const halfDone=!guest&&Boolean(data&&data.reason==='free-half-finished');
+ const q=sel=>document.querySelector('#rbhPaywall '+sel);
+ const k=q('.rbh-paywall-k');if(k)k.textContent=guest?'Daily Dividend':'Daily Dividend Pro';
+ const h=q('.rbh-paywall-h');
+ if(h)h.textContent=guest?'Sign up free to keep reading.':halfDone?'That’s the free half.':'You’ve had today’s free read.';
  const p=document.getElementById('rbhPaywallP');
- if(p)p.innerHTML=`Every day you can read one Rabbit Hole in full${r?`, and today’s was <b>${r.title}</b>`:''}. On the rest you get the first page. Come back tomorrow for another free one, or go Pro to unlock every page of every Rabbit Hole.`;
+ if(p)p.innerHTML=guest
+  ?'Without an account you get the first page. Create a free account to read the first half of one Rabbit Hole every day, or go Pro to read every page.'
+  :halfDone
+  ?'Your daily free read covers the first half of one Rabbit Hole. Go Pro to finish this one, and read every page of every Rabbit Hole.'
+  :`Every day you can read the first half of one Rabbit Hole${r?`, and today’s was <b>${r.title}</b>`:''}. On the rest you get the first page. Come back tomorrow for another free one, or go Pro to unlock every page of every Rabbit Hole.`;
+ const cta=q('.rbh-paywall-cta');
+ if(cta){cta.textContent=guest?'Sign up free':'Go Pro';cta.onclick=guest?()=>goToOnboarding(currentRabbitHole):()=>openRabbitHoleMembership();}
+ const restore=q('.rbh-paywall-restore');
+ if(restore){restore.textContent=guest?'Already have an account? Log in':'Already Pro? Check my membership';restore.onclick=guest?()=>goToOnboarding(currentRabbitHole):function(){checkMembership(this,'paywall');};}
+ const back=q('.rbh-paywall-back');
+ if(back)back.textContent=halfDone?'Back to where I was':'Back to the first page';
  const free=document.getElementById('rbhPaywallFree');
  if(free){
-  if(r&&rhSlug(r)!==(currentRabbitHole&&rhSlug(RH.find(x=>x.k===currentRabbitHole))||'')){free.hidden=false;free.textContent=`Keep reading ${r.title}`;free.onclick=()=>openRabbitHole(r.k,'replace');}
+  if(!guest&&!halfDone&&r&&rhSlug(r)!==(currentRabbitHole&&rhSlug(RH.find(x=>x.k===currentRabbitHole))||'')){free.hidden=false;free.textContent=`Keep reading ${r.title}`;free.onclick=()=>openRabbitHole(r.k,'replace');}
   else free.hidden=true;
  }
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.add('show');
- trackPostHogEvent('rabbit_hole_paywall_shown',{rabbit_hole_id:currentRabbitHole,free_read_used_on:freeSlug});
+ trackPostHogEvent('rabbit_hole_paywall_shown',{rabbit_hole_id:currentRabbitHole,free_read_used_on:freeSlug,reason:guest?'guest':halfDone?'free-half-finished':'free-read-used'});
 }
 function closeRabbitHolePaywall(){
  const wall=document.getElementById('rbhPaywall');if(wall)wall.classList.remove('show');
