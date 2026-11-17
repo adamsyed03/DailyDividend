@@ -53,7 +53,7 @@
       "change": -33.23,
       "changeDirection": "down",
       "date": "2026-11-16",
-      "lastUpdated": "2026-11-17T11:11:24.811Z"
+      "lastUpdated": "2026-11-17T13:21:06.591Z"
     },
     "NVDA": {
       "ticker": "NVDA",
@@ -65,7 +65,7 @@
       "change": 15.66,
       "changeDirection": "up",
       "date": "2026-11-16",
-      "lastUpdated": "2026-11-17T11:11:25.127Z"
+      "lastUpdated": "2026-11-17T13:21:07.708Z"
     },
     "DIS": {
       "ticker": "DIS",
@@ -77,7 +77,7 @@
       "change": 6.12,
       "changeDirection": "up",
       "date": "2026-11-16",
-      "lastUpdated": "2026-11-17T11:11:25.394Z"
+      "lastUpdated": "2026-11-17T13:21:08.067Z"
     },
     "META": {
       "ticker": "META",
@@ -89,7 +89,7 @@
       "change": 7.03,
       "changeDirection": "up",
       "date": "2026-11-16",
-      "lastUpdated": "2026-11-17T11:11:25.655Z"
+      "lastUpdated": "2026-11-17T13:21:08.349Z"
     },
     "SPOT": {
       "ticker": "SPOT",
@@ -101,7 +101,7 @@
       "change": null,
       "changeDirection": null,
       "date": "2026-11-16",
-      "lastUpdated": "2026-11-17T11:11:26.001Z"
+      "lastUpdated": "2026-11-17T13:21:08.659Z"
     },
     "KO": {
       "ticker": "KO",
@@ -113,7 +113,7 @@
       "change": 61.76,
       "changeDirection": "up",
       "date": "2026-11-16",
-      "lastUpdated": "2026-11-17T11:11:26.270Z"
+      "lastUpdated": "2026-11-17T13:21:09.293Z"
     }
   },
   "nudges": {}
