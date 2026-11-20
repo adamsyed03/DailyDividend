@@ -497,6 +497,18 @@
     $('#fStats').style.setProperty('--n', stats.length);
     $('#fStats').innerHTML = stats.join('');
 
+    // Today's top 5 (daily puzzles only). If you're not in it, your own row follows after a gap.
+    const top = final.topFive || [];
+    $('#fBoard').hidden = !top.length;
+    if (top.length) {
+      const boardRow = item => `<li${item.you ? ' class="you"' : ''}><span class="lb-rank">#${item.rank}</span><span class="lb-name">${item.you ? 'You' : esc(item.displayName)}</span><span class="lb-ret ${tone(item.returnPercent, 0)}">${pct(item.returnPercent, 0)}</span><b class="lb-val">${short(item.finalWealth)}</b></li>`;
+      let rows = top.map(boardRow).join('');
+      if (!top.some(item => item.you) && board?.rank) {
+        rows += '<li class="lb-gap" aria-hidden="true">⋯</li>' + boardRow({ rank: board.rank, you: true, returnPercent: final.returnPercent, finalWealth: final.finalWealth });
+      }
+      $('#fBoardList').innerHTML = rows;
+    }
+
     const periods = final.puzzle.periods.map(shortPeriod);
     const rows = final.ledger.filter(row => row.chips.some(Boolean));
     $('#fLedger').innerHTML = `<tr><th>Asset</th>${periods.map(period => `<th>${esc(period)}</th>`).join('')}<th>Chips</th></tr>${rows.map(row => `<tr><td>${esc(row.name)}</td>${row.returns.map(value => `<td class="${value === null ? "" : tone(value, 0)}">${value === null ? '' : pct(value, 0)}</td>`).join('')}<td>${row.chips.join('·')}</td></tr>`).join('')}`;

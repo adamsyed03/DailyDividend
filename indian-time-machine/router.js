@@ -189,6 +189,13 @@ function createTimeMachineRouter({ rootDir }) {
     };
   }
 
+  // Today's top 5 for the final screen. The player's own row is flagged; session ids never leave the server.
+  async function topFive(session) {
+    if (session.mode !== 'daily') return null;
+    const rows = await store.leaderboard(session.puzzle.id, 5);
+    return rows.map(({ sessionId, ...row }) => ({ ...row, you: sessionId === session.id }));
+  }
+
   router.get('/config', (req, res) => res.json({
     startingCapitalInr: store.config.startingCapitalInr,
     chipCount: store.config.chipCount,
@@ -227,6 +234,7 @@ function createTimeMachineRouter({ rootDir }) {
       if (session.completed) {
         const final = finalView(session, await store.rankFor(session, Math.round(session.wealth)));
         final.displayName = (await store.resultForSession(session.id))?.displayName || null;
+        final.topFive = await topFive(session);
         return res.json({ ...base, final });
       }
       if (session.stage === 'allocation') {
@@ -272,6 +280,7 @@ function createTimeMachineRouter({ rootDir }) {
         const displayName = await store.saveCompletedSession(session, summary);
         const final = finalView(session, await store.rankFor(session, summary.finalWealth));
         final.displayName = displayName;
+        final.topFive = await topFive(session);
         return { sessionId: session.id, stage: 'complete', final };
       });
       res.json(payload);
@@ -284,7 +293,7 @@ function createTimeMachineRouter({ rootDir }) {
   router.get('/leaderboard', async (req, res, next) => {
     try {
       const dateKey = /^\d{4}-\d{2}-\d{2}$/.test(req.query.date || '') ? req.query.date : istDateKey();
-      res.json({ puzzle: `daily-${dateKey}`, entries: await store.leaderboard(`daily-${dateKey}`) });
+      res.json({ puzzle: `daily-${dateKey}`, entries: (await store.leaderboard(`daily-${dateKey}`)).map(({ sessionId, ...row }) => row) });
     } catch (error) { next(error); }
   });
 
@@ -298,6 +307,7 @@ function createTimeMachineRouter({ rootDir }) {
     res.status(status).json({ error: status === 500 ? 'The time machine hit a setup error.' : error.message });
   });
 
+  router.store = store; // read by the main admin summary (games played)
   return router;
 }
 

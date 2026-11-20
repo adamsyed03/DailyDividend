@@ -137,15 +137,30 @@ class TimeMachineStore {
 
   async leaderboard(puzzleId, limit = 10) {
     await this.ready;
-    return this.rows(`SELECT display_name, final_wealth, return_percent, completed_at
+    return this.rows(`SELECT session_id, display_name, final_wealth, return_percent, completed_at
       FROM game_results WHERE puzzle_id = ? ORDER BY final_wealth DESC, completed_at ASC LIMIT ?`, [puzzleId, limit])
-      .map((row, index) => ({
-        rank: index + 1,
+      // Ties share a rank (1, 2, 2, 4), matching rankFor, which counts only strictly better scores.
+      .map((row, index, all) => ({
+        rank: all.findIndex(other => Number(other.final_wealth) === Number(row.final_wealth)) + 1,
+        sessionId: row.session_id, // internal: the router strips it before responding
         displayName: row.display_name,
         finalWealth: Number(row.final_wealth),
         returnPercent: Number(row.return_percent),
         completedAt: row.completed_at
       }));
+  }
+
+  // Admin counts. "Played" = finished games; started-but-abandoned ones are counted separately.
+  async stats(dateKey) {
+    await this.ready;
+    const count = (sql, params = []) => Number(this.row(sql, params)?.n || 0);
+    return {
+      gamesStarted: count('SELECT COUNT(*) AS n FROM game_sessions'),
+      gamesPlayed: count('SELECT COUNT(*) AS n FROM game_sessions WHERE completed = 1'),
+      dailyPlayed: count("SELECT COUNT(*) AS n FROM game_sessions WHERE completed = 1 AND mode = 'daily'"),
+      unlimitedPlayed: count("SELECT COUNT(*) AS n FROM game_sessions WHERE completed = 1 AND mode = 'unlimited'"),
+      playedToday: count('SELECT COUNT(*) AS n FROM game_results WHERE date_key = ?', [dateKey])
+    };
   }
 
   async resultForSession(sessionId) {

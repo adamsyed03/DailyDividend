@@ -6,7 +6,7 @@ const express = require('express');
 const compression = require('compression');
 const { createClient } = require('@supabase/supabase-js');
 const { createInstagramBotController } = require('./instagram-dd-bot/control');
-const { createTimeMachineRouter } = require('./indian-time-machine/router');
+const { createTimeMachineRouter, istDateKey } = require('./indian-time-machine/router');
 
 loadEnv();
 
@@ -88,7 +88,8 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
   }
 });
 app.use(express.json({ limit: '8mb' }));
-app.use('/api/time-machine', createTimeMachineRouter({ rootDir: __dirname }));
+const timeMachineRouter = createTimeMachineRouter({ rootDir: __dirname });
+app.use('/api/time-machine', timeMachineRouter);
 
 app.get('/healthz', (req, res) => {
   res.status(200).json({ ok: true });
@@ -2106,7 +2107,13 @@ app.post('/api/admin/login', (req, res) => {
 app.get('/api/admin/summary', requireAdmin, async (req, res, next) => {
   try {
     const db = await readDb();
-    res.json(adminSummary(db));
+    const summary = adminSummary(db);
+    // The game lives in its own SQLite store; a broken game DB must not take the admin dashboard down.
+    summary.game = await timeMachineRouter.store.stats(istDateKey()).catch(error => {
+      console.error('[admin] game stats unavailable:', error.message);
+      return null;
+    });
+    res.json(summary);
   } catch (error) {
     next(error);
   }

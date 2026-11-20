@@ -49,6 +49,7 @@
     .card{padding:18px}
     .k{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
     .v{font-family:var(--serif);font-size:34px;line-height:1}
+    .stat-sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
     .panel{padding:18px;margin-top:16px}
     .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
     h2{font-family:var(--serif);font-size:22px;margin:0}
@@ -280,6 +281,7 @@
       <div class="card"><div class="k">Total reads</div><div class="v" id="statReads">0</div></div>
       <div class="card"><div class="k">Saved items</div><div class="v" id="statSaves">0</div></div>
       <div class="card"><div class="k">Votes</div><div class="v" id="statVotes">0</div></div>
+      <div class="card"><div class="k">Games played</div><div class="v" id="statGames">0</div><div class="stat-sub" id="statGamesSub"></div></div>
     </section>
 
     <section class="panel" aria-label="Stock prices">
@@ -1065,6 +1067,12 @@
       $('statReads').textContent  = data.stats.totalReads;
       $('statSaves').textContent  = data.stats.savedCompaniesCount;
       $('statVotes').textContent  = data.stats.totalVotes;
+      const game = data.game;
+      $('statGames').textContent = game ? game.gamesPlayed : '–';
+      const olderGames = game ? game.gamesPlayed - game.dailyPlayed - game.unlimitedPlayed : 0; // v1 "story" mode
+      $('statGamesSub').textContent = game
+        ? `${game.playedToday} today · ${game.dailyPlayed} daily, ${game.unlimitedPlayed} unlimited${olderGames ? `, ${olderGames} old version` : ''} · ${game.gamesStarted} started`
+        : 'Game stats unavailable';
 
       const prices = Object.values(data.prices || {});
       $('pricesLastUpdated').textContent = data.priceLastUpdated ? formatDate(data.priceLastUpdated) : 'Never';

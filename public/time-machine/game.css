@@ -178,6 +178,15 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .stat small { font-family: var(--mono); font-size: 9px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
 .stat b { display: block; font-family: var(--serif); font-size: 17px; margin-top: 2px; }
 .stat span { display: block; font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+.board-card { margin-top: 8px; padding: 8px 12px; }
+.lboard { list-style: none; margin-top: 4px; }
+.lboard li { display: grid; grid-template-columns: 30px 1fr auto 64px; align-items: baseline; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+.lboard li.you { background: var(--gold-soft); margin: 0 -12px; padding: 6px 12px; font-weight: 700; }
+.lboard .lb-rank { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.lboard .lb-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lboard .lb-ret { font-family: var(--mono); font-size: 11px; }
+.lboard .lb-val { font-family: var(--serif); font-size: 14px; text-align: right; }
+.lboard li.lb-gap { display: block; text-align: center; color: var(--muted); padding: 2px 0; border-top: 0; }
 .ledger-card { margin-top: 8px; padding: 8px 12px; overflow-x: auto; }
 .ledger { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; }
 .ledger th { font-family: var(--mono); font-weight: 500; font-size: 9.5px; color: var(--muted); text-align: right; padding: 4px 2px; white-space: nowrap; }
