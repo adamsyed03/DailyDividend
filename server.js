@@ -2506,6 +2506,21 @@ app.get('/api/admin/export', requireAdmin, async (req, res, next) => {
   }
 });
 
+// Cloudflare migration: download the live game database (sessions + results) so it can be imported into
+// Supabase (scripts/cf-migrate-game.mjs). Admin-only, read-only. See docs/cloudflare-migration/DATABASE.md.
+app.get('/api/admin/time-machine/export', requireAdmin, async (req, res, next) => {
+  try {
+    const file = path.join(__dirname, 'data', 'indian-time-machine', 'indian-time-machine.sqlite');
+    const bytes = await fs.readFile(file);
+    res.setHeader('Content-Type', 'application/vnd.sqlite3');
+    res.setHeader('Content-Disposition', `attachment; filename="indian-time-machine-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.sqlite"`);
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(bytes);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get('/api/admin/instagram-bot/status', requireAdmin, requireLocalDevice, async (req, res, next) => {
   try {
     res.json(await instagramBot.status());
