@@ -141,6 +141,9 @@ function createInstagramBotController() {
   }
 
   async function start(mode) {
+    // Retired (see RETIRED.md): the bot can no longer be started from the server.
+    throw new Error('The local Instagram Chrome bot is retired. Use the Meta API auto-reply in workers/ig-autoreply.');
+    // eslint-disable-next-line no-unreachable
     if (!['login', 'dry-run', 'dm-preview', 'live'].includes(mode)) throw new Error('Unknown Instagram bot mode.');
     if (state.running || child) throw new Error('The Instagram browser is already running.');
 

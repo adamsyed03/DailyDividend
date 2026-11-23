@@ -1138,22 +1138,15 @@ async function handleOnboarding(payload, res) {
     return res.status(500).json({ error: 'Account creation could not be completed.' });
   }
 
+  // A new signup never absorbs another user's record by email or phone: neither is verified at signup, so
+  // matching on them let anyone take over a member's data and subscription. The only merge left is an
+  // explicit claim of an anonymous record (no login of its own) by its id, which only the browser that
+  // created it holds, and it never carries billing.
   const db = await readDb();
-  const existing = Object.values(db.users).find(user =>
-    normalizeLookup(user.email) === email ||
-    (data.phoneNumber && normalize(user.phoneCode) === data.phoneCode && normalize(user.phoneNumber) === data.phoneNumber)
-  );
-
-  const oldUserId = existing && existing.userId;
-  const user = existing ? {
-    ...existing,
-    ...data,
-    userId: authUser.id,
-    email,
-    onboardingCompleted: true,
-    updatedAt: new Date().toISOString()
-  } : {
+  const claimed = await claimableAnonymousRecord(db, payload.anonymousId, authUser.id);
+  const user = {
     ...makeUser(authUser.id),
+    ...(claimed ? anonymousActivity(claimed) : {}),
     ...data,
     email,
     onboardingCompleted: true,
@@ -1162,7 +1155,8 @@ async function handleOnboarding(payload, res) {
 
   recordUserSignIn(user, authUser, 'email');
 
-  if (oldUserId && oldUserId !== authUser.id) {
+  if (claimed) {
+    const oldUserId = claimed.userId;
     delete db.users[oldUserId];
     Object.values(db.votes).forEach(companyVotes => {
       if (companyVotes && Object.prototype.hasOwnProperty.call(companyVotes, oldUserId)) {
@@ -1175,9 +1169,40 @@ async function handleOnboarding(payload, res) {
   db.users[user.userId] = user;
   await writeDb(db);
   analytics.identify({ distinctId: user.userId, properties: { email, firstName: data.firstName, lastName: data.lastName, username: data.username, country: data.country, profession: data.profession } });
-  if (!existing) analytics.capture({ distinctId: user.userId, event: 'user_signed_up', properties: { country: data.country, profession: data.profession, how_heard: data.howHeard } });
+  if (!claimed) analytics.capture({ distinctId: user.userId, event: 'user_signed_up', properties: { country: data.country, profession: data.profession, how_heard: data.howHeard } });
   setAuthCookies(res, signedIn.session);
-  return res.status(existing ? 200 : 201).json({ ok: true, status: 'success', user: profile(user) });
+  return res.status(claimed ? 200 : 201).json({ ok: true, status: 'success', user: profile(user) });
+}
+
+// Reading activity an anonymous record can hand over to the account that claims it. Allowlist on purpose:
+// identity, login and billing fields never move.
+const ANONYMOUS_ACTIVITY_FIELDS = ['streak', 'lastReadDate', 'savedCompanies', 'previousVotes', 'voteData', 'readHistory',
+  'deepDiveOpens', 'completedStories', 'todayReads', 'libraryReads', 'searchUses', 'nextCompanyClicks', 'sectorsRead',
+  'contrarianVotes', 'personalityScores', 'readingPersonality'];
+
+function anonymousActivity(record) {
+  const out = {};
+  ANONYMOUS_ACTIVITY_FIELDS.forEach(field => { if (record[field] !== undefined) out[field] = record[field]; });
+  return out;
+}
+
+function recordHasBilling(record) {
+  return Boolean(record.stripeCustomerId || record.stripeSubscriptionId || record.stripeLastCheckoutSessionId
+    || (record.subscriptionStatus && record.subscriptionStatus !== 'inactive') || record.subscriptionUpdatedAt);
+}
+
+// The record behind `anonymousId`, if the new account may claim it: it must exist, must not be a Supabase login
+// itself (checked with Supabase, not guessed from the record), and must carry no billing. Anything with billing
+// is left alone for a manual check rather than moved or deleted.
+async function claimableAnonymousRecord(db, anonymousId, newUserId) {
+  const id = normalize(anonymousId);
+  if (!id || id === newUserId || !Object.prototype.hasOwnProperty.call(db.users, id)) return null;
+  const record = db.users[id];
+  if (!record || recordHasBilling(record)) return null;
+  const { data, error } = await supabase.auth.admin.getUserById(id);
+  if (data && data.user) return null; // a real account, not anonymous
+  if (error && error.status !== 404 && !/not\s*found/i.test(error.message || '')) return null; // unsure: don't merge
+  return { ...record, userId: id };
 }
 
 function levelToFinanceProficiency(level) {
@@ -2529,28 +2554,16 @@ app.get('/api/admin/instagram-bot/status', requireAdmin, requireLocalDevice, asy
   }
 });
 
-app.put('/api/admin/instagram-bot/job', requireAdmin, requireLocalDevice, async (req, res, next) => {
-  try {
-    const job = await instagramBot.saveJob(req.body);
-    res.json({ message: 'Instagram automation settings saved on this device.', job });
-  } catch (error) {
-    if (/^(Enter|Add|Public|Use|The post URL|The standardized|Polling|Hourly|Daily|Instagram bot settings)/.test(error.message)) {
-      return res.status(400).json({ error: error.message });
-    }
-    next(error);
-  }
+// The local Chrome bot (instagram-dd-bot/) is retired: see instagram-dd-bot/RETIRED.md. Its settings can no
+// longer be saved and it can no longer be started. Comment replies now run through workers/ig-autoreply.
+const INSTAGRAM_BOT_RETIRED = 'The local Instagram Chrome bot is retired. Comment replies now run through the Meta API auto-reply (workers/ig-autoreply).';
+
+app.put('/api/admin/instagram-bot/job', requireAdmin, (req, res) => {
+  res.status(410).json({ error: INSTAGRAM_BOT_RETIRED });
 });
 
-app.post('/api/admin/instagram-bot/start', requireAdmin, requireLocalDevice, async (req, res, next) => {
-  try {
-    const status = await instagramBot.start(String(req.body.mode || ''));
-    res.json({ message: 'Instagram login browser started on this device.', status });
-  } catch (error) {
-    if (/^(Playwright|The Instagram browser|Live sending)/.test(error.message)) {
-      return res.status(409).json({ error: error.message });
-    }
-    next(error);
-  }
+app.post('/api/admin/instagram-bot/start', requireAdmin, (req, res) => {
+  res.status(410).json({ error: INSTAGRAM_BOT_RETIRED });
 });
 
 app.post('/api/admin/instagram-bot/stop', requireAdmin, requireLocalDevice, async (req, res, next) => {

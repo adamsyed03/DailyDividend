@@ -2,11 +2,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "npm run test:time-machine",
-    "instagram:login": "node instagram-dd-bot/bot.js --login-only",
-    "instagram:dry-run": "node instagram-dd-bot/bot.js --dry-run",
-    "instagram:dm-preview": "node instagram-dd-bot/bot.js --dm-preview",
-    "instagram:live": "node instagram-dd-bot/bot.js --live",
+    "test": "npm run test:time-machine && npm run test:signup",
+    "test:signup": "node --test tests/signup-takeover.test.js",
     "stripe:setup": "node scripts/setup-stripe.js",
     "test:legal": "node scripts/test-legal.js",
     "test:time-machine": "node --test tests/time-machine.test.js",

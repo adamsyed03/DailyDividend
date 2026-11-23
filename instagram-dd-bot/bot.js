@@ -1,5 +1,11 @@
 'use strict';
 
+// Retired (see RETIRED.md). Exit before loading Playwright or touching Instagram, however this file is started.
+if (require.main === module) {
+  console.error('The local Instagram Chrome bot is retired. Comment replies now run through the Meta API auto-reply in workers/ig-autoreply.');
+  process.exit(1);
+}
+
 const { loadConfig } = require('./config');
 const { ProcessedCommentDatabase } = require('./database');
 const { InstagramBrowser, InstagramSafetyStop } = require('./instagram');

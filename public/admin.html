@@ -82,24 +82,56 @@
     .empty{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:8px;padding:14px;font-size:13px}
     .hidden{display:none!important}
 
-    /* -- Local Instagram automation ------------------ */
-    .ig-panel{border-color:#c9d9cf;background:linear-gradient(180deg,#fff 0%,#fbfdfb 100%)}
-    .ig-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:18px}
-    .ig-form{display:grid;gap:14px}
-    .ig-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .ig-checks{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-    .ig-checks label{display:flex;align-items:center;gap:7px;margin:0;text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)}
-    .ig-checks input{width:auto}
-    .ig-replies{display:grid;gap:10px}
-    .ig-reply{border:1px solid var(--line);border-radius:9px;padding:12px;background:#faf8f3}
-    .ig-reply-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-    .ig-reply-title{font-weight:800;font-size:13px}
-    .ig-remove{background:transparent;color:var(--red);padding:4px 7px;font-size:12px}
-    .ig-status{border:1px solid var(--line);border-radius:9px;padding:14px;background:#fff;display:grid;gap:11px;align-content:start}
-    .ig-status-line{display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .ig-note{font-size:12px;color:var(--muted);margin:0}
-    .ig-log{height:210px;overflow:auto;margin:0;padding:10px;border-radius:7px;background:#171716;color:#eee;font:11px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word}
-    .ig-locked{padding:10px;border-radius:7px;background:#fdf1d0;color:#6d5510;font-size:12px}
+    /* -- Instagram auto-reply (Meta API worker) ----- */
+    .iga-panel{border-color:#c9d9cf;background:linear-gradient(180deg,#fff 0%,#fbfdfb 100%)}
+    .iga-help{font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.4}
+    .iga-warn{font-size:12px;margin:6px 0 0;padding:8px 10px;border-radius:7px;background:#fdf1d0;color:#6d5510;line-height:1.4}
+    .iga-notice{padding:12px 14px;border-radius:8px;background:#fdf1d0;color:#6d5510;font-size:13px;margin-bottom:14px}
+    .iga-notice.error{background:#f7dfda;color:var(--red)}
+    .iga-signin{display:grid;gap:12px;max-width:560px}
+    .iga-signin p{margin:0}
+    .iga-settings{border:1px solid var(--line);border-radius:10px;background:#fff;padding:16px;display:grid;gap:14px;margin-bottom:18px}
+    .iga-pause{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;border-radius:10px;background:#e3f0e7;border:1px solid #c7decf}
+    .iga-pause.paused{background:#f7dfda;border-color:#efc5bd}
+    .iga-pause-state{font-family:var(--serif);font-size:22px;font-weight:700}
+    .iga-pause-btn{font-size:17px;padding:14px 22px;min-width:220px;background:var(--red)}
+    .iga-pause.paused .iga-pause-btn{background:var(--green)}
+    .iga-settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+    .iga-setting{border:1px solid var(--line);border-radius:9px;padding:12px;background:#faf8f3}
+    .iga-settings-actions{grid-column:1/-1;align-items:center}
+    .iga-switch{display:flex;align-items:center;gap:8px;margin:0 0 2px;text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink);cursor:pointer}
+    .iga-switch input{width:18px;height:18px;margin:0;accent-color:var(--green)}
+    .iga-switch-inline{margin-top:26px}
+    .iga-table td{vertical-align:middle}
+    .iga-table input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer}
+    .iga-link-cell{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+    .iga-row-actions{display:flex;gap:6px;justify-content:flex-end}
+    .iga-row-actions button{padding:6px 10px;font-size:12px}
+    .iga-modal{max-width:min(94vw,760px)}
+    .iga-subhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .iga-subhead label{margin:0}
+    .iga-subhead button{padding:6px 10px;font-size:12px}
+    .iga-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;background:#fff;padding:6px}
+    .iga-chips:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(31,107,74,.12)}
+    .iga-chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;background:#f0ebe1;padding:4px 4px 4px 10px;font-size:13px;font-weight:700}
+    .iga-chip button{background:transparent;color:var(--muted);padding:0 6px;font-size:15px;line-height:1}
+    .iga-chip button:hover{color:var(--red)}
+    .iga-chips input{flex:1;min-width:160px;border:0;box-shadow:none;padding:5px 4px}
+    .iga-chips input:focus{box-shadow:none}
+    .iga-variants{display:grid;gap:10px;margin-top:8px}
+    .iga-variant{border:1px solid var(--line);border-radius:9px;padding:12px;background:#faf8f3;display:grid;gap:8px}
+    .iga-variant-head{display:flex;justify-content:space-between;align-items:center}
+    .iga-variant-title{font-weight:800;font-size:13px}
+    .iga-remove{background:transparent;color:var(--red);padding:4px 7px;font-size:12px}
+    .iga-variant textarea{min-height:70px}
+    .iga-preview-label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .iga-bubble{margin-top:4px;padding:10px 12px;border-radius:16px 16px 16px 4px;background:#efefef;color:#111;font-size:14px;white-space:pre-wrap;word-break:break-word;max-width:520px}
+    .iga-bubble.empty{color:var(--muted);font-style:italic}
+    .iga-bubble .iga-link{color:#1b55c4;text-decoration:underline}
+    .iga-errors,.iga-warnings{border-radius:8px;padding:10px 12px;font-size:13px}
+    .iga-errors{background:#f7dfda;color:var(--red);border:1px solid #efc5bd}
+    .iga-warnings{background:#fdf1d0;color:#6d5510;border:1px solid #f1df9f}
+    .iga-errors ul,.iga-warnings ul{margin:4px 0 0;padding-left:18px}
 
     /* -- Controls bar ------------------------------- */
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
@@ -213,7 +245,7 @@
     @media(max-width:1100px){
       .grid{grid-template-columns:repeat(3,1fr)}
       .forms{grid-template-columns:1fr}
-      .ig-layout{grid-template-columns:1fr}
+      .iga-settings-grid{grid-template-columns:1fr}
     }
     @media(max-width:700px){
       .grid{grid-template-columns:repeat(2,1fr)}
@@ -389,98 +421,86 @@
       </div>
     </section>
 
-    <!-- -- Company HTML files -- -->
-    <section class="panel ig-panel" aria-label="Instagram automation">
+    <!-- -- Instagram auto-reply (Meta API worker: workers/ig-autoreply) -- -->
+    <!-- Reads and writes Supabase directly as the signed-in admin; RLS on dd_admins does the access check. -->
+    <section class="panel iga-panel" id="igaPanel" aria-label="Instagram auto-reply">
       <div class="panel-head">
         <div>
-          <h2>Instagram comment replies</h2>
-          <div class="sub">Runs only from this computer through a visible Google Chrome session. No Instagram or Meta API.</div>
+          <h2>Instagram auto-reply</h2>
+          <div class="sub">DMs people who comment a keyword on @dailydividend.official, through Meta's official Instagram API. The worker picks up changes within 60 seconds.</div>
         </div>
-        <span class="badge badge-gray" id="igStatusBadge">Checking local bot...</span>
+        <div class="actions" style="align-items:center">
+          <span class="badge badge-gray" id="igaWho">Not signed in</span>
+          <button class="secondary hidden" id="igaSignOut" type="button">Sign out</button>
+        </div>
       </div>
 
-      <div class="ig-layout">
-        <form id="instagramJobForm" class="ig-form">
+      <div id="igaNotice" class="iga-notice hidden" role="status"></div>
+
+      <form id="igaSignInForm" class="iga-signin hidden">
+        <p class="iga-help">This section uses your own Daily Dividend account, not the admin password. Only accounts on the admin list can see or change it.</p>
+        <div class="row">
           <div>
-            <label for="igPostUrl">Instagram post or reel URL</label>
-            <input id="igPostUrl" type="url" required placeholder="https://www.instagram.com/p/...">
+            <label for="igaEmail">Email</label>
+            <input id="igaEmail" type="email" autocomplete="username" required>
           </div>
           <div>
-            <label for="igTriggerComment">Comment to look for</label>
-            <input id="igTriggerComment" required maxlength="100" value="DD" placeholder="DD">
+            <label for="igaPassword">Password</label>
+            <input id="igaPassword" type="password" autocomplete="current-password" required>
           </div>
-          <div class="ig-checks">
-            <label><input id="igExactMatch" type="checkbox" checked> Match the whole comment only</label>
-            <label><input id="igCaseInsensitive" type="checkbox" checked> Ignore uppercase/lowercase</label>
+        </div>
+        <div class="actions"><button id="igaSignInButton" type="submit">Sign in</button></div>
+        <div id="igaSignInMessage" class="msg" role="status"></div>
+      </form>
+
+      <div id="igaApp" class="hidden">
+        <div class="iga-settings">
+          <div class="iga-pause" id="igaPauseBox">
+            <div>
+              <div class="iga-pause-state" id="igaPauseState">Sending is on</div>
+              <p class="iga-help" id="igaPauseHelp"></p>
+            </div>
+            <button class="iga-pause-btn" id="igaPauseButton" type="button">Pause all sending</button>
           </div>
 
+          <form id="igaSettingsForm" class="iga-settings-grid" novalidate>
+            <div class="iga-setting">
+              <label class="iga-switch"><input id="igaDryRun" type="checkbox"> Test mode</label>
+              <p class="iga-help">In test mode the worker only logs what it would send. Nothing is sent: no DMs and no public replies. Keep it on until your rules look right.</p>
+            </div>
+            <div class="iga-setting">
+              <label for="igaPerHour">DMs per hour</label>
+              <input id="igaPerHour" type="number" min="1" max="700" step="1" required>
+              <p class="iga-help">1 to 700. Meta allows 750 an hour, and the gap leaves room for DMs sent by hand.</p>
+            </div>
+            <div class="iga-setting">
+              <label class="iga-switch"><input id="igaPublic" type="checkbox"> Public replies</label>
+              <p class="iga-warn">Repeated public comments are the main ban risk. Keep this off unless you need it. When it is on, the worker still posts at most 40 public replies an hour.</p>
+            </div>
+            <div class="actions iga-settings-actions">
+              <button type="submit" id="igaSaveSettings">Save settings</button>
+              <span class="iga-help" id="igaSettingsUpdated"></span>
+            </div>
+          </form>
+          <p class="iga-help">If DRY_RUN or PAUSED is set to true on the worker in Cloudflare, that wins over these switches.</p>
+          <div id="igaSettingsMessage" class="msg" role="status"></div>
+        </div>
+
+        <div class="panel-head">
           <div>
-            <div class="panel-head" style="margin-bottom:8px">
-              <div>
-                <label style="margin:0">Rotating public comment replies</label>
-                <div class="sub">The bot posts one of these beneath the qualifying comment, then moves to the next variation.</div>
-              </div>
-              <button class="secondary" id="igAddReplyButton" type="button">Add reply</button>
-            </div>
-            <div id="igReplies" class="ig-replies"></div>
+            <h3 style="margin:0">Rules</h3>
+            <div class="sub">The first enabled rule that matches a comment wins. Lower priority numbers are checked first.</div>
           </div>
-
-          <div class="ig-reply">
-            <div class="ig-reply-title" style="margin-bottom:9px">Standardized direct message</div>
-            <div class="form-grid">
-              <div>
-                <label for="igDmText">DM message text</label>
-                <textarea id="igDmText" maxlength="2000" required placeholder="Thanks for commenting — here is the resource I promised..."></textarea>
-              </div>
-              <div>
-                <label for="igDmLink">Optional URL or public PDF link</label>
-                <input id="igDmLink" type="url" placeholder="https://example.com/guide.pdf">
-              </div>
-            </div>
-            <p class="ig-note" style="margin-top:8px">Every qualifying commenter receives this same DM once. The link is added after the message text.</p>
-          </div>
-
-          <div class="ig-row">
-            <div>
-              <label for="igQueueSize">Maximum matching comments to queue</label>
-              <input id="igQueueSize" type="number" min="1" max="500" value="500">
-            </div>
-            <div>
-              <label for="igPollInterval">Poll every (seconds)</label>
-              <input id="igPollInterval" type="number" min="60" max="3600" value="180">
-            </div>
-          </div>
-          <div class="ig-row">
-            <div>
-              <label for="igMaxHour">Maximum DMs per hour (recommended: 10)</label>
-              <input id="igMaxHour" type="number" min="1" max="30" value="10">
-            </div>
-            <div>
-              <label for="igMaxDay">Maximum DMs per day</label>
-              <input id="igMaxDay" type="number" min="1" max="100" value="30">
-            </div>
-          </div>
-          <p class="ig-note">The queue may contain 500 matches, but sends are evenly paced. This browser-driven workflow is intentionally capped at 30 per hour and 100 per day.</p>
-
-          <div class="actions">
-            <button type="submit">Save settings</button>
-            <button class="secondary" id="igLoginButton" type="button">Open Instagram login</button>
-            <button class="secondary" id="igDryRunButton" type="button" disabled>Run dry scan</button>
-            <button class="secondary" id="igPreviewDmButton" type="button" disabled>Test DM opening</button>
-            <button id="igLiveButton" type="button" disabled>Start live replies</button>
-            <button class="danger" id="igStopButton" type="button" disabled>Stop</button>
-          </div>
-          <div id="igMessage" class="msg" role="status"></div>
-        </form>
-
-        <aside class="ig-status">
-          <div class="ig-status-line"><strong>Device status</strong><span id="igDeviceStatus">Checking...</span></div>
-          <div class="ig-status-line"><strong>Engine phase</strong><span id="igEnginePhase">-</span></div>
-          <div id="igPhaseNotice" class="ig-locked">Dry-run reads comments only. Live replies and DMs remain locked until detection is verified.</div>
-          <p class="ig-note">Sign in once in the Chrome window opened by this panel. It uses a dedicated local profile, so your password is never read or saved by the bot.</p>
-          <p class="ig-note">A local PDF file cannot be shared as a web link. Host it somewhere you control and paste its public HTTPS URL into the standardized DM.</p>
-          <pre id="igLog" class="ig-log" aria-label="Instagram bot log">No local bot events yet.</pre>
-        </aside>
+          <button id="igaNewRule" type="button">New rule</button>
+        </div>
+        <div id="igaListWarnings" class="iga-warnings hidden" style="margin-bottom:12px"></div>
+        <div class="table-wrap">
+          <table class="table-natural iga-table">
+            <thead><tr><th>Rule</th><th>Keywords</th><th>Link</th><th>On</th><th>Last updated</th><th></th></tr></thead>
+            <tbody id="igaRulesBody"></tbody>
+          </table>
+        </div>
+        <div id="igaRulesMessage" class="msg" role="status" style="margin-top:10px"></div>
       </div>
     </section>
 
@@ -661,6 +681,81 @@
     </div>
   </div>
 
+  <!-- -- Instagram auto-reply rule editor ------------------------------- -->
+  <div id="igaModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="igaModalTitle">
+    <div class="modal-content iga-modal">
+      <div class="modal-header">
+        <h2 id="igaModalTitle">New rule</h2>
+        <button class="modal-close" id="igaModalClose" type="button" aria-label="Close">×</button>
+      </div>
+      <form id="igaRuleForm" class="modal-body" novalidate>
+        <div class="form-grid">
+          <div class="row">
+            <div>
+              <label for="igaName">Name</label>
+              <input id="igaName" maxlength="80" placeholder="Anthropic IPO">
+            </div>
+            <div class="row">
+              <div>
+                <label for="igaPriority">Priority</label>
+                <input id="igaPriority" type="number" step="1">
+              </div>
+              <label class="iga-switch iga-switch-inline"><input id="igaEnabled" type="checkbox"> Enabled</label>
+            </div>
+          </div>
+
+          <div>
+            <label for="igaKeywordInput">Keywords</label>
+            <div class="iga-chips" id="igaKeywordChips"><input id="igaKeywordInput" placeholder="Type a keyword, then Enter" autocomplete="off"></div>
+            <p class="iga-help">Matched as whole words, any case: "claude" matches "Claude?" but not "claudette". Press Enter or a comma to add one.</p>
+          </div>
+
+          <div>
+            <label for="igaLink">Link URL</label>
+            <input id="igaLink" type="url" placeholder="https://www.dailydividend.info/rabbit-holes/...">
+            <p class="iga-help">Must start with https://. It goes wherever a message says {link}.</p>
+          </div>
+
+          <div>
+            <div class="iga-subhead">
+              <label>DM message variants</label>
+              <button class="secondary" id="igaAddDm" type="button">Add variant</button>
+            </div>
+            <p class="iga-help">One is picked at random for each comment. {username} and {link} are replaced automatically. The preview uses the sample username <b id="igaSampleName"></b> and this rule's link.</p>
+            <div id="igaDmList" class="iga-variants"></div>
+          </div>
+
+          <div id="igaPublicBlock" class="hidden">
+            <div class="iga-subhead">
+              <label>Public reply variants</label>
+              <button class="secondary" id="igaAddPub" type="button">Add variant</button>
+            </div>
+            <p class="iga-help">Posted under some matching comments, only while public replies are on in the settings. {username} and {link} work here too.</p>
+            <div id="igaPubList" class="iga-variants"></div>
+            <div style="margin-top:10px;max-width:320px">
+              <label for="igaPubChance">Share of matches that get a public reply (%)</label>
+              <input id="igaPubChance" type="number" min="0" max="100" step="1">
+            </div>
+          </div>
+
+          <div>
+            <label for="igaMediaInput">Post or reel IDs (optional)</label>
+            <div class="iga-chips" id="igaMediaChips"><input id="igaMediaInput" placeholder="Paste an ID, then Enter" autocomplete="off" inputmode="numeric"></div>
+            <p class="iga-help">Leave empty to use this rule on every post and reel. With IDs, it only reacts to comments on those posts.</p>
+          </div>
+
+          <div id="igaFormErrors" class="iga-errors hidden" role="alert"></div>
+          <div id="igaFormWarnings" class="iga-warnings hidden" role="status"></div>
+        </div>
+      </form>
+      <div class="modal-actions">
+        <button class="danger hidden" id="igaDeleteRule" type="button">Delete rule</button>
+        <button class="secondary" id="igaCancel" type="button">Cancel</button>
+        <button id="igaSaveRule" type="button">Save rule</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const tokenKey = 'dailyDividendAdminToken';
     let adminToken = localStorage.getItem(tokenKey) || '';
@@ -668,7 +763,6 @@
     let latestUserDetail = null;
     let pendingHtmlFile = null;
     let activeSort = 'newest';
-    let instagramJobLoaded = false;
 
     const $ = id => document.getElementById(id);
     const escapeHtml = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -701,169 +795,6 @@
       $('loginView').classList.toggle('hidden', loggedIn);
       $('dashboardView').classList.toggle('hidden', !loggedIn);
     }
-
-    // -- Local Instagram automation -----------------------------------
-
-    function updateReplyLabels() {
-      const rows = [...document.querySelectorAll('#igReplies .ig-reply')];
-      rows.forEach((row, index) => {
-        row.querySelector('.ig-reply-title').textContent = `Reply ${index + 1}`;
-        row.querySelector('.ig-remove').disabled = rows.length === 1;
-      });
-    }
-
-    function addInstagramReply(reply = '') {
-      const row = document.createElement('div');
-      row.className = 'ig-reply';
-      row.innerHTML = `
-        <div class="ig-reply-head">
-          <span class="ig-reply-title">Reply</span>
-          <button class="ig-remove" type="button">Remove</button>
-        </div>
-        <div class="form-grid">
-          <div>
-            <label>Public reply text</label>
-            <input class="ig-reply-text" maxlength="500" required placeholder="Check your DMs — hope you enjoy!">
-          </div>
-        </div>`;
-      row.querySelector('.ig-reply-text').value = reply || '';
-      row.querySelector('.ig-remove').addEventListener('click', () => {
-        row.remove();
-        updateReplyLabels();
-      });
-      $('igReplies').appendChild(row);
-      updateReplyLabels();
-    }
-
-    function populateInstagramJob(job) {
-      $('igPostUrl').value = job.postUrl || '';
-      $('igTriggerComment').value = job.triggerComment || 'DD';
-      $('igExactMatch').checked = job.exactMatch !== false;
-      $('igCaseInsensitive').checked = job.caseInsensitive !== false;
-      $('igQueueSize').value = job.maxQueueComments || 500;
-      $('igPollInterval').value = job.pollIntervalSeconds || 180;
-      $('igMaxHour').value = Math.min(30, job.maxDmsPerHour || 10);
-      $('igMaxDay').value = Math.min(100, job.maxDmsPerDay || 30);
-      $('igDmText').value = (job.directMessage && job.directMessage.text) || '';
-      $('igDmLink').value = (job.directMessage && job.directMessage.link) || '';
-      $('igReplies').innerHTML = '';
-      const defaultReplies = [
-        'Check your DMs — hope you enjoy!',
-        'Just sent it to your DMs — hope you enjoy!',
-        'Sent! Check your DMs.',
-        'It’s in your DMs — enjoy!',
-        'Check your inbox — just sent it!'
-      ];
-      const savedReplies = job.commentReplies && job.commentReplies.length
-        ? job.commentReplies
-        : defaultReplies;
-      savedReplies.forEach(addInstagramReply);
-      instagramJobLoaded = true;
-    }
-
-    function readInstagramJob() {
-      return {
-        postUrl: $('igPostUrl').value.trim(),
-        triggerComment: $('igTriggerComment').value.trim(),
-        exactMatch: $('igExactMatch').checked,
-        caseInsensitive: $('igCaseInsensitive').checked,
-        commentReplies: [...document.querySelectorAll('#igReplies .ig-reply')]
-          .map(row => row.querySelector('.ig-reply-text').value.trim()),
-        directMessage: {
-          text: $('igDmText').value.trim(),
-          link: $('igDmLink').value.trim()
-        },
-        maxQueueComments: Number($('igQueueSize').value),
-        pollIntervalSeconds: Number($('igPollInterval').value),
-        maxDmsPerHour: Number($('igMaxHour').value),
-        maxDmsPerDay: Number($('igMaxDay').value)
-      };
-    }
-
-    function renderInstagramStatus(status) {
-      const running = Boolean(status.running);
-      $('igStatusBadge').className = `badge ${running ? 'badge-green' : 'badge-gray'}`;
-      $('igStatusBadge').textContent = running ? `Running: ${status.mode}` : 'Stopped';
-      $('igDeviceStatus').textContent = running ? 'Browser running' : 'Ready locally';
-      $('igEnginePhase').textContent = `Phase ${status.enginePhase || 1}`;
-      $('igLoginButton').disabled = running || !(status.capabilities && status.capabilities.login);
-      $('igDryRunButton').disabled = running || !(status.capabilities && status.capabilities.dryRun);
-      $('igPreviewDmButton').disabled = running || !(status.capabilities && status.capabilities.dmPreview);
-      $('igLiveButton').disabled = running || !(status.capabilities && status.capabilities.live);
-      $('igStopButton').disabled = !running;
-      $('igPhaseNotice').textContent = status.capabilities && status.capabilities.live
-        ? 'Live mode is enabled. It may reply once to each qualifying comment and send at most one DM per account for this post.'
-        : status.capabilities && status.capabilities.dryRun
-          ? 'Dry-run reads comments only. Live replies and DMs remain locked until detection is verified.'
-          : 'Dry-run and live sending remain locked until login testing and Instagram DOM inspection are complete.';
-      const logs = status.logs || [];
-      $('igLog').textContent = logs.length
-        ? logs.map(item => `[${new Date(item.at).toLocaleTimeString()}] ${item.message}`).join('\n')
-        : 'No local bot events yet.';
-      $('igLog').scrollTop = $('igLog').scrollHeight;
-      if (!instagramJobLoaded) populateInstagramJob(status.job || {});
-    }
-
-    async function loadInstagramBot() {
-      try {
-        const status = await api('/api/admin/instagram-bot/status');
-        renderInstagramStatus(status);
-      } catch (error) {
-        $('igStatusBadge').className = 'badge badge-amber';
-        $('igStatusBadge').textContent = 'Local bot unavailable';
-        $('igDeviceStatus').textContent = 'Open this admin page through localhost';
-        $('igLoginButton').disabled = true;
-        $('igDryRunButton').disabled = true;
-        $('igPreviewDmButton').disabled = true;
-        $('igLiveButton').disabled = true;
-        $('igStopButton').disabled = true;
-        $('igLog').textContent = error.message;
-        if (!instagramJobLoaded) populateInstagramJob({});
-      }
-    }
-
-    async function startInstagramBot(mode) {
-      if (mode === 'live' && !confirm('LIVE MODE: Instagram DMs may be sent. Continue?')) return;
-      try {
-        const result = await api('/api/admin/instagram-bot/start', {
-          method: 'POST',
-          body: JSON.stringify({ mode })
-        });
-        showMessage('igMessage', result.message);
-        renderInstagramStatus(result.status);
-      } catch (error) {
-        showMessage('igMessage', error.message, 'error');
-        await loadInstagramBot();
-      }
-    }
-
-    $('igAddReplyButton').addEventListener('click', () => addInstagramReply());
-    $('instagramJobForm').addEventListener('submit', async event => {
-      event.preventDefault();
-      try {
-        const result = await api('/api/admin/instagram-bot/job', {
-          method: 'PUT',
-          body: JSON.stringify(readInstagramJob())
-        });
-        populateInstagramJob(result.job);
-        showMessage('igMessage', result.message);
-      } catch (error) {
-        showMessage('igMessage', error.message, 'error');
-      }
-    });
-    $('igLoginButton').addEventListener('click', () => startInstagramBot('login'));
-    $('igDryRunButton').addEventListener('click', () => startInstagramBot('dry-run'));
-    $('igPreviewDmButton').addEventListener('click', () => startInstagramBot('dm-preview'));
-    $('igLiveButton').addEventListener('click', () => startInstagramBot('live'));
-    $('igStopButton').addEventListener('click', async () => {
-      try {
-        const result = await api('/api/admin/instagram-bot/stop', { method: 'POST', body: '{}' });
-        showMessage('igMessage', result.message);
-        renderInstagramStatus(result.status);
-      } catch (error) {
-        showMessage('igMessage', error.message, 'error');
-      }
-    });
 
     // -- Search / filter / sort -----------------------------------------
 
@@ -1360,7 +1291,6 @@
       latestData = await api('/api/admin/summary');
       renderDashboard(latestData);
       setView(true);
-      loadInstagramBot();
     }
 
     async function deleteUser(userId) {
@@ -1557,9 +1487,508 @@
     } else {
       setView(false);
     }
-    setInterval(() => {
-      if (adminToken && !$('dashboardView').classList.contains('hidden')) loadInstagramBot();
-    }, 4000);
+  </script>
+  <!-- -- Instagram auto-reply: Supabase client (exact version, integrity-checked) -- -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/dist/umd/supabase.js"
+          integrity="sha384-nD3dwv4+ZqdYnmZKe/249ImlV04om7xTCcsoSeQYI+RO+XlKPoqAWaJR1M5SJH9p"
+          crossorigin="anonymous"></script>
+  <script>
+    // Instagram auto-reply admin. Talks to Supabase as the signed-in user; the dd_admins RLS policies decide
+    // what that user may read or write. Nothing here works with the shared admin password or the bare
+    // publishable key. The worker itself (workers/ig-autoreply) is never called from the browser.
+    (() => {
+      'use strict';
+
+      const IG_SUPABASE_URL = 'https://dyagortjdbwjjwyaygip.supabase.co';
+      // The project's PUBLISHABLE (anon) key: Supabase > Project Settings > API keys. It is meant to be public;
+      // RLS is what protects the data. Never paste the service role / secret key here.
+      const IG_SUPABASE_PUBLISHABLE_KEY = '';
+      const SAMPLE_USERNAME = 'priya.invests';
+      const RULE_COLUMNS = 'id,name,enabled,priority,keywords,media_ids,link_url,dm_templates,public_reply_templates,public_reply_chance,created_at,updated_at';
+
+      const $ = id => document.getElementById(id);
+      const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const lower = s => String(s || '').toLowerCase();
+      // Same substitution as the worker's fill().
+      const fill = (tpl, username, link) => tpl.replaceAll('{username}', username || 'there').replaceAll('{link}', link || '');
+      const when = value => {
+        if (!value) return '';
+        const d = new Date(value);
+        return d.toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      };
+
+      let sb = null;
+      let settings = null;
+      let rules = [];
+      let editing = null; // the rule being edited (null = new)
+      let draftKeywords = [];
+      let draftMedia = [];
+
+      function flash(id, text, type = 'ok') {
+        const el = $(id);
+        el.textContent = text;
+        el.className = `msg show ${type}`;
+        clearTimeout(el._timer);
+        el._timer = setTimeout(() => { el.className = 'msg'; }, type === 'error' ? 8000 : 3500);
+      }
+      function notice(text, type = '') {
+        $('igaNotice').textContent = text;
+        $('igaNotice').className = `iga-notice ${type}${text ? '' : ' hidden'}`;
+      }
+      function showSignedOut() {
+        $('igaApp').classList.add('hidden');
+        $('igaSignInForm').classList.remove('hidden');
+        $('igaSignOut').classList.add('hidden');
+        $('igaWho').className = 'badge badge-gray';
+        $('igaWho').textContent = 'Not signed in';
+      }
+      const dbError = error => error && (error.message || String(error));
+
+      // ---------------------------------------------------------------- setup
+      function keyLooksSecret(key) {
+        if (/^sb_secret_/.test(key)) return true;
+        try { return JSON.parse(atob(key.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).role === 'service_role'; }
+        catch (_) { return false; }
+      }
+
+      function init() {
+        $('igaSampleName').textContent = SAMPLE_USERNAME;
+        if (!window.supabase || !window.supabase.createClient) {
+          notice('The Supabase library did not load, so this section is unavailable. Check the connection and reload.', 'error');
+          return;
+        }
+        if (!IG_SUPABASE_PUBLISHABLE_KEY) {
+          notice('Not set up yet: add the Supabase publishable key as IG_SUPABASE_PUBLISHABLE_KEY in public/admin.html.');
+          return;
+        }
+        if (keyLooksSecret(IG_SUPABASE_PUBLISHABLE_KEY)) {
+          notice('The key in IG_SUPABASE_PUBLISHABLE_KEY is a secret (service role) key. Remove it from admin.html and rotate it in Supabase. Only the publishable key belongs here.', 'error');
+          return;
+        }
+        sb = window.supabase.createClient(IG_SUPABASE_URL, IG_SUPABASE_PUBLISHABLE_KEY, {
+          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: 'dd-admin-ig-autoreply-auth' }
+        });
+        sb.auth.onAuthStateChange(event => { if (event === 'SIGNED_OUT') showSignedOut(); });
+        sb.auth.getSession().then(({ data }) => {
+          if (data && data.session) afterSignIn(data.session);
+          else showSignedOut();
+        });
+      }
+
+      async function afterSignIn(session) {
+        const { data: isAdmin, error } = await sb.rpc('dd_is_admin');
+        if (error || isAdmin !== true) {
+          await sb.auth.signOut();
+          showSignedOut();
+          flash('igaSignInMessage', error
+            ? `Could not check admin access: ${dbError(error)}`
+            : 'This account is not on the admin list, so it cannot use this section.', 'error');
+          return;
+        }
+        $('igaWho').className = 'badge badge-green';
+        $('igaWho').textContent = `Signed in as ${session.user.email}`;
+        $('igaSignOut').classList.remove('hidden');
+        $('igaSignInForm').classList.add('hidden');
+        $('igaApp').classList.remove('hidden');
+        await loadAll();
+      }
+
+      async function loadAll() {
+        const [s, r] = await Promise.all([
+          sb.from('ig_autoreply_settings').select('*').eq('id', 1).maybeSingle(),
+          sb.from('ig_autoreply_rules').select(RULE_COLUMNS).order('priority', { ascending: true }).order('created_at', { ascending: true })
+        ]);
+        if (s.error || r.error) { notice(`Could not load from Supabase: ${dbError(s.error || r.error)}`, 'error'); return; }
+        if (!s.data) { notice('The settings row is missing. Run the ig_autoreply migration in Supabase.', 'error'); return; }
+        notice('');
+        settings = s.data;
+        rules = r.data || [];
+        renderSettings();
+        renderRules();
+      }
+
+      // ------------------------------------------------------------- settings
+      function renderSettings() {
+        const paused = Boolean(settings.paused);
+        const testMode = Boolean(settings.dry_run);
+        $('igaPauseBox').classList.toggle('paused', paused);
+        $('igaPauseState').textContent = paused ? 'Paused: nothing is being sent' : testMode ? 'Running in test mode' : 'Live: sending DMs';
+        $('igaPauseHelp').textContent = paused
+          ? 'Matching comments still wait in the queue and go out after you resume, unless they are more than 6.5 days old.'
+          : testMode
+            ? 'Comments are matched and logged, but nothing is sent to Instagram while test mode is on.'
+            : `Real DMs go out to people who comment a keyword, up to ${settings.max_dms_per_hour} an hour.`;
+        $('igaPauseButton').textContent = paused ? 'Resume sending' : 'Pause all sending';
+        $('igaDryRun').checked = testMode;
+        $('igaPerHour').value = settings.max_dms_per_hour;
+        $('igaPublic').checked = Boolean(settings.public_replies_enabled);
+        $('igaSettingsUpdated').textContent = settings.updated_at ? `Last changed ${when(settings.updated_at)}` : '';
+      }
+
+      async function saveSettings(patch, okText) {
+        const { data, error } = await sb.from('ig_autoreply_settings').update(patch).eq('id', 1).select().maybeSingle();
+        if (error) { flash('igaSettingsMessage', `Not saved: ${dbError(error)}`, 'error'); return false; }
+        if (!data) { flash('igaSettingsMessage', 'Not saved. Your account may no longer be an admin.', 'error'); return false; }
+        settings = data;
+        renderSettings();
+        renderRules();
+        flash('igaSettingsMessage', okText);
+        return true;
+      }
+
+      $('igaPauseButton').addEventListener('click', async () => {
+        const resume = Boolean(settings && settings.paused);
+        if (resume && !settings.dry_run && !confirm('Resume sending? Test mode is off, so real DMs will go out.')) return;
+        $('igaPauseButton').disabled = true;
+        await saveSettings({ paused: !resume }, resume ? 'Sending resumed.' : 'Paused. Nothing will be sent until you resume.');
+        $('igaPauseButton').disabled = false;
+      });
+
+      $('igaSettingsForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        const perHour = Number($('igaPerHour').value);
+        if (!Number.isInteger(perHour) || perHour < 1 || perHour > 700) {
+          flash('igaSettingsMessage', 'DMs per hour must be a whole number from 1 to 700.', 'error');
+          return;
+        }
+        const dryRun = $('igaDryRun').checked;
+        const publicOn = $('igaPublic').checked;
+        if (settings.dry_run && !dryRun && !confirm('Turn off test mode? The worker will start sending real DMs to commenters.')) return;
+        if (!settings.public_replies_enabled && publicOn && !confirm('Turn on public replies? Repeated public comments are the main ban risk for the account.')) return;
+        await saveSettings({ dry_run: dryRun, max_dms_per_hour: perHour, public_replies_enabled: publicOn }, 'Settings saved.');
+      });
+
+      // ---------------------------------------------------------------- rules
+      // Keywords that two enabled rules share. Matching ignores case.
+      function sharedKeywords(list) {
+        const owners = new Map();
+        for (const rule of list.filter(r => r.enabled)) {
+          for (const kw of new Set((rule.keywords || []).map(lower))) {
+            if (!owners.has(kw)) owners.set(kw, []);
+            owners.get(kw).push(rule.name);
+          }
+        }
+        return [...owners].filter(([, names]) => names.length > 1);
+      }
+
+      function renderRules() {
+        const body = $('igaRulesBody');
+        if (!rules.length) {
+          body.innerHTML = '<tr><td colspan="6" class="act-empty">No rules yet. Add one with "New rule".</td></tr>';
+        } else {
+          body.innerHTML = rules.map(rule => `
+            <tr>
+              <td>
+                <div class="cell-main">${esc(rule.name)}</div>
+                <div class="cell-sub">Priority ${esc(rule.priority)} · ${rule.media_ids && rule.media_ids.length ? `${rule.media_ids.length} post${rule.media_ids.length === 1 ? '' : 's'}` : 'All posts'} · ${(rule.dm_templates || []).length} DM variant${(rule.dm_templates || []).length === 1 ? '' : 's'}</div>
+              </td>
+              <td><div class="mini-pills">${(rule.keywords || []).map(k => `<span class="mini-pill">${esc(k)}</span>`).join('') || '<span class="cell-sub">None</span>'}</div></td>
+              <td class="iga-link-cell">${rule.link_url ? `<a href="${esc(rule.link_url)}" target="_blank" rel="noopener noreferrer">${esc(rule.link_url)}</a>` : '<span class="cell-sub">No link</span>'}</td>
+              <td><input type="checkbox" data-toggle="${esc(rule.id)}" ${rule.enabled ? 'checked' : ''} aria-label="Rule ${esc(rule.name)} on or off"></td>
+              <td class="cell-sub">${esc(when(rule.updated_at))}</td>
+              <td><div class="iga-row-actions">
+                <button class="secondary" type="button" data-edit="${esc(rule.id)}">Edit</button>
+                <button class="danger" type="button" data-delete="${esc(rule.id)}">Delete</button>
+              </div></td>
+            </tr>`).join('');
+        }
+        const shared = sharedKeywords(rules);
+        $('igaListWarnings').classList.toggle('hidden', !shared.length);
+        $('igaListWarnings').innerHTML = shared.length
+          ? `<b>Keywords used by more than one enabled rule.</b> Only the rule with the lowest priority number replies.<ul>${shared.map(([kw, names]) => `<li>"${esc(kw)}": ${names.map(esc).join(', ')}</li>`).join('')}</ul>`
+          : '';
+      }
+
+      $('igaRulesBody').addEventListener('click', async event => {
+        const editId = event.target.getAttribute('data-edit');
+        const deleteId = event.target.getAttribute('data-delete');
+        if (editId) openEditor(rules.find(r => r.id === editId));
+        if (deleteId) await deleteRule(rules.find(r => r.id === deleteId));
+      });
+
+      $('igaRulesBody').addEventListener('change', async event => {
+        const id = event.target.getAttribute('data-toggle');
+        if (!id) return;
+        const rule = rules.find(r => r.id === id);
+        const enabled = event.target.checked;
+        event.target.disabled = true;
+        const { data, error } = await sb.from('ig_autoreply_rules').update({ enabled }).eq('id', id).select(RULE_COLUMNS);
+        if (error || !data || !data.length) {
+          event.target.checked = !enabled;
+          event.target.disabled = false;
+          flash('igaRulesMessage', error ? `Not saved: ${dbError(error)}` : 'Not saved. Your account may no longer be an admin.', 'error');
+          return;
+        }
+        Object.assign(rule, data[0]);
+        renderRules();
+        const clash = enabled && sharedKeywords(rules).filter(([, names]) => names.includes(rule.name));
+        flash('igaRulesMessage', clash && clash.length
+          ? `"${rule.name}" is on, but shares keywords with another enabled rule. See the warning above the list.`
+          : `"${rule.name}" is ${enabled ? 'on' : 'off'}.`, clash && clash.length ? 'error' : 'ok');
+      });
+
+      async function deleteRule(rule) {
+        if (!rule || !confirm(`Delete the rule "${rule.name}"? This cannot be undone.`)) return false;
+        const { data, error } = await sb.from('ig_autoreply_rules').delete().eq('id', rule.id).select('id');
+        if (error || !data || !data.length) {
+          flash('igaRulesMessage', error ? `Not deleted: ${dbError(error)}` : 'Not deleted. Your account may no longer be an admin.', 'error');
+          return false;
+        }
+        rules = rules.filter(r => r.id !== rule.id);
+        renderRules();
+        flash('igaRulesMessage', `Deleted "${rule.name}".`);
+        return true;
+      }
+
+      // --------------------------------------------------------------- editor
+      function renderChips(containerId, inputId, values, onRemove) {
+        const box = $(containerId);
+        box.querySelectorAll('.iga-chip').forEach(chip => chip.remove());
+        const input = $(inputId);
+        values.forEach((value, index) => {
+          const chip = document.createElement('span');
+          chip.className = 'iga-chip';
+          chip.textContent = value;
+          const x = document.createElement('button');
+          x.type = 'button';
+          x.textContent = '×';
+          x.setAttribute('aria-label', `Remove ${value}`);
+          x.addEventListener('click', () => onRemove(index));
+          chip.appendChild(x);
+          box.insertBefore(chip, input);
+        });
+      }
+      const renderKeywordChips = () => renderChips('igaKeywordChips', 'igaKeywordInput', draftKeywords, i => { draftKeywords.splice(i, 1); renderKeywordChips(); validateLive(); });
+      const renderMediaChips = () => renderChips('igaMediaChips', 'igaMediaInput', draftMedia, i => { draftMedia.splice(i, 1); renderMediaChips(); validateLive(); });
+
+      function addChipValues(raw, list, normalize) {
+        for (const part of String(raw).split(',')) {
+          const value = normalize(part);
+          if (value && !list.some(existing => lower(existing) === lower(value))) list.push(value);
+        }
+      }
+      const normalizeKeyword = s => s.trim().replace(/\s+/g, ' ').toLowerCase();
+      const normalizeMedia = s => s.trim();
+
+      function wireChipInput(inputId, list, normalize, render) {
+        const input = $(inputId);
+        const commit = () => { if (input.value.trim()) { addChipValues(input.value, list(), normalize); input.value = ''; render(); validateLive(); } };
+        input.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ',') { event.preventDefault(); commit(); }
+          else if (event.key === 'Backspace' && !input.value && list().length) { list().pop(); render(); validateLive(); }
+        });
+        input.addEventListener('blur', commit);
+        input.addEventListener('paste', () => setTimeout(commit, 0));
+        input.parentElement.addEventListener('click', event => { if (event.target === input.parentElement) input.focus(); });
+      }
+      wireChipInput('igaKeywordInput', () => draftKeywords, normalizeKeyword, renderKeywordChips);
+      wireChipInput('igaMediaInput', () => draftMedia, normalizeMedia, renderMediaChips);
+
+      function previewInto(el, text) {
+        el.replaceChildren();
+        if (!text.trim()) { el.className = 'iga-bubble empty'; el.textContent = 'Type a message to see the preview.'; return; }
+        el.className = 'iga-bubble';
+        const link = $('igaLink').value.trim();
+        const filled = fill(text, SAMPLE_USERNAME, link);
+        if (!link) { el.textContent = filled; return; }
+        filled.split(link).forEach((piece, i) => {
+          if (i) { const a = document.createElement('span'); a.className = 'iga-link'; a.textContent = link; el.appendChild(a); }
+          el.appendChild(document.createTextNode(piece));
+        });
+      }
+
+      function refreshVariantList(listId) {
+        const rows = [...$(listId).querySelectorAll('.iga-variant')];
+        rows.forEach((row, i) => {
+          row.querySelector('.iga-variant-title').textContent = `Variant ${i + 1}`;
+          row.querySelector('.iga-remove').disabled = listId === 'igaDmList' && rows.length === 1;
+          previewInto(row.querySelector('.iga-bubble'), row.querySelector('textarea').value);
+        });
+      }
+
+      function addVariant(listId, text = '') {
+        const row = document.createElement('div');
+        row.className = 'iga-variant';
+        row.innerHTML = `
+          <div class="iga-variant-head">
+            <span class="iga-variant-title">Variant</span>
+            <button class="iga-remove" type="button">Remove</button>
+          </div>
+          <textarea rows="3" placeholder="Hey {username}, thanks for commenting! Here it is: {link}"></textarea>
+          <div><span class="iga-preview-label">Preview</span><div class="iga-bubble"></div></div>`;
+        const area = row.querySelector('textarea');
+        area.value = text;
+        area.addEventListener('input', () => { previewInto(row.querySelector('.iga-bubble'), area.value); validateLive(); });
+        row.querySelector('.iga-remove').addEventListener('click', () => { row.remove(); refreshVariantList(listId); validateLive(); });
+        $(listId).appendChild(row);
+        refreshVariantList(listId);
+      }
+      const variantValues = listId => [...$(listId).querySelectorAll('textarea')].map(t => t.value.trim()).filter(Boolean);
+
+      $('igaAddDm').addEventListener('click', () => { addVariant('igaDmList'); validateLive(); });
+      $('igaAddPub').addEventListener('click', () => { addVariant('igaPubList'); validateLive(); });
+      $('igaLink').addEventListener('input', () => { refreshVariantList('igaDmList'); refreshVariantList('igaPubList'); validateLive(); });
+      ['igaName', 'igaPriority', 'igaPubChance'].forEach(id => $(id).addEventListener('input', validateLive));
+      $('igaEnabled').addEventListener('change', validateLive);
+      $('igaRuleForm').addEventListener('submit', event => event.preventDefault());
+
+      function openEditor(rule) {
+        editing = rule || null;
+        $('igaModalTitle').textContent = rule ? `Edit "${rule.name}"` : 'New rule';
+        $('igaDeleteRule').classList.toggle('hidden', !rule);
+        $('igaName').value = rule ? rule.name : '';
+        $('igaPriority').value = rule ? rule.priority : 100;
+        $('igaEnabled').checked = rule ? Boolean(rule.enabled) : true;
+        $('igaLink').value = rule && rule.link_url ? rule.link_url : '';
+        draftKeywords = rule ? [...(rule.keywords || [])] : [];
+        draftMedia = rule ? [...(rule.media_ids || [])] : [];
+        $('igaKeywordInput').value = '';
+        $('igaMediaInput').value = '';
+        renderKeywordChips();
+        renderMediaChips();
+        $('igaDmList').replaceChildren();
+        const dms = rule && rule.dm_templates && rule.dm_templates.length ? rule.dm_templates : [''];
+        dms.forEach(text => addVariant('igaDmList', text));
+        $('igaPubList').replaceChildren();
+        (rule && rule.public_reply_templates || []).forEach(text => addVariant('igaPubList', text));
+        $('igaPubChance').value = Math.round(Number(rule ? rule.public_reply_chance : 0.6) * 100);
+        $('igaPublicBlock').classList.toggle('hidden', !(settings && settings.public_replies_enabled));
+        $('igaModal').classList.add('show');
+        validateLive();
+        $('igaName').focus();
+      }
+
+      function closeEditor() {
+        $('igaModal').classList.remove('show');
+        editing = null;
+      }
+      $('igaModalClose').addEventListener('click', closeEditor);
+      $('igaCancel').addEventListener('click', closeEditor);
+      $('igaModal').addEventListener('click', event => { if (event.target === $('igaModal')) closeEditor(); });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && $('igaModal').classList.contains('show')) closeEditor(); });
+      $('igaNewRule').addEventListener('click', () => openEditor(null));
+      $('igaDeleteRule').addEventListener('click', async () => { if (editing && await deleteRule(editing)) closeEditor(); });
+
+      // A draft from the form. Public reply fields are only edited while public replies are on; otherwise the
+      // rule keeps whatever it had.
+      function readDraft() {
+        const publicShown = !$('igaPublicBlock').classList.contains('hidden');
+        const chancePct = Number($('igaPubChance').value);
+        return {
+          id: editing ? editing.id : null,
+          name: $('igaName').value.trim(),
+          enabled: $('igaEnabled').checked,
+          priorityRaw: $('igaPriority').value.trim(),
+          priority: Number($('igaPriority').value),
+          keywords: [...draftKeywords],
+          media_ids: [...draftMedia],
+          link_url: $('igaLink').value.trim(),
+          dm_templates: variantValues('igaDmList'),
+          publicShown,
+          chancePct,
+          public_reply_templates: publicShown ? variantValues('igaPubList') : (editing ? editing.public_reply_templates || [] : []),
+          public_reply_chance: publicShown ? chancePct / 100 : (editing ? Number(editing.public_reply_chance) : 0)
+        };
+      }
+
+      function validate(d) {
+        const errors = [];
+        const warnings = [];
+        if (!d.name) errors.push('Give the rule a name.');
+        if (!d.keywords.length) errors.push('Add at least one keyword.');
+        if (!d.dm_templates.length) errors.push('Add at least one DM message.');
+        if (d.link_url) {
+          let ok = false;
+          try { const u = new URL(d.link_url); ok = u.protocol === 'https:' && Boolean(u.hostname) && d.link_url.startsWith('https://'); } catch (_) { ok = false; }
+          if (!ok) errors.push('The link must be a full address starting with https://.');
+        }
+        if (d.priorityRaw === '' || !Number.isInteger(d.priority)) errors.push('Priority must be a whole number.');
+        if (d.publicShown && (!Number.isInteger(d.chancePct) || d.chancePct < 0 || d.chancePct > 100)) errors.push('The public reply share must be a whole number from 0 to 100.');
+
+        const allTemplates = [...d.dm_templates, ...(d.publicShown ? d.public_reply_templates : [])];
+        if (d.link_url && !d.dm_templates.some(t => t.includes('{link}'))) warnings.push('There is a link, but no DM variant contains {link}, so the link is never sent.');
+        if (!d.link_url && allTemplates.some(t => t.includes('{link}'))) warnings.push('A message uses {link}, but the rule has no link, so {link} would be left blank.');
+        if (d.enabled) {
+          const mine = new Set(d.keywords.map(lower));
+          for (const other of rules.filter(r => r.enabled && r.id !== d.id)) {
+            const both = (other.keywords || []).filter(k => mine.has(lower(k)));
+            if (both.length) warnings.push(`${both.map(k => `"${k}"`).join(', ')} ${both.length === 1 ? 'is' : 'are'} also used by the enabled rule "${other.name}" (priority ${other.priority}). Only the rule with the lower priority number replies.`);
+          }
+        }
+        if (d.publicShown && d.public_reply_templates.length && d.chancePct === 0) warnings.push('The public reply share is 0%, so this rule never posts a public reply.');
+        const odd = d.media_ids.filter(id => !/^\d+$/.test(id));
+        if (odd.length) warnings.push(`${odd.map(id => `"${id}"`).join(', ')} does not look like an Instagram post ID (those are long numbers). A wrong ID means this rule never matches.`);
+        return { errors, warnings };
+      }
+
+      function showList(id, title, items) {
+        $(id).classList.toggle('hidden', !items.length);
+        $(id).innerHTML = items.length ? `<b>${esc(title)}</b><ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : '';
+      }
+
+      let attemptedSave = false;
+      function validateLive() {
+        if (!$('igaModal').classList.contains('show')) return { errors: [], warnings: [] };
+        const result = validate(readDraft());
+        showList('igaFormErrors', 'Fix these before saving:', attemptedSave ? result.errors : []);
+        showList('igaFormWarnings', 'Check these:', result.warnings);
+        return result;
+      }
+
+      $('igaSaveRule').addEventListener('click', async () => {
+        attemptedSave = true;
+        const { errors } = validateLive();
+        if (errors.length) return;
+        const d = readDraft();
+        const row = {
+          name: d.name,
+          enabled: d.enabled,
+          priority: d.priority,
+          keywords: d.keywords,
+          media_ids: d.media_ids,
+          link_url: d.link_url || null,
+          dm_templates: d.dm_templates,
+          public_reply_templates: d.public_reply_templates,
+          public_reply_chance: d.public_reply_chance
+        };
+        $('igaSaveRule').disabled = true;
+        const query = editing
+          ? sb.from('ig_autoreply_rules').update(row).eq('id', editing.id).select(RULE_COLUMNS)
+          : sb.from('ig_autoreply_rules').insert(row).select(RULE_COLUMNS);
+        const { data, error } = await query;
+        $('igaSaveRule').disabled = false;
+        if (error || !data || !data.length) {
+          showList('igaFormErrors', 'Not saved:', [error ? dbError(error) : 'Supabase did not accept the change. Your account may no longer be an admin.']);
+          return;
+        }
+        const saved = data[0];
+        rules = editing ? rules.map(r => (r.id === saved.id ? saved : r)) : [...rules, saved];
+        rules.sort((a, b) => a.priority - b.priority || String(a.created_at).localeCompare(String(b.created_at)));
+        closeEditor();
+        attemptedSave = false;
+        renderRules();
+        flash('igaRulesMessage', `Saved "${saved.name}". The worker picks it up within 60 seconds.`);
+      });
+      $('igaModalClose').addEventListener('click', () => { attemptedSave = false; });
+      $('igaCancel').addEventListener('click', () => { attemptedSave = false; });
+
+      // ----------------------------------------------------------- sign in/out
+      $('igaSignInForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!sb) return;
+        $('igaSignInButton').disabled = true;
+        const { data, error } = await sb.auth.signInWithPassword({ email: $('igaEmail').value.trim(), password: $('igaPassword').value });
+        $('igaSignInButton').disabled = false;
+        $('igaPassword').value = '';
+        if (error || !data.session) { flash('igaSignInMessage', 'Sign-in failed. Check the email and password.', 'error'); return; }
+        await afterSignIn(data.session);
+      });
+      $('igaSignOut').addEventListener('click', async () => { if (sb) await sb.auth.signOut(); showSignedOut(); });
+      // Logging out of the admin panel also ends the Supabase session for this section.
+      $('logoutButton').addEventListener('click', () => { if (sb) sb.auth.signOut(); });
+
+      init();
+    })();
   </script>
 </body>
 </html>

@@ -853,7 +853,11 @@
       try{
         let data;
         try{
-          data = await api('/api/onboarding', {method:'POST', body:JSON.stringify(payload)});
+          // An anonymous record this browser created can be claimed by its id (the server checks it is
+          // anonymous and never moves billing). Nothing is matched by email or phone.
+          let anonymousId;
+          try { anonymousId = localStorage.getItem('dailyDividendUserId') || undefined; } catch (_) { anonymousId = undefined; }
+          data = await api('/api/onboarding', {method:'POST', body:JSON.stringify({ ...payload, anonymousId })});
         }catch(error){
           // Someone who signed up before (e.g. got stuck earlier): log them in with what they just typed.
           if (error.status === 409){
