@@ -552,7 +552,30 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 .fp-img-hero .fp-img-art{width:30%}
 .fp-centre-h{font-weight:500}
 /* fill: columns end level */
-@media(min-width:900px){.fp-centre{display:flex;flex-direction:column}.fp-centre .fp-img-hero{flex:1 1 auto;min-height:320px}.fp-side{display:flex;flex-direction:column}.fp-side-item{display:flex;flex-direction:column;flex:1 1 0}.fp-side-item .fp-img-thumb{flex:1 1 auto;min-height:120px;aspect-ratio:auto}}
+@media(min-width:900px){.fp-centre{display:flex;flex-direction:column}.fp-side{display:flex;flex-direction:column}}
+/* Two smaller picture stories under the centre story (they used to be text links under the lead). */
+/* subgrid rows: picture | kicker | headline | date line up across both cards whatever the photo shapes */
+.fp-more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,auto);column-gap:22px;row-gap:0;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.fp-more-item{display:grid;grid-row:span 4;grid-template-rows:subgrid;align-content:start;min-width:0}
+.fp-more-item .fp-img{margin-bottom:10px;align-self:start}
+.fp-more-item .fp-img.has-logo{aspect-ratio:auto;align-self:stretch;min-height:110px}
+.fp-more-item .fp-card-h{font-size:18px;line-height:1.22}
+@media(max-width:619px){.fp-more{column-gap:16px}.fp-more-item .fp-card-h{font-size:16px}}
+/* Top stories grid (2 and 4 columns): each card's picture | kicker | headline | date share row tracks with the
+   other cards in its row, so a taller cover never pushes one headline below its neighbours. */
+@media(min-width:620px){
+ .fp-grid{row-gap:0}
+ .fp-card{display:grid;grid-row:span 4;grid-template-rows:subgrid;align-content:start}
+ .fp-card .fp-img{align-self:start}
+ .fp-card:nth-child(n+3){margin-top:30px}
+}
+@media(min-width:900px){.fp-card:nth-child(n+3){margin-top:0}.fp-card:nth-child(n+5){margin-top:30px}}
+/* Photos carry their own text (posters, logos), so the caption overlay and its darkening gradient are only used
+   on illustrated covers. The centre story shows its category as a kicker above the headline instead. */
+.fp-img-ft.has-photo:not(.has-logo) .fp-img-capft,.fp-img-ft.has-photo:not(.has-logo)::after{display:none}
+.fp-centre>.fp-kicker{margin:18px 0 0}
+.fp-centre>.fp-kicker+.fp-centre-h{margin-top:8px}
+@media(min-width:900px){.fp-centre>.fp-kicker{align-self:center}}
 .fp-centre-dek{font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--muted);margin:12px auto 0;max-width:560px}
 @media(min-width:900px){.fp-centre-dek{text-align:center}}
 .fp-lead-photo{margin-top:20px;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:var(--cream-2)}
@@ -563,11 +586,10 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 .fp-img.has-photo .fp-img-art,.fp-img.has-photo .fp-img-ghost{display:none}
 /* logos: shown whole on their own background, no dark overlay, dark caption */
 .fp-photo-logo{object-fit:contain;padding:7% 9%;box-sizing:border-box;background:var(--logo-bg,#fff)}
-/* Cover photos are never zoomed more than RH_MAX_CROP (see rhFitPhoto). When a photo's shape is far from its
-   slot's (a portrait poster in a wide slot), it is drawn smaller and centred, over a blurred copy of itself. */
-.fp-lead-photo{position:relative}
-img.fp-photo-capped{position:absolute;inset:0;margin:auto;object-position:50% 50%;z-index:0}
-.fp-photo-blur{position:absolute;inset:-8%;width:116%;height:116%;object-fit:cover;filter:blur(22px) saturate(1.15) brightness(.85);z-index:0;pointer-events:none}
+/* Photo frames take the photo's own shape (rhFitPhoto sets --ar), so a cover is never cropped or zoomed,
+   whatever slot it lands in. Overrides the fixed slot shapes above (16/10, 16/9, square, flex-filled). */
+.fp-img.fp-fit,.fp-lead-photo.fp-fit{aspect-ratio:var(--ar)!important;flex:none!important;min-height:0!important;height:auto!important}
+.fp-fit>img{object-position:50% 50%!important}
 .fp-img.has-logo::after{display:none}
 .fp-img.has-logo{box-shadow:inset 0 0 0 1px var(--line)}
 .fp-img.has-logo .fp-img-capft{color:var(--ink);text-shadow:none;opacity:.7}
@@ -2914,7 +2936,7 @@ const RH=[
  dek:"Your beauty app is quietly becoming a beauty and fashion house. How Nykaa got here, in 13 swipes.",
  cats:["Made in India"],mins:9,date:"2026-11-10",
  bg:"#4A0D33",art:"nykaa",emoji:"💄",url:"/reports/nykaa-decoded.html"},
-{k:"marico-decoded",img:"/images/stories/marico.jpg",imgBg:"#aae1ec",title:"Marico, decoded",
+{k:"marico-decoded",img:"/images/stories/marico.jpg",imgFit:"cover",imgBg:"#aae1ec",title:"Marico, decoded",
  dek:"The Parachute company in 11 swipes: coconut oil dominance, Saffola's second act, the overseas bet, and what could break the story.",
  cats:["Made in India"],mins:8,date:"2026-11-05",
  bg:"#014FA1",art:"marico",emoji:"🥥",url:"/reports/marico-decoded.html"},
@@ -3846,25 +3868,17 @@ function rhPicture(r,cls=''){
 }
 // Story photo from public/images/stories/ (RH[].img). Missing file → the <img> removes itself and the
 // illustration underneath stays visible, so cards never show a broken image.
-function rhPhoto(r){if(!r.img)return '';const logo=r.imgFit==='contain';return `<img class="fp-photo${logo?' fp-photo-logo':''}" src="${r.img}" alt="" loading="lazy" decoding="async"${logo?` style="--logo-bg:${r.imgBg||'#ffffff'}"`:''} onload="this.parentNode.classList.add('has-photo'${logo?",'has-logo'":''});${logo?'':'rhFitPhoto(this)'}" onerror="this.remove()">`;}
-// Slots on the front page are fixed shapes (wide on phones, tall on desktop side columns) and photos come in any
-// shape, so plain object-fit:cover can zoom a photo 2-3x (a 4:5 poster in a 16:9 slot). rhFitPhoto caps the zoom
-// at RH_MAX_CROP: past that, the photo is drawn smaller (still cropped by at most RH_MAX_CROP) over a blurred copy
-// of itself. Re-runs when the slot is resized, because the slot shapes change with the layout.
-const RH_MAX_CROP=1.3;
-const rhPhotoObserver=typeof ResizeObserver==='function'?new ResizeObserver(es=>es.forEach(e=>{const i=e.target.querySelector(':scope>img:not(.fp-photo-blur)');if(i)rhFitPhoto(i);})):null;
+function rhPhoto(r){if(!r.img)return '';const logo=r.imgFit==='contain';return `<img class="fp-photo${logo?' fp-photo-logo':''}" src="${r.img}" alt="" loading="lazy" decoding="async"${logo?` style="--logo-bg:${r.imgBg||'#ffffff'}"`:''} onload="this.parentNode.classList.add('has-photo'${logo?",'has-logo'":''});${logo||r.imgFit==='cover'?'':'rhFitPhoto(this)'}" onerror="this.remove()">`;}
+// Covers come in any shape (a 4:5 film poster, a 16:9 still, a near-square collage) and land in different slots
+// as new articles push them along, so instead of cropping a photo into the slot's shape, the slot takes the
+// photo's shape: the whole photo always shows, at its own proportions. Only freak shapes (beyond 0.7 to 2.4,
+// e.g. a thin banner) are trimmed to that range so one image can't wreck the layout.
+// RH entries can opt out: imgFit:"contain" = logo shown whole on imgBg; imgFit:"cover" = artwork that may be
+// cropped to the slot's standard shape (e.g. a centred logo on a plain background).
 function rhFitPhoto(img){
- const box=img&&img.parentNode;if(!box||!img.naturalWidth)return;
- if(rhPhotoObserver&&!box.dataset.fitWatch){box.dataset.fitWatch='1';rhPhotoObserver.observe(box);}
- const bw=box.clientWidth,bh=box.clientHeight;if(!bw||!bh)return;
- const ia=img.naturalWidth/img.naturalHeight,ba=bw/bh,crop=Math.max(ia/ba,ba/ia);
- let blur=box.querySelector(':scope>.fp-photo-blur');
- if(crop<=RH_MAX_CROP){img.classList.remove('fp-photo-capped');img.style.width=img.style.height='';if(blur)blur.remove();return;}
- // Wider than the slot: full slot width, shorter height. Taller than the slot: full height, narrower width.
- const f=RH_MAX_CROP/crop*100;
- img.classList.add('fp-photo-capped');
- if(ia>ba){img.style.width='100%';img.style.height=f+'%';}else{img.style.height='100%';img.style.width=f+'%';}
- if(!blur){blur=document.createElement('img');blur.className='fp-photo-blur';blur.alt='';blur.setAttribute('aria-hidden','true');blur.src=img.currentSrc||img.src;box.insertBefore(blur,img);}
+ const box=img&&img.parentNode;if(!box||!img.naturalWidth||!img.naturalHeight)return;
+ const ar=Math.min(2.4,Math.max(0.7,img.naturalWidth/img.naturalHeight));
+ box.style.setProperty('--ar',ar.toFixed(4));box.classList.add('fp-fit');
 }
 // Newspaper-style picture: square corners, uppercase caption top-right (like a photo credit line).
 function rhPictureFt(r,cls=''){
@@ -3899,12 +3913,14 @@ function rhFrontPageHtml(all){
    <h2 class="fp-lead-h" ${rhOpen(lead)}>${lead.title}</h2>
    ${lead.dek?`<p class="fp-dek">${lead.dek}</p>`:''}
    <div class="fp-meta">${rhAgo(lead.date)}${rhIsTodaysFree(lead)?'<span class="fp-free">✓ Free today</span>':''}</div>
-   ${lead.img?`<div class="fp-lead-photo" ${rhOpen(lead)}><img src="${lead.img}" alt="" decoding="async" onload="rhFitPhoto(this)" onerror="this.parentNode.remove()"></div>`:''}
-   ${related.length?`<div class="fp-related-ft">${related.map((r,i)=>`<a ${rhOpen(r)}>${i===0?`<b>${(r.cats||[])[0]||'Rabbit hole'}.</b> `:''}${r.title}</a>`).join('')}</div>`:''}
+   ${lead.img?`<div class="fp-lead-photo" ${rhOpen(lead)}><img src="${lead.img}" alt="" decoding="async"${lead.imgFit==='cover'?'':' onload="rhFitPhoto(this)"'} onerror="this.parentNode.remove()"></div>`:''}
   </article>`:'';
- const centreHtml=centre?`<article class="fp-col fp-centre">${rhPictureFt(centre,'fp-img-hero')}<h2 class="fp-centre-h" ${rhOpen(centre)}>${centre.title}</h2>${centre.dek?`<p class="fp-centre-dek">${centre.dek}</p>`:''}${rhWhen(centre).replace('fp-meta','fp-meta fp-center-meta')}</article>`:'';
+ // Centre: the big picture story, then the two related stories as small picture cards. Photos keep their own
+ // shape (rhFitPhoto), so columns are balanced by content, not by stretching pictures.
+ const moreHtml=related.length?`<div class="fp-more">${related.map(r=>`<article class="fp-more-item">${rhPictureFt(r,'fp-img-thumb')}${rhKicker(r)}<h3 class="fp-card-h" ${rhOpen(r)}>${r.title}</h3>${rhWhen(r)}</article>`).join('')}</div>`:'';
+ const centreHtml=centre?`<article class="fp-col fp-centre">${rhPictureFt(centre,'fp-img-hero')}${rhKicker(centre)}<h2 class="fp-centre-h" ${rhOpen(centre)}>${centre.title}</h2>${centre.dek?`<p class="fp-centre-dek">${centre.dek}</p>`:''}${rhWhen(centre).replace('fp-meta','fp-meta fp-center-meta')}${moreHtml}</article>`:'';
  const sideHtml=(side1||side2)?`<aside class="fp-col fp-side">
-   ${side1?`<article class="fp-side-item">${rhPictureFt(side1,'fp-img-thumb')}<h3 class="fp-side-h" ${rhOpen(side1)}>${side1.title}</h3>${rhWhen(side1)}</article>`:''}
+   ${side1?`<article class="fp-side-item">${rhPictureFt(side1,'fp-img-thumb')}<h3 class="fp-side-h" ${rhOpen(side1)}>${side1.title}</h3>${side1.dek?`<p class="fp-side-dek">${side1.dek}</p>`:''}${rhWhen(side1)}</article>`:''}
    ${side2?`<article class="fp-side-item">${rhPictureFt(side2,'fp-img-thumb')}<h3 class="fp-side-h" ${rhOpen(side2)}>${side2.title}</h3>${side2.dek?`<p class="fp-side-dek">${side2.dek}</p>`:''}${rhWhen(side2)}</article>`:''}
   </aside>`:'';
  const topHtml=rest.length?`<div class="fp-dots" aria-hidden="true"></div><h2 class="fp-top-label">Top stories</h2><div class="fp-grid">${rest.map(rhCardFp).join('')}</div>`:'';
