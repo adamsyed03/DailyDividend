@@ -563,6 +563,11 @@ html.rabbit-only .rbh-th svg,html.stock-spotlights-hidden .rbh-th svg{display:bl
 .fp-img.has-photo .fp-img-art,.fp-img.has-photo .fp-img-ghost{display:none}
 /* logos: shown whole on their own background, no dark overlay, dark caption */
 .fp-photo-logo{object-fit:contain;padding:7% 9%;box-sizing:border-box;background:var(--logo-bg,#fff)}
+/* Cover photos are never zoomed more than RH_MAX_CROP (see rhFitPhoto). When a photo's shape is far from its
+   slot's (a portrait poster in a wide slot), it is drawn smaller and centred, over a blurred copy of itself. */
+.fp-lead-photo{position:relative}
+img.fp-photo-capped{position:absolute;inset:0;margin:auto;object-position:50% 50%;z-index:0}
+.fp-photo-blur{position:absolute;inset:-8%;width:116%;height:116%;object-fit:cover;filter:blur(22px) saturate(1.15) brightness(.85);z-index:0;pointer-events:none}
 .fp-img.has-logo::after{display:none}
 .fp-img.has-logo{box-shadow:inset 0 0 0 1px var(--line)}
 .fp-img.has-logo .fp-img-capft{color:var(--ink);text-shadow:none;opacity:.7}
@@ -3841,7 +3846,26 @@ function rhPicture(r,cls=''){
 }
 // Story photo from public/images/stories/ (RH[].img). Missing file → the <img> removes itself and the
 // illustration underneath stays visible, so cards never show a broken image.
-function rhPhoto(r){if(!r.img)return '';const logo=r.imgFit==='contain';return `<img class="fp-photo${logo?' fp-photo-logo':''}" src="${r.img}" alt="" loading="lazy" decoding="async"${logo?` style="--logo-bg:${r.imgBg||'#ffffff'}"`:''} onload="this.parentNode.classList.add('has-photo'${logo?",'has-logo'":''})" onerror="this.remove()">`;}
+function rhPhoto(r){if(!r.img)return '';const logo=r.imgFit==='contain';return `<img class="fp-photo${logo?' fp-photo-logo':''}" src="${r.img}" alt="" loading="lazy" decoding="async"${logo?` style="--logo-bg:${r.imgBg||'#ffffff'}"`:''} onload="this.parentNode.classList.add('has-photo'${logo?",'has-logo'":''});${logo?'':'rhFitPhoto(this)'}" onerror="this.remove()">`;}
+// Slots on the front page are fixed shapes (wide on phones, tall on desktop side columns) and photos come in any
+// shape, so plain object-fit:cover can zoom a photo 2-3x (a 4:5 poster in a 16:9 slot). rhFitPhoto caps the zoom
+// at RH_MAX_CROP: past that, the photo is drawn smaller (still cropped by at most RH_MAX_CROP) over a blurred copy
+// of itself. Re-runs when the slot is resized, because the slot shapes change with the layout.
+const RH_MAX_CROP=1.6;
+const rhPhotoObserver=typeof ResizeObserver==='function'?new ResizeObserver(es=>es.forEach(e=>{const i=e.target.querySelector(':scope>img:not(.fp-photo-blur)');if(i)rhFitPhoto(i);})):null;
+function rhFitPhoto(img){
+ const box=img&&img.parentNode;if(!box||!img.naturalWidth)return;
+ if(rhPhotoObserver&&!box.dataset.fitWatch){box.dataset.fitWatch='1';rhPhotoObserver.observe(box);}
+ const bw=box.clientWidth,bh=box.clientHeight;if(!bw||!bh)return;
+ const ia=img.naturalWidth/img.naturalHeight,ba=bw/bh,crop=Math.max(ia/ba,ba/ia);
+ let blur=box.querySelector(':scope>.fp-photo-blur');
+ if(crop<=RH_MAX_CROP){img.classList.remove('fp-photo-capped');img.style.width=img.style.height='';if(blur)blur.remove();return;}
+ // Wider than the slot: full slot width, shorter height. Taller than the slot: full height, narrower width.
+ const f=RH_MAX_CROP/crop*100;
+ img.classList.add('fp-photo-capped');
+ if(ia>ba){img.style.width='100%';img.style.height=f+'%';}else{img.style.height='100%';img.style.width=f+'%';}
+ if(!blur){blur=document.createElement('img');blur.className='fp-photo-blur';blur.alt='';blur.setAttribute('aria-hidden','true');blur.src=img.currentSrc||img.src;box.insertBefore(blur,img);}
+}
 // Newspaper-style picture: square corners, uppercase caption top-right (like a photo credit line).
 function rhPictureFt(r,cls=''){
  const art=rhArtHtml(r);
@@ -3875,7 +3899,7 @@ function rhFrontPageHtml(all){
    <h2 class="fp-lead-h" ${rhOpen(lead)}>${lead.title}</h2>
    ${lead.dek?`<p class="fp-dek">${lead.dek}</p>`:''}
    <div class="fp-meta">${rhAgo(lead.date)}${rhIsTodaysFree(lead)?'<span class="fp-free">✓ Free today</span>':''}</div>
-   ${lead.img?`<div class="fp-lead-photo" ${rhOpen(lead)}><img src="${lead.img}" alt="" decoding="async" onerror="this.parentNode.remove()"></div>`:''}
+   ${lead.img?`<div class="fp-lead-photo" ${rhOpen(lead)}><img src="${lead.img}" alt="" decoding="async" onload="rhFitPhoto(this)" onerror="this.parentNode.remove()"></div>`:''}
    ${related.length?`<div class="fp-related-ft">${related.map((r,i)=>`<a ${rhOpen(r)}>${i===0?`<b>${(r.cats||[])[0]||'Rabbit hole'}.</b> `:''}${r.title}</a>`).join('')}</div>`:''}
   </article>`:'';
  const centreHtml=centre?`<article class="fp-col fp-centre">${rhPictureFt(centre,'fp-img-hero')}<h2 class="fp-centre-h" ${rhOpen(centre)}>${centre.title}</h2>${centre.dek?`<p class="fp-centre-dek">${centre.dek}</p>`:''}${rhWhen(centre).replace('fp-meta','fp-meta fp-center-meta')}</article>`:'';
