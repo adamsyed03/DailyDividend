@@ -3851,7 +3851,7 @@ function rhPhoto(r){if(!r.img)return '';const logo=r.imgFit==='contain';return `
 // shape, so plain object-fit:cover can zoom a photo 2-3x (a 4:5 poster in a 16:9 slot). rhFitPhoto caps the zoom
 // at RH_MAX_CROP: past that, the photo is drawn smaller (still cropped by at most RH_MAX_CROP) over a blurred copy
 // of itself. Re-runs when the slot is resized, because the slot shapes change with the layout.
-const RH_MAX_CROP=1.6;
+const RH_MAX_CROP=1.3;
 const rhPhotoObserver=typeof ResizeObserver==='function'?new ResizeObserver(es=>es.forEach(e=>{const i=e.target.querySelector(':scope>img:not(.fp-photo-blur)');if(i)rhFitPhoto(i);})):null;
 function rhFitPhoto(img){
  const box=img&&img.parentNode;if(!box||!img.naturalWidth)return;
